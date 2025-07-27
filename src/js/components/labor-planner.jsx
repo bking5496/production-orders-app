@@ -76,7 +76,7 @@ const exportToExcel = (assignments, machines, employees, date, supervisorOnDuty)
     wsData.push([]); // Empty row
     
     // Work table headers
-    wsData.push(['Employee Code', 'Name', 'Machine', 'Role', 'Shift', 'Company']);
+    wsData.push(['Employee Code', 'Full Name', 'Machine', 'Role', 'Shift', 'Company', 'Attendance']);
     
     // Work table data
     assignments.forEach(assignment => {
@@ -84,13 +84,24 @@ const exportToExcel = (assignments, machines, employees, date, supervisorOnDuty)
         const machine = machines.find(m => m.id == assignment.machine_id);
         
         if (employee) {
+            // Determine attendance status for display
+            let attendanceStatus = 'Pending';
+            if (assignment.status === 'present') {
+                attendanceStatus = 'Present';
+            } else if (assignment.status === 'absent') {
+                attendanceStatus = 'Absent';
+            } else if (assignment.status === 'planned') {
+                attendanceStatus = 'Planned';
+            }
+            
             wsData.push([
                 employee.employee_code || 'N/A',
-                employee.fullName || employee.username || 'N/A',
+                employee.fullName || employee.username || 'N/A', // Always use full name first
                 machine?.name || `Machine ${assignment.machine_id}`,
                 (employee.role || 'N/A').charAt(0).toUpperCase() + (employee.role || 'N/A').slice(1),
                 (assignment.shift || 'N/A').charAt(0).toUpperCase() + (assignment.shift || 'N/A').slice(1),
-                employee.company || 'N/A'
+                employee.company || 'N/A',
+                attendanceStatus
             ]);
         }
     });
@@ -101,11 +112,12 @@ const exportToExcel = (assignments, machines, employees, date, supervisorOnDuty)
     // Set column widths
     worksheet['!cols'] = [
         { wch: 15 }, // Employee Code
-        { wch: 25 }, // Name
+        { wch: 25 }, // Full Name
         { wch: 20 }, // Machine
         { wch: 15 }, // Role
         { wch: 12 }, // Shift
-        { wch: 15 }  // Company
+        { wch: 15 }, // Company
+        { wch: 12 }  // Attendance
     ];
     
     // Apply formatting
@@ -139,7 +151,7 @@ const exportToExcel = (assignments, machines, employees, date, supervisorOnDuty)
     
     // Style table headers (row 8)
     const headerRow = 8;
-    for (let col = 0; col < 6; col++) {
+    for (let col = 0; col < 7; col++) { // Updated to 7 columns for attendance
         const cellRef = window.XLSX.utils.encode_cell({ r: headerRow - 1, c: col });
         if (worksheet[cellRef]) {
             worksheet[cellRef].s = {
@@ -161,18 +173,32 @@ const exportToExcel = (assignments, machines, employees, date, supervisorOnDuty)
         const isEvenRow = (row - headerRow) % 2 === 0;
         const bgColor = isEvenRow ? "FFFFFF" : "F8F9FA";
         
-        for (let col = 0; col < 6; col++) {
+        for (let col = 0; col < 7; col++) { // Updated to 7 columns for attendance
             const cellRef = window.XLSX.utils.encode_cell({ r: row, c: col });
             if (worksheet[cellRef]) {
+                // Special styling for attendance column based on status
+                let cellBgColor = bgColor;
+                if (col === 6) { // Attendance column
+                    const cellValue = worksheet[cellRef].v;
+                    if (cellValue === 'Present') {
+                        cellBgColor = "D4EDDA"; // Light green for present
+                    } else if (cellValue === 'Absent') {
+                        cellBgColor = "F8D7DA"; // Light red for absent
+                    } else if (cellValue === 'Planned') {
+                        cellBgColor = "FFF3CD"; // Light yellow for planned
+                    }
+                }
+                
                 worksheet[cellRef].s = {
-                    fill: { fgColor: { rgb: bgColor } },
+                    fill: { fgColor: { rgb: cellBgColor } },
                     border: {
                         top: { style: "thin", color: { rgb: "E0E0E0" } },
                         bottom: { style: "thin", color: { rgb: "E0E0E0" } },
                         left: { style: "thin", color: { rgb: "E0E0E0" } },
                         right: { style: "thin", color: { rgb: "E0E0E0" } }
                     },
-                    alignment: { horizontal: col === 1 ? "left" : "center" } // Name column left-aligned
+                    alignment: { horizontal: col === 1 ? "left" : "center" }, // Name column left-aligned
+                    font: col === 6 && worksheet[cellRef].v === 'Present' ? { bold: true } : undefined // Bold for present
                 };
             }
         }
@@ -180,7 +206,7 @@ const exportToExcel = (assignments, machines, employees, date, supervisorOnDuty)
     
     // Merge title cell across columns
     worksheet['!merges'] = [
-        { s: { r: 0, c: 0 }, e: { r: 0, c: 5 } } // Merge title across all columns
+        { s: { r: 0, c: 0 }, e: { r: 0, c: 6 } } // Merge title across all 7 columns
     ];
     
     // Add worksheet to workbook
@@ -459,11 +485,16 @@ export function LaborManagementSystem() {
     const saveWorkerEdit = async () => {
         try {
             const { id, ...data } = editingWorker;
-            await API.put(`/users/${id}`, data);
+            console.log('Updating worker:', id, data);
+            const response = await API.put(`/users/${id}`, data);
+            console.log('Update response:', response);
             fetchData(selectedDate);
             setEditingWorker(null);
-            showNotification('Worker updated');
-        } catch (error) { showNotification('Failed to update worker', 'danger'); }
+            showNotification('Worker updated successfully');
+        } catch (error) { 
+            console.error('Worker update error:', error);
+            showNotification(`Failed to update worker: ${error.message}`, 'danger'); 
+        }
     };
 
     // Enhanced export functionality
@@ -810,24 +841,94 @@ export function LaborManagementSystem() {
             )}
 
             {currentView === 'attendance' && (
-                <Card>
-                    <h2 className="text-2xl font-bold mb-6 flex items-center gap-3"><UserCheck className="w-8 h-8 text-green-500" />Attendance Confirmation</h2>
-                    <input type="date" value={attendanceDate} onChange={e => setAttendanceDate(e.target.value)} className="w-full md:w-1/3 p-3 border rounded-lg mb-4"/>
-                    <div className="space-y-3">
-                        {attendanceAssignments.map(a => (
-                            <div key={a.id} className="p-4 bg-gray-50 rounded-lg flex flex-col sm:flex-row justify-between items-center gap-4">
+                <div className="space-y-6">
+                    <Card className="p-6">
+                        <div className="flex items-center justify-between mb-6">
+                            <div className="flex items-center gap-3">
+                                <UserCheck className="w-8 h-8 text-green-500" />
                                 <div>
-                                    <p className="font-bold">{a.username}</p>
-                                    <p className="text-sm text-gray-600">{a.machine_name} | {a.shift} shift</p>
-                                </div>
-                                <div className="flex gap-2">
-                                    <Button onClick={() => updateAttendanceStatus(a.id, 'present')} variant={a.status === 'present' ? 'success' : 'secondary'}>Present</Button>
-                                    <Button onClick={() => updateAttendanceStatus(a.id, 'absent')} variant={a.status === 'absent' ? 'danger' : 'secondary'}>Absent</Button>
+                                    <h2 className="text-2xl font-bold">Attendance Confirmation</h2>
+                                    <p className="text-gray-600">Confirmed attendance will be included in Excel exports</p>
                                 </div>
                             </div>
-                        ))}
-                    </div>
-                </Card>
+                            <div className="flex items-center gap-3">
+                                <input 
+                                    type="date" 
+                                    value={attendanceDate} 
+                                    onChange={e => setAttendanceDate(e.target.value)} 
+                                    className="p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                />
+                                <Button variant="outline" onClick={() => setShowExportModal(true)}>
+                                    <Download className="w-4 h-4" />
+                                    Export
+                                </Button>
+                            </div>
+                        </div>
+
+                        <div className="space-y-3">
+                            {attendanceAssignments.map(assignment => (
+                                <div key={assignment.id} className="p-4 bg-white border border-gray-200 rounded-lg">
+                                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                                                <Users className="w-6 h-6 text-blue-600" />
+                                            </div>
+                                            <div>
+                                                <p className="font-bold text-gray-800">
+                                                    {assignment.fullName || assignment.username}
+                                                </p>
+                                                <p className="text-sm text-gray-600">
+                                                    {assignment.employee_code} • {assignment.machine_name} • {assignment.shift} shift
+                                                </p>
+                                                <p className="text-xs text-gray-500">{assignment.company}</p>
+                                            </div>
+                                        </div>
+                                        
+                                        <div className="flex items-center gap-2">
+                                            <Badge 
+                                                variant={
+                                                    assignment.status === 'present' ? 'success' :
+                                                    assignment.status === 'absent' ? 'danger' :
+                                                    'default'
+                                                }
+                                            >
+                                                {assignment.status === 'present' ? 'Present' :
+                                                 assignment.status === 'absent' ? 'Absent' : 'Pending'}
+                                            </Badge>
+                                            
+                                            <div className="flex gap-2 ml-3">
+                                                <Button 
+                                                    onClick={() => updateAttendanceStatus(assignment.id, 'present')} 
+                                                    variant={assignment.status === 'present' ? 'success' : 'secondary'}
+                                                    size="sm"
+                                                >
+                                                    <CheckCircle className="w-4 h-4" />
+                                                    Present
+                                                </Button>
+                                                <Button 
+                                                    onClick={() => updateAttendanceStatus(assignment.id, 'absent')} 
+                                                    variant={assignment.status === 'absent' ? 'danger' : 'secondary'}
+                                                    size="sm"
+                                                >
+                                                    <X className="w-4 h-4" />
+                                                    Absent
+                                                </Button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                            
+                            {attendanceAssignments.length === 0 && (
+                                <div className="text-center py-12">
+                                    <UserCheck className="w-12 h-12 mx-auto mb-4 text-gray-300" />
+                                    <p className="text-gray-500">No assignments found for this date</p>
+                                    <p className="text-sm text-gray-400">Check the planning section to create assignments</p>
+                                </div>
+                            )}
+                        </div>
+                    </Card>
+                </div>
             )}
 
             {currentView === 'workers' && (
@@ -886,9 +987,9 @@ export function LaborManagementSystem() {
                                             </div>
                                             <div>
                                                 <p className="font-medium text-gray-800">
-                                                    {employee.fullName || employee.username}
+                                                    {employee.fullName || (employee.username ? employee.username.replace(/\./g, ' ').replace(/\b\w/g, l => l.toUpperCase()) : 'N/A')}
                                                 </p>
-                                                <p className="text-sm text-gray-500">{employee.email}</p>
+                                                <p className="text-sm text-gray-500">{employee.email || 'No email provided'}</p>
                                             </div>
                                             <div>
                                                 <Badge variant={
@@ -1106,7 +1207,8 @@ export function LaborManagementSystem() {
                                     <p className="mb-2">Professional Excel template will include:</p>
                                     <ul className="list-disc list-inside space-y-1 ml-2">
                                         <li><strong>Header:</strong> Day of week, date, supervisor on duty</li>
-                                        <li><strong>Work Table:</strong> Employee code, name, machine, role, shift, company</li>
+                                        <li><strong>Work Table:</strong> Employee code, full name, machine, role, shift, company, attendance</li>
+                                        <li><strong>Attendance Status:</strong> Present (green), Absent (red), Planned (yellow)</li>
                                         <li><strong>Formatting:</strong> Colors, borders, proper column widths</li>
                                         <li><strong>Date:</strong> {exportDateRange.start}</li>
                                     </ul>
