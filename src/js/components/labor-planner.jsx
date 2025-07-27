@@ -27,6 +27,55 @@ const exportToJSON = (data, filename) => {
     link.click();
 };
 
+// Enhanced Excel export with proper template structure
+const exportToExcel = (assignments, machines, employees, date, supervisorOnDuty) => {
+    // Get day of week and format date
+    const dateObj = new Date(date);
+    const dayOfWeek = dateObj.toLocaleDateString('en-US', { weekday: 'long' });
+    const formattedDate = dateObj.toLocaleDateString('en-US', { 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+    });
+
+    // Create Excel content with proper structure
+    let excelContent = '';
+    
+    // Header section
+    excelContent += `Day of Week,${dayOfWeek}\n`;
+    excelContent += `Date,${formattedDate}\n`;
+    excelContent += `Supervisor on Duty,${supervisorOnDuty || 'Not Assigned'}\n`;
+    excelContent += '\n'; // Empty line separator
+    
+    // Work table headers
+    excelContent += 'Employee Code,Name,Machine,Role,Shift,Company\n';
+    
+    // Work table data
+    assignments.forEach(assignment => {
+        const employee = employees.find(e => e.id === assignment.employee_id);
+        const machine = machines.find(m => m.id == assignment.machine_id);
+        
+        if (employee) {
+            const row = [
+                employee.employee_code || 'N/A',
+                employee.fullName || employee.username || 'N/A',
+                machine?.name || `Machine ${assignment.machine_id}`,
+                employee.role || 'N/A',
+                assignment.shift || 'N/A',
+                employee.company || 'N/A'
+            ].join(',');
+            excelContent += row + '\n';
+        }
+    });
+    
+    // Create and download file
+    const blob = new Blob([excelContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `labor-schedule-${date}.csv`;
+    link.click();
+};
+
 // Enhanced UI Components
 const Card = ({ children, className = "", hover = false }) => (
     <div className={`bg-white rounded-xl shadow-sm border border-gray-100 ${hover ? 'hover:shadow-md transition-shadow' : ''} ${className}`}>
@@ -626,49 +675,354 @@ export function LaborManagementSystem() {
             )}
 
             {currentView === 'workers' && (
-                <Card>
-                     <h2 className="text-2xl font-bold mb-6 flex items-center gap-3"><Users className="w-8 h-8 text-purple-500" />Worker Management</h2>
-                     <div className="space-y-2">
-                        {employees.map(e => (
-                             <div key={e.id} className="p-3 border rounded-lg flex justify-between items-center">
-                                 <p>{e.username} ({e.employee_code})</p>
-                                 <button onClick={() => setEditingWorker(e)}><Edit2 size={16}/></button>
-                             </div>
-                        ))}
-                     </div>
-                </Card>
+                <div className="space-y-6">
+                    <Card className="p-6">
+                        <div className="flex items-center justify-between mb-6">
+                            <div className="flex items-center gap-3">
+                                <Users className="w-8 h-8 text-purple-500" />
+                                <div>
+                                    <h2 className="text-2xl font-bold">Worker Management</h2>
+                                    <p className="text-gray-600">Manage employee information and roles</p>
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-3">
+                                <div className="relative">
+                                    <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                                    <input
+                                        type="text"
+                                        placeholder="Search employees..."
+                                        value={workerSearch}
+                                        onChange={e => setWorkerSearch(e.target.value)}
+                                        className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    />
+                                </div>
+                                <Button variant="outline" onClick={() => setShowExportModal(true)}>
+                                    <Download className="w-4 h-4" />
+                                    Export
+                                </Button>
+                            </div>
+                        </div>
+
+                        {/* Workers Table */}
+                        <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+                            <div className="bg-gray-50 px-6 py-3 border-b border-gray-200">
+                                <div className="grid grid-cols-5 gap-4 font-medium text-gray-700">
+                                    <div>Employee Code</div>
+                                    <div>Name</div>
+                                    <div>Role</div>
+                                    <div>Company</div>
+                                    <div className="text-right">Actions</div>
+                                </div>
+                            </div>
+                            <div className="divide-y divide-gray-200">
+                                {filteredEmployees.map(employee => (
+                                    <div key={employee.id} className="px-6 py-4 hover:bg-gray-50 transition-colors">
+                                        <div className="grid grid-cols-5 gap-4 items-center">
+                                            <div className="flex items-center gap-3">
+                                                <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                                                    <span className="text-blue-600 font-medium text-sm">
+                                                        {employee.employee_code?.slice(0, 2) || employee.username?.slice(0, 2).toUpperCase()}
+                                                    </span>
+                                                </div>
+                                                <span className="font-medium text-gray-800">
+                                                    {employee.employee_code || 'N/A'}
+                                                </span>
+                                            </div>
+                                            <div>
+                                                <p className="font-medium text-gray-800">
+                                                    {employee.fullName || employee.username}
+                                                </p>
+                                                <p className="text-sm text-gray-500">{employee.email}</p>
+                                            </div>
+                                            <div>
+                                                <Badge variant={
+                                                    employee.role === 'supervisor' ? 'info' :
+                                                    employee.role === 'operator' ? 'success' :
+                                                    employee.role === 'technician' ? 'warning' :
+                                                    'default'
+                                                }>
+                                                    {employee.role?.charAt(0).toUpperCase() + employee.role?.slice(1)}
+                                                </Badge>
+                                            </div>
+                                            <div className="text-gray-600">
+                                                {employee.company || 'N/A'}
+                                            </div>
+                                            <div className="flex justify-end gap-2">
+                                                <Button 
+                                                    variant="ghost" 
+                                                    size="sm"
+                                                    onClick={() => setEditingWorker(employee)}
+                                                >
+                                                    <Edit2 className="w-4 h-4" />
+                                                    Edit
+                                                </Button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        {filteredEmployees.length === 0 && (
+                            <div className="text-center py-12">
+                                <Users className="w-12 h-12 mx-auto mb-4 text-gray-300" />
+                                <p className="text-gray-500">No employees found</p>
+                                <p className="text-sm text-gray-400">Try adjusting your search criteria</p>
+                            </div>
+                        )}
+                    </Card>
+                </div>
             )}
             
+            {/* Enhanced Employee Assignment Modal */}
             {showEmployeeModal && (
-                <Modal title="Assign Employee" onClose={() => setShowEmployeeModal(false)}>
-                     <input type="text" placeholder="Search..." onChange={e => setPlanningSearch(e.target.value)} className="w-full p-3 border rounded-lg mb-4"/>
-                     <div className="space-y-2">
-                        {filteredEmployees.map(e => {
-                            const isAssigned = currentAssignments.some(a => a.employee_id === e.id);
-                            return (
-                                <div key={e.id} className={`p-3 rounded-lg flex justify-between items-center ${isAssigned ? 'bg-gray-200' : 'hover:bg-gray-100'}`}>
-                                    <p>{e.username} ({e.employee_code})</p>
-                                    <Button onClick={() => assignEmployee(e.id)} disabled={isAssigned}>Assign</Button>
+                <Modal title="Assign Employee" onClose={() => setShowEmployeeModal(false)} size="lg">
+                    <div className="space-y-4">
+                        <div className="flex items-center gap-4">
+                            <div className="flex-1">
+                                <input 
+                                    type="text" 
+                                    placeholder="Search by name or employee code..." 
+                                    value={planningSearch}
+                                    onChange={e => setPlanningSearch(e.target.value)} 
+                                    className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                />
+                            </div>
+                            {bulkAssignMode && (
+                                <div className="flex items-center gap-2">
+                                    <Badge variant="info">
+                                        {selectedEmployees.length} selected
+                                    </Badge>
+                                    <Button 
+                                        variant="outline" 
+                                        size="sm"
+                                        onClick={() => setSelectedEmployees([])}
+                                    >
+                                        Clear
+                                    </Button>
                                 </div>
-                            )
-                        })}
-                     </div>
+                            )}
+                        </div>
+                        
+                        <div className="max-h-96 overflow-y-auto space-y-2">
+                            {filteredEmployees.map(employee => {
+                                const isAssigned = currentAssignments.some(a => a.employee_id === employee.id);
+                                const isSelected = selectedEmployees.includes(employee.id);
+                                
+                                return (
+                                    <div 
+                                        key={employee.id} 
+                                        className={`p-4 rounded-lg border transition-all ${
+                                            isAssigned 
+                                                ? 'bg-gray-100 border-gray-300' 
+                                                : isSelected
+                                                ? 'bg-blue-50 border-blue-300'
+                                                : 'hover:bg-gray-50 border-gray-200'
+                                        }`}
+                                    >
+                                        <div className="flex justify-between items-center">
+                                            <div className="flex items-center gap-3">
+                                                {bulkAssignMode && !isAssigned && (
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={isSelected}
+                                                        onChange={(e) => {
+                                                            if (e.target.checked) {
+                                                                setSelectedEmployees([...selectedEmployees, employee.id]);
+                                                            } else {
+                                                                setSelectedEmployees(selectedEmployees.filter(id => id !== employee.id));
+                                                            }
+                                                        }}
+                                                        className="w-4 h-4 text-blue-600 rounded"
+                                                    />
+                                                )}
+                                                <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
+                                                    <Users className="w-5 h-5 text-gray-600" />
+                                                </div>
+                                                <div>
+                                                    <p className="font-semibold">{employee.fullName || employee.username}</p>
+                                                    <p className="text-sm text-gray-500">
+                                                        {employee.employee_code} • {employee.role}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            
+                                            {!bulkAssignMode && (
+                                                <Button 
+                                                    onClick={() => assignEmployee(employee.id)} 
+                                                    disabled={isAssigned}
+                                                    variant={isAssigned ? "secondary" : "primary"}
+                                                    size="sm"
+                                                >
+                                                    {isAssigned ? 'Already Assigned' : 'Assign'}
+                                                </Button>
+                                            )}
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                        
+                        {filteredEmployees.length === 0 && (
+                            <div className="text-center py-8 text-gray-500">
+                                <Users className="w-12 h-12 mx-auto mb-3 text-gray-300" />
+                                <p>No employees found</p>
+                            </div>
+                        )}
+                    </div>
+                </Modal>
+            )}
+
+            {/* Export Modal */}
+            {showExportModal && (
+                <Modal title="Export Labor Assignments" onClose={() => setShowExportModal(false)}>
+                    <div className="space-y-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-2">Start Date</label>
+                                <input
+                                    type="date"
+                                    value={exportDateRange.start}
+                                    onChange={e => setExportDateRange({...exportDateRange, start: e.target.value})}
+                                    className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-2">End Date</label>
+                                <input
+                                    type="date"
+                                    value={exportDateRange.end}
+                                    onChange={e => setExportDateRange({...exportDateRange, end: e.target.value})}
+                                    className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                />
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">Export Format</label>
+                            <div className="grid grid-cols-2 gap-4">
+                                <button
+                                    onClick={() => setExportFormat('csv')}
+                                    className={`p-4 border-2 rounded-lg text-center transition-all ${
+                                        exportFormat === 'csv' 
+                                            ? 'border-blue-500 bg-blue-50 text-blue-700' 
+                                            : 'border-gray-300 hover:border-gray-400'
+                                    }`}
+                                >
+                                    <FileText className="w-6 h-6 mx-auto mb-2" />
+                                    <p className="font-medium">CSV</p>
+                                    <p className="text-sm text-gray-500">Spreadsheet format</p>
+                                </button>
+                                <button
+                                    onClick={() => setExportFormat('json')}
+                                    className={`p-4 border-2 rounded-lg text-center transition-all ${
+                                        exportFormat === 'json' 
+                                            ? 'border-blue-500 bg-blue-50 text-blue-700' 
+                                            : 'border-gray-300 hover:border-gray-400'
+                                    }`}
+                                >
+                                    <Settings className="w-6 h-6 mx-auto mb-2" />
+                                    <p className="font-medium">JSON</p>
+                                    <p className="text-sm text-gray-500">Data format</p>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div className="bg-gray-50 p-4 rounded-lg">
+                            <h4 className="font-medium text-gray-800 mb-2">Export Preview</h4>
+                            <p className="text-sm text-gray-600">
+                                This will export all labor assignments between {exportDateRange.start} and {exportDateRange.end} 
+                                in {exportFormat.toUpperCase()} format.
+                            </p>
+                        </div>
+
+                        <div className="flex justify-end gap-3">
+                            <Button variant="secondary" onClick={() => setShowExportModal(false)}>
+                                Cancel
+                            </Button>
+                            <Button onClick={handleExport} disabled={loading}>
+                                {loading ? (
+                                    <>
+                                        <RefreshCw className="w-4 h-4 animate-spin" />
+                                        Exporting...
+                                    </>
+                                ) : (
+                                    <>
+                                        <Download className="w-4 h-4" />
+                                        Export Data
+                                    </>
+                                )}
+                            </Button>
+                        </div>
+                    </div>
                 </Modal>
             )}
             
+            {/* Worker Edit Modal */}
             {editingWorker && (
                  <Modal title="Edit Worker" onClose={() => setEditingWorker(null)}>
                      <div className="space-y-4">
-                        <input value={editingWorker.employee_code} onChange={e => setEditingWorker({...editingWorker, employee_code: e.target.value})} placeholder="Employee Code" className="w-full p-3 border rounded-lg"/>
-                        {/* Add other fields here */}
-                        <Button onClick={saveWorkerEdit}>Save</Button>
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">Employee Code</label>
+                            <input 
+                                value={editingWorker.employee_code || ''} 
+                                onChange={e => setEditingWorker({...editingWorker, employee_code: e.target.value})} 
+                                placeholder="Employee Code" 
+                                className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+                            <input 
+                                value={editingWorker.fullName || ''} 
+                                onChange={e => setEditingWorker({...editingWorker, fullName: e.target.value})} 
+                                placeholder="Full Name" 
+                                className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">Role</label>
+                            <select 
+                                value={editingWorker.role || ''} 
+                                onChange={e => setEditingWorker({...editingWorker, role: e.target.value})} 
+                                className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            >
+                                <option value="operator">Operator</option>
+                                <option value="supervisor">Supervisor</option>
+                                <option value="technician">Technician</option>
+                                <option value="packer">Packer</option>
+                                <option value="quality_inspector">Quality Inspector</option>
+                                <option value="maintenance">Maintenance</option>
+                            </select>
+                        </div>
+                        <div className="flex gap-3 pt-4">
+                            <Button variant="secondary" onClick={() => setEditingWorker(null)} className="flex-1">
+                                Cancel
+                            </Button>
+                            <Button onClick={saveWorkerEdit} className="flex-1">
+                                <Save className="w-4 h-4" />
+                                Save Changes
+                            </Button>
+                        </div>
                      </div>
                  </Modal>
             )}
 
+            {/* Enhanced Notification */}
             {notification.show && (
-                <div className={`fixed bottom-6 right-6 z-50 text-white p-4 rounded-lg shadow-lg ${notification.type === 'success' ? 'bg-green-600' : 'bg-red-600'}`}>
-                    {notification.message}
+                <div className={`fixed bottom-6 right-6 z-50 p-4 rounded-lg shadow-lg border max-w-sm ${
+                    notification.type === 'success' 
+                        ? 'bg-green-50 border-green-200 text-green-800' 
+                        : notification.type === 'warning'
+                        ? 'bg-yellow-50 border-yellow-200 text-yellow-800'
+                        : 'bg-red-50 border-red-200 text-red-800'
+                }`}>
+                    <div className="flex items-center gap-2">
+                        {notification.type === 'success' && <CheckCircle className="w-5 h-5 text-green-600" />}
+                        {notification.type === 'warning' && <AlertCircle className="w-5 h-5 text-yellow-600" />}
+                        {notification.type === 'danger' && <X className="w-5 h-5 text-red-600" />}
+                        <p className="font-medium">{notification.message}</p>
+                    </div>
                 </div>
             )}
         </div>
