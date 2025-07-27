@@ -555,17 +555,18 @@ apiRouter.get('/planner/assignments', authenticateToken, async (req, res) => {
         const assignments = await dbAll(`
             SELECT 
                 la.id, 
-                la.employee_id, 
+                la.user_id as employee_id, 
                 la.machine_id, 
                 la.assignment_date, 
                 la.shift, 
                 la.status,
                 u.username, 
+                u.fullName,
                 m.name as machine_name, 
                 u.employee_code, 
                 u.role
             FROM labor_assignments la
-            JOIN users u ON la.employee_id = u.id
+            JOIN users u ON la.user_id = u.id
             JOIN machines m ON la.machine_id = m.id
             WHERE la.assignment_date = ?
         `, [date]);
@@ -581,8 +582,8 @@ apiRouter.post('/planner/assignments', authenticateToken, requireRole(['admin', 
     try {
         const { employee_id, machine_id, shift, assignment_date } = req.body;
         const result = await dbRun(
-            'INSERT INTO labor_assignments (employee_id, machine_id, shift, assignment_date, status) VALUES (?, ?, ?, ?, ?)',
-            [employee_id, machine_id, shift, assignment_date, 'planned']
+            'INSERT INTO labor_assignments (user_id, employee_id, machine_id, shift, assignment_date, status) VALUES (?, ?, ?, ?, ?, ?)',
+            [employee_id, employee_id, machine_id, shift, assignment_date, 'planned']
         );
         const newAssignment = await dbGet('SELECT * FROM labor_assignments WHERE id = ?', [result.lastID]);
         res.status(201).json(newAssignment);
