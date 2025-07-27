@@ -486,7 +486,7 @@ export function LaborManagementSystem() {
         try {
             const { id, ...data } = editingWorker;
             console.log('Updating worker:', id, data);
-            const response = await API.put(`/users/${id}`, data);
+            const response = await API.put(`/workers/${id}`, data);
             console.log('Update response:', response);
             fetchData(selectedDate);
             setEditingWorker(null);
@@ -989,7 +989,6 @@ export function LaborManagementSystem() {
                                                 <p className="font-medium text-gray-800">
                                                     {employee.fullName || (employee.username ? employee.username.replace(/\./g, ' ').replace(/\b\w/g, l => l.toUpperCase()) : 'N/A')}
                                                 </p>
-                                                <p className="text-sm text-gray-500">{employee.email || 'No email provided'}</p>
                                             </div>
                                             <div>
                                                 <Badge variant={

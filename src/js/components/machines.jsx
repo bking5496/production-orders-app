@@ -1,16 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { Settings, Plus, Search, Filter, RefreshCw, Edit3, Trash2, AlertTriangle, Activity, Clock, BarChart3, CheckCircle, XCircle, Wrench } from 'lucide-react';
 import API from '../core/api';
-import { Modal } from './ui-components.jsx'; // Import our new Modal component
+import { Modal, Card, Button, Badge } from './ui-components.jsx';
 
 export default function MachinesPage() {
   // State for storing the list of machines and UI status
   const [machines, setMachines] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const [selectedEnvironment, setSelectedEnvironment] = useState('all');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [notification, setNotification] = useState(null);
   
   // State for managing modals
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [showStatusModal, setShowStatusModal] = useState(false);
   
   // State for the machine being edited and the form data
   const [selectedMachine, setSelectedMachine] = useState(null);
@@ -24,22 +30,43 @@ export default function MachinesPage() {
 
   // Constants for machine types
   const MACHINE_TYPES = {
-    blending: ['Ribbon Blender', 'V-Blender', 'Paddle Mixer', 'High Shear Mixer', 'Drum Mixer'],
-    packaging: ['Form Fill Seal', 'Cartoning Machine', 'Labeling Machine', 'Capping Machine', 'Wrapping Machine'],
+    blending: ['Bulk Line', 'Canning line', 'Corraza cubes', 'Corazza tablet', 'Enflex fb 10 1;2'],
+    packaging: ['Nps 5 Lane', 'Nps Auger', 'Universal 1', 'Universal 2', 'Universal 3'],
     beverage: ['Filling Machine', 'Carbonation Unit', 'Pasteurizer', 'Homogenizer', 'Bottling Line']
   };
 
+  const STATUS_COLORS = {
+    available: { bg: 'bg-green-50', text: 'text-green-600', border: 'border-green-200', icon: CheckCircle },
+    in_use: { bg: 'bg-blue-50', text: 'text-blue-600', border: 'border-blue-200', icon: Activity },
+    maintenance: { bg: 'bg-yellow-50', text: 'text-yellow-600', border: 'border-yellow-200', icon: Wrench },
+    offline: { bg: 'bg-red-50', text: 'text-red-600', border: 'border-red-200', icon: XCircle }
+  };
+
+  // Notification helper
+  const showNotification = (message, type = 'success') => {
+    setNotification({ message, type });
+    setTimeout(() => setNotification(null), 3000);
+  };
+
   // Function to fetch machines from the backend API
-  const loadMachines = async () => {
-    setLoading(true);
+  const loadMachines = async (showRefreshIndicator = false) => {
+    if (showRefreshIndicator) setRefreshing(true);
+    else setLoading(true);
+    
     try {
-      const data = await API.get('/machines'); // Use the API service
+      const data = await API.get('/machines');
       setMachines(data);
     } catch (error) {
       console.error('Failed to load machines:', error);
+      showNotification('Failed to load machines', 'danger');
     } finally {
       setLoading(false);
+      setRefreshing(false);
     }
+  };
+
+  const handleRefresh = () => {
+    loadMachines(true);
   };
 
   // useEffect runs when the component loads.
@@ -54,10 +81,11 @@ export default function MachinesPage() {
     e.preventDefault();
     try {
       await API.post('/machines', formData);
-      setShowAddModal(false); // Close the modal on success
-      loadMachines(); // Refresh the list
+      setShowAddModal(false);
+      loadMachines();
+      showNotification('Machine added successfully');
     } catch (error) {
-      alert('Failed to add machine: ' + (error.message || 'Unknown error'));
+      showNotification('Failed to add machine: ' + (error.message || 'Unknown error'), 'danger');
     }
   };
 
@@ -68,8 +96,9 @@ export default function MachinesPage() {
       await API.put(`/machines/${selectedMachine.id}`, formData);
       setShowEditModal(false);
       loadMachines();
+      showNotification('Machine updated successfully');
     } catch (error) {
-      alert('Failed to update machine: ' + (error.message || 'Unknown error'));
+      showNotification('Failed to update machine: ' + (error.message || 'Unknown error'), 'danger');
     }
   };
 
@@ -79,27 +108,131 @@ export default function MachinesPage() {
       try {
         await API.delete(`/machines/${machineId}`);
         loadMachines();
+        showNotification('Machine deleted successfully');
       } catch (error) {
-        alert('Failed to delete machine: ' + (error.message || 'Unknown error'));
+        showNotification('Failed to delete machine: ' + (error.message || 'Unknown error'), 'danger');
       }
     }
   };
 
-  // Filter the machines based on the selected environment tab
-  const filteredMachines = selectedEnvironment === 'all'
-    ? machines
-    : machines.filter(machine => machine.environment === selectedEnvironment);
-
-  // Helper function to render a styled status badge
-  const getStatusBadge = (status) => {
-    const statusStyles = {
-      available: 'bg-green-100 text-green-800',
-      in_use: 'bg-blue-100 text-blue-800',
-      maintenance: 'bg-yellow-100 text-yellow-800',
-      offline: 'bg-red-100 text-red-800',
-    };
-    return <span className={`px-2 py-1 rounded-full text-xs font-medium ${statusStyles[status] || 'bg-gray-100'}`}>{status.replace('_', ' ').toUpperCase()}</span>;
+  // Handler for changing machine status
+  const handleStatusChange = async (status) => {
+    try {
+      await API.patch(`/machines/${selectedMachine.id}/status`, { status });
+      setShowStatusModal(false);
+      loadMachines();
+      showNotification(`Machine status changed to ${status}`);
+    } catch (error) {
+      showNotification('Failed to update status: ' + (error.message || 'Unknown error'), 'danger');
+    }
   };
+
+  // Filter and search machines
+  const filteredMachines = useMemo(() => {
+    let filtered = machines;
+    
+    if (selectedEnvironment !== 'all') {
+      filtered = filtered.filter(machine => machine.environment === selectedEnvironment);
+    }
+    
+    if (statusFilter !== 'all') {
+      filtered = filtered.filter(machine => machine.status === statusFilter);
+    }
+    
+    if (searchTerm) {
+      filtered = filtered.filter(machine => 
+        machine.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        machine.type.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+    
+    return filtered;
+  }, [machines, selectedEnvironment, statusFilter, searchTerm]);
+
+  // Calculate statistics
+  const stats = useMemo(() => {
+    const total = machines.length;
+    const available = machines.filter(m => m.status === 'available').length;
+    const inUse = machines.filter(m => m.status === 'in_use').length;
+    const maintenance = machines.filter(m => m.status === 'maintenance').length;
+    const offline = machines.filter(m => m.status === 'offline').length;
+    const utilizationRate = total > 0 ? Math.round((inUse / total) * 100) : 0;
+    
+    return { total, available, inUse, maintenance, offline, utilizationRate };
+  }, [machines]);
+
+  // Helper function to render a modern status badge
+  const getStatusBadge = (status) => {
+    const config = STATUS_COLORS[status] || STATUS_COLORS.offline;
+    const Icon = config.icon;
+    
+    return (
+      <Badge variant={status === 'available' ? 'success' : status === 'in_use' ? 'info' : status === 'maintenance' ? 'warning' : 'danger'}>
+        <Icon className="w-3 h-3 mr-1" />
+        {status.replace('_', ' ').toUpperCase()}
+      </Badge>
+    );
+  };
+
+  // Statistics panel component
+  const StatisticsPanel = () => (
+    <div className="grid grid-cols-2 md:grid-cols-6 gap-4 mb-6">
+      <Card className="p-4">
+        <div className="flex items-center gap-2">
+          <Settings className="w-5 h-5 text-gray-600" />
+          <div>
+            <p className="text-sm text-gray-500">Total</p>
+            <p className="text-2xl font-bold text-gray-800">{stats.total}</p>
+          </div>
+        </div>
+      </Card>
+      <Card className="p-4">
+        <div className="flex items-center gap-2">
+          <CheckCircle className="w-5 h-5 text-green-600" />
+          <div>
+            <p className="text-sm text-gray-500">Available</p>
+            <p className="text-2xl font-bold text-green-600">{stats.available}</p>
+          </div>
+        </div>
+      </Card>
+      <Card className="p-4">
+        <div className="flex items-center gap-2">
+          <Activity className="w-5 h-5 text-blue-600" />
+          <div>
+            <p className="text-sm text-gray-500">In Use</p>
+            <p className="text-2xl font-bold text-blue-600">{stats.inUse}</p>
+          </div>
+        </div>
+      </Card>
+      <Card className="p-4">
+        <div className="flex items-center gap-2">
+          <Wrench className="w-5 h-5 text-yellow-600" />
+          <div>
+            <p className="text-sm text-gray-500">Maintenance</p>
+            <p className="text-2xl font-bold text-yellow-600">{stats.maintenance}</p>
+          </div>
+        </div>
+      </Card>
+      <Card className="p-4">
+        <div className="flex items-center gap-2">
+          <XCircle className="w-5 h-5 text-red-600" />
+          <div>
+            <p className="text-sm text-gray-500">Offline</p>
+            <p className="text-2xl font-bold text-red-600">{stats.offline}</p>
+          </div>
+        </div>
+      </Card>
+      <Card className="p-4">
+        <div className="flex items-center gap-2">
+          <BarChart3 className="w-5 h-5 text-purple-600" />
+          <div>
+            <p className="text-sm text-gray-500">Utilization</p>
+            <p className="text-2xl font-bold text-purple-600">{stats.utilizationRate}%</p>
+          </div>
+        </div>
+      </Card>
+    </div>
+  );
 
   if (loading && machines.length === 0) {
     return <div className="p-6 text-center">Loading machines...</div>;
