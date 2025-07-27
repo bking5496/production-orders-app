@@ -1,30 +1,44 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { Package, Plus, Search, Filter, RefreshCw, Play, Pause, Square, Trash2, Clock, AlertTriangle, CheckCircle, BarChart3, Calendar, Target } from 'lucide-react';
 import API from '../core/api';
-import { Modal } from './ui-components.jsx';
+import { Modal, Card, Button, Badge } from './ui-components.jsx';
 import ProductionCompletionModalWithWaste from './production-completion-modal-with-waste.jsx';
-import { Icon } from './layout-components.jsx';
 
 export default function OrdersPage() {
   const [orders, setOrders] = useState([]);
   const [machines, setMachines] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const [selectedEnvironment, setSelectedEnvironment] = useState('all');
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [notification, setNotification] = useState(null);
 
   // State for modals
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showStartModal, setShowStartModal] = useState(false);
   const [showCompletionModal, setShowCompletionModal] = useState(false);
+  const [showPauseModal, setShowPauseModal] = useState(false);
   
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [selectedMachine, setSelectedMachine] = useState('');
+  const [pauseReason, setPauseReason] = useState('');
 
   const [formData, setFormData] = useState({
     order_number: '', product_name: '', quantity: '', environment: 'blending',
     priority: 'normal', due_date: '', notes: ''
   });
 
-  const loadData = async () => {
-    setLoading(true);
+  // Notification helper
+  const showNotification = (message, type = 'success') => {
+    setNotification({ message, type });
+    setTimeout(() => setNotification(null), 3000);
+  };
+
+  const loadData = async (showRefreshIndicator = false) => {
+    if (showRefreshIndicator) setRefreshing(true);
+    else setLoading(true);
+    
     try {
       const [ordersData, machinesData] = await Promise.all([
         API.get('/orders'),
@@ -34,9 +48,15 @@ export default function OrdersPage() {
       setMachines(machinesData);
     } catch (error) {
       console.error('Failed to load data:', error);
+      showNotification('Failed to load orders', 'danger');
     } finally {
       setLoading(false);
+      setRefreshing(false);
     }
+  };
+
+  const handleRefresh = () => {
+    loadData(true);
   };
 
   useEffect(() => {
@@ -50,41 +70,53 @@ export default function OrdersPage() {
     try {
       await API.post('/orders', formData);
       setShowCreateModal(false);
+      setFormData({ order_number: '', product_name: '', quantity: '', environment: 'blending', priority: 'normal', due_date: '', notes: '' });
       loadData();
+      showNotification('Order created successfully');
     } catch (error) {
-      alert('Failed to create order: ' + error.message);
+      showNotification('Failed to create order: ' + error.message, 'danger');
     }
   };
 
   const handleStartProduction = async () => {
-    if (!selectedMachine) return alert('Please select a machine');
+    if (!selectedMachine) {
+      showNotification('Please select a machine', 'warning');
+      return;
+    }
     try {
       await API.post(`/orders/${selectedOrder.id}/start`, { machine_id: selectedMachine });
       setShowStartModal(false);
+      setSelectedMachine('');
       loadData();
+      showNotification('Production started successfully');
     } catch (error) {
-      alert('Failed to start production: ' + error.message);
+      showNotification('Failed to start production: ' + error.message, 'danger');
     }
   };
 
-  const handlePauseProduction = async (orderId) => {
-    const reason = prompt("Enter reason for pausing:");
-    if (reason) {
-        try {
-            await API.post(`/orders/${orderId}/pause`, { reason });
-            loadData();
-        } catch (error) {
-            alert('Failed to pause production: ' + error.message);
-        }
+  const handlePauseProduction = async () => {
+    if (!pauseReason.trim()) {
+      showNotification('Please enter a reason for pausing', 'warning');
+      return;
+    }
+    try {
+      await API.post(`/orders/${selectedOrder.id}/pause`, { reason: pauseReason });
+      setShowPauseModal(false);
+      setPauseReason('');
+      loadData();
+      showNotification('Production paused successfully');
+    } catch (error) {
+      showNotification('Failed to pause production: ' + error.message, 'danger');
     }
   };
 
   const handleResumeProduction = async (orderId) => {
     try {
-        await API.post(`/orders/${orderId}/resume`);
-        loadData();
+      await API.post(`/orders/${orderId}/resume`);
+      loadData();
+      showNotification('Production resumed successfully');
     } catch (error) {
-        alert('Failed to resume production: ' + error.message);
+      showNotification('Failed to resume production: ' + error.message, 'danger');
     }
   };
 
@@ -93,112 +125,575 @@ export default function OrdersPage() {
       try {
         await API.delete(`/orders/${orderId}`);
         loadData();
+        showNotification('Order deleted successfully');
       } catch (error) {
-        alert('Failed to delete order: ' + error.message);
+        showNotification('Failed to delete order: ' + error.message, 'danger');
       }
     }
   };
 
-  const filteredOrders = selectedEnvironment === 'all'
-    ? orders
-    : orders.filter(order => order.environment === selectedEnvironment);
+  // Filter and search orders
+  const filteredOrders = useMemo(() => {
+    let filtered = orders;
+    
+    if (selectedEnvironment !== 'all') {
+      filtered = filtered.filter(order => order.environment === selectedEnvironment);
+    }
+    
+    if (statusFilter !== 'all') {
+      filtered = filtered.filter(order => order.status === statusFilter);
+    }
+    
+    if (searchTerm) {
+      filtered = filtered.filter(order => 
+        order.order_number.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        order.product_name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+    
+    return filtered;
+  }, [orders, selectedEnvironment, statusFilter, searchTerm]);
+
+  // Calculate statistics
+  const stats = useMemo(() => {
+    const total = orders.length;
+    const pending = orders.filter(o => o.status === 'pending').length;
+    const inProgress = orders.filter(o => o.status === 'in_progress').length;
+    const completed = orders.filter(o => o.status === 'completed').length;
+    const paused = orders.filter(o => o.status === 'paused').length;
+    const totalQuantity = orders.reduce((sum, o) => sum + (parseInt(o.quantity) || 0), 0);
+    const completedQuantity = orders.filter(o => o.status === 'completed').reduce((sum, o) => sum + (parseInt(o.actual_quantity || o.quantity) || 0), 0);
+    const completionRate = total > 0 ? Math.round((completed / total) * 100) : 0;
+    
+    return { total, pending, inProgress, completed, paused, totalQuantity, completedQuantity, completionRate };
+  }, [orders]);
 
   const getStatusBadge = (status) => {
-    const statusClasses = {
-      pending: 'bg-gray-100 text-gray-800', in_progress: 'bg-blue-100 text-blue-800',
-      completed: 'bg-green-100 text-green-800', paused: 'bg-yellow-100 text-yellow-800',
-      stopped: 'bg-red-100 text-red-800'
+    const statusConfig = {
+      pending: { variant: 'default', icon: Clock },
+      in_progress: { variant: 'info', icon: Play },
+      completed: { variant: 'success', icon: CheckCircle },
+      paused: { variant: 'warning', icon: Pause },
+      stopped: { variant: 'danger', icon: Square }
     };
-    return <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${statusClasses[status] || ''}`}>{status ? status.replace('_', ' ').toUpperCase() : 'UNKNOWN'}</span>;
+    
+    const config = statusConfig[status] || { variant: 'default', icon: AlertTriangle };
+    const Icon = config.icon;
+    
+    return (
+      <Badge variant={config.variant}>
+        <Icon className="w-3 h-3 mr-1" />
+        {status ? status.replace('_', ' ').toUpperCase() : 'UNKNOWN'}
+      </Badge>
+    );
   };
 
+  const getPriorityBadge = (priority) => {
+    const priorityConfig = {
+      low: 'default',
+      normal: 'info', 
+      high: 'warning',
+      urgent: 'danger'
+    };
+    return <Badge variant={priorityConfig[priority] || 'default'} size="sm">{priority?.toUpperCase() || 'NORMAL'}</Badge>;
+  };
+
+  // Statistics panel component
+  const StatisticsPanel = () => (
+    <div className="grid grid-cols-2 md:grid-cols-7 gap-4 mb-6">
+      <Card className="p-4">
+        <div className="flex items-center gap-2">
+          <Package className="w-5 h-5 text-gray-600" />
+          <div>
+            <p className="text-sm text-gray-500">Total Orders</p>
+            <p className="text-2xl font-bold text-gray-800">{stats.total}</p>
+          </div>
+        </div>
+      </Card>
+      <Card className="p-4">
+        <div className="flex items-center gap-2">
+          <Clock className="w-5 h-5 text-gray-600" />
+          <div>
+            <p className="text-sm text-gray-500">Pending</p>
+            <p className="text-2xl font-bold text-gray-600">{stats.pending}</p>
+          </div>
+        </div>
+      </Card>
+      <Card className="p-4">
+        <div className="flex items-center gap-2">
+          <Play className="w-5 h-5 text-blue-600" />
+          <div>
+            <p className="text-sm text-gray-500">In Progress</p>
+            <p className="text-2xl font-bold text-blue-600">{stats.inProgress}</p>
+          </div>
+        </div>
+      </Card>
+      <Card className="p-4">
+        <div className="flex items-center gap-2">
+          <CheckCircle className="w-5 h-5 text-green-600" />
+          <div>
+            <p className="text-sm text-gray-500">Completed</p>
+            <p className="text-2xl font-bold text-green-600">{stats.completed}</p>
+          </div>
+        </div>
+      </Card>
+      <Card className="p-4">
+        <div className="flex items-center gap-2">
+          <Pause className="w-5 h-5 text-yellow-600" />
+          <div>
+            <p className="text-sm text-gray-500">Paused</p>
+            <p className="text-2xl font-bold text-yellow-600">{stats.paused}</p>
+          </div>
+        </div>
+      </Card>
+      <Card className="p-4">
+        <div className="flex items-center gap-2">
+          <Target className="w-5 h-5 text-purple-600" />
+          <div>
+            <p className="text-sm text-gray-500">Total Qty</p>
+            <p className="text-2xl font-bold text-purple-600">{stats.totalQuantity.toLocaleString()}</p>
+          </div>
+        </div>
+      </Card>
+      <Card className="p-4">
+        <div className="flex items-center gap-2">
+          <BarChart3 className="w-5 h-5 text-indigo-600" />
+          <div>
+            <p className="text-sm text-gray-500">Completion</p>
+            <p className="text-2xl font-bold text-indigo-600">{stats.completionRate}%</p>
+          </div>
+        </div>
+      </Card>
+    </div>
+  );
+
+  if (loading && orders.length === 0) {
+    return (
+      <div className="p-6 text-center">
+        <div className="flex items-center justify-center gap-2 text-gray-500">
+          <RefreshCw className="w-5 h-5 animate-spin" />
+          Loading orders...
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="p-6 space-y-6">
-      <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-gray-800">Production Orders</h1>
-        <button onClick={() => setShowCreateModal(true)} className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-            <Icon icon="plus" size={16} className="mr-2" />
-            Create New Order
-        </button>
+    <div className="p-6 space-y-6 bg-gray-50 min-h-screen">
+      {/* Notification */}
+      {notification && (
+        <div className={`fixed top-4 right-4 p-4 rounded-lg shadow-lg z-50 ${
+          notification.type === 'success' ? 'bg-green-100 text-green-800 border border-green-200' :
+          notification.type === 'danger' ? 'bg-red-100 text-red-800 border border-red-200' :
+          notification.type === 'warning' ? 'bg-yellow-100 text-yellow-800 border border-yellow-200' :
+          'bg-blue-100 text-blue-800 border border-blue-200'
+        }`}>
+          {notification.message}
+        </div>
+      )}
+
+      {/* Header */}
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-800">Production Orders</h1>
+          <p className="text-gray-600 mt-1">Manage production orders and track progress</p>
+        </div>
+        
+        <div className="flex items-center gap-4">
+          <Button 
+            onClick={handleRefresh}
+            disabled={refreshing}
+            variant="outline"
+          >
+            <RefreshCw className={`w-4 h-4 mr-2 ${refreshing ? 'animate-spin' : ''}`} />
+            Refresh
+          </Button>
+          
+          <Button onClick={() => setShowCreateModal(true)}>
+            <Plus className="w-4 h-4 mr-2" />
+            Create Order
+          </Button>
+        </div>
       </div>
 
-      <div className="bg-white p-4 rounded-lg shadow">
-        <div className="mb-4 flex space-x-2 border-b border-gray-200 pb-4">
-            {['all', 'blending', 'packaging'].map(env => (
-              <button key={env} onClick={() => setSelectedEnvironment(env)} className={`px-4 py-2 rounded-md text-sm font-medium ${selectedEnvironment === env ? 'bg-blue-100 text-blue-700' : 'text-gray-500 hover:bg-gray-100'}`}>
-                {env.charAt(0).toUpperCase() + env.slice(1)}
-              </button>
-            ))}
-        </div>
+      {/* Statistics Panel */}
+      <StatisticsPanel />
 
+      {/* Filters and Search */}
+      <Card className="p-6">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          {/* Search */}
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+            <input
+              type="text"
+              placeholder="Search orders..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+          </div>
+          
+          {/* Environment Filter */}
+          <div className="relative">
+            <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+            <select 
+              value={selectedEnvironment}
+              onChange={(e) => setSelectedEnvironment(e.target.value)}
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none"
+            >
+              <option value="all">All Environments</option>
+              <option value="blending">Blending</option>
+              <option value="packaging">Packaging</option>
+              <option value="beverage">Beverage</option>
+            </select>
+          </div>
+          
+          {/* Status Filter */}
+          <div>
+            <select 
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            >
+              <option value="all">All Statuses</option>
+              <option value="pending">Pending</option>
+              <option value="in_progress">In Progress</option>
+              <option value="completed">Completed</option>
+              <option value="paused">Paused</option>
+            </select>
+          </div>
+          
+          {/* Results Count */}
+          <div className="flex items-center justify-center md:justify-start">
+            <span className="text-sm text-gray-600">
+              Showing {filteredOrders.length} of {orders.length} orders
+            </span>
+          </div>
+        </div>
+      </Card>
+
+      {/* Orders Table */}
+      <Card>
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
-                {['Order #', 'Product', 'Quantity', 'Environment', 'Status', 'Machine', 'Actions'].map(h => <th key={h} className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{h}</th>)}
+                {['Order #', 'Product', 'Quantity', 'Environment', 'Priority', 'Status', 'Machine', 'Due Date', 'Actions'].map(h => (
+                  <th key={h} className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{h}</th>
+                ))}
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {loading ? (
-                <tr><td colSpan="7" className="text-center py-10 text-gray-500">Loading orders...</td></tr>
+                <tr><td colSpan="9" className="text-center py-10 text-gray-500">
+                  <RefreshCw className="w-5 h-5 animate-spin mx-auto mb-2" />
+                  Loading orders...
+                </td></tr>
+              ) : filteredOrders.length === 0 ? (
+                <tr><td colSpan="9" className="text-center py-10">
+                  <Package className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                  <p className="text-gray-500 mb-2">No orders found</p>
+                  {!searchTerm && selectedEnvironment === 'all' && statusFilter === 'all' ? (
+                    <Button onClick={() => setShowCreateModal(true)} size="sm">
+                      <Plus className="w-4 h-4 mr-2" />
+                      Create First Order
+                    </Button>
+                  ) : (
+                    <p className="text-sm text-gray-400">Try adjusting your filters or search term</p>
+                  )}
+                </td></tr>
               ) : filteredOrders.map(order => (
                 <tr key={order.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{order.order_number}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm font-medium text-gray-900">{order.order_number}</div>
+                    {order.notes && <div className="text-xs text-gray-500 truncate max-w-32">{order.notes}</div>}
+                  </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{order.product_name}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{order.quantity}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                    {order.actual_quantity ? `${order.actual_quantity}/${order.quantity}` : order.quantity}
+                  </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 capitalize">{order.environment}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{getPriorityBadge(order.priority)}</td>
                   <td className="px-6 py-4 whitespace-nowrap">{getStatusBadge(order.status)}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{order.machine_name || '-'}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                    {order.due_date ? new Date(order.due_date).toLocaleDateString() : '-'}
+                  </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm space-x-2">
-                    {order.status === 'pending' && <button onClick={() => { setSelectedOrder(order); setShowStartModal(true); }} className="px-3 py-1 bg-blue-500 text-white rounded text-sm hover:bg-blue-600">Start</button>}
-                    {order.status === 'in_progress' && (
+                    {order.status === 'pending' && (
                       <>
-                        <button onClick={() => handlePauseProduction(order.id)} className="px-3 py-1 bg-yellow-500 text-white rounded text-sm hover:bg-yellow-600">Pause</button>
-                        <button onClick={() => { setSelectedOrder(order); setShowCompletionModal(true); }} className="px-3 py-1 bg-green-500 text-white rounded text-sm hover:bg-green-600">Complete</button>
+                        <Button 
+                          onClick={() => { setSelectedOrder(order); setShowStartModal(true); }} 
+                          size="sm"
+                          variant="outline"
+                        >
+                          <Play className="w-4 h-4 mr-1" />
+                          Start
+                        </Button>
+                        <Button 
+                          onClick={() => handleDeleteOrder(order.id)} 
+                          size="sm"
+                          variant="outline"
+                          className="text-red-600 hover:text-red-700"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
                       </>
                     )}
-                    {order.status === 'paused' && <button onClick={() => handleResumeProduction(order.id)} className="px-3 py-1 bg-blue-500 text-white rounded text-sm hover:bg-blue-600">Resume</button>}
-                    {order.status === 'pending' && <button onClick={() => handleDeleteOrder(order.id)} className="px-3 py-1 bg-red-500 text-white rounded text-sm hover:bg-red-600">Delete</button>}
+                    {order.status === 'in_progress' && (
+                      <>
+                        <Button 
+                          onClick={() => { setSelectedOrder(order); setShowPauseModal(true); }} 
+                          size="sm"
+                          variant="outline"
+                          className="text-yellow-600 hover:text-yellow-700"
+                        >
+                          <Pause className="w-4 h-4 mr-1" />
+                          Pause
+                        </Button>
+                        <Button 
+                          onClick={() => { setSelectedOrder(order); setShowCompletionModal(true); }} 
+                          size="sm"
+                          variant="outline"
+                          className="text-green-600 hover:text-green-700"
+                        >
+                          <CheckCircle className="w-4 h-4 mr-1" />
+                          Complete
+                        </Button>
+                      </>
+                    )}
+                    {order.status === 'paused' && (
+                      <Button 
+                        onClick={() => handleResumeProduction(order.id)} 
+                        size="sm"
+                        variant="outline"
+                        className="text-blue-600 hover:text-blue-700"
+                      >
+                        <Play className="w-4 h-4 mr-1" />
+                        Resume
+                      </Button>
+                    )}
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-      </div>
+      </Card>
 
+      {/* Create Order Modal */}
       {showCreateModal && (
         <Modal title="Create New Order" onClose={() => setShowCreateModal(false)}>
           <form onSubmit={handleCreateOrder} className="space-y-4">
-            <input type="text" placeholder="Order Number" onChange={(e) => setFormData({...formData, order_number: e.target.value})} className="w-full px-3 py-2 border rounded" required />
-            <input type="text" placeholder="Product Name" onChange={(e) => setFormData({...formData, product_name: e.target.value})} className="w-full px-3 py-2 border rounded" required />
-            <input type="number" placeholder="Quantity" onChange={(e) => setFormData({...formData, quantity: e.target.value})} className="w-full px-3 py-2 border rounded" required min="1" />
-            <div className="flex justify-end space-x-2 pt-4 border-t"><button type="button" onClick={() => setShowCreateModal(false)} className="px-4 py-2 border rounded hover:bg-gray-100">Cancel</button><button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Create Order</button></div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Order Number</label>
+                <input 
+                  type="text" 
+                  placeholder="e.g. ORD-2024-001" 
+                  value={formData.order_number}
+                  onChange={(e) => setFormData({...formData, order_number: e.target.value})} 
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                  required 
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Environment</label>
+                <select 
+                  value={formData.environment}
+                  onChange={(e) => setFormData({...formData, environment: e.target.value})} 
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
+                  <option value="blending">Blending</option>
+                  <option value="packaging">Packaging</option>
+                  <option value="beverage">Beverage</option>
+                </select>
+              </div>
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Product Name</label>
+              <input 
+                type="text" 
+                placeholder="Product name" 
+                value={formData.product_name}
+                onChange={(e) => setFormData({...formData, product_name: e.target.value})} 
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                required 
+              />
+            </div>
+            
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Quantity</label>
+                <input 
+                  type="number" 
+                  placeholder="1000" 
+                  value={formData.quantity}
+                  onChange={(e) => setFormData({...formData, quantity: e.target.value})} 
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                  required 
+                  min="1" 
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Priority</label>
+                <select 
+                  value={formData.priority}
+                  onChange={(e) => setFormData({...formData, priority: e.target.value})} 
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
+                  <option value="low">Low</option>
+                  <option value="normal">Normal</option>
+                  <option value="high">High</option>
+                  <option value="urgent">Urgent</option>
+                </select>
+              </div>
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Due Date (Optional)</label>
+              <input 
+                type="date" 
+                value={formData.due_date}
+                onChange={(e) => setFormData({...formData, due_date: e.target.value})} 
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+              />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Notes (Optional)</label>
+              <textarea 
+                placeholder="Additional notes or instructions" 
+                value={formData.notes}
+                onChange={(e) => setFormData({...formData, notes: e.target.value})} 
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                rows="3"
+              />
+            </div>
+            
+            <div className="flex justify-end gap-3 pt-4">
+              <Button type="button" onClick={() => setShowCreateModal(false)} variant="outline">
+                Cancel
+              </Button>
+              <Button type="submit">
+                <Plus className="w-4 h-4 mr-2" />
+                Create Order
+              </Button>
+            </div>
           </form>
         </Modal>
       )}
 
+      {/* Start Production Modal */}
       {showStartModal && selectedOrder && (
         <Modal title="Start Production" onClose={() => setShowStartModal(false)}>
-            <p className="text-sm text-gray-600 mb-4">Order: <span className="font-medium">{selectedOrder.order_number}</span> - {selectedOrder.product_name}</p>
-            <select value={selectedMachine} onChange={(e) => setSelectedMachine(e.target.value)} className="w-full px-3 py-2 border rounded" required>
+          <div className="space-y-4">
+            <div className="bg-blue-50 p-4 rounded-lg">
+              <h3 className="font-medium text-blue-900">Order Details</h3>
+              <p className="text-sm text-blue-700 mt-1">
+                <span className="font-medium">{selectedOrder.order_number}</span> - {selectedOrder.product_name}
+              </p>
+              <p className="text-sm text-blue-600">Quantity: {selectedOrder.quantity} | Environment: {selectedOrder.environment}</p>
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Select Machine</label>
+              <select 
+                value={selectedMachine} 
+                onChange={(e) => setSelectedMachine(e.target.value)} 
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                required
+              >
                 <option value="">Choose an available machine...</option>
-                {machines.filter(m => m.environment === selectedOrder.environment && m.status === 'available').map(m => <option key={m.id} value={m.id}>{m.name} ({m.type})</option>)}
-            </select>
-            <div className="flex justify-end space-x-2 mt-4 pt-4 border-t"><button type="button" onClick={() => setShowStartModal(false)} className="px-4 py-2 border rounded hover:bg-gray-100">Cancel</button><button onClick={handleStartProduction} disabled={!selectedMachine} className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50">Start Production</button></div>
+                {machines
+                  .filter(m => m.environment === selectedOrder.environment && m.status === 'available')
+                  .map(m => (
+                    <option key={m.id} value={m.id}>
+                      {m.name} ({m.type}) - Capacity: {m.capacity}
+                    </option>
+                  ))
+                }
+              </select>
+              {machines.filter(m => m.environment === selectedOrder.environment && m.status === 'available').length === 0 && (
+                <p className="text-sm text-red-600 mt-2">
+                  <AlertTriangle className="w-4 h-4 inline mr-1" />
+                  No available machines in {selectedOrder.environment} environment
+                </p>
+              )}
+            </div>
+            
+            <div className="flex justify-end gap-3 pt-4">
+              <Button type="button" onClick={() => setShowStartModal(false)} variant="outline">
+                Cancel
+              </Button>
+              <Button 
+                onClick={handleStartProduction} 
+                disabled={!selectedMachine}
+              >
+                <Play className="w-4 h-4 mr-2" />
+                Start Production
+              </Button>
+            </div>
+          </div>
         </Modal>
       )}
 
+      {/* Pause Production Modal */}
+      {showPauseModal && selectedOrder && (
+        <Modal title="Pause Production" onClose={() => setShowPauseModal(false)}>
+          <div className="space-y-4">
+            <div className="bg-yellow-50 p-4 rounded-lg">
+              <h3 className="font-medium text-yellow-900">Order Details</h3>
+              <p className="text-sm text-yellow-700 mt-1">
+                <span className="font-medium">{selectedOrder.order_number}</span> - {selectedOrder.product_name}
+              </p>
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Reason for Pausing</label>
+              <textarea 
+                placeholder="Enter reason for pausing production (required)" 
+                value={pauseReason}
+                onChange={(e) => setPauseReason(e.target.value)} 
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                rows="3"
+                required
+              />
+            </div>
+            
+            <div className="flex justify-end gap-3 pt-4">
+              <Button type="button" onClick={() => setShowPauseModal(false)} variant="outline">
+                Cancel
+              </Button>
+              <Button 
+                onClick={handlePauseProduction}
+                disabled={!pauseReason.trim()}
+                variant="warning"
+              >
+                <Pause className="w-4 h-4 mr-2" />
+                Pause Production
+              </Button>
+            </div>
+          </div>
+        </Modal>
+      )}
+      
+      {/* Completion Modal */}
       {showCompletionModal && selectedOrder && (
-          <ProductionCompletionModalWithWaste
-            isOpen={showCompletionModal}
-            onClose={() => setShowCompletionModal(false)}
-            order={selectedOrder}
-            onComplete={() => {
-                setShowCompletionModal(false);
-                loadData();
-            }}
-          />
+        <ProductionCompletionModalWithWaste
+          isOpen={showCompletionModal}
+          onClose={() => setShowCompletionModal(false)}
+          order={selectedOrder}
+          onComplete={() => {
+            setShowCompletionModal(false);
+            loadData();
+            showNotification('Order completed successfully');
+          }}
+        />
       )}
     </div>
   );
