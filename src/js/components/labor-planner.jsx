@@ -89,11 +89,19 @@ export function LaborManagementSystem() {
     // API Functions
     const assignEmployee = async (employeeId) => {
         if (currentAssignments.some(a => a.employee_id === employeeId)) return showNotification('Employee already assigned', 'danger');
+        if (!selectedMachine) return showNotification('Please select a machine first', 'danger');
+        if (!selectedDate) return showNotification('Please select a date first', 'danger');
+        
         try {
+            console.log('Assigning employee:', { employee_id: employeeId, machine_id: selectedMachine, shift: selectedShift, assignment_date: selectedDate });
             const newAssignment = await API.post('/planner/assignments', { employee_id: employeeId, machine_id: selectedMachine, shift: selectedShift, assignment_date: selectedDate });
             fetchData(selectedDate); // Refetch to get all details
-            showNotification('Employee assigned');
-        } catch (error) { showNotification('Failed to assign employee', 'danger'); }
+            showNotification('Employee assigned successfully');
+        } catch (error) { 
+            console.error('Assignment error:', error);
+            const errorMessage = error.response?.data?.error || error.message || 'Failed to assign employee';
+            showNotification(`Assignment failed: ${errorMessage}`, 'danger'); 
+        }
     };
 
     const removeAssignment = async (id) => {

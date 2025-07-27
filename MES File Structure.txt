@@ -1,0 +1,40 @@
+/production-orders-app/
+├── node_modules/
+├── scripts/
+│   └── migrate.js        # ✅ Manages your database schema
+├── src/
+│   ├── app.jsx           # ✅ Main React application component
+│   └── js/
+│       ├── components/
+│       │   ├── admin.jsx
+│       │   ├── analytics.jsx
+│       │   ├── auth-components.jsx
+│       │   ├── dashboard.jsx
+│       │   ├── labor-layout.jsx
+│       │   ├── labor-planner.jsx   # ✅ Your new feature
+│       │   ├── layout-components.jsx
+│       │   ├── machines.jsx
+│       │   ├── orders.jsx
+│       │   ├── production-completion-modal-with-waste.jsx
+│       │   ├── production-dashboard.jsx
+│       │   ├── ui-components.jsx
+│       │   └── users.jsx
+│       ├── config/
+│       │   └── app-config.js
+│       ├── core/
+│       │   ├── api.js
+│       │   ├── auth.js
+│       │   ├── event-bus.js
+│       │   └── router.js
+│       └── modules/
+│           ├── production-module.jsx
+│           ├── reporting-module.jsx
+│           └── settings-module.jsx
+├── .env
+├── .gitignore
+├── index.html            # ✅ Main HTML file for Vite
+├── package.json
+├── package-lock.json
+├── production.db         # ✅ Your SQLite database
+├── server.js             # ✅ Your Express backend API server
+└── vite.config.js        # ✅ Configuration for Vite

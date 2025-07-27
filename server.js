@@ -581,15 +581,29 @@ apiRouter.get('/planner/assignments', authenticateToken, async (req, res) => {
 apiRouter.post('/planner/assignments', authenticateToken, requireRole(['admin', 'supervisor']), async (req, res) => {
     try {
         const { employee_id, machine_id, shift, assignment_date } = req.body;
+        console.log('Assignment request data:', { employee_id, machine_id, shift, assignment_date });
+        console.log('User role:', req.user?.role);
+        
+        // Validate required fields
+        if (!employee_id || !machine_id || !shift || !assignment_date) {
+            return res.status(400).json({ error: 'Missing required fields: employee_id, machine_id, shift, assignment_date' });
+        }
+        
+        const params = [employee_id, employee_id, machine_id, shift, assignment_date, 'planned'];
+        console.log('SQL parameters:', params);
         const result = await dbRun(
             'INSERT INTO labor_assignments (user_id, employee_id, machine_id, shift, assignment_date, status) VALUES (?, ?, ?, ?, ?, ?)',
-            [employee_id, employee_id, machine_id, shift, assignment_date, 'planned']
+            params
         );
+        console.log('Assignment created with ID:', result.lastID);
+        
         const newAssignment = await dbGet('SELECT * FROM labor_assignments WHERE id = ?', [result.lastID]);
         res.status(201).json(newAssignment);
     } catch (error) {
-        console.error("Error creating assignment:", error);
-        res.status(500).json({ error: 'Failed to create assignment' });
+        console.error("Error creating assignment - Full error:", error);
+        console.error("Error message:", error.message);
+        console.error("Error code:", error.code);
+        res.status(500).json({ error: `Failed to create assignment: ${error.message}` });
     }
 });
 
