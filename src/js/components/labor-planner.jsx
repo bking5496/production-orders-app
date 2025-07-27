@@ -27,8 +27,30 @@ const exportToJSON = (data, filename) => {
     link.click();
 };
 
-// Enhanced Excel export with proper template structure
+// Professional Excel export with proper formatting
 const exportToExcel = (assignments, machines, employees, date, supervisorOnDuty) => {
+    // Check if XLSX library is available
+    if (!window.XLSX) {
+        // Fallback to CSV if XLSX not available
+        console.warn('XLSX library not available, falling back to CSV export');
+        exportToCSV(
+            assignments.map(assignment => {
+                const employee = employees.find(e => e.id === assignment.employee_id);
+                const machine = machines.find(m => m.id == assignment.machine_id);
+                return {
+                    'Employee Code': employee?.employee_code || 'N/A',
+                    'Name': employee?.fullName || employee?.username || 'N/A',
+                    'Machine': machine?.name || `Machine ${assignment.machine_id}`,
+                    'Role': employee?.role || 'N/A',
+                    'Shift': assignment.shift || 'N/A',
+                    'Company': employee?.company || 'N/A'
+                };
+            }),
+            `labor-schedule-${date}.csv`
+        );
+        return;
+    }
+
     // Get day of week and format date
     const dateObj = new Date(date);
     const dayOfWeek = dateObj.toLocaleDateString('en-US', { weekday: 'long' });
@@ -38,17 +60,23 @@ const exportToExcel = (assignments, machines, employees, date, supervisorOnDuty)
         day: 'numeric' 
     });
 
-    // Create Excel content with proper structure
-    let excelContent = '';
+    // Create a new workbook
+    const workbook = window.XLSX.utils.book_new();
     
-    // Header section
-    excelContent += `Day of Week,${dayOfWeek}\n`;
-    excelContent += `Date,${formattedDate}\n`;
-    excelContent += `Supervisor on Duty,${supervisorOnDuty || 'Not Assigned'}\n`;
-    excelContent += '\n'; // Empty line separator
+    // Create worksheet data array
+    const wsData = [];
+    
+    // Header section with styling
+    wsData.push(['LABOR SCHEDULE REPORT']); // Title row
+    wsData.push([]); // Empty row
+    wsData.push(['Day of Week:', dayOfWeek]);
+    wsData.push(['Date:', formattedDate]);
+    wsData.push(['Supervisor on Duty:', supervisorOnDuty || 'Not Assigned']);
+    wsData.push([]); // Empty row
+    wsData.push([]); // Empty row
     
     // Work table headers
-    excelContent += 'Employee Code,Name,Machine,Role,Shift,Company\n';
+    wsData.push(['Employee Code', 'Name', 'Machine', 'Role', 'Shift', 'Company']);
     
     // Work table data
     assignments.forEach(assignment => {
@@ -56,24 +84,113 @@ const exportToExcel = (assignments, machines, employees, date, supervisorOnDuty)
         const machine = machines.find(m => m.id == assignment.machine_id);
         
         if (employee) {
-            const row = [
+            wsData.push([
                 employee.employee_code || 'N/A',
                 employee.fullName || employee.username || 'N/A',
                 machine?.name || `Machine ${assignment.machine_id}`,
-                employee.role || 'N/A',
-                assignment.shift || 'N/A',
+                (employee.role || 'N/A').charAt(0).toUpperCase() + (employee.role || 'N/A').slice(1),
+                (assignment.shift || 'N/A').charAt(0).toUpperCase() + (assignment.shift || 'N/A').slice(1),
                 employee.company || 'N/A'
-            ].join(',');
-            excelContent += row + '\n';
+            ]);
         }
     });
     
-    // Create and download file
-    const blob = new Blob([excelContent], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = `labor-schedule-${date}.csv`;
-    link.click();
+    // Create worksheet
+    const worksheet = window.XLSX.utils.aoa_to_sheet(wsData);
+    
+    // Set column widths
+    worksheet['!cols'] = [
+        { wch: 15 }, // Employee Code
+        { wch: 25 }, // Name
+        { wch: 20 }, // Machine
+        { wch: 15 }, // Role
+        { wch: 12 }, // Shift
+        { wch: 15 }  // Company
+    ];
+    
+    // Apply formatting
+    const range = window.XLSX.utils.decode_range(worksheet['!ref']);
+    
+    // Style the title row (A1)
+    if (worksheet['A1']) {
+        worksheet['A1'].s = {
+            font: { bold: true, sz: 16, color: { rgb: "1F4E79" } },
+            alignment: { horizontal: "center" }
+        };
+    }
+    
+    // Style header information rows (A3:B5)
+    for (let row = 2; row <= 4; row++) {
+        const cellA = `A${row + 1}`;
+        const cellB = `B${row + 1}`;
+        if (worksheet[cellA]) {
+            worksheet[cellA].s = {
+                font: { bold: true },
+                fill: { fgColor: { rgb: "F2F2F2" } }
+            };
+        }
+        if (worksheet[cellB]) {
+            worksheet[cellB].s = {
+                font: { bold: false },
+                fill: { fgColor: { rgb: "F9F9F9" } }
+            };
+        }
+    }
+    
+    // Style table headers (row 8)
+    const headerRow = 8;
+    for (let col = 0; col < 6; col++) {
+        const cellRef = window.XLSX.utils.encode_cell({ r: headerRow - 1, c: col });
+        if (worksheet[cellRef]) {
+            worksheet[cellRef].s = {
+                font: { bold: true, color: { rgb: "FFFFFF" } },
+                fill: { fgColor: { rgb: "4472C4" } },
+                alignment: { horizontal: "center" },
+                border: {
+                    top: { style: "thin", color: { rgb: "000000" } },
+                    bottom: { style: "thin", color: { rgb: "000000" } },
+                    left: { style: "thin", color: { rgb: "000000" } },
+                    right: { style: "thin", color: { rgb: "000000" } }
+                }
+            };
+        }
+    }
+    
+    // Style data rows with alternating colors
+    for (let row = headerRow; row < range.e.r; row++) {
+        const isEvenRow = (row - headerRow) % 2 === 0;
+        const bgColor = isEvenRow ? "FFFFFF" : "F8F9FA";
+        
+        for (let col = 0; col < 6; col++) {
+            const cellRef = window.XLSX.utils.encode_cell({ r: row, c: col });
+            if (worksheet[cellRef]) {
+                worksheet[cellRef].s = {
+                    fill: { fgColor: { rgb: bgColor } },
+                    border: {
+                        top: { style: "thin", color: { rgb: "E0E0E0" } },
+                        bottom: { style: "thin", color: { rgb: "E0E0E0" } },
+                        left: { style: "thin", color: { rgb: "E0E0E0" } },
+                        right: { style: "thin", color: { rgb: "E0E0E0" } }
+                    },
+                    alignment: { horizontal: col === 1 ? "left" : "center" } // Name column left-aligned
+                };
+            }
+        }
+    }
+    
+    // Merge title cell across columns
+    worksheet['!merges'] = [
+        { s: { r: 0, c: 0 }, e: { r: 0, c: 5 } } // Merge title across all columns
+    ];
+    
+    // Add worksheet to workbook
+    window.XLSX.utils.book_append_sheet(workbook, worksheet, 'Labor Schedule');
+    
+    // Generate filename
+    const filename = `Labor-Schedule-${date}.xlsx`;
+    
+    // Write and download the file
+    window.XLSX.writeFile(workbook, filename);
 };
 
 // Enhanced UI Components
@@ -253,11 +370,15 @@ export function LaborManagementSystem() {
 
     // Export state
     const [showExportModal, setShowExportModal] = useState(false);
-    const [exportFormat, setExportFormat] = useState('csv');
+    const [exportFormat, setExportFormat] = useState('excel');
     const [exportDateRange, setExportDateRange] = useState({
         start: new Date().toISOString().split('T')[0],
         end: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
     });
+
+    // Supervisor management
+    const [supervisorOnDuty, setSupervisorOnDuty] = useState('');
+    const [showSupervisorModal, setShowSupervisorModal] = useState(false);
 
     // Filtering state
     const [filters, setFilters] = useState({
@@ -349,34 +470,46 @@ export function LaborManagementSystem() {
     const handleExport = async () => {
         try {
             setLoading(true);
-            const response = await API.get(`/planner/assignments/export`, {
-                params: {
-                    startDate: exportDateRange.start,
-                    endDate: exportDateRange.end,
-                    format: exportFormat
-                }
-            });
             
-            const exportData = response.map(assignment => ({
-                'Assignment ID': assignment.id,
-                'Date': assignment.assignment_date,
-                'Machine': assignment.machine_name || `Machine ${assignment.machine_id}`,
-                'Employee': assignment.fullName || assignment.username,
-                'Employee Code': assignment.employee_code,
-                'Shift': assignment.shift,
-                'Status': assignment.status,
-                'Role': assignment.role
-            }));
-
-            const filename = `labor-assignments-${exportDateRange.start}-to-${exportDateRange.end}.${exportFormat}`;
-            
-            if (exportFormat === 'csv') {
-                exportToCSV(exportData, filename);
+            if (exportFormat === 'excel') {
+                // Use the Excel template format for single day export
+                const exportDate = exportDateRange.start;
+                const dayAssignments = assignments.filter(a => a.assignment_date === exportDate);
+                
+                exportToExcel(dayAssignments, machines, employees, exportDate, supervisorOnDuty);
+                showNotification(`Exported labor schedule for ${exportDate}`, 'success');
             } else {
-                exportToJSON(exportData, filename);
+                // For CSV/JSON, get data from API
+                const response = await API.get(`/planner/assignments`, {
+                    params: {
+                        startDate: exportDateRange.start,
+                        endDate: exportDateRange.end
+                    }
+                });
+                
+                const exportData = response.map(assignment => ({
+                    'Assignment ID': assignment.id,
+                    'Date': assignment.assignment_date,
+                    'Machine': assignment.machine_name || `Machine ${assignment.machine_id}`,
+                    'Employee': assignment.fullName || assignment.username,
+                    'Employee Code': assignment.employee_code,
+                    'Shift': assignment.shift,
+                    'Status': assignment.status,
+                    'Role': assignment.role,
+                    'Company': assignment.company
+                }));
+
+                const filename = `labor-assignments-${exportDateRange.start}-to-${exportDateRange.end}.${exportFormat}`;
+                
+                if (exportFormat === 'csv') {
+                    exportToCSV(exportData, filename);
+                } else {
+                    exportToJSON(exportData, filename);
+                }
+                
+                showNotification(`Exported ${exportData.length} assignments to ${exportFormat.toUpperCase()}`, 'success');
             }
             
-            showNotification(`Exported ${exportData.length} assignments to ${exportFormat.toUpperCase()}`, 'success');
             setShowExportModal(false);
         } catch (error) {
             showNotification('Export failed: ' + error.message, 'danger');
@@ -516,6 +649,29 @@ export function LaborManagementSystem() {
                         <div className="flex items-center gap-3 mb-6">
                             <ClipboardList className="w-8 h-8 text-blue-500" />
                             <h2 className="text-2xl font-bold">Labor Planning</h2>
+                        </div>
+
+                        {/* Supervisor Assignment */}
+                        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-3">
+                                    <UserCheck className="w-5 h-5 text-blue-600" />
+                                    <div>
+                                        <p className="font-medium text-blue-800">Supervisor on Duty</p>
+                                        <p className="text-sm text-blue-600">
+                                            {supervisorOnDuty || 'Not assigned for this shift'}
+                                        </p>
+                                    </div>
+                                </div>
+                                <Button 
+                                    variant="outline" 
+                                    size="sm"
+                                    onClick={() => setShowSupervisorModal(true)}
+                                >
+                                    <Edit2 className="w-4 h-4" />
+                                    Assign Supervisor
+                                </Button>
+                            </div>
                         </div>
 
                         {/* Enhanced Controls */}
@@ -900,7 +1056,22 @@ export function LaborManagementSystem() {
                         
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-2">Export Format</label>
-                            <div className="grid grid-cols-2 gap-4">
+                            <div className="grid grid-cols-3 gap-4">
+                                <button
+                                    onClick={() => setExportFormat('excel')}
+                                    className={`p-4 border-2 rounded-lg text-center transition-all relative ${
+                                        exportFormat === 'excel' 
+                                            ? 'border-green-500 bg-green-50 text-green-700' 
+                                            : 'border-gray-300 hover:border-green-300 hover:bg-green-50'
+                                    }`}
+                                >
+                                    <div className="absolute top-2 right-2">
+                                        <Badge variant="success" size="sm">Recommended</Badge>
+                                    </div>
+                                    <FileText className="w-6 h-6 mx-auto mb-2 text-green-600" />
+                                    <p className="font-medium">Excel Template</p>
+                                    <p className="text-sm text-gray-500">Professional format</p>
+                                </button>
                                 <button
                                     onClick={() => setExportFormat('csv')}
                                     className={`p-4 border-2 rounded-lg text-center transition-all ${
@@ -930,10 +1101,22 @@ export function LaborManagementSystem() {
 
                         <div className="bg-gray-50 p-4 rounded-lg">
                             <h4 className="font-medium text-gray-800 mb-2">Export Preview</h4>
-                            <p className="text-sm text-gray-600">
-                                This will export all labor assignments between {exportDateRange.start} and {exportDateRange.end} 
-                                in {exportFormat.toUpperCase()} format.
-                            </p>
+                            {exportFormat === 'excel' ? (
+                                <div className="text-sm text-gray-600">
+                                    <p className="mb-2">Professional Excel template will include:</p>
+                                    <ul className="list-disc list-inside space-y-1 ml-2">
+                                        <li><strong>Header:</strong> Day of week, date, supervisor on duty</li>
+                                        <li><strong>Work Table:</strong> Employee code, name, machine, role, shift, company</li>
+                                        <li><strong>Formatting:</strong> Colors, borders, proper column widths</li>
+                                        <li><strong>Date:</strong> {exportDateRange.start}</li>
+                                    </ul>
+                                </div>
+                            ) : (
+                                <p className="text-sm text-gray-600">
+                                    This will export all labor assignments between {exportDateRange.start} and {exportDateRange.end} 
+                                    in {exportFormat.toUpperCase()} format.
+                                </p>
+                            )}
                         </div>
 
                         <div className="flex justify-end gap-3">
@@ -1006,6 +1189,60 @@ export function LaborManagementSystem() {
                         </div>
                      </div>
                  </Modal>
+            )}
+
+            {/* Supervisor Assignment Modal */}
+            {showSupervisorModal && (
+                <Modal title="Assign Supervisor on Duty" onClose={() => setShowSupervisorModal(false)}>
+                    <div className="space-y-4">
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                                Select Supervisor for {selectedShift} shift on {selectedDate}
+                            </label>
+                            <div className="space-y-2 max-h-64 overflow-y-auto">
+                                {employees.filter(e => e.role === 'supervisor' || e.role === 'admin').map(supervisor => (
+                                    <div 
+                                        key={supervisor.id}
+                                        className={`p-3 border rounded-lg cursor-pointer transition-all ${
+                                            supervisorOnDuty === (supervisor.fullName || supervisor.username)
+                                                ? 'border-blue-500 bg-blue-50'
+                                                : 'border-gray-200 hover:border-gray-300'
+                                        }`}
+                                        onClick={() => setSupervisorOnDuty(supervisor.fullName || supervisor.username)}
+                                    >
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
+                                                <UserCheck className="w-4 h-4 text-purple-600" />
+                                            </div>
+                                            <div>
+                                                <p className="font-medium">{supervisor.fullName || supervisor.username}</p>
+                                                <p className="text-sm text-gray-500">
+                                                    {supervisor.employee_code} • {supervisor.role}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                        
+                        <div className="flex justify-end gap-3 pt-4 border-t">
+                            <Button variant="secondary" onClick={() => setShowSupervisorModal(false)}>
+                                Cancel
+                            </Button>
+                            <Button 
+                                onClick={() => {
+                                    setShowSupervisorModal(false);
+                                    showNotification('Supervisor assigned successfully', 'success');
+                                }}
+                                disabled={!supervisorOnDuty}
+                            >
+                                <UserCheck className="w-4 h-4" />
+                                Assign Supervisor
+                            </Button>
+                        </div>
+                    </div>
+                </Modal>
             )}
 
             {/* Enhanced Notification */}
