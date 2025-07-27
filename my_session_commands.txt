@@ -1,0 +1,350 @@
+    1  mkdir production-orders-app
+    2  cd production-orders-app
+    3  mkdir public uploads
+    4  ll
+    5  # Create package.json
+    6  cat > package.json << 'EOF'
+    7  {
+    8    "name": "production-orders-app",
+    9    "version": "1.0.0",
+   10    "description": "Multi-Environment Manufacturing Execution System",
+   11    "main": "app.js",
+   12    "scripts": {
+   13      "start": "node app.js",
+   14      "dev": "nodemon app.js"
+   15    },
+   16    "dependencies": {
+   17      "express": "^4.18.2",
+   18      "sqlite3": "^5.1.6",
+   19      "multer": "^1.4.5-lts.1",
+   20      "xlsx": "^0.18.5"
+   21    },
+   22    "devDependencies": {
+   23      "nodemon": "^3.0.1"
+   24    },
+   25    "keywords": ["production", "manufacturing", "MES", "excel"],
+   26    "license": "MIT"
+   27  }
+   28  EOF
+   29  npm install
+   30  cat > package.json << 'EOF'
+   31  {
+   32    "name": "production-orders-app",
+   33    "version": "1.0.0",
+   34    "description": "Multi-Environment Manufacturing Execution System",
+   35    "main": "app.js",
+   36    "scripts": {
+   37      "start": "node app.js",
+   38      "dev": "nodemon app.js"
+   39    },
+   40    "dependencies": {
+   41      "express": "^4.18.2",
+   42      "sqlite3": "^5.1.6",
+   43      "multer": "^1.4.5-lts.1",
+   44      "xlsx": "^0.18.5"
+   45    },
+   46    "devDependencies": {
+   47      "nodemon": "^3.0.1"
+   48    },
+   49    "keywords": ["production", "manufacturing", "MES", "excel"],
+   50    "license": "MIT"
+   51  }
+   52  EOF
+   53  npm install
+   54  nano app.js
+   55  nano public/index.html
+   56  nano public/production.html
+   57  nano public/upload.html
+   58  npm start
+   59  cd ~/production-orders-app
+   60  npm install
+   61  npm start
+   62  chmod 700 public/
+   63  ll
+   64  cd production-orders-app/
+   65  chmod 700 public/
+   66  sudo chmod +x public/
+   67  sudo chmod 700 public/
+   68  nano public/app.js 
+   69  npm run dev
+   70  which nodemon
+   71  ls -l node_modules/.bin/nodemon
+   72  chmod +x node_modules/.bin/nodemon
+   73  npm run dev
+   74  find . -type d -exec chmod 755 {} \;
+   75  cd public/
+   76  ll
+   77  nano app.js 
+   78  cd ..
+   79  npm run dev
+   80  nano public/app.js 
+   81  npm run dev
+   82  cd ~/production-orders-app
+   83  openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout server.key -out server.cert
+   84  ls
+   85  npm run dev
+   86  nano public/app.js 
+   87  npm run dev
+   88  nano public/index.html 
+   89  npm run dev
+   90  nano public/app.js 
+   91  npm run dev
+   92  nano server.js 
+   93  nano .env 
+   94  nano server.
+   95  nano server.js 
+   96  npm run dev
+   97  npm start
+   98  npm run dev
+   99  nano public/app.js 
+  100  npm run dev
+  101  cd public/
+  102  mv index.html index.html.old
+  103  npm run dev
+  104  cd ..
+  105  nano server.js
+  106  nano .env 
+  107  nano public/index.html
+  108  npm run dev
+  109  ls -la public/
+  110  npm run dev
+  111  nano public/app.js 
+  112  npm run dev
+  113  nano public/simple-test.html
+  114  npm run dev
+  115  nano public/react-test.html
+  116  npm run dev
+  117  nano public/app.js
+  118  npm run dev
+  119  sqlite3 production.db
+  120  nano seed-data.js
+  121  node seed-data.js
+  122  nano migration.js
+  123  node migration.js
+  124  node seed-data.js
+  125  npm run dev
+  126  nano public/app.js 
+  127  nano server.js
+  128  npm run dev
+  129  nano public/app.js 
+  130  npm run dev
+  131  nano public/app.js 
+  132  npm run dev
+  133  nano migration.js 
+  134  node migration.js
+  135  nano seed.js
+  136  node seed.js
+  137  chmod 666 production.db
+  138  npm run dev
+  139  # Press Ctrl+C to stop the current server
+  140  npm run dev
+  141  nano server.js
+  142  npm run dev
+  143  nano migrate-db.js
+  144  npm run dev
+  145  nano public/index.html
+  146  nano migrate-db.js 
+  147  node migrate-db.js
+  148  nano .env
+  149  node -e "console.log(require('crypto').randomBytes(16).toString('base64'))"
+  150  nano .env
+  151  nano .env 
+  152  echo ".env" >> .gitignore
+  153  cp production.db production.db.backup
+  154  node migrate-db.js
+  155  npm install -g pm2
+  156  nano ecosystem.config.js
+  157  npm install pm2 --save-dev
+  158  nano package.json 
+  159  npm run pm2:start
+  160  npm run pm2:logs
+  161  nano package.json 
+  162  # Backup current file
+  163  cp package.json package.json.backup
+  164  # Then edit and fix the comma issue
+  165  nano package.json
+  166  cp package.json package.json.backup
+  167  nano ecosystem.config.js 
+  168  npm install pm2 --save-dev
+  169  mkdir -p logs
+  170  npm run pm2:start
+  171  npm run pm2:status
+  172  npm run pm2:logs
+  173  nano .env 
+  174  npm run pm2:logs
+  175  npm run pm2:stop
+  176  node migrate-db.js
+  177  nano migrate-db.js 
+  178  nano migrate-db-fixed.js
+  179  node migrate-db-fixed.js
+  180  npm run pm2:restart
+  181  npm run pm2:logs --lines 20
+  182  curl http://localhost:3000/api/health
+  183  nano production-config.js
+  184  npm run pm2:restart
+  185  nano public/app.js 
+  186  nano public/app.js
+  187  npm run pm2:logs --lines 50
+  188  pm2 restart
+  189  pm2 restart all
+  190  pm2:restart
+  191  npm run pm2:start
+  192  npm run pm2:logs
+  193  nano public/app.js 
+  194  npm run pm2:logs --lines 50
+  195  nano public/app.js 
+  196  grep -o '{' app.js | wc -l
+  197  grep -o '}' app.js | wc -l
+  198  grep -o '{' app.js | wc -l
+  199  nano public/app.js 
+  200  npm run pm2:restart
+  201  nano add-machines.js
+  202  node add-machines.js
+  203  sqlite3 production.db "SELECT environment, COUNT(*) as count FROM machines GROUP BY environment;"
+  204  sqlite3 production.db "SELECT name, environment, status FROM machines ORDER BY environment, name;"
+  205  npm run pm2:restart
+  206  sqlite3 production.db "SELECT id, name, environment, status FROM machines LIMIT 10;"
+  207  sqlite3 production.db "SELECT id, username, role, is_active FROM users;"
+  208  npm run pm2:logs --lines 50
+  209  nano public/apps.js
+  210  nano public/app.js 
+  211  npm run pm2:logs --lines 50
+  212  nano check-db.js
+  213  node check-db.js
+  214  nano public/api-service.js
+  215  nano public/index.html 
+  216  nano public/app.js 
+  217  npm run pm2:restart
+  218  npm run pm2:logs --lines 50
+  219  nano public/index.html 
+  220  nano public/js/constants.js
+  221  mkdir public/js
+  222  ll
+  223  cd public/
+  224  ll
+  225  cd ..
+  226  nano public/js/constants.js
+  227  nano public/js/utils.js
+  228  nano public/js/api-service.js
+  229  mkdir public/js/components
+  230  nano public/js/components/common.js
+  231  nano public/js/components/auth.js
+  232  nano public/js/components/orders.js
+  233  nano public/js/components/machines.js
+  234  mkdir services
+  235  mkdir utils
+  236  mkdir contexts
+  237  mkdir auth
+  238  mkdir orders
+  239  mkdir machines
+  240  mkdir modals
+  241  mkdir admin
+  242  mkdir layout
+  243  ll
+  244  mv orders public/
+  245  ll
+  246  nano public/js/components/modals.js
+  247  nano public/js/components/admin.js
+  248  nano public/js/components/dashboard.js
+  249  nano public/js/app.js
+  250  nano public/index.html 
+  251  nano public/js/services/websocket.js
+  252  ll
+  253  cd public/
+  254  ll
+  255  cd js
+  256  ll
+  257  mkdir services
+  258  nano api.js
+  259  mv api.js services/
+  260  ll
+  261  cd services/
+  262  ll
+  263  cd ..
+  264  cd services/
+  265  ll
+  266  nano api.js 
+  267  cd ..
+  268  ll
+  269  cd services/
+  270  nano websocket.js
+  271  cd ..
+  272  ll
+  273  mkdir utils
+  274  nano js/utils/validators.js
+  275  ll
+  276  cd utils/
+  277  ll
+  278  nano validators.js
+  279  cd ..
+  280  cd services/
+  281  nano notification.js
+  282  nano eventbus.js
+  283  nano storage.js
+  284  cd ..
+  285  mkdir hooks
+  286  cd hooks/
+  287  nano hooks.js
+  288  cd ..
+  289  cd services/
+  290  nano router.js
+  291  cd ll
+  292  cd ..
+  293  cd utils/
+  294  ll
+  295  nano forms.js
+  296  nano component-utils.js
+  297  nano data-table.js
+  298  nano file-utils.js
+  299  cd ..
+  300  cd components/
+  301  ll
+  302  nano auth-components.js
+  303  nano layout-components.js
+  304  nano order-components.js
+  305  cd ..
+  306  ll
+  307  nano app.js 
+  308  ll
+  309  cd ..
+  310  nano index.html 
+  311  ll
+  312  cd js/
+  313  ll
+  314  cd ..
+  315  cd..
+  316  cd ..
+  317  npm start
+  318  ll
+  319  cd public/
+  320  ll
+  321  cd js
+  322  ll
+  323  mkdir config
+  324  ll
+  325  cd services/
+  326  ll
+  327  cd ..
+  328  cd utils/
+  329  ll
+  330  cd ..
+  331  ll
+  332  cd hooks/
+  333  ll
+  334  cd ..
+  335  cd components/
+  336  ;;
+  337  ll
+  338  cd ..
+  339  ll
+  340  cd config/
+  341  nano app-config.js
+  342  cd ..
+  343  ll
+  344  cd utils/
+  345  ll
+  346  nano helpers.js
+  347  cd ..
+  348  npm install
+  349  npm start
+  350  history > my_session_commands.txt

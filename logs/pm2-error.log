@@ -1,0 +1,35 @@
+2025-07-20T00:17:40: Database error in /api/protected/orders: [Error: SQLITE_ERROR: no such column: o.created_at] {
+  errno: 1,
+  code: 'SQLITE_ERROR'
+}
+2025-07-20T00:17:40: Query: SELECT o.*, m.name as machine_name, u.username as operator_name 
+               FROM production_orders o
+               LEFT JOIN machines m ON o.machine_id = m.id
+               LEFT JOIN users u ON o.operator_id = u.id
+               WHERE 1=1 ORDER BY o.created_at DESC LIMIT ? OFFSET ?
+2025-07-20T00:17:40: Params: [ 50, 0 ]
+2025-07-20T00:19:33: Database error in /api/protected/orders: [Error: SQLITE_ERROR: no such column: o.created_at] {
+  errno: 1,
+  code: 'SQLITE_ERROR'
+}
+2025-07-20T00:19:33: Query: SELECT o.*, m.name as machine_name, u.username as operator_name 
+               FROM production_orders o
+               LEFT JOIN machines m ON o.machine_id = m.id
+               LEFT JOIN users u ON o.operator_id = u.id
+               WHERE 1=1 ORDER BY o.created_at DESC LIMIT ? OFFSET ?
+2025-07-20T00:19:33: Params: [ 50, 0 ]
+2025-07-20T00:19:42: Database error in /api/protected/orders: [Error: SQLITE_ERROR: no such column: o.created_at] {
+  errno: 1,
+  code: 'SQLITE_ERROR'
+}
+2025-07-20T00:19:42: Query: SELECT o.*, m.name as machine_name, u.username as operator_name 
+               FROM production_orders o
+               LEFT JOIN machines m ON o.machine_id = m.id
+               LEFT JOIN users u ON o.operator_id = u.id
+               WHERE 1=1 ORDER BY o.created_at DESC LIMIT ? OFFSET ?
+2025-07-20T00:19:42: Params: [ 50, 0 ]
+Error: SQLITE_ERROR: table waste_records has no column named waste_type
+Error: SQLITE_ERROR: table waste_records has no column named waste_type
+Error: SQLITE_ERROR: table waste_records has no column named waste_type
+Error: SQLITE_ERROR: table waste_records has no column named waste_type
+Error: SQLITE_ERROR: table waste_records has no column named waste_type

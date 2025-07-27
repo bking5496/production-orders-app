@@ -1,0 +1,100 @@
+  253  cd public/
+  254  ll
+  255  cd js
+  256  ll
+  257  mkdir services
+  258  nano api.js
+  259  mv api.js services/
+  260  ll
+  261  cd services/
+  262  ll
+  263  cd ..
+  264  cd services/
+  265  ll
+  266  nano api.js 
+  267  cd ..
+  268  ll
+  269  cd services/
+  270  nano websocket.js
+  271  cd ..
+  272  ll
+  273  mkdir utils
+  274  nano js/utils/validators.js
+  275  ll
+  276  cd utils/
+  277  ll
+  278  nano validators.js
+  279  cd ..
+  280  cd services/
+  281  nano notification.js
+  282  nano eventbus.js
+  283  nano storage.js
+  284  cd ..
+  285  mkdir hooks
+  286  cd hooks/
+  287  nano hooks.js
+  288  cd ..
+  289  cd services/
+  290  nano router.js
+  291  cd ll
+  292  cd ..
+  293  cd utils/
+  294  ll
+  295  nano forms.js
+  296  nano component-utils.js
+  297  nano data-table.js
+  298  nano file-utils.js
+  299  cd ..
+  300  cd components/
+  301  ll
+  302  nano auth-components.js
+  303  nano layout-components.js
+  304  nano order-components.js
+  305  cd ..
+  306  ll
+  307  nano app.js 
+  308  ll
+  309  cd ..
+  310  nano index.html 
+  311  ll
+  312  cd js/
+  313  ll
+  314  cd ..
+  315  cd..
+  316  cd ..
+  317  npm start
+  318  ll
+  319  cd public/
+  320  ll
+  321  cd js
+  322  ll
+  323  mkdir config
+  324  ll
+  325  cd services/
+  326  ll
+  327  cd ..
+  328  cd utils/
+  329  ll
+  330  cd ..
+  331  ll
+  332  cd hooks/
+  333  ll
+  334  cd ..
+  335  cd components/
+  336  ;;
+  337  ll
+  338  cd ..
+  339  ll
+  340  cd config/
+  341  nano app-config.js
+  342  cd ..
+  343  ll
+  344  cd utils/
+  345  ll
+  346  nano helpers.js
+  347  cd ..
+  348  npm install
+  349  npm start
+  350  history > my_session_commands.txt
+  351  ll
+  352  history | tail -n 100 > session.txt
