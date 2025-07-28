@@ -224,9 +224,9 @@ apiRouter.post('/machines', authenticateToken, requireRole(['admin', 'supervisor
     }
 );
 apiRouter.put('/machines/:id', authenticateToken, requireRole(['admin', 'supervisor']),
-    body('name').notEmpty(), body('type').notEmpty(), body('capacity').isInt({min: 1}), handleValidationErrors,
+    body('name').notEmpty(), body('type').notEmpty(), body('environment').notEmpty(), body('capacity').isInt({min: 1}), handleValidationErrors,
     async (req, res) => {
-        await dbRun('UPDATE machines SET name = ?, type = ?, capacity = ? WHERE id = ?', [req.body.name, req.body.type, req.body.capacity, req.params.id]);
+        await dbRun('UPDATE machines SET name = ?, type = ?, environment = ?, capacity = ? WHERE id = ?', [req.body.name, req.body.type, req.body.environment, req.body.capacity, req.params.id]);
         res.json({message: 'Machine updated.'});
     }
 );

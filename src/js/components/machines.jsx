@@ -540,14 +540,14 @@ export default function MachinesPage() {
               <label className="block text-sm font-medium text-gray-700 mb-2">Environment</label>
               <select 
                 value={formData.environment} 
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100 cursor-not-allowed" 
-                disabled
+                onChange={(e) => setFormData({...formData, environment: e.target.value, type: ''})} 
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
                 <option value="blending">Blending</option>
                 <option value="packaging">Packaging</option>
                 <option value="beverage">Beverage</option>
               </select>
-              <p className="text-xs text-gray-500 mt-1">Environment cannot be changed after creation</p>
+              <p className="text-xs text-gray-500 mt-1">Changing environment will reset the machine type</p>
             </div>
             
             <div>
