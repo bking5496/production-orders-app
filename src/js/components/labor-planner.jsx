@@ -551,13 +551,43 @@ export function LaborManagementSystem() {
                 return;
             }
 
-            // Get source assignments
-            const sourceAssignments = await API.get(`/planner/assignments?date=${sourceDate}`);
-            const sourceSupervisors = await API.get(`/planner/supervisors?date=${sourceDate}&shift=day`);
-            const sourceNightSupervisors = await API.get(`/planner/supervisors?date=${sourceDate}&shift=night`);
+            console.log('Planning weekly labor:', { sourceDate, weekDates, applyToShifts });
+
+            // Get source assignments and supervisors
+            let sourceAssignments = [];
+            let sourceSupervisors = [];
+            let sourceNightSupervisors = [];
+
+            try {
+                sourceAssignments = await API.get(`/planner/assignments?date=${sourceDate}`);
+            } catch (error) {
+                console.warn('No source assignments found:', error);
+                sourceAssignments = [];
+            }
+
+            try {
+                sourceSupervisors = await API.get(`/planner/supervisors?date=${sourceDate}&shift=day`);
+            } catch (error) {
+                console.warn('No day supervisors found:', error);
+                sourceSupervisors = [];
+            }
+
+            try {
+                sourceNightSupervisors = await API.get(`/planner/supervisors?date=${sourceDate}&shift=night`);
+            } catch (error) {
+                console.warn('No night supervisors found:', error);
+                sourceNightSupervisors = [];
+            }
+
+            if (sourceAssignments.length === 0 && sourceSupervisors.length === 0 && sourceNightSupervisors.length === 0) {
+                showNotification(`No assignments or supervisors found for ${sourceDate} to copy from`, 'warning');
+                setShowWeeklyPlanModal(false);
+                return;
+            }
 
             let successCount = 0;
             let errorCount = 0;
+            let skippedCount = 0;
 
             // Apply to each date in the range
             for (const targetDate of weekDates) {
@@ -565,6 +595,8 @@ export function LaborManagementSystem() {
                     try {
                         // Copy regular assignments
                         const shiftAssignments = sourceAssignments.filter(a => a.shift === shift);
+                        console.log(`Found ${shiftAssignments.length} assignments for ${shift} shift to copy to ${targetDate}`);
+                        
                         for (const assignment of shiftAssignments) {
                             try {
                                 await API.post('/planner/assignments', {
@@ -575,7 +607,10 @@ export function LaborManagementSystem() {
                                 });
                                 successCount++;
                             } catch (error) {
-                                if (!error.message.includes('already assigned')) {
+                                console.error('Assignment error:', error);
+                                if (error.message.includes('already assigned')) {
+                                    skippedCount++;
+                                } else {
                                     errorCount++;
                                 }
                             }
@@ -583,6 +618,8 @@ export function LaborManagementSystem() {
 
                         // Copy supervisors
                         const supervisorsToAssign = shift === 'day' ? sourceSupervisors : sourceNightSupervisors;
+                        console.log(`Found ${supervisorsToAssign.length} supervisors for ${shift} shift to copy to ${targetDate}`);
+                        
                         for (const supervisor of supervisorsToAssign) {
                             try {
                                 await API.post('/planner/supervisors', {
@@ -591,6 +628,7 @@ export function LaborManagementSystem() {
                                     shift: shift
                                 });
                             } catch (error) {
+                                console.error('Supervisor assignment error:', error);
                                 if (!error.message.includes('already assigned')) {
                                     console.warn('Failed to assign supervisor:', error);
                                 }
@@ -606,11 +644,12 @@ export function LaborManagementSystem() {
             setShowWeeklyPlanModal(false);
             fetchData(selectedDate); // Refresh current view
             
-            if (errorCount === 0) {
-                showNotification(`Successfully planned labor for ${weekDates.length} days (${successCount} assignments)`, 'success');
-            } else {
-                showNotification(`Planned labor with ${successCount} successful and ${errorCount} failed assignments`, 'warning');
-            }
+            let message = `Planned labor for ${weekDates.length} days: ${successCount} successful`;
+            if (skippedCount > 0) message += `, ${skippedCount} skipped (already assigned)`;
+            if (errorCount > 0) message += `, ${errorCount} failed`;
+            
+            const notificationType = errorCount > 0 ? 'warning' : 'success';
+            showNotification(message, notificationType);
 
         } catch (error) {
             console.error('Weekly planning error:', error);
