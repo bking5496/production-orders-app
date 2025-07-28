@@ -406,6 +406,16 @@ export function LaborManagementSystem() {
     const [supervisorsOnDuty, setSupervisorsOnDuty] = useState([]);
     const [showSupervisorModal, setShowSupervisorModal] = useState(false);
 
+    // Weekly planning state
+    const [showWeeklyPlanModal, setShowWeeklyPlanModal] = useState(false);
+    const [weeklyPlanData, setWeeklyPlanData] = useState({
+        startDate: '',
+        endDate: '',
+        template: 'current_week', // 'current_week', 'previous_week', 'custom'
+        applyToShifts: ['day', 'night'],
+        copyFrom: ''
+    });
+
     // Filtering state
     const [filters, setFilters] = useState({
         machine: '',
@@ -449,6 +459,33 @@ export function LaborManagementSystem() {
         setNotification({ show: true, message, type });
         setTimeout(() => setNotification({ show: false, message: '', type: 'success' }), 3000);
     }, []);
+
+    // Weekly planning helper functions
+    const getWeekDates = (startDate, days = 7) => {
+        const dates = [];
+        const start = new Date(startDate);
+        for (let i = 0; i < days; i++) {
+            const date = new Date(start);
+            date.setDate(start.getDate() + i);
+            dates.push(date.toISOString().split('T')[0]);
+        }
+        return dates;
+    };
+
+    const getNextWeekDates = () => {
+        const today = new Date();
+        const nextMonday = new Date(today);
+        const daysUntilMonday = (1 + 7 - today.getDay()) % 7;
+        nextMonday.setDate(today.getDate() + (daysUntilMonday === 0 ? 7 : daysUntilMonday));
+        
+        const nextFriday = new Date(nextMonday);
+        nextFriday.setDate(nextMonday.getDate() + 4);
+        
+        return {
+            start: nextMonday.toISOString().split('T')[0],
+            end: nextFriday.toISOString().split('T')[0]
+        };
+    };
 
     // Supervisor management functions
     const addSupervisor = async (supervisorId) => {
