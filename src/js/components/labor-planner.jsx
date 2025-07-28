@@ -1572,6 +1572,129 @@ export function LaborManagementSystem() {
                 </Modal>
             )}
 
+            {/* Weekly Planning Modal */}
+            {showWeeklyPlanModal && (
+                <Modal title="Plan Weekly Labor" onClose={() => setShowWeeklyPlanModal(false)}>
+                    <div className="space-y-6">
+                        {/* Date Range Selection */}
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-2">From Date</label>
+                                <input
+                                    type="date"
+                                    value={weeklyPlanData.startDate}
+                                    onChange={(e) => setWeeklyPlanData({...weeklyPlanData, startDate: e.target.value})}
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-2">To Date</label>
+                                <input
+                                    type="date"
+                                    value={weeklyPlanData.endDate}
+                                    onChange={(e) => setWeeklyPlanData({...weeklyPlanData, endDate: e.target.value})}
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                />
+                            </div>
+                        </div>
+
+                        {/* Template Selection */}
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">Copy Template From</label>
+                            <select
+                                value={weeklyPlanData.template}
+                                onChange={(e) => setWeeklyPlanData({...weeklyPlanData, template: e.target.value})}
+                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            >
+                                <option value="current_week">Current Day ({selectedDate})</option>
+                                <option value="previous_week">Previous Week</option>
+                                <option value="custom">Custom Date</option>
+                            </select>
+                        </div>
+
+                        {/* Custom Date Selection */}
+                        {weeklyPlanData.template === 'custom' && (
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-2">Copy From Date</label>
+                                <input
+                                    type="date"
+                                    value={weeklyPlanData.copyFrom}
+                                    onChange={(e) => setWeeklyPlanData({...weeklyPlanData, copyFrom: e.target.value})}
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                />
+                            </div>
+                        )}
+
+                        {/* Shift Selection */}
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">Apply to Shifts</label>
+                            <div className="space-y-2">
+                                <label className="flex items-center">
+                                    <input
+                                        type="checkbox"
+                                        checked={weeklyPlanData.applyToShifts.includes('day')}
+                                        onChange={(e) => {
+                                            const shifts = e.target.checked 
+                                                ? [...weeklyPlanData.applyToShifts, 'day']
+                                                : weeklyPlanData.applyToShifts.filter(s => s !== 'day');
+                                            setWeeklyPlanData({...weeklyPlanData, applyToShifts: shifts});
+                                        }}
+                                        className="mr-2"
+                                    />
+                                    Day Shift (6AM - 6PM)
+                                </label>
+                                <label className="flex items-center">
+                                    <input
+                                        type="checkbox"
+                                        checked={weeklyPlanData.applyToShifts.includes('night')}
+                                        onChange={(e) => {
+                                            const shifts = e.target.checked 
+                                                ? [...weeklyPlanData.applyToShifts, 'night']
+                                                : weeklyPlanData.applyToShifts.filter(s => s !== 'night');
+                                            setWeeklyPlanData({...weeklyPlanData, applyToShifts: shifts});
+                                        }}
+                                        className="mr-2"
+                                    />
+                                    Night Shift (6PM - 6AM)
+                                </label>
+                            </div>
+                        </div>
+
+                        {/* Preview Information */}
+                        {weeklyPlanData.startDate && weeklyPlanData.endDate && (
+                            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                                <h4 className="font-medium text-blue-800 mb-2">Planning Summary</h4>
+                                <div className="text-sm text-blue-700 space-y-1">
+                                    <p><strong>Date Range:</strong> {weeklyPlanData.startDate} to {weeklyPlanData.endDate}</p>
+                                    <p><strong>Days:</strong> {Math.ceil((new Date(weeklyPlanData.endDate) - new Date(weeklyPlanData.startDate)) / (1000 * 60 * 60 * 24)) + 1}</p>
+                                    <p><strong>Shifts:</strong> {weeklyPlanData.applyToShifts.join(', ')}</p>
+                                    <p><strong>Source:</strong> {
+                                        weeklyPlanData.template === 'current_week' ? `Current day (${selectedDate})` :
+                                        weeklyPlanData.template === 'previous_week' ? 'Previous week' :
+                                        `Custom date (${weeklyPlanData.copyFrom})`
+                                    }</p>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Action Buttons */}
+                        <div className="flex justify-end gap-3 pt-4 border-t">
+                            <Button variant="secondary" onClick={() => setShowWeeklyPlanModal(false)}>
+                                Cancel
+                            </Button>
+                            <Button 
+                                onClick={planWeeklyLabor}
+                                disabled={!weeklyPlanData.startDate || !weeklyPlanData.endDate || weeklyPlanData.applyToShifts.length === 0}
+                                className="bg-green-600 hover:bg-green-700"
+                            >
+                                <Calendar className="w-4 h-4" />
+                                Plan Labor
+                            </Button>
+                        </div>
+                    </div>
+                </Modal>
+            )}
+
             {/* Enhanced Notification */}
             {notification.show && (
                 <div className={`fixed bottom-6 right-6 z-50 p-4 rounded-lg shadow-lg border max-w-sm ${
