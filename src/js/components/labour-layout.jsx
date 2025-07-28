@@ -287,7 +287,7 @@ export default function LabourLayoutPage() {
                         <Eye className="w-5 h-5 text-blue-600" />
                         <div>
                             <h2 className="text-lg font-semibold">Labour Layout</h2>
-                            <p className="text-sm text-gray-600">{selectedDate} • {(rosterData.summary.total_supervisors || 0) + (rosterData.summary.total_assignments || 0) + (rosterData.summary.total_attendance || 0)} total records</p>
+                            <p className="text-sm text-gray-600">{selectedDate} • {((rosterData.summary?.total_supervisors || 0) + (rosterData.summary?.total_assignments || 0) + (rosterData.summary?.total_attendance || 0))} total records</p>
                         </div>
                     </div>
                     <div className="flex space-x-2">
@@ -322,9 +322,9 @@ export default function LabourLayoutPage() {
                             <option value="night">Night Shift</option>
                         </select>
                         <div className="flex items-center gap-6 ml-auto text-sm">
-                            <span className="text-blue-600">Supervisors: {rosterData.summary.total_supervisors || 0}</span>
-                            <span className="text-green-600">Assignments: {rosterData.summary.total_assignments || 0}</span>
-                            <span className="text-purple-600">Attendance: {rosterData.summary.total_attendance || 0}</span>
+                            <span className="text-blue-600">Supervisors: {rosterData.summary?.total_supervisors || 0}</span>
+                            <span className="text-green-600">Assignments: {rosterData.summary?.total_assignments || 0}</span>
+                            <span className="text-purple-600">Attendance: {rosterData.summary?.total_attendance || 0}</span>
                         </div>
                     </div>
                 </div>
@@ -531,9 +531,9 @@ export default function LabourLayoutPage() {
                                 <p className="text-sm text-blue-800">Exporting labour layout for:</p>
                                 <p className="font-medium text-blue-900">{selectedDate}</p>
                                 <div className="text-sm text-blue-700 space-y-1">
-                                    <p>Supervisors: {rosterData.summary.total_supervisors || 0}</p>
-                                    <p>Assignments: {rosterData.summary.total_assignments || 0}</p>
-                                    <p>Attendance: {rosterData.summary.total_attendance || 0}</p>
+                                    <p>Supervisors: {rosterData.summary?.total_supervisors || 0}</p>
+                                    <p>Assignments: {rosterData.summary?.total_assignments || 0}</p>
+                                    <p>Attendance: {rosterData.summary?.total_attendance || 0}</p>
                                 </div>
                             </div>
                         </div>
