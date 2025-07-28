@@ -402,9 +402,10 @@ export function LaborManagementSystem() {
         end: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
     });
 
-    // Supervisor management
-    const [supervisorOnDuty, setSupervisorOnDuty] = useState('');
+    // Supervisor management - Changed to support multiple supervisors
+    const [supervisorsOnDuty, setSupervisorsOnDuty] = useState([]);
     const [showSupervisorModal, setShowSupervisorModal] = useState(false);
+    const [selectedShift, setSelectedShift] = useState('dayshift');
 
     // Filtering state
     const [filters, setFilters] = useState({
@@ -417,21 +418,23 @@ export function LaborManagementSystem() {
     const fetchData = useCallback(async (date) => {
         setLoading(true);
         try {
-            const [machinesData, employeesData, assignmentsData] = await Promise.all([
+            const [machinesData, employeesData, assignmentsData, supervisorsData] = await Promise.all([
                 API.get('/machines'),
                 API.get('/users'),
-                API.get(`/planner/assignments?date=${date}`)
+                API.get(`/planner/assignments?date=${date}`),
+                API.get(`/planner/supervisors?date=${date}&shift=${selectedShift}`)
             ]);
             setMachines(machinesData);
             setEmployees(employeesData.filter(u => u.role !== 'admin'));
             setAssignments(assignmentsData);
+            setSupervisorsOnDuty(supervisorsData);
         } catch (error) {
             showNotification('Failed to load initial data: ' + error.message, 'danger');
             console.error(error);
         } finally {
             setLoading(false);
         }
-    }, []);
+    }, [selectedShift]);
 
     useEffect(() => {
         const dateToFetch = currentView === 'attendance' ? attendanceDate : selectedDate;
@@ -447,6 +450,37 @@ export function LaborManagementSystem() {
         setNotification({ show: true, message, type });
         setTimeout(() => setNotification({ show: false, message: '', type: 'success' }), 3000);
     }, []);
+
+    // Supervisor management functions
+    const addSupervisor = async (supervisorId) => {
+        try {
+            await API.post('/planner/supervisors', {
+                supervisor_id: supervisorId,
+                assignment_date: selectedDate,
+                shift: selectedShift
+            });
+            
+            // Reload supervisors data
+            const supervisorsData = await API.get(`/planner/supervisors?date=${selectedDate}&shift=${selectedShift}`);
+            setSupervisorsOnDuty(supervisorsData);
+            showNotification('Supervisor assigned successfully', 'success');
+        } catch (error) {
+            showNotification(error.response?.data?.error || 'Failed to assign supervisor', 'error');
+        }
+    };
+
+    const removeSupervisor = async (supervisorAssignmentId) => {
+        try {
+            await API.delete(`/planner/supervisors/${supervisorAssignmentId}`);
+            
+            // Reload supervisors data
+            const supervisorsData = await API.get(`/planner/supervisors?date=${selectedDate}&shift=${selectedShift}`);
+            setSupervisorsOnDuty(supervisorsData);
+            showNotification('Supervisor removed successfully', 'success');
+        } catch (error) {
+            showNotification(error.response?.data?.error || 'Failed to remove supervisor', 'error');
+        }
+    };
 
     // API Functions
     const assignEmployee = async (employeeId) => {
@@ -692,13 +726,13 @@ export function LaborManagementSystem() {
 
                         {/* Supervisor Assignment */}
                         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-                            <div className="flex items-center justify-between">
+                            <div className="flex items-center justify-between mb-3">
                                 <div className="flex items-center gap-3">
                                     <UserCheck className="w-5 h-5 text-blue-600" />
                                     <div>
-                                        <p className="font-medium text-blue-800">Supervisor on Duty</p>
+                                        <p className="font-medium text-blue-800">Supervisors on Duty ({supervisorsOnDuty.length}/5)</p>
                                         <p className="text-sm text-blue-600">
-                                            {supervisorOnDuty || 'Not assigned for this shift'}
+                                            {selectedShift} shift on {selectedDate}
                                         </p>
                                     </div>
                                 </div>
@@ -706,11 +740,33 @@ export function LaborManagementSystem() {
                                     variant="outline" 
                                     size="sm"
                                     onClick={() => setShowSupervisorModal(true)}
+                                    disabled={supervisorsOnDuty.length >= 5}
                                 >
-                                    <Edit2 className="w-4 h-4" />
-                                    Assign Supervisor
+                                    <PlusCircle className="w-4 h-4" />
+                                    {supervisorsOnDuty.length >= 5 ? 'Max Reached' : 'Add Supervisor'}
                                 </Button>
                             </div>
+                            
+                            {/* Display current supervisors */}
+                            {supervisorsOnDuty.length > 0 ? (
+                                <div className="flex flex-wrap gap-2">
+                                    {supervisorsOnDuty.map(supervisor => (
+                                        <div key={supervisor.id} className="bg-blue-100 px-3 py-1 rounded-full flex items-center gap-2">
+                                            <span className="text-sm font-medium text-blue-800">
+                                                {supervisor.fullName || supervisor.username}
+                                            </span>
+                                            <button
+                                                onClick={() => removeSupervisor(supervisor.id)}
+                                                className="text-blue-600 hover:text-red-600 transition-colors"
+                                            >
+                                                <X className="w-3 h-3" />
+                                            </button>
+                                        </div>
+                                    ))}
+                                </div>
+                            ) : (
+                                <p className="text-sm text-blue-600 italic">No supervisors assigned for this shift</p>
+                            )}
                         </div>
 
                         {/* Enhanced Controls */}

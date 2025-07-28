@@ -771,6 +771,90 @@ apiRouter.delete('/planner/assignments/:id', authenticateToken, requireRole(['ad
     }
 });
 
+// --- Shift Supervisor Management ---
+apiRouter.get('/planner/supervisors', authenticateToken, async (req, res) => {
+    try {
+        const { date, shift } = req.query;
+        if (!date || !shift) return res.status(400).json({ error: 'Date and shift are required' });
+        
+        const supervisors = await dbAll(`
+            SELECT 
+                ss.id,
+                ss.supervisor_id,
+                ss.assignment_date,
+                ss.shift,
+                ss.created_at,
+                u.username,
+                u.fullName,
+                u.employee_code
+            FROM shift_supervisors ss
+            JOIN users u ON ss.supervisor_id = u.id
+            WHERE ss.assignment_date = ? AND ss.shift = ?
+            ORDER BY ss.created_at
+        `, [date, shift]);
+        
+        res.json(supervisors);
+    } catch (error) {
+        console.error("Error fetching shift supervisors:", error);
+        res.status(500).json({ error: 'Database error fetching shift supervisors' });
+    }
+});
+
+apiRouter.post('/planner/supervisors', authenticateToken, requireRole(['admin', 'supervisor']), async (req, res) => {
+    try {
+        const { supervisor_id, assignment_date, shift } = req.body;
+        
+        if (!supervisor_id || !assignment_date || !shift) {
+            return res.status(400).json({ error: 'supervisor_id, assignment_date, and shift are required' });
+        }
+        
+        // Check if we already have 5 supervisors for this shift
+        const currentCount = await dbGet(`
+            SELECT COUNT(*) as count 
+            FROM shift_supervisors 
+            WHERE assignment_date = ? AND shift = ?
+        `, [assignment_date, shift]);
+        
+        if (currentCount.count >= 5) {
+            return res.status(400).json({ error: 'Maximum of 5 supervisors allowed per shift' });
+        }
+        
+        // Check if supervisor is already assigned to this shift
+        const existing = await dbGet(`
+            SELECT id FROM shift_supervisors 
+            WHERE supervisor_id = ? AND assignment_date = ? AND shift = ?
+        `, [supervisor_id, assignment_date, shift]);
+        
+        if (existing) {
+            return res.status(400).json({ error: 'Supervisor already assigned to this shift' });
+        }
+        
+        const result = await dbRun(`
+            INSERT INTO shift_supervisors (supervisor_id, assignment_date, shift, created_by) 
+            VALUES (?, ?, ?, ?)
+        `, [supervisor_id, assignment_date, shift, req.user.id]);
+        
+        res.status(201).json({ 
+            id: result.lastID, 
+            message: 'Supervisor assigned to shift successfully' 
+        });
+    } catch (error) {
+        console.error("Error assigning supervisor to shift:", error);
+        res.status(500).json({ error: 'Failed to assign supervisor to shift' });
+    }
+});
+
+apiRouter.delete('/planner/supervisors/:id', authenticateToken, requireRole(['admin', 'supervisor']), async (req, res) => {
+    try {
+        const result = await dbRun('DELETE FROM shift_supervisors WHERE id = ?', [req.params.id]);
+        if (result.changes === 0) return res.status(404).json({error: "Supervisor assignment not found"});
+        res.json({ message: 'Supervisor removed from shift' });
+    } catch (error) {
+        console.error("Error removing supervisor from shift:", error);
+        res.status(500).json({ error: 'Failed to remove supervisor from shift' });
+    }
+});
+
 
 
 
