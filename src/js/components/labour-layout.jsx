@@ -105,10 +105,12 @@ export default function LabourLayoutPage() {
         supervisors: [],
         assignments: [],
         attendance: [],
+        machinesInUse: [],
         summary: {
             total_supervisors: 0,
             total_assignments: 0,
             total_attendance: 0,
+            total_machines_in_use: 0,
             day_supervisors: 0,
             night_supervisors: 0,
             day_assignments: 0,
@@ -135,10 +137,12 @@ export default function LabourLayoutPage() {
                     supervisors: [],
                     assignments: [],
                     attendance: fallbackData,
+                    machinesInUse: [],
                     summary: { 
                         total_supervisors: 0,
                         total_assignments: 0,
                         total_attendance: fallbackData.length,
+                        total_machines_in_use: 0,
                         day_supervisors: 0,
                         night_supervisors: 0,
                         day_assignments: 0,
@@ -151,11 +155,13 @@ export default function LabourLayoutPage() {
                 setRosterData({ 
                     supervisors: [], 
                     assignments: [], 
-                    attendance: [], 
+                    attendance: [],
+                    machinesInUse: [],
                     summary: {
                         total_supervisors: 0,
                         total_assignments: 0,
                         total_attendance: 0,
+                        total_machines_in_use: 0,
                         day_supervisors: 0,
                         night_supervisors: 0,
                         day_assignments: 0,
@@ -259,7 +265,7 @@ export default function LabourLayoutPage() {
                         <Eye className="w-5 h-5 text-blue-600" />
                         <div>
                             <h2 className="text-lg font-semibold">Labour Layout</h2>
-                            <p className="text-sm text-gray-600">{selectedDate} • {((rosterData.summary?.total_supervisors || 0) + (rosterData.summary?.total_assignments || 0) + (rosterData.summary?.total_attendance || 0))} total records</p>
+                            <p className="text-sm text-gray-600">{selectedDate} • {((rosterData.summary?.total_supervisors || 0) + (rosterData.summary?.total_assignments || 0) + (rosterData.summary?.total_attendance || 0) + (rosterData.summary?.total_machines_in_use || 0))} total records</p>
                         </div>
                     </div>
                 </div>
@@ -279,6 +285,7 @@ export default function LabourLayoutPage() {
                         <div className="flex items-center gap-6 ml-auto text-sm">
                             <span className="text-blue-600">Supervisors: {rosterData.summary?.total_supervisors || 0}</span>
                             <span className="text-green-600">Assignments: {rosterData.summary?.total_assignments || 0}</span>
+                            <span className="text-orange-600">Machines: {rosterData.summary?.total_machines_in_use || 0}</span>
                             <span className="text-purple-600">Attendance: {rosterData.summary?.total_attendance || 0}</span>
                         </div>
                     </div>
@@ -389,6 +396,80 @@ export default function LabourLayoutPage() {
                                 </div>
                             )}
 
+                            {/* Machines in Use Section */}
+                            {rosterData.machinesInUse && rosterData.machinesInUse.length > 0 && (
+                                <div>
+                                    <h3 className="text-lg font-semibold text-orange-800 mb-3 flex items-center gap-2">
+                                        <Settings className="w-5 h-5" />
+                                        Machines in Use
+                                    </h3>
+                                    <div className="bg-orange-50 rounded-lg overflow-hidden">
+                                        <table className="min-w-full">
+                                            <thead className="bg-orange-100">
+                                                <tr>
+                                                    <th className="px-4 py-2 text-left text-xs font-medium text-orange-700 uppercase">Machine</th>
+                                                    <th className="px-4 py-2 text-left text-xs font-medium text-orange-700 uppercase">Type</th>
+                                                    <th className="px-4 py-2 text-left text-xs font-medium text-orange-700 uppercase">Environment</th>
+                                                    <th className="px-4 py-2 text-left text-xs font-medium text-orange-700 uppercase">Assigned Workers</th>
+                                                    <th className="px-4 py-2 text-left text-xs font-medium text-orange-700 uppercase">Shifts</th>
+                                                    <th className="px-4 py-2 text-left text-xs font-medium text-orange-700 uppercase">Capacity</th>
+                                                    <th className="px-4 py-2 text-left text-xs font-medium text-orange-700 uppercase">Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody className="bg-white divide-y divide-orange-100">
+                                                {rosterData.machinesInUse.map(machine => (
+                                                    <tr key={`machine-${machine.id}`}>
+                                                        <td className="px-4 py-2 whitespace-nowrap text-sm font-medium text-gray-900">
+                                                            {machine.name}
+                                                        </td>
+                                                        <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-600">
+                                                            {machine.type || 'N/A'}
+                                                        </td>
+                                                        <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-600">
+                                                            {machine.environment || 'N/A'}
+                                                        </td>
+                                                        <td className="px-4 py-2 whitespace-nowrap text-sm text-center">
+                                                            <div className="flex items-center gap-2">
+                                                                <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs font-medium">
+                                                                    Total: {machine.assigned_workers}
+                                                                </span>
+                                                                {machine.day_workers > 0 && (
+                                                                    <span className="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-xs">
+                                                                        Day: {machine.day_workers}
+                                                                    </span>
+                                                                )}
+                                                                {machine.night_workers > 0 && (
+                                                                    <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs">
+                                                                        Night: {machine.night_workers}
+                                                                    </span>
+                                                                )}
+                                                            </div>
+                                                        </td>
+                                                        <td className="px-4 py-2 whitespace-nowrap text-sm">
+                                                            <span className="px-2 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
+                                                                {machine.shifts_in_use || 'N/A'}
+                                                            </span>
+                                                        </td>
+                                                        <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-600">
+                                                            {machine.capacity || 'N/A'}%
+                                                        </td>
+                                                        <td className="px-4 py-2 whitespace-nowrap text-sm">
+                                                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                                                machine.status === 'available' ? 'bg-green-100 text-green-800' : 
+                                                                machine.status === 'maintenance' ? 'bg-red-100 text-red-800' :
+                                                                'bg-gray-100 text-gray-800'
+                                                            }`}>
+                                                                {machine.status}
+                                                            </span>
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            )}
+
                             {/* Attendance Records Section */}
                             {rosterData.attendance && rosterData.attendance.length > 0 && (
                                 <div>
@@ -442,6 +523,7 @@ export default function LabourLayoutPage() {
                             {/* No Data Message */}
                             {(!rosterData.supervisors || rosterData.supervisors.length === 0) && 
                              (!rosterData.assignments || rosterData.assignments.length === 0) && 
+                             (!rosterData.machinesInUse || rosterData.machinesInUse.length === 0) &&
                              (!rosterData.attendance || rosterData.attendance.length === 0) && (
                                 <div className="text-center py-8 text-gray-500">
                                     <Users className="w-12 h-12 mx-auto mb-4 text-gray-300" />
@@ -488,6 +570,7 @@ export default function LabourLayoutPage() {
                                 <div className="text-sm text-blue-700 space-y-1">
                                     <p>Supervisors: {rosterData.summary?.total_supervisors || 0}</p>
                                     <p>Assignments: {rosterData.summary?.total_assignments || 0}</p>
+                                    <p>Machines: {rosterData.summary?.total_machines_in_use || 0}</p>
                                     <p>Attendance: {rosterData.summary?.total_attendance || 0}</p>
                                 </div>
                             </div>
