@@ -1,0 +1,119 @@
+{
+  "app_info": {
+    "name": "Production Management System",
+    "version": "2.0.0",
+    "last_updated": "2025-01-28",
+    "current_status": "Production Ready",
+    "timezone": "SAST (UTC+2)"
+  },
+  "recent_changes": [
+    {
+      "date": "2025-01-28",
+      "type": "feature_update",
+      "description": "Changed Pause to Stop functionality",
+      "files_modified": [
+        "src/js/components/orders.jsx",
+        "src/js/modules/production-module.jsx",
+        "server.js"
+      ],
+      "impact": "high"
+    },
+    {
+      "date": "2025-01-28", 
+      "type": "bug_fix",
+      "description": "Fixed production timer timezone offset",
+      "files_modified": [
+        "src/js/modules/production-module.jsx",
+        "src/js/components/production-dashboard.jsx",
+        "src/js/components/production-control.jsx"
+      ],
+      "impact": "high"
+    },
+    {
+      "date": "2025-01-28",
+      "type": "new_feature", 
+      "description": "Added comprehensive downtime reporting",
+      "files_modified": [
+        "src/js/components/downtime-report.jsx",
+        "server.js"
+      ],
+      "impact": "medium"
+    }
+  ],
+  "database_schema": {
+    "tables": {
+      "production_orders": {
+        "status": "updated",
+        "key_changes": ["status field now includes 'stopped' instead of 'paused'"]
+      },
+      "production_stops": {
+        "status": "enhanced",
+        "key_changes": ["added category and operator tracking"]
+      },
+      "machines": {
+        "status": "stable",
+        "key_changes": []
+      },
+      "environments": {
+        "status": "stable", 
+        "key_changes": []
+      }
+    }
+  },
+  "api_endpoints": {
+    "new": [
+      "/api/reports/downtime",
+      "/api/orders/:id/stop"
+    ],
+    "removed": [
+      "/api/orders/:id/pause"
+    ],
+    "modified": [
+      "/api/orders/:id/resume"
+    ]
+  },
+  "frontend_components": {
+    "modern_jsx": [
+      "orders.jsx",
+      "machines.jsx", 
+      "dashboard.jsx",
+      "downtime-report.jsx",
+      "production-module.jsx",
+      "settings-module.jsx",
+      "reporting-module.jsx"
+    ],
+    "legacy_react": [
+      "production-completion-modal.jsx"
+    ],
+    "ui_libraries": [
+      "lucide-react",
+      "tailwindcss"
+    ]
+  },
+  "current_issues": [
+    {
+      "type": "timezone",
+      "description": "Production timers require manual 2-hour offset",
+      "severity": "medium",
+      "workaround": "Add (2 * 60 * 60 * 1000) to database timestamps"
+    }
+  ],
+  "key_patterns": {
+    "database_timestamps": "datetime('now', '+2 hours')",
+    "frontend_time_calc": "startTime + (2 * 60 * 60 * 1000)",
+    "api_error_handling": "try/catch with notification system",
+    "component_structure": "functional components with hooks"
+  },
+  "environment_config": {
+    "development": {
+      "port": 3000,
+      "db": "production.db",
+      "build_tool": "vite"
+    },
+    "production": {
+      "port": 3000,
+      "process_manager": "pm2",
+      "reverse_proxy": "nginx (optional)"
+    }
+  }
+}
