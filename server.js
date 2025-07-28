@@ -808,16 +808,7 @@ apiRouter.post('/planner/supervisors', authenticateToken, requireRole(['admin', 
             return res.status(400).json({ error: 'supervisor_id, assignment_date, and shift are required' });
         }
         
-        // Check if we already have 5 supervisors for this shift
-        const currentCount = await dbGet(`
-            SELECT COUNT(*) as count 
-            FROM shift_supervisors 
-            WHERE assignment_date = ? AND shift = ?
-        `, [assignment_date, shift]);
-        
-        if (currentCount.count >= 5) {
-            return res.status(400).json({ error: 'Maximum of 5 supervisors allowed per shift' });
-        }
+        // No limit on number of supervisors - removed the 5-supervisor restriction
         
         // Check if supervisor is already assigned to this shift
         const existing = await dbGet(`

@@ -453,17 +453,22 @@ export function LaborManagementSystem() {
     // Supervisor management functions
     const addSupervisor = async (supervisorId) => {
         try {
+            console.log('Adding supervisor:', { supervisorId, selectedDate, selectedShift });
             await API.post('/planner/supervisors', {
                 supervisor_id: supervisorId,
                 assignment_date: selectedDate,
                 shift: selectedShift
             });
             
+            // Close modal first
+            setShowSupervisorModal(false);
+            
             // Reload supervisors data
             const supervisorsData = await API.get(`/planner/supervisors?date=${selectedDate}&shift=${selectedShift}`);
             setSupervisorsOnDuty(supervisorsData);
             showNotification('Supervisor assigned successfully', 'success');
         } catch (error) {
+            console.error('Error adding supervisor:', error);
             showNotification(error.response?.data?.error || 'Failed to assign supervisor', 'error');
         }
     };
@@ -1354,11 +1359,11 @@ export function LaborManagementSystem() {
 
             {/* Supervisor Assignment Modal */}
             {showSupervisorModal && (
-                <Modal title="Add Supervisor to Shift" onClose={() => setShowSupervisorModal(false)}>
+                <Modal title="Assign Supervisor" onClose={() => setShowSupervisorModal(false)}>
                     <div className="space-y-4">
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-2">
-                                Select Supervisor for {selectedShift} shift on {selectedDate} ({supervisorsOnDuty.length}/5 assigned)
+                                Select Supervisor for {selectedDate}
                             </label>
                             <div className="space-y-2 max-h-64 overflow-y-auto">
                                 {employees.filter(e => e.role === 'supervisor' || e.role === 'admin')
@@ -1387,7 +1392,7 @@ export function LaborManagementSystem() {
                         
                         {employees.filter(e => e.role === 'supervisor' || e.role === 'admin')
                             .filter(supervisor => !supervisorsOnDuty.some(s => s.supervisor_id === supervisor.id)).length === 0 && (
-                            <p className="text-center text-gray-500 py-4">All available supervisors are already assigned to this shift.</p>
+                            <p className="text-center text-gray-500 py-4">All available supervisors are already assigned.</p>
                         )}
                         
                         <div className="flex justify-end gap-3 pt-4 border-t">
