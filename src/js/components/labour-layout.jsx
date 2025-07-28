@@ -30,17 +30,53 @@ const exportToExcel = (rosterData, selectedDate) => {
     if (!window.XLSX) {
         // Fallback to CSV if XLSX not available
         console.warn('XLSX library not available, falling back to CSV export');
-        exportToCSV(
-            workers.map(worker => ({
-                'Name': worker.name,
-                'Production Area': worker.production_area,
-                'Position': worker.position,
-                'Shift': worker.shift,
-                'Status': worker.status,
+        const allData = [
+            ...rosterData.supervisors.map(s => ({
+                'Type': 'Supervisor',
+                'Name': s.fullName || s.name,
+                'Employee Code': s.employee_code || 'N/A',
+                'Machine': 'N/A',
+                'Production Area': 'Supervision',
+                'Position': s.position,
+                'Shift': s.shift,
+                'Status': s.status,
                 'Date': selectedDate
             })),
-            `labour-layout-${selectedDate}.csv`
-        );
+            ...rosterData.assignments.map(a => ({
+                'Type': 'Employee',
+                'Name': a.fullName || a.name,
+                'Employee Code': a.employee_code || 'N/A',
+                'Machine': a.machine || 'N/A',
+                'Production Area': a.production_area || 'N/A',
+                'Position': a.position,
+                'Shift': a.shift,
+                'Status': a.status,
+                'Date': selectedDate
+            })),
+            ...rosterData.machinesInUse.map(m => ({
+                'Type': 'Machine',
+                'Name': m.name,
+                'Employee Code': 'N/A',
+                'Machine': m.name,
+                'Production Area': m.environment || 'N/A',
+                'Position': m.type || 'N/A',
+                'Shift': m.shifts_in_use || 'N/A',
+                'Status': m.status,
+                'Date': selectedDate
+            })),
+            ...rosterData.attendance.map(w => ({
+                'Type': 'Attendance',
+                'Name': w.name,
+                'Employee Code': 'N/A',
+                'Machine': 'N/A',
+                'Production Area': w.production_area || 'N/A',
+                'Position': w.position || 'N/A',
+                'Shift': w.shift,
+                'Status': w.status,
+                'Date': selectedDate
+            }))
+        ];
+        exportToCSV(allData, `labour-layout-${selectedDate}.csv`);
         return;
     }
 
@@ -63,22 +99,76 @@ const exportToExcel = (rosterData, selectedDate) => {
     wsData.push([]);
     wsData.push(['Day of Week:', dayOfWeek]);
     wsData.push(['Date:', formattedDate]);
-    wsData.push(['Total Workers:', workers.length]);
+    wsData.push(['Total Supervisors:', rosterData.summary.total_supervisors || 0]);
+    wsData.push(['Total Assignments:', rosterData.summary.total_assignments || 0]);
+    wsData.push(['Total Machines:', rosterData.summary.total_machines_in_use || 0]);
+    wsData.push(['Total Attendance Records:', rosterData.summary.total_attendance || 0]);
     wsData.push([]);
     
-    // Workers table headers
-    wsData.push(['Name', 'Production Area', 'Position', 'Shift', 'Status']);
+    // Supervisors section
+    if (rosterData.supervisors.length > 0) {
+        wsData.push([]);
+        wsData.push(['SUPERVISORS ON DUTY']);
+        wsData.push(['Name', 'Employee Code', 'Shift', 'Status']);
+        rosterData.supervisors.forEach(supervisor => {
+            wsData.push([
+                supervisor.fullName || supervisor.name,
+                supervisor.employee_code || 'N/A',
+                supervisor.shift,
+                supervisor.status
+            ]);
+        });
+    }
     
-    // Workers data
-    workers.forEach(worker => {
-        wsData.push([
-            worker.name,
-            worker.production_area,
-            worker.position, 
-            worker.shift,
-            worker.status
-        ]);
-    });
+    // Assigned employees section
+    if (rosterData.assignments.length > 0) {
+        wsData.push([]);
+        wsData.push(['ASSIGNED EMPLOYEES']);
+        wsData.push(['Name', 'Employee Code', 'Machine', 'Production Area', 'Shift', 'Status']);
+        rosterData.assignments.forEach(assignment => {
+            wsData.push([
+                assignment.fullName || assignment.name,
+                assignment.employee_code || 'N/A',
+                assignment.machine || 'N/A',
+                assignment.production_area || 'N/A',
+                assignment.shift,
+                assignment.status
+            ]);
+        });
+    }
+
+    // Machines in use section
+    if (rosterData.machinesInUse.length > 0) {
+        wsData.push([]);
+        wsData.push(['MACHINES IN USE']);
+        wsData.push(['Machine', 'Type', 'Environment', 'Assigned Workers', 'Shifts', 'Status']);
+        rosterData.machinesInUse.forEach(machine => {
+            wsData.push([
+                machine.name,
+                machine.type || 'N/A',
+                machine.environment || 'N/A',
+                machine.assigned_workers,
+                machine.shifts_in_use || 'N/A',
+                machine.status
+            ]);
+        });
+    }
+    
+    // Attendance records section
+    if (rosterData.attendance.length > 0) {
+        wsData.push([]);
+        wsData.push(['ATTENDANCE RECORDS']);
+        wsData.push(['Name', 'Production Area', 'Position', 'Shift', 'Status']);
+        rosterData.attendance.forEach(worker => {
+            wsData.push([
+                worker.name,
+                worker.production_area || 'N/A',
+                worker.position || 'N/A',
+                worker.shift,
+                worker.status
+            ]);
+        });
+    }
     
     // Create worksheet
     const ws = window.XLSX.utils.aoa_to_sheet(wsData);
@@ -196,27 +286,65 @@ export default function LabourLayoutPage() {
             setLoading(true);
             
             if (exportFormat === 'excel') {
-                exportToExcel(workers, selectedDate);
+                exportToExcel(rosterData, selectedDate);
                 alert(`Exported labour layout for ${selectedDate}`);
             } else {
-                const exportData = workers.map(worker => ({
-                    'Name': worker.name,
-                    'Production Area': worker.production_area,
-                    'Position': worker.position,
-                    'Shift': worker.shift,
-                    'Status': worker.status,
-                    'Date': selectedDate
-                }));
+                const allData = [
+                    ...rosterData.supervisors.map(s => ({
+                        'Type': 'Supervisor',
+                        'Name': s.fullName || s.name,
+                        'Employee Code': s.employee_code || 'N/A',
+                        'Machine': 'N/A',
+                        'Production Area': 'Supervision',
+                        'Position': s.position,
+                        'Shift': s.shift,
+                        'Status': s.status,
+                        'Date': selectedDate
+                    })),
+                    ...rosterData.assignments.map(a => ({
+                        'Type': 'Employee',
+                        'Name': a.fullName || a.name,
+                        'Employee Code': a.employee_code || 'N/A',
+                        'Machine': a.machine || 'N/A',
+                        'Production Area': a.production_area || 'N/A',
+                        'Position': a.position,
+                        'Shift': a.shift,
+                        'Status': a.status,
+                        'Date': selectedDate
+                    })),
+                    ...rosterData.machinesInUse.map(m => ({
+                        'Type': 'Machine',
+                        'Name': m.name,
+                        'Employee Code': 'N/A',
+                        'Machine': m.name,
+                        'Production Area': m.environment || 'N/A',
+                        'Position': m.type || 'N/A',
+                        'Shift': m.shifts_in_use || 'N/A',
+                        'Status': m.status,
+                        'Date': selectedDate
+                    })),
+                    ...rosterData.attendance.map(w => ({
+                        'Type': 'Attendance',
+                        'Name': w.name,
+                        'Employee Code': 'N/A',
+                        'Machine': 'N/A',
+                        'Production Area': w.production_area || 'N/A',
+                        'Position': w.position || 'N/A',
+                        'Shift': w.shift,
+                        'Status': w.status,
+                        'Date': selectedDate
+                    }))
+                ];
                 
                 const filename = `labour-layout-${selectedDate}.${exportFormat}`;
                 
                 if (exportFormat === 'csv') {
-                    exportToCSV(exportData, filename);
+                    exportToCSV(allData, filename);
                 } else {
-                    exportToJSON(exportData, filename);
+                    exportToJSON(allData, filename);
                 }
                 
-                alert(`Exported ${exportData.length} worker records to ${exportFormat.toUpperCase()}`);
+                alert(`Exported ${allData.length} records to ${exportFormat.toUpperCase()}`);
             }
             
             setShowExportModal(false);
