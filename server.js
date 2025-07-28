@@ -261,6 +261,147 @@ apiRouter.delete('/orders/:id', authenticateToken, requireRole(['admin']), async
     res.json({message: 'Order deleted.'});
 });
 
+// --- Environment Management ---
+apiRouter.get('/environments', authenticateToken, async (req, res) => {
+    try {
+        const environments = await dbAll(`
+            SELECT 
+                id,
+                name,
+                code,
+                description,
+                color,
+                machine_types,
+                created_at
+            FROM environments 
+            ORDER BY name
+        `);
+        
+        // Parse machine_types JSON if it exists
+        const parsedEnvironments = environments.map(row => ({
+            ...row,
+            machine_types: row.machine_types ? JSON.parse(row.machine_types) : []
+        }));
+        
+        res.json(parsedEnvironments);
+    } catch (error) {
+        console.error('Environment fetch error:', error);
+        // Fallback to distinct machines if environments table doesn't exist
+        try {
+            const fallbackEnvironments = await dbAll('SELECT DISTINCT environment as name FROM machines ORDER BY environment');
+            res.json(fallbackEnvironments.map(r => ({ name: r.name })));
+        } catch (fallbackError) {
+            res.status(500).json({ error: 'Database error' });
+        }
+    }
+});
+
+apiRouter.post('/environments', authenticateToken, requireRole(['admin', 'supervisor']),
+    body('name').notEmpty().trim(),
+    body('code').optional().trim(),
+    body('description').optional().trim(),
+    body('color').optional().isIn(['red', 'blue', 'green', 'yellow', 'purple', 'pink', 'indigo']),
+    body('machine_types').optional().isArray(),
+    handleValidationErrors,
+    async (req, res) => {
+        const { name, code, description, color, machine_types } = req.body;
+
+        try {
+            const result = await dbRun(`
+                INSERT INTO environments (name, code, description, color, machine_types, created_at) 
+                VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+            `, [
+                name, 
+                code || name.toLowerCase().replace(/\s+/g, '_'), 
+                description || '', 
+                color || 'blue', 
+                JSON.stringify(machine_types || [])
+            ]);
+            
+            res.json({ 
+                id: result.lastID, 
+                message: 'Environment created successfully' 
+            });
+        } catch (error) {
+            if (error.message.includes('UNIQUE')) {
+                return res.status(400).json({ error: 'Environment name already exists' });
+            }
+            console.error('Environment creation error:', error);
+            res.status(500).json({ error: 'Failed to create environment' });
+        }
+    }
+);
+
+apiRouter.put('/environments/:id', authenticateToken, requireRole(['admin', 'supervisor']),
+    body('name').notEmpty().trim(),
+    body('code').optional().trim(),
+    body('description').optional().trim(),
+    body('color').optional().isIn(['red', 'blue', 'green', 'yellow', 'purple', 'pink', 'indigo']),
+    body('machine_types').optional().isArray(),
+    handleValidationErrors,
+    async (req, res) => {
+        const { id } = req.params;
+        const { name, code, description, color, machine_types } = req.body;
+
+        try {
+            const result = await dbRun(`
+                UPDATE environments 
+                SET name = ?, code = ?, description = ?, color = ?, machine_types = ?, updated_at = CURRENT_TIMESTAMP
+                WHERE id = ?
+            `, [
+                name, 
+                code || name.toLowerCase().replace(/\s+/g, '_'), 
+                description || '', 
+                color || 'blue', 
+                JSON.stringify(machine_types || []),
+                id
+            ]);
+            
+            if (result.changes === 0) {
+                return res.status(404).json({ error: 'Environment not found' });
+            }
+            
+            res.json({ message: 'Environment updated successfully' });
+        } catch (error) {
+            if (error.message.includes('UNIQUE')) {
+                return res.status(400).json({ error: 'Environment name already exists' });
+            }
+            console.error('Environment update error:', error);
+            res.status(500).json({ error: 'Failed to update environment' });
+        }
+    }
+);
+
+apiRouter.delete('/environments/:id', authenticateToken, requireRole(['admin']), async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        // Check if environment is being used by machines
+        const result = await dbGet(`
+            SELECT COUNT(*) as machine_count 
+            FROM machines 
+            WHERE environment = (SELECT name FROM environments WHERE id = ?)
+        `, [id]);
+        
+        if (result && result.machine_count > 0) {
+            return res.status(400).json({ 
+                error: 'Cannot delete environment that is being used by machines' 
+            });
+        }
+        
+        const deleteResult = await dbRun('DELETE FROM environments WHERE id = ?', [id]);
+        
+        if (deleteResult.changes === 0) {
+            return res.status(404).json({ error: 'Environment not found' });
+        }
+        
+        res.json({ message: 'Environment deleted successfully' });
+    } catch (error) {
+        console.error('Environment deletion error:', error);
+        res.status(500).json({ error: 'Failed to delete environment' });
+    }
+});
+
 // --- Production Actions & Monitoring ---
 apiRouter.post('/orders/:id/start',
     authenticateToken, requireRole(['admin', 'supervisor', 'operator']),
