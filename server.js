@@ -660,21 +660,44 @@ apiRouter.get('/labour/roster', authenticateToken, async (req, res) => {
             JOIN users u ON la.user_id = u.id
             JOIN machines m ON la.machine_id = m.id
             WHERE la.assignment_date = ?
-            ORDER BY la.shift, m.machine_name, u.username
+            ORDER BY la.shift, m.name, u.username
         `, [date]);
 
         // Get attendance records from daily_attendance table (if any)
         const attendance = await dbAll('SELECT * FROM daily_attendance WHERE attendance_date = ? ORDER BY name', [date]);
+
+        // Get machines in use for the day
+        const machinesInUse = await dbAll(`
+            SELECT 
+                m.id,
+                m.name,
+                m.type,
+                m.status,
+                m.environment,
+                m.capacity,
+                m.production_rate,
+                COUNT(DISTINCT la.id) as assigned_workers,
+                COUNT(DISTINCT CASE WHEN la.shift = 'day' THEN la.id END) as day_workers,
+                COUNT(DISTINCT CASE WHEN la.shift = 'night' THEN la.id END) as night_workers,
+                GROUP_CONCAT(DISTINCT la.shift) as shifts_in_use
+            FROM machines m
+            INNER JOIN labor_assignments la ON m.id = la.machine_id
+            WHERE la.assignment_date = ?
+            GROUP BY m.id, m.name, m.type, m.status, m.environment, m.capacity, m.production_rate
+            ORDER BY assigned_workers DESC, m.name
+        `, [date]);
 
         // Combine all data
         const roster = {
             supervisors,
             assignments,
             attendance,
+            machinesInUse,
             summary: {
                 total_supervisors: supervisors.length,
                 total_assignments: assignments.length,
                 total_attendance: attendance.length,
+                total_machines_in_use: machinesInUse.length,
                 day_supervisors: supervisors.filter(s => s.shift === 'day').length,
                 night_supervisors: supervisors.filter(s => s.shift === 'night').length,
                 day_assignments: assignments.filter(a => a.shift === 'day').length,

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Calendar, Download, RefreshCw, Eye, Users, ClipboardList, UserCheck } from 'lucide-react';
+import { Calendar, Download, RefreshCw, Eye, Users, ClipboardList, UserCheck, Settings } from 'lucide-react';
 import API from '../core/api';
 import { Icon } from './layout-components.jsx';
 
