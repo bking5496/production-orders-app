@@ -729,28 +729,17 @@ export function LaborManagementSystem() {
                                 <div className="flex items-center gap-3">
                                     <UserCheck className="w-5 h-5 text-blue-600" />
                                     <div>
-                                        <p className="font-medium text-blue-800">Supervisors on Duty ({supervisorsOnDuty.length}/5)</p>
-                                        <div className="flex items-center gap-2">
-                                            <select 
-                                                value={selectedShift} 
-                                                onChange={(e) => setSelectedShift(e.target.value)}
-                                                className="text-xs border rounded px-2 py-1 bg-blue-50 border-blue-200"
-                                            >
-                                                <option value="day">Day Shift</option>
-                                                <option value="night">Night Shift</option>
-                                            </select>
-                                            <span className="text-sm text-blue-600">on {selectedDate}</span>
-                                        </div>
+                                        <p className="font-medium text-blue-800">Supervisors on Duty</p>
+                                        <p className="text-sm text-blue-600">{selectedDate}</p>
                                     </div>
                                 </div>
                                 <Button 
                                     variant="outline" 
                                     size="sm"
                                     onClick={() => setShowSupervisorModal(true)}
-                                    disabled={supervisorsOnDuty.length >= 5}
                                 >
                                     <PlusCircle className="w-4 h-4" />
-                                    {supervisorsOnDuty.length >= 5 ? 'Max Reached' : 'Add Supervisor'}
+                                    Assign Supervisor
                                 </Button>
                             </div>
                             
