@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Calendar, Download, RefreshCw, Upload, FileText, Eye } from 'lucide-react';
+import { Calendar, Download, RefreshCw, Upload, FileText, Eye, Users, ClipboardList, UserCheck } from 'lucide-react';
 import API from '../core/api';
 import { Icon } from './layout-components.jsx';
 
@@ -105,7 +105,15 @@ export default function LabourLayoutPage() {
         supervisors: [],
         assignments: [],
         attendance: [],
-        summary: {}
+        summary: {
+            total_supervisors: 0,
+            total_assignments: 0,
+            total_attendance: 0,
+            day_supervisors: 0,
+            night_supervisors: 0,
+            day_assignments: 0,
+            night_assignments: 0
+        }
     });
     const [loading, setLoading] = useState(true);
     const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
@@ -128,12 +136,33 @@ export default function LabourLayoutPage() {
                     supervisors: [],
                     assignments: [],
                     attendance: fallbackData,
-                    summary: { total_attendance: fallbackData.length }
+                    summary: { 
+                        total_supervisors: 0,
+                        total_assignments: 0,
+                        total_attendance: fallbackData.length,
+                        day_supervisors: 0,
+                        night_supervisors: 0,
+                        day_assignments: 0,
+                        night_assignments: 0
+                    }
                 });
             } catch (fallbackError) {
                 console.error("Failed to fetch roster:", fallbackError);
                 alert("Failed to load roster. Please check the server connection.");
-                setRosterData({ supervisors: [], assignments: [], attendance: [], summary: {} });
+                setRosterData({ 
+                    supervisors: [], 
+                    assignments: [], 
+                    attendance: [], 
+                    summary: {
+                        total_supervisors: 0,
+                        total_assignments: 0,
+                        total_attendance: 0,
+                        day_supervisors: 0,
+                        night_supervisors: 0,
+                        day_assignments: 0,
+                        night_assignments: 0
+                    }
+                });
             }
         } finally {
             setLoading(false);
@@ -279,39 +308,194 @@ export default function LabourLayoutPage() {
                         </button>
                     </div>
                 </div>
+                {/* Shift Filter */}
+                <div className="p-4 border-b">
+                    <div className="flex items-center gap-4">
+                        <label className="text-sm font-medium text-gray-700">Filter by Shift:</label>
+                        <select 
+                            value={selectedShift} 
+                            onChange={e => setSelectedShift(e.target.value)}
+                            className="p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        >
+                            <option value="all">All Shifts</option>
+                            <option value="day">Day Shift</option>
+                            <option value="night">Night Shift</option>
+                        </select>
+                        <div className="flex items-center gap-6 ml-auto text-sm">
+                            <span className="text-blue-600">Supervisors: {rosterData.summary.total_supervisors || 0}</span>
+                            <span className="text-green-600">Assignments: {rosterData.summary.total_assignments || 0}</span>
+                            <span className="text-purple-600">Attendance: {rosterData.summary.total_attendance || 0}</span>
+                        </div>
+                    </div>
+                </div>
+
                 <div className="overflow-auto" style={{maxHeight: '60vh'}}>
-                    <table className="min-w-full divide-y divide-gray-200">
-                        <thead className="bg-gray-50">
-                            <tr>
-                                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
-                                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Production Area</th>
-                                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Position</th>
-                                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Shift</th>
-                                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody className="bg-white divide-y divide-gray-200">
-                            {loading ? (
-                                <tr><td colSpan="6" className="text-center py-4 text-gray-500">Loading...</td></tr>
-                            ) : workers.map(worker => (
-                                <tr key={worker.id}>
-                                    <td className="px-4 py-2 whitespace-nowrap text-sm font-medium text-gray-900">{worker.name}</td>
-                                    <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-500">{worker.production_area}</td>
-                                    <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-500">{worker.position}</td>
-                                    <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-500">{worker.shift}</td>
-                                    <td className="px-4 py-2 whitespace-nowrap text-sm">
-                                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${worker.status === 'present' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>{worker.status}</span>
-                                    </td>
-                                    <td className="px-4 py-2 whitespace-nowrap text-sm">
-                                        {worker.status === 'pending' && (
-                                            <button onClick={() => handleVerify(worker.id)} className="px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded hover:bg-blue-200">Verify Arrival</button>
-                                        )}
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                    {loading ? (
+                        <div className="text-center py-8 text-gray-500">Loading...</div>
+                    ) : (
+                        <div className="space-y-6 p-4">
+                            {/* Supervisors Section */}
+                            {rosterData.supervisors && rosterData.supervisors.filter(s => selectedShift === 'all' || s.shift === selectedShift).length > 0 && (
+                                <div>
+                                    <h3 className="text-lg font-semibold text-blue-800 mb-3 flex items-center gap-2">
+                                        <Users className="w-5 h-5" />
+                                        Supervisors on Duty
+                                    </h3>
+                                    <div className="bg-blue-50 rounded-lg overflow-hidden">
+                                        <table className="min-w-full">
+                                            <thead className="bg-blue-100">
+                                                <tr>
+                                                    <th className="px-4 py-2 text-left text-xs font-medium text-blue-700 uppercase">Name</th>
+                                                    <th className="px-4 py-2 text-left text-xs font-medium text-blue-700 uppercase">Employee Code</th>
+                                                    <th className="px-4 py-2 text-left text-xs font-medium text-blue-700 uppercase">Shift</th>
+                                                    <th className="px-4 py-2 text-left text-xs font-medium text-blue-700 uppercase">Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody className="bg-white divide-y divide-blue-100">
+                                                {rosterData.supervisors.filter(s => selectedShift === 'all' || s.shift === selectedShift).map(supervisor => (
+                                                    <tr key={`supervisor-${supervisor.id}`}>
+                                                        <td className="px-4 py-2 whitespace-nowrap text-sm font-medium text-gray-900">
+                                                            {supervisor.fullName || supervisor.name}
+                                                        </td>
+                                                        <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-600">
+                                                            {supervisor.employee_code || 'N/A'}
+                                                        </td>
+                                                        <td className="px-4 py-2 whitespace-nowrap text-sm">
+                                                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${supervisor.shift === 'day' ? 'bg-yellow-100 text-yellow-800' : 'bg-blue-100 text-blue-800'}`}>
+                                                                {supervisor.shift === 'day' ? 'Day Shift' : 'Night Shift'}
+                                                            </span>
+                                                        </td>
+                                                        <td className="px-4 py-2 whitespace-nowrap text-sm">
+                                                            <span className="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                                                {supervisor.status}
+                                                            </span>
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Assigned Employees Section */}
+                            {rosterData.assignments && rosterData.assignments.filter(a => selectedShift === 'all' || a.shift === selectedShift).length > 0 && (
+                                <div>
+                                    <h3 className="text-lg font-semibold text-green-800 mb-3 flex items-center gap-2">
+                                        <ClipboardList className="w-5 h-5" />
+                                        Assigned Employees
+                                    </h3>
+                                    <div className="bg-green-50 rounded-lg overflow-hidden">
+                                        <table className="min-w-full">
+                                            <thead className="bg-green-100">
+                                                <tr>
+                                                    <th className="px-4 py-2 text-left text-xs font-medium text-green-700 uppercase">Name</th>
+                                                    <th className="px-4 py-2 text-left text-xs font-medium text-green-700 uppercase">Employee Code</th>
+                                                    <th className="px-4 py-2 text-left text-xs font-medium text-green-700 uppercase">Machine</th>
+                                                    <th className="px-4 py-2 text-left text-xs font-medium text-green-700 uppercase">Production Area</th>
+                                                    <th className="px-4 py-2 text-left text-xs font-medium text-green-700 uppercase">Shift</th>
+                                                    <th className="px-4 py-2 text-left text-xs font-medium text-green-700 uppercase">Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody className="bg-white divide-y divide-green-100">
+                                                {rosterData.assignments.filter(a => selectedShift === 'all' || a.shift === selectedShift).map(assignment => (
+                                                    <tr key={`assignment-${assignment.id}`}>
+                                                        <td className="px-4 py-2 whitespace-nowrap text-sm font-medium text-gray-900">
+                                                            {assignment.fullName || assignment.name}
+                                                        </td>
+                                                        <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-600">
+                                                            {assignment.employee_code || 'N/A'}
+                                                        </td>
+                                                        <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-600">
+                                                            {assignment.machine || 'N/A'}
+                                                        </td>
+                                                        <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-600">
+                                                            {assignment.production_area || 'N/A'}
+                                                        </td>
+                                                        <td className="px-4 py-2 whitespace-nowrap text-sm">
+                                                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${assignment.shift === 'day' ? 'bg-yellow-100 text-yellow-800' : 'bg-blue-100 text-blue-800'}`}>
+                                                                {assignment.shift === 'day' ? 'Day Shift' : 'Night Shift'}
+                                                            </span>
+                                                        </td>
+                                                        <td className="px-4 py-2 whitespace-nowrap text-sm">
+                                                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                                                assignment.status === 'present' ? 'bg-green-100 text-green-800' :
+                                                                assignment.status === 'absent' ? 'bg-red-100 text-red-800' :
+                                                                'bg-yellow-100 text-yellow-800'
+                                                            }`}>
+                                                                {assignment.status}
+                                                            </span>
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Attendance Records Section */}
+                            {rosterData.attendance && rosterData.attendance.length > 0 && (
+                                <div>
+                                    <h3 className="text-lg font-semibold text-purple-800 mb-3 flex items-center gap-2">
+                                        <UserCheck className="w-5 h-5" />
+                                        Attendance Records
+                                    </h3>
+                                    <div className="bg-purple-50 rounded-lg overflow-hidden">
+                                        <table className="min-w-full">
+                                            <thead className="bg-purple-100">
+                                                <tr>
+                                                    <th className="px-4 py-2 text-left text-xs font-medium text-purple-700 uppercase">Name</th>
+                                                    <th className="px-4 py-2 text-left text-xs font-medium text-purple-700 uppercase">Production Area</th>
+                                                    <th className="px-4 py-2 text-left text-xs font-medium text-purple-700 uppercase">Position</th>
+                                                    <th className="px-4 py-2 text-left text-xs font-medium text-purple-700 uppercase">Shift</th>
+                                                    <th className="px-4 py-2 text-left text-xs font-medium text-purple-700 uppercase">Status</th>
+                                                    <th className="px-4 py-2 text-left text-xs font-medium text-purple-700 uppercase">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody className="bg-white divide-y divide-purple-100">
+                                                {rosterData.attendance.map(worker => (
+                                                    <tr key={`attendance-${worker.id}`}>
+                                                        <td className="px-4 py-2 whitespace-nowrap text-sm font-medium text-gray-900">{worker.name}</td>
+                                                        <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-600">{worker.production_area || 'N/A'}</td>
+                                                        <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-600">{worker.position || 'N/A'}</td>
+                                                        <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-600">{worker.shift}</td>
+                                                        <td className="px-4 py-2 whitespace-nowrap text-sm">
+                                                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                                                worker.status === 'present' ? 'bg-green-100 text-green-800' : 
+                                                                worker.status === 'absent' ? 'bg-red-100 text-red-800' :
+                                                                'bg-yellow-100 text-yellow-800'
+                                                            }`}>
+                                                                {worker.status}
+                                                            </span>
+                                                        </td>
+                                                        <td className="px-4 py-2 whitespace-nowrap text-sm">
+                                                            {worker.status === 'pending' && (
+                                                                <button onClick={() => handleVerify(worker.id)} className="px-2 py-1 text-xs bg-purple-100 text-purple-700 rounded hover:bg-purple-200">
+                                                                    Verify Arrival
+                                                                </button>
+                                                            )}
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* No Data Message */}
+                            {(!rosterData.supervisors || rosterData.supervisors.length === 0) && 
+                             (!rosterData.assignments || rosterData.assignments.length === 0) && 
+                             (!rosterData.attendance || rosterData.attendance.length === 0) && (
+                                <div className="text-center py-8 text-gray-500">
+                                    <Users className="w-12 h-12 mx-auto mb-4 text-gray-300" />
+                                    <p>No labour data found for {selectedDate}</p>
+                                    <p className="text-sm">Try selecting a different date or check if data has been entered for this date.</p>
+                                </div>
+                            )}
+                        </div>
+                    )}
                 </div>
             </div>
 
@@ -346,7 +530,11 @@ export default function LabourLayoutPage() {
                             <div className="bg-blue-50 p-3 rounded-lg">
                                 <p className="text-sm text-blue-800">Exporting labour layout for:</p>
                                 <p className="font-medium text-blue-900">{selectedDate}</p>
-                                <p className="text-sm text-blue-700">{workers.length} workers</p>
+                                <div className="text-sm text-blue-700 space-y-1">
+                                    <p>Supervisors: {rosterData.summary.total_supervisors || 0}</p>
+                                    <p>Assignments: {rosterData.summary.total_assignments || 0}</p>
+                                    <p>Attendance: {rosterData.summary.total_attendance || 0}</p>
+                                </div>
                             </div>
                         </div>
                         
