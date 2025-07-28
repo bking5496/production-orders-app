@@ -617,6 +617,23 @@ apiRouter.get('/labour/today', authenticateToken, async (req, res) => {
     }
 });
 
+// Get roster for specific date
+apiRouter.get('/labour/roster', authenticateToken, async (req, res) => {
+    const { date } = req.query;
+    
+    if (!date) {
+        return res.status(400).json({ error: 'Date parameter is required' });
+    }
+    
+    try {
+        const workers = await dbAll('SELECT * FROM daily_attendance WHERE attendance_date = ? ORDER BY name', [date]);
+        res.json(workers);
+    } catch (error) {
+        console.error('Error fetching roster for date:', date, error);
+        res.status(500).json({ error: 'Failed to fetch roster for the specified date.' });
+    }
+});
+
 apiRouter.post('/labour/upload', authenticateToken, upload.single('rosterFile'), async (req, res) => {
     if (!req.file) {
         return res.status(400).json({ error: 'No file uploaded.' });
