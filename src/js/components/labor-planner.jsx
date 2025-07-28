@@ -28,7 +28,7 @@ const exportToJSON = (data, filename) => {
 };
 
 // Professional Excel export with proper formatting
-const exportToExcel = (assignments, machines, employees, date, supervisorOnDuty) => {
+const exportToExcel = (assignments, machines, employees, date, supervisorsOnDuty) => {
     // Check if XLSX library is available
     if (!window.XLSX) {
         // Fallback to CSV if XLSX not available
@@ -71,7 +71,7 @@ const exportToExcel = (assignments, machines, employees, date, supervisorOnDuty)
     wsData.push([]); // Empty row
     wsData.push(['Day of Week:', dayOfWeek]);
     wsData.push(['Date:', formattedDate]);
-    wsData.push(['Supervisor on Duty:', supervisorOnDuty || 'Not Assigned']);
+    wsData.push(['Supervisors on Duty:', supervisorsOnDuty.length > 0 ? supervisorsOnDuty.map(s => s.fullName || s.username).join(', ') : 'Not Assigned']);
     wsData.push([]); // Empty row
     wsData.push([]); // Empty row
     
@@ -405,7 +405,6 @@ export function LaborManagementSystem() {
     // Supervisor management - Changed to support multiple supervisors
     const [supervisorsOnDuty, setSupervisorsOnDuty] = useState([]);
     const [showSupervisorModal, setShowSupervisorModal] = useState(false);
-    const [selectedShift, setSelectedShift] = useState('dayshift');
 
     // Filtering state
     const [filters, setFilters] = useState({
@@ -439,7 +438,7 @@ export function LaborManagementSystem() {
     useEffect(() => {
         const dateToFetch = currentView === 'attendance' ? attendanceDate : selectedDate;
         fetchData(dateToFetch);
-    }, [selectedDate, attendanceDate, currentView, fetchData]);
+    }, [selectedDate, attendanceDate, currentView, selectedShift, fetchData]);
     
     // Memos for filtering
     const currentAssignments = useMemo(() => assignments.filter(a => a.machine_id == selectedMachine && a.shift === selectedShift && a.assignment_date === selectedDate), [assignments, selectedMachine, selectedShift, selectedDate]);
@@ -549,7 +548,7 @@ export function LaborManagementSystem() {
                 const exportDate = exportDateRange.start;
                 const dayAssignments = assignments.filter(a => a.assignment_date === exportDate);
                 
-                exportToExcel(dayAssignments, machines, employees, exportDate, supervisorOnDuty);
+                exportToExcel(dayAssignments, machines, employees, exportDate, supervisorsOnDuty);
                 showNotification(`Exported labor schedule for ${exportDate}`, 'success');
             } else {
                 // For CSV/JSON, get data from API
@@ -731,9 +730,17 @@ export function LaborManagementSystem() {
                                     <UserCheck className="w-5 h-5 text-blue-600" />
                                     <div>
                                         <p className="font-medium text-blue-800">Supervisors on Duty ({supervisorsOnDuty.length}/5)</p>
-                                        <p className="text-sm text-blue-600">
-                                            {selectedShift} shift on {selectedDate}
-                                        </p>
+                                        <div className="flex items-center gap-2">
+                                            <select 
+                                                value={selectedShift} 
+                                                onChange={(e) => setSelectedShift(e.target.value)}
+                                                className="text-xs border rounded px-2 py-1 bg-blue-50 border-blue-200"
+                                            >
+                                                <option value="day">Day Shift</option>
+                                                <option value="night">Night Shift</option>
+                                            </select>
+                                            <span className="text-sm text-blue-600">on {selectedDate}</span>
+                                        </div>
                                     </div>
                                 </div>
                                 <Button 
@@ -1358,22 +1365,20 @@ export function LaborManagementSystem() {
 
             {/* Supervisor Assignment Modal */}
             {showSupervisorModal && (
-                <Modal title="Assign Supervisor on Duty" onClose={() => setShowSupervisorModal(false)}>
+                <Modal title="Add Supervisor to Shift" onClose={() => setShowSupervisorModal(false)}>
                     <div className="space-y-4">
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-2">
-                                Select Supervisor for {selectedShift} shift on {selectedDate}
+                                Select Supervisor for {selectedShift} shift on {selectedDate} ({supervisorsOnDuty.length}/5 assigned)
                             </label>
                             <div className="space-y-2 max-h-64 overflow-y-auto">
-                                {employees.filter(e => e.role === 'supervisor' || e.role === 'admin').map(supervisor => (
+                                {employees.filter(e => e.role === 'supervisor' || e.role === 'admin')
+                                    .filter(supervisor => !supervisorsOnDuty.some(s => s.supervisor_id === supervisor.id))
+                                    .map(supervisor => (
                                     <div 
                                         key={supervisor.id}
-                                        className={`p-3 border rounded-lg cursor-pointer transition-all ${
-                                            supervisorOnDuty === (supervisor.fullName || supervisor.username)
-                                                ? 'border-blue-500 bg-blue-50'
-                                                : 'border-gray-200 hover:border-gray-300'
-                                        }`}
-                                        onClick={() => setSupervisorOnDuty(supervisor.fullName || supervisor.username)}
+                                        className="p-3 border rounded-lg cursor-pointer transition-all border-gray-200 hover:border-blue-300 hover:bg-blue-50"
+                                        onClick={() => addSupervisor(supervisor.id)}
                                     >
                                         <div className="flex items-center gap-3">
                                             <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
@@ -1391,19 +1396,14 @@ export function LaborManagementSystem() {
                             </div>
                         </div>
                         
+                        {employees.filter(e => e.role === 'supervisor' || e.role === 'admin')
+                            .filter(supervisor => !supervisorsOnDuty.some(s => s.supervisor_id === supervisor.id)).length === 0 && (
+                            <p className="text-center text-gray-500 py-4">All available supervisors are already assigned to this shift.</p>
+                        )}
+                        
                         <div className="flex justify-end gap-3 pt-4 border-t">
                             <Button variant="secondary" onClick={() => setShowSupervisorModal(false)}>
-                                Cancel
-                            </Button>
-                            <Button 
-                                onClick={() => {
-                                    setShowSupervisorModal(false);
-                                    showNotification('Supervisor assigned successfully', 'success');
-                                }}
-                                disabled={!supervisorOnDuty}
-                            >
-                                <UserCheck className="w-4 h-4" />
-                                Assign Supervisor
+                                Close
                             </Button>
                         </div>
                     </div>
