@@ -190,7 +190,8 @@ export const ProductionTimer = ({ order, onUpdate }) => {
 
     useEffect(() => {
         if (order.status === 'in_progress' && !isPaused) {
-            const startTime = new Date(order.started_at).getTime();
+            // Convert start time from SAST to local calculation
+            const startTime = new Date(order.started_at || order.start_time).getTime();
             const now = Date.now();
             setElapsed(now - startTime);
             
