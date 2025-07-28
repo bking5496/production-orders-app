@@ -803,35 +803,43 @@ apiRouter.get('/planner/supervisors', authenticateToken, async (req, res) => {
 apiRouter.post('/planner/supervisors', authenticateToken, requireRole(['admin', 'supervisor']), async (req, res) => {
     try {
         const { supervisor_id, assignment_date, shift } = req.body;
+        console.log('Supervisor assignment request:', { supervisor_id, assignment_date, shift, user: req.user });
         
         if (!supervisor_id || !assignment_date || !shift) {
+            console.log('Missing required fields');
             return res.status(400).json({ error: 'supervisor_id, assignment_date, and shift are required' });
         }
         
         // No limit on number of supervisors - removed the 5-supervisor restriction
         
         // Check if supervisor is already assigned to this shift
+        console.log('Checking for existing assignment...');
         const existing = await dbGet(`
             SELECT id FROM shift_supervisors 
             WHERE supervisor_id = ? AND assignment_date = ? AND shift = ?
         `, [supervisor_id, assignment_date, shift]);
         
         if (existing) {
+            console.log('Supervisor already assigned');
             return res.status(400).json({ error: 'Supervisor already assigned to this shift' });
         }
         
+        console.log('Creating new supervisor assignment...');
         const result = await dbRun(`
             INSERT INTO shift_supervisors (supervisor_id, assignment_date, shift, created_by) 
             VALUES (?, ?, ?, ?)
         `, [supervisor_id, assignment_date, shift, req.user.id]);
         
+        console.log('Supervisor assignment created successfully:', result.lastID);
         res.status(201).json({ 
             id: result.lastID, 
             message: 'Supervisor assigned to shift successfully' 
         });
     } catch (error) {
-        console.error("Error assigning supervisor to shift:", error);
-        res.status(500).json({ error: 'Failed to assign supervisor to shift' });
+        console.error("Error assigning supervisor to shift - Full error:", error);
+        console.error("Error message:", error.message);
+        console.error("Error code:", error.code);
+        res.status(500).json({ error: `Failed to assign supervisor to shift: ${error.message}` });
     }
 });
 
