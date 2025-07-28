@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { 
   CheckCircle, Package, AlertTriangle, TrendingUp, Target, 
   Clock, BarChart3, Trash2, Plus, Calculator, Save, X
@@ -8,6 +8,7 @@ import API from '../core/api';
 
 export default function ProductionCompletionModalWithWaste({ isOpen, onClose, order, onComplete }) {
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const [notification, setNotification] = useState(null);
   const [activeTab, setActiveTab] = useState('production');
   const [formData, setFormData] = useState({
@@ -24,45 +25,156 @@ export default function ProductionCompletionModalWithWaste({ isOpen, onClose, or
     { type: 'Finished Product', category: 'product', amount: 0, unit: 'units', cost_per_unit: 0 }
   ]);
 
+  // Waste management functions
+  const addWasteItem = useCallback(() => {
+    setWasteData(prev => [
+      ...prev,
+      { type: '', category: 'material', amount: 0, unit: 'kg', cost_per_unit: 0 }
+    ]);
+  }, []);
+
+  const updateWasteItem = useCallback((index, field, value) => {
+    setWasteData(prev => prev.map((item, i) => 
+      i === index ? { ...item, [field]: value } : item
+    ));
+  }, []);
+
+  const removeWasteItem = useCallback((index) => {
+    setWasteData(prev => prev.filter((_, i) => i !== index));
+  }, []);
+
+  // Calculate metrics
+  const metrics = useMemo(() => {
+    const completionRate = order?.quantity > 0 
+      ? Math.round((formData.actual_quantity / order.quantity) * 100) 
+      : 0;
+    
+    const qualityScore = {
+      excellent: 100,
+      good: 85,
+      fair: 70,
+      poor: 50
+    }[formData.quality_rating] || 85;
+    
+    const totalWasteAmount = wasteData.reduce((sum, waste) => sum + waste.amount, 0);
+    const totalWasteCost = wasteData.reduce((sum, waste) => sum + (waste.amount * waste.cost_per_unit), 0);
+    
+    return {
+      completionRate,
+      qualityScore,
+      totalWasteAmount,
+      totalWasteCost
+    };
+  }, [formData, wasteData, order]);
+
   // When the 'order' prop changes, update the form's default data
   useEffect(() => {
     if (order) {
       setFormData({
         actual_quantity: order.quantity || 0,
+        quality_rating: 'good',
+        efficiency_score: 0,
         notes: '',
-        waste_powder: 0,
-        waste_corrugated_box: 0,
-        waste_paper: 0,
-        waste_display: 0
+        completion_time: new Date().toISOString().slice(0, 16)
       });
       setError('');
+      setNotification(null);
     }
   }, [order]);
 
   // Don't render anything if the modal isn't supposed to be open
   if (!isOpen || !order) return null;
 
-  const handleSubmit = async (e) => {
+  const validateForm = useCallback(() => {
+    const errors = [];
+    
+    if (!formData.actual_quantity || formData.actual_quantity <= 0) {
+      errors.push('Actual quantity must be greater than 0');
+    }
+    
+    if (formData.actual_quantity > (order?.quantity * 1.2)) {
+      errors.push('Actual quantity cannot exceed 120% of target quantity');
+    }
+    
+    if (!formData.completion_time) {
+      errors.push('Completion time is required');
+    }
+    
+    // Validate waste data
+    const invalidWaste = wasteData.some(waste => 
+      waste.amount > 0 && (!waste.type.trim() || waste.cost_per_unit < 0)
+    );
+    
+    if (invalidWaste) {
+      errors.push('All waste items with amounts must have a valid type and non-negative cost');
+    }
+    
+    return errors;
+  }, [formData, wasteData, order]);
+
+  const handleSubmit = useCallback(async (e) => {
     e.preventDefault();
+    
+    const validationErrors = validateForm();
+    if (validationErrors.length > 0) {
+      setError(validationErrors.join('. '));
+      return;
+    }
+    
     setLoading(true);
     setError('');
+    setNotification(null);
+    
     try {
-      const response = await API.post(`/orders/${order.id}/complete`, formData);
-      onComplete(response); // Notify the parent component (OrdersPage) that we're done
-      onClose();
+      const submitData = {
+        ...formData,
+        waste_data: wasteData.filter(waste => waste.amount > 0),
+        metrics: {
+          completion_rate: metrics.completionRate,
+          quality_score: metrics.qualityScore,
+          total_waste_cost: metrics.totalWasteCost,
+          total_waste_amount: metrics.totalWasteAmount
+        }
+      };
+      
+      const response = await API.post(`/orders/${order.id}/complete`, submitData);
+      
+      setNotification({
+        type: 'success',
+        message: 'Production order completed successfully!'
+      });
+      
+      // Wait a moment to show success message
+      setTimeout(() => {
+        onComplete?.(response);
+        onClose();
+      }, 1500);
+      
     } catch (err) {
-      setError(err.message || 'Failed to complete order.');
+      const errorMessage = err.response?.data?.message || err.message || 'Failed to complete order';
+      setError(errorMessage);
+      setNotification({
+        type: 'error',
+        message: errorMessage
+      });
     } finally {
       setLoading(false);
     }
-  };
+  }, [formData, wasteData, order, metrics, validateForm, onComplete, onClose]);
 
   return (
     <Modal title="Complete Production Order" onClose={onClose} size="xl">
       <div className="space-y-6">
+        {/* Error Message */}
+        {error && (
+          <div className="p-4 rounded-lg bg-red-100 text-red-800 border border-red-200" role="alert">
+            {error}
+          </div>
+        )}
+        
         {/* Notification */}
         {notification && (
-          <div className={`p-4 rounded-lg ${notification.type === 'success' ? 'bg-green-100 text-green-800 border border-green-200' : 'bg-red-100 text-red-800 border border-red-200'}`}>
+          <div className={`p-4 rounded-lg ${notification.type === 'success' ? 'bg-green-100 text-green-800 border border-green-200' : 'bg-red-100 text-red-800 border border-red-200'}`} role="alert">
             {notification.message}
           </div>
         )}
@@ -397,8 +509,18 @@ export default function ProductionCompletionModalWithWaste({ isOpen, onClose, or
               <X className="w-4 h-4 mr-2" />
               Cancel
             </Button>
-            <Button type="submit" disabled={loading || formData.actual_quantity <= 0}>
-              <CheckCircle className="w-4 h-4 mr-2" />
+            <Button 
+              type="submit" 
+              disabled={loading || formData.actual_quantity <= 0}
+              className={loading ? 'opacity-50 cursor-not-allowed' : ''}
+            >
+              {loading && (
+                <svg className="animate-spin -ml-1 mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="m4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+              )}
+              {!loading && <CheckCircle className="w-4 h-4 mr-2" />}
               {loading ? 'Completing...' : 'Complete Production'}
             </Button>
           </div>
