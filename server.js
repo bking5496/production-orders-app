@@ -730,10 +730,10 @@ apiRouter.post('/planner/assignments', authenticateToken, requireRole(['admin', 
             return res.status(400).json({ error: 'Missing required fields: employee_id, machine_id, shift, assignment_date' });
         }
         
-        const params = [employee_id, machine_id, shift, assignment_date, 'planned'];
+        const params = [employee_id, employee_id, machine_id, shift, assignment_date, 'planned'];
         console.log('SQL parameters:', params);
         const result = await dbRun(
-            'INSERT INTO labor_assignments (user_id, machine_id, shift, assignment_date, status) VALUES (?, ?, ?, ?, ?)',
+            'INSERT INTO labor_assignments (user_id, employee_id, machine_id, shift, assignment_date, status) VALUES (?, ?, ?, ?, ?, ?)',
             params
         );
         console.log('Assignment created with ID:', result.lastID);
