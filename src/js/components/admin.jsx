@@ -16,6 +16,18 @@ export default function AdminPanel() {
   const [searchTerm, setSearchTerm] = useState('');
   const [roleFilter, setRoleFilter] = useState('all');
   const [activeTab, setActiveTab] = useState('overview');
+  
+  // Environment management state
+  const [environments, setEnvironments] = useState([]);
+  const [showEnvironmentModal, setShowEnvironmentModal] = useState(false);
+  const [editingEnvironment, setEditingEnvironment] = useState(null);
+  const [environmentFormData, setEnvironmentFormData] = useState({
+    name: '',
+    code: '',
+    description: '',
+    color: 'blue',
+    machine_types: []
+  });
 
   // Modal states
   const [showUserModal, setShowUserModal] = useState(false);
@@ -51,10 +63,14 @@ export default function AdminPanel() {
     else setLoading(true);
     
     try {
-      const data = await API.get('/users');
-      setUsers(data);
+      const [usersData, environmentsData] = await Promise.all([
+        API.get('/users'),
+        API.get('/environments').catch(() => []) // Fallback if environments endpoint doesn't exist
+      ]);
+      setUsers(usersData);
+      setEnvironments(environmentsData);
     } catch (error) {
-      console.error('Failed to load users:', error);
+      console.error('Failed to load data:', error);
       showNotification('Failed to load users', 'danger');
     } finally {
       setLoading(false);
@@ -121,6 +137,58 @@ export default function AdminPanel() {
       company: user.company || 'Workforce'
     });
     setShowUserModal(true);
+  };
+
+  // Environment management functions
+  const handleCreateEnvironment = async (e) => {
+    e.preventDefault();
+    try {
+      await API.post('/environments', environmentFormData);
+      setShowEnvironmentModal(false);
+      setEnvironmentFormData({ name: '', code: '', description: '', color: 'blue', machine_types: [] });
+      loadUsers();
+      showNotification('Environment created successfully');
+    } catch (error) {
+      showNotification('Failed to create environment: ' + error.message, 'danger');
+    }
+  };
+
+  const handleEditEnvironment = async (e) => {
+    e.preventDefault();
+    try {
+      await API.put(`/environments/${editingEnvironment.id}`, environmentFormData);
+      setShowEnvironmentModal(false);
+      setEditingEnvironment(null);
+      setEnvironmentFormData({ name: '', code: '', description: '', color: 'blue', machine_types: [] });
+      loadUsers();
+      showNotification('Environment updated successfully');
+    } catch (error) {
+      showNotification('Failed to update environment: ' + error.message, 'danger');
+    }
+  };
+
+  const handleDeleteEnvironment = async (environmentId) => {
+    if (window.confirm('Are you sure you want to delete this environment? This action cannot be undone.')) {
+      try {
+        await API.delete(`/environments/${environmentId}`);
+        loadUsers();
+        showNotification('Environment deleted successfully');
+      } catch (error) {
+        showNotification('Failed to delete environment: ' + error.message, 'danger');
+      }
+    }
+  };
+
+  const openEditEnvironment = (environment) => {
+    setEditingEnvironment(environment);
+    setEnvironmentFormData({
+      name: environment.name,
+      code: environment.code,
+      description: environment.description || '',
+      color: environment.color || 'blue',
+      machine_types: environment.machine_types || []
+    });
+    setShowEnvironmentModal(true);
   };
 
   // Filter users
@@ -313,6 +381,7 @@ export default function AdminPanel() {
           {[
             { id: 'overview', label: 'Overview', icon: BarChart3 },
             { id: 'users', label: 'User Management', icon: Users },
+            { id: 'environments', label: 'Environments', icon: Settings },
             { id: 'settings', label: 'System Settings', icon: Settings },
             { id: 'tools', label: 'Admin Tools', icon: Wrench }
           ].map(tab => {
@@ -500,6 +569,97 @@ export default function AdminPanel() {
         </div>
       )}
 
+      {activeTab === 'environments' && (
+        <div className="space-y-6">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div>
+              <h2 className="text-xl font-semibold text-gray-800">Environment Management</h2>
+              <p className="text-gray-600">Configure production environments and their machine types</p>
+            </div>
+            
+            <Button onClick={() => {
+              setEnvironmentFormData({ name: '', code: '', description: '', color: 'blue', machine_types: [] });
+              setEditingEnvironment(null);
+              setShowEnvironmentModal(true);
+            }}>
+              <Plus className="w-4 h-4 mr-2" />
+              Add Environment
+            </Button>
+          </div>
+
+          {/* Environments Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {environments.length === 0 ? (
+              <Card className="col-span-full p-12 text-center">
+                <Settings className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-gray-600 mb-2">No environments configured</h3>
+                <p className="text-gray-500 mb-4">Create your first production environment to get started</p>
+                <Button onClick={() => {
+                  setEnvironmentFormData({ name: '', code: '', description: '', color: 'blue', machine_types: [] });
+                  setEditingEnvironment(null);
+                  setShowEnvironmentModal(true);
+                }}>
+                  <Plus className="w-4 h-4 mr-2" />
+                  Add First Environment
+                </Button>
+              </Card>
+            ) : environments.map(environment => (
+              <Card key={environment.id} className={`p-6 border-l-4 border-${environment.color || 'blue'}-200 hover:shadow-lg transition-all duration-300`}>
+                <div className="flex justify-between items-start mb-4">
+                  <div className="flex-1">
+                    <h3 className="text-lg font-semibold text-gray-800 mb-1">{environment.name}</h3>
+                    <p className="text-sm text-gray-500 mb-2 uppercase font-mono">{environment.code}</p>
+                    {environment.description && (
+                      <p className="text-sm text-gray-600">{environment.description}</p>
+                    )}
+                  </div>
+                  <Badge variant={environment.color === 'blue' ? 'info' : environment.color === 'green' ? 'success' : environment.color === 'yellow' ? 'warning' : 'default'}>
+                    {environment.code}
+                  </Badge>
+                </div>
+                
+                {/* Machine Types */}
+                {environment.machine_types && environment.machine_types.length > 0 && (
+                  <div className="space-y-2 mb-4">
+                    <p className="text-sm font-medium text-gray-700">Machine Types:</p>
+                    <div className="flex flex-wrap gap-1">
+                      {environment.machine_types.slice(0, 3).map((type, index) => (
+                        <Badge key={index} variant="default" size="sm">{type}</Badge>
+                      ))}
+                      {environment.machine_types.length > 3 && (
+                        <Badge variant="default" size="sm">+{environment.machine_types.length - 3} more</Badge>
+                      )}
+                    </div>
+                  </div>
+                )}
+                
+                {/* Action Buttons */}
+                <div className="flex gap-2 mt-4">
+                  <Button 
+                    onClick={() => openEditEnvironment(environment)}
+                    variant="outline"
+                    size="sm"
+                    className="flex-1"
+                  >
+                    <Edit3 className="w-4 h-4 mr-1" />
+                    Edit
+                  </Button>
+                  
+                  <Button 
+                    onClick={() => handleDeleteEnvironment(environment.id)}
+                    variant="outline"
+                    size="sm"
+                    className="text-red-600 hover:text-red-700 hover:border-red-300"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
+                </div>
+              </Card>
+            ))}
+          </div>
+        </div>
+      )}
+
       {activeTab === 'settings' && (
         <div className="space-y-6">
           <div>
@@ -633,6 +793,100 @@ export default function AdminPanel() {
             />
           </div>
         </div>
+      )}
+
+      {/* Environment Modal */}
+      {showEnvironmentModal && (
+        <Modal title={editingEnvironment ? "Edit Environment" : "Add New Environment"} onClose={() => {
+          setShowEnvironmentModal(false);
+          setEditingEnvironment(null);
+          setEnvironmentFormData({ name: '', code: '', description: '', color: 'blue', machine_types: [] });
+        }}>
+          <form onSubmit={editingEnvironment ? handleEditEnvironment : handleCreateEnvironment} className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Environment Name</label>
+                <input 
+                  type="text" 
+                  placeholder="e.g. Blending Department" 
+                  value={environmentFormData.name}
+                  onChange={(e) => setEnvironmentFormData({...environmentFormData, name: e.target.value})} 
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                  required 
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Environment Code</label>
+                <input 
+                  type="text" 
+                  placeholder="e.g. blending" 
+                  value={environmentFormData.code}
+                  onChange={(e) => setEnvironmentFormData({...environmentFormData, code: e.target.value.toLowerCase().replace(/\s+/g, '_')})} 
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                  required 
+                />
+                <p className="text-xs text-gray-500 mt-1">Used internally (lowercase, no spaces)</p>
+              </div>
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Description (Optional)</label>
+              <textarea 
+                placeholder="Brief description of this environment" 
+                value={environmentFormData.description}
+                onChange={(e) => setEnvironmentFormData({...environmentFormData, description: e.target.value})} 
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                rows="2"
+              />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Color Theme</label>
+              <select 
+                value={environmentFormData.color}
+                onChange={(e) => setEnvironmentFormData({...environmentFormData, color: e.target.value})} 
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              >
+                <option value="blue">Blue</option>
+                <option value="green">Green</option>
+                <option value="yellow">Yellow</option>
+                <option value="purple">Purple</option>
+                <option value="red">Red</option>
+                <option value="gray">Gray</option>
+              </select>
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Machine Types</label>
+              <textarea 
+                placeholder="Enter machine types, one per line (e.g., Bulk Line, Canning line, etc.)" 
+                value={environmentFormData.machine_types.join('\n')}
+                onChange={(e) => setEnvironmentFormData({
+                  ...environmentFormData, 
+                  machine_types: e.target.value.split('\n').filter(type => type.trim())
+                })} 
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                rows="4"
+              />
+              <p className="text-xs text-gray-500 mt-1">One machine type per line</p>
+            </div>
+            
+            <div className="flex justify-end gap-3 pt-4">
+              <Button type="button" onClick={() => {
+                setShowEnvironmentModal(false);
+                setEditingEnvironment(null);
+                setEnvironmentFormData({ name: '', code: '', description: '', color: 'blue', machine_types: [] });
+              }} variant="outline">
+                Cancel
+              </Button>
+              <Button type="submit">
+                {editingEnvironment ? <Save className="w-4 h-4 mr-2" /> : <Plus className="w-4 h-4 mr-2" />}
+                {editingEnvironment ? 'Update Environment' : 'Create Environment'}
+              </Button>
+            </div>
+          </form>
+        </Modal>
       )}
 
       {/* User Modal */}

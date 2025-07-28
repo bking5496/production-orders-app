@@ -1,18 +1,28 @@
-import React, { useState, useEffect } from 'react';
-import { Modal } from './ui-components.jsx';
+import React, { useState, useEffect, useMemo } from 'react';
+import { 
+  CheckCircle, Package, AlertTriangle, TrendingUp, Target, 
+  Clock, BarChart3, Trash2, Plus, Calculator, Save, X
+} from 'lucide-react';
+import { Modal, Card, Button, Badge } from './ui-components.jsx';
 import API from '../core/api';
 
 export default function ProductionCompletionModalWithWaste({ isOpen, onClose, order, onComplete }) {
   const [loading, setLoading] = useState(false);
+  const [notification, setNotification] = useState(null);
+  const [activeTab, setActiveTab] = useState('production');
   const [formData, setFormData] = useState({
     actual_quantity: 0,
+    quality_rating: 'good',
+    efficiency_score: 0,
     notes: '',
-    waste_powder: 0,
-    waste_corrugated_box: 0,
-    waste_paper: 0,
-    waste_display: 0
+    completion_time: new Date().toISOString().slice(0, 16)
   });
-  const [error, setError] = useState('');
+  
+  const [wasteData, setWasteData] = useState([
+    { type: 'Raw Material', category: 'material', amount: 0, unit: 'kg', cost_per_unit: 0 },
+    { type: 'Packaging Material', category: 'packaging', amount: 0, unit: 'kg', cost_per_unit: 0 },
+    { type: 'Finished Product', category: 'product', amount: 0, unit: 'units', cost_per_unit: 0 }
+  ]);
 
   // When the 'order' prop changes, update the form's default data
   useEffect(() => {
