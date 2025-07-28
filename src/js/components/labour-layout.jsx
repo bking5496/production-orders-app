@@ -176,9 +176,8 @@ export default function LabourLayoutPage() {
     const handleVerify = async (workerId) => {
         try {
             await API.put(`/labour/verify/${workerId}`);
-            setWorkers(currentWorkers => 
-                currentWorkers.map(w => w.id === workerId ? { ...w, status: 'present' } : w)
-            );
+            // Refresh the data after verification
+            fetchRosterForDate(selectedDate);
         } catch (error) {
             alert('Failed to verify worker: ' + error.message);
         }

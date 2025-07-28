@@ -653,7 +653,7 @@ apiRouter.get('/labour/roster', authenticateToken, async (req, res) => {
                 u.fullName,
                 u.employee_code,
                 u.role as position,
-                m.machine_name as machine,
+                m.name as machine,
                 m.environment as production_area,
                 'employee' as type
             FROM labor_assignments la
