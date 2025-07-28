@@ -70,10 +70,10 @@ export default function ProductionControl({ order, onUpdate, className = "" }) {
     if (!order || order.status !== 'in_progress') return;
 
     const interval = setInterval(() => {
-      // Convert SAST start time to UTC for proper elapsed calculation
-      const utcStartTime = convertSASTToUTC(order.start_time);
-      const now = new Date();
-      const runtimeMinutes = Math.floor((now - utcStartTime) / (1000 * 60));
+      // Add 2 hours to database timestamp to align with local SAST time
+      const startTime = new Date(order.start_time).getTime() + (2 * 60 * 60 * 1000);
+      const now = Date.now();
+      const runtimeMinutes = Math.floor((now - startTime) / (1000 * 60));
       setRuntime(runtimeMinutes);
 
       // Calculate production rate (units per hour)

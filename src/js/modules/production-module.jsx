@@ -190,15 +190,15 @@ export const ProductionTimer = ({ order, onUpdate }) => {
 
     useEffect(() => {
         if (order.status === 'in_progress' && !isPaused) {
-            // Convert SAST start time to UTC for proper elapsed calculation
+            // Add 2 hours to database timestamp to align with local SAST time
             const sastStartTime = order.started_at || order.start_time;
             if (sastStartTime) {
-                const utcStartTime = convertSASTToUTC(sastStartTime).getTime();
+                const startTime = new Date(sastStartTime).getTime() + (2 * 60 * 60 * 1000);
                 const now = Date.now();
-                setElapsed(now - utcStartTime);
+                setElapsed(now - startTime);
                 
                 intervalRef.current = setInterval(() => {
-                    setElapsed(Date.now() - utcStartTime);
+                    setElapsed(Date.now() - startTime);
                 }, 1000);
 
                 return () => {
@@ -218,20 +218,20 @@ export const ProductionTimer = ({ order, onUpdate }) => {
         return `${hours.toString().padStart(2, '0')}:${(minutes % 60).toString().padStart(2, '0')}:${(seconds % 60).toString().padStart(2, '0')}`;
     }, []);
 
-    const handlePause = useCallback(async () => {
+    const handleStop = useCallback(async () => {
         setIsLoading(true);
         setError('');
         
         try {
-            await API.post(`/orders/${order.id}/pause`);
+            await API.post(`/orders/${order.id}/stop`, { reason: 'operator_break' });
             setIsPaused(true);
             if (intervalRef.current) {
                 clearInterval(intervalRef.current);
             }
             onUpdate?.();
         } catch (error) {
-            setError('Failed to pause production');
-            console.error('Failed to pause production:', error);
+            setError('Failed to stop production');
+            console.error('Failed to stop production:', error);
         } finally {
             setIsLoading(false);
         }
@@ -291,13 +291,13 @@ export const ProductionTimer = ({ order, onUpdate }) => {
                     ) : (
                         <Button
                             size="sm"
-                            variant="secondary"
-                            icon={<span>⏸️</span>}
-                            onClick={handlePause}
+                            variant="danger"
+                            icon={<span>🛑</span>}
+                            onClick={handleStop}
                             loading={isLoading}
                             disabled={isLoading}
                         >
-                            Pause
+                            Stop
                         </Button>
                     )}
                 </div>

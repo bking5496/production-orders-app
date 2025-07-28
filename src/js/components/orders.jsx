@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Package, Plus, Search, Filter, RefreshCw, Play, Pause, Square, Trash2, Clock, AlertTriangle, CheckCircle, BarChart3, Calendar, Target } from 'lucide-react';
+import { Package, Plus, Search, Filter, RefreshCw, Play, Square, Trash2, Clock, AlertTriangle, CheckCircle, BarChart3, Calendar, Target } from 'lucide-react';
 import API from '../core/api';
 import { Modal, Card, Button, Badge } from './ui-components.jsx';
 import ProductionCompletionModalWithWaste from './production-completion-modal-with-waste.jsx';
@@ -19,11 +19,11 @@ export default function OrdersPage() {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showStartModal, setShowStartModal] = useState(false);
   const [showCompletionModal, setShowCompletionModal] = useState(false);
-  const [showPauseModal, setShowPauseModal] = useState(false);
+  const [showStopModal, setShowStopModal] = useState(false);
   
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [selectedMachine, setSelectedMachine] = useState('');
-  const [pauseReason, setPauseReason] = useState('');
+  const [stopReason, setStopReason] = useState('');
 
   const [formData, setFormData] = useState({
     order_number: '', product_name: '', quantity: '', environment: '',
@@ -97,19 +97,19 @@ export default function OrdersPage() {
     }
   };
 
-  const handlePauseProduction = async () => {
-    if (!pauseReason.trim()) {
-      showNotification('Please enter a reason for pausing', 'warning');
+  const handleStopProduction = async () => {
+    if (!stopReason.trim()) {
+      showNotification('Please enter a reason for stopping', 'warning');
       return;
     }
     try {
-      await API.post(`/orders/${selectedOrder.id}/pause`, { reason: pauseReason });
-      setShowPauseModal(false);
-      setPauseReason('');
+      await API.post(`/orders/${selectedOrder.id}/stop`, { reason: stopReason });
+      setShowStopModal(false);
+      setStopReason('');
       loadData();
-      showNotification('Production paused successfully');
+      showNotification('Production stopped successfully');
     } catch (error) {
-      showNotification('Failed to pause production: ' + error.message, 'danger');
+      showNotification('Failed to stop production: ' + error.message, 'danger');
     }
   };
 
@@ -163,12 +163,12 @@ export default function OrdersPage() {
     const pending = orders.filter(o => o.status === 'pending').length;
     const inProgress = orders.filter(o => o.status === 'in_progress').length;
     const completed = orders.filter(o => o.status === 'completed').length;
-    const paused = orders.filter(o => o.status === 'paused').length;
+    const stopped = orders.filter(o => o.status === 'stopped').length;
     const totalQuantity = orders.reduce((sum, o) => sum + (parseInt(o.quantity) || 0), 0);
     const completedQuantity = orders.filter(o => o.status === 'completed').reduce((sum, o) => sum + (parseInt(o.actual_quantity || o.quantity) || 0), 0);
     const completionRate = total > 0 ? Math.round((completed / total) * 100) : 0;
     
-    return { total, pending, inProgress, completed, paused, totalQuantity, completedQuantity, completionRate };
+    return { total, pending, inProgress, completed, stopped, totalQuantity, completedQuantity, completionRate };
   }, [orders]);
 
   const getStatusBadge = (status) => {
@@ -176,7 +176,6 @@ export default function OrdersPage() {
       pending: { variant: 'default', icon: Clock },
       in_progress: { variant: 'info', icon: Play },
       completed: { variant: 'success', icon: CheckCircle },
-      paused: { variant: 'warning', icon: Pause },
       stopped: { variant: 'danger', icon: Square }
     };
     
@@ -242,10 +241,10 @@ export default function OrdersPage() {
       </Card>
       <Card className="p-4">
         <div className="flex items-center gap-2">
-          <Pause className="w-5 h-5 text-yellow-600" />
+          <Square className="w-5 h-5 text-red-600" />
           <div>
-            <p className="text-sm text-gray-500">Paused</p>
-            <p className="text-2xl font-bold text-yellow-600">{stats.paused}</p>
+            <p className="text-sm text-gray-500">Stopped</p>
+            <p className="text-2xl font-bold text-red-600">{stats.stopped}</p>
           </div>
         </div>
       </Card>
@@ -363,7 +362,7 @@ export default function OrdersPage() {
               <option value="pending">Pending</option>
               <option value="in_progress">In Progress</option>
               <option value="completed">Completed</option>
-              <option value="paused">Paused</option>
+              <option value="stopped">Stopped</option>
             </select>
           </div>
           
@@ -447,13 +446,13 @@ export default function OrdersPage() {
                     {order.status === 'in_progress' && (
                       <>
                         <Button 
-                          onClick={() => { setSelectedOrder(order); setShowPauseModal(true); }} 
+                          onClick={() => { setSelectedOrder(order); setShowStopModal(true); }} 
                           size="sm"
                           variant="outline"
-                          className="text-yellow-600 hover:text-yellow-700"
+                          className="text-red-600 hover:text-red-700"
                         >
-                          <Pause className="w-4 h-4 mr-1" />
-                          Pause
+                          <Square className="w-4 h-4 mr-1" />
+                          Stop
                         </Button>
                         <Button 
                           onClick={() => { setSelectedOrder(order); setShowCompletionModal(true); }} 
@@ -466,7 +465,7 @@ export default function OrdersPage() {
                         </Button>
                       </>
                     )}
-                    {order.status === 'paused' && (
+                    {order.status === 'stopped' && (
                       <Button 
                         onClick={() => handleResumeProduction(order.id)} 
                         size="sm"
@@ -647,40 +646,57 @@ export default function OrdersPage() {
         </Modal>
       )}
 
-      {/* Pause Production Modal */}
-      {showPauseModal && selectedOrder && (
-        <Modal title="Pause Production" onClose={() => setShowPauseModal(false)}>
+      {/* Stop Production Modal */}
+      {showStopModal && selectedOrder && (
+        <Modal title="Stop Production" onClose={() => setShowStopModal(false)}>
           <div className="space-y-4">
-            <div className="bg-yellow-50 p-4 rounded-lg">
-              <h3 className="font-medium text-yellow-900">Order Details</h3>
-              <p className="text-sm text-yellow-700 mt-1">
+            <div className="bg-red-50 p-4 rounded-lg">
+              <h3 className="font-medium text-red-900">Order Details</h3>
+              <p className="text-sm text-red-700 mt-1">
                 <span className="font-medium">{selectedOrder.order_number}</span> - {selectedOrder.product_name}
               </p>
             </div>
             
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Reason for Pausing</label>
-              <textarea 
-                placeholder="Enter reason for pausing production (required)" 
-                value={pauseReason}
-                onChange={(e) => setPauseReason(e.target.value)} 
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
-                rows="3"
+              <label className="block text-sm font-medium text-gray-700 mb-2">Reason for Stopping</label>
+              <select 
+                value={stopReason}
+                onChange={(e) => setStopReason(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent mb-3"
                 required
-              />
+              >
+                <option value="">Select stop reason...</option>
+                <option value="machine_breakdown">Machine Breakdown</option>
+                <option value="material_shortage">Material Shortage</option>
+                <option value="quality_issue">Quality Issue</option>
+                <option value="operator_break">Operator Break</option>
+                <option value="shift_change">Shift Change</option>
+                <option value="maintenance">Scheduled Maintenance</option>
+                <option value="safety_incident">Safety Incident</option>
+                <option value="power_outage">Power Outage</option>
+                <option value="other">Other</option>
+              </select>
+              
+              {stopReason && (
+                <textarea 
+                  placeholder="Additional details about the stop reason..." 
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                  rows="3"
+                />
+              )}
             </div>
             
             <div className="flex justify-end gap-3 pt-4">
-              <Button type="button" onClick={() => setShowPauseModal(false)} variant="outline">
+              <Button type="button" onClick={() => setShowStopModal(false)} variant="outline">
                 Cancel
               </Button>
               <Button 
-                onClick={handlePauseProduction}
-                disabled={!pauseReason.trim()}
-                variant="warning"
+                onClick={handleStopProduction}
+                disabled={!stopReason.trim()}
+                variant="danger"
               >
-                <Pause className="w-4 h-4 mr-2" />
-                Pause Production
+                <Square className="w-4 h-4 mr-2" />
+                Stop Production
               </Button>
             </div>
           </div>

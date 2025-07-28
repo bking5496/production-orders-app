@@ -110,6 +110,22 @@ const handleValidationErrors = (req, res, next) => {
     next();
 };
 
+// Helper function to categorize stop reasons for reporting
+const getCategoryFromReason = (reason) => {
+    const categories = {
+        machine_breakdown: 'Equipment',
+        material_shortage: 'Material',
+        quality_issue: 'Quality',
+        operator_break: 'Planned',
+        shift_change: 'Planned',
+        maintenance: 'Maintenance',
+        safety_incident: 'Safety',
+        power_outage: 'Utilities',
+        other: 'Other'
+    };
+    return categories[reason] || 'Other';
+};
+
 // ===========================================
 //               API ROUTES
 // ===========================================
@@ -446,28 +462,29 @@ apiRouter.post('/orders/:id/start',
         }
     }
 );
-apiRouter.post('/orders/:id/pause', authenticateToken, requireRole(['admin', 'supervisor', 'operator']),
+apiRouter.post('/orders/:id/stop', authenticateToken, requireRole(['admin', 'supervisor', 'operator']),
     body('reason').notEmpty(), handleValidationErrors,
     async (req, res) => {
         const { reason, notes } = req.body;
-        // Pause production with SAST timestamp
-        await dbRun(`UPDATE production_orders SET status = 'paused', stop_reason = ? WHERE id = ? AND status = 'in_progress'`, [reason, req.params.id]);
-        await dbRun("INSERT INTO production_stops (order_id, reason, notes, start_time) VALUES (?, ?, ?, datetime('now', '+2 hours'))", [req.params.id, reason, notes]);
-        res.json({message: 'Production paused.'});
+        // Stop production with SAST timestamp and enhanced tracking
+        await dbRun(`UPDATE production_orders SET status = 'stopped', stop_reason = ? WHERE id = ? AND status = 'in_progress'`, [reason, req.params.id]);
+        await dbRun("INSERT INTO production_stops (order_id, reason, notes, start_time, category, operator_id) VALUES (?, ?, ?, datetime('now', '+2 hours'), ?, ?)", 
+            [req.params.id, reason, notes, getCategoryFromReason(reason), req.user.id]);
+        res.json({message: 'Production stopped.'});
     }
 );
 apiRouter.post('/orders/:id/resume', authenticateToken, requireRole(['admin', 'supervisor', 'operator']),
     async (req, res) => {
-        await dbRun(`UPDATE production_orders SET status = 'in_progress' WHERE id = ? AND status = 'paused'`, [req.params.id]);
-        // Resume production with SAST timestamp
-        await dbRun(`UPDATE production_stops SET end_time = datetime('now', '+2 hours'), duration = CAST((julianday(datetime('now', '+2 hours')) - julianday(start_time)) * 24 * 60 AS INTEGER) WHERE order_id = ? AND end_time IS NULL`, [req.params.id]);
+        await dbRun(`UPDATE production_orders SET status = 'in_progress' WHERE id = ? AND status = 'stopped'`, [req.params.id]);
+        // Resume production with SAST timestamp and calculate downtime
+        await dbRun(`UPDATE production_stops SET end_time = datetime('now', '+2 hours'), duration = CAST((julianday(datetime('now', '+2 hours')) - julianday(start_time)) * 24 * 60 AS INTEGER), resolved_by = ? WHERE order_id = ? AND end_time IS NULL`, [req.user.id, req.params.id]);
         res.json({message: 'Production resumed.'});
     }
 );
 apiRouter.post('/orders/:id/complete', authenticateToken, requireRole(['admin', 'supervisor', 'operator']),
     body('actual_quantity').isInt({min: 0}), handleValidationErrors,
     async (req, res) => {
-        const order = await dbGet('SELECT quantity, machine_id FROM production_orders WHERE id = ? AND status IN ("in_progress", "paused")', [req.params.id]);
+        const order = await dbGet('SELECT quantity, machine_id FROM production_orders WHERE id = ? AND status IN ("in_progress", "stopped")', [req.params.id]);
         if (!order) return res.status(400).json({error: 'Order not in a completable state.'});
         const efficiency = (req.body.actual_quantity / order.quantity) * 100;
         // Complete order with SAST timestamp
@@ -476,7 +493,97 @@ apiRouter.post('/orders/:id/complete', authenticateToken, requireRole(['admin', 
         res.json({message: 'Order completed.'});
     }
 );
-apiRouter.get('/production/active', authenticateToken, async (req, res) => { res.json(await dbAll(`SELECT o.*, m.name as machine_name FROM production_orders o LEFT JOIN machines m ON o.machine_id = m.id WHERE o.status IN ('in_progress', 'paused', 'stopped') AND o.archived = 0`)); });
+apiRouter.get('/production/active', authenticateToken, async (req, res) => { res.json(await dbAll(`SELECT o.*, m.name as machine_name FROM production_orders o LEFT JOIN machines m ON o.machine_id = m.id WHERE o.status IN ('in_progress', 'stopped') AND o.archived = 0`)); });
+
+// Downtime Reporting Endpoint
+apiRouter.get('/reports/downtime', authenticateToken, async (req, res) => {
+    try {
+        const { start_date, end_date, machine_id, category } = req.query;
+        
+        let query = `
+            SELECT 
+                ps.*,
+                o.order_number,
+                m.name as machine_name,
+                m.environment,
+                u1.username as stopped_by,
+                u2.username as resolved_by,
+                CASE 
+                    WHEN ps.end_time IS NULL THEN 'Active'
+                    ELSE 'Resolved'
+                END as status
+            FROM production_stops ps
+            LEFT JOIN production_orders o ON ps.order_id = o.id
+            LEFT JOIN machines m ON o.machine_id = m.id
+            LEFT JOIN users u1 ON ps.operator_id = u1.id
+            LEFT JOIN users u2 ON ps.resolved_by = u2.id
+            WHERE 1=1
+        `;
+        
+        const params = [];
+        
+        if (start_date) {
+            query += ' AND ps.start_time >= ?';
+            params.push(start_date);
+        }
+        
+        if (end_date) {
+            query += ' AND ps.start_time <= ?';
+            params.push(end_date);
+        }
+        
+        if (machine_id) {
+            query += ' AND o.machine_id = ?';
+            params.push(machine_id);
+        }
+        
+        if (category) {
+            query += ' AND ps.category = ?';
+            params.push(category);
+        }
+        
+        query += ' ORDER BY ps.start_time DESC';
+        
+        const downtimeRecords = await dbAll(query, params);
+        
+        // Calculate summary statistics
+        const totalStops = downtimeRecords.length;
+        const resolvedStops = downtimeRecords.filter(s => s.end_time).length;
+        const activeStops = totalStops - resolvedStops;
+        const totalDowntimeMinutes = downtimeRecords
+            .filter(s => s.duration)
+            .reduce((sum, s) => sum + s.duration, 0);
+        
+        const summary = {
+            total_stops: totalStops,
+            resolved_stops: resolvedStops,
+            active_stops: activeStops,
+            total_downtime_hours: Math.round((totalDowntimeMinutes / 60) * 100) / 100,
+            average_downtime_minutes: totalStops > 0 ? Math.round((totalDowntimeMinutes / resolvedStops) * 100) / 100 : 0
+        };
+        
+        // Group by category
+        const categoryBreakdown = downtimeRecords.reduce((acc, stop) => {
+            const cat = stop.category || 'Other';
+            if (!acc[cat]) {
+                acc[cat] = { count: 0, total_minutes: 0 };
+            }
+            acc[cat].count++;
+            acc[cat].total_minutes += stop.duration || 0;
+            return acc;
+        }, {});
+        
+        res.json({
+            summary,
+            category_breakdown: categoryBreakdown,
+            records: downtimeRecords
+        });
+        
+    } catch (error) {
+        console.error('Downtime report error:', error);
+        res.status(500).json({ error: 'Failed to generate downtime report' });
+    }
+});
 apiRouter.get('/production/stats', authenticateToken, async (req, res) => {
     const stats = await dbGet(`SELECT COUNT(CASE WHEN status = 'in_progress' THEN 1 END) as active_orders, COUNT(CASE WHEN status = 'stopped' THEN 1 END) as stopped_orders, AVG(efficiency_percentage) as avg_efficiency FROM production_orders WHERE archived = 0`);
     const machineStats = await dbGet(`SELECT COUNT(*) as total_machines, COUNT(CASE WHEN status = 'in_use' THEN 1 END) as machines_in_use FROM machines`);

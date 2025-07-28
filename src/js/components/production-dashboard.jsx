@@ -7,10 +7,10 @@ import { convertSASTToUTC } from '../utils/timezone.js';
 // Helper to format time from a start date to now, creating a running timer effect
 const formatDuration = (startTime) => {
     if (!startTime) return '00:00:00';
-    // Convert SAST start time to UTC for proper elapsed calculation
-    const utcStartTime = convertSASTToUTC(startTime).getTime();
+    // Add 2 hours to database timestamp to align with local SAST time
+    const start = new Date(startTime).getTime() + (2 * 60 * 60 * 1000);
     const now = Date.now();
-    const diff = Math.max(0, now - utcStartTime);
+    const diff = Math.max(0, now - start);
 
     const hours = Math.floor(diff / 3600000).toString().padStart(2, '0');
     const minutes = Math.floor((diff % 3600000) / 60000).toString().padStart(2, '0');
@@ -22,9 +22,9 @@ const formatDuration = (startTime) => {
 // Helper to calculate efficiency percentage
 const calculateEfficiency = (machine) => {
     if (!machine.start_time || machine.status !== 'in_use') return 0;
-    // Convert SAST start time to UTC for proper runtime calculation
-    const utcStartTime = convertSASTToUTC(machine.start_time).getTime();
-    const runtime = Date.now() - utcStartTime;
+    // Add 2 hours to database timestamp to align with local SAST time
+    const startTime = new Date(machine.start_time).getTime() + (2 * 60 * 60 * 1000);
+    const runtime = Date.now() - startTime;
     const expectedProduction = (runtime / 3600000) * (machine.production_rate || 60);
     const actualProduction = machine.actual_quantity || 0;
     return expectedProduction > 0 ? Math.min(100, Math.round((actualProduction / expectedProduction) * 100)) : 0;
