@@ -17,8 +17,9 @@ const { body, validationResult } = require('express-validator');
 
 // SAST Timezone Utility Functions
 // South African Standard Time is UTC+2 year-round (no daylight saving)
+// Store times as they are (local server time) since server should be in SAST timezone
 const getSASTTimestamp = () => {
-    return new Date(Date.now() + (2 * 60 * 60 * 1000)).toISOString();
+    return new Date().toISOString();
 };
 
 const convertToSAST = (utcDate) => {

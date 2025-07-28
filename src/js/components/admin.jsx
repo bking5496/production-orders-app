@@ -181,12 +181,24 @@ export default function AdminPanel() {
 
   const openEditEnvironment = (environment) => {
     setEditingEnvironment(environment);
+    
+    // Parse machine_types if it's a JSON string
+    let machineTypes = [];
+    try {
+      machineTypes = typeof environment.machine_types === 'string' 
+        ? JSON.parse(environment.machine_types) 
+        : environment.machine_types || [];
+    } catch (e) {
+      console.error('Failed to parse machine types:', e);
+      machineTypes = [];
+    }
+    
     setEnvironmentFormData({
       name: environment.name,
       code: environment.code,
       description: environment.description || '',
       color: environment.color || 'blue',
-      machine_types: environment.machine_types || []
+      machine_types: machineTypes
     });
     setShowEnvironmentModal(true);
   };
@@ -619,19 +631,31 @@ export default function AdminPanel() {
                 </div>
                 
                 {/* Machine Types */}
-                {environment.machine_types && environment.machine_types.length > 0 && (
-                  <div className="space-y-2 mb-4">
-                    <p className="text-sm font-medium text-gray-700">Machine Types:</p>
-                    <div className="flex flex-wrap gap-1">
-                      {environment.machine_types.slice(0, 3).map((type, index) => (
-                        <Badge key={index} variant="default" size="sm">{type}</Badge>
-                      ))}
-                      {environment.machine_types.length > 3 && (
-                        <Badge variant="default" size="sm">+{environment.machine_types.length - 3} more</Badge>
-                      )}
+                {(() => {
+                  let machineTypes = [];
+                  try {
+                    machineTypes = typeof environment.machine_types === 'string' 
+                      ? JSON.parse(environment.machine_types) 
+                      : environment.machine_types || [];
+                  } catch (e) {
+                    console.error('Failed to parse machine types:', e);
+                    machineTypes = [];
+                  }
+                  
+                  return machineTypes && machineTypes.length > 0 && (
+                    <div className="space-y-2 mb-4">
+                      <p className="text-sm font-medium text-gray-700">Machine Types:</p>
+                      <div className="flex flex-wrap gap-1">
+                        {machineTypes.slice(0, 3).map((type, index) => (
+                          <Badge key={index} variant="default" size="sm">{type}</Badge>
+                        ))}
+                        {machineTypes.length > 3 && (
+                          <Badge variant="default" size="sm">+{machineTypes.length - 3} more</Badge>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                )}
+                  );
+                })()}
                 
                 {/* Action Buttons */}
                 <div className="flex gap-2 mt-4">

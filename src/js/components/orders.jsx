@@ -7,6 +7,7 @@ import ProductionCompletionModalWithWaste from './production-completion-modal-wi
 export default function OrdersPage() {
   const [orders, setOrders] = useState([]);
   const [machines, setMachines] = useState([]);
+  const [environments, setEnvironments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [selectedEnvironment, setSelectedEnvironment] = useState('all');
@@ -25,7 +26,7 @@ export default function OrdersPage() {
   const [pauseReason, setPauseReason] = useState('');
 
   const [formData, setFormData] = useState({
-    order_number: '', product_name: '', quantity: '', environment: 'blending',
+    order_number: '', product_name: '', quantity: '', environment: '',
     priority: 'normal', due_date: '', notes: ''
   });
 
@@ -40,12 +41,14 @@ export default function OrdersPage() {
     else setLoading(true);
     
     try {
-      const [ordersData, machinesData] = await Promise.all([
+      const [ordersData, machinesData, environmentsData] = await Promise.all([
         API.get('/orders'),
-        API.get('/machines')
+        API.get('/machines'),
+        API.get('/environments').catch(() => [])
       ]);
       setOrders(ordersData);
       setMachines(machinesData);
+      setEnvironments(environmentsData);
     } catch (error) {
       console.error('Failed to load data:', error);
       showNotification('Failed to load orders', 'danger');
@@ -70,7 +73,7 @@ export default function OrdersPage() {
     try {
       await API.post('/orders', formData);
       setShowCreateModal(false);
-      setFormData({ order_number: '', product_name: '', quantity: '', environment: 'blending', priority: 'normal', due_date: '', notes: '' });
+      setFormData({ order_number: '', product_name: '', quantity: '', environment: '', priority: 'normal', due_date: '', notes: '' });
       loadData();
       showNotification('Order created successfully');
     } catch (error) {
@@ -343,9 +346,9 @@ export default function OrdersPage() {
               className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none"
             >
               <option value="all">All Environments</option>
-              <option value="blending">Blending</option>
-              <option value="packaging">Packaging</option>
-              <option value="beverage">Beverage</option>
+              {environments.map(env => (
+                <option key={env.id} value={env.code}>{env.name}</option>
+              ))}
             </select>
           </div>
           
@@ -505,10 +508,12 @@ export default function OrdersPage() {
                   value={formData.environment}
                   onChange={(e) => setFormData({...formData, environment: e.target.value})} 
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  required
                 >
-                  <option value="blending">Blending</option>
-                  <option value="packaging">Packaging</option>
-                  <option value="beverage">Beverage</option>
+                  <option value="">Select Environment</option>
+                  {environments.map(env => (
+                    <option key={env.id} value={env.code}>{env.name}</option>
+                  ))}
                 </select>
               </div>
             </div>

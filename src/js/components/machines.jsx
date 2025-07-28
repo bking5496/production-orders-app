@@ -6,6 +6,7 @@ import { Modal, Card, Button, Badge } from './ui-components.jsx';
 export default function MachinesPage() {
   // State for storing the list of machines and UI status
   const [machines, setMachines] = useState([]);
+  const [environments, setEnvironments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [selectedEnvironment, setSelectedEnvironment] = useState('all');
@@ -23,17 +24,37 @@ export default function MachinesPage() {
   const [formData, setFormData] = useState({
     name: '',
     type: '',
-    environment: 'blending',
+    environment: '',
     capacity: 100,
     production_rate: 60
   });
 
-  // Constants for machine types
-  const MACHINE_TYPES = {
-    blending: ['Bulk Line', 'Canning line', 'Corraza cubes', 'Corazza tablet', 'Enflex fb 10 1;2'],
-    packaging: ['Nps 5 Lane', 'Nps Auger', 'Universal 1', 'Universal 2', 'Universal 3'],
-    beverage: ['Filling Machine', 'Carbonation Unit', 'Pasteurizer', 'Homogenizer', 'Bottling Line']
-  };
+  // Update form environment when environments are loaded
+  useEffect(() => {
+    if (environments.length > 0 && !formData.environment) {
+      setFormData(prev => ({ ...prev, environment: environments[0].code }));
+    }
+  }, [environments, formData.environment]);
+
+  // Machine types will be loaded from environments
+  const MACHINE_TYPES = useMemo(() => {
+    const types = {};
+    environments.forEach(env => {
+      if (env.machine_types) {
+        try {
+          types[env.code] = typeof env.machine_types === 'string' 
+            ? JSON.parse(env.machine_types) 
+            : env.machine_types;
+        } catch (e) {
+          console.error('Failed to parse machine types for environment:', env.name, e);
+          types[env.code] = [];
+        }
+      } else {
+        types[env.code] = [];
+      }
+    });
+    return types;
+  }, [environments]);
 
   const STATUS_COLORS = {
     available: { bg: 'bg-green-50', text: 'text-green-600', border: 'border-green-200', icon: CheckCircle },
@@ -46,6 +67,17 @@ export default function MachinesPage() {
   const showNotification = (message, type = 'success') => {
     setNotification({ message, type });
     setTimeout(() => setNotification(null), 3000);
+  };
+
+  // Function to fetch environments from the backend API
+  const loadEnvironments = async () => {
+    try {
+      const data = await API.get('/environments');
+      setEnvironments(data);
+    } catch (error) {
+      console.error('Failed to load environments:', error);
+      showNotification('Failed to load environments', 'danger');
+    }
   };
 
   // Function to fetch machines from the backend API
@@ -71,6 +103,7 @@ export default function MachinesPage() {
 
   // useEffect runs when the component loads.
   useEffect(() => {
+    loadEnvironments(); // Load environments first
     loadMachines(); // Fetch data immediately
     const interval = setInterval(loadMachines, 30000); // And refresh every 30 seconds
     return () => clearInterval(interval); // Clean up the interval when the component is unmounted
@@ -312,9 +345,9 @@ export default function MachinesPage() {
               className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none"
             >
               <option value="all">All Environments</option>
-              <option value="blending">Blending</option>
-              <option value="packaging">Packaging</option>
-              <option value="beverage">Beverage</option>
+              {environments.map(env => (
+                <option key={env.id} value={env.code}>{env.name}</option>
+              ))}
             </select>
           </div>
           
@@ -461,9 +494,10 @@ export default function MachinesPage() {
                 onChange={(e) => setFormData({...formData, environment: e.target.value, type: ''})} 
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
-                <option value="blending">Blending</option>
-                <option value="packaging">Packaging</option>
-                <option value="beverage">Beverage</option>
+                <option value="">Select Environment</option>
+                {environments.map(env => (
+                  <option key={env.id} value={env.code}>{env.name}</option>
+                ))}
               </select>
             </div>
             
@@ -543,9 +577,10 @@ export default function MachinesPage() {
                 onChange={(e) => setFormData({...formData, environment: e.target.value, type: ''})} 
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
-                <option value="blending">Blending</option>
-                <option value="packaging">Packaging</option>
-                <option value="beverage">Beverage</option>
+                <option value="">Select Environment</option>
+                {environments.map(env => (
+                  <option key={env.id} value={env.code}>{env.name}</option>
+                ))}
               </select>
               <p className="text-xs text-gray-500 mt-1">Changing environment will reset the machine type</p>
             </div>
