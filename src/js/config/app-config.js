@@ -182,8 +182,35 @@ window.APP_CONFIG = {
     full: 'max-w-6xl'
   },
   
-  // Date/Time Configuration
-  TIMEZONE: 'Africa/Johannesburg',
+  // Date/Time Configuration - SAST (UTC+2)
+  TIMEZONE: {
+    name: 'SAST',
+    fullName: 'South African Standard Time',
+    offset: '+02:00',
+    offsetMinutes: 120,
+    olsonName: 'Africa/Johannesburg',
+    displayInUI: true
+  },
+  
+  DATE_FORMATS: {
+    display: {
+      date: 'YYYY-MM-DD',
+      time: 'HH:mm:ss',
+      datetime: 'YYYY-MM-DD HH:mm:ss',
+      datetimeShort: 'YYYY-MM-DD HH:mm',
+      friendly: 'DD MMM YYYY',
+      friendlyWithTime: 'DD MMM YYYY, HH:mm SAST'
+    },
+    input: {
+      date: 'YYYY-MM-DD',
+      time: 'HH:mm',
+      datetime: 'YYYY-MM-DDTHH:mm'
+    },
+    api: {
+      iso: 'YYYY-MM-DDTHH:mm:ss.SSSZ'
+    }
+  },
+  
   DATE_FORMAT: {
     dateStyle: 'short',
     timeStyle: 'short'
@@ -193,6 +220,44 @@ window.APP_CONFIG = {
     timeStyle: 'medium'
   },
   LOCALE: 'en-ZA',
+  
+  // Business Hours Configuration (in SAST)
+  BUSINESS_HOURS: {
+    timezone: 'SAST',
+    workDays: [1, 2, 3, 4, 5], // Monday to Friday
+    startTime: '08:00',
+    endTime: '17:00',
+    lunchBreak: {
+      start: '12:00',
+      end: '13:00'
+    },
+    breaks: [
+      { name: 'Morning Tea', start: '10:00', end: '10:15' },
+      { name: 'Afternoon Tea', start: '15:00', end: '15:15' }
+    ]
+  },
+  
+  // Production Shift Configuration (in SAST)
+  SHIFTS: {
+    day: {
+      name: 'Day Shift',
+      start: '06:00',
+      end: '14:00',
+      timezone: 'SAST'
+    },
+    afternoon: {
+      name: 'Afternoon Shift',
+      start: '14:00',
+      end: '22:00',
+      timezone: 'SAST'
+    },
+    night: {
+      name: 'Night Shift',
+      start: '22:00',
+      end: '06:00',
+      timezone: 'SAST'
+    }
+  },
   
   // File Upload Configuration
   UPLOAD: {
@@ -284,6 +349,9 @@ window.APP_CONFIG = {
     EXPORT_FUNCTIONALITY: true,
     ADVANCED_ANALYTICS: true,
     MACHINE_MAINTENANCE_TRACKING: true,
+    TIMEZONE_DISPLAY: true, // Show SAST timezone in UI
+    BUSINESS_HOURS_VALIDATION: true, // Validate operations during business hours
+    SHIFT_TRACKING: true, // Track which shift operations occur in
     QUALITY_CONTROL: false, // Coming soon
     INVENTORY_MANAGEMENT: false, // Coming soon
     PREDICTIVE_MAINTENANCE: false // Coming soon

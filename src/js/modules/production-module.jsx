@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import API from '../core/api';
 import { useAuth } from '../core/auth';
+import { formatSASTDate, getCurrentSASTTime, getSASTRelativeTime } from '../utils/timezone.js';
 
 // Shared Components
 const LoadingSpinner = ({ size = 20 }) => (
@@ -300,7 +301,7 @@ export const ProductionTimer = ({ order, onUpdate }) => {
             
             {estimatedCompletion && (
                 <div className="text-sm text-gray-600">
-                    Estimated completion: {estimatedCompletion.toLocaleTimeString()}
+                    Estimated completion: {formatSASTDate(estimatedCompletion, { includeTimezone: true, timeStyle: 'short' })}
                 </div>
             )}
         </div>
@@ -852,7 +853,7 @@ export const MachineMonitor = ({ machines = [] }) => {
                                         
                                         {machine.last_maintenance && (
                                             <div className="text-xs text-gray-500">
-                                                Last maintenance: {new Date(machine.last_maintenance).toLocaleDateString()}
+                                                Last maintenance: {formatSASTDate(machine.last_maintenance, { includeTime: false, includeTimezone: false })}
                                             </div>
                                         )}
                                     </div>

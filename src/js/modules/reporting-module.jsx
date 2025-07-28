@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import API from '../core/api';
 import { useAuth } from '../core/auth';
+import { formatSASTDate, getSASTDateOnly, getCurrentSASTTime } from '../utils/timezone.js';
 
 // Shared components
 const ContentCard = ({ title, subtitle, children, className = '' }) => (
@@ -376,20 +377,21 @@ export const CustomReportBuilder = () => {
                 {/* Date Range */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <Input
-                        label="Start Date"
+                        label="Start Date (SAST)"
                         type="date"
                         value={dateRange.start}
                         onChange={(e) => setDateRange(prev => ({ ...prev, start: e.target.value }))}
                         error={errors.startDate}
-                        max={dateRange.end || undefined}
+                        max={dateRange.end || getSASTDateOnly()}
                     />
                     <Input
-                        label="End Date"
+                        label="End Date (SAST)"
                         type="date"
                         value={dateRange.end}
                         onChange={(e) => setDateRange(prev => ({ ...prev, end: e.target.value }))}
                         error={errors.endDate}
                         min={dateRange.start || undefined}
+                        max={getSASTDateOnly()}
                     />
                 </div>
                 {errors.dateRange && <p className="text-sm text-red-600">{errors.dateRange}</p>}
@@ -608,7 +610,7 @@ export const ReportTemplateManager = () => {
                                     </span>
                                     <span>
                                         {template.last_used 
-                                            ? `Used ${new Date(template.last_used).toLocaleDateString()}`
+                                            ? `Used ${formatSASTDate(template.last_used, { includeTime: false, includeTimezone: false })}`
                                             : 'Never used'
                                         }
                                     </span>

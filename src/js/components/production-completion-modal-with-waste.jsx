@@ -5,6 +5,7 @@ import {
 } from 'lucide-react';
 import { Modal, Card, Button, Badge } from './ui-components.jsx';
 import API from '../core/api';
+import { getCurrentSASTTime, getSASTDateTimeLocal, convertSASTToUTC, formatSASTDate } from '../utils/timezone.js';
 
 export default function ProductionCompletionModalWithWaste({ isOpen, onClose, order, onComplete }) {
   const [loading, setLoading] = useState(false);
@@ -16,7 +17,7 @@ export default function ProductionCompletionModalWithWaste({ isOpen, onClose, or
     quality_rating: 'good',
     efficiency_score: 0,
     notes: '',
-    completion_time: new Date().toISOString().slice(0, 16)
+    completion_time: getSASTDateTimeLocal()
   });
   
   const [wasteData, setWasteData] = useState([
@@ -75,7 +76,7 @@ export default function ProductionCompletionModalWithWaste({ isOpen, onClose, or
         quality_rating: 'good',
         efficiency_score: 0,
         notes: '',
-        completion_time: new Date().toISOString().slice(0, 16)
+        completion_time: getSASTDateTimeLocal()
       });
       setError('');
       setNotification(null);
@@ -128,6 +129,7 @@ export default function ProductionCompletionModalWithWaste({ isOpen, onClose, or
     try {
       const submitData = {
         ...formData,
+        completion_time: convertSASTToUTC(formData.completion_time).toISOString(),
         waste_data: wasteData.filter(waste => waste.amount > 0),
         metrics: {
           completion_rate: metrics.completionRate,
@@ -270,13 +272,18 @@ export default function ProductionCompletionModalWithWaste({ isOpen, onClose, or
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Completion Time</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Completion Time (SAST)
+                  </label>
                   <input
                     type="datetime-local"
                     value={formData.completion_time}
                     onChange={(e) => setFormData({ ...formData, completion_time: e.target.value })}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
+                  <p className="text-xs text-gray-500 mt-1">
+                    Current SAST time: {formatSASTDate(getCurrentSASTTime(), { includeSeconds: true })}
+                  </p>
                 </div>
               </div>
               
