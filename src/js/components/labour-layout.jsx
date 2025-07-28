@@ -258,7 +258,7 @@ export default function LabourLayoutPage() {
                         <Eye className="w-5 h-5 text-blue-600" />
                         <div>
                             <h2 className="text-lg font-semibold">Labour Layout</h2>
-                            <p className="text-sm text-gray-600">{selectedDate} • {workers.length} workers</p>
+                            <p className="text-sm text-gray-600">{selectedDate} • {(rosterData.summary.total_supervisors || 0) + (rosterData.summary.total_assignments || 0) + (rosterData.summary.total_attendance || 0)} total records</p>
                         </div>
                     </div>
                     <div className="flex space-x-2">
