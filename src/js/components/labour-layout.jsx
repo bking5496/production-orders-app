@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Calendar, Download, RefreshCw, Upload, FileText, Eye, Users, ClipboardList, UserCheck } from 'lucide-react';
+import { Calendar, Download, RefreshCw, Eye, Users, ClipboardList, UserCheck } from 'lucide-react';
 import API from '../core/api';
 import { Icon } from './layout-components.jsx';
 
@@ -120,7 +120,6 @@ export default function LabourLayoutPage() {
     const [showExportModal, setShowExportModal] = useState(false);
     const [exportFormat, setExportFormat] = useState('excel');
     const [selectedShift, setSelectedShift] = useState('all');
-    const fileInputRef = useRef(null); // Ref to access the hidden file input
 
     const fetchRosterForDate = async (date) => {
         setLoading(true);
@@ -173,29 +172,6 @@ export default function LabourLayoutPage() {
         fetchRosterForDate(selectedDate);
     }, [selectedDate]);
 
-    const handleFileUpload = async (event) => {
-        const file = event.target.files[0];
-        if (!file) return;
-
-        const formData = new FormData();
-        formData.append('rosterFile', file);
-
-        try {
-            const response = await fetch('/api/labour/upload', {
-                method: 'POST',
-                body: formData,
-            });
-            if (!response.ok) {
-                const err = await response.json();
-                throw new Error(err.error || 'Upload failed');
-            }
-            const result = await response.json();
-            alert(result.message || 'Roster uploaded successfully!');
-            fetchRosterForDate(selectedDate);
-        } catch (error) {
-            alert('Error uploading roster: ' + error.message);
-        }
-    };
 
     const handleVerify = async (workerId) => {
         try {
@@ -208,9 +184,6 @@ export default function LabourLayoutPage() {
         }
     };
     
-    const handleDownload = () => {
-        window.location.href = '/api/labour/export';
-    };
 
     // Enhanced export functionality
     const handleExport = async () => {
@@ -289,23 +262,6 @@ export default function LabourLayoutPage() {
                             <h2 className="text-lg font-semibold">Labour Layout</h2>
                             <p className="text-sm text-gray-600">{selectedDate} • {((rosterData.summary?.total_supervisors || 0) + (rosterData.summary?.total_assignments || 0) + (rosterData.summary?.total_attendance || 0))} total records</p>
                         </div>
-                    </div>
-                    <div className="flex space-x-2">
-                        <input type="file" ref={fileInputRef} onChange={handleFileUpload} className="hidden" accept=".xlsx, .xls, .csv" />
-                        <button 
-                            onClick={() => fileInputRef.current.click()} 
-                            className="flex items-center gap-2 px-3 py-2 bg-blue-500 text-white text-sm rounded hover:bg-blue-600 transition-colors"
-                        >
-                            <Upload className="w-4 h-4" />
-                            Upload Roster
-                        </button>
-                        <button 
-                            onClick={handleDownload} 
-                            className="flex items-center gap-2 px-3 py-2 bg-green-500 text-white text-sm rounded hover:bg-green-600 transition-colors"
-                        >
-                            <FileText className="w-4 h-4" />
-                            Legacy Export
-                        </button>
                     </div>
                 </div>
                 {/* Shift Filter */}
