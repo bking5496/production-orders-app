@@ -25,7 +25,7 @@ const exportToJSON = (data, filename) => {
 };
 
 // Professional Excel export with proper formatting
-const exportToExcel = (workers, selectedDate) => {
+const exportToExcel = (rosterData, selectedDate) => {
     // Check if XLSX library is available
     if (!window.XLSX) {
         // Fallback to CSV if XLSX not available
