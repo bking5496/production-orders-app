@@ -523,6 +523,115 @@ export function LaborManagementSystem() {
         }
     };
 
+    // Weekly planning functions
+    const planWeeklyLabor = async () => {
+        try {
+            setLoading(true);
+            const { startDate, endDate, template, applyToShifts, copyFrom } = weeklyPlanData;
+            
+            if (!startDate || !endDate) {
+                showNotification('Please select both start and end dates', 'error');
+                return;
+            }
+
+            const weekDates = getWeekDates(startDate, Math.ceil((new Date(endDate) - new Date(startDate)) / (1000 * 60 * 60 * 24)) + 1);
+            let sourceDate = copyFrom;
+
+            // Determine source date based on template
+            if (template === 'current_week') {
+                sourceDate = selectedDate;
+            } else if (template === 'previous_week') {
+                const prevWeek = new Date(startDate);
+                prevWeek.setDate(prevWeek.getDate() - 7);
+                sourceDate = prevWeek.toISOString().split('T')[0];
+            }
+
+            if (!sourceDate) {
+                showNotification('Please specify a source date to copy from', 'error');
+                return;
+            }
+
+            // Get source assignments
+            const sourceAssignments = await API.get(`/planner/assignments?date=${sourceDate}`);
+            const sourceSupervisors = await API.get(`/planner/supervisors?date=${sourceDate}&shift=day`);
+            const sourceNightSupervisors = await API.get(`/planner/supervisors?date=${sourceDate}&shift=night`);
+
+            let successCount = 0;
+            let errorCount = 0;
+
+            // Apply to each date in the range
+            for (const targetDate of weekDates) {
+                for (const shift of applyToShifts) {
+                    try {
+                        // Copy regular assignments
+                        const shiftAssignments = sourceAssignments.filter(a => a.shift === shift);
+                        for (const assignment of shiftAssignments) {
+                            try {
+                                await API.post('/planner/assignments', {
+                                    employee_id: assignment.employee_id,
+                                    machine_id: assignment.machine_id,
+                                    shift: shift,
+                                    assignment_date: targetDate
+                                });
+                                successCount++;
+                            } catch (error) {
+                                if (!error.message.includes('already assigned')) {
+                                    errorCount++;
+                                }
+                            }
+                        }
+
+                        // Copy supervisors
+                        const supervisorsToAssign = shift === 'day' ? sourceSupervisors : sourceNightSupervisors;
+                        for (const supervisor of supervisorsToAssign) {
+                            try {
+                                await API.post('/planner/supervisors', {
+                                    supervisor_id: supervisor.supervisor_id,
+                                    assignment_date: targetDate,
+                                    shift: shift
+                                });
+                            } catch (error) {
+                                if (!error.message.includes('already assigned')) {
+                                    console.warn('Failed to assign supervisor:', error);
+                                }
+                            }
+                        }
+                    } catch (error) {
+                        console.error(`Error planning for ${targetDate} ${shift}:`, error);
+                        errorCount++;
+                    }
+                }
+            }
+
+            setShowWeeklyPlanModal(false);
+            fetchData(selectedDate); // Refresh current view
+            
+            if (errorCount === 0) {
+                showNotification(`Successfully planned labor for ${weekDates.length} days (${successCount} assignments)`, 'success');
+            } else {
+                showNotification(`Planned labor with ${successCount} successful and ${errorCount} failed assignments`, 'warning');
+            }
+
+        } catch (error) {
+            console.error('Weekly planning error:', error);
+            showNotification('Failed to plan weekly labor: ' + error.message, 'error');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // Initialize weekly planning modal with next week dates
+    const openWeeklyPlanModal = () => {
+        const nextWeek = getNextWeekDates();
+        setWeeklyPlanData({
+            ...weeklyPlanData,
+            startDate: nextWeek.start,
+            endDate: nextWeek.end,
+            copyFrom: selectedDate
+        });
+        setShowWeeklyPlanModal(true);
+    };
+
     // API Functions
     const assignEmployee = async (employeeId) => {
         if (currentAssignments.some(a => a.employee_id === employeeId)) return showNotification('Employee already assigned', 'danger');
@@ -805,6 +914,28 @@ export function LaborManagementSystem() {
                             ) : (
                                 <p className="text-sm text-blue-600 italic">No supervisors assigned for this shift</p>
                             )}
+                        </div>
+
+                        {/* Weekly Planning */}
+                        <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-3">
+                                    <Calendar className="w-5 h-5 text-green-600" />
+                                    <div>
+                                        <p className="font-medium text-green-800">Weekly Labor Planning</p>
+                                        <p className="text-sm text-green-600">Plan labor for multiple days ahead</p>
+                                    </div>
+                                </div>
+                                <Button 
+                                    variant="outline" 
+                                    size="sm"
+                                    onClick={openWeeklyPlanModal}
+                                    className="border-green-300 text-green-700 hover:bg-green-100"
+                                >
+                                    <Calendar className="w-4 h-4" />
+                                    Plan Week
+                                </Button>
+                            </div>
                         </div>
 
                         {/* Enhanced Controls */}
