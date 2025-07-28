@@ -617,7 +617,7 @@ apiRouter.get('/labour/today', authenticateToken, async (req, res) => {
     }
 });
 
-// Get roster for specific date
+// Get comprehensive roster for specific date (supervisors + assigned employees)
 apiRouter.get('/labour/roster', authenticateToken, async (req, res) => {
     const { date } = req.query;
     
@@ -626,10 +626,65 @@ apiRouter.get('/labour/roster', authenticateToken, async (req, res) => {
     }
     
     try {
-        const workers = await dbAll('SELECT * FROM daily_attendance WHERE attendance_date = ? ORDER BY name', [date]);
-        res.json(workers);
+        // Get supervisors on duty for both shifts
+        const supervisors = await dbAll(`
+            SELECT 
+                ss.id,
+                ss.shift,
+                u.username as name,
+                u.fullName,
+                u.employee_code,
+                'Supervisor' as position,
+                'supervisor' as type,
+                'planned' as status
+            FROM shift_supervisors ss
+            JOIN users u ON ss.supervisor_id = u.id
+            WHERE ss.assignment_date = ?
+            ORDER BY ss.shift, u.username
+        `, [date]);
+
+        // Get assigned employees with their machine assignments
+        const assignments = await dbAll(`
+            SELECT 
+                la.id,
+                la.shift,
+                la.status,
+                u.username as name,
+                u.fullName,
+                u.employee_code,
+                u.role as position,
+                m.machine_name as machine,
+                m.environment as production_area,
+                'employee' as type
+            FROM labor_assignments la
+            JOIN users u ON la.user_id = u.id
+            JOIN machines m ON la.machine_id = m.id
+            WHERE la.assignment_date = ?
+            ORDER BY la.shift, m.machine_name, u.username
+        `, [date]);
+
+        // Get attendance records from daily_attendance table (if any)
+        const attendance = await dbAll('SELECT * FROM daily_attendance WHERE attendance_date = ? ORDER BY name', [date]);
+
+        // Combine all data
+        const roster = {
+            supervisors,
+            assignments,
+            attendance,
+            summary: {
+                total_supervisors: supervisors.length,
+                total_assignments: assignments.length,
+                total_attendance: attendance.length,
+                day_supervisors: supervisors.filter(s => s.shift === 'day').length,
+                night_supervisors: supervisors.filter(s => s.shift === 'night').length,
+                day_assignments: assignments.filter(a => a.shift === 'day').length,
+                night_assignments: assignments.filter(a => a.shift === 'night').length
+            }
+        };
+
+        res.json(roster);
     } catch (error) {
-        console.error('Error fetching roster for date:', date, error);
+        console.error('Error fetching comprehensive roster for date:', date, error);
         res.status(500).json({ error: 'Failed to fetch roster for the specified date.' });
     }
 });

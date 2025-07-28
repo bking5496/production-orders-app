@@ -101,28 +101,39 @@ const exportToExcel = (workers, selectedDate) => {
 };
 
 export default function LabourLayoutPage() {
-    const [workers, setWorkers] = useState([]);
+    const [rosterData, setRosterData] = useState({
+        supervisors: [],
+        assignments: [],
+        attendance: [],
+        summary: {}
+    });
     const [loading, setLoading] = useState(true);
     const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
     const [showExportModal, setShowExportModal] = useState(false);
     const [exportFormat, setExportFormat] = useState('excel');
+    const [selectedShift, setSelectedShift] = useState('all');
     const fileInputRef = useRef(null); // Ref to access the hidden file input
 
     const fetchRosterForDate = async (date) => {
         setLoading(true);
         try {
             const data = await API.get(`/labour/roster?date=${date}`);
-            setWorkers(data);
+            setRosterData(data);
         } catch (error) {
             console.error(`Failed to fetch roster for ${date}:`, error);
             // Fallback to today's roster if date-specific endpoint doesn't exist
             try {
                 const fallbackData = await API.get('/labour/today');
-                setWorkers(fallbackData);
+                setRosterData({
+                    supervisors: [],
+                    assignments: [],
+                    attendance: fallbackData,
+                    summary: { total_attendance: fallbackData.length }
+                });
             } catch (fallbackError) {
                 console.error("Failed to fetch roster:", fallbackError);
                 alert("Failed to load roster. Please check the server connection.");
-                setWorkers([]);
+                setRosterData({ supervisors: [], assignments: [], attendance: [], summary: {} });
             }
         } finally {
             setLoading(false);
