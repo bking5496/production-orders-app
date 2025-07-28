@@ -486,8 +486,16 @@ export function LaborManagementSystem() {
         try {
             const { id, ...data } = editingWorker;
             console.log('Updating worker:', id, data);
-            const response = await API.put(`/workers/${id}`, data);
+            const response = await API.put(`/users/${id}`, data);
             console.log('Update response:', response);
+            
+            // Update the local employees state immediately to reflect changes
+            setEmployees(prevEmployees => 
+                prevEmployees.map(emp => 
+                    emp.id === id ? { ...emp, ...data } : emp
+                )
+            );
+            
             fetchData(selectedDate);
             setEditingWorker(null);
             showNotification('Worker updated successfully');
