@@ -103,8 +103,14 @@ window.ProductionCompletionModal = ({ isOpen, onClose, order, onComplete }) => {
           React.createElement('span', { className: 'text-gray-600' }, 'Production Time: '),
           React.createElement('span', { className: 'font-medium' }, 
             (() => {
-              const start = new Date(order.start_time);
-              const duration = Date.now() - start.getTime();
+              // Convert SAST start time to UTC for proper elapsed calculation
+              // Import convertSASTToUTC from timezone utilities
+              const convertSASTToUTC = (sastDate) => {
+                const date = new Date(sastDate);
+                return new Date(date.getTime() - (2 * 60 * 60 * 1000));
+              };
+              const utcStartTime = convertSASTToUTC(order.start_time);
+              const duration = Date.now() - utcStartTime.getTime();
               const hours = Math.floor(duration / (1000 * 60 * 60));
               const minutes = Math.floor((duration % (1000 * 60 * 60)) / (1000 * 60));
               return `${hours}h ${minutes}m`;

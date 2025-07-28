@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import { Modal, Card, Button, Badge } from './ui-components.jsx';
 import API from '../core/api';
+import { convertSASTToUTC } from '../utils/timezone.js';
 
 export default function ProductionControl({ order, onUpdate, className = "" }) {
   const [showPauseModal, setShowPauseModal] = useState(false);
@@ -69,9 +70,10 @@ export default function ProductionControl({ order, onUpdate, className = "" }) {
     if (!order || order.status !== 'in_progress') return;
 
     const interval = setInterval(() => {
-      const startTime = new Date(order.start_time);
+      // Convert SAST start time to UTC for proper elapsed calculation
+      const utcStartTime = convertSASTToUTC(order.start_time);
       const now = new Date();
-      const runtimeMinutes = Math.floor((now - startTime) / (1000 * 60));
+      const runtimeMinutes = Math.floor((now - utcStartTime) / (1000 * 60));
       setRuntime(runtimeMinutes);
 
       // Calculate production rate (units per hour)

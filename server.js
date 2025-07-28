@@ -17,9 +17,10 @@ const { body, validationResult } = require('express-validator');
 
 // SAST Timezone Utility Functions
 // South African Standard Time is UTC+2 year-round (no daylight saving)
-// Store times as they are (local server time) since server should be in SAST timezone
+// Use SQLite datetime functions for consistent SAST timestamps
 const getSASTTimestamp = () => {
-    return new Date().toISOString();
+    // SQLite will handle this with datetime('now', '+2 hours')
+    return "datetime('now', '+2 hours')";
 };
 
 const convertToSAST = (utcDate) => {
@@ -129,8 +130,7 @@ apiRouter.post('/auth/login',
         const token = jwt.sign({ id: user.id, username: user.username, role: user.role }, JWT_SECRET, { expiresIn: '24h' });
         res.cookie('token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'strict', maxAge: 24 * 60 * 60 * 1000 });
         // Update last login with SAST time
-        const sastLoginTime = getSASTTimestamp();
-        await dbRun('UPDATE users SET last_login = ? WHERE id = ?', [sastLoginTime, user.id]);
+        await dbRun("UPDATE users SET last_login = datetime('now', '+2 hours') WHERE id = ?", [user.id]);
         res.json({ user: { id: user.id, username: user.username, email: user.email, role: user.role } });
     } catch (error) {
         console.error("Login Error:", error);
@@ -327,17 +327,15 @@ apiRouter.post('/environments', authenticateToken, requireRole(['admin', 'superv
 
         try {
             // Create environment with SAST timestamp
-            const sastCreateTime = getSASTTimestamp();
             const result = await dbRun(`
                 INSERT INTO environments (name, code, description, color, machine_types, created_at) 
-                VALUES (?, ?, ?, ?, ?, ?)
+                VALUES (?, ?, ?, ?, ?, datetime('now', '+2 hours'))
             `, [
                 name, 
                 code || name.toLowerCase().replace(/\s+/g, '_'), 
                 description || '', 
                 color || 'blue', 
-                JSON.stringify(machine_types || []),
-                sastCreateTime
+                JSON.stringify(machine_types || [])
             ]);
             
             res.json({ 
@@ -367,10 +365,9 @@ apiRouter.put('/environments/:id', authenticateToken, requireRole(['admin', 'sup
 
         try {
             // Update environment with SAST timestamp
-            const sastUpdateTime = getSASTTimestamp();
             const result = await dbRun(`
                 UPDATE environments 
-                SET name = ?, code = ?, description = ?, color = ?, machine_types = ?, updated_at = ?
+                SET name = ?, code = ?, description = ?, color = ?, machine_types = ?, updated_at = datetime('now', '+2 hours')
                 WHERE id = ?
             `, [
                 name, 
@@ -378,7 +375,6 @@ apiRouter.put('/environments/:id', authenticateToken, requireRole(['admin', 'sup
                 description || '', 
                 color || 'blue', 
                 JSON.stringify(machine_types || []),
-                sastUpdateTime,
                 id
             ]);
             
@@ -438,8 +434,7 @@ apiRouter.post('/orders/:id/start',
         try {
             await dbRun('BEGIN TRANSACTION');
             // Create SAST timestamp for production start
-            const sastStartTime = getSASTTimestamp();
-            const orderUpdate = await dbRun(`UPDATE production_orders SET status = 'in_progress', machine_id = ?, operator_id = ?, start_time = ? WHERE id = ? AND status = 'pending'`, [machine_id, operatorId, sastStartTime, orderId]);
+            const orderUpdate = await dbRun(`UPDATE production_orders SET status = 'in_progress', machine_id = ?, operator_id = ?, start_time = datetime('now', '+2 hours') WHERE id = ? AND status = 'pending'`, [machine_id, operatorId, orderId]);
             if (orderUpdate.changes === 0) throw new Error('Order not available to start.');
             const machineUpdate = await dbRun('UPDATE machines SET status = "in_use" WHERE id = ? AND status = "available"', [machine_id]);
             if (machineUpdate.changes === 0) throw new Error('Machine not available.');
@@ -456,9 +451,8 @@ apiRouter.post('/orders/:id/pause', authenticateToken, requireRole(['admin', 'su
     async (req, res) => {
         const { reason, notes } = req.body;
         // Pause production with SAST timestamp
-        const sastPauseTime = getSASTTimestamp();
         await dbRun(`UPDATE production_orders SET status = 'paused', stop_reason = ? WHERE id = ? AND status = 'in_progress'`, [reason, req.params.id]);
-        await dbRun('INSERT INTO production_stops (order_id, reason, notes, start_time) VALUES (?, ?, ?, ?)', [req.params.id, reason, notes, sastPauseTime]);
+        await dbRun("INSERT INTO production_stops (order_id, reason, notes, start_time) VALUES (?, ?, ?, datetime('now', '+2 hours'))", [req.params.id, reason, notes]);
         res.json({message: 'Production paused.'});
     }
 );
@@ -466,8 +460,7 @@ apiRouter.post('/orders/:id/resume', authenticateToken, requireRole(['admin', 's
     async (req, res) => {
         await dbRun(`UPDATE production_orders SET status = 'in_progress' WHERE id = ? AND status = 'paused'`, [req.params.id]);
         // Resume production with SAST timestamp
-        const sastResumeTime = getSASTTimestamp();
-        await dbRun(`UPDATE production_stops SET end_time = ?, duration = CAST((julianday(?) - julianday(start_time)) * 24 * 60 AS INTEGER) WHERE order_id = ? AND end_time IS NULL`, [sastResumeTime, sastResumeTime, req.params.id]);
+        await dbRun(`UPDATE production_stops SET end_time = datetime('now', '+2 hours'), duration = CAST((julianday(datetime('now', '+2 hours')) - julianday(start_time)) * 24 * 60 AS INTEGER) WHERE order_id = ? AND end_time IS NULL`, [req.params.id]);
         res.json({message: 'Production resumed.'});
     }
 );
@@ -478,8 +471,7 @@ apiRouter.post('/orders/:id/complete', authenticateToken, requireRole(['admin', 
         if (!order) return res.status(400).json({error: 'Order not in a completable state.'});
         const efficiency = (req.body.actual_quantity / order.quantity) * 100;
         // Complete order with SAST timestamp
-        const sastCompleteTime = getSASTTimestamp();
-        await dbRun(`UPDATE production_orders SET status = 'completed', actual_quantity = ?, complete_time = ?, efficiency_percentage = ?, archived = 1 WHERE id = ?`, [req.body.actual_quantity, sastCompleteTime, efficiency, req.params.id]);
+        await dbRun(`UPDATE production_orders SET status = 'completed', actual_quantity = ?, complete_time = datetime('now', '+2 hours'), efficiency_percentage = ?, archived = 1 WHERE id = ?`, [req.body.actual_quantity, efficiency, req.params.id]);
         await dbRun('UPDATE machines SET status = "available" WHERE id = ?', [order.machine_id]);
         res.json({message: 'Order completed.'});
     }

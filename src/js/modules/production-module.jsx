@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import API from '../core/api';
 import { useAuth } from '../core/auth';
-import { formatSASTDate, getCurrentSASTTime, getSASTRelativeTime } from '../utils/timezone.js';
+import { formatSASTDate, getCurrentSASTTime, getSASTRelativeTime, convertSASTToUTC } from '../utils/timezone.js';
 
 // Shared Components
 const LoadingSpinner = ({ size = 20 }) => (
@@ -190,20 +190,23 @@ export const ProductionTimer = ({ order, onUpdate }) => {
 
     useEffect(() => {
         if (order.status === 'in_progress' && !isPaused) {
-            // Convert start time from SAST to local calculation
-            const startTime = new Date(order.started_at || order.start_time).getTime();
-            const now = Date.now();
-            setElapsed(now - startTime);
-            
-            intervalRef.current = setInterval(() => {
-                setElapsed(Date.now() - startTime);
-            }, 1000);
+            // Convert SAST start time to UTC for proper elapsed calculation
+            const sastStartTime = order.started_at || order.start_time;
+            if (sastStartTime) {
+                const utcStartTime = convertSASTToUTC(sastStartTime).getTime();
+                const now = Date.now();
+                setElapsed(now - utcStartTime);
+                
+                intervalRef.current = setInterval(() => {
+                    setElapsed(Date.now() - utcStartTime);
+                }, 1000);
 
-            return () => {
-                if (intervalRef.current) {
-                    clearInterval(intervalRef.current);
-                }
-            };
+                return () => {
+                    if (intervalRef.current) {
+                        clearInterval(intervalRef.current);
+                    }
+                };
+            }
         }
     }, [order, isPaused]);
 
