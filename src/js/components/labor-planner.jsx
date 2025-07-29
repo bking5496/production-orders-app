@@ -6,6 +6,64 @@ import {
 } from 'lucide-react';
 import API from '../core/api';
 
+// SAST Timezone Utilities (UTC+2)
+const SAST_OFFSET_HOURS = 2;
+
+// Convert UTC to SAST for display
+const convertUTCToSAST = (utcDateString) => {
+    if (!utcDateString) return null;
+    const utcDate = new Date(utcDateString);
+    const sastDate = new Date(utcDate.getTime() + (SAST_OFFSET_HOURS * 60 * 60 * 1000));
+    return sastDate;
+};
+
+// Convert SAST to UTC for API calls
+const convertSASTToUTC = (sastDateString) => {
+    if (!sastDateString) return null;
+    const sastDate = new Date(sastDateString);
+    const utcDate = new Date(sastDate.getTime() - (SAST_OFFSET_HOURS * 60 * 60 * 1000));
+    return utcDate.toISOString();
+};
+
+// Format SAST date for display
+const formatSASTDate = (utcDateString, options = {}) => {
+    if (!utcDateString) return 'N/A';
+    const sastDate = convertUTCToSAST(utcDateString);
+    if (!sastDate) return 'N/A';
+    
+    const defaultOptions = {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        timeZone: 'Africa/Johannesburg',
+        ...options
+    };
+    
+    return sastDate.toLocaleString('en-ZA', defaultOptions);
+};
+
+// Format SAST time only
+const formatSASTTime = (utcDateString) => {
+    if (!utcDateString) return 'N/A';
+    const sastDate = convertUTCToSAST(utcDateString);
+    if (!sastDate) return 'N/A';
+    
+    return sastDate.toLocaleTimeString('en-ZA', {
+        hour: '2-digit',
+        minute: '2-digit',
+        timeZone: 'Africa/Johannesburg'
+    });
+};
+
+// Get current SAST date string for date inputs (YYYY-MM-DD)
+const getCurrentSASTDateString = () => {
+    const now = new Date();
+    const sastNow = new Date(now.getTime() + (SAST_OFFSET_HOURS * 60 * 60 * 1000));
+    return sastNow.toISOString().split('T')[0];
+};
+
 // Utility functions for export
 const exportToCSV = (data, filename) => {
     const csvContent = "data:text/csv;charset=utf-8," + 
@@ -432,14 +490,14 @@ export function LaborManagementSystem() {
     // Planning state
     const [selectedMachine, setSelectedMachine] = useState('');
     const [selectedShift, setSelectedShift] = useState('day');
-    const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
+    const [selectedDate, setSelectedDate] = useState(getCurrentSASTDateString());
     const [showEmployeeModal, setShowEmployeeModal] = useState(false);
     const [planningSearch, setPlanningSearch] = useState('');
     const [bulkAssignMode, setBulkAssignMode] = useState(false);
     const [selectedEmployees, setSelectedEmployees] = useState([]);
 
     // Attendance state
-    const [attendanceDate, setAttendanceDate] = useState(new Date().toISOString().split('T')[0]);
+    const [attendanceDate, setAttendanceDate] = useState(getCurrentSASTDateString());
 
     // Worker management state
     const [workerSearch, setWorkerSearch] = useState('');
@@ -475,14 +533,18 @@ export function LaborManagementSystem() {
         status: ''
     });
 
-    const fetchData = useCallback(async (date) => {
+    const fetchData = useCallback(async (sastDate) => {
         setLoading(true);
         try {
+            // Convert SAST date to UTC for API call
+            const utcDate = convertSASTToUTC(sastDate + 'T00:00:00');
+            const apiDate = utcDate ? new Date(utcDate).toISOString().split('T')[0] : sastDate;
+            
             const [machinesData, employeesData, assignmentsData, supervisorsData] = await Promise.all([
                 API.get('/machines'),
                 API.get('/users'),
-                API.get(`/planner/assignments?date=${date}`),
-                API.get(`/planner/supervisors?date=${date}&shift=${selectedShift}`)
+                API.get(`/planner/assignments?date=${apiDate}`),
+                API.get(`/planner/supervisors?date=${apiDate}&shift=${selectedShift}`)
             ]);
             setMachines(machinesData);
             setEmployees(employeesData.filter(u => u.role !== 'admin'));
@@ -541,10 +603,14 @@ export function LaborManagementSystem() {
     // Supervisor management functions
     const addSupervisor = async (supervisorId) => {
         try {
-            console.log('Adding supervisor:', { supervisorId, selectedDate, selectedShift });
+            // Convert SAST date to UTC for API
+            const utcDate = convertSASTToUTC(selectedDate + 'T00:00:00');
+            const apiDate = utcDate ? new Date(utcDate).toISOString().split('T')[0] : selectedDate;
+            
+            console.log('Adding supervisor:', { supervisorId, apiDate, selectedShift });
             await API.post('/planner/supervisors', {
                 supervisor_id: supervisorId,
-                assignment_date: selectedDate,
+                assignment_date: apiDate,
                 shift: selectedShift
             });
             
@@ -552,7 +618,7 @@ export function LaborManagementSystem() {
             setShowSupervisorModal(false);
             
             // Reload supervisors data
-            const supervisorsData = await API.get(`/planner/supervisors?date=${selectedDate}&shift=${selectedShift}`);
+            const supervisorsData = await API.get(`/planner/supervisors?date=${apiDate}&shift=${selectedShift}`);
             setSupervisorsOnDuty(supervisorsData);
             showNotification('Supervisor assigned successfully', 'success');
         } catch (error) {
@@ -729,8 +795,17 @@ export function LaborManagementSystem() {
         if (!selectedDate) return showNotification('Please select a date first', 'danger');
         
         try {
-            console.log('Assigning employee:', { employee_id: employeeId, machine_id: selectedMachine, shift: selectedShift, assignment_date: selectedDate });
-            const newAssignment = await API.post('/planner/assignments', { employee_id: employeeId, machine_id: selectedMachine, shift: selectedShift, assignment_date: selectedDate });
+            // Convert SAST date to UTC for API
+            const utcDate = convertSASTToUTC(selectedDate + 'T00:00:00');
+            const apiDate = utcDate ? new Date(utcDate).toISOString().split('T')[0] : selectedDate;
+            
+            console.log('Assigning employee:', { employee_id: employeeId, machine_id: selectedMachine, shift: selectedShift, assignment_date: apiDate });
+            const newAssignment = await API.post('/planner/assignments', { 
+                employee_id: employeeId, 
+                machine_id: selectedMachine, 
+                shift: selectedShift, 
+                assignment_date: apiDate 
+            });
             fetchData(selectedDate); // Refetch to get all details
             showNotification('Employee assigned successfully');
         } catch (error) { 
