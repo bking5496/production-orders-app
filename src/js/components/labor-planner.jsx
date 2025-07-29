@@ -904,23 +904,21 @@ export function LaborManagementSystem() {
     );
 
     return (
-        <div className="min-h-screen bg-gray-50 p-4 sm:p-6">
-            {/* Enhanced Header with Export and Actions */}
-            <div className="mb-6">
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-6">
+            {/* Sleek Header */}
+            <div className="mb-8">
+                <div className="flex justify-between items-center mb-6">
                     <div>
-                        <h1 className="text-3xl font-bold text-gray-800">Labor Management System</h1>
-                        <p className="text-gray-600 mt-1">Plan, track, and manage workforce assignments</p>
+                        <h1 className="text-2xl font-bold text-gray-900 mb-1">Labor Planner</h1>
+                        <p className="text-gray-500 text-sm">Streamlined workforce management</p>
                     </div>
                     
-                    <div className="flex items-center gap-3">
-                        <Button variant="outline" onClick={() => setShowExportModal(true)}>
+                    <div className="flex items-center gap-2">
+                        <Button variant="ghost" size="sm" onClick={() => setShowExportModal(true)}>
                             <Download className="w-4 h-4" />
-                            Export
                         </Button>
-                        <Button variant="secondary" onClick={() => fetchData(currentView === 'attendance' ? attendanceDate : selectedDate)}>
+                        <Button variant="ghost" size="sm" onClick={() => fetchData(currentView === 'attendance' ? attendanceDate : selectedDate)}>
                             <RefreshCw className="w-4 h-4" />
-                            Refresh
                         </Button>
                     </div>
                 </div>
