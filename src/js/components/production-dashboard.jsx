@@ -535,6 +535,12 @@ export default function ProductionDashboard() {
         try {
             setError(null);
             const data = await API.get('/production/floor-overview');
+            console.log('Production floor overview data:', data);
+            
+            // Log machines with orders to debug stopped orders
+            const machinesWithOrders = (data || []).filter(machine => machine.order_number);
+            console.log('Machines with orders:', machinesWithOrders);
+            
             setOverviewData(data || []);
         } catch (error) {
             console.error("Failed to fetch production data:", error);
