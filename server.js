@@ -594,11 +594,58 @@ apiRouter.get('/production/stats', authenticateToken, async (req, res) => {
     const machineStats = await dbGet(`SELECT COUNT(*) as total_machines, COUNT(CASE WHEN status = 'in_use' THEN 1 END) as machines_in_use FROM machines`);
     res.json({ ...stats, ...machineStats, avg_efficiency: stats.avg_efficiency || 0 });
 });
+// Enhanced quantity update with shift tracking
 apiRouter.patch('/orders/:id/quantity', authenticateToken, requireRole(['admin', 'supervisor', 'operator']),
     body('actual_quantity').isInt({min: 0}), handleValidationErrors,
     async (req, res) => {
-        await dbRun('UPDATE production_orders SET actual_quantity = ? WHERE id = ? AND status = "in_progress"', [req.body.actual_quantity, req.params.id]);
-        res.json({message: 'Quantity updated.'});
+        try {
+            await dbRun('BEGIN TRANSACTION');
+            
+            // Get current quantity
+            const order = await dbGet('SELECT actual_quantity, machine_id FROM production_orders WHERE id = ? AND status = "in_progress"', [req.params.id]);
+            if (!order) {
+                await dbRun('ROLLBACK');
+                return res.status(400).json({error: 'Order not found or not in progress'});
+            }
+            
+            const previousQuantity = order.actual_quantity || 0;
+            const quantityChange = req.body.actual_quantity - previousQuantity;
+            
+            // Determine current shift
+            const currentHour = new Date().getHours();
+            const shiftType = (currentHour >= 6 && currentHour < 18) ? 'day' : 'night';
+            const shiftDate = new Date().toISOString().split('T')[0];
+            
+            // Update order quantity
+            await dbRun('UPDATE production_orders SET actual_quantity = ? WHERE id = ?', [req.body.actual_quantity, req.params.id]);
+            
+            // Record quantity update for shift tracking
+            await dbRun(`
+                INSERT INTO quantity_updates (
+                    order_id, previous_quantity, new_quantity, quantity_change, 
+                    updated_by, shift_date, shift_type, notes
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            `, [
+                req.params.id, previousQuantity, req.body.actual_quantity, 
+                quantityChange, req.user.id, shiftDate, shiftType, req.body.notes || null
+            ]);
+            
+            await dbRun('COMMIT');
+            
+            res.json({
+                message: 'Quantity updated successfully',
+                previousQuantity,
+                newQuantity: req.body.actual_quantity,
+                quantityChange,
+                shiftType,
+                timestamp: new Date().toISOString()
+            });
+            
+        } catch (error) {
+            await dbRun('ROLLBACK');
+            console.error('Quantity update error:', error);
+            res.status(500).json({error: 'Failed to update quantity'});
+        }
     }
 );
 
@@ -619,14 +666,203 @@ apiRouter.get('/production/floor-overview', authenticateToken, async (req, res) 
     res.json(overviewData);
 });
 
-
-apiRouter.patch('/orders/:id/quantity', authenticateToken, requireRole(['admin', 'supervisor', 'operator']),
-    body('actual_quantity').isInt({min: 0}), handleValidationErrors,
-    async (req, res) => {
-        await dbRun('UPDATE production_orders SET actual_quantity = ? WHERE id = ? AND status = "in_progress"', [req.body.actual_quantity, req.params.id]);
-        res.json({message: 'Quantity updated.'});
+// --- Shift Reporting ---
+// Get current shift report
+apiRouter.get('/shifts/current', authenticateToken, async (req, res) => {
+    try {
+        const currentHour = new Date().getHours();
+        const shiftType = (currentHour >= 6 && currentHour < 18) ? 'day' : 'night';
+        const shiftDate = new Date().toISOString().split('T')[0];
+        const environment = req.query.environment || '';
+        
+        const shiftReport = await dbGet(`
+            SELECT * FROM shift_reports 
+            WHERE shift_date = ? AND shift_type = ? AND environment = ?
+        `, [shiftDate, shiftType, environment]);
+        
+        if (!shiftReport) {
+            // Create new shift report if none exists
+            const startHour = shiftType === 'day' ? 6 : 18;
+            const endHour = shiftType === 'day' ? 18 : 6;
+            
+            await dbRun(`
+                INSERT INTO shift_reports 
+                (shift_date, shift_type, environment, start_time, end_time, created_by)
+                VALUES (?, ?, ?, datetime('now', 'start of day', '+${startHour} hours'), 
+                        datetime('now', 'start of day', '+${endHour + (shiftType === 'night' ? 24 : 0)} hours'), ?)
+            `, [shiftDate, shiftType, environment, req.user.id]);
+            
+            const newReport = await dbGet(`
+                SELECT * FROM shift_reports 
+                WHERE shift_date = ? AND shift_type = ? AND environment = ?
+            `, [shiftDate, shiftType, environment]);
+            
+            return res.json(newReport);
+        }
+        
+        res.json(shiftReport);
+    } catch (error) {
+        console.error('Get current shift error:', error);
+        res.status(500).json({error: 'Failed to get current shift'});
     }
-);
+});
+
+// Generate automated shift report
+apiRouter.post('/shifts/:id/generate', authenticateToken, requireRole(['admin', 'supervisor']), async (req, res) => {
+    try {
+        const shiftId = req.params.id;
+        const shift = await dbGet('SELECT * FROM shift_reports WHERE id = ?', [shiftId]);
+        
+        if (!shift) {
+            return res.status(404).json({error: 'Shift report not found'});
+        }
+        
+        // Calculate shift statistics
+        const stats = await dbAll(`
+            SELECT 
+                COUNT(*) as total_orders,
+                COUNT(CASE WHEN status = 'completed' THEN 1 END) as completed_orders,
+                COUNT(CASE WHEN status = 'in_progress' THEN 1 END) as in_progress_orders,
+                COUNT(CASE WHEN status = 'stopped' THEN 1 END) as stopped_orders,
+                SUM(COALESCE(actual_quantity, 0)) as total_quantity_produced,
+                AVG(COALESCE(efficiency_percentage, 0)) as avg_efficiency
+            FROM production_orders o
+            LEFT JOIN machines m ON o.machine_id = m.id
+            WHERE m.environment = ? 
+            AND DATE(o.start_time) = ?
+        `, [shift.environment, shift.shift_date]);
+        
+        // Get downtime statistics
+        const downtimeStats = await dbGet(`
+            SELECT 
+                COUNT(*) as total_stops,
+                COALESCE(SUM(duration), 0) as total_downtime_minutes
+            FROM production_stops ps
+            LEFT JOIN production_orders o ON ps.order_id = o.id
+            LEFT JOIN machines m ON o.machine_id = m.id
+            WHERE m.environment = ?
+            AND DATE(ps.start_time) = ?
+        `, [shift.environment, shift.shift_date]);
+        
+        // Get machine statistics
+        const machineStats = await dbGet(`
+            SELECT 
+                COUNT(*) as total_machines_available,
+                COUNT(CASE WHEN status = 'in_use' THEN 1 END) as total_machines_active
+            FROM machines 
+            WHERE environment = ?
+        `, [shift.environment]);
+        
+        // Calculate OEE (simplified calculation)
+        const availability = downtimeStats.total_downtime_minutes > 0 ? 
+            Math.max(0, 100 - (downtimeStats.total_downtime_minutes / (shift.shift_type === 'day' ? 720 : 720) * 100)) : 100;
+        const performance = stats[0].avg_efficiency || 0;
+        const quality = 100; // Simplified - would need quality data
+        const oee = (availability * performance * quality) / 10000;
+        
+        // Update shift report with calculated statistics
+        await dbRun(`
+            UPDATE shift_reports SET
+                total_orders = ?, completed_orders = ?, in_progress_orders = ?, stopped_orders = ?,
+                total_quantity_produced = ?, total_stops = ?, total_downtime_minutes = ?,
+                total_machines_active = ?, total_machines_available = ?,
+                oee_percentage = ?, efficiency_percentage = ?, quality_percentage = ?
+            WHERE id = ?
+        `, [
+            stats[0].total_orders, stats[0].completed_orders, stats[0].in_progress_orders, stats[0].stopped_orders,
+            stats[0].total_quantity_produced, downtimeStats.total_stops, downtimeStats.total_downtime_minutes,
+            machineStats.total_machines_active, machineStats.total_machines_available,
+            oee, performance, quality, shiftId
+        ]);
+        
+        // Get updated report
+        const updatedReport = await dbGet('SELECT * FROM shift_reports WHERE id = ?', [shiftId]);
+        
+        res.json({
+            message: 'Shift report generated successfully',
+            report: updatedReport,
+            statistics: {
+                ...stats[0],
+                ...downtimeStats,
+                ...machineStats,
+                oee_percentage: oee,
+                availability_percentage: availability
+            }
+        });
+        
+    } catch (error) {
+        console.error('Generate shift report error:', error);
+        res.status(500).json({error: 'Failed to generate shift report'});
+    }
+});
+
+// Get shift reports history
+apiRouter.get('/shifts/reports', authenticateToken, async (req, res) => {
+    try {
+        const { environment, start_date, end_date, shift_type } = req.query;
+        
+        let query = `
+            SELECT sr.*, u.username as supervisor_name 
+            FROM shift_reports sr
+            LEFT JOIN users u ON sr.supervisor_id = u.id
+            WHERE 1=1
+        `;
+        const params = [];
+        
+        if (environment) {
+            query += ' AND sr.environment = ?';
+            params.push(environment);
+        }
+        
+        if (start_date) {
+            query += ' AND sr.shift_date >= ?';
+            params.push(start_date);
+        }
+        
+        if (end_date) {
+            query += ' AND sr.shift_date <= ?';
+            params.push(end_date);
+        }
+        
+        if (shift_type) {
+            query += ' AND sr.shift_type = ?';
+            params.push(shift_type);
+        }
+        
+        query += ' ORDER BY sr.shift_date DESC, sr.shift_type DESC';
+        
+        const reports = await dbAll(query, params);
+        res.json(reports);
+        
+    } catch (error) {
+        console.error('Get shift reports error:', error);
+        res.status(500).json({error: 'Failed to get shift reports'});
+    }
+});
+
+// Get quantity updates for current shift
+apiRouter.get('/shifts/quantity-updates', authenticateToken, async (req, res) => {
+    try {
+        const { shift_date, shift_type, environment } = req.query;
+        
+        const updates = await dbAll(`
+            SELECT qu.*, o.order_number, o.product_name, u.username as updated_by_name, m.name as machine_name
+            FROM quantity_updates qu
+            LEFT JOIN production_orders o ON qu.order_id = o.id
+            LEFT JOIN users u ON qu.updated_by = u.id
+            LEFT JOIN machines m ON o.machine_id = m.id
+            WHERE qu.shift_date = ? AND qu.shift_type = ?
+            ${environment ? 'AND m.environment = ?' : ''}
+            ORDER BY qu.update_time DESC
+        `, environment ? [shift_date, shift_type, environment] : [shift_date, shift_type]);
+        
+        res.json(updates);
+        
+    } catch (error) {
+        console.error('Get quantity updates error:', error);
+        res.status(500).json({error: 'Failed to get quantity updates'});
+    }
+});
 
 // --- Analytics ---
 apiRouter.get('/analytics/summary', authenticateToken, requireRole(['admin', 'supervisor']), async (req, res) => {
