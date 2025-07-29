@@ -12,6 +12,7 @@ export default function AnalyticsPage() {
     orders: [],
     machines: [],
     assignments: [],
+    employees: [],
     summary: {}
   });
   const [loading, setLoading] = useState(true);
@@ -36,16 +37,20 @@ export default function AnalyticsPage() {
     
     try {
       const params = new URLSearchParams(dateRange).toString();
-      const [ordersData, machinesData, summaryData, downtimeData] = await Promise.all([
+      const [ordersData, machinesData, summaryData, downtimeData, employeesData, assignmentsData] = await Promise.all([
         API.get('/orders'),
         API.get('/machines'),
         API.get(`/analytics/summary?${params}`),
-        API.get(`/analytics/downtime?${params}`)
+        API.get(`/analytics/downtime?${params}`),
+        API.get('/users'),
+        API.get(`/planner/assignments?date=${dateRange.end_date}`)
       ]);
       
       setAnalytics({
         orders: ordersData || [],
         machines: machinesData || [],
+        employees: employeesData || [],
+        assignments: assignmentsData || [],
         summary: summaryData?.summary || {},
         downtime: downtimeData || {}
       });
@@ -495,6 +500,7 @@ export default function AnalyticsPage() {
             { id: 'overview', label: 'Overview', icon: BarChart3 },
             { id: 'orders', label: 'Order Analytics', icon: Package },
             { id: 'machines', label: 'Machine Analytics', icon: Factory },
+            { id: 'labor', label: 'Labor Analytics', icon: Users },
             { id: 'performance', label: 'Performance', icon: TrendingUp }
           ].map(tab => {
             const Icon = tab.icon;
@@ -760,6 +766,126 @@ export default function AnalyticsPage() {
                       </Badge>
                     </td>
                   </tr>
+                </tbody>
+              </table>
+            </div>
+          </Card>
+        </div>
+      )}
+
+      {activeTab === 'labor' && (
+        <div className="space-y-6">
+          {/* Labor Statistics */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <StatsCard
+              title="Total Employees"
+              value={analytics.employees.filter(e => e.role !== 'admin').length}
+              icon={Users}
+              color="blue"
+            />
+            <StatsCard
+              title="Assigned Today"
+              value={analytics.assignments.length}
+              icon={CheckCircle}
+              color="green"
+            />
+            <StatsCard
+              title="Unique Workers"
+              value={new Set(analytics.assignments.map(a => a.employee_id)).size}
+              icon={Activity}
+              color="purple"
+            />
+            <StatsCard
+              title="Utilization"
+              value={`${Math.round((analytics.assignments.length / Math.max(analytics.machines.length, 1)) * 100)}%`}
+              icon={TrendingUp}
+              color="orange"
+            />
+          </div>
+
+          {/* Labor Distribution */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <Card className="p-6">
+              <h3 className="text-lg font-semibold mb-4 text-gray-800">Employee Roles</h3>
+              <div className="space-y-3">
+                {['operator', 'supervisor', 'packer'].map(role => {
+                  const count = analytics.employees.filter(e => e.role === role).length;
+                  const percentage = Math.round((count / Math.max(analytics.employees.filter(e => e.role !== 'admin').length, 1)) * 100);
+                  return (
+                    <div key={role} className="flex justify-between items-center">
+                      <span className="text-sm font-medium text-gray-600 capitalize">{role}</span>
+                      <div className="flex items-center gap-2">
+                        <div className="w-24 bg-gray-200 rounded-full h-2">
+                          <div className={`h-2 rounded-full bg-blue-500`} style={{ width: `${percentage}%` }}></div>
+                        </div>
+                        <span className="text-sm text-gray-500 w-12">{count}</span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </Card>
+
+            <Card className="p-6">
+              <h3 className="text-lg font-semibold mb-4 text-gray-800">Shift Distribution</h3>
+              <div className="space-y-3">
+                {['day', 'night'].map(shift => {
+                  const count = analytics.assignments.filter(a => a.shift === shift).length;
+                  const percentage = Math.round((count / Math.max(analytics.assignments.length, 1)) * 100);
+                  return (
+                    <div key={shift} className="flex justify-between items-center">
+                      <span className="text-sm font-medium text-gray-600 capitalize">{shift} Shift</span>
+                      <div className="flex items-center gap-2">
+                        <div className="w-24 bg-gray-200 rounded-full h-2">
+                          <div className={`h-2 rounded-full ${shift === 'day' ? 'bg-yellow-500' : 'bg-blue-500'}`} style={{ width: `${percentage}%` }}></div>
+                        </div>
+                        <span className="text-sm text-gray-500 w-12">{count}</span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </Card>
+          </div>
+
+          {/* Recent Assignments Table */}
+          <Card className="p-6">
+            <h3 className="text-lg font-semibold mb-4 text-gray-800">Recent Labor Assignments</h3>
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Employee</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Machine</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Shift</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {analytics.assignments.slice(0, 10).map((assignment, index) => {
+                    const employee = analytics.employees.find(e => e.id === assignment.employee_id);
+                    const machine = analytics.machines.find(m => m.id == assignment.machine_id);
+                    return (
+                      <tr key={index}>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                          {employee?.fullName || employee?.username || 'Unknown'}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 capitalize">
+                          {employee?.role || 'N/A'}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                          {machine?.name || `Machine ${assignment.machine_id}`}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 capitalize">
+                          {assignment.shift}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <Badge variant="success">Active</Badge>
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
