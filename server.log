@@ -1,3 +1,2 @@
-Command 'node' not found, did you mean:
-  command 'node' from deb nodejs (18.13.0+dfsg1-1ubuntu2)
-Try: sudo apt install <deb name>
+🚀 API Server running on http://localhost:3000
+✅ Connected to SQLite database
