@@ -1159,93 +1159,86 @@ export function LaborManagementSystem() {
             )}
 
             {currentView === 'attendance' && (
-                <div className="space-y-6">
-                    <Card className="p-6">
-                        <div className="flex items-center justify-between mb-6">
-                            <div className="flex items-center gap-3">
-                                <UserCheck className="w-8 h-8 text-green-500" />
-                                <div>
-                                    <h2 className="text-2xl font-bold">Attendance Confirmation</h2>
-                                    <p className="text-gray-600">Confirmed attendance will be included in Excel exports</p>
-                                </div>
+                <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                    <div className="flex items-center justify-between mb-6">
+                        <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                                <UserCheck className="w-5 h-5 text-green-600" />
                             </div>
-                            <div className="flex items-center gap-3">
-                                <input 
-                                    type="date" 
-                                    value={attendanceDate} 
-                                    onChange={e => setAttendanceDate(e.target.value)} 
-                                    className="p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                />
-                                <Button variant="outline" onClick={() => setShowExportModal(true)}>
-                                    <Download className="w-4 h-4" />
-                                    Export
-                                </Button>
+                            <div>
+                                <h2 className="text-xl font-semibold text-gray-900">Attendance</h2>
+                                <p className="text-gray-500 text-sm">Track daily attendance</p>
                             </div>
                         </div>
+                        <input 
+                            type="date" 
+                            value={attendanceDate} 
+                            onChange={e => setAttendanceDate(e.target.value)} 
+                            className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        />
+                    </div>
 
-                        <div className="space-y-3">
-                            {attendanceAssignments.map(assignment => (
-                                <div key={assignment.id} className="p-4 bg-white border border-gray-200 rounded-lg">
-                                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                                        <div className="flex items-center gap-3">
-                                            <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                                                <Users className="w-6 h-6 text-blue-600" />
-                                            </div>
-                                            <div>
-                                                <p className="font-bold text-gray-800">
-                                                    {assignment.fullName || assignment.username}
-                                                </p>
-                                                <p className="text-sm text-gray-600">
-                                                    {assignment.employee_code} • {assignment.machine_name} • {assignment.shift} shift
-                                                </p>
-                                                <p className="text-xs text-gray-500">{assignment.company}</p>
-                                            </div>
-                                        </div>
-                                        
-                                        <div className="flex items-center gap-2">
-                                            <Badge 
-                                                variant={
-                                                    assignment.status === 'present' ? 'success' :
-                                                    assignment.status === 'absent' ? 'danger' :
-                                                    'default'
-                                                }
-                                            >
-                                                {assignment.status === 'present' ? 'Present' :
-                                                 assignment.status === 'absent' ? 'Absent' : 'Pending'}
-                                            </Badge>
-                                            
-                                            <div className="flex gap-2 ml-3">
-                                                <Button 
-                                                    onClick={() => updateAttendanceStatus(assignment.id, 'present')} 
-                                                    variant={assignment.status === 'present' ? 'success' : 'secondary'}
-                                                    size="sm"
-                                                >
-                                                    <CheckCircle className="w-4 h-4" />
-                                                    Present
-                                                </Button>
-                                                <Button 
-                                                    onClick={() => updateAttendanceStatus(assignment.id, 'absent')} 
-                                                    variant={assignment.status === 'absent' ? 'danger' : 'secondary'}
-                                                    size="sm"
-                                                >
-                                                    <X className="w-4 h-4" />
-                                                    Absent
-                                                </Button>
-                                            </div>
-                                        </div>
+                    {/* Attendance List */}
+                    <div className="space-y-2">
+                        {attendanceAssignments.map(assignment => (
+                            <div key={assignment.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                                <div className="flex items-center gap-4">
+                                    <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                                        <span className="text-blue-600 font-medium text-sm">
+                                            {assignment.employee_code?.slice(0, 2) || assignment.username?.slice(0, 2).toUpperCase()}
+                                        </span>
+                                    </div>
+                                    <div className="flex-1">
+                                        <p className="font-semibold text-gray-900">
+                                            {assignment.fullName || assignment.username}
+                                        </p>
+                                        <p className="text-sm text-gray-500">
+                                            {assignment.employee_code} • {assignment.machine_name} • {assignment.shift} shift
+                                        </p>
+                                    </div>
+                                    <div className="flex items-center gap-3">
+                                        <Badge 
+                                            variant={
+                                                assignment.status === 'present' ? 'success' :
+                                                assignment.status === 'absent' ? 'danger' :
+                                                'default'
+                                            }
+                                        >
+                                            {assignment.status === 'present' ? 'Present' :
+                                             assignment.status === 'absent' ? 'Absent' : 'Pending'}
+                                        </Badge>
                                     </div>
                                 </div>
-                            ))}
-                            
-                            {attendanceAssignments.length === 0 && (
-                                <div className="text-center py-12">
-                                    <UserCheck className="w-12 h-12 mx-auto mb-4 text-gray-300" />
-                                    <p className="text-gray-500">No assignments found for this date</p>
-                                    <p className="text-sm text-gray-400">Check the planning section to create assignments</p>
+                                
+                                <div className="flex gap-2">
+                                    <Button 
+                                        onClick={() => updateAttendanceStatus(assignment.id, 'present')} 
+                                        variant={assignment.status === 'present' ? 'success' : 'ghost'}
+                                        size="sm"
+                                    >
+                                        <CheckCircle className="w-4 h-4" />
+                                    </Button>
+                                    <Button 
+                                        onClick={() => updateAttendanceStatus(assignment.id, 'absent')} 
+                                        variant={assignment.status === 'absent' ? 'danger' : 'ghost'}
+                                        size="sm"
+                                    >
+                                        <X className="w-4 h-4" />
+                                    </Button>
                                 </div>
-                            )}
+                            </div>
+                        ))}
+                    </div>
+                    
+                    {attendanceAssignments.length === 0 && (
+                        <div className="text-center py-12">
+                            <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <UserCheck className="w-8 h-8 text-gray-400" />
+                            </div>
+                            <p className="text-gray-500 text-sm">No assignments found for this date</p>
+                            <p className="text-xs text-gray-400">Check the planning section to create assignments</p>
                         </div>
-                    </Card>
+                    )}
                 </div>
             )}
 
