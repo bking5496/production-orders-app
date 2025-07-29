@@ -398,140 +398,185 @@ const OrderDetailsModal = ({ isOpen, onClose, orderId, orderNumber }) => {
                     onClick={onClose}
                 />
                 <span className="hidden sm:inline-block sm:align-middle sm:h-screen">&#8203;</span>
-                <div className="inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-3xl sm:w-full">
-                    <div className="bg-gradient-to-r from-blue-50 to-indigo-50 px-8 pt-6 pb-4 border-b border-gray-100">
+                <div className="inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full">
+                    {/* Compact Header */}
+                    <div className="bg-gradient-to-r from-gray-900 to-gray-800 px-6 py-4">
                         <div className="flex items-center justify-between">
-                            <div>
-                                <h3 className="text-2xl font-bold text-gray-900">{orderNumber}</h3>
-                                <p className="text-sm text-gray-600 mt-1">Production Order Details</p>
+                            <div className="flex items-center gap-4">
+                                <h3 className="text-xl font-bold text-white">{orderNumber}</h3>
+                                {orderDetails && (
+                                    <div className={`px-3 py-1 rounded-full text-xs font-medium ${
+                                        orderDetails.order.status === 'stopped' ? 'bg-red-500 text-white' : 
+                                        orderDetails.order.status === 'in_progress' ? 'bg-blue-500 text-white' :
+                                        orderDetails.order.status === 'completed' ? 'bg-green-500 text-white' : 'bg-gray-500 text-white'
+                                    }`}>
+                                        {orderDetails.order.status.replace('_', ' ').toUpperCase()}
+                                    </div>
+                                )}
                             </div>
                             <button
                                 onClick={onClose}
-                                className="text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-full p-2 hover:bg-white/50 transition-colors"
+                                className="text-gray-300 hover:text-white focus:outline-none focus:ring-2 focus:ring-white/20 rounded-full p-1.5 hover:bg-white/10 transition-colors"
                             >
                                 <X className="w-5 h-5" />
                             </button>
                         </div>
                     </div>
 
-                    <div className="px-8 py-6">
+                    <div className="p-6">
                         {loading && (
-                            <div className="flex items-center justify-center py-12">
-                                <RefreshCw className="w-6 h-6 animate-spin text-blue-500 mr-3" />
-                                <span className="text-gray-600">Loading order details...</span>
+                            <div className="flex items-center justify-center py-8">
+                                <RefreshCw className="w-5 h-5 animate-spin text-gray-400 mr-2" />
+                                <span className="text-gray-500 text-sm">Loading...</span>
                             </div>
                         )}
 
                         {error && (
-                            <div className="p-4 bg-red-50 border-l-4 border-red-400 rounded-r-lg mb-6">
+                            <div className="p-3 bg-red-50 border border-red-200 rounded-lg mb-4">
                                 <div className="flex items-center">
-                                    <AlertTriangle className="w-5 h-5 text-red-500 mr-2" />
-                                    <span className="text-red-700">{error}</span>
+                                    <AlertTriangle className="w-4 h-4 text-red-500 mr-2" />
+                                    <span className="text-red-700 text-sm">{error}</span>
                                 </div>
                             </div>
                         )}
 
                         {orderDetails && !loading && (
-                            <div className="space-y-8">
-                                {/* Order Summary - Minimal Cards */}
-                                <div className="grid grid-cols-3 gap-6">
-                                    <div className="text-center">
-                                        <div className="text-2xl font-bold text-gray-900 mb-1">
-                                            {orderDetails.order.start_time ? 
-                                                formatSASTTime(orderDetails.order.start_time) : '--:--'}
+                            <div className="space-y-4">
+                                {/* Compact Overview Cards */}
+                                <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+                                    <div className="bg-gray-50 rounded-lg p-3 text-center">
+                                        <div className="text-lg font-bold text-gray-900">
+                                            {orderDetails.order.start_time ? formatSASTTime(orderDetails.order.start_time) : '--:--'}
                                         </div>
-                                        <div className="text-sm text-gray-500 uppercase tracking-wide">Start Time</div>
+                                        <div className="text-xs text-gray-500 mt-1">Started</div>
                                     </div>
-                                    <div className="text-center">
-                                        <div className={`text-2xl font-bold mb-1 capitalize ${
-                                            orderDetails.order.status === 'stopped' ? 'text-red-600' : 
-                                            orderDetails.order.status === 'in_progress' ? 'text-blue-600' :
-                                            orderDetails.order.status === 'completed' ? 'text-green-600' : 'text-gray-600'
-                                        }`}>
-                                            {orderDetails.order.status.replace('_', ' ')}
+                                    <div className="bg-gray-50 rounded-lg p-3 text-center">
+                                        <div className="text-lg font-bold text-gray-900">
+                                            {orderDetails.order.quantity?.toLocaleString() || '0'}
                                         </div>
-                                        <div className="text-sm text-gray-500 uppercase tracking-wide">Status</div>
-                                        {orderDetails.order.status === 'stopped' && (
-                                            <div className="text-xs text-red-600 mt-1">⏸️ Downtime Active</div>
-                                        )}
+                                        <div className="text-xs text-gray-500 mt-1">Target Qty</div>
                                     </div>
-                                    <div className="text-center">
-                                        <div className="text-2xl font-bold text-green-600 mb-1">
-                                            {Math.round(((orderDetails.order.actual_quantity || 0) / orderDetails.order.quantity) * 100)}%
+                                    <div className="bg-gray-50 rounded-lg p-3 text-center">
+                                        <div className="text-lg font-bold text-gray-900">
+                                            {(orderDetails.order.actual_quantity || 0).toLocaleString()}
                                         </div>
-                                        <div className="text-sm text-gray-500 uppercase tracking-wide">Complete</div>
+                                        <div className="text-xs text-gray-500 mt-1">Produced</div>
+                                    </div>
+                                    <div className="bg-gray-50 rounded-lg p-3 text-center">
+                                        <div className="flex items-center justify-center">
+                                            <div className="relative w-8 h-8">
+                                                <div className="absolute inset-0 bg-gray-200 rounded-full"></div>
+                                                <div 
+                                                    className="absolute inset-0 bg-gradient-to-r from-blue-500 to-green-500 rounded-full" 
+                                                    style={{clipPath: `inset(0 ${100 - Math.round(((orderDetails.order.actual_quantity || 0) / orderDetails.order.quantity) * 100)}% 0 0)`}}
+                                                ></div>
+                                                <div className="absolute inset-0 flex items-center justify-center">
+                                                    <span className="text-xs font-bold text-gray-700">
+                                                        {Math.round(((orderDetails.order.actual_quantity || 0) / orderDetails.order.quantity) * 100)}%
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="text-xs text-gray-500 mt-1">Complete</div>
                                     </div>
                                 </div>
 
-                                {/* Downtime Summary - Compact */}
-                                <div className="bg-gradient-to-r from-red-50 to-pink-50 rounded-xl p-6 border border-red-100">
-                                    <div className="grid grid-cols-3 gap-6 text-center">
-                                        <div>
-                                            <div className="text-3xl font-bold text-red-600 mb-1">
+                                {/* Downtime Summary - Modern */}
+                                <div className="bg-gradient-to-r from-orange-50 to-red-50 border border-orange-100 rounded-lg p-4">
+                                    <div className="flex items-center justify-between mb-3">
+                                        <h4 className="font-semibold text-gray-900 flex items-center gap-2">
+                                            <AlertTriangle className="w-4 h-4 text-orange-500" />
+                                            Downtime Analysis
+                                        </h4>
+                                        {orderDetails.order.status === 'stopped' && (
+                                            <div className="flex items-center gap-1 text-xs text-red-600 bg-red-100 px-2 py-1 rounded-full">
+                                                <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
+                                                Active Stop
+                                            </div>
+                                        )}
+                                    </div>
+                                    <div className="grid grid-cols-3 gap-4">
+                                        <div className="text-center">
+                                            <div className="text-2xl font-bold text-orange-600">
                                                 {orderDetails.stops.length}
                                             </div>
-                                            <div className="text-sm text-gray-600 uppercase tracking-wide">Stops</div>
+                                            <div className="text-xs text-gray-600">Total Stops</div>
                                         </div>
-                                        <div>
-                                            <div className="text-3xl font-bold text-red-600 mb-1">
+                                        <div className="text-center">
+                                            <div className="text-2xl font-bold text-red-600">
                                                 {formatDowntimeDuration(calculateTotalDowntime(orderDetails.stops))}
                                             </div>
-                                            <div className="text-sm text-gray-600 uppercase tracking-wide">Total Downtime</div>
+                                            <div className="text-xs text-gray-600">Total Time</div>
                                         </div>
-                                        <div>
-                                            <div className="text-3xl font-bold text-red-600 mb-1">
+                                        <div className="text-center">
+                                            <div className="text-2xl font-bold text-red-500">
                                                 {orderDetails.stops.length > 0 ? 
                                                     formatDowntimeDuration(calculateTotalDowntime(orderDetails.stops) / orderDetails.stops.length) : '0m'}
                                             </div>
-                                            <div className="text-sm text-gray-600 uppercase tracking-wide">Avg Duration</div>
+                                            <div className="text-xs text-gray-600">Avg Duration</div>
                                         </div>
                                     </div>
                                 </div>
 
-                                {/* Detailed Stop History - Streamlined */}
+                                {/* Stop History - Compact Timeline */}
                                 {(!orderDetails.stops || !Array.isArray(orderDetails.stops) || orderDetails.stops.length === 0) ? (
-                                    <div className="text-center py-8 text-gray-400">
-                                        <Clock className="w-12 h-12 mx-auto mb-3 opacity-50" />
-                                        <p className="text-sm">No production stops recorded</p>
+                                    <div className="text-center py-6 text-gray-400">
+                                        <Clock className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                                        <p className="text-sm">No stops recorded</p>
                                     </div>
                                 ) : (
-                                    <div className="space-y-2">
-                                        <h4 className="text-lg font-semibold text-gray-900 mb-4">Stop History</h4>
-                                        {(orderDetails.stops || []).map((stop, index) => (
-                                            <div key={index} className="bg-white border border-gray-100 rounded-xl p-4 hover:shadow-sm transition-shadow">
-                                                <div className="flex items-center justify-between">
-                                                    <div className="flex-1">
-                                                        <div className="flex items-center gap-3 mb-2">
-                                                            <span className="font-semibold text-gray-900">
-                                                                {stop.reason.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
-                                                            </span>
-                                                            <span className="text-xs bg-gray-100 px-2 py-1 rounded-full text-gray-600">
-                                                                {formatSASTTime(stop.start_time)}
-                                                            </span>
-                                                            {stop.end_time && (
-                                                                <span className="text-xs bg-green-100 px-2 py-1 rounded-full text-green-700">
-                                                                    {formatSASTTime(stop.end_time)}
+                                    <div>
+                                        <h4 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                                            <Clock className="w-4 h-4" />
+                                            Stop History ({orderDetails.stops.length})
+                                        </h4>
+                                        <div className="space-y-2 max-h-64 overflow-y-auto">
+                                            {(orderDetails.stops || []).map((stop, index) => (
+                                                <div key={index} className="bg-white border border-gray-200 rounded-lg p-3 hover:border-gray-300 transition-colors">
+                                                    <div className="flex items-center justify-between">
+                                                        <div className="flex-1 min-w-0">
+                                                            <div className="flex items-center gap-2 mb-1">
+                                                                <div className={`w-2 h-2 rounded-full ${!stop.end_time ? 'bg-red-500 animate-pulse' : 'bg-gray-400'}`}></div>
+                                                                <span className="font-medium text-gray-900 text-sm truncate">
+                                                                    {stop.reason.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
                                                                 </span>
-                                                            )}
+                                                                <span className={`text-xs px-2 py-0.5 rounded-full ${
+                                                                    stop.category === 'Equipment' ? 'bg-red-100 text-red-700' :
+                                                                    stop.category === 'Material' ? 'bg-orange-100 text-orange-700' :
+                                                                    stop.category === 'Quality' ? 'bg-yellow-100 text-yellow-700' :
+                                                                    'bg-gray-100 text-gray-700'
+                                                                }`}>
+                                                                    {stop.category || 'Other'}
+                                                                </span>
+                                                            </div>
+                                                            <div className="flex items-center gap-2 text-xs text-gray-500">
+                                                                <span>{formatSASTTime(stop.start_time)}</span>
+                                                                {stop.end_time && (
+                                                                    <>
+                                                                        <span>→</span>
+                                                                        <span>{formatSASTTime(stop.end_time)}</span>
+                                                                    </>
+                                                                )}
+                                                            </div>
                                                         </div>
-                                                        {stop.notes && (
-                                                            <p className="text-sm text-gray-600 leading-relaxed">{stop.notes}</p>
-                                                        )}
-                                                    </div>
-                                                    <div className="text-right ml-4">
-                                                        <div className="text-xl font-bold text-red-500">
-                                                            {stop.start_time ? 
-                                                                formatDowntimeDuration(
-                                                                    stop.end_time ? 
-                                                                        new Date(stop.end_time).getTime() - new Date(stop.start_time).getTime() :
-                                                                        Date.now() - new Date(stop.start_time).getTime()
-                                                                ) : 
-                                                                <span className="text-orange-500">Unknown</span>}
+                                                        <div className="text-right ml-3">
+                                                            <div className={`text-sm font-bold ${!stop.end_time ? 'text-red-600' : 'text-gray-900'}`}>
+                                                                {stop.start_time ? 
+                                                                    formatDowntimeDuration(
+                                                                        stop.end_time ? 
+                                                                            new Date(stop.end_time).getTime() - new Date(stop.start_time).getTime() :
+                                                                            Date.now() - new Date(stop.start_time).getTime()
+                                                                    ) : 
+                                                                    <span className="text-orange-500">Unknown</span>}
+                                                            </div>
+                                                            <div className="text-xs text-gray-500">
+                                                                {!stop.end_time ? 'active' : 'resolved'}
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        ))}
+                                            ))}
+                                        </div>
                                     </div>
                                 )}
                             </div>
