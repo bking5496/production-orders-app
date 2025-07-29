@@ -563,9 +563,26 @@ export function LaborManagementSystem() {
         fetchData(dateToFetch);
     }, [selectedDate, attendanceDate, currentView, selectedShift, fetchData]);
     
-    // Memos for filtering
-    const currentAssignments = useMemo(() => assignments.filter(a => a.machine_id == selectedMachine && a.shift === selectedShift && a.assignment_date === selectedDate), [assignments, selectedMachine, selectedShift, selectedDate]);
-    const attendanceAssignments = useMemo(() => assignments.filter(a => a.assignment_date === attendanceDate), [assignments, attendanceDate]);
+    // Memos for filtering with timezone conversion
+    const currentAssignments = useMemo(() => {
+        // Convert SAST date to UTC for comparison
+        const utcDate = convertSASTToUTC(selectedDate + 'T00:00:00');
+        const apiDate = utcDate ? new Date(utcDate).toISOString().split('T')[0] : selectedDate;
+        
+        return assignments.filter(a => 
+            a.machine_id == selectedMachine && 
+            a.shift === selectedShift && 
+            a.assignment_date === apiDate
+        );
+    }, [assignments, selectedMachine, selectedShift, selectedDate]);
+    
+    const attendanceAssignments = useMemo(() => {
+        // Convert SAST date to UTC for comparison
+        const utcDate = convertSASTToUTC(attendanceDate + 'T00:00:00');
+        const apiDate = utcDate ? new Date(utcDate).toISOString().split('T')[0] : attendanceDate;
+        
+        return assignments.filter(a => a.assignment_date === apiDate);
+    }, [assignments, attendanceDate]);
     const filteredEmployees = useMemo(() => employees.filter(e => !workerSearch || e.username.toLowerCase().includes(workerSearch.toLowerCase()) || (e.employee_code && e.employee_code.toLowerCase().includes(workerSearch.toLowerCase()))), [employees, workerSearch]);
 
     const showNotification = useCallback((message, type = 'success') => {
@@ -631,8 +648,12 @@ export function LaborManagementSystem() {
         try {
             await API.delete(`/planner/supervisors/${supervisorAssignmentId}`);
             
+            // Convert SAST date to UTC for API
+            const utcDate = convertSASTToUTC(selectedDate + 'T00:00:00');
+            const apiDate = utcDate ? new Date(utcDate).toISOString().split('T')[0] : selectedDate;
+            
             // Reload supervisors data
-            const supervisorsData = await API.get(`/planner/supervisors?date=${selectedDate}&shift=${selectedShift}`);
+            const supervisorsData = await API.get(`/planner/supervisors?date=${apiDate}&shift=${selectedShift}`);
             setSupervisorsOnDuty(supervisorsData);
             showNotification('Supervisor removed successfully', 'success');
         } catch (error) {
@@ -939,14 +960,19 @@ export function LaborManagementSystem() {
 
     // Cancel all assignments for the day
     const cancelDayLabour = async () => {
-        const dayAssignments = assignments.filter(a => a.assignment_date === selectedDate);
+        // Convert SAST date to UTC for comparison
+        const utcDate = convertSASTToUTC(selectedDate + 'T00:00:00');
+        const apiDate = utcDate ? new Date(utcDate).toISOString().split('T')[0] : selectedDate;
+        
+        const dayAssignments = assignments.filter(a => a.assignment_date === apiDate);
         
         if (dayAssignments.length === 0) {
             showNotification('No assignments found for this date', 'warning');
             return;
         }
 
-        if (!window.confirm(`Are you sure you want to cancel all ${dayAssignments.length} assignments for ${selectedDate}? This action cannot be undone.`)) {
+        // Display SAST date to user but work with UTC internally
+        if (!window.confirm(`Are you sure you want to cancel all ${dayAssignments.length} assignments for ${selectedDate} (SAST)? This action cannot be undone.`)) {
             return;
         }
         
@@ -1063,10 +1089,14 @@ export function LaborManagementSystem() {
                     {/* Machine Grid */}
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
                         {machines.map(machine => {
+                            // Convert SAST date to UTC for assignment count
+                            const utcDate = convertSASTToUTC(selectedDate + 'T00:00:00');
+                            const apiDate = utcDate ? new Date(utcDate).toISOString().split('T')[0] : selectedDate;
+                            
                             const assignmentCount = assignments.filter(a => 
                                 a.machine_id == machine.id && 
                                 a.shift === selectedShift && 
-                                a.assignment_date === selectedDate
+                                a.assignment_date === apiDate
                             ).length;
                             const isSelected = selectedMachine == machine.id;
                             
