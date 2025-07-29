@@ -469,7 +469,7 @@ const OrderDetailsModal = ({ isOpen, onClose, orderId, orderNumber }) => {
                                 ) : (
                                     <div className="space-y-2">
                                         <h4 className="text-lg font-semibold text-gray-900 mb-4">Stop History</h4>
-                                        {orderDetails.stops.map((stop, index) => (
+                                        {(orderDetails.stops || []).map((stop, index) => (
                                             <div key={index} className="bg-white border border-gray-100 rounded-xl p-4 hover:shadow-sm transition-shadow">
                                                 <div className="flex items-center justify-between">
                                                     <div className="flex-1">
