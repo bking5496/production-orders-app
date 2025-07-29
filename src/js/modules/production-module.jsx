@@ -189,9 +189,15 @@ export const ProductionTimer = ({ order, onUpdate }) => {
     const intervalRef = useRef(null);
 
     useEffect(() => {
+        // Clear any existing interval
+        if (intervalRef.current) {
+            clearInterval(intervalRef.current);
+            intervalRef.current = null;
+        }
+
         if (order.status === 'in_progress' && !isPaused) {
             // Add 2 hours to database timestamp to align with local SAST time
-            const sastStartTime = order.started_at || order.start_time;
+            const sastStartTime = order.start_time || order.started_at;
             if (sastStartTime) {
                 const startTime = new Date(sastStartTime).getTime() + (2 * 60 * 60 * 1000);
                 const now = Date.now();
@@ -200,14 +206,17 @@ export const ProductionTimer = ({ order, onUpdate }) => {
                 intervalRef.current = setInterval(() => {
                     setElapsed(Date.now() - startTime);
                 }, 1000);
-
-                return () => {
-                    if (intervalRef.current) {
-                        clearInterval(intervalRef.current);
-                    }
-                };
             }
+        } else {
+            // If not in progress or paused, stop counting
+            setElapsed(0);
         }
+
+        return () => {
+            if (intervalRef.current) {
+                clearInterval(intervalRef.current);
+            }
+        };
     }, [order, isPaused]);
 
     const formatTime = useCallback((ms) => {
