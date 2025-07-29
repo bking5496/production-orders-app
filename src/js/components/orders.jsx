@@ -115,6 +115,41 @@ export default function OrdersPage() {
     }
   };
 
+  // Handle quantity update with real-time tracking
+  const handleQuantityUpdate = async (e) => {
+    e.preventDefault();
+    if (currentQuantity < 0 || currentQuantity > selectedOrder.quantity) {
+      showNotification('Invalid quantity entered', 'warning');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const response = await API.patch(`/orders/${selectedOrder.id}/quantity`, {
+        actual_quantity: currentQuantity,
+        notes: `Updated from ${selectedOrder.actual_quantity || 0} to ${currentQuantity} by operator`
+      });
+      
+      // Show enhanced feedback with shift tracking info
+      if (response.shiftType && response.quantityChange !== undefined) {
+        showNotification(
+          `Quantity updated: ${response.quantityChange > 0 ? '+' : ''}${response.quantityChange} units (${response.shiftType} shift)`,
+          'success'
+        );
+      } else {
+        showNotification('Quantity updated successfully');
+      }
+      
+      setShowQuantityModal(false);
+      setCurrentQuantity(0);
+      loadData();
+    } catch (error) {
+      showNotification('Failed to update quantity: ' + error.message, 'danger');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleResumeProduction = async (orderId) => {
     try {
       await API.post(`/orders/${orderId}/resume`);
@@ -448,6 +483,19 @@ export default function OrdersPage() {
                     {order.status === 'in_progress' && (
                       <>
                         <Button 
+                          onClick={() => { 
+                            setSelectedOrder(order); 
+                            setCurrentQuantity(order.actual_quantity || 0);
+                            setShowQuantityModal(true); 
+                          }} 
+                          size="sm"
+                          variant="outline"
+                          className="text-blue-600 hover:text-blue-700"
+                        >
+                          <Target className="w-4 h-4 mr-1" />
+                          Update Qty
+                        </Button>
+                        <Button 
                           onClick={() => { setSelectedOrder(order); setShowStopModal(true); }} 
                           size="sm"
                           variant="outline"
@@ -717,6 +765,69 @@ export default function OrdersPage() {
             showNotification('Order completed successfully');
           }}
         />
+      )}
+
+      {/* Update Quantity Modal */}
+      {showQuantityModal && selectedOrder && (
+        <Modal title="Update Production Quantity" onClose={() => setShowQuantityModal(false)}>
+          <form onSubmit={handleQuantityUpdate} className="space-y-4">
+            <div className="bg-blue-50 p-4 rounded-lg">
+              <h3 className="font-medium text-blue-900">Order Details</h3>
+              <p className="text-sm text-blue-700 mt-1">
+                <span className="font-medium">{selectedOrder.order_number}</span> - {selectedOrder.product_name}
+              </p>
+              <div className="flex justify-between mt-2 text-sm">
+                <span>Target Quantity: <span className="font-medium">{selectedOrder.quantity}</span></span>
+                <span>Current: <span className="font-medium">{selectedOrder.actual_quantity || 0}</span></span>
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Update Produced Quantity
+              </label>
+              <input
+                type="number"
+                min="0"
+                max={selectedOrder.quantity}
+                value={currentQuantity}
+                onChange={(e) => setCurrentQuantity(parseInt(e.target.value) || 0)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                placeholder="Enter current produced quantity"
+                required
+              />
+              <p className="text-xs text-gray-500 mt-1">
+                Enter the total quantity produced so far (0 to {selectedOrder.quantity})
+              </p>
+            </div>
+
+            <div className="bg-green-50 p-3 rounded-lg">
+              <div className="flex items-center gap-2 text-sm text-green-800">
+                <Target className="w-4 h-4" />
+                <span className="font-medium">Real-time Tracking:</span>
+                <span>Updates are automatically tracked by shift and recorded with timestamp</span>
+              </div>
+            </div>
+
+            <div className="flex justify-end gap-3 pt-4">
+              <Button 
+                type="button" 
+                onClick={() => setShowQuantityModal(false)} 
+                variant="outline"
+              >
+                Cancel
+              </Button>
+              <Button 
+                type="submit"
+                disabled={loading || currentQuantity < 0 || currentQuantity > selectedOrder.quantity}
+                className="bg-blue-600 text-white hover:bg-blue-700"
+              >
+                <Target className="w-4 h-4 mr-2" />
+                {loading ? 'Updating...' : 'Update Quantity'}
+              </Button>
+            </div>
+          </form>
+        </Modal>
       )}
     </div>
   );
