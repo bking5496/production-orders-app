@@ -336,7 +336,7 @@ const OrderDetailsModal = ({ isOpen, onClose, orderId, orderNumber }) => {
     }, [fetchOrderDetails]);
 
     const calculateTotalDowntime = useCallback((stops) => {
-        if (!stops || stops.length === 0) return 0;
+        if (!stops || !Array.isArray(stops) || stops.length === 0) return 0;
         
         return stops.reduce((total, stop) => {
             if (stop.end_time && stop.start_time) {
@@ -415,10 +415,17 @@ const OrderDetailsModal = ({ isOpen, onClose, orderId, orderNumber }) => {
                                         <div className="text-sm text-gray-500 uppercase tracking-wide">Start Time</div>
                                     </div>
                                     <div className="text-center">
-                                        <div className="text-2xl font-bold text-blue-600 mb-1 capitalize">
+                                        <div className={`text-2xl font-bold mb-1 capitalize ${
+                                            orderDetails.order.status === 'stopped' ? 'text-red-600' : 
+                                            orderDetails.order.status === 'in_progress' ? 'text-blue-600' :
+                                            orderDetails.order.status === 'completed' ? 'text-green-600' : 'text-gray-600'
+                                        }`}>
                                             {orderDetails.order.status.replace('_', ' ')}
                                         </div>
                                         <div className="text-sm text-gray-500 uppercase tracking-wide">Status</div>
+                                        {orderDetails.order.status === 'stopped' && (
+                                            <div className="text-xs text-red-600 mt-1">⏸️ Downtime Active</div>
+                                        )}
                                     </div>
                                     <div className="text-center">
                                         <div className="text-2xl font-bold text-green-600 mb-1">
