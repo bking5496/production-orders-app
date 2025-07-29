@@ -1,7 +1,36 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import API from '../core/api';
 import { useAuth } from '../core/auth';
-// Removed timezone utilities - using server time directly
+
+// SAST Timezone Utilities (UTC+2) - Consistent across all components
+const SAST_OFFSET_HOURS = 2;
+
+// Convert UTC to SAST for display
+const convertUTCToSAST = (utcDateString) => {
+    if (!utcDateString) return null;
+    const utcDate = new Date(utcDateString);
+    const sastDate = new Date(utcDate.getTime() + (SAST_OFFSET_HOURS * 60 * 60 * 1000));
+    return sastDate;
+};
+
+// Format SAST date for display
+const formatSASTDate = (utcDateString, options = {}) => {
+    if (!utcDateString) return 'N/A';
+    const sastDate = convertUTCToSAST(utcDateString);
+    if (!sastDate) return 'N/A';
+    
+    const defaultOptions = {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        timeZone: 'Africa/Johannesburg',
+        ...options
+    };
+    
+    return sastDate.toLocaleString('en-ZA', defaultOptions);
+};
 
 // Shared Components
 const LoadingSpinner = ({ size = 20 }) => (
@@ -196,11 +225,11 @@ export const ProductionTimer = ({ order, onUpdate }) => {
         }
 
         if (order.status === 'in_progress' && !isPaused) {
-            // Use server time directly
-            const serverStartTime = order.start_time || order.started_at;
-            if (serverStartTime) {
-                const startTime = new Date(serverStartTime).getTime();
-                const now = Date.now();
+            // Work with UTC timestamps from server
+            const utcStartTime = order.start_time || order.started_at;
+            if (utcStartTime) {
+                const startTime = new Date(utcStartTime).getTime();
+                const now = Date.now(); // Current UTC time
                 setElapsed(now - startTime);
                 
                 intervalRef.current = setInterval(() => {
@@ -266,7 +295,8 @@ export const ProductionTimer = ({ order, onUpdate }) => {
         const remaining = order.quantity - order.completed_quantity;
         const estimatedMinutes = remaining / rate;
         
-        return new Date(Date.now() + estimatedMinutes * 60 * 1000);
+        // Return UTC timestamp that will be converted to SAST for display
+        return new Date(Date.now() + estimatedMinutes * 60 * 1000).toISOString();
     }, [order, elapsed]);
 
     return (
@@ -311,7 +341,12 @@ export const ProductionTimer = ({ order, onUpdate }) => {
             
             {estimatedCompletion && (
                 <div className="text-sm text-gray-600">
-                    Estimated completion: {formatSASTDate(estimatedCompletion, { includeTimezone: true, timeStyle: 'short' })}
+                    Estimated completion: {formatSASTDate(estimatedCompletion, { 
+                        hour: '2-digit', 
+                        minute: '2-digit',
+                        day: 'numeric',
+                        month: 'short'
+                    })} SAST
                 </div>
             )}
         </div>
@@ -863,7 +898,11 @@ export const MachineMonitor = ({ machines = [] }) => {
                                         
                                         {machine.last_maintenance && (
                                             <div className="text-xs text-gray-500">
-                                                Last maintenance: {formatSASTDate(machine.last_maintenance, { includeTime: false, includeTimezone: false })}
+                                                Last maintenance: {formatSASTDate(machine.last_maintenance, { 
+                                                    year: 'numeric',
+                                                    month: 'short', 
+                                                    day: 'numeric'
+                                                })}
                                             </div>
                                         )}
                                     </div>
