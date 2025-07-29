@@ -285,6 +285,7 @@ const OrderDetailsModal = ({ isOpen, onClose, orderId, orderNumber }) => {
     const [orderDetails, setOrderDetails] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const [tick, setTick] = useState(0);
 
     const fetchOrderDetails = useCallback(async () => {
         if (!orderId || !isOpen) return;
@@ -345,6 +346,14 @@ const OrderDetailsModal = ({ isOpen, onClose, orderId, orderNumber }) => {
         fetchOrderDetails();
     }, [fetchOrderDetails]);
 
+    // Timer for live downtime updates
+    useEffect(() => {
+        if (isOpen && orderDetails?.stops?.some(stop => !stop.end_time)) {
+            const timer = setInterval(() => setTick(t => t + 1), 1000);
+            return () => clearInterval(timer);
+        }
+    }, [isOpen, orderDetails?.stops]);
+
     const calculateTotalDowntime = useCallback((stops) => {
         if (!stops || !Array.isArray(stops) || stops.length === 0) return 0;
         
@@ -365,7 +374,7 @@ const OrderDetailsModal = ({ isOpen, onClose, orderId, orderNumber }) => {
             }
             return total;
         }, 0);
-    }, []);
+    }, [tick]);
 
     const formatDowntimeDuration = useCallback((milliseconds) => {
         if (!milliseconds || milliseconds === 0) return '0m';
@@ -448,7 +457,7 @@ const OrderDetailsModal = ({ isOpen, onClose, orderId, orderNumber }) => {
                                     </div>
                                     <div className="text-center">
                                         <div className="text-2xl font-bold text-green-600 mb-1">
-                                            {Math.round(((orderDetails.order.completed_quantity || 0) / orderDetails.order.quantity) * 100)}%
+                                            {Math.round(((orderDetails.order.actual_quantity || 0) / orderDetails.order.quantity) * 100)}%
                                         </div>
                                         <div className="text-sm text-gray-500 uppercase tracking-wide">Complete</div>
                                     </div>
