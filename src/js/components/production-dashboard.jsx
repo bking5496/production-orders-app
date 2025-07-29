@@ -2,13 +2,65 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { Activity, Clock, Users, AlertTriangle, Pause, Play, RefreshCw, Filter, TrendingUp } from 'lucide-react';
 import API from '../core/api';
 import { Icon } from './layout-components.jsx';
-// Removed timezone utilities - using server time directly
+
+// SAST Timezone Utilities (UTC+2) - Same as labor planner
+const SAST_OFFSET_HOURS = 2;
+
+// Convert UTC to SAST for display
+const convertUTCToSAST = (utcDateString) => {
+    if (!utcDateString) return null;
+    const utcDate = new Date(utcDateString);
+    const sastDate = new Date(utcDate.getTime() + (SAST_OFFSET_HOURS * 60 * 60 * 1000));
+    return sastDate;
+};
+
+// Convert SAST to UTC for API calls
+const convertSASTToUTC = (sastDateString) => {
+    if (!sastDateString) return null;
+    const sastDate = new Date(sastDateString);
+    const utcDate = new Date(sastDate.getTime() - (SAST_OFFSET_HOURS * 60 * 60 * 1000));
+    return utcDate.toISOString();
+};
+
+// Format SAST date for display
+const formatSASTDate = (utcDateString, options = {}) => {
+    if (!utcDateString) return 'N/A';
+    const sastDate = convertUTCToSAST(utcDateString);
+    if (!sastDate) return 'N/A';
+    
+    const defaultOptions = {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        timeZone: 'Africa/Johannesburg',
+        ...options
+    };
+    
+    return sastDate.toLocaleString('en-ZA', defaultOptions);
+};
+
+// Format SAST time only
+const formatSASTTime = (utcDateString) => {
+    if (!utcDateString) return 'N/A';
+    const sastDate = convertUTCToSAST(utcDateString);
+    if (!sastDate) return 'N/A';
+    
+    return sastDate.toLocaleTimeString('en-ZA', {
+        hour: '2-digit',
+        minute: '2-digit',
+        timeZone: 'Africa/Johannesburg'
+    });
+};
 
 // Helper to format time from a start date to now, creating a running timer effect
-const formatDuration = (startTime) => {
-    if (!startTime) return '00:00:00';
-    // Use server time directly
-    const start = new Date(startTime).getTime();
+const formatDuration = (utcStartTime) => {
+    if (!utcStartTime) return '00:00:00';
+    
+    // Convert UTC start time to timestamp
+    const start = new Date(utcStartTime).getTime();
+    // Get current UTC time
     const now = Date.now();
     const diff = Math.max(0, now - start);
 
@@ -22,7 +74,8 @@ const formatDuration = (startTime) => {
 // Helper to calculate efficiency percentage
 const calculateEfficiency = (machine) => {
     if (!machine.start_time || machine.status !== 'in_use') return 0;
-    // Use server time directly
+    
+    // Work with UTC timestamps
     const startTime = new Date(machine.start_time).getTime();
     const runtime = Date.now() - startTime;
     const expectedProduction = (runtime / 3600000) * (machine.production_rate || 60);
