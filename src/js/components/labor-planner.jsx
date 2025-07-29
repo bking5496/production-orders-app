@@ -862,35 +862,29 @@ export function LaborManagementSystem() {
         }
     };
 
-    // Copy assignments from previous day
-    const copyFromPreviousDay = async () => {
-        const previousDate = new Date(selectedDate);
-        previousDate.setDate(previousDate.getDate() - 1);
-        const prevDateStr = previousDate.toISOString().split('T')[0];
+    // Cancel all assignments for the day
+    const cancelDayLabour = async () => {
+        const dayAssignments = assignments.filter(a => a.assignment_date === selectedDate);
+        
+        if (dayAssignments.length === 0) {
+            showNotification('No assignments found for this date', 'warning');
+            return;
+        }
+
+        if (!window.confirm(`Are you sure you want to cancel all ${dayAssignments.length} assignments for ${selectedDate}? This action cannot be undone.`)) {
+            return;
+        }
         
         try {
-            const prevAssignments = await API.get(`/planner/assignments?date=${prevDateStr}`);
-            const filteredPrev = prevAssignments.filter(a => a.shift === selectedShift);
-            
-            if (filteredPrev.length === 0) {
-                showNotification('No assignments found for previous day', 'warning');
-                return;
-            }
-
-            const promises = filteredPrev.map(assignment =>
-                API.post('/planner/assignments', {
-                    employee_id: assignment.employee_id,
-                    machine_id: assignment.machine_id,
-                    shift: selectedShift,
-                    assignment_date: selectedDate
-                })
+            const promises = dayAssignments.map(assignment =>
+                API.delete(`/planner/assignments/${assignment.id}`)
             );
             
             await Promise.all(promises);
             fetchData(selectedDate);
-            showNotification(`Copied ${filteredPrev.length} assignments from ${prevDateStr}`, 'success');
+            showNotification(`Cancelled ${dayAssignments.length} assignments for ${selectedDate}`, 'success');
         } catch (error) {
-            showNotification('Failed to copy assignments: ' + error.message, 'danger');
+            showNotification('Failed to cancel assignments: ' + error.message, 'danger');
         }
     };
 
@@ -952,209 +946,151 @@ export function LaborManagementSystem() {
 
             {/* Planning View */}
             {currentView === 'planning' && (
-                <div className="space-y-6">
-                    <Card className="p-6">
-                        <div className="flex items-center gap-3 mb-6">
-                            <ClipboardList className="w-8 h-8 text-blue-500" />
-                            <h2 className="text-2xl font-bold">Labor Planning</h2>
-                        </div>
-
-                        {/* Supervisor Assignment */}
-                        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-                            <div className="flex items-center justify-between mb-3">
-                                <div className="flex items-center gap-3">
-                                    <UserCheck className="w-5 h-5 text-blue-600" />
-                                    <div>
-                                        <p className="font-medium text-blue-800">Supervisors on Duty</p>
-                                        <p className="text-sm text-blue-600">{selectedDate}</p>
-                                    </div>
-                                </div>
-                                <Button 
-                                    variant="outline" 
-                                    size="sm"
-                                    onClick={() => setShowSupervisorModal(true)}
-                                >
-                                    <PlusCircle className="w-4 h-4" />
-                                    Assign Supervisor
-                                </Button>
-                            </div>
-                            
-                            {/* Display current supervisors */}
-                            {supervisorsOnDuty.length > 0 ? (
-                                <div className="flex flex-wrap gap-2">
-                                    {supervisorsOnDuty.map(supervisor => (
-                                        <div key={supervisor.id} className="bg-blue-100 px-3 py-1 rounded-full flex items-center gap-2">
-                                            <span className="text-sm font-medium text-blue-800">
-                                                {supervisor.fullName || supervisor.username}
-                                            </span>
-                                            <button
-                                                onClick={() => removeSupervisor(supervisor.id)}
-                                                className="text-blue-600 hover:text-red-600 transition-colors"
-                                            >
-                                                <X className="w-3 h-3" />
-                                            </button>
-                                        </div>
-                                    ))}
-                                </div>
-                            ) : (
-                                <p className="text-sm text-blue-600 italic">No supervisors assigned for this shift</p>
-                            )}
-                        </div>
-
-                        {/* Weekly Planning */}
-                        <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
-                            <div className="flex items-center justify-between">
-                                <div className="flex items-center gap-3">
-                                    <Calendar className="w-5 h-5 text-green-600" />
-                                    <div>
-                                        <p className="font-medium text-green-800">Weekly Labor Planning</p>
-                                        <p className="text-sm text-green-600">Plan labor for multiple days ahead</p>
-                                    </div>
-                                </div>
-                                <Button 
-                                    variant="outline" 
-                                    size="sm"
-                                    onClick={openWeeklyPlanModal}
-                                    className="border-green-300 text-green-700 hover:bg-green-100"
-                                >
-                                    <Calendar className="w-4 h-4" />
-                                    Plan Week
-                                </Button>
-                            </div>
-                        </div>
-
-                        {/* Enhanced Controls */}
-                        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">Machine</label>
-                                <select 
-                                    value={selectedMachine} 
-                                    onChange={e => setSelectedMachine(e.target.value)} 
-                                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                >
-                                    <option value="">Select Machine...</option>
-                                    {machines.map(m => (
-                                        <option key={m.id} value={m.id}>{m.name} ({m.type})</option>
-                                    ))}
-                                </select>
-                            </div>
-                            
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">Shift</label>
-                                <select 
-                                    value={selectedShift} 
-                                    onChange={e => setSelectedShift(e.target.value)} 
-                                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                >
-                                    <option value="day">Day Shift (6AM - 6PM)</option>
-                                    <option value="night">Night Shift (6PM - 6AM)</option>
-                                </select>
-                            </div>
-                            
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">Date</label>
+                <div className="space-y-4">
+                    {/* Quick Controls */}
+                    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+                        <div className="flex flex-wrap items-center gap-4">
+                            <div className="flex items-center gap-2 text-sm">
+                                <Calendar className="w-4 h-4 text-gray-400" />
                                 <input 
                                     type="date" 
                                     value={selectedDate} 
                                     onChange={e => setSelectedDate(e.target.value)} 
-                                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    className="border-0 bg-transparent text-gray-700 font-medium focus:ring-0 p-0"
                                 />
                             </div>
-
-                            <div className="flex items-end">
-                                <Button 
-                                    variant="outline" 
-                                    onClick={copyFromPreviousDay}
-                                    className="w-full"
-                                    disabled={!selectedShift}
-                                >
-                                    <Copy className="w-4 h-4" />
-                                    Copy Previous Day
+                            <div className="h-5 w-px bg-gray-200"></div>
+                            <select 
+                                value={selectedShift} 
+                                onChange={e => setSelectedShift(e.target.value)} 
+                                className="border-0 bg-transparent text-gray-700 font-medium focus:ring-0 p-0 text-sm"
+                            >
+                                <option value="day">Day Shift</option>
+                                <option value="night">Night Shift</option>
+                            </select>
+                            <div className="ml-auto flex items-center gap-2">
+                                <Button variant="ghost" size="sm" onClick={openWeeklyPlanModal}>
+                                    <Calendar className="w-4 h-4" />
+                                    Weekly
+                                </Button>
+                                <Button variant="ghost" size="sm" onClick={() => setShowSupervisorModal(true)}>
+                                    <UserCheck className="w-4 h-4" />
+                                    Supervisors
+                                </Button>
+                                <Button variant="danger" size="sm" onClick={cancelDayLabour}>
+                                    <X className="w-4 h-4" />
+                                    Cancel Day
                                 </Button>
                             </div>
                         </div>
+                    </div>
 
-                        {selectedMachine && (
-                            <div className="border-t pt-6">
-                                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+                    {/* Machine Grid */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+                        {machines.map(machine => {
+                            const assignmentCount = assignments.filter(a => 
+                                a.machine_id == machine.id && 
+                                a.shift === selectedShift && 
+                                a.assignment_date === selectedDate
+                            ).length;
+                            const isSelected = selectedMachine == machine.id;
+                            
+                            return (
+                                <div 
+                                    key={machine.id}
+                                    onClick={() => setSelectedMachine(machine.id)}
+                                    className={`p-3 rounded-lg border-2 cursor-pointer transition-all hover:shadow-md ${
+                                        isSelected 
+                                            ? 'border-blue-500 bg-blue-50 shadow-md' 
+                                            : 'border-gray-200 bg-white hover:border-gray-300'
+                                    }`}
+                                >
+                                    <div className="flex items-center justify-between mb-2">
+                                        <h3 className="font-medium text-gray-900 text-sm">{machine.name}</h3>
+                                        <div className={`w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold ${
+                                            assignmentCount > 0 ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'
+                                        }`}>
+                                            {assignmentCount}
+                                        </div>
+                                    </div>
+                                    <p className="text-xs text-gray-500">{machine.type}</p>
+                                    <p className="text-xs text-gray-400">{machine.environment}</p>
+                                </div>
+                            );
+                        })}
+                    </div>
+
+                    {/* Worker Assignment Panel */}
+                    {selectedMachine && (
+                        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+                            <div className="flex items-center justify-between mb-4">
+                                <div className="flex items-center gap-3">
+                                    <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                                        <Settings className="w-4 h-4 text-blue-600" />
+                                    </div>
                                     <div>
-                                        <h3 className="text-xl font-semibold text-gray-800">
-                                            Assigned Workers
-                                            <Badge variant="info" className="ml-2">
-                                                {currentAssignments.length} assigned
-                                            </Badge>
+                                        <h3 className="font-medium text-gray-900 text-sm">
+                                            {machines.find(m => m.id == selectedMachine)?.name}
                                         </h3>
-                                        <p className="text-gray-600 text-sm mt-1">
-                                            {machines.find(m => m.id == selectedMachine)?.name} - {selectedShift} shift
+                                        <p className="text-xs text-gray-500">
+                                            {currentAssignments.length} workers • {selectedShift} shift
                                         </p>
                                     </div>
-                                    
-                                    <div className="flex items-center gap-2">
-                                        <Button 
-                                            variant={bulkAssignMode ? "warning" : "ghost"}
-                                            onClick={() => setBulkAssignMode(!bulkAssignMode)}
-                                            size="sm"
-                                        >
-                                            {bulkAssignMode ? <MinusCircle className="w-4 h-4" /> : <PlusCircle className="w-4 h-4" />}
-                                            {bulkAssignMode ? 'Cancel Bulk' : 'Bulk Assign'}
-                                        </Button>
-                                        
-                                        {bulkAssignMode && selectedEmployees.length > 0 && (
-                                            <Button onClick={handleBulkAssign} size="sm">
-                                                Assign {selectedEmployees.length} Workers
-                                            </Button>
-                                        )}
-                                        
-                                        <Button onClick={() => setShowEmployeeModal(true)}>
-                                            <Plus className="w-4 h-4" />
-                                            Add Worker
-                                        </Button>
-                                    </div>
                                 </div>
-
-                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                    {currentAssignments.map(assignment => (
-                                        <Card key={assignment.id} hover className="p-4">
-                                            <div className="flex justify-between items-start">
-                                                <div className="flex-1">
-                                                    <div className="flex items-center gap-2 mb-2">
-                                                        <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                                                            <Users className="w-5 h-5 text-blue-600" />
-                                                        </div>
-                                                        <div>
-                                                            <p className="font-semibold text-gray-800">
-                                                                {assignment.fullName || assignment.username}
-                                                            </p>
-                                                            <p className="text-sm text-gray-500">
-                                                                {assignment.employee_code} • {assignment.role}
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                    <Badge variant="success">{assignment.status}</Badge>
-                                                </div>
-                                                <Button 
-                                                    variant="ghost" 
-                                                    size="sm"
-                                                    onClick={() => removeAssignment(assignment.id)}
-                                                    className="text-red-500 hover:text-red-700 hover:bg-red-50"
-                                                >
-                                                    <Trash2 className="w-4 h-4" />
-                                                </Button>
-                                            </div>
-                                        </Card>
-                                    ))}
-                                    
-                                    {currentAssignments.length === 0 && (
-                                        <div className="col-span-full text-center py-8 text-gray-500">
-                                            <Users className="w-12 h-12 mx-auto mb-3 text-gray-300" />
-                                            <p>No workers assigned yet</p>
-                                            <p className="text-sm">Click "Add Worker" to get started</p>
-                                        </div>
-                                    )}
-                                </div>
+                                
+                                <Button onClick={() => setShowEmployeeModal(true)} size="sm">
+                                    <Plus className="w-4 h-4" />
+                                    Add
+                                </Button>
                             </div>
-                        )}
-                    </Card>
+
+                            {currentAssignments.length > 0 ? (
+                                <div className="space-y-2">
+                                    {currentAssignments.map(assignment => (
+                                        <div key={assignment.id} className="flex items-center justify-between p-2 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                                            <div className="flex items-center gap-3">
+                                                <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
+                                                    <span className="text-blue-600 font-medium text-xs">
+                                                        {assignment.employee_code?.slice(0, 2) || assignment.username?.slice(0, 2).toUpperCase()}
+                                                    </span>
+                                                </div>
+                                                <div>
+                                                    <p className="font-medium text-gray-900 text-xs">
+                                                        {assignment.fullName || assignment.username}
+                                                    </p>
+                                                    <p className="text-xs text-gray-500">
+                                                        {assignment.employee_code} • {assignment.role}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <Button 
+                                                variant="ghost" 
+                                                size="sm"
+                                                onClick={() => removeAssignment(assignment.id)}
+                                                className="text-red-500 hover:text-red-700 hover:bg-red-50 p-1"
+                                            >
+                                                <X className="w-3 h-3" />
+                                            </Button>
+                                        </div>
+                                    ))}
+                                </div>
+                            ) : (
+                                <div className="text-center py-6">
+                                    <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                                        <Users className="w-6 h-6 text-gray-400" />
+                                    </div>
+                                    <p className="text-gray-500 text-xs mb-2">No workers assigned</p>
+                                    <Button 
+                                        variant="outline" 
+                                        size="sm" 
+                                        onClick={() => setShowEmployeeModal(true)}
+                                    >
+                                        Assign Worker
+                                    </Button>
+                                </div>
+                            )}
+                        </div>
+                    )}
                 </div>
             )}
 
