@@ -498,7 +498,7 @@ apiRouter.get('/production/active', authenticateToken, async (req, res) => { res
 // Downtime Reporting Endpoint
 apiRouter.get('/reports/downtime', authenticateToken, async (req, res) => {
     try {
-        const { start_date, end_date, machine_id, category } = req.query;
+        const { start_date, end_date, machine_id, category, order_id } = req.query;
         
         let query = `
             SELECT 
@@ -540,6 +540,11 @@ apiRouter.get('/reports/downtime', authenticateToken, async (req, res) => {
         if (category) {
             query += ' AND ps.category = ?';
             params.push(category);
+        }
+        
+        if (order_id) {
+            query += ' AND ps.order_id = ?';
+            params.push(order_id);
         }
         
         query += ' ORDER BY ps.start_time DESC';
