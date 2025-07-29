@@ -378,7 +378,7 @@ export default function LabourLayoutPage() {
                                 <span className="cursor-pointer hover:text-white transition-colors" onClick={() => window.location.href = `/labor-planner?date=${selectedDate}`}>Labor Planner</span>
                                 <span>›</span>
                                 <span className="text-white font-medium">Layout View</span>
-                                <span className="ml-2 px-2 py-1 bg-green-500/20 text-green-200 rounded-full text-xs">Live Data</span>
+                                <span className="ml-2 px-2 py-1 bg-green-500 bg-opacity-20 text-green-200 rounded-full text-xs">Live Data</span>
                             </div>
                             <h1 className="text-2xl font-bold flex items-center gap-3">
                                 <Users className="w-8 h-8" />
@@ -387,7 +387,7 @@ export default function LabourLayoutPage() {
                             <p className="text-blue-100 mt-1">Real-time workforce management and reporting</p>
                         </div>
                         <div className="flex flex-wrap items-center gap-3">
-                            <div className="bg-white/10 backdrop-blur-sm rounded-lg px-3 py-2 flex items-center gap-2">
+                            <div className="bg-white bg-opacity-10 backdrop-blur-sm rounded-lg px-3 py-2 flex items-center gap-2">
                                 <Calendar className="w-4 h-4" />
                                 <input 
                                     type="date" 
@@ -412,7 +412,7 @@ export default function LabourLayoutPage() {
                             </button>
                             <button 
                                 onClick={() => fetchRosterForDate(selectedDate)}
-                                className="bg-white/10 hover:bg-white/20 backdrop-blur-sm px-4 py-2 rounded-lg flex items-center gap-2 text-sm font-medium transition-colors"
+                                className="bg-white bg-opacity-10 hover:bg-white hover:bg-opacity-20 backdrop-blur-sm px-4 py-2 rounded-lg flex items-center gap-2 text-sm font-medium transition-colors"
                             >
                                 <RefreshCw className="w-4 h-4" />
                                 Refresh
