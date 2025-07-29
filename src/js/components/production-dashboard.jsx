@@ -2,13 +2,13 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { Activity, Clock, Users, AlertTriangle, Pause, Play, RefreshCw, Filter, TrendingUp } from 'lucide-react';
 import API from '../core/api';
 import { Icon } from './layout-components.jsx';
-import { convertSASTToUTC } from '../utils/timezone.js';
+// Removed timezone utilities - using server time directly
 
 // Helper to format time from a start date to now, creating a running timer effect
 const formatDuration = (startTime) => {
     if (!startTime) return '00:00:00';
-    // Add 2 hours to database timestamp to align with local SAST time
-    const start = new Date(startTime).getTime() + (2 * 60 * 60 * 1000);
+    // Use server time directly
+    const start = new Date(startTime).getTime();
     const now = Date.now();
     const diff = Math.max(0, now - start);
 
@@ -22,8 +22,8 @@ const formatDuration = (startTime) => {
 // Helper to calculate efficiency percentage
 const calculateEfficiency = (machine) => {
     if (!machine.start_time || machine.status !== 'in_use') return 0;
-    // Add 2 hours to database timestamp to align with local SAST time
-    const startTime = new Date(machine.start_time).getTime() + (2 * 60 * 60 * 1000);
+    // Use server time directly
+    const startTime = new Date(machine.start_time).getTime();
     const runtime = Date.now() - startTime;
     const expectedProduction = (runtime / 3600000) * (machine.production_rate || 60);
     const actualProduction = machine.actual_quantity || 0;
@@ -325,10 +325,6 @@ export default function ProductionDashboard() {
                         Refresh
                     </button>
                     
-                    <div className="text-sm text-gray-500">
-                        <Clock className="w-4 h-4 inline mr-1" />
-                        {lastUpdated.toLocaleTimeString()}
-                    </div>
                 </div>
             </div>
 

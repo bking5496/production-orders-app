@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import API from '../core/api';
 import { useAuth } from '../core/auth';
-import { formatSASTDate, getCurrentSASTTime, getSASTRelativeTime, convertSASTToUTC } from '../utils/timezone.js';
+// Removed timezone utilities - using server time directly
 
 // Shared Components
 const LoadingSpinner = ({ size = 20 }) => (
@@ -196,10 +196,10 @@ export const ProductionTimer = ({ order, onUpdate }) => {
         }
 
         if (order.status === 'in_progress' && !isPaused) {
-            // Add 2 hours to database timestamp to align with local SAST time
-            const sastStartTime = order.start_time || order.started_at;
-            if (sastStartTime) {
-                const startTime = new Date(sastStartTime).getTime() + (2 * 60 * 60 * 1000);
+            // Use server time directly
+            const serverStartTime = order.start_time || order.started_at;
+            if (serverStartTime) {
+                const startTime = new Date(serverStartTime).getTime();
                 const now = Date.now();
                 setElapsed(now - startTime);
                 
