@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { 
     Calendar, Users, Search, Plus, CheckCircle, X, ClipboardList, UserCheck, 
     Edit2, Save, Trash2, RefreshCw, Download, Copy, PlusCircle, MinusCircle,
-    FileText, Settings, TrendingUp, AlertCircle
+    FileText, Settings, TrendingUp, AlertCircle, Eye
 } from 'lucide-react';
 import API from '../core/api';
 
@@ -490,7 +490,15 @@ export function LaborManagementSystem() {
     // Planning state
     const [selectedMachine, setSelectedMachine] = useState('');
     const [selectedShift, setSelectedShift] = useState('day');
-    const [selectedDate, setSelectedDate] = useState(getCurrentSASTDateString());
+    const [selectedDate, setSelectedDate] = useState(() => {
+        // Check URL params for date
+        const urlParams = new URLSearchParams(window.location.search);
+        const dateParam = urlParams.get('date');
+        if (dateParam) {
+            return dateParam;
+        }
+        return getCurrentSASTDateString();
+    });
     const [showEmployeeModal, setShowEmployeeModal] = useState(false);
     const [planningSearch, setPlanningSearch] = useState('');
     const [bulkAssignMode, setBulkAssignMode] = useState(false);
@@ -1024,11 +1032,20 @@ export function LaborManagementSystem() {
             <div className="mb-8">
                 <div className="flex justify-between items-center mb-6">
                     <div>
+                        <div className="flex items-center gap-2 text-gray-500 text-sm mb-2">
+                            <span className="text-blue-600 font-medium">Planning Mode</span>
+                            <span>›</span>
+                            <span className="cursor-pointer hover:text-blue-600" onClick={() => window.location.href = `/labour-layout?date=${selectedDate}`}>View Layout</span>
+                        </div>
                         <h1 className="text-2xl font-bold text-gray-900 mb-1">Labor Planner</h1>
                         <p className="text-gray-500 text-sm">Streamlined workforce management</p>
                     </div>
                     
                     <div className="flex items-center gap-2">
+                        <Button variant="outline" size="sm" onClick={() => window.location.href = `/labour-layout?date=${selectedDate}`}>
+                            <Eye className="w-4 h-4" />
+                            View Layout
+                        </Button>
                         <Button variant="ghost" size="sm" onClick={() => setShowExportModal(true)}>
                             <Download className="w-4 h-4" />
                         </Button>

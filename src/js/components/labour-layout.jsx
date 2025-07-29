@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Calendar, Download, RefreshCw, Eye, Users, ClipboardList, UserCheck, Settings } from 'lucide-react';
+import { Calendar, Download, RefreshCw, Eye, Users, ClipboardList, UserCheck, Settings, Edit2 } from 'lucide-react';
 import API from '../core/api';
 import { Icon } from './layout-components.jsx';
 
@@ -208,7 +208,15 @@ export default function LabourLayoutPage() {
         }
     });
     const [loading, setLoading] = useState(true);
-    const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
+    const [selectedDate, setSelectedDate] = useState(() => {
+        // Check URL params for date
+        const urlParams = new URLSearchParams(window.location.search);
+        const dateParam = urlParams.get('date');
+        if (dateParam) {
+            return dateParam;
+        }
+        return new Date().toISOString().split('T')[0];
+    });
     const [showExportModal, setShowExportModal] = useState(false);
     const [exportFormat, setExportFormat] = useState('excel');
     const [selectedShift, setSelectedShift] = useState('all');
@@ -363,6 +371,12 @@ export default function LabourLayoutPage() {
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
                     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                         <div>
+                            <div className="flex items-center gap-2 text-blue-200 text-sm mb-2">
+                                <span className="cursor-pointer hover:text-white transition-colors" onClick={() => window.location.href = `/labor-planner?date=${selectedDate}`}>Labor Planner</span>
+                                <span>›</span>
+                                <span className="text-white font-medium">Layout View</span>
+                                <span className="ml-2 px-2 py-1 bg-green-500/20 text-green-200 rounded-full text-xs">Live Data</span>
+                            </div>
                             <h1 className="text-2xl font-bold flex items-center gap-3">
                                 <Users className="w-8 h-8" />
                                 Daily Labour Layout
@@ -379,6 +393,13 @@ export default function LabourLayoutPage() {
                                     className="bg-transparent text-white placeholder-blue-200 border-none outline-none text-sm font-medium"
                                 />
                             </div>
+                            <button 
+                                onClick={() => window.location.href = `/labor-planner?date=${selectedDate}`}
+                                className="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-lg flex items-center gap-2 text-sm font-medium transition-colors"
+                            >
+                                <Edit2 className="w-4 h-4" />
+                                Plan Workforce
+                            </button>
                             <button 
                                 onClick={() => setShowExportModal(true)}
                                 className="bg-green-500 hover:bg-green-600 px-4 py-2 rounded-lg flex items-center gap-2 text-sm font-medium transition-colors"
