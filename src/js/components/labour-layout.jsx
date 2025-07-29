@@ -33,23 +33,23 @@ const exportToExcel = (rosterData, selectedDate) => {
         const allData = [
             ...rosterData.supervisors.map(s => ({
                 'Type': 'Supervisor',
-                'Name': s.fullName || s.name,
                 'Employee Code': s.employee_code || 'N/A',
+                'Name': s.fullName || s.name,
                 'Machine': 'N/A',
-                'Production Area': 'Supervision',
-                'Position': s.position,
+                'Position': 'Supervisor',
                 'Shift': s.shift,
+                'Company': 'N/A',
                 'Status': s.status,
                 'Date': selectedDate
             })),
             ...rosterData.assignments.map(a => ({
                 'Type': 'Employee',
-                'Name': a.fullName || a.name,
                 'Employee Code': a.employee_code || 'N/A',
+                'Name': a.fullName || a.name,
                 'Machine': a.machine || 'N/A',
-                'Production Area': a.production_area || 'N/A',
-                'Position': a.position,
+                'Position': a.position || a.role || 'Operator',
                 'Shift': a.shift,
+                'Company': a.company || 'N/A',
                 'Status': a.status,
                 'Date': selectedDate
             })),
@@ -109,11 +109,13 @@ const exportToExcel = (rosterData, selectedDate) => {
     if (rosterData.supervisors.length > 0) {
         wsData.push([]);
         wsData.push(['SUPERVISORS ON DUTY']);
-        wsData.push(['Name', 'Employee Code', 'Shift', 'Status']);
+        wsData.push(['Employee Code', 'Name', 'Area', 'Position', 'Shift', 'Status']);
         rosterData.supervisors.forEach(supervisor => {
             wsData.push([
-                supervisor.fullName || supervisor.name,
                 supervisor.employee_code || 'N/A',
+                supervisor.fullName || supervisor.name,
+                'Supervision',
+                'Supervisor',
                 supervisor.shift,
                 supervisor.status
             ]);
@@ -124,14 +126,15 @@ const exportToExcel = (rosterData, selectedDate) => {
     if (rosterData.assignments.length > 0) {
         wsData.push([]);
         wsData.push(['ASSIGNED EMPLOYEES']);
-        wsData.push(['Name', 'Employee Code', 'Machine', 'Production Area', 'Shift', 'Status']);
+        wsData.push(['Employee Code', 'Name', 'Machine', 'Position', 'Shift', 'Company', 'Status']);
         rosterData.assignments.forEach(assignment => {
             wsData.push([
-                assignment.fullName || assignment.name,
                 assignment.employee_code || 'N/A',
+                assignment.fullName || assignment.name,
                 assignment.machine || 'N/A',
-                assignment.production_area || 'N/A',
+                assignment.position || assignment.role || 'Operator',
                 assignment.shift,
+                assignment.company || 'N/A',
                 assignment.status
             ]);
         });
@@ -519,8 +522,10 @@ export default function LabourLayoutPage() {
                                             <table className="min-w-full">
                                                 <thead className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
                                                     <tr>
-                                                        <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider">Name</th>
                                                         <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider">Employee Code</th>
+                                                        <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider">Name</th>
+                                                        <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider">Area</th>
+                                                        <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider">Position</th>
                                                         <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider">Shift</th>
                                                         <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider">Status</th>
                                                     </tr>
@@ -528,6 +533,11 @@ export default function LabourLayoutPage() {
                                                 <tbody className="bg-white divide-y divide-blue-100">
                                                 {rosterData.supervisors.filter(s => selectedShift === 'all' || s.shift === selectedShift).map(supervisor => (
                                                         <tr key={`supervisor-${supervisor.id}`} className="hover:bg-blue-50 transition-colors">
+                                                            <td className="px-6 py-4 whitespace-nowrap">
+                                                                <span className="text-sm text-gray-600 font-mono font-semibold">
+                                                                    {supervisor.employee_code || 'N/A'}
+                                                                </span>
+                                                            </td>
                                                             <td className="px-6 py-4 whitespace-nowrap">
                                                                 <div className="flex items-center">
                                                                     <div className="bg-blue-100 rounded-full p-2 mr-3">
@@ -539,8 +549,13 @@ export default function LabourLayoutPage() {
                                                                 </div>
                                                             </td>
                                                             <td className="px-6 py-4 whitespace-nowrap">
-                                                                <span className="text-sm text-gray-600 font-mono">
-                                                                    {supervisor.employee_code || 'N/A'}
+                                                                <span className="text-sm text-gray-600">
+                                                                    Supervision
+                                                                </span>
+                                                            </td>
+                                                            <td className="px-6 py-4 whitespace-nowrap">
+                                                                <span className="text-sm text-gray-900 font-medium">
+                                                                    Supervisor
                                                                 </span>
                                                             </td>
                                                             <td className="px-6 py-4 whitespace-nowrap">
@@ -565,45 +580,67 @@ export default function LabourLayoutPage() {
                             {/* Assigned Employees Section */}
                             {rosterData.assignments && rosterData.assignments.filter(a => selectedShift === 'all' || a.shift === selectedShift).length > 0 && (
                                 <div>
-                                    <h3 className="text-lg font-semibold text-green-800 mb-3 flex items-center gap-2">
-                                        <ClipboardList className="w-5 h-5" />
+                                    <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                                        <div className="bg-green-100 p-2 rounded-lg">
+                                            <ClipboardList className="w-5 h-5 text-green-600" />
+                                        </div>
                                         Assigned Employees
                                     </h3>
-                                    <div className="bg-green-50 rounded-lg overflow-hidden">
-                                        <table className="min-w-full">
-                                            <thead className="bg-green-100">
-                                                <tr>
-                                                    <th className="px-4 py-2 text-left text-xs font-medium text-green-700 uppercase">Name</th>
-                                                    <th className="px-4 py-2 text-left text-xs font-medium text-green-700 uppercase">Employee Code</th>
-                                                    <th className="px-4 py-2 text-left text-xs font-medium text-green-700 uppercase">Machine</th>
-                                                    <th className="px-4 py-2 text-left text-xs font-medium text-green-700 uppercase">Production Area</th>
-                                                    <th className="px-4 py-2 text-left text-xs font-medium text-green-700 uppercase">Shift</th>
-                                                    <th className="px-4 py-2 text-left text-xs font-medium text-green-700 uppercase">Status</th>
-                                                </tr>
-                                            </thead>
+                                    <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl border border-green-100 overflow-hidden">
+                                        <div className="overflow-x-auto">
+                                            <table className="min-w-full">
+                                                <thead className="bg-gradient-to-r from-green-600 to-emerald-600 text-white">
+                                                    <tr>
+                                                        <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider">Employee Code</th>
+                                                        <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider">Name</th>
+                                                        <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider">Machine</th>
+                                                        <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider">Position</th>
+                                                        <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider">Shift</th>
+                                                        <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider">Company</th>
+                                                        <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider">Status</th>
+                                                    </tr>
+                                                </thead>
                                             <tbody className="bg-white divide-y divide-green-100">
                                                 {rosterData.assignments.filter(a => selectedShift === 'all' || a.shift === selectedShift).map(assignment => (
-                                                    <tr key={`assignment-${assignment.id}`}>
-                                                        <td className="px-4 py-2 whitespace-nowrap text-sm font-medium text-gray-900">
-                                                            {assignment.fullName || assignment.name}
+                                                    <tr key={`assignment-${assignment.id}`} className="hover:bg-green-50 transition-colors">
+                                                        <td className="px-6 py-4 whitespace-nowrap">
+                                                            <span className="text-sm text-gray-600 font-mono font-semibold">
+                                                                {assignment.employee_code || 'N/A'}
+                                                            </span>
                                                         </td>
-                                                        <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-600">
-                                                            {assignment.employee_code || 'N/A'}
+                                                        <td className="px-6 py-4 whitespace-nowrap">
+                                                            <div className="flex items-center">
+                                                                <div className="bg-green-100 rounded-full p-2 mr-3">
+                                                                    <Users className="w-4 h-4 text-green-600" />
+                                                                </div>
+                                                                <div className="text-sm font-semibold text-gray-900">
+                                                                    {assignment.fullName || assignment.name}
+                                                                </div>
+                                                            </div>
                                                         </td>
-                                                        <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-600">
-                                                            {assignment.machine || 'N/A'}
+                                                        <td className="px-6 py-4 whitespace-nowrap">
+                                                            <span className="text-sm text-gray-900 font-medium">
+                                                                {assignment.machine || 'N/A'}
+                                                            </span>
                                                         </td>
-                                                        <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-600">
-                                                            {assignment.production_area || 'N/A'}
+                                                        <td className="px-6 py-4 whitespace-nowrap">
+                                                            <span className="text-sm text-gray-600">
+                                                                {assignment.position || assignment.role || 'Operator'}
+                                                            </span>
                                                         </td>
-                                                        <td className="px-4 py-2 whitespace-nowrap text-sm">
-                                                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${assignment.shift === 'day' ? 'bg-yellow-100 text-yellow-800' : 'bg-blue-100 text-blue-800'}`}>
+                                                        <td className="px-6 py-4 whitespace-nowrap">
+                                                            <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${assignment.shift === 'day' ? 'bg-amber-100 text-amber-800' : 'bg-indigo-100 text-indigo-800'}`}>
                                                                 {assignment.shift === 'day' ? 'Day Shift' : 'Night Shift'}
                                                             </span>
                                                         </td>
-                                                        <td className="px-4 py-2 whitespace-nowrap text-sm">
-                                                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                                                                assignment.status === 'present' ? 'bg-green-100 text-green-800' :
+                                                        <td className="px-6 py-4 whitespace-nowrap">
+                                                            <span className="text-sm text-gray-600">
+                                                                {assignment.company || 'N/A'}
+                                                            </span>
+                                                        </td>
+                                                        <td className="px-6 py-4 whitespace-nowrap">
+                                                            <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${
+                                                                assignment.status === 'present' ? 'bg-emerald-100 text-emerald-800' :
                                                                 assignment.status === 'absent' ? 'bg-red-100 text-red-800' :
                                                                 'bg-yellow-100 text-yellow-800'
                                                             }`}>
