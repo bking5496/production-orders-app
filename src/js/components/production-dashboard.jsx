@@ -307,16 +307,26 @@ const OrderDetailsModal = ({ isOpen, onClose, orderId, orderNumber }) => {
                 throw new Error(`Order with ID ${orderId} not found`);
             }
             
-            // Try to get stops/downtime data - try different possible endpoints
+            // Try to get stops/downtime data from the reports endpoint
             let stops = [];
             try {
-                // Try the downtime reports endpoint with different query formats
+                // Get downtime reports for this specific order
                 const downtimeResponse = await API.get(`/reports/downtime?order_id=${orderId}`);
                 stops = downtimeResponse.data || downtimeResponse || [];
-                console.log('Downtime response:', stops);
+                console.log('Downtime response for order', orderId, ':', stops);
+                
+                // If no data, try without the order_id filter to see all stops
+                if (!Array.isArray(stops) || stops.length === 0) {
+                    console.log('No stops found for specific order, trying all stops...');
+                    const allStopsResponse = await API.get('/reports/downtime');
+                    const allStops = allStopsResponse.data || allStopsResponse || [];
+                    console.log('All stops:', allStops);
+                    // Filter by order_id on the client side
+                    stops = Array.isArray(allStops) ? allStops.filter(stop => stop.order_id == orderId) : [];
+                }
             } catch (downtimeError) {
-                console.log('Downtime endpoint not available, trying alternative...', downtimeError);
-                // If that fails, we'll show empty stops for now
+                console.log('Downtime endpoint error:', downtimeError);
+                stops = [];
             }
             
             setOrderDetails({
@@ -339,9 +349,18 @@ const OrderDetailsModal = ({ isOpen, onClose, orderId, orderNumber }) => {
         if (!stops || !Array.isArray(stops) || stops.length === 0) return 0;
         
         return stops.reduce((total, stop) => {
-            if (stop.end_time && stop.start_time) {
+            if (stop.start_time) {
                 const startTime = new Date(stop.start_time).getTime();
-                const endTime = new Date(stop.end_time).getTime();
+                let endTime;
+                
+                if (stop.end_time) {
+                    // Stop has ended, use the end time
+                    endTime = new Date(stop.end_time).getTime();
+                } else {
+                    // Stop is ongoing, use current time
+                    endTime = Date.now();
+                }
+                
                 return total + (endTime - startTime);
             }
             return total;
@@ -492,9 +511,13 @@ const OrderDetailsModal = ({ isOpen, onClose, orderId, orderNumber }) => {
                                                     </div>
                                                     <div className="text-right ml-4">
                                                         <div className="text-xl font-bold text-red-500">
-                                                            {stop.end_time && stop.start_time ? 
-                                                                formatDowntimeDuration(new Date(stop.end_time).getTime() - new Date(stop.start_time).getTime()) : 
-                                                                <span className="text-orange-500">Ongoing</span>}
+                                                            {stop.start_time ? 
+                                                                formatDowntimeDuration(
+                                                                    stop.end_time ? 
+                                                                        new Date(stop.end_time).getTime() - new Date(stop.start_time).getTime() :
+                                                                        Date.now() - new Date(stop.start_time).getTime()
+                                                                ) : 
+                                                                <span className="text-orange-500">Unknown</span>}
                                                         </div>
                                                     </div>
                                                 </div>
