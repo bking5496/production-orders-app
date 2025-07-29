@@ -128,11 +128,11 @@ const MachineStatusCard = ({ machine, onClick }) => {
 
     const efficiency = calculateEfficiency(machine);
     const isRunning = machine.status === 'in_use';
-    const hasActiveOrder = isRunning && machine.order_number;
+    const hasAssignedOrder = machine.order_number; // Any order assigned (running or stopped)
 
     return (
         <div 
-            className={`rounded-xl shadow-sm border-l-4 ${style.border} ${style.bg} hover:shadow-lg transition-all duration-300 ${hasActiveOrder ? 'cursor-pointer' : 'cursor-default'} transform hover:scale-105 ${hasActiveOrder ? 'relative' : ''}`}
+            className={`rounded-xl shadow-sm border-l-4 ${style.border} ${style.bg} hover:shadow-lg transition-all duration-300 ${hasAssignedOrder ? 'cursor-pointer' : 'cursor-default'} transform hover:scale-105 ${hasAssignedOrder ? 'relative' : ''}`}
             onClick={() => onClick && onClick(machine)}
         >
             <div className="p-4">
@@ -153,13 +153,16 @@ const MachineStatusCard = ({ machine, onClick }) => {
                 </div>
                 
                 <div className="space-y-2">
-                    {isRunning && machine.order_number ? (
+                    {hasAssignedOrder ? (
                         <>
                             <div className="bg-white rounded-lg p-2 relative">
                                 <div className="flex items-center justify-between">
                                     <div className="flex-1">
                                         <p className="text-sm font-semibold text-gray-700 truncate">{machine.order_number}</p>
                                         <p className="text-xs text-gray-500 truncate">{machine.product_name}</p>
+                                        {!isRunning && (
+                                            <p className="text-xs text-red-600 font-medium mt-1">STOPPED</p>
+                                        )}
                                     </div>
                                     <Eye className="w-4 h-4 text-blue-500 flex-shrink-0 ml-2" title="Click to view order details" />
                                 </div>
@@ -290,13 +293,10 @@ const OrderDetailsModal = ({ isOpen, onClose, orderId, orderNumber }) => {
         setError('');
         
         try {
-            // Get order details from the main orders list and downtime reports
+            // Get order details from the main orders list and try to get downtime reports
             console.log('Fetching order details for ID:', orderId);
             
-            const [ordersResponse] = await Promise.all([
-                API.get('/orders')
-            ]);
-            
+            const ordersResponse = await API.get('/orders');
             console.log('Orders response:', ordersResponse);
             
             // Find the specific order from the orders list
@@ -307,10 +307,21 @@ const OrderDetailsModal = ({ isOpen, onClose, orderId, orderNumber }) => {
                 throw new Error(`Order with ID ${orderId} not found`);
             }
             
-            // For now, just show order details without stops data until we find the right endpoint
+            // Try to get stops/downtime data - try different possible endpoints
+            let stops = [];
+            try {
+                // Try the downtime reports endpoint with different query formats
+                const downtimeResponse = await API.get(`/reports/downtime?order_id=${orderId}`);
+                stops = downtimeResponse.data || downtimeResponse || [];
+                console.log('Downtime response:', stops);
+            } catch (downtimeError) {
+                console.log('Downtime endpoint not available, trying alternative...', downtimeError);
+                // If that fails, we'll show empty stops for now
+            }
+            
             setOrderDetails({
                 order: order,
-                stops: [] // Empty for now - we'll add this when we find the right endpoint
+                stops: stops
             });
         } catch (error) {
             console.error('Failed to fetch order details:', error);
@@ -534,15 +545,18 @@ export default function ProductionDashboard() {
     };
 
     const handleMachineClick = (machine) => {
-        // If machine has an active order, show order details
+        // If machine has an assigned order (running or stopped), show order details
         if (machine.order_id && machine.order_number) {
             setSelectedOrder({
                 id: machine.order_id,
-                number: machine.order_number
+                number: machine.order_number,
+                machineId: machine.id,
+                machineName: machine.name,
+                status: machine.status
             });
             setShowOrderModal(true);
         } else {
-            console.log('Machine clicked (no active order):', machine);
+            console.log('Machine clicked (no assigned order):', machine);
         }
     };
 
