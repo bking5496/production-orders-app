@@ -293,13 +293,11 @@ const OrderDetailsModal = ({ isOpen, onClose, orderId, orderNumber }) => {
             // Get order details from the main orders list and downtime reports
             console.log('Fetching order details for ID:', orderId);
             
-            const [ordersResponse, downtimeResponse] = await Promise.all([
-                API.get('/api/orders'),
-                API.get(`/api/reports/downtime?order_id=${orderId}`)
+            const [ordersResponse] = await Promise.all([
+                API.get('/orders')
             ]);
             
             console.log('Orders response:', ordersResponse);
-            console.log('Downtime response:', downtimeResponse);
             
             // Find the specific order from the orders list
             const orders = ordersResponse.data || ordersResponse || [];
@@ -309,9 +307,10 @@ const OrderDetailsModal = ({ isOpen, onClose, orderId, orderNumber }) => {
                 throw new Error(`Order with ID ${orderId} not found`);
             }
             
+            // For now, just show order details without stops data until we find the right endpoint
             setOrderDetails({
                 order: order,
-                stops: downtimeResponse.data || downtimeResponse || []
+                stops: [] // Empty for now - we'll add this when we find the right endpoint
             });
         } catch (error) {
             console.error('Failed to fetch order details:', error);
