@@ -1250,65 +1250,52 @@ export function LaborManagementSystem() {
             )}
 
             {currentView === 'workers' && (
-                <div className="space-y-6">
-                    <Card className="p-6">
-                        <div className="flex items-center justify-between mb-6">
-                            <div className="flex items-center gap-3">
-                                <Users className="w-8 h-8 text-purple-500" />
-                                <div>
-                                    <h2 className="text-2xl font-bold">Worker Management</h2>
-                                    <p className="text-gray-600">Manage employee information and roles</p>
-                                </div>
+                <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                    <div className="flex items-center justify-between mb-6">
+                        <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+                                <Users className="w-5 h-5 text-purple-600" />
                             </div>
-                            <div className="flex items-center gap-3">
-                                <div className="relative">
-                                    <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                                    <input
-                                        type="text"
-                                        placeholder="Search employees..."
-                                        value={workerSearch}
-                                        onChange={e => setWorkerSearch(e.target.value)}
-                                        className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                    />
-                                </div>
-                                <Button variant="outline" onClick={() => setShowExportModal(true)}>
-                                    <Download className="w-4 h-4" />
-                                    Export
-                                </Button>
+                            <div>
+                                <h2 className="text-xl font-semibold text-gray-900">Workers</h2>
+                                <p className="text-gray-500 text-sm">Manage employee information</p>
                             </div>
                         </div>
-
-                        {/* Workers Table */}
-                        <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-                            <div className="bg-gray-50 px-6 py-3 border-b border-gray-200">
-                                <div className="grid grid-cols-5 gap-4 font-medium text-gray-700">
-                                    <div>Employee Code</div>
-                                    <div>Name</div>
-                                    <div>Role</div>
-                                    <div>Company</div>
-                                    <div className="text-right">Actions</div>
-                                </div>
+                        <div className="flex items-center gap-3">
+                            <div className="relative">
+                                <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                                <input
+                                    type="text"
+                                    placeholder="Search employees..."
+                                    value={workerSearch}
+                                    onChange={e => setWorkerSearch(e.target.value)}
+                                    className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                />
                             </div>
-                            <div className="divide-y divide-gray-200">
-                                {filteredEmployees.map(employee => (
-                                    <div key={employee.id} className="px-6 py-4 hover:bg-gray-50 transition-colors">
-                                        <div className="grid grid-cols-5 gap-4 items-center">
-                                            <div className="flex items-center gap-3">
-                                                <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                                                    <span className="text-blue-600 font-medium text-sm">
-                                                        {employee.employee_code?.slice(0, 2) || employee.username?.slice(0, 2).toUpperCase()}
-                                                    </span>
-                                                </div>
-                                                <span className="font-medium text-gray-800">
-                                                    {employee.employee_code || 'N/A'}
-                                                </span>
-                                            </div>
-                                            <div>
-                                                <p className="font-medium text-gray-800">
+                        </div>
+                    </div>
+
+                    {/* Workers List */}
+                    <div className="space-y-2">
+                        {filteredEmployees.map(employee => (
+                            <div key={employee.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                                <div className="flex items-center gap-4">
+                                    <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                                        <span className="text-blue-600 font-medium text-sm">
+                                            {employee.employee_code?.slice(0, 2) || employee.username?.slice(0, 2).toUpperCase()}
+                                        </span>
+                                    </div>
+                                    <div className="flex-1">
+                                        <div className="flex items-center gap-4">
+                                            <div className="min-w-0 flex-1">
+                                                <p className="font-semibold text-gray-900 truncate">
                                                     {employee.fullName || (employee.username ? employee.username.replace(/\./g, ' ').replace(/\b\w/g, l => l.toUpperCase()) : 'N/A')}
                                                 </p>
+                                                <p className="text-sm text-gray-500">
+                                                    {employee.employee_code} • {employee.company || 'N/A'}
+                                                </p>
                                             </div>
-                                            <div>
+                                            <div className="flex items-center gap-3">
                                                 <Badge variant={
                                                     employee.role === 'supervisor' ? 'info' :
                                                     employee.role === 'operator' ? 'success' :
@@ -1318,33 +1305,29 @@ export function LaborManagementSystem() {
                                                     {employee.role?.charAt(0).toUpperCase() + employee.role?.slice(1)}
                                                 </Badge>
                                             </div>
-                                            <div className="text-gray-600">
-                                                {employee.company || 'N/A'}
-                                            </div>
-                                            <div className="flex justify-end gap-2">
-                                                <Button 
-                                                    variant="ghost" 
-                                                    size="sm"
-                                                    onClick={() => setEditingWorker(employee)}
-                                                >
-                                                    <Edit2 className="w-4 h-4" />
-                                                    Edit
-                                                </Button>
-                                            </div>
                                         </div>
                                     </div>
-                                ))}
+                                </div>
+                                <Button 
+                                    variant="ghost" 
+                                    size="sm"
+                                    onClick={() => setEditingWorker(employee)}
+                                >
+                                    <Edit2 className="w-4 h-4" />
+                                </Button>
                             </div>
-                        </div>
+                        ))}
+                    </div>
 
-                        {filteredEmployees.length === 0 && (
-                            <div className="text-center py-12">
-                                <Users className="w-12 h-12 mx-auto mb-4 text-gray-300" />
-                                <p className="text-gray-500">No employees found</p>
-                                <p className="text-sm text-gray-400">Try adjusting your search criteria</p>
+                    {filteredEmployees.length === 0 && (
+                        <div className="text-center py-12">
+                            <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <Users className="w-8 h-8 text-gray-400" />
                             </div>
-                        )}
-                    </Card>
+                            <p className="text-gray-500 text-sm">No employees found</p>
+                            <p className="text-xs text-gray-400">Try adjusting your search criteria</p>
+                        </div>
+                    )}
                 </div>
             )}
             
