@@ -321,7 +321,7 @@ const OrderDetailsModal = ({ isOpen, onClose, orderId, orderNumber }) => {
             
             setOrderDetails({
                 order: order,
-                stops: stops
+                stops: Array.isArray(stops) ? stops : []
             });
         } catch (error) {
             console.error('Failed to fetch order details:', error);
@@ -461,7 +461,7 @@ const OrderDetailsModal = ({ isOpen, onClose, orderId, orderNumber }) => {
                                 </div>
 
                                 {/* Detailed Stop History - Streamlined */}
-                                {orderDetails.stops.length === 0 ? (
+                                {(!orderDetails.stops || !Array.isArray(orderDetails.stops) || orderDetails.stops.length === 0) ? (
                                     <div className="text-center py-8 text-gray-400">
                                         <Clock className="w-12 h-12 mx-auto mb-3 opacity-50" />
                                         <p className="text-sm">No production stops recorded</p>
