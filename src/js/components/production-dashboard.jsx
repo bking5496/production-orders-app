@@ -312,14 +312,14 @@ const OrderDetailsModal = ({ isOpen, onClose, orderId, orderNumber }) => {
             try {
                 // Get downtime reports for this specific order
                 const downtimeResponse = await API.get(`/reports/downtime?order_id=${orderId}`);
-                stops = downtimeResponse.data || downtimeResponse || [];
-                console.log('Downtime response for order', orderId, ':', stops);
+                stops = downtimeResponse.records || downtimeResponse.data?.records || [];
+                console.log('Downtime response for order', orderId, ':', downtimeResponse);
                 
                 // If no data, try without the order_id filter to see all stops
                 if (!Array.isArray(stops) || stops.length === 0) {
                     console.log('No stops found for specific order, trying all stops...');
                     const allStopsResponse = await API.get('/reports/downtime');
-                    const allStops = allStopsResponse.data || allStopsResponse || [];
+                    const allStops = allStopsResponse.records || allStopsResponse.data?.records || [];
                     console.log('All stops:', allStops);
                     // Filter by order_id on the client side
                     stops = Array.isArray(allStops) ? allStops.filter(stop => stop.order_id == orderId) : [];
