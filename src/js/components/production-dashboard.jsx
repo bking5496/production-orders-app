@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { Activity, Clock, Users, AlertTriangle, Pause, Play, RefreshCw, Filter, TrendingUp } from 'lucide-react';
+import { Activity, Clock, Users, AlertTriangle, Pause, Play, RefreshCw, Filter, TrendingUp, Eye, X } from 'lucide-react';
 import API from '../core/api';
 import { Icon } from './layout-components.jsx';
 
@@ -58,10 +58,9 @@ const formatSASTTime = (utcDateString) => {
 const formatDuration = (utcStartTime) => {
     if (!utcStartTime) return '00:00:00';
     
-    // Convert UTC start time to timestamp
+    // Parse UTC start time and work with UTC timestamps throughout
     const start = new Date(utcStartTime).getTime();
-    // Get current UTC time
-    const now = Date.now();
+    const now = new Date().getTime(); // Current UTC time
     const diff = Math.max(0, now - start);
 
     const hours = Math.floor(diff / 3600000).toString().padStart(2, '0');
@@ -129,10 +128,11 @@ const MachineStatusCard = ({ machine, onClick }) => {
 
     const efficiency = calculateEfficiency(machine);
     const isRunning = machine.status === 'in_use';
+    const hasActiveOrder = isRunning && machine.order_number;
 
     return (
         <div 
-            className={`rounded-xl shadow-sm border-l-4 ${style.border} ${style.bg} hover:shadow-lg transition-all duration-300 cursor-pointer transform hover:scale-105`}
+            className={`rounded-xl shadow-sm border-l-4 ${style.border} ${style.bg} hover:shadow-lg transition-all duration-300 ${hasActiveOrder ? 'cursor-pointer' : 'cursor-default'} transform hover:scale-105 ${hasActiveOrder ? 'relative' : ''}`}
             onClick={() => onClick && onClick(machine)}
         >
             <div className="p-4">
@@ -155,9 +155,14 @@ const MachineStatusCard = ({ machine, onClick }) => {
                 <div className="space-y-2">
                     {isRunning && machine.order_number ? (
                         <>
-                            <div className="bg-white rounded-lg p-2">
-                                <p className="text-sm font-semibold text-gray-700 truncate">{machine.order_number}</p>
-                                <p className="text-xs text-gray-500 truncate">{machine.product_name}</p>
+                            <div className="bg-white rounded-lg p-2 relative">
+                                <div className="flex items-center justify-between">
+                                    <div className="flex-1">
+                                        <p className="text-sm font-semibold text-gray-700 truncate">{machine.order_number}</p>
+                                        <p className="text-xs text-gray-500 truncate">{machine.product_name}</p>
+                                    </div>
+                                    <Eye className="w-4 h-4 text-blue-500 flex-shrink-0 ml-2" title="Click to view order details" />
+                                </div>
                             </div>
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center gap-1 text-gray-600">
@@ -272,6 +277,228 @@ const ProductionSummary = ({ machines }) => {
     );
 };
 
+// Order Details Modal Component
+const OrderDetailsModal = ({ isOpen, onClose, orderId, orderNumber }) => {
+    const [orderDetails, setOrderDetails] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
+
+    const fetchOrderDetails = useCallback(async () => {
+        if (!orderId || !isOpen) return;
+        
+        setLoading(true);
+        setError('');
+        
+        try {
+            const [orderResponse, stopsResponse] = await Promise.all([
+                API.get(`/orders/${orderId}`),
+                API.get(`/orders/${orderId}/stops`)
+            ]);
+            
+            setOrderDetails({
+                order: orderResponse.data || orderResponse,
+                stops: stopsResponse.data || stopsResponse || []
+            });
+        } catch (error) {
+            console.error('Failed to fetch order details:', error);
+            setError('Failed to load order details');
+        } finally {
+            setLoading(false);
+        }
+    }, [orderId, isOpen]);
+
+    useEffect(() => {
+        fetchOrderDetails();
+    }, [fetchOrderDetails]);
+
+    const calculateTotalDowntime = useCallback((stops) => {
+        if (!stops || stops.length === 0) return 0;
+        
+        return stops.reduce((total, stop) => {
+            if (stop.end_time && stop.start_time) {
+                const startTime = new Date(stop.start_time).getTime();
+                const endTime = new Date(stop.end_time).getTime();
+                return total + (endTime - startTime);
+            }
+            return total;
+        }, 0);
+    }, []);
+
+    const formatDowntimeDuration = useCallback((milliseconds) => {
+        if (!milliseconds || milliseconds === 0) return '0m';
+        
+        const minutes = Math.floor(milliseconds / 60000);
+        const hours = Math.floor(minutes / 60);
+        
+        if (hours > 0) {
+            return `${hours}h ${minutes % 60}m`;
+        }
+        return `${minutes}m`;
+    }, []);
+
+    if (!isOpen) return null;
+
+    return (
+        <div className="fixed inset-0 z-50 overflow-y-auto" role="dialog" aria-modal="true">
+            <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                <div 
+                    className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+                    onClick={onClose}
+                />
+                <span className="hidden sm:inline-block sm:align-middle sm:h-screen">&#8203;</span>
+                <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full">
+                    <div className="bg-white px-6 pt-6 pb-4">
+                        <div className="flex items-center justify-between mb-6">
+                            <h3 className="text-xl font-semibold text-gray-900">
+                                Order Details: {orderNumber}
+                            </h3>
+                            <button
+                                onClick={onClose}
+                                className="text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded p-1"
+                            >
+                                <X className="w-6 h-6" />
+                            </button>
+                        </div>
+
+                        {loading && (
+                            <div className="flex items-center justify-center py-8">
+                                <RefreshCw className="w-6 h-6 animate-spin text-blue-500 mr-2" />
+                                Loading order details...
+                            </div>
+                        )}
+
+                        {error && (
+                            <div className="p-4 bg-red-50 border border-red-200 rounded-lg mb-4">
+                                <div className="flex items-center">
+                                    <AlertTriangle className="w-5 h-5 text-red-600 mr-2" />
+                                    <span className="text-red-800">{error}</span>
+                                </div>
+                            </div>
+                        )}
+
+                        {orderDetails && !loading && (
+                            <div className="space-y-6">
+                                {/* Order Summary */}
+                                <div className="bg-gray-50 rounded-lg p-4">
+                                    <h4 className="text-lg font-medium mb-4">Production Summary</h4>
+                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                        <div>
+                                            <label className="text-sm text-gray-600">Start Time</label>
+                                            <div className="font-medium">
+                                                {orderDetails.order.start_time ? 
+                                                    formatSASTDate(orderDetails.order.start_time) : 'Not started'}
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <label className="text-sm text-gray-600">Status</label>
+                                            <div className="font-medium capitalize">
+                                                {orderDetails.order.status.replace('_', ' ')}
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <label className="text-sm text-gray-600">Progress</label>
+                                            <div className="font-medium">
+                                                {orderDetails.order.completed_quantity || 0} / {orderDetails.order.quantity} units
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Downtime Summary */}
+                                <div className="bg-red-50 rounded-lg p-4">
+                                    <h4 className="text-lg font-medium mb-4 text-red-800">Downtime Analysis</h4>
+                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                                        <div>
+                                            <label className="text-sm text-gray-600">Total Stops</label>
+                                            <div className="text-2xl font-bold text-red-600">
+                                                {orderDetails.stops.length}
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <label className="text-sm text-gray-600">Total Downtime</label>
+                                            <div className="text-2xl font-bold text-red-600">
+                                                {formatDowntimeDuration(calculateTotalDowntime(orderDetails.stops))}
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <label className="text-sm text-gray-600">Avg Stop Duration</label>
+                                            <div className="text-2xl font-bold text-red-600">
+                                                {orderDetails.stops.length > 0 ? 
+                                                    formatDowntimeDuration(calculateTotalDowntime(orderDetails.stops) / orderDetails.stops.length) : '0m'}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Detailed Stop History */}
+                                <div>
+                                    <h4 className="text-lg font-medium mb-4">Stop History</h4>
+                                    {orderDetails.stops.length === 0 ? (
+                                        <div className="text-center py-8 text-gray-500">
+                                            <Clock className="w-8 h-8 mx-auto mb-2 text-gray-400" />
+                                            <p>No production stops recorded</p>
+                                        </div>
+                                    ) : (
+                                        <div className="space-y-3">
+                                            {orderDetails.stops.map((stop, index) => (
+                                                <div key={index} className="border rounded-lg p-4 hover:bg-gray-50">
+                                                    <div className="flex items-start justify-between">
+                                                        <div className="flex-1">
+                                                            <div className="font-medium text-gray-900 mb-1">
+                                                                {stop.reason.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                                                            </div>
+                                                            {stop.notes && (
+                                                                <p className="text-gray-600 text-sm mb-2">{stop.notes}</p>
+                                                            )}
+                                                            <div className="flex flex-wrap gap-4 text-sm text-gray-500">
+                                                                <div>
+                                                                    <span className="font-medium">Started:</span> {formatSASTTime(stop.start_time)}
+                                                                </div>
+                                                                {stop.end_time && (
+                                                                    <div>
+                                                                        <span className="font-medium">Ended:</span> {formatSASTTime(stop.end_time)}
+                                                                    </div>
+                                                                )}
+                                                                {stop.category && (
+                                                                    <div>
+                                                                        <span className="font-medium">Category:</span> {stop.category}
+                                                                    </div>
+                                                                )}
+                                                            </div>
+                                                        </div>
+                                                        <div className="text-right">
+                                                            <div className="text-lg font-bold text-red-600">
+                                                                {stop.end_time && stop.start_time ? 
+                                                                    formatDowntimeDuration(new Date(stop.end_time).getTime() - new Date(stop.start_time).getTime()) : 
+                                                                    'Ongoing'}
+                                                            </div>
+                                                            <div className="text-xs text-gray-500">Duration</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                    <div className="bg-gray-50 px-6 py-3">
+                        <div className="flex justify-end">
+                            <button
+                                onClick={onClose}
+                                className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
+                            >
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
 export default function ProductionDashboard() {
     const [overviewData, setOverviewData] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -279,6 +506,8 @@ export default function ProductionDashboard() {
     const [error, setError] = useState(null);
     const [filterStatus, setFilterStatus] = useState('all');
     const [refreshing, setRefreshing] = useState(false);
+    const [selectedOrder, setSelectedOrder] = useState(null);
+    const [showOrderModal, setShowOrderModal] = useState(false);
 
     const fetchData = useCallback(async () => {
         try {
@@ -301,8 +530,16 @@ export default function ProductionDashboard() {
     };
 
     const handleMachineClick = (machine) => {
-        // Navigate to machine details or show modal
-        console.log('Machine clicked:', machine);
+        // If machine has an active order, show order details
+        if (machine.order_id && machine.order_number) {
+            setSelectedOrder({
+                id: machine.order_id,
+                number: machine.order_number
+            });
+            setShowOrderModal(true);
+        } else {
+            console.log('Machine clicked (no active order):', machine);
+        }
     };
 
     useEffect(() => {
@@ -399,6 +636,14 @@ export default function ProductionDashboard() {
                     <p className="text-gray-500">No machines found for the selected filter</p>
                 </div>
             )}
+
+            {/* Order Details Modal */}
+            <OrderDetailsModal
+                isOpen={showOrderModal}
+                onClose={() => setShowOrderModal(false)}
+                orderId={selectedOrder?.id}
+                orderNumber={selectedOrder?.number}
+            />
         </div>
     );
 }
