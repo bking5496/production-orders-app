@@ -1,16 +1,36 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { 
     Calendar, Users, Search, Plus, CheckCircle, X, ClipboardList, UserCheck, 
-    Edit2, Save, Trash2, Clock, RefreshCw, User
+    Edit2, Save, Trash2, RefreshCw, Download, Copy, PlusCircle, MinusCircle,
+    FileText, Settings, TrendingUp, AlertCircle
 } from 'lucide-react';
 import API from '../core/api';
 
-// Sleek Card Component
-const Card = ({ children, className = "" }) => (
-    <div className={`bg-white rounded-xl shadow-xs border border-gray-100 ${className}`}>
-        {children}
-    </div>
-);
+// Utility functions for export
+const exportToCSV = (data, filename) => {
+    const csvContent = "data:text/csv;charset=utf-8," + 
+        [Object.keys(data[0]).join(','), ...data.map(row => Object.values(row).join(','))].join('\n');
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement('a');
+    link.setAttribute('href', encodedUri);
+    link.setAttribute('download', filename);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+};
+
+const exportToJSON = (data, filename) => {
+    const jsonStr = JSON.stringify(data, null, 2);
+    const blob = new Blob([jsonStr], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+};
 
 // Professional Excel export with proper formatting
 const exportToExcel = (assignments, machines, employees, date, supervisorsOnDuty) => {
@@ -204,7 +224,7 @@ const exportToExcel = (assignments, machines, employees, date, supervisorsOnDuty
     window.XLSX.writeFile(workbook, filename);
 };
 
-// Enhanced UI Components
+// Sleek UI Components
 const Card = ({ children, className = "", hover = false }) => (
     <div className={`bg-white rounded-xl shadow-sm border border-gray-100 ${hover ? 'hover:shadow-md transition-shadow' : ''} ${className}`}>
         {children}
@@ -282,76 +302,122 @@ const Badge = ({ children, variant = "default", size = "sm" }) => {
     );
 };
 
-// Statistics Summary Component
+// Sleek Statistics Panel
 const StatisticsPanel = ({ assignments, machines, employees }) => {
     const stats = useMemo(() => {
         const totalAssignments = assignments.length;
         const uniqueMachines = new Set(assignments.map(a => a.machine_id)).size;
         const uniqueEmployees = new Set(assignments.map(a => a.employee_id)).size;
-        const shiftDistribution = assignments.reduce((acc, a) => {
-            acc[a.shift] = (acc[a.shift] || 0) + 1;
-            return acc;
-        }, {});
+        const utilizationRate = machines.length > 0 ? Math.round((uniqueMachines / machines.length) * 100) : 0;
         
         return {
             totalAssignments,
             uniqueMachines,
             uniqueEmployees,
-            utilizationRate: machines.length > 0 ? Math.round((uniqueMachines / machines.length) * 100) : 0,
-            shiftDistribution
+            utilizationRate
         };
     }, [assignments, machines, employees]);
 
     return (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-            <Card className="p-4">
+            <div className="bg-white rounded-lg p-4 border border-gray-100">
                 <div className="flex items-center gap-3">
-                    <div className="p-2 bg-blue-100 rounded-lg">
+                    <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
                         <Users className="w-5 h-5 text-blue-600" />
                     </div>
                     <div>
-                        <p className="text-sm text-gray-500">Total Assignments</p>
-                        <p className="text-2xl font-bold text-gray-800">{stats.totalAssignments}</p>
+                        <p className="text-xs text-gray-500 uppercase tracking-wide">Assignments</p>
+                        <p className="text-xl font-bold text-gray-800">{stats.totalAssignments}</p>
                     </div>
                 </div>
-            </Card>
-            <Card className="p-4">
+            </div>
+            <div className="bg-white rounded-lg p-4 border border-gray-100">
                 <div className="flex items-center gap-3">
-                    <div className="p-2 bg-green-100 rounded-lg">
+                    <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
                         <Settings className="w-5 h-5 text-green-600" />
                     </div>
                     <div>
-                        <p className="text-sm text-gray-500">Machines Used</p>
-                        <p className="text-2xl font-bold text-gray-800">{stats.uniqueMachines}</p>
+                        <p className="text-xs text-gray-500 uppercase tracking-wide">Machines</p>
+                        <p className="text-xl font-bold text-gray-800">{stats.uniqueMachines}</p>
                     </div>
                 </div>
-            </Card>
-            <Card className="p-4">
+            </div>
+            <div className="bg-white rounded-lg p-4 border border-gray-100">
                 <div className="flex items-center gap-3">
-                    <div className="p-2 bg-purple-100 rounded-lg">
+                    <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
                         <UserCheck className="w-5 h-5 text-purple-600" />
                     </div>
                     <div>
-                        <p className="text-sm text-gray-500">Employees Assigned</p>
-                        <p className="text-2xl font-bold text-gray-800">{stats.uniqueEmployees}</p>
+                        <p className="text-xs text-gray-500 uppercase tracking-wide">Employees</p>
+                        <p className="text-xl font-bold text-gray-800">{stats.uniqueEmployees}</p>
                     </div>
                 </div>
-            </Card>
-            <Card className="p-4">
+            </div>
+            <div className="bg-white rounded-lg p-4 border border-gray-100">
                 <div className="flex items-center gap-3">
-                    <div className="p-2 bg-orange-100 rounded-lg">
+                    <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center">
                         <TrendingUp className="w-5 h-5 text-orange-600" />
                     </div>
                     <div>
-                        <p className="text-sm text-gray-500">Utilization</p>
-                        <p className="text-2xl font-bold text-gray-800">{stats.utilizationRate}%</p>
+                        <p className="text-xs text-gray-500 uppercase tracking-wide">Utilization</p>
+                        <p className="text-xl font-bold text-gray-800">{stats.utilizationRate}%</p>
                     </div>
                 </div>
-            </Card>
+            </div>
         </div>
     );
 };
 
+
+// Employee Card Component
+const EmployeeCard = ({ employee, onAssign, onRemove, isAssigned, showActions = true }) => (
+    <div className={`p-4 rounded-lg border transition-all ${
+        isAssigned ? 'bg-gray-50 border-gray-200' : 'bg-white border-gray-200 hover:border-blue-300 hover:shadow-sm'
+    }`}>
+        <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                    <span className="text-blue-600 font-medium text-sm">
+                        {employee.employee_code?.slice(0, 2) || employee.username?.slice(0, 2).toUpperCase()}
+                    </span>
+                </div>
+                <div>
+                    <p className="font-medium text-gray-800">
+                        {employee.fullName || employee.username}
+                    </p>
+                    <p className="text-sm text-gray-500">
+                        {employee.employee_code} • {employee.role}
+                    </p>
+                </div>
+            </div>
+            {showActions && (
+                <div>
+                    {isAssigned ? (
+                        <Button variant="ghost" size="sm" onClick={() => onRemove?.(employee.id)}>
+                            <X className="w-4 h-4" />
+                        </Button>
+                    ) : (
+                        <Button variant="primary" size="sm" onClick={() => onAssign?.(employee.id)}>
+                            Assign
+                        </Button>
+                    )}
+                </div>
+            )}
+        </div>
+    </div>
+);
+
+// Machine Card Component
+const MachineCard = ({ machine, assignmentCount = 0, onClick }) => (
+    <div className="bg-white rounded-lg p-4 border border-gray-200 hover:border-blue-300 hover:shadow-sm transition-all cursor-pointer" onClick={() => onClick?.(machine)}>
+        <div className="flex items-center justify-between mb-3">
+            <h3 className="font-medium text-gray-800">{machine.name}</h3>
+            <Badge variant="info">{assignmentCount} assigned</Badge>
+        </div>
+        <p className="text-sm text-gray-500">{machine.type}</p>
+        <p className="text-xs text-gray-400 mt-1">{machine.environment}</p>
+    </div>
+);
 
 // Main Component
 export function LaborManagementSystem() {
