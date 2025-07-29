@@ -160,7 +160,7 @@ const MachineStatusCard = ({ machine, onClick }) => {
                                     <div className="flex-1">
                                         <p className="text-sm font-semibold text-gray-700 truncate">{machine.order_number}</p>
                                         <p className="text-xs text-gray-500 truncate">{machine.product_name}</p>
-                                        {!isRunning && (
+                                        {machine.order_status === 'stopped' && (
                                             <p className="text-xs text-red-600 font-medium mt-1">STOPPED</p>
                                         )}
                                     </div>

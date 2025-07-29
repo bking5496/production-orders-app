@@ -604,9 +604,10 @@ apiRouter.get('/production/floor-overview', authenticateToken, async (req, res) 
             o.id as order_id,
             o.order_number,
             o.product_name,
-            o.start_time
+            o.start_time,
+            o.status as order_status
         FROM machines m
-        LEFT JOIN production_orders o ON m.id = o.machine_id AND o.status IN ('in_progress', 'paused')
+        LEFT JOIN production_orders o ON m.id = o.machine_id AND o.status IN ('in_progress', 'paused', 'stopped')
         ORDER BY m.environment, m.name
     `;
     const overviewData = await dbAll(query);
