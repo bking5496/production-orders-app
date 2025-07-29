@@ -18,6 +18,7 @@ import ProductionDashboard from "./js/components/production-dashboard.jsx";
 import OrdersPage from "./js/components/orders.jsx";
 import MachinesPage from "./js/components/machines.jsx";
 import AnalyticsPage from "./js/components/analytics.jsx";
+import ShiftReports from "./js/components/shift-reports.jsx";
 import UsersPage from "./js/components/users.jsx";
 import { SettingsPage } from "./js/modules/settings-module.jsx";
 import AdminPanel from "./js/components/admin.jsx";
@@ -33,6 +34,7 @@ const routes = [
     { path: '/orders', component: OrdersPage, title: 'Production Orders' },
     { path: '/machines', component: MachinesPage, title: 'Machine Management' },
     { path: '/analytics', component: AnalyticsPage, title: 'Analytics & Reports' },
+    { path: '/shift-reports', component: ShiftReports, title: 'Shift Reports' },
     { path: '/users', component: UsersPage, title: 'User Management' },
     { path: '/settings', component: SettingsPage, title: 'Settings' },
     { path: '/admin', component: AdminPanel, title: 'Admin Panel' },

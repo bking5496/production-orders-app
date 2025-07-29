@@ -74,24 +74,10 @@ CREATE INDEX IF NOT EXISTS idx_shift_reports_date_env ON shift_reports(shift_dat
 CREATE INDEX IF NOT EXISTS idx_handovers_time ON shift_handovers(handover_time);
 
 -- Insert default shift templates for common environments
+-- Insert default shift reports for today (will be skipped if they already exist)
 INSERT OR IGNORE INTO shift_reports (shift_date, shift_type, environment, start_time, end_time, created_at, created_by)
-SELECT 
-    date('now'),
-    'day',
-    environment,
-    datetime('now', 'start of day', '+6 hours'), -- Day shift starts at 6 AM
-    datetime('now', 'start of day', '+18 hours'), -- Ends at 6 PM
-    datetime('now', '+2 hours'),
-    1 -- Admin user
-FROM (SELECT DISTINCT environment FROM machines WHERE environment IS NOT NULL);
-
-INSERT OR IGNORE INTO shift_reports (shift_date, shift_type, environment, start_time, end_time, created_at, created_by)
-SELECT 
-    date('now'),
-    'night',
-    environment,
-    datetime('now', 'start of day', '+18 hours'), -- Night shift starts at 6 PM
-    datetime('now', 'start of day', '+30 hours'), -- Ends at 6 AM next day
-    datetime('now', '+2 hours'),
-    1 -- Admin user
-FROM (SELECT DISTINCT environment FROM machines WHERE environment IS NOT NULL);
+VALUES 
+    (date('now'), 'day', 'packaging', datetime('now', 'start of day', '+6 hours'), datetime('now', 'start of day', '+18 hours'), datetime('now', '+2 hours'), 1),
+    (date('now'), 'night', 'packaging', datetime('now', 'start of day', '+18 hours'), datetime('now', 'start of day', '+30 hours'), datetime('now', '+2 hours'), 1),
+    (date('now'), 'day', 'production', datetime('now', 'start of day', '+6 hours'), datetime('now', 'start of day', '+18 hours'), datetime('now', '+2 hours'), 1),
+    (date('now'), 'night', 'production', datetime('now', 'start of day', '+18 hours'), datetime('now', 'start of day', '+30 hours'), datetime('now', '+2 hours'), 1);

@@ -140,13 +140,23 @@ export default function ProductionControl({ order, onUpdate, className = "" }) {
 
     setLoading(true);
     try {
-      await API.patch(`/orders/${order.id}/quantity`, {
-        actual_quantity: currentQuantity
+      const response = await API.patch(`/orders/${order.id}/quantity`, {
+        actual_quantity: currentQuantity,
+        notes: `Updated from ${order.actual_quantity || 0} to ${currentQuantity}`
       });
+      
+      // Show enhanced feedback with shift tracking info
+      if (response.shiftType && response.quantityChange) {
+        showNotification(
+          `Quantity updated: ${response.quantityChange > 0 ? '+' : ''}${response.quantityChange} units (${response.shiftType} shift)`,
+          'success'
+        );
+      } else {
+        showNotification('Quantity updated successfully');
+      }
       
       setShowQuantityModal(false);
       onUpdate && onUpdate();
-      showNotification('Quantity updated successfully');
     } catch (error) {
       showNotification('Failed to update quantity: ' + error.message, 'danger');
     } finally {

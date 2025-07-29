@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../core/auth';
-import { Calendar, Users, Search, Plus, CheckCircle, X, ClipboardList, UserCheck, Settings, Edit2, Save, Trash2, Upload, Download, Activity, Package, Shield, LayoutDashboard, MoreVertical } from 'lucide-react';
+import { Calendar, Users, Search, Plus, CheckCircle, X, ClipboardList, UserCheck, Settings, Edit2, Save, Trash2, Upload, Download, Activity, Package, Shield, LayoutDashboard, MoreVertical, Clock, BarChart3 } from 'lucide-react';
 
 // Create a map of icons to avoid a large switch statement
 const iconMap = {
@@ -23,6 +23,8 @@ const iconMap = {
     shield: Shield,
     dashboard: LayoutDashboard,
     moreVertical: MoreVertical,
+    clock: Clock,
+    barChart3: BarChart3,
 };
 
 // EXPORT the Icon component so other files can use it
@@ -94,6 +96,7 @@ const Sidebar = ({ isOpen, onClose }) => {
     { name: 'Labor Layout', href: '/labour-layout', icon: 'users' },
     { name: 'Labor Planner', href: '/labor-planner', icon: 'calendar' },
     { name: 'Analytics', href: '/analytics', icon: 'barChart3' },
+    { name: 'Shift Reports', href: '/shift-reports', icon: 'clock' },
     { name: 'Users', href: '/users', icon: 'users' },
     { name: 'Settings', href: '/settings', icon: 'settings' },
     { name: 'Admin', href: '/admin', icon: 'shield' },

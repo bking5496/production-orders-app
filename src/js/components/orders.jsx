@@ -20,10 +20,12 @@ export default function OrdersPage() {
   const [showStartModal, setShowStartModal] = useState(false);
   const [showCompletionModal, setShowCompletionModal] = useState(false);
   const [showStopModal, setShowStopModal] = useState(false);
+  const [showQuantityModal, setShowQuantityModal] = useState(false);
   
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [selectedMachine, setSelectedMachine] = useState('');
   const [stopReason, setStopReason] = useState('');
+  const [currentQuantity, setCurrentQuantity] = useState(0);
 
   const [formData, setFormData] = useState({
     order_number: '', product_name: '', quantity: '', environment: '',
