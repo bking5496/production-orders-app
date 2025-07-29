@@ -1200,168 +1200,286 @@ export function LaborManagementSystem() {
             )}
 
             {currentView === 'attendance' && (
-                <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                    <div className="flex items-center justify-between mb-6">
-                        <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-                                <UserCheck className="w-5 h-5 text-green-600" />
+                <div className="flex-1 p-6">
+                    <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                        <div className="flex items-center justify-between mb-6">
+                            <div className="flex items-center gap-4">
+                                <div className="p-3 bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl">
+                                    <UserCheck className="w-6 h-6 text-white" />
+                                </div>
+                                <div>
+                                    <h2 className="text-2xl font-bold text-slate-900">Attendance Tracking</h2>
+                                    <p className="text-slate-600 text-sm">Monitor daily attendance and presence</p>
+                                </div>
                             </div>
-                            <div>
-                                <h2 className="text-xl font-semibold text-gray-900">Attendance</h2>
-                                <p className="text-gray-500 text-sm">Track daily attendance</p>
+                            <div className="flex items-center gap-3">
+                                <Calendar className="w-5 h-5 text-slate-500" />
+                                <input 
+                                    type="date" 
+                                    value={attendanceDate} 
+                                    onChange={e => setAttendanceDate(e.target.value)} 
+                                    className="px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-medium"
+                                />
                             </div>
                         </div>
-                        <input 
-                            type="date" 
-                            value={attendanceDate} 
-                            onChange={e => setAttendanceDate(e.target.value)} 
-                            className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        />
-                    </div>
 
-                    {/* Attendance List */}
-                    <div className="space-y-2">
-                        {attendanceAssignments.map(assignment => (
-                            <div key={assignment.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-                                <div className="flex items-center gap-4">
-                                    <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                                        <span className="text-blue-600 font-medium text-sm">
-                                            {assignment.employee_code?.slice(0, 2) || assignment.username?.slice(0, 2).toUpperCase()}
-                                        </span>
+                        {/* Summary Stats */}
+                        <div className="grid grid-cols-3 gap-4 mb-6">
+                            <div className="bg-emerald-50 rounded-lg p-4 border border-emerald-200">
+                                <div className="flex items-center gap-3">
+                                    <div className="w-8 h-8 bg-emerald-100 rounded-lg flex items-center justify-center">
+                                        <CheckCircle className="w-4 h-4 text-emerald-600" />
                                     </div>
-                                    <div className="flex-1">
-                                        <p className="font-semibold text-gray-900">
-                                            {assignment.fullName || assignment.username}
-                                        </p>
-                                        <p className="text-sm text-gray-500">
-                                            {assignment.employee_code} • {assignment.machine_name} • {assignment.shift} shift
+                                    <div>
+                                        <p className="text-sm font-medium text-emerald-900">Present</p>
+                                        <p className="text-xl font-bold text-emerald-700">
+                                            {attendanceAssignments.filter(a => a.status === 'present').length}
                                         </p>
                                     </div>
-                                    <div className="flex items-center gap-3">
-                                        <Badge 
-                                            variant={
-                                                assignment.status === 'present' ? 'success' :
-                                                assignment.status === 'absent' ? 'danger' :
-                                                'default'
-                                            }
-                                        >
-                                            {assignment.status === 'present' ? 'Present' :
-                                             assignment.status === 'absent' ? 'Absent' : 'Pending'}
-                                        </Badge>
+                                </div>
+                            </div>
+                            <div className="bg-red-50 rounded-lg p-4 border border-red-200">
+                                <div className="flex items-center gap-3">
+                                    <div className="w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center">
+                                        <X className="w-4 h-4 text-red-600" />
+                                    </div>
+                                    <div>
+                                        <p className="text-sm font-medium text-red-900">Absent</p>
+                                        <p className="text-xl font-bold text-red-700">
+                                            {attendanceAssignments.filter(a => a.status === 'absent').length}
+                                        </p>
                                     </div>
                                 </div>
-                                
-                                <div className="flex gap-2">
-                                    <Button 
-                                        onClick={() => updateAttendanceStatus(assignment.id, 'present')} 
-                                        variant={assignment.status === 'present' ? 'success' : 'ghost'}
-                                        size="sm"
-                                    >
-                                        <CheckCircle className="w-4 h-4" />
-                                    </Button>
-                                    <Button 
-                                        onClick={() => updateAttendanceStatus(assignment.id, 'absent')} 
-                                        variant={assignment.status === 'absent' ? 'danger' : 'ghost'}
-                                        size="sm"
-                                    >
-                                        <X className="w-4 h-4" />
-                                    </Button>
+                            </div>
+                            <div className="bg-amber-50 rounded-lg p-4 border border-amber-200">
+                                <div className="flex items-center gap-3">
+                                    <div className="w-8 h-8 bg-amber-100 rounded-lg flex items-center justify-center">
+                                        <AlertCircle className="w-4 h-4 text-amber-600" />
+                                    </div>
+                                    <div>
+                                        <p className="text-sm font-medium text-amber-900">Pending</p>
+                                        <p className="text-xl font-bold text-amber-700">
+                                            {attendanceAssignments.filter(a => a.status === 'planned' || !a.status).length}
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
-                        ))}
-                    </div>
-                    
-                    {attendanceAssignments.length === 0 && (
-                        <div className="text-center py-12">
-                            <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <UserCheck className="w-8 h-8 text-gray-400" />
-                            </div>
-                            <p className="text-gray-500 text-sm">No assignments found for this date</p>
-                            <p className="text-xs text-gray-400">Check the planning section to create assignments</p>
                         </div>
-                    )}
+
+                        {/* Attendance List */}
+                        <div className="space-y-3">
+                            {attendanceAssignments.map(assignment => (
+                                <div key={assignment.id} className="bg-slate-50 rounded-lg border border-slate-200 p-4 hover:bg-slate-100 transition-colors">
+                                    <div className="flex items-center justify-between">
+                                        <div className="flex items-center gap-4">
+                                            <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full flex items-center justify-center">
+                                                <span className="text-white font-medium">
+                                                    {assignment.employee_code?.slice(0, 2) || assignment.username?.slice(0, 2).toUpperCase()}
+                                                </span>
+                                            </div>
+                                            <div className="flex-1">
+                                                <p className="font-semibold text-slate-900 text-lg">
+                                                    {assignment.fullName || assignment.username}
+                                                </p>
+                                                <div className="flex items-center gap-4 mt-1">
+                                                    <span className="text-sm text-slate-600">{assignment.employee_code}</span>
+                                                    <span className="text-sm text-slate-400">•</span>
+                                                    <span className="text-sm text-slate-600">{assignment.machine_name}</span>
+                                                    <span className="text-sm text-slate-400">•</span>
+                                                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                                        assignment.shift === 'day' 
+                                                            ? 'bg-amber-100 text-amber-700' 
+                                                            : 'bg-blue-100 text-blue-700'
+                                                    }`}>
+                                                        {assignment.shift} shift
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div className="flex items-center gap-3">
+                                                <div className={`px-3 py-1 rounded-full text-sm font-medium ${
+                                                    assignment.status === 'present' ? 'bg-emerald-100 text-emerald-700' :
+                                                    assignment.status === 'absent' ? 'bg-red-100 text-red-700' :
+                                                    'bg-amber-100 text-amber-700'
+                                                }`}>
+                                                    {assignment.status === 'present' ? 'Present' :
+                                                     assignment.status === 'absent' ? 'Absent' : 'Pending'}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div className="flex gap-2">
+                                            <button
+                                                onClick={() => updateAttendanceStatus(assignment.id, 'present')} 
+                                                className={`p-2 rounded-lg border transition-all ${
+                                                    assignment.status === 'present'
+                                                        ? 'bg-emerald-500 border-emerald-500 text-white'
+                                                        : 'bg-white border-slate-200 text-slate-600 hover:bg-emerald-50 hover:border-emerald-200 hover:text-emerald-600'
+                                                }`}
+                                            >
+                                                <CheckCircle className="w-4 h-4" />
+                                            </button>
+                                            <button
+                                                onClick={() => updateAttendanceStatus(assignment.id, 'absent')} 
+                                                className={`p-2 rounded-lg border transition-all ${
+                                                    assignment.status === 'absent'
+                                                        ? 'bg-red-500 border-red-500 text-white'
+                                                        : 'bg-white border-slate-200 text-slate-600 hover:bg-red-50 hover:border-red-200 hover:text-red-600'
+                                                }`}
+                                            >
+                                                <X className="w-4 h-4" />
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    
+                        {attendanceAssignments.length === 0 && (
+                            <div className="text-center py-16">
+                                <div className="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                                    <UserCheck className="w-10 h-10 text-slate-400" />
+                                </div>
+                                <h3 className="text-lg font-medium text-slate-700 mb-2">No assignments found</h3>
+                                <p className="text-slate-500 mb-4">No scheduled assignments for this date</p>
+                                <p className="text-sm text-slate-400">Check the planning board to create assignments first</p>
+                            </div>
+                        )}
                 </div>
             )}
 
             {currentView === 'workers' && (
-                <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                    <div className="flex items-center justify-between mb-6">
-                        <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
-                                <Users className="w-5 h-5 text-purple-600" />
+                <div className="flex-1 p-6">
+                    <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                        <div className="flex items-center justify-between mb-6">
+                            <div className="flex items-center gap-4">
+                                <div className="p-3 bg-gradient-to-r from-purple-500 to-violet-600 rounded-xl">
+                                    <Users className="w-6 h-6 text-white" />
+                                </div>
+                                <div>
+                                    <h2 className="text-2xl font-bold text-slate-900">Team Management</h2>
+                                    <p className="text-slate-600 text-sm">Manage employee information and roles</p>
+                                </div>
                             </div>
-                            <div>
-                                <h2 className="text-xl font-semibold text-gray-900">Workers</h2>
-                                <p className="text-gray-500 text-sm">Manage employee information</p>
+                            <div className="flex items-center gap-3">
+                                <div className="relative">
+                                    <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400" />
+                                    <input
+                                        type="text"
+                                        placeholder="Search employees..."
+                                        value={workerSearch}
+                                        onChange={e => setWorkerSearch(e.target.value)}
+                                        className="pl-10 pr-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent w-64"
+                                    />
+                                </div>
                             </div>
                         </div>
-                        <div className="flex items-center gap-3">
-                            <div className="relative">
-                                <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                                <input
-                                    type="text"
-                                    placeholder="Search employees..."
-                                    value={workerSearch}
-                                    onChange={e => setWorkerSearch(e.target.value)}
-                                    className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                />
-                            </div>
-                        </div>
-                    </div>
 
-                    {/* Workers List */}
-                    <div className="space-y-2">
-                        {filteredEmployees.map(employee => (
-                            <div key={employee.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-                                <div className="flex items-center gap-4">
-                                    <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                                        <span className="text-blue-600 font-medium text-sm">
-                                            {employee.employee_code?.slice(0, 2) || employee.username?.slice(0, 2).toUpperCase()}
-                                        </span>
-                                    </div>
-                                    <div className="flex-1">
-                                        <div className="flex items-center gap-4">
-                                            <div className="min-w-0 flex-1">
-                                                <p className="font-semibold text-gray-900 truncate">
-                                                    {employee.fullName || (employee.username ? employee.username.replace(/\./g, ' ').replace(/\b\w/g, l => l.toUpperCase()) : 'N/A')}
-                                                </p>
-                                                <p className="text-sm text-gray-500">
-                                                    {employee.employee_code} • {employee.company || 'N/A'}
-                                                </p>
+                        {/* Team Stats */}
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                            {['supervisor', 'operator', 'packer', 'technician'].map(role => {
+                                const count = filteredEmployees.filter(e => e.role === role).length;
+                                const colors = {
+                                    supervisor: 'purple',
+                                    operator: 'green', 
+                                    packer: 'blue',
+                                    technician: 'amber'
+                                };
+                                const color = colors[role] || 'slate';
+                                return (
+                                    <div key={role} className={`bg-${color}-50 rounded-lg p-4 border border-${color}-200`}>
+                                        <div className="flex items-center gap-3">
+                                            <div className={`w-8 h-8 bg-${color}-100 rounded-lg flex items-center justify-center`}>
+                                                <Users className={`w-4 h-4 text-${color}-600`} />
                                             </div>
-                                            <div className="flex items-center gap-3">
-                                                <Badge variant={
-                                                    employee.role === 'supervisor' ? 'info' :
-                                                    employee.role === 'operator' ? 'success' :
-                                                    employee.role === 'technician' ? 'warning' :
-                                                    'default'
-                                                }>
-                                                    {employee.role?.charAt(0).toUpperCase() + employee.role?.slice(1)}
-                                                </Badge>
+                                            <div>
+                                                <p className={`text-sm font-medium text-${color}-900 capitalize`}>{role}s</p>
+                                                <p className={`text-xl font-bold text-${color}-700`}>{count}</p>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <Button 
-                                    variant="ghost" 
-                                    size="sm"
-                                    onClick={() => setEditingWorker(employee)}
-                                >
-                                    <Edit2 className="w-4 h-4" />
-                                </Button>
-                            </div>
-                        ))}
-                    </div>
-
-                    {filteredEmployees.length === 0 && (
-                        <div className="text-center py-12">
-                            <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <Users className="w-8 h-8 text-gray-400" />
-                            </div>
-                            <p className="text-gray-500 text-sm">No employees found</p>
-                            <p className="text-xs text-gray-400">Try adjusting your search criteria</p>
+                                );
+                            })}
                         </div>
-                    )}
+
+                        {/* Workers Grid */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            {filteredEmployees.map(employee => {
+                                const isAssigned = currentAssignments.some(a => a.employee_id === employee.id);
+                                return (
+                                    <div key={employee.id} className={`p-4 rounded-lg border-2 transition-all hover:shadow-md ${
+                                        isAssigned 
+                                            ? 'border-green-200 bg-green-50' 
+                                            : 'border-slate-200 bg-white hover:border-slate-300'
+                                    }`}>
+                                        <div className="flex items-center justify-between mb-3">
+                                            <div className="flex items-center gap-3">
+                                                <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full flex items-center justify-center">
+                                                    <span className="text-white font-medium">
+                                                        {employee.employee_code?.slice(0, 2) || employee.username?.slice(0, 2).toUpperCase()}
+                                                    </span>
+                                                </div>
+                                                <div>
+                                                    <p className="font-semibold text-slate-900">
+                                                        {employee.fullName || (employee.username ? employee.username.replace(/\./g, ' ').replace(/\b\w/g, l => l.toUpperCase()) : 'N/A')}
+                                                    </p>
+                                                    <p className="text-sm text-slate-600">
+                                                        {employee.employee_code}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <button
+                                                onClick={() => setEditingWorker(employee)}
+                                                className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-colors"
+                                            >
+                                                <Edit2 className="w-4 h-4" />
+                                            </button>
+                                        </div>
+                                        
+                                        <div className="space-y-2">
+                                            <div className="flex items-center justify-between">
+                                                <span className="text-sm text-slate-600">Role:</span>
+                                                <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                                    employee.role === 'supervisor' ? 'bg-purple-100 text-purple-700' :
+                                                    employee.role === 'operator' ? 'bg-green-100 text-green-700' :
+                                                    employee.role === 'packer' ? 'bg-blue-100 text-blue-700' :
+                                                    employee.role === 'technician' ? 'bg-amber-100 text-amber-700' :
+                                                    'bg-slate-100 text-slate-700'
+                                                }`}>
+                                                    {employee.role?.charAt(0).toUpperCase() + employee.role?.slice(1)}
+                                                </span>
+                                            </div>
+                                            <div className="flex items-center justify-between">
+                                                <span className="text-sm text-slate-600">Company:</span>
+                                                <span className="text-sm font-medium text-slate-900">
+                                                    {employee.company || 'N/A'}
+                                                </span>
+                                            </div>
+                                            <div className="flex items-center justify-between">
+                                                <span className="text-sm text-slate-600">Status:</span>
+                                                <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                                    isAssigned 
+                                                        ? 'bg-green-100 text-green-700' 
+                                                        : 'bg-slate-100 text-slate-700'
+                                                }`}>
+                                                    {isAssigned ? 'Assigned' : 'Available'}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+
+                        {filteredEmployees.length === 0 && (
+                            <div className="col-span-full text-center py-16">
+                                <div className="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                                    <Users className="w-10 h-10 text-slate-400" />
+                                </div>
+                                <h3 className="text-lg font-medium text-slate-700 mb-2">No employees found</h3>
+                                <p className="text-slate-500 mb-4">No employees match your search criteria</p>
+                                <p className="text-sm text-slate-400">Try adjusting your search terms or check if employees exist</p>
+                            </div>
+                        )}
                 </div>
             )}
             
