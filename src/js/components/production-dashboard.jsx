@@ -55,12 +55,12 @@ const formatSASTTime = (utcDateString) => {
 };
 
 // Helper to format time from a start date to now, creating a running timer effect
-const formatDuration = (utcStartTime) => {
-    if (!utcStartTime) return '00:00:00';
+const formatDuration = (sastStartTime) => {
+    if (!sastStartTime) return '00:00:00';
     
-    // Parse UTC start time and work with UTC timestamps throughout
-    const start = new Date(utcStartTime).getTime();
-    const now = new Date().getTime(); // Current UTC time
+    // Server stores SAST time, but we need to subtract 2 more hours for correct display
+    const start = new Date(sastStartTime).getTime();
+    const now = Date.now() - (2 * 60 * 60 * 1000); // Subtract 2 hours from current time
     const diff = Math.max(0, now - start);
 
     const hours = Math.floor(diff / 3600000).toString().padStart(2, '0');
@@ -342,23 +342,25 @@ const OrderDetailsModal = ({ isOpen, onClose, orderId, orderNumber }) => {
         <div className="fixed inset-0 z-50 overflow-y-auto" role="dialog" aria-modal="true">
             <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
                 <div 
-                    className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+                    className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm transition-opacity"
                     onClick={onClose}
                 />
                 <span className="hidden sm:inline-block sm:align-middle sm:h-screen">&#8203;</span>
-                <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full">
-                    <div className="bg-white px-6 pt-6 pb-4">
-                        <div className="flex items-center justify-between mb-6">
-                            <h3 className="text-xl font-semibold text-gray-900">
-                                Order Details: {orderNumber}
-                            </h3>
+                <div className="inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-3xl sm:w-full">
+                    <div className="bg-gradient-to-r from-blue-50 to-indigo-50 px-8 pt-6 pb-4 border-b border-gray-100">
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <h3 className="text-2xl font-bold text-gray-900">{orderNumber}</h3>
+                                <p className="text-sm text-gray-600 mt-1">Production Order Details</p>
+                            </div>
                             <button
                                 onClick={onClose}
-                                className="text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded p-1"
+                                className="text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-full p-2 hover:bg-white/50 transition-colors"
                             >
-                                <X className="w-6 h-6" />
+                                <X className="w-5 h-5" />
                             </button>
                         </div>
+                    </div>
 
                         {loading && (
                             <div className="flex items-center justify-center py-8">
