@@ -357,113 +357,186 @@ export default function LabourLayoutPage() {
     };
 
     return (
-        <div className="p-6 space-y-6">
-            <div className="flex justify-between items-center">
-                <h1 className="text-2xl font-bold text-gray-800">Daily Labour Layout</h1>
-                <div className="flex items-center gap-4">
-                    <div className="flex items-center gap-2">
-                        <Calendar className="w-5 h-5 text-blue-600" />
-                        <input 
-                            type="date" 
-                            value={selectedDate} 
-                            onChange={e => setSelectedDate(e.target.value)} 
-                            className="p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        />
+        <div className="min-h-screen bg-gray-50">
+            {/* Modern Header with gradient */}
+            <div className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white shadow-lg">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                        <div>
+                            <h1 className="text-2xl font-bold flex items-center gap-3">
+                                <Users className="w-8 h-8" />
+                                Daily Labour Layout
+                            </h1>
+                            <p className="text-blue-100 mt-1">Real-time workforce management and reporting</p>
+                        </div>
+                        <div className="flex flex-wrap items-center gap-3">
+                            <div className="bg-white/10 backdrop-blur-sm rounded-lg px-3 py-2 flex items-center gap-2">
+                                <Calendar className="w-4 h-4" />
+                                <input 
+                                    type="date" 
+                                    value={selectedDate} 
+                                    onChange={e => setSelectedDate(e.target.value)} 
+                                    className="bg-transparent text-white placeholder-blue-200 border-none outline-none text-sm font-medium"
+                                />
+                            </div>
+                            <button 
+                                onClick={() => setShowExportModal(true)}
+                                className="bg-green-500 hover:bg-green-600 px-4 py-2 rounded-lg flex items-center gap-2 text-sm font-medium transition-colors"
+                            >
+                                <Download className="w-4 h-4" />
+                                Export
+                            </button>
+                            <button 
+                                onClick={() => fetchRosterForDate(selectedDate)}
+                                className="bg-white/10 hover:bg-white/20 backdrop-blur-sm px-4 py-2 rounded-lg flex items-center gap-2 text-sm font-medium transition-colors"
+                            >
+                                <RefreshCw className="w-4 h-4" />
+                                Refresh
+                            </button>
+                        </div>
                     </div>
-                    <button 
-                        onClick={() => setShowExportModal(true)}
-                        className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-                    >
-                        <Download className="w-4 h-4" />
-                        Export
-                    </button>
-                    <button 
-                        onClick={() => fetchRosterForDate(selectedDate)}
-                        className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                    >
-                        <RefreshCw className="w-4 h-4" />
-                        Refresh
-                    </button>
                 </div>
             </div>
 
-            <div className="bg-white rounded-lg shadow">
-                <div className="p-4 border-b flex justify-between items-center">
-                    <div className="flex items-center gap-3">
-                        <Eye className="w-5 h-5 text-blue-600" />
-                        <div>
-                            <h2 className="text-lg font-semibold">Labour Layout</h2>
-                            <p className="text-sm text-gray-600">{selectedDate} • {((rosterData.summary?.total_supervisors || 0) + (rosterData.summary?.total_assignments || 0) + (rosterData.summary?.total_attendance || 0) + (rosterData.summary?.total_machines_in_use || 0))} total records</p>
+            {/* Main Content */}
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+                {/* Modern Stats Cards */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                    <div className="bg-white rounded-xl shadow-sm border border-blue-100 p-6">
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <p className="text-sm font-medium text-blue-600">Supervisors</p>
+                                <p className="text-2xl font-bold text-gray-900">{rosterData.summary?.total_supervisors || 0}</p>
+                            </div>
+                            <div className="bg-blue-100 p-3 rounded-full">
+                                <UserCheck className="w-6 h-6 text-blue-600" />
+                            </div>
                         </div>
                     </div>
-                </div>
-                {/* Shift Filter */}
-                <div className="p-4 border-b">
-                    <div className="flex items-center gap-4">
-                        <label className="text-sm font-medium text-gray-700">Filter by Shift:</label>
-                        <select 
-                            value={selectedShift} 
-                            onChange={e => setSelectedShift(e.target.value)}
-                            className="p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        >
-                            <option value="all">All Shifts</option>
-                            <option value="day">Day Shift</option>
-                            <option value="night">Night Shift</option>
-                        </select>
-                        <div className="flex items-center gap-6 ml-auto text-sm">
-                            <span className="text-blue-600">Supervisors: {rosterData.summary?.total_supervisors || 0}</span>
-                            <span className="text-green-600">Assignments: {rosterData.summary?.total_assignments || 0}</span>
-                            <span className="text-orange-600">Machines: {rosterData.summary?.total_machines_in_use || 0}</span>
-                            <span className="text-purple-600">Attendance: {rosterData.summary?.total_attendance || 0}</span>
+                    <div className="bg-white rounded-xl shadow-sm border border-green-100 p-6">
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <p className="text-sm font-medium text-green-600">Assignments</p>
+                                <p className="text-2xl font-bold text-gray-900">{rosterData.summary?.total_assignments || 0}</p>
+                            </div>
+                            <div className="bg-green-100 p-3 rounded-full">
+                                <ClipboardList className="w-6 h-6 text-green-600" />
+                            </div>
+                        </div>
+                    </div>
+                    <div className="bg-white rounded-xl shadow-sm border border-orange-100 p-6">
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <p className="text-sm font-medium text-orange-600">Machines Active</p>
+                                <p className="text-2xl font-bold text-gray-900">{rosterData.summary?.total_machines_in_use || 0}</p>
+                            </div>
+                            <div className="bg-orange-100 p-3 rounded-full">
+                                <Settings className="w-6 h-6 text-orange-600" />
+                            </div>
+                        </div>
+                    </div>
+                    <div className="bg-white rounded-xl shadow-sm border border-purple-100 p-6">
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <p className="text-sm font-medium text-purple-600">Attendance</p>
+                                <p className="text-2xl font-bold text-gray-900">{rosterData.summary?.total_attendance || 0}</p>
+                            </div>
+                            <div className="bg-purple-100 p-3 rounded-full">
+                                <Eye className="w-6 h-6 text-purple-600" />
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div className="overflow-auto" style={{maxHeight: '60vh'}}>
-                    {loading ? (
-                        <div className="text-center py-8 text-gray-500">Loading...</div>
-                    ) : (
-                        <div className="space-y-6 p-4">
+                {/* Modern Filter Card */}
+                <div className="bg-white rounded-xl shadow-sm border border-gray-200 mb-6">
+                    <div className="p-6">
+                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                            <div>
+                                <h2 className="text-lg font-semibold text-gray-900">Workforce Overview</h2>
+                                <p className="text-sm text-gray-600 mt-1">{selectedDate} • {((rosterData.summary?.total_supervisors || 0) + (rosterData.summary?.total_assignments || 0) + (rosterData.summary?.total_attendance || 0) + (rosterData.summary?.total_machines_in_use || 0))} total records</p>
+                            </div>
+                            <div className="flex items-center gap-3">
+                                <label className="text-sm font-medium text-gray-700">Shift Filter:</label>
+                                <select 
+                                    value={selectedShift} 
+                                    onChange={e => setSelectedShift(e.target.value)}
+                                    className="bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                >
+                                    <option value="all">All Shifts</option>
+                                    <option value="day">Day Shift</option>
+                                    <option value="night">Night Shift</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Main Content Card */}
+                <div className="bg-white rounded-xl shadow-sm border border-gray-200">
+
+                    <div className="p-6">
+                        {loading ? (
+                            <div className="text-center py-12">
+                                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+                                <p className="text-gray-500 mt-3">Loading workforce data...</p>
+                            </div>
+                        ) : (
+                            <div className="space-y-8">
                             {/* Supervisors Section */}
                             {rosterData.supervisors && rosterData.supervisors.filter(s => selectedShift === 'all' || s.shift === selectedShift).length > 0 && (
                                 <div>
-                                    <h3 className="text-lg font-semibold text-blue-800 mb-3 flex items-center gap-2">
-                                        <Users className="w-5 h-5" />
+                                    <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                                        <div className="bg-blue-100 p-2 rounded-lg">
+                                            <Users className="w-5 h-5 text-blue-600" />
+                                        </div>
                                         Supervisors on Duty
                                     </h3>
-                                    <div className="bg-blue-50 rounded-lg overflow-hidden">
-                                        <table className="min-w-full">
-                                            <thead className="bg-blue-100">
-                                                <tr>
-                                                    <th className="px-4 py-2 text-left text-xs font-medium text-blue-700 uppercase">Name</th>
-                                                    <th className="px-4 py-2 text-left text-xs font-medium text-blue-700 uppercase">Employee Code</th>
-                                                    <th className="px-4 py-2 text-left text-xs font-medium text-blue-700 uppercase">Shift</th>
-                                                    <th className="px-4 py-2 text-left text-xs font-medium text-blue-700 uppercase">Status</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody className="bg-white divide-y divide-blue-100">
-                                                {rosterData.supervisors.filter(s => selectedShift === 'all' || s.shift === selectedShift).map(supervisor => (
-                                                    <tr key={`supervisor-${supervisor.id}`}>
-                                                        <td className="px-4 py-2 whitespace-nowrap text-sm font-medium text-gray-900">
-                                                            {supervisor.fullName || supervisor.name}
-                                                        </td>
-                                                        <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-600">
-                                                            {supervisor.employee_code || 'N/A'}
-                                                        </td>
-                                                        <td className="px-4 py-2 whitespace-nowrap text-sm">
-                                                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${supervisor.shift === 'day' ? 'bg-yellow-100 text-yellow-800' : 'bg-blue-100 text-blue-800'}`}>
-                                                                {supervisor.shift === 'day' ? 'Day Shift' : 'Night Shift'}
-                                                            </span>
-                                                        </td>
-                                                        <td className="px-4 py-2 whitespace-nowrap text-sm">
-                                                            <span className="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                                                {supervisor.status}
-                                                            </span>
-                                                        </td>
+                                    <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-100 overflow-hidden">
+                                        <div className="overflow-x-auto">
+                                            <table className="min-w-full">
+                                                <thead className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
+                                                    <tr>
+                                                        <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider">Name</th>
+                                                        <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider">Employee Code</th>
+                                                        <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider">Shift</th>
+                                                        <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider">Status</th>
                                                     </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
+                                                </thead>
+                                                <tbody className="bg-white divide-y divide-blue-100">
+                                                {rosterData.supervisors.filter(s => selectedShift === 'all' || s.shift === selectedShift).map(supervisor => (
+                                                        <tr key={`supervisor-${supervisor.id}`} className="hover:bg-blue-50 transition-colors">
+                                                            <td className="px-6 py-4 whitespace-nowrap">
+                                                                <div className="flex items-center">
+                                                                    <div className="bg-blue-100 rounded-full p-2 mr-3">
+                                                                        <Users className="w-4 h-4 text-blue-600" />
+                                                                    </div>
+                                                                    <div className="text-sm font-semibold text-gray-900">
+                                                                        {supervisor.fullName || supervisor.name}
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                            <td className="px-6 py-4 whitespace-nowrap">
+                                                                <span className="text-sm text-gray-600 font-mono">
+                                                                    {supervisor.employee_code || 'N/A'}
+                                                                </span>
+                                                            </td>
+                                                            <td className="px-6 py-4 whitespace-nowrap">
+                                                                <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${supervisor.shift === 'day' ? 'bg-amber-100 text-amber-800' : 'bg-indigo-100 text-indigo-800'}`}>
+                                                                    {supervisor.shift === 'day' ? 'Day Shift' : 'Night Shift'}
+                                                                </span>
+                                                            </td>
+                                                            <td className="px-6 py-4 whitespace-nowrap">
+                                                                <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800">
+                                                                    {supervisor.status}
+                                                                </span>
+                                                            </td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
                             )}
@@ -659,8 +732,9 @@ export default function LabourLayoutPage() {
                                     <p className="text-sm">Try selecting a different date or check if data has been entered for this date.</p>
                                 </div>
                             )}
-                        </div>
-                    )}
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
 

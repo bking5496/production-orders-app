@@ -965,25 +965,45 @@ export function LaborManagementSystem() {
         const apiDate = utcDate ? new Date(utcDate).toISOString().split('T')[0] : selectedDate;
         
         const dayAssignments = assignments.filter(a => a.assignment_date === apiDate);
+        const daySupervisors = supervisorsOnDuty; // These are already filtered by date from fetchData
         
-        if (dayAssignments.length === 0) {
-            showNotification('No assignments found for this date', 'warning');
+        const totalItems = dayAssignments.length + daySupervisors.length;
+        
+        if (totalItems === 0) {
+            showNotification('No assignments or supervisors found for this date', 'warning');
             return;
         }
 
         // Display SAST date to user but work with UTC internally
-        if (!window.confirm(`Are you sure you want to cancel all ${dayAssignments.length} assignments for ${selectedDate} (SAST)? This action cannot be undone.`)) {
+        const confirmMessage = daySupervisors.length > 0 
+            ? `Are you sure you want to cancel all ${dayAssignments.length} assignments and ${daySupervisors.length} supervisor assignments for ${selectedDate} (SAST)? This action cannot be undone.`
+            : `Are you sure you want to cancel all ${dayAssignments.length} assignments for ${selectedDate} (SAST)? This action cannot be undone.`;
+            
+        if (!window.confirm(confirmMessage)) {
             return;
         }
         
         try {
-            const promises = dayAssignments.map(assignment =>
-                API.delete(`/planner/assignments/${assignment.id}`)
-            );
+            const promises = [];
+            
+            // Cancel regular employee assignments
+            dayAssignments.forEach(assignment => {
+                promises.push(API.delete(`/planner/assignments/${assignment.id}`));
+            });
+            
+            // Cancel supervisor assignments
+            daySupervisors.forEach(supervisor => {
+                promises.push(API.delete(`/planner/supervisors/${supervisor.id}`));
+            });
             
             await Promise.all(promises);
             fetchData(selectedDate);
-            showNotification(`Cancelled ${dayAssignments.length} assignments for ${selectedDate}`, 'success');
+            
+            const successMessage = daySupervisors.length > 0 
+                ? `Cancelled ${dayAssignments.length} assignments and ${daySupervisors.length} supervisor assignments for ${selectedDate}`
+                : `Cancelled ${dayAssignments.length} assignments for ${selectedDate}`;
+                
+            showNotification(successMessage, 'success');
         } catch (error) {
             showNotification('Failed to cancel assignments: ' + error.message, 'danger');
         }
