@@ -541,6 +541,14 @@ export default function ProductionDashboard() {
             const machinesWithOrders = (data || []).filter(machine => machine.order_number);
             console.log('Machines with orders:', machinesWithOrders);
             
+            // Log all machine statuses to see what's happening
+            console.log('All machine statuses:', (data || []).map(m => ({
+                name: m.name,
+                status: m.status,
+                order_number: m.order_number,
+                order_id: m.order_id
+            })));
+            
             setOverviewData(data || []);
         } catch (error) {
             console.error("Failed to fetch production data:", error);
