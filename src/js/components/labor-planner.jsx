@@ -1344,6 +1344,7 @@ export function LaborManagementSystem() {
                                 <p className="text-sm text-slate-400">Check the planning board to create assignments first</p>
                             </div>
                         )}
+                    </div>
                 </div>
             )}
 
@@ -1376,24 +1377,22 @@ export function LaborManagementSystem() {
 
                         {/* Team Stats */}
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                            {['supervisor', 'operator', 'packer', 'technician'].map(role => {
+                            {[
+                                { role: 'supervisor', bgClass: 'bg-purple-50', borderClass: 'border-purple-200', iconClass: 'bg-purple-100', iconTextClass: 'text-purple-600', titleClass: 'text-purple-900', countClass: 'text-purple-700' },
+                                { role: 'operator', bgClass: 'bg-green-50', borderClass: 'border-green-200', iconClass: 'bg-green-100', iconTextClass: 'text-green-600', titleClass: 'text-green-900', countClass: 'text-green-700' },
+                                { role: 'packer', bgClass: 'bg-blue-50', borderClass: 'border-blue-200', iconClass: 'bg-blue-100', iconTextClass: 'text-blue-600', titleClass: 'text-blue-900', countClass: 'text-blue-700' },
+                                { role: 'technician', bgClass: 'bg-amber-50', borderClass: 'border-amber-200', iconClass: 'bg-amber-100', iconTextClass: 'text-amber-600', titleClass: 'text-amber-900', countClass: 'text-amber-700' }
+                            ].map(({ role, bgClass, borderClass, iconClass, iconTextClass, titleClass, countClass }) => {
                                 const count = filteredEmployees.filter(e => e.role === role).length;
-                                const colors = {
-                                    supervisor: 'purple',
-                                    operator: 'green', 
-                                    packer: 'blue',
-                                    technician: 'amber'
-                                };
-                                const color = colors[role] || 'slate';
                                 return (
-                                    <div key={role} className={`bg-${color}-50 rounded-lg p-4 border border-${color}-200`}>
+                                    <div key={role} className={`${bgClass} rounded-lg p-4 border ${borderClass}`}>
                                         <div className="flex items-center gap-3">
-                                            <div className={`w-8 h-8 bg-${color}-100 rounded-lg flex items-center justify-center`}>
-                                                <Users className={`w-4 h-4 text-${color}-600`} />
+                                            <div className={`w-8 h-8 ${iconClass} rounded-lg flex items-center justify-center`}>
+                                                <Users className={`w-4 h-4 ${iconTextClass}`} />
                                             </div>
                                             <div>
-                                                <p className={`text-sm font-medium text-${color}-900 capitalize`}>{role}s</p>
-                                                <p className={`text-xl font-bold text-${color}-700`}>{count}</p>
+                                                <p className={`text-sm font-medium ${titleClass} capitalize`}>{role}s</p>
+                                                <p className={`text-xl font-bold ${countClass}`}>{count}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -1480,6 +1479,7 @@ export function LaborManagementSystem() {
                                 <p className="text-sm text-slate-400">Try adjusting your search terms or check if employees exist</p>
                             </div>
                         )}
+                    </div>
                 </div>
             )}
             
