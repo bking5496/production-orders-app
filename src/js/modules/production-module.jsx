@@ -207,9 +207,6 @@ export const ProductionTimer = ({ order, onUpdate }) => {
                     setElapsed(Date.now() - startTime);
                 }, 1000);
             }
-        } else {
-            // If not in progress or paused, stop counting
-            setElapsed(0);
         }
 
         return () => {
