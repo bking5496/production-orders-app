@@ -923,8 +923,8 @@ export function LaborManagementSystem() {
                     </div>
                 </div>
 
-                {/* Navigation Tabs */}
-                <div className="flex gap-1 mt-6 bg-gray-100 p-1 rounded-lg w-fit">
+                {/* Modern Tab Navigation */}
+                <div className="flex gap-0 bg-white rounded-xl shadow-sm border border-gray-100 p-1">
                     {[
                         { id: 'planning', label: 'Planning', icon: ClipboardList },
                         { id: 'attendance', label: 'Attendance', icon: UserCheck },
@@ -935,14 +935,14 @@ export function LaborManagementSystem() {
                             <button
                                 key={tab.id}
                                 onClick={() => setCurrentView(tab.id)}
-                                className={`flex items-center gap-2 px-4 py-2 rounded-md font-medium transition-all ${
+                                className={`flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-medium transition-all flex-1 ${
                                     currentView === tab.id 
-                                        ? 'bg-white text-blue-600 shadow-sm' 
-                                        : 'text-gray-600 hover:text-gray-800'
+                                        ? 'bg-blue-500 text-white shadow-sm' 
+                                        : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
                                 }`}
                             >
                                 <Icon className="w-4 h-4" />
-                                {tab.label}
+                                <span className="hidden sm:inline">{tab.label}</span>
                             </button>
                         );
                     })}
