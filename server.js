@@ -1123,6 +1123,187 @@ apiRouter.post('/labour/upload', authenticateToken, upload.single('rosterFile'),
     }
 });
 
+// --- Daily Role Override Routes ---
+
+// Get role overrides for a specific date
+apiRouter.get('/labour/role-overrides', authenticateToken, async (req, res) => {
+    const { date } = req.query;
+    
+    try {
+        const overrides = await dbAll(`
+            SELECT 
+                dro.*,
+                u.username,
+                u.fullName,
+                u.employee_code,
+                assigned_by_user.username as assigned_by_name
+            FROM daily_role_overrides dro
+            JOIN users u ON dro.employee_id = u.id
+            LEFT JOIN users assigned_by_user ON dro.assigned_by = assigned_by_user.id
+            WHERE dro.override_date = ?
+            ORDER BY u.fullName
+        `, [date || new Date().toISOString().split('T')[0]]);
+        
+        res.json(overrides);
+    } catch (error) {
+        console.error('Get role overrides error:', error);
+        res.status(500).json({error: 'Failed to get role overrides'});
+    }
+});
+
+// Create role override for specific date
+apiRouter.post('/labour/role-overrides', 
+    authenticateToken,
+    requireRole(['admin', 'supervisor']),
+    [
+        body('employee_id').isInt({min: 1}).withMessage('Valid employee ID required'),
+        body('override_role').isIn(['operator', 'packer', 'supervisor', 'quality_control']).withMessage('Valid role required'),
+        body('override_date').isISO8601().withMessage('Valid date required'),
+        body('shift_type').optional().isIn(['day', 'night', 'both']).withMessage('Valid shift type required'),
+        body('notes').optional().isLength({max: 500}).withMessage('Notes too long')
+    ],
+    handleValidationErrors,
+    async (req, res) => {
+        const { employee_id, override_role, override_date, shift_type = 'both', notes } = req.body;
+        
+        try {
+            // Get employee's original role
+            const employee = await dbGet('SELECT role FROM users WHERE id = ?', [employee_id]);
+            if (!employee) {
+                return res.status(404).json({error: 'Employee not found'});
+            }
+            
+            // Create role override
+            const result = await dbRun(`
+                INSERT INTO daily_role_overrides (
+                    employee_id, original_role, override_role, override_date, 
+                    shift_type, assigned_by, notes
+                ) VALUES (?, ?, ?, ?, ?, ?, ?)
+            `, [employee_id, employee.role, override_role, override_date, shift_type, req.user.id, notes]);
+            
+            res.json({
+                message: 'Role override created successfully',
+                override_id: result.lastID,
+                employee_id,
+                original_role: employee.role,
+                override_role,
+                override_date,
+                shift_type
+            });
+        } catch (error) {
+            if (error.code === 'SQLITE_CONSTRAINT_UNIQUE') {
+                return res.status(409).json({error: 'Role override already exists for this employee, date, and shift'});
+            }
+            console.error('Create role override error:', error);
+            res.status(500).json({error: 'Failed to create role override'});
+        }
+    }
+);
+
+// Update role override
+apiRouter.put('/labour/role-overrides/:id',
+    authenticateToken,
+    requireRole(['admin', 'supervisor']),
+    [
+        body('override_role').optional().isIn(['operator', 'packer', 'supervisor', 'quality_control']).withMessage('Valid role required'),
+        body('shift_type').optional().isIn(['day', 'night', 'both']).withMessage('Valid shift type required'),
+        body('notes').optional().isLength({max: 500}).withMessage('Notes too long')
+    ],
+    handleValidationErrors,
+    async (req, res) => {
+        const { override_role, shift_type, notes } = req.body;
+        
+        try {
+            const result = await dbRun(`
+                UPDATE daily_role_overrides 
+                SET override_role = COALESCE(?, override_role),
+                    shift_type = COALESCE(?, shift_type),
+                    notes = COALESCE(?, notes)
+                WHERE id = ?
+            `, [override_role, shift_type, notes, req.params.id]);
+            
+            if (result.changes === 0) {
+                return res.status(404).json({error: 'Role override not found'});
+            }
+            
+            res.json({message: 'Role override updated successfully'});
+        } catch (error) {
+            console.error('Update role override error:', error);
+            res.status(500).json({error: 'Failed to update role override'});
+        }
+    }
+);
+
+// Delete role override
+apiRouter.delete('/labour/role-overrides/:id',
+    authenticateToken,
+    requireRole(['admin', 'supervisor']),
+    async (req, res) => {
+        try {
+            const result = await dbRun('DELETE FROM daily_role_overrides WHERE id = ?', [req.params.id]);
+            
+            if (result.changes === 0) {
+                return res.status(404).json({error: 'Role override not found'});
+            }
+            
+            res.json({message: 'Role override deleted successfully'});
+        } catch (error) {
+            console.error('Delete role override error:', error);
+            res.status(500).json({error: 'Failed to delete role override'});
+        }
+    }
+);
+
+// Get effective roles for employees on a specific date (includes overrides)
+apiRouter.get('/labour/effective-roles', authenticateToken, async (req, res) => {
+    const { date, shift } = req.query;
+    const targetDate = date || new Date().toISOString().split('T')[0];
+    
+    try {
+        const employees = await dbAll(`
+            SELECT 
+                u.id,
+                u.username,
+                u.fullName,
+                u.employee_code,
+                u.role as original_role,
+                u.company,
+                COALESCE(dro.override_role, u.role) as effective_role,
+                dro.shift_type as override_shift,
+                dro.notes as override_notes,
+                CASE 
+                    WHEN dro.id IS NOT NULL THEN 1 
+                    ELSE 0 
+                END as has_override
+            FROM users u
+            LEFT JOIN daily_role_overrides dro ON (
+                u.id = dro.employee_id 
+                AND dro.override_date = ?
+                AND (dro.shift_type = 'both' OR dro.shift_type = ? OR ? IS NULL)
+            )
+            WHERE u.is_active = 1 AND u.role != 'admin'
+            ORDER BY u.fullName
+        `, [targetDate, shift, shift]);
+        
+        res.json({
+            date: targetDate,
+            shift: shift || 'all',
+            employees,
+            summary: {
+                total_employees: employees.length,
+                with_overrides: employees.filter(e => e.has_override).length,
+                roles: employees.reduce((acc, emp) => {
+                    acc[emp.effective_role] = (acc[emp.effective_role] || 0) + 1;
+                    return acc;
+                }, {})
+            }
+        });
+    } catch (error) {
+        console.error('Get effective roles error:', error);
+        res.status(500).json({error: 'Failed to get effective roles'});
+    }
+});
+
 apiRouter.put('/labour/verify/:id', authenticateToken, async (req, res) => {
     try {
         const result = await dbRun('UPDATE daily_attendance SET status = "present" WHERE id = ?', [req.params.id]);
