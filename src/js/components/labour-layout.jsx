@@ -368,8 +368,7 @@ export default function LabourLayoutPage() {
     };
 
     return (
-        <>
-            <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-gray-50">
             {/* Modern Header with gradient */}
             <div className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white shadow-lg">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
@@ -509,10 +508,10 @@ export default function LabourLayoutPage() {
                             </div>
                         ) : (
                             <div className="space-y-8">
-                            {/* Supervisors Section */}
-                            {rosterData.supervisors && rosterData.supervisors.filter(s => selectedShift === 'all' || s.shift === selectedShift).length > 0 && (
-                                <div>
-                                    <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                                {/* Supervisors Section */}
+                                {rosterData.supervisors && rosterData.supervisors.filter(s => selectedShift === 'all' || s.shift === selectedShift).length > 0 && (
+                                    <div>
+                                        <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
                                         <div className="bg-blue-100 p-2 rounded-lg">
                                             <Users className="w-5 h-5 text-blue-600" />
                                         </div>
@@ -791,10 +790,10 @@ export default function LabourLayoutPage() {
                                     <p className="text-sm">Try selecting a different date or check if data has been entered for this date.</p>
                                 </div>
                             )}
+                            </div>
                         )}
                     </div>
                 </div>
-            </div>
 
             {/* Export Modal */}
             {showExportModal && (
@@ -855,6 +854,6 @@ export default function LabourLayoutPage() {
                     </div>
                 </div>
             )}
-        </>
+        </div>
     );
 };
