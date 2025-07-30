@@ -541,18 +541,15 @@ export function LaborManagementSystem() {
         status: ''
     });
 
-    const fetchData = useCallback(async (sastDate) => {
+    const fetchData = useCallback(async (selectedDate) => {
         setLoading(true);
         try {
-            // Convert SAST date to UTC for API call
-            const utcDate = convertSASTToUTC(sastDate + 'T00:00:00');
-            const apiDate = utcDate ? new Date(utcDate).toISOString().split('T')[0] : sastDate;
-            
+            // Use date directly without timezone conversion to match labour-layout behavior
             const [machinesData, employeesData, assignmentsData, supervisorsData] = await Promise.all([
                 API.get('/machines'),
                 API.get('/users'),
-                API.get(`/planner/assignments?date=${apiDate}`),
-                API.get(`/planner/supervisors?date=${apiDate}&shift=${selectedShift}`)
+                API.get(`/planner/assignments?date=${selectedDate}`),
+                API.get(`/planner/supervisors?date=${selectedDate}&shift=${selectedShift}`)
             ]);
             setMachines(machinesData);
             setEmployees(employeesData.filter(u => u.role !== 'admin'));
@@ -571,25 +568,17 @@ export function LaborManagementSystem() {
         fetchData(dateToFetch);
     }, [selectedDate, attendanceDate, currentView, selectedShift, fetchData]);
     
-    // Memos for filtering with timezone conversion
+    // Memos for filtering without timezone conversion
     const currentAssignments = useMemo(() => {
-        // Convert SAST date to UTC for comparison
-        const utcDate = convertSASTToUTC(selectedDate + 'T00:00:00');
-        const apiDate = utcDate ? new Date(utcDate).toISOString().split('T')[0] : selectedDate;
-        
         return assignments.filter(a => 
             a.machine_id == selectedMachine && 
             a.shift === selectedShift && 
-            a.assignment_date === apiDate
+            a.assignment_date === selectedDate
         );
     }, [assignments, selectedMachine, selectedShift, selectedDate]);
     
     const attendanceAssignments = useMemo(() => {
-        // Convert SAST date to UTC for comparison
-        const utcDate = convertSASTToUTC(attendanceDate + 'T00:00:00');
-        const apiDate = utcDate ? new Date(utcDate).toISOString().split('T')[0] : attendanceDate;
-        
-        return assignments.filter(a => a.assignment_date === apiDate);
+        return assignments.filter(a => a.assignment_date === attendanceDate);
     }, [assignments, attendanceDate]);
     const filteredEmployees = useMemo(() => employees.filter(e => !workerSearch || e.username.toLowerCase().includes(workerSearch.toLowerCase()) || (e.employee_code && e.employee_code.toLowerCase().includes(workerSearch.toLowerCase()))), [employees, workerSearch]);
 
@@ -628,14 +617,10 @@ export function LaborManagementSystem() {
     // Supervisor management functions
     const addSupervisor = async (supervisorId) => {
         try {
-            // Convert SAST date to UTC for API
-            const utcDate = convertSASTToUTC(selectedDate + 'T00:00:00');
-            const apiDate = utcDate ? new Date(utcDate).toISOString().split('T')[0] : selectedDate;
-            
-            console.log('Adding supervisor:', { supervisorId, apiDate, selectedShift });
+            console.log('Adding supervisor:', { supervisorId, selectedDate, selectedShift });
             await API.post('/planner/supervisors', {
                 supervisor_id: supervisorId,
-                assignment_date: apiDate,
+                assignment_date: selectedDate,
                 shift: selectedShift
             });
             
@@ -643,7 +628,7 @@ export function LaborManagementSystem() {
             setShowSupervisorModal(false);
             
             // Reload supervisors data
-            const supervisorsData = await API.get(`/planner/supervisors?date=${apiDate}&shift=${selectedShift}`);
+            const supervisorsData = await API.get(`/planner/supervisors?date=${selectedDate}&shift=${selectedShift}`);
             setSupervisorsOnDuty(supervisorsData);
             showNotification('Supervisor assigned successfully', 'success');
         } catch (error) {
