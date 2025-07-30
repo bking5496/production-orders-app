@@ -797,65 +797,6 @@ export default function LabourLayoutPage() {
                 </div>
             </div>
 
-            {/* Export Modal */}
-            {showExportModal && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                    <div className="bg-white rounded-lg p-6 w-96 max-w-full mx-4">
-                        <div className="flex justify-between items-center mb-4">
-                            <h3 className="text-lg font-semibold">Export Labour Layout</h3>
-                            <button 
-                                onClick={() => setShowExportModal(false)}
-                                className="text-gray-400 hover:text-gray-600"
-                            >
-                                ×
-                            </button>
-                        </div>
-                        
-                        <div className="space-y-4">
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">Export Format</label>
-                                <select 
-                                    value={exportFormat} 
-                                    onChange={e => setExportFormat(e.target.value)}
-                                    className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                >
-                                    <option value="excel">Excel (.xlsx)</option>
-                                    <option value="csv">CSV (.csv)</option>
-                                    <option value="json">JSON (.json)</option>
-                                </select>
-                            </div>
-                            
-                            <div className="bg-blue-50 p-3 rounded-lg">
-                                <p className="text-sm text-blue-800">Exporting labour layout for:</p>
-                                <p className="font-medium text-blue-900">{selectedDate}</p>
-                                <div className="text-sm text-blue-700 space-y-1">
-                                    <p>Supervisors: {rosterData.summary?.total_supervisors || 0}</p>
-                                    <p>Assignments: {rosterData.summary?.total_assignments || 0}</p>
-                                    <p>Machines: {rosterData.summary?.total_machines_in_use || 0}</p>
-                                    <p>Attendance: {rosterData.summary?.total_attendance || 0}</p>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div className="flex justify-end gap-3 mt-6">
-                            <button 
-                                onClick={() => setShowExportModal(false)}
-                                className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
-                            >
-                                Cancel
-                            </button>
-                            <button 
-                                onClick={handleExport}
-                                disabled={loading}
-                                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 flex items-center gap-2"
-                            >
-                                <Download className="w-4 h-4" />
-                                {loading ? 'Exporting...' : 'Export'}
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
         </>
     );
 };
