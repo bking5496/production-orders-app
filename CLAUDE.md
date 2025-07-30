@@ -8,6 +8,10 @@
 **Timezone:** SAST (UTC+2) - South African Standard Time  
 
 ## Recent Major Changes
+- **2025-07-30:** Fixed critical timezone conversion bug in labor-planner.jsx causing data synchronization issues
+- **2025-07-30:** Rebuilt labour-layout.jsx from ground up to resolve JSX syntax and build errors
+- **2025-07-30:** Resolved database schema issues - verified all required columns exist
+- **2025-07-30:** Fixed PM2 log errors and improved application stability
 - **2025-01-28:** Changed "Pause" to "Stop" functionality across all components
 - **2025-01-28:** Fixed production timer timezone issues (was showing 2 hours ahead)
 - **2025-01-28:** Added comprehensive downtime reporting system
