@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Calendar, Download, RefreshCw, Eye, Users, ClipboardList, UserCheck, Settings, Edit2 } from 'lucide-react';
 import API from '../core/api';
-import { Icon } from './layout-components.jsx';
 
 // Export utilities
 const exportToCSV = (data, filename) => {
@@ -24,11 +23,8 @@ const exportToJSON = (data, filename) => {
     link.click();
 };
 
-// Professional Excel export with proper formatting
 const exportToExcel = (rosterData, selectedDate) => {
-    // Check if XLSX library is available
     if (!window.XLSX) {
-        // Fallback to CSV if XLSX not available
         console.warn('XLSX library not available, falling back to CSV export');
         const allData = [
             ...rosterData.supervisors.map(s => ({
@@ -53,17 +49,6 @@ const exportToExcel = (rosterData, selectedDate) => {
                 'Status': a.status,
                 'Date': selectedDate
             })),
-            ...rosterData.machinesInUse.map(m => ({
-                'Type': 'Machine',
-                'Name': m.name,
-                'Employee Code': 'N/A',
-                'Machine': m.name,
-                'Production Area': m.environment || 'N/A',
-                'Position': m.type || 'N/A',
-                'Shift': m.shifts_in_use || 'N/A',
-                'Status': m.status,
-                'Date': selectedDate
-            })),
             ...rosterData.attendance.map(w => ({
                 'Type': 'Attendance',
                 'Name': w.name,
@@ -81,8 +66,6 @@ const exportToExcel = (rosterData, selectedDate) => {
     }
 
     const wb = window.XLSX.utils.book_new();
-    
-    // Get day of week and format date
     const dateObj = new Date(selectedDate);
     const dayOfWeek = dateObj.toLocaleDateString('en-US', { weekday: 'long' });
     const formattedDate = dateObj.toLocaleDateString('en-US', { 
@@ -91,23 +74,17 @@ const exportToExcel = (rosterData, selectedDate) => {
         day: 'numeric' 
     });
 
-    // Create worksheet data
     const wsData = [];
-    
-    // Header information
     wsData.push(['DAILY LABOUR LAYOUT REPORT']);
     wsData.push([]);
     wsData.push(['Day of Week:', dayOfWeek]);
     wsData.push(['Date:', formattedDate]);
     wsData.push(['Total Supervisors:', rosterData.summary.total_supervisors || 0]);
     wsData.push(['Total Assignments:', rosterData.summary.total_assignments || 0]);
-    wsData.push(['Total Machines:', rosterData.summary.total_machines_in_use || 0]);
     wsData.push(['Total Attendance Records:', rosterData.summary.total_attendance || 0]);
     wsData.push([]);
     
-    // Supervisors section
     if (rosterData.supervisors.length > 0) {
-        wsData.push([]);
         wsData.push(['SUPERVISORS ON DUTY']);
         wsData.push(['Employee Code', 'Name', 'Area', 'Position', 'Shift', 'Status']);
         rosterData.supervisors.forEach(supervisor => {
@@ -122,7 +99,6 @@ const exportToExcel = (rosterData, selectedDate) => {
         });
     }
     
-    // Assigned employees section
     if (rosterData.assignments.length > 0) {
         wsData.push([]);
         wsData.push(['ASSIGNED EMPLOYEES']);
@@ -140,24 +116,6 @@ const exportToExcel = (rosterData, selectedDate) => {
         });
     }
 
-    // Machines in use section
-    if (rosterData.machinesInUse.length > 0) {
-        wsData.push([]);
-        wsData.push(['MACHINES IN USE']);
-        wsData.push(['Machine', 'Type', 'Environment', 'Assigned Workers', 'Shifts', 'Status']);
-        rosterData.machinesInUse.forEach(machine => {
-            wsData.push([
-                machine.name,
-                machine.type || 'N/A',
-                machine.environment || 'N/A',
-                machine.assigned_workers,
-                machine.shifts_in_use || 'N/A',
-                machine.status
-            ]);
-        });
-    }
-    
-    // Attendance records section
     if (rosterData.attendance.length > 0) {
         wsData.push([]);
         wsData.push(['ATTENDANCE RECORDS']);
@@ -173,23 +131,17 @@ const exportToExcel = (rosterData, selectedDate) => {
         });
     }
     
-    // Create worksheet
     const ws = window.XLSX.utils.aoa_to_sheet(wsData);
-    
-    // Set column widths
     const colWidths = [
-        { wch: 20 }, // Name
-        { wch: 18 }, // Production Area
-        { wch: 15 }, // Position
-        { wch: 10 }, // Shift
-        { wch: 12 }  // Status
+        { wch: 20 },
+        { wch: 18 },
+        { wch: 15 },
+        { wch: 10 },
+        { wch: 12 }
     ];
     ws['!cols'] = colWidths;
     
-    // Add worksheet to workbook
     window.XLSX.utils.book_append_sheet(wb, ws, 'Labour Layout');
-    
-    // Save file
     window.XLSX.writeFile(wb, `labour-layout-${selectedDate}.xlsx`);
 };
 
@@ -212,7 +164,6 @@ export default function LabourLayoutPage() {
     });
     const [loading, setLoading] = useState(true);
     const [selectedDate, setSelectedDate] = useState(() => {
-        // Check URL params for date
         const urlParams = new URLSearchParams(window.location.search);
         const dateParam = urlParams.get('date');
         if (dateParam) {
@@ -231,7 +182,6 @@ export default function LabourLayoutPage() {
             setRosterData(data);
         } catch (error) {
             console.error('Failed to fetch roster for ' + date + ':', error);
-            // Fallback to today's roster if date-specific endpoint doesn't exist
             try {
                 const fallbackData = await API.get('/labour/today');
                 setRosterData({
@@ -279,19 +229,15 @@ export default function LabourLayoutPage() {
         fetchRosterForDate(selectedDate);
     }, [selectedDate]);
 
-
     const handleVerify = async (workerId) => {
         try {
             await API.put('/labour/verify/' + workerId);
-            // Refresh the data after verification
             fetchRosterForDate(selectedDate);
         } catch (error) {
             alert('Failed to verify worker: ' + error.message);
         }
     };
-    
 
-    // Enhanced export functionality
     const handleExport = async () => {
         try {
             setLoading(true);
@@ -321,17 +267,6 @@ export default function LabourLayoutPage() {
                         'Position': a.position,
                         'Shift': a.shift,
                         'Status': a.status,
-                        'Date': selectedDate
-                    })),
-                    ...rosterData.machinesInUse.map(m => ({
-                        'Type': 'Machine',
-                        'Name': m.name,
-                        'Employee Code': 'N/A',
-                        'Machine': m.name,
-                        'Production Area': m.environment || 'N/A',
-                        'Position': m.type || 'N/A',
-                        'Shift': m.shifts_in_use || 'N/A',
-                        'Status': m.status,
                         'Date': selectedDate
                     })),
                     ...rosterData.attendance.map(w => ({
@@ -370,22 +305,22 @@ export default function LabourLayoutPage() {
     return (
         <>
             <div className="min-h-screen bg-gray-50">
-                {/* Modern Header with gradient */}
                 <div className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white shadow-lg">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
                         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                             <div>
                                 <div className="flex items-center gap-2 text-blue-200 text-sm mb-2">
-                                <span className="cursor-pointer hover:text-white transition-colors" onClick={() => window.location.href = '/labor-planner?date=' + selectedDate}>Labor Planner</span>
-                                <span>›</span>
-                                <span className="text-white font-medium">Layout View</span>
-                                <span className="ml-2 px-2 py-1 bg-green-500 bg-opacity-20 text-green-200 rounded-full text-xs">Live Data</span>
+                                    <span className="cursor-pointer hover:text-white transition-colors" onClick={() => window.location.href = '/labor-planner?date=' + selectedDate}>Labor Planner</span>
+                                    <span>&gt;</span>
+                                    <span className="text-white font-medium">Layout View</span>
+                                    <span className="ml-2 px-2 py-1 bg-green-500 bg-opacity-20 text-green-200 rounded-full text-xs">Live Data</span>
+                                </div>
+                                <h1 className="text-2xl font-bold flex items-center gap-3">
+                                    <Users className="w-8 h-8" />
+                                    Daily Labour Layout
+                                </h1>
+                                <p className="text-blue-100 mt-1">Real-time workforce management and reporting</p>
                             </div>
-                            <h1 className="text-2xl font-bold flex items-center gap-3">
-                                <Users className="w-8 h-8" />
-                                Daily Labour Layout
-                            </h1>
-                            <p className="text-blue-100 mt-1">Real-time workforce management and reporting</p>
                         </div>
                         <div className="flex flex-wrap items-center gap-3">
                             <div className="bg-white bg-opacity-10 backdrop-blur-sm rounded-lg px-3 py-2 flex items-center gap-2">
@@ -421,384 +356,294 @@ export default function LabourLayoutPage() {
                         </div>
                     </div>
                 </div>
-            </div>
 
-            {/* Main Content */}
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-
-                {/* Modern Stats Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-                    <div className="bg-white rounded-xl shadow-sm border border-blue-100 p-6">
-                        <div className="flex items-center justify-between">
-                            <div>
-                                <p className="text-sm font-medium text-blue-600">Supervisors</p>
-                                <p className="text-2xl font-bold text-gray-900">{rosterData.summary?.total_supervisors || 0}</p>
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                        <div className="bg-white rounded-xl shadow-sm border border-blue-100 p-6">
+                            <div className="flex items-center justify-between">
+                                <div>
+                                    <p className="text-sm font-medium text-blue-600">Supervisors</p>
+                                    <p className="text-2xl font-bold text-gray-900">{rosterData.summary?.total_supervisors || 0}</p>
+                                </div>
+                                <div className="bg-blue-100 p-3 rounded-full">
+                                    <UserCheck className="w-6 h-6 text-blue-600" />
+                                </div>
                             </div>
-                            <div className="bg-blue-100 p-3 rounded-full">
-                                <UserCheck className="w-6 h-6 text-blue-600" />
+                        </div>
+                        <div className="bg-white rounded-xl shadow-sm border border-green-100 p-6">
+                            <div className="flex items-center justify-between">
+                                <div>
+                                    <p className="text-sm font-medium text-green-600">Assignments</p>
+                                    <p className="text-2xl font-bold text-gray-900">{rosterData.summary?.total_assignments || 0}</p>
+                                </div>
+                                <div className="bg-green-100 p-3 rounded-full">
+                                    <ClipboardList className="w-6 h-6 text-green-600" />
+                                </div>
+                            </div>
+                        </div>
+                        <div className="bg-white rounded-xl shadow-sm border border-orange-100 p-6">
+                            <div className="flex items-center justify-between">
+                                <div>
+                                    <p className="text-sm font-medium text-orange-600">Machines Active</p>
+                                    <p className="text-2xl font-bold text-gray-900">{rosterData.summary?.total_machines_in_use || 0}</p>
+                                </div>
+                                <div className="bg-orange-100 p-3 rounded-full">
+                                    <Settings className="w-6 h-6 text-orange-600" />
+                                </div>
+                            </div>
+                        </div>
+                        <div className="bg-white rounded-xl shadow-sm border border-purple-100 p-6">
+                            <div className="flex items-center justify-between">
+                                <div>
+                                    <p className="text-sm font-medium text-purple-600">Attendance</p>
+                                    <p className="text-2xl font-bold text-gray-900">{rosterData.summary?.total_attendance || 0}</p>
+                                </div>
+                                <div className="bg-purple-100 p-3 rounded-full">
+                                    <Eye className="w-6 h-6 text-purple-600" />
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div className="bg-white rounded-xl shadow-sm border border-green-100 p-6">
-                        <div className="flex items-center justify-between">
-                            <div>
-                                <p className="text-sm font-medium text-green-600">Assignments</p>
-                                <p className="text-2xl font-bold text-gray-900">{rosterData.summary?.total_assignments || 0}</p>
-                            </div>
-                            <div className="bg-green-100 p-3 rounded-full">
-                                <ClipboardList className="w-6 h-6 text-green-600" />
-                            </div>
-                        </div>
-                    </div>
-                    <div className="bg-white rounded-xl shadow-sm border border-orange-100 p-6">
-                        <div className="flex items-center justify-between">
-                            <div>
-                                <p className="text-sm font-medium text-orange-600">Machines Active</p>
-                                <p className="text-2xl font-bold text-gray-900">{rosterData.summary?.total_machines_in_use || 0}</p>
-                            </div>
-                            <div className="bg-orange-100 p-3 rounded-full">
-                                <Settings className="w-6 h-6 text-orange-600" />
-                            </div>
-                        </div>
-                    </div>
-                    <div className="bg-white rounded-xl shadow-sm border border-purple-100 p-6">
-                        <div className="flex items-center justify-between">
-                            <div>
-                                <p className="text-sm font-medium text-purple-600">Attendance</p>
-                                <p className="text-2xl font-bold text-gray-900">{rosterData.summary?.total_attendance || 0}</p>
-                            </div>
-                            <div className="bg-purple-100 p-3 rounded-full">
-                                <Eye className="w-6 h-6 text-purple-600" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-                {/* Modern Filter Card */}
-                <div className="bg-white rounded-xl shadow-sm border border-gray-200 mb-6">
-                    <div className="p-6">
-                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                            <div>
-                                <h2 className="text-lg font-semibold text-gray-900">Workforce Overview</h2>
-                                <p className="text-sm text-gray-600 mt-1">{selectedDate} • {((rosterData.summary?.total_supervisors ? rosterData.summary.total_supervisors : 0) + (rosterData.summary?.total_assignments ? rosterData.summary.total_assignments : 0) + (rosterData.summary?.total_attendance ? rosterData.summary.total_attendance : 0) + (rosterData.summary?.total_machines_in_use ? rosterData.summary.total_machines_in_use : 0))} total records</p>
-                            </div>
-                            <div className="flex items-center gap-3">
-                                <label className="text-sm font-medium text-gray-700">Shift Filter:</label>
-                                <select 
-                                    value={selectedShift} 
-                                    onChange={e => setSelectedShift(e.target.value)}
-                                    className="bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                >
-                                    <option value="all">All Shifts</option>
-                                    <option value="day">Day Shift</option>
-                                    <option value="night">Night Shift</option>
-                                </select>
+                    <div className="bg-white rounded-xl shadow-sm border border-gray-200 mb-6">
+                        <div className="p-6">
+                            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                                <div>
+                                    <h2 className="text-lg font-semibold text-gray-900">Workforce Overview</h2>
+                                    <p className="text-sm text-gray-600 mt-1">{selectedDate} • {((rosterData.summary?.total_supervisors || 0) + (rosterData.summary?.total_assignments || 0) + (rosterData.summary?.total_attendance || 0) + (rosterData.summary?.total_machines_in_use || 0))} total records</p>
+                                </div>
+                                <div className="flex items-center gap-3">
+                                    <label className="text-sm font-medium text-gray-700">Shift Filter:</label>
+                                    <select 
+                                        value={selectedShift} 
+                                        onChange={e => setSelectedShift(e.target.value)}
+                                        className="bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    >
+                                        <option value="all">All Shifts</option>
+                                        <option value="day">Day Shift</option>
+                                        <option value="night">Night Shift</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                {/* Main Content Card */}
-                <div className="bg-white rounded-xl shadow-sm border border-gray-200">
-
-                    <div className="p-6">
-                        {loading ? (
-                            <div className="text-center py-12">
-                                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
-                                <p className="text-gray-500 mt-3">Loading workforce data...</p>
-                            </div>
-                        ) : (
-                            <div className="space-y-8">
-                                {/* Supervisors Section */}
-                                {rosterData.supervisors && rosterData.supervisors.length > 0 && (
-                                    <div>
-                                        <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                                        <div className="bg-blue-100 p-2 rounded-lg">
-                                            <Users className="w-5 h-5 text-blue-600" />
+                    <div className="bg-white rounded-xl shadow-sm border border-gray-200">
+                        <div className="p-6">
+                            {loading ? (
+                                <div className="text-center py-12">
+                                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+                                    <p className="text-gray-500 mt-3">Loading workforce data...</p>
+                                </div>
+                            ) : (
+                                <div className="space-y-8">
+                                    {rosterData.supervisors && rosterData.supervisors.length > 0 && (
+                                        <div>
+                                            <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                                                <div className="bg-blue-100 p-2 rounded-lg">
+                                                    <Users className="w-5 h-5 text-blue-600" />
+                                                </div>
+                                                Supervisors on Duty
+                                            </h3>
+                                            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-100 overflow-hidden">
+                                                <div className="overflow-x-auto">
+                                                    <table className="min-w-full">
+                                                        <thead className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
+                                                            <tr>
+                                                                <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider">Employee Code</th>
+                                                                <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider">Name</th>
+                                                                <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider">Area</th>
+                                                                <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider">Position</th>
+                                                                <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider">Shift</th>
+                                                                <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider">Status</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody className="bg-white divide-y divide-blue-100">
+                                                            {rosterData.supervisors.filter(s => selectedShift === 'all' ? true : s.shift === selectedShift).map(supervisor => (
+                                                                <tr key={`supervisor-${supervisor.id}`} className="hover:bg-blue-50 transition-colors">
+                                                                    <td className="px-6 py-4 whitespace-nowrap">
+                                                                        <span className="text-sm text-gray-600 font-mono font-semibold">
+                                                                            {supervisor.employee_code || 'N/A'}
+                                                                        </span>
+                                                                    </td>
+                                                                    <td className="px-6 py-4 whitespace-nowrap">
+                                                                        <div className="flex items-center">
+                                                                            <div className="bg-blue-100 rounded-full p-2 mr-3">
+                                                                                <Users className="w-4 h-4 text-blue-600" />
+                                                                            </div>
+                                                                            <div className="text-sm font-semibold text-gray-900">
+                                                                                {supervisor.fullName || supervisor.name}
+                                                                            </div>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td className="px-6 py-4 whitespace-nowrap">
+                                                                        <span className="text-sm text-gray-600">Supervision</span>
+                                                                    </td>
+                                                                    <td className="px-6 py-4 whitespace-nowrap">
+                                                                        <span className="text-sm text-gray-900 font-medium">Supervisor</span>
+                                                                    </td>
+                                                                    <td className="px-6 py-4 whitespace-nowrap">
+                                                                        <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${supervisor.shift === 'day' ? 'bg-amber-100 text-amber-800' : 'bg-indigo-100 text-indigo-800'}`}>
+                                                                            {supervisor.shift === 'day' ? 'Day Shift' : 'Night Shift'}
+                                                                        </span>
+                                                                    </td>
+                                                                    <td className="px-6 py-4 whitespace-nowrap">
+                                                                        <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800">
+                                                                            {supervisor.status}
+                                                                        </span>
+                                                                    </td>
+                                                                </tr>
+                                                            ))}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
                                         </div>
-                                        Supervisors on Duty
-                                    </h3>
-                                    <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-100 overflow-hidden">
-                                        <div className="overflow-x-auto">
-                                            <table className="min-w-full">
-                                                <thead className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
-                                                    <tr>
-                                                        <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider">Employee Code</th>
-                                                        <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider">Name</th>
-                                                        <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider">Area</th>
-                                                        <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider">Position</th>
-                                                        <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider">Shift</th>
-                                                        <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider">Status</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody className="bg-white divide-y divide-blue-100">
-                                                {rosterData.supervisors.filter(s => selectedShift === 'all' ? true : s.shift === selectedShift).map(supervisor => (
-                                                        <tr key={`supervisor-${supervisor.id}`} className="hover:bg-blue-50 transition-colors">
-                                                            <td className="px-6 py-4 whitespace-nowrap">
-                                                                <span className="text-sm text-gray-600 font-mono font-semibold">
-                                                                    {supervisor.employee_code || 'N/A'}
-                                                                </span>
-                                                            </td>
-                                                            <td className="px-6 py-4 whitespace-nowrap">
-                                                                <div className="flex items-center">
-                                                                    <div className="bg-blue-100 rounded-full p-2 mr-3">
-                                                                        <Users className="w-4 h-4 text-blue-600" />
-                                                                    </div>
-                                                                    <div className="text-sm font-semibold text-gray-900">
-                                                                        {supervisor.fullName || supervisor.name}
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                            <td className="px-6 py-4 whitespace-nowrap">
-                                                                <span className="text-sm text-gray-600">
-                                                                    Supervision
-                                                                </span>
-                                                            </td>
-                                                            <td className="px-6 py-4 whitespace-nowrap">
-                                                                <span className="text-sm text-gray-900 font-medium">
-                                                                    Supervisor
-                                                                </span>
-                                                            </td>
-                                                            <td className="px-6 py-4 whitespace-nowrap">
-                                                                <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${supervisor.shift === 'day' ? 'bg-amber-100 text-amber-800' : 'bg-indigo-100 text-indigo-800'}`}>
-                                                                    {supervisor.shift === 'day' ? 'Day Shift' : 'Night Shift'}
-                                                                </span>
-                                                            </td>
-                                                            <td className="px-6 py-4 whitespace-nowrap">
-                                                                <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800">
-                                                                    {supervisor.status}
-                                                                </span>
-                                                            </td>
+                                    )}
+
+                                    {rosterData.assignments && rosterData.assignments.filter(a => selectedShift === 'all' ? true : a.shift === selectedShift).length > 0 && (
+                                        <div>
+                                            <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                                                <div className="bg-green-100 p-2 rounded-lg">
+                                                    <ClipboardList className="w-5 h-5 text-green-600" />
+                                                </div>
+                                                Assigned Employees
+                                            </h3>
+                                            <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl border border-green-100 overflow-hidden">
+                                                <div className="overflow-x-auto">
+                                                    <table className="min-w-full">
+                                                        <thead className="bg-gradient-to-r from-green-600 to-emerald-600 text-white">
+                                                            <tr>
+                                                                <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider">Employee Code</th>
+                                                                <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider">Name</th>
+                                                                <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider">Machine</th>
+                                                                <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider">Position</th>
+                                                                <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider">Shift</th>
+                                                                <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider">Company</th>
+                                                                <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider">Status</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody className="bg-white divide-y divide-green-100">
+                                                            {rosterData.assignments.filter(a => selectedShift === 'all' ? true : a.shift === selectedShift).map(assignment => (
+                                                                <tr key={`assignment-${assignment.id}`} className="hover:bg-green-50 transition-colors">
+                                                                    <td className="px-6 py-4 whitespace-nowrap">
+                                                                        <span className="text-sm text-gray-600 font-mono font-semibold">
+                                                                            {assignment.employee_code || 'N/A'}
+                                                                        </span>
+                                                                    </td>
+                                                                    <td className="px-6 py-4 whitespace-nowrap">
+                                                                        <div className="flex items-center">
+                                                                            <div className="bg-green-100 rounded-full p-2 mr-3">
+                                                                                <Users className="w-4 h-4 text-green-600" />
+                                                                            </div>
+                                                                            <div className="text-sm font-semibold text-gray-900">
+                                                                                {assignment.fullName || assignment.name}
+                                                                            </div>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td className="px-6 py-4 whitespace-nowrap">
+                                                                        <span className="text-sm text-gray-900 font-medium">
+                                                                            {assignment.machine || 'N/A'}
+                                                                        </span>
+                                                                    </td>
+                                                                    <td className="px-6 py-4 whitespace-nowrap">
+                                                                        <span className="text-sm text-gray-600">
+                                                                            {assignment.position ? assignment.position : (assignment.role ? assignment.role : 'Operator')}
+                                                                        </span>
+                                                                    </td>
+                                                                    <td className="px-6 py-4 whitespace-nowrap">
+                                                                        <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${assignment.shift === 'day' ? 'bg-amber-100 text-amber-800' : 'bg-indigo-100 text-indigo-800'}`}>
+                                                                            {assignment.shift === 'day' ? 'Day Shift' : 'Night Shift'}
+                                                                        </span>
+                                                                    </td>
+                                                                    <td className="px-6 py-4 whitespace-nowrap">
+                                                                        <span className="text-sm text-gray-600">
+                                                                            {assignment.company || 'N/A'}
+                                                                        </span>
+                                                                    </td>
+                                                                    <td className="px-6 py-4 whitespace-nowrap">
+                                                                        <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${
+                                                                            assignment.status === 'present' ? 'bg-emerald-100 text-emerald-800' :
+                                                                            assignment.status === 'absent' ? 'bg-red-100 text-red-800' :
+                                                                            'bg-yellow-100 text-yellow-800'
+                                                                        }`}>
+                                                                            {assignment.status}
+                                                                        </span>
+                                                                    </td>
+                                                                </tr>
+                                                            ))}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {rosterData.attendance && rosterData.attendance.length > 0 && (
+                                        <div>
+                                            <h3 className="text-lg font-semibold text-purple-800 mb-3 flex items-center gap-2">
+                                                <UserCheck className="w-5 h-5" />
+                                                Attendance Records
+                                            </h3>
+                                            <div className="bg-purple-50 rounded-lg overflow-hidden">
+                                                <table className="min-w-full">
+                                                    <thead className="bg-purple-100">
+                                                        <tr>
+                                                            <th className="px-4 py-2 text-left text-xs font-medium text-purple-700 uppercase">Name</th>
+                                                            <th className="px-4 py-2 text-left text-xs font-medium text-purple-700 uppercase">Production Area</th>
+                                                            <th className="px-4 py-2 text-left text-xs font-medium text-purple-700 uppercase">Position</th>
+                                                            <th className="px-4 py-2 text-left text-xs font-medium text-purple-700 uppercase">Shift</th>
+                                                            <th className="px-4 py-2 text-left text-xs font-medium text-purple-700 uppercase">Status</th>
+                                                            <th className="px-4 py-2 text-left text-xs font-medium text-purple-700 uppercase">Action</th>
                                                         </tr>
-                                                    ))}
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
-
-                            {/* Assigned Employees Section */}
-                            {rosterData.assignments && rosterData.assignments.filter(a => selectedShift === 'all' ? true : a.shift === selectedShift).length > 0 && (
-                                <div>
-                                    <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                                        <div className="bg-green-100 p-2 rounded-lg">
-                                            <ClipboardList className="w-5 h-5 text-green-600" />
-                                        </div>
-                                        Assigned Employees
-                                    </h3>
-                                    <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl border border-green-100 overflow-hidden">
-                                        <div className="overflow-x-auto">
-                                            <table className="min-w-full">
-                                                <thead className="bg-gradient-to-r from-green-600 to-emerald-600 text-white">
-                                                    <tr>
-                                                        <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider">Employee Code</th>
-                                                        <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider">Name</th>
-                                                        <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider">Machine</th>
-                                                        <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider">Position</th>
-                                                        <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider">Shift</th>
-                                                        <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider">Company</th>
-                                                        <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider">Status</th>
-                                                    </tr>
-                                                </thead>
-                                            <tbody className="bg-white divide-y divide-green-100">
-                                                {rosterData.assignments.filter(a => selectedShift === 'all' ? true : a.shift === selectedShift).map(assignment => (
-                                                    <tr key={`assignment-${assignment.id}`} className="hover:bg-green-50 transition-colors">
-                                                        <td className="px-6 py-4 whitespace-nowrap">
-                                                            <span className="text-sm text-gray-600 font-mono font-semibold">
-                                                                {assignment.employee_code || 'N/A'}
-                                                            </span>
-                                                        </td>
-                                                        <td className="px-6 py-4 whitespace-nowrap">
-                                                            <div className="flex items-center">
-                                                                <div className="bg-green-100 rounded-full p-2 mr-3">
-                                                                    <Users className="w-4 h-4 text-green-600" />
-                                                                </div>
-                                                                <div className="text-sm font-semibold text-gray-900">
-                                                                    {assignment.fullName || assignment.name}
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                        <td className="px-6 py-4 whitespace-nowrap">
-                                                            <span className="text-sm text-gray-900 font-medium">
-                                                                {assignment.machine || 'N/A'}
-                                                            </span>
-                                                        </td>
-                                                        <td className="px-6 py-4 whitespace-nowrap">
-                                                            <span className="text-sm text-gray-600">
-                                                                {assignment.position ? assignment.position : (assignment.role ? assignment.role : 'Operator')}
-                                                            </span>
-                                                        </td>
-                                                        <td className="px-6 py-4 whitespace-nowrap">
-                                                            <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${assignment.shift === 'day' ? 'bg-amber-100 text-amber-800' : 'bg-indigo-100 text-indigo-800'}`}>
-                                                                {assignment.shift === 'day' ? 'Day Shift' : 'Night Shift'}
-                                                            </span>
-                                                        </td>
-                                                        <td className="px-6 py-4 whitespace-nowrap">
-                                                            <span className="text-sm text-gray-600">
-                                                                {assignment.company || 'N/A'}
-                                                            </span>
-                                                        </td>
-                                                        <td className="px-6 py-4 whitespace-nowrap">
-                                                            <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${
-                                                                assignment.status === 'present' ? 'bg-emerald-100 text-emerald-800' :
-                                                                assignment.status === 'absent' ? 'bg-red-100 text-red-800' :
-                                                                'bg-yellow-100 text-yellow-800'
-                                                            }`}>
-                                                                {assignment.status}
-                                                            </span>
-                                                        </td>
-                                                    </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            )}
-
-                            {/* Machines in Use Section */}
-                            {rosterData.machinesInUse && rosterData.machinesInUse.length > 0 && (
-                                <div>
-                                    <h3 className="text-lg font-semibold text-orange-800 mb-3 flex items-center gap-2">
-                                        <Settings className="w-5 h-5" />
-                                        Machines in Use
-                                    </h3>
-                                    <div className="bg-orange-50 rounded-lg overflow-hidden">
-                                        <table className="min-w-full">
-                                            <thead className="bg-orange-100">
-                                                <tr>
-                                                    <th className="px-4 py-2 text-left text-xs font-medium text-orange-700 uppercase">Machine</th>
-                                                    <th className="px-4 py-2 text-left text-xs font-medium text-orange-700 uppercase">Type</th>
-                                                    <th className="px-4 py-2 text-left text-xs font-medium text-orange-700 uppercase">Environment</th>
-                                                    <th className="px-4 py-2 text-left text-xs font-medium text-orange-700 uppercase">Assigned Workers</th>
-                                                    <th className="px-4 py-2 text-left text-xs font-medium text-orange-700 uppercase">Shifts</th>
-                                                    <th className="px-4 py-2 text-left text-xs font-medium text-orange-700 uppercase">Capacity</th>
-                                                    <th className="px-4 py-2 text-left text-xs font-medium text-orange-700 uppercase">Status</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody className="bg-white divide-y divide-orange-100">
-                                                {rosterData.machinesInUse.map(machine => (
-                                                    <tr key={`machine-${machine.id}`}>
-                                                        <td className="px-4 py-2 whitespace-nowrap text-sm font-medium text-gray-900">
-                                                            {machine.name}
-                                                        </td>
-                                                        <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-600">
-                                                            {machine.type || 'N/A'}
-                                                        </td>
-                                                        <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-600">
-                                                            {machine.environment || 'N/A'}
-                                                        </td>
-                                                        <td className="px-4 py-2 whitespace-nowrap text-sm text-center">
-                                                            <div className="flex items-center gap-2">
-                                                                <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs font-medium">
-                                                                    Total: {machine.assigned_workers}
-                                                                </span>
-                                                                {machine.day_workers > 0 && (
-                                                                    <span className="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-xs">
-                                                                        Day: {machine.day_workers}
+                                                    </thead>
+                                                    <tbody className="bg-white divide-y divide-purple-100">
+                                                        {rosterData.attendance.map(worker => (
+                                                            <tr key={`attendance-${worker.id}`}>
+                                                                <td className="px-4 py-2 whitespace-nowrap text-sm font-medium text-gray-900">{worker.name}</td>
+                                                                <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-600">{worker.production_area || 'N/A'}</td>
+                                                                <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-600">{worker.position || 'N/A'}</td>
+                                                                <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-600">{worker.shift}</td>
+                                                                <td className="px-4 py-2 whitespace-nowrap text-sm">
+                                                                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                                                        worker.status === 'present' ? 'bg-green-100 text-green-800' : 
+                                                                        worker.status === 'absent' ? 'bg-red-100 text-red-800' :
+                                                                        'bg-yellow-100 text-yellow-800'
+                                                                    }`}>
+                                                                        {worker.status}
                                                                     </span>
-                                                                )}
-                                                                {machine.night_workers > 0 && (
-                                                                    <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs">
-                                                                        Night: {machine.night_workers}
-                                                                    </span>
-                                                                )}
-                                                            </div>
-                                                        </td>
-                                                        <td className="px-4 py-2 whitespace-nowrap text-sm">
-                                                            <span className="px-2 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
-                                                                {machine.shifts_in_use || 'N/A'}
-                                                            </span>
-                                                        </td>
-                                                        <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-600">
-                                                            {machine.capacity || 'N/A'}%
-                                                        </td>
-                                                        <td className="px-4 py-2 whitespace-nowrap text-sm">
-                                                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                                                                machine.status === 'available' ? 'bg-green-100 text-green-800' : 
-                                                                machine.status === 'maintenance' ? 'bg-red-100 text-red-800' :
-                                                                'bg-gray-100 text-gray-800'
-                                                            }`}>
-                                                                {machine.status}
-                                                            </span>
-                                                        </td>
-                                                    </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            )}
+                                                                </td>
+                                                                <td className="px-4 py-2 whitespace-nowrap text-sm">
+                                                                    {worker.status === 'pending' && (
+                                                                        <button onClick={() => handleVerify(worker.id)} className="px-2 py-1 text-xs bg-purple-100 text-purple-700 rounded hover:bg-purple-200">
+                                                                            Verify Arrival
+                                                                        </button>
+                                                                    )}
+                                                                </td>
+                                                            </tr>
+                                                        ))}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    )}
 
-                            {/* Attendance Records Section */}
-                            {rosterData.attendance && rosterData.attendance.length > 0 && (
-                                <div>
-                                    <h3 className="text-lg font-semibold text-purple-800 mb-3 flex items-center gap-2">
-                                        <UserCheck className="w-5 h-5" />
-                                        Attendance Records
-                                    </h3>
-                                    <div className="bg-purple-50 rounded-lg overflow-hidden">
-                                        <table className="min-w-full">
-                                            <thead className="bg-purple-100">
-                                                <tr>
-                                                    <th className="px-4 py-2 text-left text-xs font-medium text-purple-700 uppercase">Name</th>
-                                                    <th className="px-4 py-2 text-left text-xs font-medium text-purple-700 uppercase">Production Area</th>
-                                                    <th className="px-4 py-2 text-left text-xs font-medium text-purple-700 uppercase">Position</th>
-                                                    <th className="px-4 py-2 text-left text-xs font-medium text-purple-700 uppercase">Shift</th>
-                                                    <th className="px-4 py-2 text-left text-xs font-medium text-purple-700 uppercase">Status</th>
-                                                    <th className="px-4 py-2 text-left text-xs font-medium text-purple-700 uppercase">Action</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody className="bg-white divide-y divide-purple-100">
-                                                {rosterData.attendance.map(worker => (
-                                                    <tr key={`attendance-${worker.id}`}>
-                                                        <td className="px-4 py-2 whitespace-nowrap text-sm font-medium text-gray-900">{worker.name}</td>
-                                                        <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-600">{worker.production_area || 'N/A'}</td>
-                                                        <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-600">{worker.position || 'N/A'}</td>
-                                                        <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-600">{worker.shift}</td>
-                                                        <td className="px-4 py-2 whitespace-nowrap text-sm">
-                                                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                                                                worker.status === 'present' ? 'bg-green-100 text-green-800' : 
-                                                                worker.status === 'absent' ? 'bg-red-100 text-red-800' :
-                                                                'bg-yellow-100 text-yellow-800'
-                                                            }`}>
-                                                                {worker.status}
-                                                            </span>
-                                                        </td>
-                                                        <td className="px-4 py-2 whitespace-nowrap text-sm">
-                                                            {worker.status === 'pending' && (
-                                                                <button onClick={() => handleVerify(worker.id)} className="px-2 py-1 text-xs bg-purple-100 text-purple-700 rounded hover:bg-purple-200">
-                                                                    Verify Arrival
-                                                                </button>
-                                                            )}
-                                                        </td>
-                                                    </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                    {((rosterData.supervisors ? rosterData.supervisors.length : 0) === 0) && 
+                                     ((rosterData.assignments ? rosterData.assignments.length : 0) === 0) && 
+                                     ((rosterData.attendance ? rosterData.attendance.length : 0) === 0) && (
+                                        <div className="text-center py-8 text-gray-500">
+                                            <Users className="w-12 h-12 mx-auto mb-4 text-gray-300" />
+                                            <p>No labour data found for {selectedDate}</p>
+                                            <p className="text-sm">Try selecting a different date or check if data has been entered for this date.</p>
+                                        </div>
+                                    )}
                                 </div>
                             )}
-
-                            {/* No Data Message */}
-                            {((rosterData.supervisors ? rosterData.supervisors.length : 0) === 0) && 
-                             ((rosterData.assignments ? rosterData.assignments.length : 0) === 0) && 
-                             ((rosterData.machinesInUse ? rosterData.machinesInUse.length : 0) === 0) &&
-                             ((rosterData.attendance ? rosterData.attendance.length : 0) === 0) && (
-                                <div className="text-center py-8 text-gray-500">
-                                    <Users className="w-12 h-12 mx-auto mb-4 text-gray-300" />
-                                    <p>No labour data found for {selectedDate}</p>
-                                    <p className="text-sm">Try selecting a different date or check if data has been entered for this date.</p>
-                                </div>
-                            )}
-                            </div>
-                        )}
+                        </div>
                     </div>
                 </div>
             </div>
-            </div>
 
-            {/* Export Modal */}
             {showExportModal && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                     <div className="bg-white rounded-lg p-6 w-96">
@@ -836,4 +681,4 @@ export default function LabourLayoutPage() {
             )}
         </>
     );
-};
+}
