@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Settings, Plus, Search, Filter, RefreshCw, Edit3, Trash2, AlertTriangle, Activity, Clock, BarChart3, CheckCircle, XCircle, Wrench } from 'lucide-react';
+import { Settings, Plus, Search, Filter, RefreshCw, Edit3, Trash2, AlertTriangle, Activity, Clock, BarChart3, CheckCircle, XCircle, Wrench, Users, Calendar, RotateCcw, Info } from 'lucide-react';
 import API from '../core/api';
 import { Modal, Card, Button, Badge } from './ui-components.jsx';
 
@@ -26,8 +26,20 @@ export default function MachinesPage() {
     type: '',
     environment: '',
     capacity: 100,
-    production_rate: 60
+    production_rate: 60,
+    shift_cycle_enabled: false,
+    cycle_start_date: '',
+    crew_size: 1
   });
+  
+  // Shift cycle specific state
+  const [crews, setCrews] = useState([
+    { letter: 'A', offset: 0, employees: [] },
+    { letter: 'B', offset: 2, employees: [] },
+    { letter: 'C', offset: 4, employees: [] }
+  ]);
+  const [employees, setEmployees] = useState([]);
+  const [loadingEmployees, setLoadingEmployees] = useState(false);
 
   // Update form environment when environments are loaded
   useEffect(() => {
@@ -96,15 +108,118 @@ export default function MachinesPage() {
       setRefreshing(false);
     }
   };
+  
+  // Function to load employees for crew assignments
+  const loadEmployees = async () => {
+    setLoadingEmployees(true);
+    try {
+      const data = await API.get('/employees');
+      setEmployees(data);
+    } catch (error) {
+      console.error('Failed to load employees:', error);
+      showNotification('Failed to load employees', 'danger');
+    } finally {
+      setLoadingEmployees(false);
+    }
+  };
+  
+  // Function to load crew data for a machine
+  const loadCrewsForMachine = async (machineId) => {
+    try {
+      const data = await API.get(`/machines/${machineId}/crews`);
+      if (data.length > 0) {
+        setCrews(data);
+      } else {
+        // Reset to default crews if none exist
+        setCrews([
+          { letter: 'A', offset: 0, employees: [] },
+          { letter: 'B', offset: 2, employees: [] },
+          { letter: 'C', offset: 4, employees: [] }
+        ]);
+      }
+    } catch (error) {
+      console.error('Failed to load crews:', error);
+      // Keep default crews on error
+    }
+  };
 
   const handleRefresh = () => {
     loadMachines(true);
+  };
+  
+  // 2-2-2 Shift Cycle Calculation Functions
+  const calculateCrewAssignment = (startDate, currentDate, offset) => {
+    if (!startDate) return 'rest';
+    
+    const start = new Date(startDate);
+    const current = new Date(currentDate);
+    const daysSinceStart = Math.floor((current - start) / (1000 * 60 * 60 * 24));
+    const cycleDay = (daysSinceStart + offset) % 6;
+    
+    if (cycleDay === 0 || cycleDay === 1) return 'day';
+    if (cycleDay === 2 || cycleDay === 3) return 'night';
+    return 'rest';
+  };
+  
+  const getShiftAssignments = (startDate, date) => {
+    if (!startDate) return { dayShift: [], nightShift: [], resting: ['A', 'B', 'C'] };
+    
+    const assignments = crews.reduce((acc, crew) => {
+      const assignment = calculateCrewAssignment(startDate, date, crew.offset);
+      acc[assignment].push(crew.letter);
+      return acc;
+    }, { day: [], night: [], rest: [] });
+    
+    return {
+      dayShift: assignments.day,
+      nightShift: assignments.night,
+      resting: assignments.rest
+    };
+  };
+  
+  const generatePreviewDays = (startDate, days = 14) => {
+    if (!startDate) return [];
+    
+    const preview = [];
+    for (let i = 0; i < days; i++) {
+      const date = new Date(startDate);
+      date.setDate(date.getDate() + i);
+      
+      const assignments = getShiftAssignments(startDate, date);
+      preview.push({
+        date: date.toISOString().split('T')[0],
+        dayOfWeek: date.toLocaleDateString('en-US', { weekday: 'short' }),
+        ...assignments
+      });
+    }
+    return preview;
+  };
+  
+  // Handle crew employee assignments
+  const handleCrewEmployeeChange = (crewLetter, employeeIds) => {
+    setCrews(prev => prev.map(crew => 
+      crew.letter === crewLetter 
+        ? { ...crew, employees: employeeIds }
+        : crew
+    ));
+  };
+  
+  // Save crew assignments
+  const saveCrewAssignments = async (machineId) => {
+    try {
+      await API.post(`/machines/${machineId}/crews`, crews);
+      showNotification('Crew assignments saved successfully');
+    } catch (error) {
+      console.error('Failed to save crew assignments:', error);
+      showNotification('Failed to save crew assignments: ' + (error.message || 'Unknown error'), 'danger');
+    }
   };
 
   // useEffect runs when the component loads.
   useEffect(() => {
     loadEnvironments(); // Load environments first
     loadMachines(); // Fetch data immediately
+    loadEmployees(); // Load employees for crew assignments
     const interval = setInterval(loadMachines, 30000); // And refresh every 30 seconds
     return () => clearInterval(interval); // Clean up the interval when the component is unmounted
   }, []);
@@ -126,7 +241,14 @@ export default function MachinesPage() {
   const handleEditMachine = async (e) => {
     e.preventDefault();
     try {
+      // Update machine settings
       await API.put(`/machines/${selectedMachine.id}`, formData);
+      
+      // If shift cycle is enabled, save crew assignments
+      if (formData.shift_cycle_enabled) {
+        await saveCrewAssignments(selectedMachine.id);
+      }
+      
       setShowEditModal(false);
       loadMachines();
       showNotification('Machine updated successfully');
@@ -422,9 +544,16 @@ export default function MachinesPage() {
                 </Button>
                 
                 <Button 
-                  onClick={() => {
+                  onClick={async () => {
                     setSelectedMachine(machine);
-                    setFormData(machine);
+                    setFormData({
+                      ...machine,
+                      shift_cycle_enabled: machine.shift_cycle_enabled || false,
+                      cycle_start_date: machine.cycle_start_date || '',
+                      crew_size: machine.crew_size || 1
+                    });
+                    // Load crews for this machine
+                    await loadCrewsForMachine(machine.id);
                     setShowEditModal(true);
                   }}
                   variant="outline"
@@ -622,6 +751,149 @@ export default function MachinesPage() {
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
                 />
               </div>
+            </div>
+            
+            {/* 2-2-2 Shift Cycle Settings */}
+            <div className="border-t pt-6 mt-6">
+              <div className="flex items-center space-x-3 mb-4">
+                <input 
+                  type="checkbox" 
+                  id="shift_cycle_enabled"
+                  checked={formData.shift_cycle_enabled || false}
+                  onChange={(e) => setFormData({...formData, shift_cycle_enabled: e.target.checked})}
+                  className="w-5 h-5 text-blue-600 rounded focus:ring-blue-500"
+                />
+                <label htmlFor="shift_cycle_enabled" className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+                  <RotateCcw className="w-5 h-5 text-blue-600" />
+                  Enable 2-2-2 Shift Cycle
+                </label>
+              </div>
+              
+              {formData.shift_cycle_enabled && (
+                <div className="space-y-4 bg-blue-50 p-4 rounded-lg">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <Calendar className="w-4 h-4 inline mr-1" />
+                        Cycle Start Date
+                      </label>
+                      <input 
+                        type="date" 
+                        value={formData.cycle_start_date || ''}
+                        onChange={(e) => setFormData({...formData, cycle_start_date: e.target.value})}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        required={formData.shift_cycle_enabled}
+                      />
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <Users className="w-4 h-4 inline mr-1" />
+                        Crew Size (people per shift)
+                      </label>
+                      <input 
+                        type="number" 
+                        min="1"
+                        max="20"
+                        value={formData.crew_size || 1}
+                        onChange={(e) => setFormData({...formData, crew_size: parseInt(e.target.value)})}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      />
+                    </div>
+                  </div>
+                  
+                  {/* Crew Assignment Section */}
+                  <div>
+                    <h4 className="text-md font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                      <Users className="w-4 h-4" />
+                      Crew Assignments
+                    </h4>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      {crews.map(crew => (
+                        <div key={crew.letter} className="bg-white p-4 rounded-lg border border-gray-200">
+                          <div className="flex items-center justify-between mb-2">
+                            <h5 className="font-semibold text-gray-900">Crew {crew.letter}</h5>
+                            <span className="text-xs bg-gray-100 px-2 py-1 rounded">
+                              {crew.offset} day offset
+                            </span>
+                          </div>
+                          
+                          <div className="text-xs text-gray-600 mb-2">
+                            Pattern: Day → Night → Rest
+                          </div>
+                          
+                          <select 
+                            multiple
+                            value={crew.employees}
+                            onChange={(e) => {
+                              const selectedIds = Array.from(e.target.selectedOptions, option => parseInt(option.value));
+                              handleCrewEmployeeChange(crew.letter, selectedIds);
+                            }}
+                            className="w-full px-2 py-1 border border-gray-300 rounded text-xs h-20"
+                            disabled={loadingEmployees}
+                          >
+                            {loadingEmployees ? (
+                              <option disabled>Loading employees...</option>
+                            ) : (
+                              employees.map(emp => (
+                                <option key={emp.id} value={emp.id}>
+                                  {emp.name} ({emp.employee_code || 'No code'})
+                                </option>
+                              ))
+                            )}
+                          </select>
+                          
+                          <div className="text-xs text-gray-500 mt-1">
+                            {crew.employees.length} / {formData.crew_size || 1} assigned
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    
+                    {/* Cycle Preview */}
+                    {formData.cycle_start_date && (
+                      <div className="mt-4">
+                        <h5 className="text-sm font-semibold text-gray-900 mb-2 flex items-center gap-2">
+                          <Info className="w-4 h-4" />
+                          14-Day Cycle Preview
+                        </h5>
+                        
+                        <div className="bg-white rounded-lg border border-gray-200 max-h-48 overflow-y-auto">
+                          <table className="w-full text-xs">
+                            <thead className="bg-gray-50 sticky top-0">
+                              <tr>
+                                <th className="px-2 py-1 text-left font-medium text-gray-700">Date</th>
+                                <th className="px-2 py-1 text-left font-medium text-gray-700">Day</th>
+                                <th className="px-2 py-1 text-left font-medium text-blue-600">Day Shift</th>
+                                <th className="px-2 py-1 text-left font-medium text-indigo-600">Night Shift</th>
+                                <th className="px-2 py-1 text-left font-medium text-gray-600">Rest</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {generatePreviewDays(formData.cycle_start_date).map(day => (
+                                <tr key={day.date} className="border-t border-gray-100">
+                                  <td className="px-2 py-1 font-mono">{day.date}</td>
+                                  <td className="px-2 py-1">{day.dayOfWeek}</td>
+                                  <td className="px-2 py-1 text-blue-600 font-medium">
+                                    {day.dayShift.length > 0 ? `Crew ${day.dayShift.join(', ')}` : '-'}
+                                  </td>
+                                  <td className="px-2 py-1 text-indigo-600 font-medium">
+                                    {day.nightShift.length > 0 ? `Crew ${day.nightShift.join(', ')}` : '-'}
+                                  </td>
+                                  <td className="px-2 py-1 text-gray-500">
+                                    {day.resting.length > 0 ? `Crew ${day.resting.join(', ')}` : '-'}
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
             
             <div className="flex justify-end gap-3 pt-4">

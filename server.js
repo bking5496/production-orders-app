@@ -253,15 +253,25 @@ apiRouter.get('/machines', authenticateToken, async (req, res) => { res.json(awa
 apiRouter.post('/machines', authenticateToken, requireRole(['admin', 'supervisor']),
     body('name').notEmpty(), body('type').notEmpty(), body('environment').notEmpty(), body('capacity').isInt({min: 1}), handleValidationErrors,
     async (req, res) => {
-        const { name, type, environment, capacity } = req.body;
-        const result = await dbRun('INSERT INTO machines (name, type, environment, capacity) VALUES (?, ?, ?, ?)', [name, type, environment, capacity]);
+        const { name, type, environment, capacity, production_rate } = req.body;
+        const result = await dbRun('INSERT INTO machines (name, type, environment, capacity, production_rate) VALUES (?, ?, ?, ?, ?)', 
+            [name, type, environment, capacity, production_rate || null]);
         res.status(201).json({id: result.lastID, message: 'Machine created.'});
     }
 );
 apiRouter.put('/machines/:id', authenticateToken, requireRole(['admin', 'supervisor']),
     body('name').notEmpty(), body('type').notEmpty(), body('environment').notEmpty(), body('capacity').isInt({min: 1}), handleValidationErrors,
     async (req, res) => {
-        await dbRun('UPDATE machines SET name = ?, type = ?, environment = ?, capacity = ? WHERE id = ?', [req.body.name, req.body.type, req.body.environment, req.body.capacity, req.params.id]);
+        const { name, type, environment, capacity, production_rate, shift_cycle_enabled, cycle_start_date, crew_size } = req.body;
+        
+        await dbRun(`
+            UPDATE machines 
+            SET name = ?, type = ?, environment = ?, capacity = ?, production_rate = ?, 
+                shift_cycle_enabled = ?, cycle_start_date = ?, crew_size = ? 
+            WHERE id = ?
+        `, [name, type, environment, capacity, production_rate || null, 
+            shift_cycle_enabled ? 1 : 0, cycle_start_date || null, crew_size || 1, req.params.id]);
+        
         res.json({message: 'Machine updated.'});
     }
 );
@@ -276,6 +286,139 @@ apiRouter.patch('/machines/:id/status', authenticateToken, requireRole(['admin',
         res.json({message: 'Status updated.'});
     }
 );
+
+// --- Machine Crew Management ---
+// Get crews for a specific machine
+apiRouter.get('/machines/:id/crews', authenticateToken, async (req, res) => {
+    try {
+        const crews = await dbAll(`
+            SELECT id, crew_letter, cycle_offset, employees, is_active, created_date
+            FROM machine_crews 
+            WHERE machine_id = ? AND is_active = 1
+            ORDER BY crew_letter
+        `, [req.params.id]);
+        
+        // Parse JSON employees field
+        const crewsWithEmployees = crews.map(crew => ({
+            ...crew,
+            employees: crew.employees ? JSON.parse(crew.employees) : []
+        }));
+        
+        res.json(crewsWithEmployees);
+    } catch (error) {
+        console.error('Error fetching machine crews:', error);
+        res.status(500).json({ error: 'Failed to fetch machine crews' });
+    }
+});
+
+// Save/update crews for a specific machine
+apiRouter.post('/machines/:id/crews', authenticateToken, requireRole(['admin', 'supervisor']), async (req, res) => {
+    try {
+        const machineId = req.params.id;
+        const crews = req.body; // Array of crew objects
+        
+        // Validate crews array
+        if (!Array.isArray(crews)) {
+            return res.status(400).json({ error: 'Crews must be an array' });
+        }
+        
+        // Start transaction
+        await dbRun('BEGIN TRANSACTION');
+        
+        try {
+            // Delete existing crews for this machine
+            await dbRun('DELETE FROM machine_crews WHERE machine_id = ?', [machineId]);
+            
+            // Insert new crews
+            for (const crew of crews) {
+                const { letter, offset, employees } = crew;
+                
+                if (!['A', 'B', 'C'].includes(letter)) {
+                    throw new Error(`Invalid crew letter: ${letter}`);
+                }
+                
+                if (![0, 2, 4].includes(offset)) {
+                    throw new Error(`Invalid cycle offset: ${offset}`);
+                }
+                
+                await dbRun(`
+                    INSERT INTO machine_crews 
+                    (machine_id, crew_letter, cycle_offset, employees, created_by)
+                    VALUES (?, ?, ?, ?, ?)
+                `, [machineId, letter, offset, JSON.stringify(employees || []), req.user.id]);
+            }
+            
+            // Commit transaction
+            await dbRun('COMMIT');
+            
+            res.json({ message: 'Crews saved successfully' });
+        } catch (error) {
+            // Rollback on error
+            await dbRun('ROLLBACK');
+            throw error;
+        }
+    } catch (error) {
+        console.error('Error saving machine crews:', error);
+        res.status(500).json({ error: `Failed to save crews: ${error.message}` });
+    }
+});
+
+// Get shift assignments for a machine on a specific date
+apiRouter.get('/machines/:id/assignments/:date', authenticateToken, async (req, res) => {
+    try {
+        const { id: machineId, date } = req.params;
+        
+        // Get machine cycle settings
+        const machine = await dbGet(`
+            SELECT shift_cycle_enabled, cycle_start_date, crew_size
+            FROM machines 
+            WHERE id = ?
+        `, [machineId]);
+        
+        if (!machine?.shift_cycle_enabled || !machine.cycle_start_date) {
+            return res.json({ enabled: false, assignments: [] });
+        }
+        
+        // Get crews for this machine
+        const crews = await dbAll(`
+            SELECT crew_letter, cycle_offset, employees
+            FROM machine_crews 
+            WHERE machine_id = ? AND is_active = 1
+            ORDER BY crew_letter
+        `, [machineId]);
+        
+        // Calculate assignments for the given date
+        const startDate = new Date(machine.cycle_start_date);
+        const targetDate = new Date(date);
+        const daysSinceStart = Math.floor((targetDate - startDate) / (1000 * 60 * 60 * 24));
+        
+        const assignments = crews.map(crew => {
+            const cycleDay = (daysSinceStart + crew.cycle_offset) % 6;
+            let shiftType;
+            
+            if (cycleDay === 0 || cycleDay === 1) shiftType = 'day';
+            else if (cycleDay === 2 || cycleDay === 3) shiftType = 'night';
+            else shiftType = 'rest';
+            
+            return {
+                crew_letter: crew.crew_letter,
+                shift_type: shiftType,
+                employees: JSON.parse(crew.employees || '[]')
+            };
+        });
+        
+        res.json({
+            enabled: true,
+            machine_id: machineId,
+            date,
+            assignments,
+            crew_size: machine.crew_size
+        });
+    } catch (error) {
+        console.error('Error getting machine assignments:', error);
+        res.status(500).json({ error: 'Failed to get machine assignments' });
+    }
+});
 
 // --- Order Management ---
 apiRouter.get('/orders', authenticateToken, async (req, res) => {
