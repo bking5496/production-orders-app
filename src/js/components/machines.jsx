@@ -571,7 +571,9 @@ export default function MachinesPage() {
                       ...machine,
                       shift_cycle_enabled: machine.shift_cycle_enabled || false,
                       cycle_start_date: machine.cycle_start_date || '',
-                      crew_size: machine.crew_size || 1
+                      operators_per_shift: machine.operators_per_shift ?? 2,
+                      hopper_loaders_per_shift: machine.hopper_loaders_per_shift ?? 1,
+                      packers_per_shift: machine.packers_per_shift ?? 3
                     });
                     // Load crews for this machine
                     await loadCrewsForMachine(machine.id);
@@ -789,10 +791,13 @@ export default function MachinesPage() {
                   </label>
                   <input 
                     type="number" 
-                    min="1"
+                    min="0"
                     max="10"
-                    value={formData.operators_per_shift || 2}
-                    onChange={(e) => setFormData({...formData, operators_per_shift: parseInt(e.target.value)})}
+                    value={formData.operators_per_shift ?? 2}
+                    onChange={(e) => {
+                      const value = e.target.value === '' ? 0 : Math.max(0, parseInt(e.target.value) || 0);
+                      setFormData({...formData, operators_per_shift: value});
+                    }}
                     className="w-full px-3 py-2 border border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
                   />
                   <p className="text-xs text-blue-600 mt-1">Machine operators needed</p>
@@ -807,8 +812,11 @@ export default function MachinesPage() {
                     type="number" 
                     min="0"
                     max="5"
-                    value={formData.hopper_loaders_per_shift || 1}
-                    onChange={(e) => setFormData({...formData, hopper_loaders_per_shift: parseInt(e.target.value)})}
+                    value={formData.hopper_loaders_per_shift ?? 1}
+                    onChange={(e) => {
+                      const value = e.target.value === '' ? 0 : Math.max(0, parseInt(e.target.value) || 0);
+                      setFormData({...formData, hopper_loaders_per_shift: value});
+                    }}
                     className="w-full px-3 py-2 border border-orange-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent bg-white"
                   />
                   <p className="text-xs text-orange-600 mt-1">Material handling staff</p>
@@ -821,10 +829,13 @@ export default function MachinesPage() {
                   </label>
                   <input 
                     type="number" 
-                    min="1"
+                    min="0"
                     max="15"
-                    value={formData.packers_per_shift || 3}
-                    onChange={(e) => setFormData({...formData, packers_per_shift: parseInt(e.target.value)})}
+                    value={formData.packers_per_shift ?? 3}
+                    onChange={(e) => {
+                      const value = e.target.value === '' ? 0 : Math.max(0, parseInt(e.target.value) || 0);
+                      setFormData({...formData, packers_per_shift: value});
+                    }}
                     className="w-full px-3 py-2 border border-green-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent bg-white"
                   />
                   <p className="text-xs text-green-600 mt-1">Packaging staff needed</p>
@@ -839,7 +850,7 @@ export default function MachinesPage() {
                   </div>
                   <div className="text-right">
                     <div className="text-2xl font-bold text-gray-900">
-                      {(formData.operators_per_shift || 2) + (formData.hopper_loaders_per_shift || 1) + (formData.packers_per_shift || 3)}
+                      {(formData.operators_per_shift ?? 2) + (formData.hopper_loaders_per_shift ?? 1) + (formData.packers_per_shift ?? 3)}
                     </div>
                     <div className="text-sm text-gray-500">people</div>
                   </div>

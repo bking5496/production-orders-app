@@ -1,20 +1,2 @@
 🚀 API Server running on http://localhost:3000
 ✅ Connected to SQLite database
-Assignment request data: {
-  employee_id: 17,
-  machine_id: 6,
-  shift: 'day',
-  assignment_date: '2025-07-30'
-}
-User role: admin
-SQL parameters: [ 17, 17, 6, 'day', '2025-07-30', 'planned', 'Operator' ]
-Assignment created with ID: 81
-Assignment request data: {
-  employee_id: 32,
-  machine_id: 8,
-  shift: 'day',
-  assignment_date: '2025-07-30'
-}
-User role: admin
-SQL parameters: [ 32, 32, 8, 'day', '2025-07-30', 'planned', 'Packer' ]
-Assignment created with ID: 82
