@@ -1370,9 +1370,9 @@ export function LaborManagementSystem() {
                                     <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
                                         {cycleEnabledMachines.map(machine => {
                                             const assignments = getShiftAssignments(machine);
-                                            const totalWorkforce = (machine.operators_per_shift || 2) + 
-                                                                  (machine.hopper_loaders_per_shift || 1) + 
-                                                                  (machine.packers_per_shift || 3);
+                                            const totalWorkforce = (machine.operators_per_shift || 0) + 
+                                                                  (machine.hopper_loaders_per_shift || 0) + 
+                                                                  (machine.packers_per_shift || 0);
                                             
                                             return (
                                                 <div key={machine.id} className="bg-white rounded-lg border border-gray-200 p-4">
@@ -1447,15 +1447,21 @@ export function LaborManagementSystem() {
                                                     <div className="mt-3 pt-3 border-t border-gray-100">
                                                         <div className="grid grid-cols-3 gap-2 text-xs">
                                                             <div className="text-center">
-                                                                <div className="font-medium text-blue-600">{machine.operators_per_shift || 2}</div>
+                                                                <div className="font-medium text-blue-600">
+                                                                    {machine.operators_per_shift == null ? 'N/A' : machine.operators_per_shift === 0 ? 'Auto' : machine.operators_per_shift}
+                                                                </div>
                                                                 <div className="text-gray-500">Operators</div>
                                                             </div>
                                                             <div className="text-center">
-                                                                <div className="font-medium text-orange-600">{machine.hopper_loaders_per_shift || 1}</div>
+                                                                <div className="font-medium text-orange-600">
+                                                                    {machine.hopper_loaders_per_shift == null ? 'N/A' : machine.hopper_loaders_per_shift === 0 ? 'Auto' : machine.hopper_loaders_per_shift}
+                                                                </div>
                                                                 <div className="text-gray-500">Loaders</div>
                                                             </div>
                                                             <div className="text-center">
-                                                                <div className="font-medium text-green-600">{machine.packers_per_shift || 3}</div>
+                                                                <div className="font-medium text-green-600">
+                                                                    {machine.packers_per_shift == null ? 'N/A' : machine.packers_per_shift === 0 ? 'Auto' : machine.packers_per_shift}
+                                                                </div>
                                                                 <div className="text-gray-500">Packers</div>
                                                             </div>
                                                         </div>

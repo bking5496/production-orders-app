@@ -571,9 +571,9 @@ export default function MachinesPage() {
                       ...machine,
                       shift_cycle_enabled: machine.shift_cycle_enabled || false,
                       cycle_start_date: machine.cycle_start_date || '',
-                      operators_per_shift: machine.operators_per_shift ?? 2,
-                      hopper_loaders_per_shift: machine.hopper_loaders_per_shift ?? 1,
-                      packers_per_shift: machine.packers_per_shift ?? 3
+                      operators_per_shift: machine.operators_per_shift == null ? '' : machine.operators_per_shift,
+                      hopper_loaders_per_shift: machine.hopper_loaders_per_shift == null ? '' : machine.hopper_loaders_per_shift,
+                      packers_per_shift: machine.packers_per_shift == null ? '' : machine.packers_per_shift
                     });
                     // Load crews for this machine
                     await loadCrewsForMachine(machine.id);
@@ -795,12 +795,13 @@ export default function MachinesPage() {
                     max="10"
                     value={formData.operators_per_shift ?? 2}
                     onChange={(e) => {
-                      const value = e.target.value === '' ? 0 : Math.max(0, parseInt(e.target.value) || 0);
+                      const value = e.target.value === '' ? '' : Math.max(0, parseInt(e.target.value) || 0);
                       setFormData({...formData, operators_per_shift: value});
                     }}
+                    placeholder="Not applicable"
                     className="w-full px-3 py-2 border border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
                   />
-                  <p className="text-xs text-blue-600 mt-1">Machine operators needed</p>
+                  <p className="text-xs text-blue-600 mt-1">Machine operators needed • Blank = N/A, 0 = Automated</p>
                 </div>
                 
                 <div className="bg-orange-50 p-4 rounded-lg border border-orange-200">
@@ -814,12 +815,13 @@ export default function MachinesPage() {
                     max="5"
                     value={formData.hopper_loaders_per_shift ?? 1}
                     onChange={(e) => {
-                      const value = e.target.value === '' ? 0 : Math.max(0, parseInt(e.target.value) || 0);
+                      const value = e.target.value === '' ? '' : Math.max(0, parseInt(e.target.value) || 0);
                       setFormData({...formData, hopper_loaders_per_shift: value});
                     }}
+                    placeholder="Not applicable"
                     className="w-full px-3 py-2 border border-orange-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent bg-white"
                   />
-                  <p className="text-xs text-orange-600 mt-1">Material handling staff</p>
+                  <p className="text-xs text-orange-600 mt-1">Material handling staff • Blank = N/A, 0 = Automated</p>
                 </div>
                 
                 <div className="bg-green-50 p-4 rounded-lg border border-green-200">
@@ -833,12 +835,13 @@ export default function MachinesPage() {
                     max="15"
                     value={formData.packers_per_shift ?? 3}
                     onChange={(e) => {
-                      const value = e.target.value === '' ? 0 : Math.max(0, parseInt(e.target.value) || 0);
+                      const value = e.target.value === '' ? '' : Math.max(0, parseInt(e.target.value) || 0);
                       setFormData({...formData, packers_per_shift: value});
                     }}
+                    placeholder="Not applicable"
                     className="w-full px-3 py-2 border border-green-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent bg-white"
                   />
-                  <p className="text-xs text-green-600 mt-1">Packaging staff needed</p>
+                  <p className="text-xs text-green-600 mt-1">Packaging staff needed • Blank = N/A, 0 = Automated</p>
                 </div>
               </div>
               
@@ -850,7 +853,12 @@ export default function MachinesPage() {
                   </div>
                   <div className="text-right">
                     <div className="text-2xl font-bold text-gray-900">
-                      {(formData.operators_per_shift ?? 2) + (formData.hopper_loaders_per_shift ?? 1) + (formData.packers_per_shift ?? 3)}
+                      {(() => {
+                        const operators = formData.operators_per_shift === '' ? 0 : (formData.operators_per_shift ?? 2);
+                        const loaders = formData.hopper_loaders_per_shift === '' ? 0 : (formData.hopper_loaders_per_shift ?? 1);
+                        const packers = formData.packers_per_shift === '' ? 0 : (formData.packers_per_shift ?? 3);
+                        return operators + loaders + packers;
+                      })()}
                     </div>
                     <div className="text-sm text-gray-500">people</div>
                   </div>

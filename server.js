@@ -273,7 +273,9 @@ apiRouter.put('/machines/:id', authenticateToken, requireRole(['admin', 'supervi
             WHERE id = ?
         `, [name, type, environment, capacity, production_rate || null, 
             shift_cycle_enabled ? 1 : 0, cycle_start_date || null,
-            operators_per_shift || 2, hopper_loaders_per_shift || 1, packers_per_shift || 3, 
+            operators_per_shift === '' ? null : (operators_per_shift ?? 2), 
+            hopper_loaders_per_shift === '' ? null : (hopper_loaders_per_shift ?? 1), 
+            packers_per_shift === '' ? null : (packers_per_shift ?? 3), 
             req.params.id]);
         
         res.json({message: 'Machine updated.'});
