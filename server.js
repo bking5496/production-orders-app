@@ -1380,6 +1380,20 @@ apiRouter.post('/planner/assignments', authenticateToken, requireRole(['admin', 
             return res.status(400).json({ error: 'Missing required fields: employee_id, machine_id, shift, assignment_date' });
         }
         
+        // Check if employee is already assigned to opposite shift on same date
+        const oppositeShift = shift === 'day' ? 'night' : 'day';
+        const existingOppositeShift = await dbGet(`
+            SELECT id FROM labor_assignments 
+            WHERE employee_id = ? AND assignment_date = ? AND shift = ?
+        `, [employee_id, assignment_date, oppositeShift]);
+        
+        if (existingOppositeShift) {
+            return res.status(400).json({ 
+                error: `This employee is already assigned to the ${oppositeShift} shift on ${assignment_date}. An employee cannot work both shifts on the same day.`,
+                errorType: 'DOUBLE_SHIFT_CONFLICT'
+            });
+        }
+        
         const params = [employee_id, employee_id, machine_id, shift, assignment_date, 'planned'];
         console.log('SQL parameters:', params);
         const result = await dbRun(
@@ -1490,6 +1504,20 @@ apiRouter.post('/planner/supervisors', authenticateToken, requireRole(['admin', 
         if (existing) {
             console.log('Supervisor already assigned');
             return res.status(400).json({ error: 'Supervisor already assigned to this shift' });
+        }
+        
+        // Check if supervisor is already assigned to opposite shift on same date
+        const oppositeShift = shift === 'day' ? 'night' : 'day';
+        const existingOppositeShift = await dbGet(`
+            SELECT id FROM shift_supervisors 
+            WHERE supervisor_id = ? AND assignment_date = ? AND shift = ?
+        `, [supervisor_id, assignment_date, oppositeShift]);
+        
+        if (existingOppositeShift) {
+            return res.status(400).json({ 
+                error: `This supervisor is already assigned to the ${oppositeShift} shift on ${assignment_date}. A supervisor cannot work both shifts on the same day.`,
+                errorType: 'DOUBLE_SHIFT_CONFLICT'
+            });
         }
         
         console.log('Creating new supervisor assignment...');

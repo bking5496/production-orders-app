@@ -635,7 +635,20 @@ export function LaborManagementSystem() {
             showNotification('Supervisor assigned successfully', 'success');
         } catch (error) {
             console.error('Error adding supervisor:', error);
-            showNotification(error.response?.data?.error || 'Failed to assign supervisor', 'error');
+            
+            // Handle specific error types for supervisor assignments
+            if (error.response?.data?.errorType === 'DOUBLE_SHIFT_CONFLICT') {
+                const supervisor = employees.find(e => e.id === supervisorId);
+                const supervisorName = supervisor?.fullName || supervisor?.username || 'This supervisor';
+                const oppositeShift = selectedShift === 'day' ? 'night' : 'day';
+                
+                showNotification(
+                    `${supervisorName} is already assigned to the ${oppositeShift} shift on ${selectedDate}. A supervisor cannot work both shifts on the same day.`,
+                    'warning'
+                );
+            } else {
+                showNotification(error.response?.data?.error || 'Failed to assign supervisor', 'error');
+            }
         }
     };
 
@@ -863,6 +876,15 @@ export function LaborManagementSystem() {
                         'warning'
                     );
                 }
+            } else if (error.response?.data?.errorType === 'DOUBLE_SHIFT_CONFLICT') {
+                const employee = employees.find(e => e.id === employeeId);
+                const employeeName = employee?.fullName || employee?.username || 'This employee';
+                const oppositeShift = selectedShift === 'day' ? 'night' : 'day';
+                
+                showNotification(
+                    `${employeeName} is already assigned to the ${oppositeShift} shift on ${selectedDate}. An employee cannot work both shifts on the same day.`,
+                    'warning'
+                );
             } else {
                 const errorMessage = error.response?.data?.error || error.message || 'Failed to assign employee';
                 showNotification(`Assignment failed: ${errorMessage}`, 'danger');
