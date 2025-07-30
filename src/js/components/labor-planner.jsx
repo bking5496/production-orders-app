@@ -800,7 +800,25 @@ export function LaborManagementSystem() {
 
     // API Functions
     const assignEmployee = async (employeeId) => {
-        if (currentAssignments.some(a => a.employee_id === employeeId)) return showNotification('Employee already assigned', 'danger');
+        // Check if employee is already assigned to ANY machine for this date/shift
+        const existingAssignment = assignments.find(a => 
+            a.employee_id === employeeId && 
+            a.assignment_date === selectedDate && 
+            a.shift === selectedShift
+        );
+        
+        if (existingAssignment) {
+            const employee = employees.find(e => e.id === employeeId);
+            const employeeName = employee?.fullName || employee?.username || 'This employee';
+            const currentMachine = machines.find(m => m.id === existingAssignment.machine_id);
+            const currentMachineName = currentMachine?.name || 'another machine';
+            
+            return showNotification(
+                `${employeeName} is already assigned to ${currentMachineName} for ${selectedDate} (${selectedShift} shift). Please remove their existing assignment first.`,
+                'warning'
+            );
+        }
+        
         if (!selectedMachine) return showNotification('Please select a machine first', 'danger');
         if (!selectedDate) return showNotification('Please select a date first', 'danger');
         
