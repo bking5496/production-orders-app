@@ -17,8 +17,15 @@ class ApiService {
         }
         throw new Error('Session expired or unauthorized. Please login again.');
       }
-      const error = await response.json().catch(() => ({ error: 'Request failed' }));
-      throw new Error(error.error || error.message || 'Request failed');
+      const errorData = await response.json().catch(() => ({ error: 'Request failed' }));
+      
+      // Create error with response structure for better error handling
+      const error = new Error(errorData.error || errorData.message || 'Request failed');
+      error.response = {
+        status: response.status,
+        data: errorData
+      };
+      throw error;
     }
     // Handle responses that might not have a JSON body
     if (response.headers.get('content-length') === '0') {
