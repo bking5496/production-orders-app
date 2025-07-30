@@ -236,11 +236,60 @@ apiRouter.post('/users', authenticateToken, requireRole(['admin']),
         }
     }
 );
-apiRouter.put('/users/:id', authenticateToken, requireRole(['admin']),
-    body('email').isEmail(), body('role').isIn(['admin', 'supervisor', 'operator', 'viewer']), handleValidationErrors,
+apiRouter.put('/users/:id', authenticateToken, requireRole(['admin', 'supervisor']),
     async (req, res) => {
-        await dbRun('UPDATE users SET email = ?, role = ? WHERE id = ?', [req.body.email, req.body.role, req.params.id]);
-        res.json({message: 'User updated.'});
+        try {
+            const { employee_code, username, role, company, email } = req.body;
+            const validRoles = ['admin', 'supervisor', 'operator', 'operator(ar)', 'hopper_loader', 'packer', 'technician', 'quality_inspector', 'maintenance'];
+            
+            // Validate role if provided
+            if (role && !validRoles.includes(role)) {
+                return res.status(400).json({ error: 'Invalid role specified' });
+            }
+            
+            // Build dynamic update query
+            const updates = [];
+            const values = [];
+            
+            if (employee_code !== undefined) {
+                updates.push('employee_code = ?');
+                values.push(employee_code);
+            }
+            if (username !== undefined) {
+                updates.push('username = ?');
+                values.push(username);
+            }
+            if (role !== undefined) {
+                updates.push('role = ?');
+                values.push(role);
+            }
+            if (company !== undefined) {
+                updates.push('company = ?');
+                values.push(company);
+            }
+            if (email !== undefined) {
+                updates.push('email = ?');
+                values.push(email);
+            }
+            
+            if (updates.length === 0) {
+                return res.status(400).json({ error: 'No fields to update' });
+            }
+            
+            values.push(req.params.id);
+            
+            await dbRun(`UPDATE users SET ${updates.join(', ')} WHERE id = ?`, values);
+            
+            // Return updated user data
+            const updatedUser = await dbGet('SELECT id, employee_code, username, email, role, company FROM users WHERE id = ?', [req.params.id]);
+            res.json(updatedUser);
+        } catch (error) {
+            console.error('User update error:', error);
+            if (error.code === 'SQLITE_CONSTRAINT') {
+                return res.status(409).json({ error: 'Employee code or username already exists' });
+            }
+            res.status(500).json({ error: 'Failed to update user' });
+        }
     }
 );
 apiRouter.delete('/users/:id', authenticateToken, requireRole(['admin']), async (req, res) => {

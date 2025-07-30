@@ -6,6 +6,7 @@ import {
     Wrench, Activity
 } from 'lucide-react';
 import API from '../core/api';
+import { capitalizeWords, formatUserDisplayName, formatEmployeeCode, formatRoleName } from '../utils/text-utils';
 
 // SAST Timezone Utilities (UTC+2)
 const SAST_OFFSET_HOURS = 2;
@@ -560,7 +561,14 @@ export function LaborManagementSystem() {
                 API.get(`/planner/supervisors?date=${selectedDate}&shift=${selectedShift}`)
             ]);
             setMachines(machinesData);
-            setEmployees(employeesData.filter(u => u.role !== 'admin'));
+            // Add formatted display names to employees
+            const formattedEmployees = employeesData.filter(u => u.role !== 'admin').map(emp => ({
+                ...emp,
+                displayName: formatUserDisplayName(emp),
+                formattedCode: formatEmployeeCode(emp.employee_code),
+                formattedRole: formatRoleName(emp.role)
+            }));
+            setEmployees(formattedEmployees);
             setAssignments(assignmentsData);
             setSupervisorsOnDuty(supervisorsData);
         } catch (error) {
@@ -2188,9 +2196,18 @@ export function LaborManagementSystem() {
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
                             <input 
-                                value={editingWorker.fullName || ''} 
-                                onChange={e => setEditingWorker({...editingWorker, fullName: e.target.value})} 
+                                value={editingWorker.username || editingWorker.fullName || ''} 
+                                onChange={e => setEditingWorker({...editingWorker, username: e.target.value})} 
                                 placeholder="Full Name" 
+                                className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">Company</label>
+                            <input 
+                                value={editingWorker.company || ''} 
+                                onChange={e => setEditingWorker({...editingWorker, company: e.target.value})} 
+                                placeholder="Company" 
                                 className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                             />
                         </div>
@@ -2202,9 +2219,11 @@ export function LaborManagementSystem() {
                                 className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                             >
                                 <option value="operator">Operator</option>
+                                <option value="operator(ar)">Operator(AR)</option>
+                                <option value="hopper_loader">Hopper Loader</option>
+                                <option value="packer">Packer</option>
                                 <option value="supervisor">Supervisor</option>
                                 <option value="technician">Technician</option>
-                                <option value="packer">Packer</option>
                                 <option value="quality_inspector">Quality Inspector</option>
                                 <option value="maintenance">Maintenance</option>
                             </select>

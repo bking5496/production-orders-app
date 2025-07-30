@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Settings, Plus, Search, Filter, RefreshCw, Edit3, Trash2, AlertTriangle, Activity, Clock, BarChart3, CheckCircle, XCircle, Wrench, Users, Calendar, RotateCcw, Info } from 'lucide-react';
 import API from '../core/api';
+import { formatUserDisplayName, formatEmployeeCode } from '../utils/text-utils';
 import { Modal, Card, Button, Badge } from './ui-components.jsx';
 
 export default function MachinesPage() {
@@ -117,11 +118,11 @@ export default function MachinesPage() {
     setLoadingEmployees(true);
     try {
       const data = await API.get('/users');
-      // Transform users to match expected employee format
+      // Transform users to match expected employee format with proper capitalization
       const employees = data.map(user => ({
         id: user.id,
-        name: user.username,
-        employee_code: user.employee_code || `EMP${user.id.toString().padStart(3, '0')}`,
+        name: formatUserDisplayName(user),
+        employee_code: formatEmployeeCode(user.employee_code) || `EMP${user.id.toString().padStart(3, '0')}`,
         role: user.role,
         is_active: user.is_active
       })).filter(emp => emp.is_active !== false); // Only active employees
