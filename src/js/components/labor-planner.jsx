@@ -1431,7 +1431,7 @@ export function LaborManagementSystem() {
                                 { role: 'packer', bgClass: 'bg-blue-50', borderClass: 'border-blue-200', iconClass: 'bg-blue-100', iconTextClass: 'text-blue-600', titleClass: 'text-blue-900', countClass: 'text-blue-700' },
                                 { role: 'technician', bgClass: 'bg-amber-50', borderClass: 'border-amber-200', iconClass: 'bg-amber-100', iconTextClass: 'text-amber-600', titleClass: 'text-amber-900', countClass: 'text-amber-700' }
                             ].map(({ role, bgClass, borderClass, iconClass, iconTextClass, titleClass, countClass }) => {
-                                const count = filteredEmployees.filter(e => e.role === role).length;
+                                const count = filteredWorkers.filter(e => e.role === role).length;
                                 return (
                                     <div key={role} className={`${bgClass} rounded-lg p-4 border ${borderClass}`}>
                                         <div className="flex items-center gap-3">
@@ -1450,7 +1450,7 @@ export function LaborManagementSystem() {
 
                         {/* Workers Grid */}
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                            {filteredEmployees.map(employee => {
+                            {filteredWorkers.map(employee => {
                                 const isAssigned = currentAssignments.some(a => a.employee_id === employee.id);
                                 return (
                                     <div key={employee.id} className={`p-4 rounded-lg border-2 transition-all hover:shadow-md ${
