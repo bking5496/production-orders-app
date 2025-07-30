@@ -503,6 +503,7 @@ export function LaborManagementSystem() {
     const [planningSearch, setPlanningSearch] = useState('');
     const [bulkAssignMode, setBulkAssignMode] = useState(false);
     const [selectedEmployees, setSelectedEmployees] = useState([]);
+    const [employeeRoles, setEmployeeRoles] = useState({}); // Track job roles for selected employees
 
     // Attendance state
     const [attendanceDate, setAttendanceDate] = useState(getCurrentSASTDateString());
@@ -814,7 +815,7 @@ export function LaborManagementSystem() {
     };
 
     // API Functions
-    const assignEmployee = async (employeeId) => {
+    const assignEmployee = async (employeeId, jobRole = 'Packer') => {
         // Check if employee is already assigned to ANY machine for this date/shift
         const existingAssignment = assignments.find(a => 
             a.employee_id === employeeId && 
@@ -843,7 +844,8 @@ export function LaborManagementSystem() {
                 employee_id: employeeId, 
                 machine_id: selectedMachine, 
                 shift: selectedShift, 
-                assignment_date: selectedDate 
+                assignment_date: selectedDate,
+                job_role: jobRole
             });
             fetchData(selectedDate); // Refetch to get all details
             showNotification('Employee assigned successfully');
