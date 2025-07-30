@@ -894,6 +894,50 @@ export function LaborManagementSystem() {
         }
     };
 
+    const bulkAssignEmployees = async () => {
+        if (selectedEmployees.length === 0) {
+            return showNotification('Please select at least one employee', 'warning');
+        }
+        
+        if (!selectedMachine) return showNotification('Please select a machine first', 'danger');
+        if (!selectedDate) return showNotification('Please select a date first', 'danger');
+        
+        try {
+            const promises = selectedEmployees.map(employeeId => {
+                const jobRole = employeeRoles[employeeId] || 'Packer';
+                return API.post('/planner/assignments', {
+                    employee_id: employeeId,
+                    machine_id: selectedMachine,
+                    shift: selectedShift,
+                    assignment_date: selectedDate,
+                    job_role: jobRole
+                });
+            });
+            
+            await Promise.all(promises);
+            
+            // Close modal and reset state
+            setShowEmployeeModal(false);
+            setSelectedEmployees([]);
+            setEmployeeRoles({});
+            setBulkAssignMode(false);
+            
+            fetchData(selectedDate);
+            showNotification(`Successfully assigned ${selectedEmployees.length} employees`, 'success');
+        } catch (error) {
+            console.error('Bulk assignment error:', error);
+            
+            // Handle specific error types
+            if (error.response?.data?.errorType === 'DOUBLE_SHIFT_CONFLICT') {
+                showNotification('One or more employees are already assigned to the opposite shift on this date', 'warning');
+            } else if (error.response?.data?.errorType === 'DUPLICATE_ASSIGNMENT') {
+                showNotification('One or more employees are already assigned to a machine for this date and shift', 'warning');
+            } else {
+                showNotification('Some assignments failed. Please check and try again.', 'danger');
+            }
+        }
+    };
+
     const removeAssignment = async (id) => {
         try {
             await API.delete(`/planner/assignments/${id}`);
@@ -1243,6 +1287,7 @@ export function LaborManagementSystem() {
                                                     </p>
                                                     <p className="text-xs text-gray-500">
                                                         {assignment.employee_code} • {assignment.role}
+                                                        {assignment.job_role && ` • ${assignment.job_role}`}
                                                     </p>
                                                 </div>
                                             </div>
@@ -1357,6 +1402,12 @@ export function LaborManagementSystem() {
                                                     <span className="text-sm text-slate-600">{assignment.employee_code}</span>
                                                     <span className="text-sm text-slate-400">•</span>
                                                     <span className="text-sm text-slate-600">{assignment.machine_name}</span>
+                                                    {assignment.job_role && (
+                                                        <>
+                                                            <span className="text-sm text-slate-400">•</span>
+                                                            <span className="text-sm font-medium text-blue-600">{assignment.job_role}</span>
+                                                        </>
+                                                    )}
                                                     <span className="text-sm text-slate-400">•</span>
                                                     <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                                                         assignment.shift === 'day' 
@@ -1555,12 +1606,18 @@ export function LaborManagementSystem() {
                 </div>
             )}
             
-            {/* Enhanced Employee Assignment Modal */}
+            {/* Enhanced Employee Assignment Modal with Role Selection */}
             {showEmployeeModal && (
-                <Modal title="Assign Employee" onClose={() => setShowEmployeeModal(false)} size="lg">
-                    <div className="space-y-4">
-                        <div className="flex items-center gap-4">
-                            <div className="flex-1">
+                <Modal title="Assign Employees to Machine" onClose={() => {
+                    setShowEmployeeModal(false);
+                    setSelectedEmployees([]);
+                    setEmployeeRoles({});
+                    setBulkAssignMode(false);
+                }} size="xl">
+                    <div className="space-y-6">
+                        {/* Header Controls */}
+                        <div className="flex items-center justify-between">
+                            <div className="flex-1 max-w-md">
                                 <input 
                                     type="text" 
                                     placeholder="Search by name or employee code..." 
@@ -1569,23 +1626,34 @@ export function LaborManagementSystem() {
                                     className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                 />
                             </div>
-                            {bulkAssignMode && (
-                                <div className="flex items-center gap-2">
-                                    <Badge variant="info">
+                            <div className="flex items-center gap-3">
+                                {selectedEmployees.length > 0 && (
+                                    <Badge variant="info" className="px-3 py-1">
                                         {selectedEmployees.length} selected
                                     </Badge>
-                                    <Button 
-                                        variant="outline" 
-                                        size="sm"
-                                        onClick={() => setSelectedEmployees([])}
-                                    >
-                                        Clear
-                                    </Button>
-                                </div>
-                            )}
+                                )}
+                                <Button 
+                                    variant="outline" 
+                                    size="sm"
+                                    onClick={() => {
+                                        setSelectedEmployees([]);
+                                        setEmployeeRoles({});
+                                    }}
+                                >
+                                    Clear All
+                                </Button>
+                                <Button 
+                                    onClick={bulkAssignEmployees}
+                                    disabled={selectedEmployees.length === 0}
+                                    className="min-w-[120px]"
+                                >
+                                    Assign Selected ({selectedEmployees.length})
+                                </Button>
+                            </div>
                         </div>
                         
-                        <div className="max-h-96 overflow-y-auto space-y-2">
+                        {/* Employee List */}
+                        <div className="max-h-96 overflow-y-auto space-y-3">
                             {filteredEmployees.map(employee => {
                                 const isAssigned = currentAssignments.some(a => a.employee_id === employee.id);
                                 const isSelected = selectedEmployees.includes(employee.id);
@@ -1601,41 +1669,66 @@ export function LaborManagementSystem() {
                                                 : 'hover:bg-gray-50 border-gray-200'
                                         }`}
                                     >
-                                        <div className="flex justify-between items-center">
-                                            <div className="flex items-center gap-3">
-                                                {bulkAssignMode && !isAssigned && (
+                                        <div className="flex items-center justify-between">
+                                            <div className="flex items-center gap-4">
+                                                {!isAssigned && (
                                                     <input
                                                         type="checkbox"
                                                         checked={isSelected}
                                                         onChange={(e) => {
                                                             if (e.target.checked) {
                                                                 setSelectedEmployees([...selectedEmployees, employee.id]);
+                                                                setEmployeeRoles({...employeeRoles, [employee.id]: 'Packer'});
                                                             } else {
-                                                                setSelectedEmployees(selectedEmployees.filter(id => id !== employee.id));
+                                                                const newSelected = selectedEmployees.filter(id => id !== employee.id);
+                                                                const newRoles = {...employeeRoles};
+                                                                delete newRoles[employee.id];
+                                                                setSelectedEmployees(newSelected);
+                                                                setEmployeeRoles(newRoles);
                                                             }
                                                         }}
-                                                        className="w-4 h-4 text-blue-600 rounded"
+                                                        className="w-5 h-5 text-blue-600 rounded"
                                                     />
                                                 )}
-                                                <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
-                                                    <Users className="w-5 h-5 text-gray-600" />
+                                                <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">
+                                                    <Users className="w-6 h-6 text-gray-600" />
                                                 </div>
                                                 <div>
-                                                    <p className="font-semibold">{employee.fullName || employee.username}</p>
+                                                    <p className="font-semibold text-lg">{employee.fullName || employee.username}</p>
                                                     <p className="text-sm text-gray-500">
                                                         {employee.employee_code} • {employee.role}
+                                                        {isAssigned && ' • Already Assigned'}
                                                     </p>
                                                 </div>
                                             </div>
                                             
-                                            {!bulkAssignMode && (
+                                            {/* Role Selection for Selected Employees */}
+                                            {isSelected && (
+                                                <div className="flex items-center gap-3">
+                                                    <label className="text-sm font-medium text-gray-700">Job Role:</label>
+                                                    <select
+                                                        value={employeeRoles[employee.id] || 'Packer'}
+                                                        onChange={(e) => setEmployeeRoles({
+                                                            ...employeeRoles,
+                                                            [employee.id]: e.target.value
+                                                        })}
+                                                        className="px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                                                    >
+                                                        <option value="Packer">Packer</option>
+                                                        <option value="Operator">Operator</option>
+                                                        <option value="Hopper">Hopper</option>
+                                                    </select>
+                                                </div>
+                                            )}
+                                            
+                                            {/* Single Assignment Button for non-bulk mode */}
+                                            {!isSelected && !isAssigned && (
                                                 <Button 
-                                                    onClick={() => assignEmployee(employee.id)} 
-                                                    disabled={isAssigned}
-                                                    variant={isAssigned ? "secondary" : "primary"}
+                                                    onClick={() => assignEmployee(employee.id, 'Packer')} 
+                                                    variant="outline"
                                                     size="sm"
                                                 >
-                                                    {isAssigned ? 'Already Assigned' : 'Assign'}
+                                                    Quick Assign as Packer
                                                 </Button>
                                             )}
                                         </div>
@@ -1647,7 +1740,28 @@ export function LaborManagementSystem() {
                         {filteredEmployees.length === 0 && (
                             <div className="text-center py-8 text-gray-500">
                                 <Users className="w-12 h-12 mx-auto mb-3 text-gray-300" />
-                                <p>No employees found</p>
+                                <p>No employees found matching your search</p>
+                            </div>
+                        )}
+                        
+                        {/* Summary of Selections */}
+                        {selectedEmployees.length > 0 && (
+                            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                                <h4 className="font-medium text-blue-900 mb-2">Assignment Summary:</h4>
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-2 text-sm">
+                                    {['Packer', 'Operator', 'Hopper'].map(role => {
+                                        const count = selectedEmployees.filter(id => employeeRoles[id] === role).length;
+                                        if (count > 0) {
+                                            return (
+                                                <div key={role} className="flex justify-between">
+                                                    <span className="font-medium">{role}s:</span>
+                                                    <span className="text-blue-700">{count}</span>
+                                                </div>
+                                            );
+                                        }
+                                        return null;
+                                    })}
+                                </div>
                             </div>
                         )}
                     </div>

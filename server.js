@@ -1394,10 +1394,10 @@ apiRouter.post('/planner/assignments', authenticateToken, requireRole(['admin', 
             });
         }
         
-        const params = [employee_id, employee_id, machine_id, shift, assignment_date, 'planned'];
+        const params = [employee_id, employee_id, machine_id, shift, assignment_date, 'planned', job_role];
         console.log('SQL parameters:', params);
         const result = await dbRun(
-            'INSERT INTO labor_assignments (user_id, employee_id, machine_id, shift, assignment_date, status) VALUES (?, ?, ?, ?, ?, ?)',
+            'INSERT INTO labor_assignments (user_id, employee_id, machine_id, shift, assignment_date, status, job_role) VALUES (?, ?, ?, ?, ?, ?, ?)',
             params
         );
         console.log('Assignment created with ID:', result.lastID);
