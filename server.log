@@ -90,3 +90,28 @@ Assignment request data: {
 User role: admin
 SQL parameters: [ 31, 31, 17, 'day', '2025-07-30', 'planned', 'Hopper' ]
 Assignment created with ID: 92
+Assignment request data: {
+  employee_id: 25,
+  machine_id: 17,
+  shift: 'night',
+  assignment_date: '2025-07-30'
+}
+User role: admin
+Assignment request data: {
+  employee_id: 39,
+  machine_id: 17,
+  shift: 'night',
+  assignment_date: '2025-07-30'
+}
+User role: admin
+SQL parameters: [ 39, 39, 17, 'night', '2025-07-30', 'planned', 'Operator' ]
+Assignment created with ID: 93
+Assignment request data: {
+  employee_id: 45,
+  machine_id: 17,
+  shift: 'night',
+  assignment_date: '2025-07-30'
+}
+User role: admin
+SQL parameters: [ 45, 45, 17, 'night', '2025-07-30', 'planned', 'Hopper' ]
+Assignment created with ID: 94

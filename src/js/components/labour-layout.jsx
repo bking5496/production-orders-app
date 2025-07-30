@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Calendar, Download, RefreshCw, Eye, Users, ClipboardList, UserCheck, Settings, Edit2 } from 'lucide-react';
 import API from '../core/api';
+import { formatUserDisplayName, formatEmployeeCode, formatRoleName } from '../utils/text-utils';
 
 // Export utilities
 const exportToCSV = (data, filename) => {
@@ -41,7 +42,7 @@ const exportToExcel = (rosterData, selectedDate) => {
             ...rosterData.assignments.map(a => ({
                 'Type': 'Employee',
                 'Employee Code': a.employee_code || 'N/A',
-                'Name': a.fullName || a.name,
+                'Name': formatUserDisplayName(a),
                 'Machine': a.machine || 'N/A',
                 'Position': a.position ? a.position : (a.role ? a.role : 'Operator'),
                 'Shift': a.shift,
@@ -260,7 +261,7 @@ export default function LabourLayoutPage() {
                     })),
                     ...rosterData.assignments.map(a => ({
                         'Type': 'Employee',
-                        'Name': a.fullName || a.name,
+                        'Name': formatUserDisplayName(a),
                         'Employee Code': a.employee_code || 'N/A',
                         'Machine': a.machine || 'N/A',
                         'Production Area': a.production_area || 'N/A',

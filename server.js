@@ -1228,7 +1228,8 @@ apiRouter.get('/labour/roster', authenticateToken, async (req, res) => {
                 u.username as name,
                 u.fullName,
                 u.employee_code,
-                u.role as position,
+                u.company,
+                COALESCE(la.job_role, u.role) as position,
                 m.name as machine,
                 m.environment as production_area,
                 'employee' as type
