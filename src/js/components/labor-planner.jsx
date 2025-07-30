@@ -820,14 +820,29 @@ export function LaborManagementSystem() {
             // Handle specific error types with enhanced messages
             if (error.response?.data?.errorType === 'DUPLICATE_ASSIGNMENT') {
                 const employee = employees.find(e => e.id === employeeId);
-                const machine = machines.find(m => m.id === selectedMachine);
                 const employeeName = employee?.fullName || employee?.username || 'This employee';
-                const machineName = machine?.name || 'a machine';
                 
-                showNotification(
-                    `${employeeName} is already assigned to ${machineName} for ${selectedDate} (${selectedShift} shift). Please remove their existing assignment first or choose a different employee.`,
-                    'warning'
+                // Find the employee's existing assignment for this date/shift
+                const existingAssignment = assignments.find(a => 
+                    a.employee_id === employeeId && 
+                    a.assignment_date === selectedDate && 
+                    a.shift === selectedShift
                 );
+                
+                if (existingAssignment) {
+                    const currentMachine = machines.find(m => m.id === existingAssignment.machine_id);
+                    const currentMachineName = currentMachine?.name || 'another machine';
+                    
+                    showNotification(
+                        `${employeeName} is already assigned to ${currentMachineName} for ${selectedDate} (${selectedShift} shift). Please remove their existing assignment first.`,
+                        'warning'
+                    );
+                } else {
+                    showNotification(
+                        `${employeeName} is already assigned to a machine for ${selectedDate} (${selectedShift} shift). Please remove their existing assignment first.`,
+                        'warning'
+                    );
+                }
             } else {
                 const errorMessage = error.response?.data?.error || error.message || 'Failed to assign employee';
                 showNotification(`Assignment failed: ${errorMessage}`, 'danger');
