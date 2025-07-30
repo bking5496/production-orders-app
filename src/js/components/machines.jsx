@@ -125,7 +125,17 @@ export default function MachinesPage() {
       setEmployees(employees);
     } catch (error) {
       console.error('Failed to load employees:', error);
-      showNotification('Failed to load employees', 'danger');
+      console.error('Error details:', error.message, error.response);
+      
+      // Provide fallback empty list so the interface still works
+      setEmployees([]);
+      
+      // Show helpful error message
+      if (error.message.includes('unauthorized') || error.message.includes('Session expired')) {
+        showNotification('Please log in to manage crew assignments', 'danger');
+      } else {
+        showNotification(`Failed to load employees: ${error.message}. You can still configure shift cycles without employee assignments.`, 'danger');
+      }
     } finally {
       setLoadingEmployees(false);
     }
@@ -843,6 +853,8 @@ export default function MachinesPage() {
                           >
                             {loadingEmployees ? (
                               <option disabled>Loading employees...</option>
+                            ) : employees.length === 0 ? (
+                              <option disabled>No employees available - please log in or check permissions</option>
                             ) : (
                               employees.map(emp => (
                                 <option key={emp.id} value={emp.id}>
