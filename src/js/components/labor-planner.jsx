@@ -1287,6 +1287,25 @@ export function LaborManagementSystem() {
                                 <option value="night">Night Shift</option>
                             </select>
                             <div className="ml-auto flex items-center gap-2">
+                                <button
+                                    onClick={() => {
+                                        setShowShiftCyclePanel(!showShiftCyclePanel);
+                                        if (!showShiftCyclePanel) loadShiftCycleMachines();
+                                    }}
+                                    className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all ${
+                                        showShiftCyclePanel 
+                                            ? 'bg-indigo-100 text-indigo-700 border border-indigo-200' 
+                                            : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                                    }`}
+                                >
+                                    <RotateCcw className="w-4 h-4" />
+                                    <span className="hidden sm:inline">2-2-2 Cycle</span>
+                                    {cycleEnabledMachines.length > 0 && (
+                                        <span className="bg-indigo-600 text-white text-xs px-2 py-1 rounded-full ml-1">
+                                            {cycleEnabledMachines.length}
+                                        </span>
+                                    )}
+                                </button>
                                 <Button variant="ghost" size="sm" onClick={openWeeklyPlanModal}>
                                     <Calendar className="w-4 h-4" />
                                     Weekly
@@ -1302,6 +1321,187 @@ export function LaborManagementSystem() {
                             </div>
                         </div>
                     </div>
+                    
+                    {/* 2-2-2 Shift Cycle Panel */}
+                    {showShiftCyclePanel && (
+                        <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl border border-indigo-200 p-6">
+                            <div className="flex items-center justify-between mb-6">
+                                <div>
+                                    <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+                                        <RotateCcw className="w-5 h-5 text-indigo-600" />
+                                        2-2-2 Shift Cycle Management
+                                    </h3>
+                                    <p className="text-sm text-gray-600 mt-1">
+                                        Automatic crew rotation: 2 days day shift → 2 days night shift → 2 days rest
+                                    </p>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    {loadingCycleData && (
+                                        <div className="flex items-center gap-2 text-indigo-600">
+                                            <RefreshCw className="w-4 h-4 animate-spin" />
+                                            <span className="text-sm">Loading...</span>
+                                        </div>
+                                    )}
+                                    <button
+                                        onClick={() => setShowShiftCyclePanel(false)}
+                                        className="p-2 text-gray-400 hover:text-gray-600 hover:bg-white rounded-lg transition-colors"
+                                    >
+                                        <X className="w-4 h-4" />
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            {cycleEnabledMachines.length === 0 ? (
+                                <div className="text-center py-8">
+                                    <Clock className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                                    <h4 className="text-lg font-medium text-gray-900 mb-2">No Shift Cycles Configured</h4>
+                                    <p className="text-gray-600 mb-4">
+                                        Enable 2-2-2 shift cycles on machines to see automatic crew rotation here.
+                                    </p>
+                                    <button
+                                        onClick={() => window.location.href = '/machines'}
+                                        className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+                                    >
+                                        Configure Machines →
+                                    </button>
+                                </div>
+                            ) : (
+                                <div className="space-y-4">
+                                    <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
+                                        {cycleEnabledMachines.map(machine => {
+                                            const assignments = getShiftAssignments(machine);
+                                            const totalWorkforce = (machine.operators_per_shift || 2) + 
+                                                                  (machine.hopper_loaders_per_shift || 1) + 
+                                                                  (machine.packers_per_shift || 3);
+                                            
+                                            return (
+                                                <div key={machine.id} className="bg-white rounded-lg border border-gray-200 p-4">
+                                                    <div className="flex items-center justify-between mb-3">
+                                                        <h4 className="font-semibold text-gray-900">{machine.name}</h4>
+                                                        <div className="flex items-center gap-1">
+                                                            <Activity className="w-4 h-4 text-green-500" />
+                                                            <span className="text-xs text-green-600 font-medium">Active Cycle</span>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div className="space-y-3">
+                                                        {/* Day Shift */}
+                                                        <div className="flex items-center justify-between p-2 bg-blue-50 rounded-lg">
+                                                            <div className="flex items-center gap-2">
+                                                                <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
+                                                                <span className="text-sm font-medium">Day Shift</span>
+                                                            </div>
+                                                            <div className="text-right">
+                                                                <div className="text-sm font-bold text-blue-700">
+                                                                    {assignments.dayShift.length > 0 
+                                                                        ? `Crew ${assignments.dayShift.join(', ')}`
+                                                                        : 'No crew assigned'
+                                                                    }
+                                                                </div>
+                                                                <div className="text-xs text-blue-600">
+                                                                    {totalWorkforce} people needed
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        {/* Night Shift */}
+                                                        <div className="flex items-center justify-between p-2 bg-indigo-50 rounded-lg">
+                                                            <div className="flex items-center gap-2">
+                                                                <div className="w-3 h-3 bg-indigo-500 rounded-full"></div>
+                                                                <span className="text-sm font-medium">Night Shift</span>
+                                                            </div>
+                                                            <div className="text-right">
+                                                                <div className="text-sm font-bold text-indigo-700">
+                                                                    {assignments.nightShift.length > 0 
+                                                                        ? `Crew ${assignments.nightShift.join(', ')}`
+                                                                        : 'No crew assigned'
+                                                                    }
+                                                                </div>
+                                                                <div className="text-xs text-indigo-600">
+                                                                    {totalWorkforce} people needed
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        {/* Rest */}
+                                                        <div className="flex items-center justify-between p-2 bg-gray-50 rounded-lg">
+                                                            <div className="flex items-center gap-2">
+                                                                <div className="w-3 h-3 bg-gray-400 rounded-full"></div>
+                                                                <span className="text-sm font-medium">Rest</span>
+                                                            </div>
+                                                            <div className="text-right">
+                                                                <div className="text-sm font-medium text-gray-600">
+                                                                    {assignments.resting.length > 0 
+                                                                        ? `Crew ${assignments.resting.join(', ')}`
+                                                                        : 'All crews working'
+                                                                    }
+                                                                </div>
+                                                                <div className="text-xs text-gray-500">
+                                                                    Off duty
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    {/* Workforce Breakdown */}
+                                                    <div className="mt-3 pt-3 border-t border-gray-100">
+                                                        <div className="grid grid-cols-3 gap-2 text-xs">
+                                                            <div className="text-center">
+                                                                <div className="font-medium text-blue-600">{machine.operators_per_shift || 2}</div>
+                                                                <div className="text-gray-500">Operators</div>
+                                                            </div>
+                                                            <div className="text-center">
+                                                                <div className="font-medium text-orange-600">{machine.hopper_loaders_per_shift || 1}</div>
+                                                                <div className="text-gray-500">Loaders</div>
+                                                            </div>
+                                                            <div className="text-center">
+                                                                <div className="font-medium text-green-600">{machine.packers_per_shift || 3}</div>
+                                                                <div className="text-gray-500">Packers</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    {/* Quick Actions */}
+                                                    <div className="mt-3 flex gap-2">
+                                                        <button 
+                                                            onClick={() => window.location.href = `/machines?edit=${machine.id}`}
+                                                            className="flex-1 px-3 py-2 text-xs bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+                                                        >
+                                                            <Edit2 className="w-3 h-3 inline mr-1" />
+                                                            Edit
+                                                        </button>
+                                                        <button 
+                                                            onClick={() => window.location.href = '/labour-layout?date=' + selectedDate}
+                                                            className="flex-1 px-3 py-2 text-xs bg-indigo-100 text-indigo-700 rounded-lg hover:bg-indigo-200 transition-colors"
+                                                        >
+                                                            <Eye className="w-3 h-3 inline mr-1" />
+                                                            View Layout
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                    
+                                    {/* Cycle Information */}
+                                    <div className="mt-6 p-4 bg-white rounded-lg border border-indigo-200">
+                                        <div className="flex items-start gap-3">
+                                            <Info className="w-5 h-5 text-indigo-600 mt-0.5" />
+                                            <div>
+                                                <h4 className="font-medium text-gray-900 mb-2">How 2-2-2 Cycle Works</h4>
+                                                <div className="text-sm text-gray-600 space-y-1">
+                                                    <p>• <strong>3 staggered crews</strong> (A, B, C) ensure continuous 24/7 operations</p>
+                                                    <p>• <strong>Each crew rotates:</strong> 2 days day shift → 2 days night shift → 2 days rest</p>
+                                                    <p>• <strong>Perfect coverage:</strong> Every day has exactly 1 crew on day + 1 crew on night shift</p>
+                                                    <p>• <strong>Date: {selectedDate}</strong> - Assignments shown for selected date</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    )}
 
                     {/* Machine Grid */}
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">

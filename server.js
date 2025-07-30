@@ -335,21 +335,25 @@ apiRouter.post('/machines/:id/crews', authenticateToken, requireRole(['admin', '
             
             // Insert new crews
             for (const crew of crews) {
-                const { letter, offset, employees } = crew;
+                const { letter, crew_letter, offset, cycle_offset, employees } = crew;
                 
-                if (!['A', 'B', 'C'].includes(letter)) {
-                    throw new Error(`Invalid crew letter: ${letter}`);
+                // Handle both frontend formats (letter/crew_letter, offset/cycle_offset)
+                const crewLetter = letter || crew_letter;
+                const crewOffset = offset !== undefined ? offset : cycle_offset;
+                
+                if (!['A', 'B', 'C'].includes(crewLetter)) {
+                    throw new Error(`Invalid crew letter: ${crewLetter}`);
                 }
                 
-                if (![0, 2, 4].includes(offset)) {
-                    throw new Error(`Invalid cycle offset: ${offset}`);
+                if (![0, 2, 4].includes(crewOffset)) {
+                    throw new Error(`Invalid cycle offset: ${crewOffset}`);
                 }
                 
                 await dbRun(`
                     INSERT INTO machine_crews 
                     (machine_id, crew_letter, cycle_offset, employees, created_by)
                     VALUES (?, ?, ?, ?, ?)
-                `, [machineId, letter, offset, JSON.stringify(employees || []), req.user.id]);
+                `, [machineId, crewLetter, crewOffset, JSON.stringify(employees || []), req.user.id]);
             }
             
             // Commit transaction
