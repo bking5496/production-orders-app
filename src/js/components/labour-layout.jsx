@@ -368,7 +368,8 @@ export default function LabourLayoutPage() {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <>
+            <div className="min-h-screen bg-gray-50">
             {/* Modern Header with gradient */}
             <div className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white shadow-lg">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
@@ -790,7 +791,6 @@ export default function LabourLayoutPage() {
                                     <p className="text-sm">Try selecting a different date or check if data has been entered for this date.</p>
                                 </div>
                             )}
-                            </div>
                         )}
                     </div>
                 </div>
@@ -855,6 +855,6 @@ export default function LabourLayoutPage() {
                     </div>
                 </div>
             )}
-        </div>
+        </>
     );
 };
