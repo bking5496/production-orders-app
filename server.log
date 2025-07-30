@@ -1,2 +1,22 @@
 🚀 API Server running on http://localhost:3000
 ✅ Connected to SQLite database
+Error saving machine crews: Error: Invalid crew letter: undefined
+    at /home/production-app/production-orders-app/server.js:337:27
+Assignment request data: {
+  employee_id: 24,
+  machine_id: 8,
+  shift: 'day',
+  assignment_date: '2025-08-01'
+}
+User role: admin
+SQL parameters: [ 24, 24, 8, 'day', '2025-08-01', 'planned', 'Packer' ]
+Assignment created with ID: 78
+Assignment request data: {
+  employee_id: 2,
+  machine_id: 8,
+  shift: 'day',
+  assignment_date: '2025-08-01'
+}
+User role: admin
+SQL parameters: [ 2, 2, 8, 'day', '2025-08-01', 'planned', 'Packer' ]
+Assignment created with ID: 79

@@ -113,8 +113,16 @@ export default function MachinesPage() {
   const loadEmployees = async () => {
     setLoadingEmployees(true);
     try {
-      const data = await API.get('/employees');
-      setEmployees(data);
+      const data = await API.get('/users');
+      // Transform users to match expected employee format
+      const employees = data.map(user => ({
+        id: user.id,
+        name: user.username,
+        employee_code: user.employee_code || `EMP${user.id.toString().padStart(3, '0')}`,
+        role: user.role,
+        is_active: user.is_active
+      })).filter(emp => emp.is_active !== false); // Only active employees
+      setEmployees(employees);
     } catch (error) {
       console.error('Failed to load employees:', error);
       showNotification('Failed to load employees', 'danger');
