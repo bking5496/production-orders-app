@@ -580,7 +580,7 @@ export function LaborManagementSystem() {
     const attendanceAssignments = useMemo(() => {
         return assignments.filter(a => a.assignment_date === attendanceDate);
     }, [assignments, attendanceDate]);
-    const filteredEmployees = useMemo(() => employees.filter(e => !workerSearch || e.username.toLowerCase().includes(workerSearch.toLowerCase()) || (e.employee_code && e.employee_code.toLowerCase().includes(workerSearch.toLowerCase()))), [employees, workerSearch]);
+    const filteredEmployees = useMemo(() => employees.filter(e => !planningSearch || e.username.toLowerCase().includes(planningSearch.toLowerCase()) || (e.employee_code && e.employee_code.toLowerCase().includes(planningSearch.toLowerCase()))), [employees, planningSearch]);
 
     const showNotification = useCallback((message, type = 'success') => {
         setNotification({ show: true, message, type });
@@ -1236,14 +1236,8 @@ export function LaborManagementSystem() {
                                     <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-2">
                                         <Users className="w-6 h-6 text-gray-400" />
                                     </div>
-                                    <p className="text-gray-500 text-xs mb-2">No workers assigned</p>
-                                    <Button 
-                                        variant="outline" 
-                                        size="sm" 
-                                        onClick={() => setShowEmployeeModal(true)}
-                                    >
-                                        Assign Worker
-                                    </Button>
+                                    <p className="text-gray-500 text-xs">No workers assigned</p>
+                                    <p className="text-gray-400 text-xs mt-1">Use the "Add" button above to assign workers</p>
                                 </div>
                             )}
                         </div>
