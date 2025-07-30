@@ -581,6 +581,8 @@ export function LaborManagementSystem() {
         return assignments.filter(a => a.assignment_date === attendanceDate);
     }, [assignments, attendanceDate]);
     const filteredEmployees = useMemo(() => employees.filter(e => !planningSearch || e.username.toLowerCase().includes(planningSearch.toLowerCase()) || (e.employee_code && e.employee_code.toLowerCase().includes(planningSearch.toLowerCase()))), [employees, planningSearch]);
+    
+    const filteredWorkers = useMemo(() => employees.filter(e => !workerSearch || e.username.toLowerCase().includes(workerSearch.toLowerCase()) || (e.employee_code && e.employee_code.toLowerCase().includes(workerSearch.toLowerCase()))), [employees, workerSearch]);
 
     const showNotification = useCallback((message, type = 'success') => {
         setNotification({ show: true, message, type });
