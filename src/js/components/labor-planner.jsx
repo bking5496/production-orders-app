@@ -2,7 +2,8 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { 
     Calendar, Users, Search, Plus, CheckCircle, X, ClipboardList, UserCheck, 
     Edit2, Save, Trash2, RefreshCw, Download, Copy, PlusCircle, MinusCircle,
-    FileText, Settings, TrendingUp, AlertCircle, Eye
+    FileText, Settings, TrendingUp, AlertCircle, Eye, RotateCcw, Clock, Info,
+    Wrench, Activity
 } from 'lucide-react';
 import API from '../core/api';
 
@@ -524,6 +525,12 @@ export function LaborManagementSystem() {
     const [supervisorsOnDuty, setSupervisorsOnDuty] = useState([]);
     const [showSupervisorModal, setShowSupervisorModal] = useState(false);
 
+    // 2-2-2 Shift Cycle State
+    const [showShiftCyclePanel, setShowShiftCyclePanel] = useState(false);
+    const [cycleEnabledMachines, setCycleEnabledMachines] = useState([]);
+    const [shiftCycleAssignments, setShiftCycleAssignments] = useState({});
+    const [loadingCycleData, setLoadingCycleData] = useState(false);
+    
     // Weekly planning state
     const [showWeeklyPlanModal, setShowWeeklyPlanModal] = useState(false);
     const [weeklyPlanData, setWeeklyPlanData] = useState({
@@ -563,11 +570,76 @@ export function LaborManagementSystem() {
             setLoading(false);
         }
     }, [selectedShift]);
+    
+    // 2-2-2 Shift Cycle Functions
+    const loadShiftCycleMachines = useCallback(async () => {
+        setLoadingCycleData(true);
+        try {
+            const machinesData = await API.get('/machines');
+            const cycleEnabled = machinesData.filter(m => m.shift_cycle_enabled);
+            setCycleEnabledMachines(cycleEnabled);
+            
+            // Load assignments for cycle-enabled machines
+            const cycleAssignments = {};
+            for (const machine of cycleEnabled) {
+                try {
+                    const assignments = await API.get(`/machines/${machine.id}/assignments/${selectedDate}`);
+                    cycleAssignments[machine.id] = assignments;
+                } catch (error) {
+                    console.warn(`Failed to load assignments for machine ${machine.id}:`, error);
+                    cycleAssignments[machine.id] = { enabled: false, assignments: [] };
+                }
+            }
+            setShiftCycleAssignments(cycleAssignments);
+        } catch (error) {
+            console.error('Failed to load shift cycle data:', error);
+            showNotification('Failed to load shift cycle data: ' + error.message, 'danger');
+        } finally {
+            setLoadingCycleData(false);
+        }
+    }, [selectedDate]);
+    
+    // Calculate crew assignment for display
+    const calculateCrewAssignment = (startDate, currentDate, offset) => {
+        if (!startDate) return 'rest';
+        
+        const start = new Date(startDate);
+        const current = new Date(currentDate);
+        const daysSinceStart = Math.floor((current - start) / (1000 * 60 * 60 * 24));
+        const cycleDay = (daysSinceStart + offset) % 6;
+        
+        if (cycleDay === 0 || cycleDay === 1) return 'day';
+        if (cycleDay === 2 || cycleDay === 3) return 'night';
+        return 'rest';
+    };
+    
+    // Get shift assignments for all crews on selected date
+    const getShiftAssignments = (machine) => {
+        if (!machine.cycle_start_date) return { dayShift: [], nightShift: [], resting: ['A', 'B', 'C'] };
+        
+        const crews = [{ letter: 'A', offset: 0 }, { letter: 'B', offset: 2 }, { letter: 'C', offset: 4 }];
+        const assignments = crews.reduce((acc, crew) => {
+            const assignment = calculateCrewAssignment(machine.cycle_start_date, selectedDate, crew.offset);
+            acc[assignment].push(crew.letter);
+            return acc;
+        }, { day: [], night: [], rest: [] });
+        
+        return {
+            dayShift: assignments.day,
+            nightShift: assignments.night,
+            resting: assignments.rest
+        };
+    };
 
     useEffect(() => {
         const dateToFetch = currentView === 'attendance' ? attendanceDate : selectedDate;
         fetchData(dateToFetch);
-    }, [selectedDate, attendanceDate, currentView, selectedShift, fetchData]);
+        
+        // Load shift cycle data when in planning view
+        if (currentView === 'planning' && showShiftCyclePanel) {
+            loadShiftCycleMachines();
+        }
+    }, [selectedDate, attendanceDate, currentView, selectedShift, fetchData, showShiftCyclePanel, loadShiftCycleMachines]);
     
     // Memos for filtering without timezone conversion
     const currentAssignments = useMemo(() => {

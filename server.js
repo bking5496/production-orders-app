@@ -262,15 +262,19 @@ apiRouter.post('/machines', authenticateToken, requireRole(['admin', 'supervisor
 apiRouter.put('/machines/:id', authenticateToken, requireRole(['admin', 'supervisor']),
     body('name').notEmpty(), body('type').notEmpty(), body('environment').notEmpty(), body('capacity').isInt({min: 1}), handleValidationErrors,
     async (req, res) => {
-        const { name, type, environment, capacity, production_rate, shift_cycle_enabled, cycle_start_date, crew_size } = req.body;
+        const { name, type, environment, capacity, production_rate, shift_cycle_enabled, cycle_start_date, 
+                operators_per_shift, hopper_loaders_per_shift, packers_per_shift } = req.body;
         
         await dbRun(`
             UPDATE machines 
             SET name = ?, type = ?, environment = ?, capacity = ?, production_rate = ?, 
-                shift_cycle_enabled = ?, cycle_start_date = ?, crew_size = ? 
+                shift_cycle_enabled = ?, cycle_start_date = ?, 
+                operators_per_shift = ?, hopper_loaders_per_shift = ?, packers_per_shift = ?
             WHERE id = ?
         `, [name, type, environment, capacity, production_rate || null, 
-            shift_cycle_enabled ? 1 : 0, cycle_start_date || null, crew_size || 1, req.params.id]);
+            shift_cycle_enabled ? 1 : 0, cycle_start_date || null,
+            operators_per_shift || 2, hopper_loaders_per_shift || 1, packers_per_shift || 3, 
+            req.params.id]);
         
         res.json({message: 'Machine updated.'});
     }

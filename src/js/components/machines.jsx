@@ -29,7 +29,10 @@ export default function MachinesPage() {
     production_rate: 60,
     shift_cycle_enabled: false,
     cycle_start_date: '',
-    crew_size: 1
+    // Role-based crew configuration
+    operators_per_shift: 2,
+    hopper_loaders_per_shift: 1,
+    packers_per_shift: 3
   });
   
   // Shift cycle specific state
@@ -771,149 +774,121 @@ export default function MachinesPage() {
               </div>
             </div>
             
-            {/* 2-2-2 Shift Cycle Settings */}
+            {/* Workforce Configuration */}
             <div className="border-t pt-6 mt-6">
-              <div className="flex items-center space-x-3 mb-4">
-                <input 
-                  type="checkbox" 
-                  id="shift_cycle_enabled"
-                  checked={formData.shift_cycle_enabled || false}
-                  onChange={(e) => setFormData({...formData, shift_cycle_enabled: e.target.checked})}
-                  className="w-5 h-5 text-blue-600 rounded focus:ring-blue-500"
-                />
-                <label htmlFor="shift_cycle_enabled" className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-                  <RotateCcw className="w-5 h-5 text-blue-600" />
-                  Enable 2-2-2 Shift Cycle
-                </label>
+              <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                <Users className="w-5 h-5 text-blue-600" />
+                Workforce Requirements
+              </h3>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                  <label className="block text-sm font-medium text-blue-800 mb-2">
+                    <Settings className="w-4 h-4 inline mr-1" />
+                    Operators per Shift
+                  </label>
+                  <input 
+                    type="number" 
+                    min="1"
+                    max="10"
+                    value={formData.operators_per_shift || 2}
+                    onChange={(e) => setFormData({...formData, operators_per_shift: parseInt(e.target.value)})}
+                    className="w-full px-3 py-2 border border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+                  />
+                  <p className="text-xs text-blue-600 mt-1">Machine operators needed</p>
+                </div>
+                
+                <div className="bg-orange-50 p-4 rounded-lg border border-orange-200">
+                  <label className="block text-sm font-medium text-orange-800 mb-2">
+                    <BarChart3 className="w-4 h-4 inline mr-1" />
+                    Hopper Loaders per Shift
+                  </label>
+                  <input 
+                    type="number" 
+                    min="0"
+                    max="5"
+                    value={formData.hopper_loaders_per_shift || 1}
+                    onChange={(e) => setFormData({...formData, hopper_loaders_per_shift: parseInt(e.target.value)})}
+                    className="w-full px-3 py-2 border border-orange-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent bg-white"
+                  />
+                  <p className="text-xs text-orange-600 mt-1">Material handling staff</p>
+                </div>
+                
+                <div className="bg-green-50 p-4 rounded-lg border border-green-200">
+                  <label className="block text-sm font-medium text-green-800 mb-2">
+                    <CheckCircle className="w-4 h-4 inline mr-1" />
+                    Packers per Shift
+                  </label>
+                  <input 
+                    type="number" 
+                    min="1"
+                    max="15"
+                    value={formData.packers_per_shift || 3}
+                    onChange={(e) => setFormData({...formData, packers_per_shift: parseInt(e.target.value)})}
+                    className="w-full px-3 py-2 border border-green-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent bg-white"
+                  />
+                  <p className="text-xs text-green-600 mt-1">Packaging staff needed</p>
+                </div>
               </div>
               
-              {formData.shift_cycle_enabled && (
-                <div className="space-y-4 bg-blue-50 p-4 rounded-lg">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        <Calendar className="w-4 h-4 inline mr-1" />
-                        Cycle Start Date
-                      </label>
-                      <input 
-                        type="date" 
-                        value={formData.cycle_start_date || ''}
-                        onChange={(e) => setFormData({...formData, cycle_start_date: e.target.value})}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        required={formData.shift_cycle_enabled}
-                      />
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        <Users className="w-4 h-4 inline mr-1" />
-                        Crew Size (people per shift)
-                      </label>
-                      <input 
-                        type="number" 
-                        min="1"
-                        max="20"
-                        value={formData.crew_size || 1}
-                        onChange={(e) => setFormData({...formData, crew_size: parseInt(e.target.value)})}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      />
-                    </div>
-                  </div>
-                  
-                  {/* Crew Assignment Section */}
+              <div className="bg-gray-50 p-4 rounded-lg mb-4">
+                <div className="flex items-center justify-between">
                   <div>
-                    <h4 className="text-md font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                      <Users className="w-4 h-4" />
-                      Crew Assignments
-                    </h4>
-                    
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      {crews.map(crew => (
-                        <div key={crew.letter} className="bg-white p-4 rounded-lg border border-gray-200">
-                          <div className="flex items-center justify-between mb-2">
-                            <h5 className="font-semibold text-gray-900">Crew {crew.letter}</h5>
-                            <span className="text-xs bg-gray-100 px-2 py-1 rounded">
-                              {crew.offset} day offset
-                            </span>
-                          </div>
-                          
-                          <div className="text-xs text-gray-600 mb-2">
-                            Pattern: Day → Night → Rest
-                          </div>
-                          
-                          <select 
-                            multiple
-                            value={crew.employees}
-                            onChange={(e) => {
-                              const selectedIds = Array.from(e.target.selectedOptions, option => parseInt(option.value));
-                              handleCrewEmployeeChange(crew.letter, selectedIds);
-                            }}
-                            className="w-full px-2 py-1 border border-gray-300 rounded text-xs h-20"
-                            disabled={loadingEmployees}
-                          >
-                            {loadingEmployees ? (
-                              <option disabled>Loading employees...</option>
-                            ) : employees.length === 0 ? (
-                              <option disabled>No employees available - please log in or check permissions</option>
-                            ) : (
-                              employees.map(emp => (
-                                <option key={emp.id} value={emp.id}>
-                                  {emp.name} ({emp.employee_code || 'No code'})
-                                </option>
-                              ))
-                            )}
-                          </select>
-                          
-                          <div className="text-xs text-gray-500 mt-1">
-                            {crew.employees.length} / {formData.crew_size || 1} assigned
-                          </div>
-                        </div>
-                      ))}
+                    <h4 className="font-medium text-gray-900">Total Workforce per Shift</h4>
+                    <p className="text-sm text-gray-600">Combined staffing requirement</p>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-2xl font-bold text-gray-900">
+                      {(formData.operators_per_shift || 2) + (formData.hopper_loaders_per_shift || 1) + (formData.packers_per_shift || 3)}
                     </div>
-                    
-                    {/* Cycle Preview */}
-                    {formData.cycle_start_date && (
-                      <div className="mt-4">
-                        <h5 className="text-sm font-semibold text-gray-900 mb-2 flex items-center gap-2">
-                          <Info className="w-4 h-4" />
-                          14-Day Cycle Preview
-                        </h5>
-                        
-                        <div className="bg-white rounded-lg border border-gray-200 max-h-48 overflow-y-auto">
-                          <table className="w-full text-xs">
-                            <thead className="bg-gray-50 sticky top-0">
-                              <tr>
-                                <th className="px-2 py-1 text-left font-medium text-gray-700">Date</th>
-                                <th className="px-2 py-1 text-left font-medium text-gray-700">Day</th>
-                                <th className="px-2 py-1 text-left font-medium text-blue-600">Day Shift</th>
-                                <th className="px-2 py-1 text-left font-medium text-indigo-600">Night Shift</th>
-                                <th className="px-2 py-1 text-left font-medium text-gray-600">Rest</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {generatePreviewDays(formData.cycle_start_date).map(day => (
-                                <tr key={day.date} className="border-t border-gray-100">
-                                  <td className="px-2 py-1 font-mono">{day.date}</td>
-                                  <td className="px-2 py-1">{day.dayOfWeek}</td>
-                                  <td className="px-2 py-1 text-blue-600 font-medium">
-                                    {day.dayShift.length > 0 ? `Crew ${day.dayShift.join(', ')}` : '-'}
-                                  </td>
-                                  <td className="px-2 py-1 text-indigo-600 font-medium">
-                                    {day.nightShift.length > 0 ? `Crew ${day.nightShift.join(', ')}` : '-'}
-                                  </td>
-                                  <td className="px-2 py-1 text-gray-500">
-                                    {day.resting.length > 0 ? `Crew ${day.resting.join(', ')}` : '-'}
-                                  </td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
-                        </div>
-                      </div>
-                    )}
+                    <div className="text-sm text-gray-500">people</div>
                   </div>
                 </div>
-              )}
+              </div>
+              
+              {/* Simplified Shift Cycle Toggle */}
+              <div className="border-t pt-4">
+                <div className="flex items-center justify-between p-4 bg-indigo-50 rounded-lg border border-indigo-200">
+                  <div>
+                    <div className="flex items-center gap-2 mb-1">
+                      <RotateCcw className="w-5 h-5 text-indigo-600" />
+                      <span className="font-semibold text-gray-900">2-2-2 Shift Cycle</span>
+                      <span className="px-2 py-1 bg-indigo-100 text-indigo-700 text-xs rounded-full">Advanced</span>
+                    </div>
+                    <p className="text-sm text-gray-600">Automatic crew rotation with continuous coverage</p>
+                    <p className="text-xs text-indigo-600 mt-1">Configure detailed scheduling in Labor Planner →</p>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <input 
+                      type="checkbox" 
+                      id="shift_cycle_enabled"
+                      checked={formData.shift_cycle_enabled || false}
+                      onChange={(e) => setFormData({...formData, shift_cycle_enabled: e.target.checked})}
+                      className="w-5 h-5 text-indigo-600 rounded focus:ring-indigo-500"
+                    />
+                    <label htmlFor="shift_cycle_enabled" className="text-sm font-medium text-gray-700">
+                      Enable
+                    </label>
+                  </div>
+                </div>
+              
+                {formData.shift_cycle_enabled && (
+                  <div className="mt-4 p-4 bg-white rounded-lg border border-indigo-200">
+                    <div className="text-center">
+                      <Calendar className="w-8 h-8 text-indigo-600 mx-auto mb-2" />
+                      <p className="text-sm font-medium text-gray-900 mb-1">Shift Cycle Enabled</p>
+                      <p className="text-xs text-gray-600 mb-3">Configure detailed crew assignments and schedules in the Labor Planner</p>
+                      <button 
+                        type="button"
+                        onClick={() => window.location.href = '/labor-planner'}
+                        className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-sm font-medium"
+                      >
+                        Open Labor Planner →
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
             
             <div className="flex justify-end gap-3 pt-4">
