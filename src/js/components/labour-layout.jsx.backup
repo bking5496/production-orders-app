@@ -531,7 +531,7 @@ export default function LabourLayoutPage() {
                                                     </tr>
                                                 </thead>
                                                 <tbody className="bg-white divide-y divide-blue-100">
-                                                {rosterData.supervisors.filter(s => selectedShift === 'all' ? true : s.shift === selectedShift).map(supervisor => (
+                                                {rosterData.supervisors.filter(s => selectedShift === 'all' || s.shift === selectedShift).map(supervisor => (
                                                         <tr key={`supervisor-${supervisor.id}`} className="hover:bg-blue-50 transition-colors">
                                                             <td className="px-6 py-4 whitespace-nowrap">
                                                                 <span className="text-sm text-gray-600 font-mono font-semibold">
@@ -578,7 +578,7 @@ export default function LabourLayoutPage() {
                             )}
 
                             {/* Assigned Employees Section */}
-                            {rosterData.assignments && rosterData.assignments.filter(a => selectedShift === 'all' ? true : a.shift === selectedShift).length > 0 && (
+                            {rosterData.assignments && rosterData.assignments.filter(a => selectedShift === 'all' || a.shift === selectedShift).length > 0 && (
                                 <div>
                                     <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
                                         <div className="bg-green-100 p-2 rounded-lg">
@@ -601,7 +601,7 @@ export default function LabourLayoutPage() {
                                                     </tr>
                                                 </thead>
                                             <tbody className="bg-white divide-y divide-green-100">
-                                                {rosterData.assignments.filter(a => selectedShift === 'all' ? true : a.shift === selectedShift).map(assignment => (
+                                                {rosterData.assignments.filter(a => selectedShift === 'all' || a.shift === selectedShift).map(assignment => (
                                                     <tr key={`assignment-${assignment.id}`} className="hover:bg-green-50 transition-colors">
                                                         <td className="px-6 py-4 whitespace-nowrap">
                                                             <span className="text-sm text-gray-600 font-mono font-semibold">
@@ -780,10 +780,10 @@ export default function LabourLayoutPage() {
                             )}
 
                             {/* No Data Message */}
-                            {((rosterData.supervisors ? rosterData.supervisors.length : 0) === 0) && 
-                             ((rosterData.assignments ? rosterData.assignments.length : 0) === 0) && 
-                             ((rosterData.machinesInUse ? rosterData.machinesInUse.length : 0) === 0) &&
-                             ((rosterData.attendance ? rosterData.attendance.length : 0) === 0) && (
+                            {(!rosterData.supervisors || rosterData.supervisors.length === 0) && 
+                             (!rosterData.assignments || rosterData.assignments.length === 0) && 
+                             (!rosterData.machinesInUse || rosterData.machinesInUse.length === 0) &&
+                             (!rosterData.attendance || rosterData.attendance.length === 0) && (
                                 <div className="text-center py-8 text-gray-500">
                                     <Users className="w-12 h-12 mx-auto mb-4 text-gray-300" />
                                     <p>No labour data found for {selectedDate}</p>
