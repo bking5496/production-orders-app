@@ -1394,6 +1394,24 @@ apiRouter.post('/planner/assignments', authenticateToken, requireRole(['admin', 
         console.error("Error creating assignment - Full error:", error);
         console.error("Error message:", error.message);
         console.error("Error code:", error.code);
+        
+        // Handle specific SQLite constraint errors with user-friendly messages
+        if (error.code === 'SQLITE_CONSTRAINT' && error.message.includes('UNIQUE constraint failed: labor_assignments.user_id')) {
+            return res.status(400).json({ 
+                error: 'This employee is already assigned to a machine for this date and shift. Please choose a different employee or remove their existing assignment first.',
+                errorType: 'DUPLICATE_ASSIGNMENT'
+            });
+        }
+        
+        // Handle other constraint errors
+        if (error.code === 'SQLITE_CONSTRAINT') {
+            return res.status(400).json({ 
+                error: 'Assignment conflict detected. Please check for existing assignments.',
+                errorType: 'CONSTRAINT_ERROR'
+            });
+        }
+        
+        // Generic error for other issues
         res.status(500).json({ error: `Failed to create assignment: ${error.message}` });
     }
 });
