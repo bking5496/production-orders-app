@@ -2015,7 +2015,8 @@ export function LaborManagementSystem() {
                                                     >
                                                         <option value="Packer">Packer</option>
                                                         <option value="Operator">Operator</option>
-                                                        <option value="Hopper">Hopper</option>
+                                                        <option value="Operator(AR)">Operator(AR)</option>
+                                                        <option value="Hopper Loader">Hopper Loader</option>
                                                     </select>
                                                 </div>
                                             )}
@@ -2048,12 +2049,12 @@ export function LaborManagementSystem() {
                             <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                                 <h4 className="font-medium text-blue-900 mb-2">Assignment Summary:</h4>
                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-2 text-sm">
-                                    {['Packer', 'Operator', 'Hopper'].map(role => {
+                                    {['Packer', 'Operator', 'Operator(AR)', 'Hopper Loader'].map(role => {
                                         const count = selectedEmployees.filter(id => employeeRoles[id] === role).length;
                                         if (count > 0) {
                                             return (
                                                 <div key={role} className="flex justify-between">
-                                                    <span className="font-medium">{role}s:</span>
+                                                    <span className="font-medium">{role === 'Hopper Loader' ? 'Hopper Loaders' : role + 's'}:</span>
                                                     <span className="text-blue-700">{count}</span>
                                                 </div>
                                             );

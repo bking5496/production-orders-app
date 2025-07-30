@@ -1,117 +1,20 @@
 🚀 API Server running on http://localhost:3000
 ✅ Connected to SQLite database
 Assignment request data: {
-  employee_id: 37,
-  machine_id: 17,
+  employee_id: 34,
+  machine_id: 7,
   shift: 'day',
-  assignment_date: '2025-07-30'
+  assignment_date: '2025-07-31'
 }
 User role: admin
-SQL parameters: [ 37, 37, 17, 'day', '2025-07-30', 'planned', 'Packer' ]
-Assignment created with ID: 83
+SQL parameters: [ 34, 34, 7, 'day', '2025-07-31', 'planned', 'Operator' ]
+Assignment created with ID: 95
 Assignment request data: {
-  employee_id: 16,
-  machine_id: 17,
+  employee_id: 65,
+  machine_id: 7,
   shift: 'day',
-  assignment_date: '2025-07-30'
+  assignment_date: '2025-07-31'
 }
 User role: admin
-SQL parameters: [ 16, 16, 17, 'day', '2025-07-30', 'planned', 'Packer' ]
-Assignment created with ID: 84
-Assignment request data: {
-  employee_id: 21,
-  machine_id: 17,
-  shift: 'day',
-  assignment_date: '2025-07-30'
-}
-User role: admin
-SQL parameters: [ 21, 21, 17, 'day', '2025-07-30', 'planned', 'Packer' ]
-Assignment created with ID: 85
-Assignment request data: {
-  employee_id: 23,
-  machine_id: 17,
-  shift: 'day',
-  assignment_date: '2025-07-30'
-}
-User role: admin
-SQL parameters: [ 23, 23, 17, 'day', '2025-07-30', 'planned', 'Packer' ]
-Assignment created with ID: 86
-Assignment request data: {
-  employee_id: 24,
-  machine_id: 17,
-  shift: 'day',
-  assignment_date: '2025-07-30'
-}
-User role: admin
-SQL parameters: [ 24, 24, 17, 'day', '2025-07-30', 'planned', 'Packer' ]
-Assignment created with ID: 87
-Assignment request data: {
-  employee_id: 25,
-  machine_id: 17,
-  shift: 'day',
-  assignment_date: '2025-07-30'
-}
-User role: admin
-SQL parameters: [ 25, 25, 17, 'day', '2025-07-30', 'planned', 'Packer' ]
-Assignment created with ID: 88
-Assignment request data: {
-  employee_id: 26,
-  machine_id: 17,
-  shift: 'day',
-  assignment_date: '2025-07-30'
-}
-User role: admin
-SQL parameters: [ 26, 26, 17, 'day', '2025-07-30', 'planned', 'Packer' ]
-Assignment created with ID: 89
-Assignment request data: {
-  employee_id: 27,
-  machine_id: 17,
-  shift: 'day',
-  assignment_date: '2025-07-30'
-}
-User role: admin
-SQL parameters: [ 27, 27, 17, 'day', '2025-07-30', 'planned', 'Packer' ]
-Assignment created with ID: 90
-Assignment request data: {
-  employee_id: 30,
-  machine_id: 17,
-  shift: 'day',
-  assignment_date: '2025-07-30'
-}
-User role: admin
-SQL parameters: [ 30, 30, 17, 'day', '2025-07-30', 'planned', 'Operator' ]
-Assignment created with ID: 91
-Assignment request data: {
-  employee_id: 31,
-  machine_id: 17,
-  shift: 'day',
-  assignment_date: '2025-07-30'
-}
-User role: admin
-SQL parameters: [ 31, 31, 17, 'day', '2025-07-30', 'planned', 'Hopper' ]
-Assignment created with ID: 92
-Assignment request data: {
-  employee_id: 25,
-  machine_id: 17,
-  shift: 'night',
-  assignment_date: '2025-07-30'
-}
-User role: admin
-Assignment request data: {
-  employee_id: 39,
-  machine_id: 17,
-  shift: 'night',
-  assignment_date: '2025-07-30'
-}
-User role: admin
-SQL parameters: [ 39, 39, 17, 'night', '2025-07-30', 'planned', 'Operator' ]
-Assignment created with ID: 93
-Assignment request data: {
-  employee_id: 45,
-  machine_id: 17,
-  shift: 'night',
-  assignment_date: '2025-07-30'
-}
-User role: admin
-SQL parameters: [ 45, 45, 17, 'night', '2025-07-30', 'planned', 'Hopper' ]
-Assignment created with ID: 94
+SQL parameters: [ 65, 65, 7, 'day', '2025-07-31', 'planned', 'Operator(AR)' ]
+Assignment created with ID: 96
