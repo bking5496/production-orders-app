@@ -47,7 +47,7 @@ const exportToExcel = (rosterData, selectedDate) => {
                 'Employee Code': a.employee_code || 'N/A',
                 'Name': a.fullName || a.name,
                 'Machine': a.machine || 'N/A',
-                'Position': a.position || a.role || 'Operator',
+                'Position': a.position ? a.position : (a.role ? a.role : 'Operator'),
                 'Shift': a.shift,
                 'Company': a.company || 'N/A',
                 'Status': a.status,
@@ -132,7 +132,7 @@ const exportToExcel = (rosterData, selectedDate) => {
                 assignment.employee_code || 'N/A',
                 assignment.fullName || assignment.name,
                 assignment.machine || 'N/A',
-                assignment.position || assignment.role || 'Operator',
+                assignment.position ? assignment.position : (assignment.role ? assignment.role : 'Operator'),
                 assignment.shift,
                 assignment.company || 'N/A',
                 assignment.status
@@ -368,13 +368,14 @@ export default function LabourLayoutPage() {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50">
-            {/* Modern Header with gradient */}
-            <div className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white shadow-lg">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                        <div>
-                            <div className="flex items-center gap-2 text-blue-200 text-sm mb-2">
+        <>
+            <div className="min-h-screen bg-gray-50">
+                {/* Modern Header with gradient */}
+                <div className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white shadow-lg">
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                            <div>
+                                <div className="flex items-center gap-2 text-blue-200 text-sm mb-2">
                                 <span className="cursor-pointer hover:text-white transition-colors" onClick={() => window.location.href = '/labor-planner?date=' + selectedDate}>Labor Planner</span>
                                 <span>›</span>
                                 <span className="text-white font-medium">Layout View</span>
@@ -479,7 +480,7 @@ export default function LabourLayoutPage() {
                         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                             <div>
                                 <h2 className="text-lg font-semibold text-gray-900">Workforce Overview</h2>
-                                <p className="text-sm text-gray-600 mt-1">{selectedDate} • {((rosterData.summary?.total_supervisors || 0) + (rosterData.summary?.total_assignments || 0) + (rosterData.summary?.total_attendance || 0) + (rosterData.summary?.total_machines_in_use || 0))} total records</p>
+                                <p className="text-sm text-gray-600 mt-1">{selectedDate} • {((rosterData.summary?.total_supervisors ? rosterData.summary.total_supervisors : 0) + (rosterData.summary?.total_assignments ? rosterData.summary.total_assignments : 0) + (rosterData.summary?.total_attendance ? rosterData.summary.total_attendance : 0) + (rosterData.summary?.total_machines_in_use ? rosterData.summary.total_machines_in_use : 0))} total records</p>
                             </div>
                             <div className="flex items-center gap-3">
                                 <label className="text-sm font-medium text-gray-700">Shift Filter:</label>
@@ -625,7 +626,7 @@ export default function LabourLayoutPage() {
                                                         </td>
                                                         <td className="px-6 py-4 whitespace-nowrap">
                                                             <span className="text-sm text-gray-600">
-                                                                {assignment.position || assignment.role || 'Operator'}
+                                                                {assignment.position ? assignment.position : (assignment.role ? assignment.role : 'Operator')}
                                                             </span>
                                                         </td>
                                                         <td className="px-6 py-4 whitespace-nowrap">
@@ -794,6 +795,7 @@ export default function LabourLayoutPage() {
                         )}
                     </div>
                 </div>
+            </div>
 
             {/* Export Modal */}
             {showExportModal && (
@@ -854,6 +856,6 @@ export default function LabourLayoutPage() {
                     </div>
                 </div>
             )}
-        </div>
+        </>
     );
 };
