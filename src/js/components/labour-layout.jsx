@@ -796,7 +796,44 @@ export default function LabourLayoutPage() {
                     </div>
                 </div>
             </div>
+            </div>
 
+            {/* Export Modal */}
+            {showExportModal && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div className="bg-white rounded-lg p-6 w-96">
+                        <h3 className="text-lg font-semibold mb-4">Export Labour Layout</h3>
+                        <div className="space-y-4">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-2">Export Format</label>
+                                <select 
+                                    value={exportFormat} 
+                                    onChange={e => setExportFormat(e.target.value)}
+                                    className="w-full border border-gray-300 rounded-md px-3 py-2"
+                                >
+                                    <option value="excel">Excel (.xlsx)</option>
+                                    <option value="csv">CSV (.csv)</option>
+                                    <option value="json">JSON (.json)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div className="flex justify-end gap-3 mt-6">
+                            <button 
+                                onClick={() => setShowExportModal(false)}
+                                className="px-4 py-2 text-gray-600 hover:text-gray-800"
+                            >
+                                Cancel
+                            </button>
+                            <button 
+                                onClick={handleExport}
+                                className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
+                            >
+                                Export
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </>
     );
 };
