@@ -641,12 +641,8 @@ export function LaborManagementSystem() {
         try {
             await API.delete(`/planner/supervisors/${supervisorAssignmentId}`);
             
-            // Convert SAST date to UTC for API
-            const utcDate = convertSASTToUTC(selectedDate + 'T00:00:00');
-            const apiDate = utcDate ? new Date(utcDate).toISOString().split('T')[0] : selectedDate;
-            
             // Reload supervisors data
-            const supervisorsData = await API.get(`/planner/supervisors?date=${apiDate}&shift=${selectedShift}`);
+            const supervisorsData = await API.get(`/planner/supervisors?date=${selectedDate}&shift=${selectedShift}`);
             setSupervisorsOnDuty(supervisorsData);
             showNotification('Supervisor removed successfully', 'success');
         } catch (error) {
@@ -809,16 +805,12 @@ export function LaborManagementSystem() {
         if (!selectedDate) return showNotification('Please select a date first', 'danger');
         
         try {
-            // Convert SAST date to UTC for API
-            const utcDate = convertSASTToUTC(selectedDate + 'T00:00:00');
-            const apiDate = utcDate ? new Date(utcDate).toISOString().split('T')[0] : selectedDate;
-            
-            console.log('Assigning employee:', { employee_id: employeeId, machine_id: selectedMachine, shift: selectedShift, assignment_date: apiDate });
+            console.log('Assigning employee:', { employee_id: employeeId, machine_id: selectedMachine, shift: selectedShift, assignment_date: selectedDate });
             const newAssignment = await API.post('/planner/assignments', { 
                 employee_id: employeeId, 
                 machine_id: selectedMachine, 
                 shift: selectedShift, 
-                assignment_date: apiDate 
+                assignment_date: selectedDate 
             });
             fetchData(selectedDate); // Refetch to get all details
             showNotification('Employee assigned successfully');
@@ -953,11 +945,7 @@ export function LaborManagementSystem() {
 
     // Cancel all assignments for the day
     const cancelDayLabour = async () => {
-        // Convert SAST date to UTC for comparison
-        const utcDate = convertSASTToUTC(selectedDate + 'T00:00:00');
-        const apiDate = utcDate ? new Date(utcDate).toISOString().split('T')[0] : selectedDate;
-        
-        const dayAssignments = assignments.filter(a => a.assignment_date === apiDate);
+        const dayAssignments = assignments.filter(a => a.assignment_date === selectedDate);
         const daySupervisors = supervisorsOnDuty; // These are already filtered by date from fetchData
         
         const totalItems = dayAssignments.length + daySupervisors.length;
@@ -967,10 +955,9 @@ export function LaborManagementSystem() {
             return;
         }
 
-        // Display SAST date to user but work with UTC internally
         const confirmMessage = daySupervisors.length > 0 
-            ? `Are you sure you want to cancel all ${dayAssignments.length} assignments and ${daySupervisors.length} supervisor assignments for ${selectedDate} (SAST)? This action cannot be undone.`
-            : `Are you sure you want to cancel all ${dayAssignments.length} assignments for ${selectedDate} (SAST)? This action cannot be undone.`;
+            ? `Are you sure you want to cancel all ${dayAssignments.length} assignments and ${daySupervisors.length} supervisor assignments for ${selectedDate}? This action cannot be undone.`
+            : `Are you sure you want to cancel all ${dayAssignments.length} assignments for ${selectedDate}? This action cannot be undone.`;
             
         if (!window.confirm(confirmMessage)) {
             return;
