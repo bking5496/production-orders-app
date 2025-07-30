@@ -1098,14 +1098,10 @@ export function LaborManagementSystem() {
                     {/* Machine Grid */}
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
                         {machines.map(machine => {
-                            // Convert SAST date to UTC for assignment count
-                            const utcDate = convertSASTToUTC(selectedDate + 'T00:00:00');
-                            const apiDate = utcDate ? new Date(utcDate).toISOString().split('T')[0] : selectedDate;
-                            
                             const assignmentCount = assignments.filter(a => 
                                 a.machine_id == machine.id && 
                                 a.shift === selectedShift && 
-                                a.assignment_date === apiDate
+                                a.assignment_date === selectedDate
                             ).length;
                             const isSelected = selectedMachine == machine.id;
                             
