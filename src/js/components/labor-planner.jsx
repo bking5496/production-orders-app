@@ -581,7 +581,26 @@ export function LaborManagementSystem() {
     const attendanceAssignments = useMemo(() => {
         return assignments.filter(a => a.assignment_date === attendanceDate);
     }, [assignments, attendanceDate]);
-    const filteredEmployees = useMemo(() => employees.filter(e => !planningSearch || e.username.toLowerCase().includes(planningSearch.toLowerCase()) || (e.employee_code && e.employee_code.toLowerCase().includes(planningSearch.toLowerCase()))), [employees, planningSearch]);
+    const filteredEmployees = useMemo(() => {
+        return employees.filter(employee => {
+            // Remove already assigned employees from the list
+            const isAlreadyAssigned = currentAssignments.some(a => a.employee_id === employee.id);
+            if (isAlreadyAssigned) return false;
+            
+            // If no search query, show all unassigned employees
+            if (!planningSearch) return true;
+            
+            const searchLower = planningSearch.toLowerCase();
+            
+            // Search by multiple fields
+            return (
+                employee.username?.toLowerCase().includes(searchLower) ||
+                employee.fullName?.toLowerCase().includes(searchLower) ||
+                employee.employee_code?.toLowerCase().includes(searchLower) ||
+                employee.role?.toLowerCase().includes(searchLower)
+            );
+        });
+    }, [employees, planningSearch, currentAssignments]);
     
     const filteredWorkers = useMemo(() => employees.filter(e => !workerSearch || e.username.toLowerCase().includes(workerSearch.toLowerCase()) || (e.employee_code && e.employee_code.toLowerCase().includes(workerSearch.toLowerCase()))), [employees, workerSearch]);
 
@@ -1620,7 +1639,7 @@ export function LaborManagementSystem() {
                             <div className="flex-1 max-w-md">
                                 <input 
                                     type="text" 
-                                    placeholder="Search by name or employee code..." 
+                                    placeholder="Search..." 
                                     value={planningSearch}
                                     onChange={e => setPlanningSearch(e.target.value)} 
                                     className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -1655,41 +1674,36 @@ export function LaborManagementSystem() {
                         {/* Employee List */}
                         <div className="max-h-96 overflow-y-auto space-y-3">
                             {filteredEmployees.map(employee => {
-                                const isAssigned = currentAssignments.some(a => a.employee_id === employee.id);
                                 const isSelected = selectedEmployees.includes(employee.id);
                                 
                                 return (
                                     <div 
                                         key={employee.id} 
                                         className={`p-4 rounded-lg border transition-all ${
-                                            isAssigned 
-                                                ? 'bg-gray-100 border-gray-300' 
-                                                : isSelected
+                                            isSelected
                                                 ? 'bg-blue-50 border-blue-300'
                                                 : 'hover:bg-gray-50 border-gray-200'
                                         }`}
                                     >
                                         <div className="flex items-center justify-between">
                                             <div className="flex items-center gap-4">
-                                                {!isAssigned && (
-                                                    <input
-                                                        type="checkbox"
-                                                        checked={isSelected}
-                                                        onChange={(e) => {
-                                                            if (e.target.checked) {
-                                                                setSelectedEmployees([...selectedEmployees, employee.id]);
-                                                                setEmployeeRoles({...employeeRoles, [employee.id]: 'Packer'});
-                                                            } else {
-                                                                const newSelected = selectedEmployees.filter(id => id !== employee.id);
-                                                                const newRoles = {...employeeRoles};
-                                                                delete newRoles[employee.id];
-                                                                setSelectedEmployees(newSelected);
-                                                                setEmployeeRoles(newRoles);
-                                                            }
-                                                        }}
-                                                        className="w-5 h-5 text-blue-600 rounded"
-                                                    />
-                                                )}
+                                                <input
+                                                    type="checkbox"
+                                                    checked={isSelected}
+                                                    onChange={(e) => {
+                                                        if (e.target.checked) {
+                                                            setSelectedEmployees([...selectedEmployees, employee.id]);
+                                                            setEmployeeRoles({...employeeRoles, [employee.id]: 'Packer'});
+                                                        } else {
+                                                            const newSelected = selectedEmployees.filter(id => id !== employee.id);
+                                                            const newRoles = {...employeeRoles};
+                                                            delete newRoles[employee.id];
+                                                            setSelectedEmployees(newSelected);
+                                                            setEmployeeRoles(newRoles);
+                                                        }
+                                                    }}
+                                                    className="w-5 h-5 text-blue-600 rounded"
+                                                />
                                                 <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">
                                                     <Users className="w-6 h-6 text-gray-600" />
                                                 </div>
@@ -1697,7 +1711,6 @@ export function LaborManagementSystem() {
                                                     <p className="font-semibold text-lg">{employee.fullName || employee.username}</p>
                                                     <p className="text-sm text-gray-500">
                                                         {employee.employee_code} • {employee.role}
-                                                        {isAssigned && ' • Already Assigned'}
                                                     </p>
                                                 </div>
                                             </div>
@@ -1722,7 +1735,7 @@ export function LaborManagementSystem() {
                                             )}
                                             
                                             {/* Single Assignment Button for non-bulk mode */}
-                                            {!isSelected && !isAssigned && (
+                                            {!isSelected && (
                                                 <Button 
                                                     onClick={() => assignEmployee(employee.id, 'Packer')} 
                                                     variant="outline"
