@@ -1795,11 +1795,54 @@ export function LaborManagementSystem() {
 
             {/* Supervisor Assignment Modal */}
             {showSupervisorModal && (
-                <Modal title="Assign Supervisor" onClose={() => setShowSupervisorModal(false)}>
-                    <div className="space-y-4">
+                <Modal title="Manage Supervisors" onClose={() => setShowSupervisorModal(false)} size="lg">
+                    <div className="space-y-6">
+                        {/* Currently Assigned Supervisors */}
+                        {supervisorsOnDuty.length > 0 && (
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-3">
+                                    Currently Assigned Supervisors ({selectedShift} shift, {selectedDate})
+                                </label>
+                                <div className="space-y-2 max-h-48 overflow-y-auto">
+                                    {supervisorsOnDuty.map(assignedSupervisor => {
+                                        const employee = employees.find(e => e.id === assignedSupervisor.supervisor_id);
+                                        return (
+                                            <div 
+                                                key={assignedSupervisor.id}
+                                                className="p-3 border rounded-lg bg-green-50 border-green-200"
+                                            >
+                                                <div className="flex items-center justify-between">
+                                                    <div className="flex items-center gap-3">
+                                                        <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                                                            <UserCheck className="w-4 h-4 text-green-600" />
+                                                        </div>
+                                                        <div>
+                                                            <p className="font-medium text-gray-900">{employee?.fullName || employee?.username || 'Unknown'}</p>
+                                                            <p className="text-sm text-gray-500">
+                                                                {employee?.employee_code} • {employee?.role} • Assigned
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <Button 
+                                                        variant="ghost" 
+                                                        size="sm"
+                                                        onClick={() => removeSupervisor(assignedSupervisor.id)}
+                                                        className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                                                    >
+                                                        <X className="w-4 h-4" />
+                                                    </Button>
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        )}
+                        
+                        {/* Available Supervisors to Assign */}
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
-                                Select Supervisor for {selectedDate}
+                            <label className="block text-sm font-medium text-gray-700 mb-3">
+                                Available Supervisors to Assign
                             </label>
                             <div className="space-y-2 max-h-64 overflow-y-auto">
                                 {employees.filter(e => e.role === 'supervisor' || e.role === 'admin')
@@ -1811,8 +1854,8 @@ export function LaborManagementSystem() {
                                         onClick={() => addSupervisor(supervisor.id)}
                                     >
                                         <div className="flex items-center gap-3">
-                                            <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
-                                                <UserCheck className="w-4 h-4 text-purple-600" />
+                                            <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                                                <UserCheck className="w-4 h-4 text-blue-600" />
                                             </div>
                                             <div>
                                                 <p className="font-medium">{supervisor.fullName || supervisor.username}</p>
