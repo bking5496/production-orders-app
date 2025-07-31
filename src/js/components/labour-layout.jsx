@@ -426,17 +426,33 @@ export default function LabourLayoutPage() {
                                     <h2 className="text-lg font-semibold text-gray-900">Workforce Overview</h2>
                                     <p className="text-sm text-gray-600 mt-1">{selectedDate} • {((rosterData.summary?.total_supervisors || 0) + (rosterData.summary?.total_assignments || 0) + (rosterData.summary?.total_attendance || 0) + (rosterData.summary?.total_machines_in_use || 0))} total records</p>
                                 </div>
-                                <div className="flex items-center gap-3">
-                                    <label className="text-sm font-medium text-gray-700">Shift Filter:</label>
-                                    <select 
-                                        value={selectedShift} 
-                                        onChange={e => setSelectedShift(e.target.value)}
-                                        className="bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                    >
-                                        <option value="all">All Shifts</option>
-                                        <option value="day">Day Shift</option>
-                                        <option value="night">Night Shift</option>
-                                    </select>
+                                <div className="flex flex-col gap-3">
+                                    <div className="flex items-center gap-3">
+                                        <label className="text-sm font-medium text-gray-700">Shift Filter:</label>
+                                        <select 
+                                            value={selectedShift} 
+                                            onChange={e => setSelectedShift(e.target.value)}
+                                            className="bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                        >
+                                            <option value="all">All Shifts</option>
+                                            <option value="day">Day Shift</option>
+                                            <option value="night">Night Shift</option>
+                                        </select>
+                                    </div>
+                                    <div className="flex items-center gap-3">
+                                        <select 
+                                            value={selectedMachine} 
+                                            onChange={e => setSelectedMachine(e.target.value)}
+                                            className="bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                        >
+                                            <option value="all">Machine [all]</option>
+                                            {machines.map(machine => (
+                                                <option key={machine.id} value={machine.name}>
+                                                    {machine.name}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -515,7 +531,11 @@ export default function LabourLayoutPage() {
                                         </div>
                                     )}
 
-                                    {rosterData.assignments && rosterData.assignments.filter(a => selectedShift === 'all' ? true : a.shift === selectedShift).length > 0 && (
+                                    {rosterData.assignments && rosterData.assignments.filter(a => {
+                                        const shiftMatch = selectedShift === 'all' ? true : a.shift === selectedShift;
+                                        const machineMatch = selectedMachine === 'all' ? true : a.machine === selectedMachine;
+                                        return shiftMatch && machineMatch;
+                                    }).length > 0 && (
                                         <div>
                                             <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
                                                 <div className="bg-green-100 p-2 rounded-lg">
@@ -538,7 +558,11 @@ export default function LabourLayoutPage() {
                                                             </tr>
                                                         </thead>
                                                         <tbody className="bg-white divide-y divide-green-100">
-                                                            {rosterData.assignments.filter(a => selectedShift === 'all' ? true : a.shift === selectedShift).map(assignment => (
+                                                            {rosterData.assignments.filter(a => {
+                                                                const shiftMatch = selectedShift === 'all' ? true : a.shift === selectedShift;
+                                                                const machineMatch = selectedMachine === 'all' ? true : a.machine === selectedMachine;
+                                                                return shiftMatch && machineMatch;
+                                                            }).map(assignment => (
                                                                 <tr key={`assignment-${assignment.id}`} className="hover:bg-green-50 transition-colors">
                                                                     <td className="px-6 py-4 whitespace-nowrap">
                                                                         <span className="text-sm text-gray-600 font-mono font-semibold">
