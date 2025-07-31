@@ -15,7 +15,8 @@ export default function AnalyticsPage() {
     machines: [],
     assignments: [],
     employees: [],
-    summary: {}
+    summary: {},
+    archivedOrders: []
   });
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -100,37 +101,58 @@ export default function AnalyticsPage() {
     loadAnalytics();
   }, [dateRange]);
   
-  // Load completed orders after analytics data is loaded
+  // Load completed orders after initial analytics load
   useEffect(() => {
-    if (analytics.orders.length > 0) {
-      loadCompletedOrdersWithWaste();
-    }
-  }, [analytics.orders]);
+    loadCompletedOrdersWithWaste();
+  }, [dateRange]);
 
-  // Load completed orders with waste data
+  // Load completed orders with waste data from archives
   const loadCompletedOrdersWithWaste = async () => {
     try {
-      console.log('Loading completed orders, current analytics.orders:', analytics.orders.length);
-      console.log('Completed orders found:', analytics.orders.filter(o => o.status === 'completed').length);
+      const params = new URLSearchParams({
+        start_date: dateRange.start_date,
+        end_date: dateRange.end_date
+      }).toString();
       
-      // Use existing analytics.orders data
-      const completedOrders = analytics.orders.filter(o => o.status === 'completed');
-      setCompletedOrdersWithWaste(completedOrders);
+      // Load from archived/completed orders
+      const [archivedOrders, wasteData] = await Promise.all([
+        API.get(`/orders/archived?${params}`).catch(() => []),
+        API.get(`/reports/waste?${params}`).catch(() => [])
+      ]);
       
-      // Try to load waste data if available
+      // Update analytics with archived orders
+      const completedOrders = archivedOrders || [];
+      
+      // Merge with existing analytics orders
+      setAnalytics(prev => ({
+        ...prev,
+        orders: [...prev.orders, ...completedOrders],
+        archivedOrders: completedOrders
+      }));
+      
+      setWasteReports(wasteData || []);
+      
+      console.log('Loaded archived orders:', completedOrders.length);
+    } catch (error) {
+      console.error('Failed to load archived orders:', error);
+      // Try alternative endpoint
       try {
         const params = new URLSearchParams({
           start_date: dateRange.start_date,
-          end_date: dateRange.end_date
+          end_date: dateRange.end_date,
+          status: 'completed'
         }).toString();
-        const wasteData = await API.get(`/reports/waste?${params}`);
-        setWasteReports(wasteData || []);
-      } catch (wasteError) {
-        console.log('Waste data not available, continuing without it');
-        setWasteReports([]);
+        
+        const completedOrders = await API.get(`/orders?${params}&archived=true`);
+        setAnalytics(prev => ({
+          ...prev,
+          orders: [...prev.orders, ...(completedOrders || [])],
+          archivedOrders: completedOrders || []
+        }));
+        console.log('Loaded completed orders from alternative endpoint:', (completedOrders || []).length);
+      } catch (altError) {
+        console.error('Alternative archived orders endpoint also failed:', altError);
       }
-    } catch (error) {
-      console.error('Failed to load completed orders with waste:', error);
     }
   };
 
@@ -156,9 +178,16 @@ export default function AnalyticsPage() {
     }
   };
 
+  // Get all completed orders (active + archived)
+  const getAllCompletedOrders = () => {
+    const activeCompleted = analytics.orders.filter(o => o.status === 'completed');
+    const archivedCompleted = analytics.archivedOrders || [];
+    return [...activeCompleted, ...archivedCompleted];
+  };
+  
   // Get waste summary for all completed orders
   const getWasteSummary = () => {
-    const completedOrders = analytics.orders.filter(o => o.status === 'completed');
+    const completedOrders = getAllCompletedOrders();
     const ordersWithWaste = completedOrders.filter(o => o.waste_data && o.waste_data.length > 0);
     
     const totalWaste = completedOrders.reduce((sum, order) => {
@@ -179,7 +208,7 @@ export default function AnalyticsPage() {
   // Export waste reports
   const exportWasteReports = () => {
     try {
-      const completedOrders = analytics.orders.filter(o => o.status === 'completed');
+      const completedOrders = getAllCompletedOrders();
       
       if (completedOrders.length === 0) {
         showNotification('No completed orders to export', 'warning');
@@ -1267,20 +1296,19 @@ export default function AnalyticsPage() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             <StatsCard
               title="Completed Orders"
-              value={analytics.orders.filter(o => o.status === 'completed').length}
+              value={getAllCompletedOrders().length}
               icon={CheckCircle}
               color="green"
             />
             <StatsCard
               title="Orders with Waste"
-              value={analytics.orders.filter(o => o.status === 'completed' && o.waste_data && o.waste_data.length > 0).length}
+              value={getAllCompletedOrders().filter(o => o.waste_data && o.waste_data.length > 0).length}
               icon={AlertTriangle}
               color="yellow"
             />
             <StatsCard
               title="Total Waste Weight"
-              value={`${analytics.orders
-                .filter(o => o.status === 'completed')
+              value={`${getAllCompletedOrders()
                 .reduce((sum, order) => {
                   if (order.waste_data) {
                     return sum + order.waste_data.reduce((orderSum, waste) => orderSum + (waste.weight || 0), 0);
@@ -1292,9 +1320,9 @@ export default function AnalyticsPage() {
             />
             <StatsCard
               title="Waste Tracking Rate"
-              value={`${analytics.orders.filter(o => o.status === 'completed').length > 0 ? 
-                Math.round((analytics.orders.filter(o => o.status === 'completed' && o.waste_data && o.waste_data.length > 0).length / 
-                analytics.orders.filter(o => o.status === 'completed').length) * 100) : 0}%`}
+              value={`${getAllCompletedOrders().length > 0 ? 
+                Math.round((getAllCompletedOrders().filter(o => o.waste_data && o.waste_data.length > 0).length / 
+                getAllCompletedOrders().length) * 100) : 0}%`}
               icon={Target}
               color="blue"
             />
@@ -1305,16 +1333,11 @@ export default function AnalyticsPage() {
             <div className="p-6 border-b">
               <h3 className="text-lg font-semibold">Completed Orders - Waste Tracking</h3>
               <p className="text-sm text-gray-600 mt-1">
-                Showing {analytics.orders.filter(o => o.status === 'completed').length} completed orders for selected period
+                Showing {(analytics.archivedOrders || []).length + analytics.orders.filter(o => o.status === 'completed').length} completed orders for selected period
               </p>
               <p className="text-xs text-gray-500 mt-1">
-                Debug: Total orders: {analytics.orders.length}, Date range: {dateRange.start_date} to {dateRange.end_date}
+                Debug: Active orders: {analytics.orders.length}, Archived orders: {(analytics.archivedOrders || []).length}
               </p>
-              {analytics.orders.length > 0 && (
-                <p className="text-xs text-gray-500">
-                  Order statuses: {[...new Set(analytics.orders.map(o => o.status))].join(', ')}
-                </p>
-              )}
             </div>
             
             <div className="overflow-x-auto">
