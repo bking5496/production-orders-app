@@ -178,13 +178,13 @@ export default function ProductionCompletionModalWithWaste({ isOpen, onClose, or
         <Card className="p-6 glass hover-lift card-hover gradient-animate">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-lg font-semibold gradient-text float">{order.order_number}</h3>
-              <p className="text-white/90 font-medium">{order.product_name}</p>
-              <p className="text-sm text-white/80">Target: {order.quantity?.toLocaleString()} units</p>
+              <h3 className="text-lg font-semibold text-gray-800 float">{order.order_number}</h3>
+              <p className="text-gray-700 font-medium">{order.product_name}</p>
+              <p className="text-sm text-gray-600">Target: {order.quantity?.toLocaleString()} units</p>
             </div>
             <div className="text-right">
-              <p className="text-sm text-white/80">Environment: {order.environment}</p>
-              <p className="text-sm text-white/80">Machine: {order.machine_name || 'N/A'}</p>
+              <p className="text-sm text-gray-600">Environment: {order.environment}</p>
+              <p className="text-sm text-gray-600">Machine: {order.machine_name || 'N/A'}</p>
             </div>
           </div>
         </Card>
@@ -254,7 +254,7 @@ export default function ProductionCompletionModalWithWaste({ isOpen, onClose, or
                     Order will be marked as completed at the current time when you submit this form.
                   </p>
                   <p className="text-xs text-gray-500 mt-1">
-                    Current time: {formatSASTDate(getCurrentSASTTime(), { includeSeconds: true })} SAST
+                    Current time: {formatSASTDate(getCurrentSASTTime(), { includeSeconds: true })}
                   </p>
                 </div>
               </div>
