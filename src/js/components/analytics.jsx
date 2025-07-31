@@ -1021,7 +1021,7 @@ export default function AnalyticsPage() {
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
                   <tr>
-                    {['Start Time', 'Duration', 'Reason', 'Category', 'Order', 'Machine', 'Status'].map(header => (
+                    {['Start Time', 'Duration', 'Reason', 'Category', 'Order', 'Machine', 'Stopped By', 'Supervisor', 'Shift', 'Status'].map(header => (
                       <th key={header} className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         {header}
                       </th>
@@ -1031,7 +1031,7 @@ export default function AnalyticsPage() {
                 <tbody className="bg-white divide-y divide-gray-200">
                   {(!analytics.downtimeRecords || analytics.downtimeRecords.length === 0) ? (
                     <tr>
-                      <td colSpan="7" className="text-center py-10 text-gray-500">
+                      <td colSpan="10" className="text-center py-10 text-gray-500">
                         No downtime records found for the selected period
                       </td>
                     </tr>
