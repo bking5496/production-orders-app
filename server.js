@@ -713,12 +713,29 @@ apiRouter.get('/reports/downtime', authenticateToken, async (req, res) => {
                 CASE 
                     WHEN ps.end_time IS NULL THEN 'Active'
                     ELSE 'Resolved'
-                END as status
+                END as status,
+                CASE 
+                    WHEN CAST(strftime('%H', ps.start_time) AS INTEGER) >= 6 
+                         AND CAST(strftime('%H', ps.start_time) AS INTEGER) < 18 
+                    THEN 'day'
+                    ELSE 'night'
+                END as shift,
+                u3.username as supervisor_on_duty
             FROM production_stops ps
             LEFT JOIN production_orders o ON ps.order_id = o.id
             LEFT JOIN machines m ON o.machine_id = m.id
             LEFT JOIN users u1 ON ps.operator_id = u1.id
             LEFT JOIN users u2 ON ps.resolved_by = u2.id
+            LEFT JOIN shift_supervisors ss ON (
+                DATE(ps.start_time) = ss.assignment_date 
+                AND ss.shift = CASE 
+                    WHEN CAST(strftime('%H', ps.start_time) AS INTEGER) >= 6 
+                         AND CAST(strftime('%H', ps.start_time) AS INTEGER) < 18 
+                    THEN 'day'
+                    ELSE 'night'
+                END
+            )
+            LEFT JOIN users u3 ON ss.supervisor_id = u3.id
             WHERE 1=1
         `;
         
