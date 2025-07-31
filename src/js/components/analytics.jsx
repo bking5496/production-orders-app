@@ -1059,7 +1059,7 @@ export default function AnalyticsPage() {
                     analytics.downtimeRecords.slice(0, 20).map((record, index) => (
                       <tr key={record.id || index} className="hover:bg-gray-50">
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                          {record.start_time ? new Date(record.start_time).toLocaleString() : 'N/A'}
+                          {record.start_time ? new Date(new Date(record.start_time).getTime() + (2 * 60 * 60 * 1000)).toLocaleString() : 'N/A'}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                           {record.duration ? `${record.duration}m` : 'Active'}
