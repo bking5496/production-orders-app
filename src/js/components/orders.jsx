@@ -240,39 +240,39 @@ export default function OrdersPage() {
   // Statistics panel component - Simplified to 4 key metrics
   const StatisticsPanel = () => (
     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-      <Card className="p-4">
+      <Card className="p-4 glass hover-lift card-hover">
         <div className="flex items-center gap-3">
-          <Package className="w-6 h-6 text-gray-600" />
+          <Package className="w-6 h-6 text-blue-600 float" />
           <div>
-            <p className="text-sm text-gray-500">Total Orders</p>
+            <p className="text-sm text-gray-600">Total Orders</p>
             <p className="text-2xl font-bold text-gray-800">{stats.total}</p>
           </div>
         </div>
       </Card>
-      <Card className="p-4">
+      <Card className="p-4 glass hover-lift card-hover">
         <div className="flex items-center gap-3">
-          <Clock className="w-6 h-6 text-orange-600" />
+          <Clock className="w-6 h-6 text-orange-600 float" style={{animationDelay: '1s'}} />
           <div>
-            <p className="text-sm text-gray-500">Pending</p>
-            <p className="text-2xl font-bold text-orange-600">{stats.pending}</p>
+            <p className="text-sm text-gray-600">Pending</p>
+            <p className="text-2xl font-bold text-orange-600 status-pending rounded px-2">{stats.pending}</p>
           </div>
         </div>
       </Card>
-      <Card className="p-4">
+      <Card className="p-4 glass hover-lift card-hover">
         <div className="flex items-center gap-3">
-          <Play className="w-6 h-6 text-blue-600" />
+          <Play className="w-6 h-6 text-blue-600 float" style={{animationDelay: '2s'}} />
           <div>
-            <p className="text-sm text-gray-500">In Progress</p>
-            <p className="text-2xl font-bold text-blue-600">{stats.inProgress}</p>
+            <p className="text-sm text-gray-600">In Progress</p>
+            <p className="text-2xl font-bold text-blue-600 status-progress rounded px-2">{stats.inProgress}</p>
           </div>
         </div>
       </Card>
-      <Card className="p-4">
+      <Card className="p-4 glass hover-lift card-hover">
         <div className="flex items-center gap-3">
-          <Square className="w-6 h-6 text-red-600" />
+          <Square className="w-6 h-6 text-red-600 float" style={{animationDelay: '3s'}} />
           <div>
-            <p className="text-sm text-gray-500">Stopped</p>
-            <p className="text-2xl font-bold text-red-600">{stats.stopped}</p>
+            <p className="text-sm text-gray-600">Stopped</p>
+            <p className="text-2xl font-bold text-red-600 status-stopped rounded px-2">{stats.stopped}</p>
           </div>
         </div>
       </Card>
@@ -281,40 +281,49 @@ export default function OrdersPage() {
 
   if (loading && orders.length === 0) {
     return (
-      <div className="p-6 text-center">
-        <div className="flex items-center justify-center gap-2 text-gray-500">
-          <RefreshCw className="w-5 h-5 animate-spin" />
-          Loading orders...
+      <div className="p-6 text-center min-h-screen gradient-animate flex items-center justify-center">
+        <div className="glass p-8 rounded-2xl shadow-2xl">
+          <div className="flex items-center justify-center gap-3 text-white">
+            <RefreshCw className="w-8 h-8 animate-spin" />
+            <span className="text-lg font-medium shimmer">Loading orders...</span>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="p-6 space-y-6 bg-gray-50 min-h-screen">
+    <div className="p-6 space-y-6 min-h-screen gradient-animate">
       {/* Notification */}
       {notification && (
-        <div className={`fixed top-4 right-4 p-4 rounded-lg shadow-lg z-50 ${
-          notification.type === 'success' ? 'bg-green-100 text-green-800 border border-green-200' :
-          notification.type === 'danger' ? 'bg-red-100 text-red-800 border border-red-200' :
-          notification.type === 'warning' ? 'bg-yellow-100 text-yellow-800 border border-yellow-200' :
-          'bg-blue-100 text-blue-800 border border-blue-200'
+        <div className={`fixed top-4 right-4 p-4 rounded-xl shadow-2xl z-50 glass backdrop-blur-xl hover-lift transition-all duration-500 transform animate-pulse ${
+          notification.type === 'success' ? 'border-l-4 border-green-400 text-green-800' :
+          notification.type === 'danger' ? 'border-l-4 border-red-400 text-red-800' :
+          notification.type === 'warning' ? 'border-l-4 border-yellow-400 text-yellow-800' :
+          'border-l-4 border-blue-400 text-blue-800'
         }`}>
-          {notification.message}
+          <div className="flex items-center gap-2">
+            {notification.type === 'success' && <CheckCircle className="w-5 h-5 text-green-600" />}
+            {notification.type === 'danger' && <AlertTriangle className="w-5 h-5 text-red-600" />}
+            {notification.type === 'warning' && <AlertTriangle className="w-5 h-5 text-yellow-600" />}
+            {notification.type !== 'success' && notification.type !== 'danger' && notification.type !== 'warning' && <Package className="w-5 h-5 text-blue-600" />}
+            <span className="font-medium">{notification.message}</span>
+          </div>
         </div>
       )}
 
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div className="flex items-center gap-4">
-          <Button onClick={() => setShowCreateModal(true)}>
+        <div className="float">
+          <h1 className="text-3xl font-bold gradient-text mb-2">Production Orders</h1>
+          <p className="text-white/80 text-sm mb-4 backdrop-blur-sm">Manage production orders and track progress</p>
+          <Button 
+            onClick={() => setShowCreateModal(true)}
+            className="hover-lift btn-micro bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white border-0 shadow-lg"
+          >
             <Plus className="w-4 h-4 mr-2" />
             Create Order
           </Button>
-          <div>
-            <h1 className="text-2xl font-bold text-gray-800">Production Orders</h1>
-            <p className="text-gray-600 text-sm">Manage production orders and track progress</p>
-          </div>
         </div>
         
         <div className="flex items-center gap-3">
@@ -326,7 +335,7 @@ export default function OrdersPage() {
               placeholder="Search orders..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-64 pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-64 pl-10 pr-4 py-2 glass border border-white/20 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 focus:scale-105"
             />
           </div>
           
@@ -335,6 +344,7 @@ export default function OrdersPage() {
             disabled={refreshing}
             variant="outline"
             size="sm"
+            className="hover-lift btn-micro glass border-white/20 text-gray-700 hover:bg-white/20"
           >
             <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
           </Button>
@@ -345,7 +355,7 @@ export default function OrdersPage() {
       <StatisticsPanel />
 
       {/* Filters */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-4 rounded-lg shadow-sm border">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 glass p-4 rounded-lg shadow-lg hover-lift">
         <div className="flex flex-col sm:flex-row gap-3">
           {/* Environment Filter */}
           <div className="relative">
@@ -383,7 +393,7 @@ export default function OrdersPage() {
       </div>
 
       {/* Orders Table */}
-      <Card>
+      <Card className="glass hover-lift shadow-2xl">
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
@@ -395,9 +405,11 @@ export default function OrdersPage() {
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {loading ? (
-                <tr><td colSpan="7" className="text-center py-10 text-gray-500">
-                  <RefreshCw className="w-5 h-5 animate-spin mx-auto mb-2" />
-                  Loading orders...
+                <tr><td colSpan="7" className="text-center py-10">
+                  <div className="flex flex-col items-center gap-3">
+                    <RefreshCw className="w-8 h-8 animate-spin text-blue-600" />
+                    <span className="text-gray-600 shimmer">Loading orders...</span>
+                  </div>
                 </td></tr>
               ) : filteredOrders.length === 0 ? (
                 <tr><td colSpan="7" className="text-center py-10">
@@ -413,7 +425,7 @@ export default function OrdersPage() {
                   )}
                 </td></tr>
               ) : filteredOrders.map(order => (
-                <tr key={order.id} className="hover:bg-gray-50">
+                <tr key={order.id} className="hover:bg-white/50 transition-all duration-300 hover:scale-[1.01] hover:shadow-md">
                   <td className="px-4 py-3 whitespace-nowrap">
                     <div className="text-sm font-medium text-gray-900">{order.order_number}</div>
                     {order.priority !== 'normal' && (
@@ -438,7 +450,7 @@ export default function OrdersPage() {
                             onClick={() => { setSelectedOrder(order); setShowStartModal(true); }} 
                             size="sm"
                             variant="outline"
-                            className="text-blue-600 hover:text-blue-700"
+                            className="text-blue-600 hover:text-blue-700 hover-lift btn-micro"
                           >
                             <Play className="w-3 h-3" />
                           </Button>
@@ -446,7 +458,7 @@ export default function OrdersPage() {
                             onClick={() => handleDeleteOrder(order.id)} 
                             size="sm"
                             variant="outline"
-                            className="text-red-600 hover:text-red-700"
+                            className="text-red-600 hover:text-red-700 hover-lift btn-micro"
                           >
                             <Trash2 className="w-3 h-3" />
                           </Button>
@@ -462,7 +474,7 @@ export default function OrdersPage() {
                             }} 
                             size="sm"
                             variant="outline"
-                            className="text-blue-600 hover:text-blue-700"
+                            className="text-blue-600 hover:text-blue-700 hover-lift btn-micro"
                             title="Update Quantity"
                           >
                             <Target className="w-3 h-3" />
@@ -471,7 +483,7 @@ export default function OrdersPage() {
                             onClick={() => { setSelectedOrder(order); setShowStopModal(true); }} 
                             size="sm"
                             variant="outline"
-                            className="text-red-600 hover:text-red-700"
+                            className="text-red-600 hover:text-red-700 hover-lift btn-micro"
                             title="Stop Production"
                           >
                             <Square className="w-3 h-3" />
@@ -480,7 +492,7 @@ export default function OrdersPage() {
                             onClick={() => { setSelectedOrder(order); setShowCompletionModal(true); }} 
                             size="sm"
                             variant="outline"
-                            className="text-green-600 hover:text-green-700"
+                            className="text-green-600 hover:text-green-700 hover-lift btn-micro"
                             title="Complete Order"
                           >
                             <CheckCircle className="w-3 h-3" />
@@ -492,7 +504,7 @@ export default function OrdersPage() {
                           onClick={() => handleResumeProduction(order.id)} 
                           size="sm"
                           variant="outline"
-                          className="text-blue-600 hover:text-blue-700"
+                          className="text-blue-600 hover:text-blue-700 hover-lift btn-micro btn-pulse"
                           title="Resume Production"
                         >
                           <Play className="w-3 h-3" />
@@ -509,7 +521,7 @@ export default function OrdersPage() {
 
       {/* Create Order Modal */}
       {showCreateModal && (
-        <Modal title="Create New Order" onClose={() => setShowCreateModal(false)}>
+        <Modal title="Create New Order" onClose={() => setShowCreateModal(false)} className="glass backdrop-blur-xl">
           <form onSubmit={handleCreateOrder} className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div>
@@ -606,7 +618,7 @@ export default function OrdersPage() {
               <Button type="button" onClick={() => setShowCreateModal(false)} variant="outline">
                 Cancel
               </Button>
-              <Button type="submit">
+              <Button type="submit" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white border-0 hover-lift btn-micro">
                 <Plus className="w-4 h-4 mr-2" />
                 Create Order
               </Button>
@@ -660,6 +672,7 @@ export default function OrdersPage() {
               <Button 
                 onClick={handleStartProduction} 
                 disabled={!selectedMachine}
+                className="bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white border-0 hover-lift btn-micro"
               >
                 <Play className="w-4 h-4 mr-2" />
                 Start Production
@@ -716,7 +729,7 @@ export default function OrdersPage() {
               <Button 
                 onClick={handleStopProduction}
                 disabled={!stopReason.trim()}
-                variant="danger"
+                className="bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 text-white border-0 hover-lift btn-micro"
               >
                 <Square className="w-4 h-4 mr-2" />
                 Stop Production
@@ -793,10 +806,15 @@ export default function OrdersPage() {
               <Button 
                 type="submit"
                 disabled={loading || currentQuantity < 0 || currentQuantity > selectedOrder.quantity}
-                className="bg-blue-600 text-white hover:bg-blue-700"
+                className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white border-0 hover-lift btn-micro"
               >
                 <Target className="w-4 h-4 mr-2" />
-                {loading ? 'Updating...' : 'Update Quantity'}
+                {loading ? (
+                  <>
+                    <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                    Updating...
+                  </>
+                ) : 'Update Quantity'}
               </Button>
             </div>
           </form>
