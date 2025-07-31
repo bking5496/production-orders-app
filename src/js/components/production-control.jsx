@@ -6,7 +6,7 @@ import {
 } from 'lucide-react';
 import { Modal, Card, Button, Badge } from './ui-components.jsx';
 import API from '../core/api';
-import { convertSASTToUTC } from '../utils/timezone.js';
+import Time from '../core/time';
 
 export default function ProductionControl({ order, onUpdate, className = "" }) {
   const [showPauseModal, setShowPauseModal] = useState(false);
@@ -70,8 +70,8 @@ export default function ProductionControl({ order, onUpdate, className = "" }) {
     if (!order || order.status !== 'in_progress') return;
 
     const interval = setInterval(() => {
-      // Add 2 hours to database timestamp to align with local SAST time
-      const startTime = new Date(order.start_time).getTime() + (2 * 60 * 60 * 1000);
+      // Use Time module for SAST timezone handling
+      const startTime = Time.toSAST(order.start_time).getTime();
       const now = Date.now();
       const runtimeMinutes = Math.floor((now - startTime) / (1000 * 60));
       setRuntime(runtimeMinutes);

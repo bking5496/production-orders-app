@@ -5,7 +5,7 @@ import {
 } from 'lucide-react';
 import { Modal, Card, Button, Badge } from './ui-components.jsx';
 import API from '../core/api';
-import { getCurrentSASTTime, getSASTDateTimeLocal, convertSASTToUTC, formatSASTDate } from '../utils/timezone.js';
+import Time from '../core/time';
 
 export default function ProductionCompletionModalWithWaste({ isOpen, onClose, order, onComplete }) {
   const [loading, setLoading] = useState(false);
@@ -254,16 +254,7 @@ export default function ProductionCompletionModalWithWaste({ isOpen, onClose, or
                     Order will be marked as completed when you submit this form.
                   </p>
                   <p className="text-xs text-gray-500 mt-1">
-                    Current time: {new Date().toLocaleString('en-ZA', { 
-                      timeZone: 'Africa/Johannesburg',
-                      year: 'numeric',
-                      month: '2-digit', 
-                      day: '2-digit',
-                      hour: '2-digit',
-                      minute: '2-digit',
-                      second: '2-digit',
-                      hour12: false
-                    })} SAST
+                    Current time: {Time.formatSASTDateTime(Time.getCurrentSASTTime())}
                   </p>
                 </div>
               </div>

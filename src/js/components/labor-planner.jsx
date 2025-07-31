@@ -6,64 +6,12 @@ import {
     Wrench, Activity
 } from 'lucide-react';
 import API from '../core/api';
+import Time from '../core/time';
 import { capitalizeWords, formatUserDisplayName, formatEmployeeCode, formatRoleName } from '../utils/text-utils';
-
-// SAST Timezone Utilities (UTC+2)
-const SAST_OFFSET_HOURS = 2;
-
-// Convert UTC to SAST for display
-const convertUTCToSAST = (utcDateString) => {
-    if (!utcDateString) return null;
-    const utcDate = new Date(utcDateString);
-    const sastDate = new Date(utcDate.getTime() + (SAST_OFFSET_HOURS * 60 * 60 * 1000));
-    return sastDate;
-};
-
-// Convert SAST to UTC for API calls
-const convertSASTToUTC = (sastDateString) => {
-    if (!sastDateString) return null;
-    const sastDate = new Date(sastDateString);
-    const utcDate = new Date(sastDate.getTime() - (SAST_OFFSET_HOURS * 60 * 60 * 1000));
-    return utcDate.toISOString();
-};
-
-// Format SAST date for display
-const formatSASTDate = (utcDateString, options = {}) => {
-    if (!utcDateString) return 'N/A';
-    const sastDate = convertUTCToSAST(utcDateString);
-    if (!sastDate) return 'N/A';
-    
-    const defaultOptions = {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-        timeZone: 'Africa/Johannesburg',
-        ...options
-    };
-    
-    return sastDate.toLocaleString('en-ZA', defaultOptions);
-};
-
-// Format SAST time only
-const formatSASTTime = (utcDateString) => {
-    if (!utcDateString) return 'N/A';
-    const sastDate = convertUTCToSAST(utcDateString);
-    if (!sastDate) return 'N/A';
-    
-    return sastDate.toLocaleTimeString('en-ZA', {
-        hour: '2-digit',
-        minute: '2-digit',
-        timeZone: 'Africa/Johannesburg'
-    });
-};
 
 // Get current SAST date string for date inputs (YYYY-MM-DD)
 const getCurrentSASTDateString = () => {
-    const now = new Date();
-    const sastNow = new Date(now.getTime() + (SAST_OFFSET_HOURS * 60 * 60 * 1000));
-    return sastNow.toISOString().split('T')[0];
+    return Time.formatSASTDate(Time.getCurrentSASTTime());
 };
 
 // Utility functions for export

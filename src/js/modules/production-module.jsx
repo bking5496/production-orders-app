@@ -1,36 +1,7 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import API from '../core/api';
+import Time from '../core/time';
 import { useAuth } from '../core/auth';
-
-// SAST Timezone Utilities (UTC+2) - Consistent across all components
-const SAST_OFFSET_HOURS = 2;
-
-// Convert UTC to SAST for display
-const convertUTCToSAST = (utcDateString) => {
-    if (!utcDateString) return null;
-    const utcDate = new Date(utcDateString);
-    const sastDate = new Date(utcDate.getTime() + (SAST_OFFSET_HOURS * 60 * 60 * 1000));
-    return sastDate;
-};
-
-// Format SAST date for display
-const formatSASTDate = (utcDateString, options = {}) => {
-    if (!utcDateString) return 'N/A';
-    const sastDate = convertUTCToSAST(utcDateString);
-    if (!sastDate) return 'N/A';
-    
-    const defaultOptions = {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-        timeZone: 'Africa/Johannesburg',
-        ...options
-    };
-    
-    return sastDate.toLocaleString('en-ZA', defaultOptions);
-};
 
 // Shared Components
 const LoadingSpinner = ({ size = 20 }) => (
@@ -341,12 +312,12 @@ export const ProductionTimer = ({ order, onUpdate }) => {
             
             {estimatedCompletion && (
                 <div className="text-sm text-gray-600">
-                    Estimated completion: {formatSASTDate(estimatedCompletion, { 
+                    Estimated completion: {Time.formatSASTDateTime(estimatedCompletion, { 
                         hour: '2-digit', 
                         minute: '2-digit',
                         day: 'numeric',
                         month: 'short'
-                    })} SAST
+                    })}
                 </div>
             )}
         </div>
@@ -898,7 +869,7 @@ export const MachineMonitor = ({ machines = [] }) => {
                                         
                                         {machine.last_maintenance && (
                                             <div className="text-xs text-gray-500">
-                                                Last maintenance: {formatSASTDate(machine.last_maintenance, { 
+                                                Last maintenance: {Time.formatSASTDateTime(machine.last_maintenance, { 
                                                     year: 'numeric',
                                                     month: 'short', 
                                                     day: 'numeric'

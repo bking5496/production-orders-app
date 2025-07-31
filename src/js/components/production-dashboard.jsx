@@ -1,66 +1,15 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { Activity, Clock, Users, AlertTriangle, Pause, Play, RefreshCw, Filter, TrendingUp, Eye, X } from 'lucide-react';
 import API from '../core/api';
+import Time from '../core/time';
 import { Icon } from './layout-components.jsx';
-
-// SAST Timezone Utilities (UTC+2) - Same as labor planner
-const SAST_OFFSET_HOURS = 2;
-
-// Convert UTC to SAST for display
-const convertUTCToSAST = (utcDateString) => {
-    if (!utcDateString) return null;
-    const utcDate = new Date(utcDateString);
-    const sastDate = new Date(utcDate.getTime() + (SAST_OFFSET_HOURS * 60 * 60 * 1000));
-    return sastDate;
-};
-
-// Convert SAST to UTC for API calls
-const convertSASTToUTC = (sastDateString) => {
-    if (!sastDateString) return null;
-    const sastDate = new Date(sastDateString);
-    const utcDate = new Date(sastDate.getTime() - (SAST_OFFSET_HOURS * 60 * 60 * 1000));
-    return utcDate.toISOString();
-};
-
-// Format SAST date for display
-const formatSASTDate = (utcDateString, options = {}) => {
-    if (!utcDateString) return 'N/A';
-    const sastDate = convertUTCToSAST(utcDateString);
-    if (!sastDate) return 'N/A';
-    
-    const defaultOptions = {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-        timeZone: 'Africa/Johannesburg',
-        ...options
-    };
-    
-    return sastDate.toLocaleString('en-ZA', defaultOptions);
-};
-
-// Format SAST time only
-const formatSASTTime = (utcDateString) => {
-    if (!utcDateString) return 'N/A';
-    const sastDate = convertUTCToSAST(utcDateString);
-    if (!sastDate) return 'N/A';
-    
-    return sastDate.toLocaleTimeString('en-ZA', {
-        hour: '2-digit',
-        minute: '2-digit',
-        timeZone: 'Africa/Johannesburg'
-    });
-};
 
 // Helper to format time from a start date to now, creating a running timer effect
 const formatDuration = (sastStartTime) => {
     if (!sastStartTime) return '00:00:00';
     
-    // Server stores SAST time, but we need to subtract 2 more hours for correct display
-    const start = new Date(sastStartTime).getTime();
-    const now = Date.now() - (2 * 60 * 60 * 1000); // Subtract 2 hours from current time
+    const start = Time.toSAST(sastStartTime).getTime();
+    const now = Time.getSASTTimestamp();
     const diff = Math.max(0, now - start);
 
     const hours = Math.floor(diff / 3600000).toString().padStart(2, '0');
@@ -446,7 +395,7 @@ const OrderDetailsModal = ({ isOpen, onClose, orderId, orderNumber }) => {
                                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
                                     <div className="bg-gray-50 rounded-lg p-3 text-center">
                                         <div className="text-lg font-bold text-gray-900">
-                                            {orderDetails.order.start_time ? formatSASTTime(orderDetails.order.start_time) : '--:--'}
+                                            {orderDetails.order.start_time ? Time.formatSASTTime(orderDetails.order.start_time) : '--:--'}
                                         </div>
                                         <div className="text-xs text-gray-500 mt-1">Started</div>
                                     </div>
@@ -550,11 +499,11 @@ const OrderDetailsModal = ({ isOpen, onClose, orderId, orderNumber }) => {
                                                                 </span>
                                                             </div>
                                                             <div className="flex items-center gap-2 text-xs text-gray-500">
-                                                                <span>{formatSASTTime(stop.start_time)}</span>
+                                                                <span>{Time.formatSASTTime(stop.start_time)}</span>
                                                                 {stop.end_time && (
                                                                     <>
                                                                         <span>→</span>
-                                                                        <span>{formatSASTTime(stop.end_time)}</span>
+                                                                        <span>{Time.formatSASTTime(stop.end_time)}</span>
                                                                     </>
                                                                 )}
                                                             </div>

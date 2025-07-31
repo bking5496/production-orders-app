@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import API from '../core/api';
 import { useAuth } from '../core/auth';
-import { formatSASTDate, getSASTDateOnly, getCurrentSASTTime } from '../utils/timezone.js';
+import Time from '../core/time';
 
 // Shared components
 const ContentCard = ({ title, subtitle, children, className = '' }) => (
@@ -382,7 +382,7 @@ export const CustomReportBuilder = () => {
                         value={dateRange.start}
                         onChange={(e) => setDateRange(prev => ({ ...prev, start: e.target.value }))}
                         error={errors.startDate}
-                        max={dateRange.end || getSASTDateOnly()}
+                        max={dateRange.end || Time.formatSASTDate(Time.getCurrentSASTTime())}
                     />
                     <Input
                         label="End Date (SAST)"
@@ -391,7 +391,7 @@ export const CustomReportBuilder = () => {
                         onChange={(e) => setDateRange(prev => ({ ...prev, end: e.target.value }))}
                         error={errors.endDate}
                         min={dateRange.start || undefined}
-                        max={getSASTDateOnly()}
+                        max={Time.formatSASTDate(Time.getCurrentSASTTime())}
                     />
                 </div>
                 {errors.dateRange && <p className="text-sm text-red-600">{errors.dateRange}</p>}
@@ -610,7 +610,7 @@ export const ReportTemplateManager = () => {
                                     </span>
                                     <span>
                                         {template.last_used 
-                                            ? `Used ${formatSASTDate(template.last_used, { includeTime: false, includeTimezone: false })}`
+                                            ? `Used ${Time.formatSASTDate(template.last_used)}`
                                             : 'Never used'
                                         }
                                     </span>

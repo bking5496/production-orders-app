@@ -1,6 +1,8 @@
 // production-completion-modal.js - Production Completion Modal Component
 // Save as: public/js/components/production-completion-modal.js
 
+import Time from '../core/time';
+
 window.ProductionCompletionModal = ({ isOpen, onClose, order, onComplete }) => {
   const [loading, setLoading] = React.useState(false);
   const [formData, setFormData] = React.useState({
@@ -103,9 +105,9 @@ window.ProductionCompletionModal = ({ isOpen, onClose, order, onComplete }) => {
           React.createElement('span', { className: 'text-gray-600' }, 'Production Time: '),
           React.createElement('span', { className: 'font-medium' }, 
             (() => {
-              // Add 2 hours to database timestamp to align with local SAST time
-              const start = new Date(order.start_time).getTime() + (2 * 60 * 60 * 1000);
-              const duration = Date.now() - start;
+              // Use Time module for SAST timezone handling
+              const start = Time.toSAST(order.start_time).getTime();
+              const duration = Time.getSASTTimestamp() - start;
               const hours = Math.floor(duration / (1000 * 60 * 60));
               const minutes = Math.floor((duration % (1000 * 60 * 60)) / (1000 * 60));
               return `${hours}h ${minutes}m`;

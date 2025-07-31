@@ -2,15 +2,15 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Clock, AlertTriangle, TrendingDown, BarChart3, Download, Filter, Calendar } from 'lucide-react';
 import API from '../core/api';
 import { Modal, Card, Button, Badge } from './ui-components.jsx';
-import { formatSASTDate } from '../utils/timezone.js';
+import Time from '../core/time';
 
 export default function DowntimeReport() {
   const [downtimeData, setDowntimeData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [filters, setFilters] = useState({
-    start_date: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // Last 7 days
-    end_date: new Date().toISOString().split('T')[0],
+    start_date: Time.formatSASTDate(new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)), // Last 7 days
+    end_date: Time.formatSASTDate(new Date()),
     machine_id: '',
     category: ''
   });
@@ -53,8 +53,8 @@ export default function DowntimeReport() {
     const csvContent = [
       ['Start Time', 'End Time', 'Duration (min)', 'Reason', 'Category', 'Order', 'Machine', 'Stopped By', 'Status'],
       ...downtimeData.records.map(record => [
-        formatSASTDate(record.start_time, { includeTime: true }),
-        record.end_time ? formatSASTDate(record.end_time, { includeTime: true }) : 'Active',
+        Time.formatSASTDateTime(record.start_time),
+        record.end_time ? Time.formatSASTDateTime(record.end_time) : 'Active',
         record.duration || 'N/A',
         record.reason,
         record.category,
@@ -278,7 +278,7 @@ export default function DowntimeReport() {
                 records?.map(record => (
                   <tr key={record.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      {formatSASTDate(record.start_time, { includeTime: true, timeStyle: 'short' })}
+                      {Time.formatSASTDateTime(record.start_time)}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                       {record.duration ? `${record.duration}m` : 'Active'}
