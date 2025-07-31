@@ -208,10 +208,10 @@ export default function ProductionCompletionModalWithWaste({ isOpen, onClose, or
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center gap-2 px-4 py-2 border-b-2 font-medium text-sm transition-colors ${
+                className={`flex items-center gap-2 px-4 py-2 border-b-2 font-medium text-sm transition-all duration-300 hover-lift btn-micro ${
                   activeTab === tab.id
-                    ? 'border-blue-500 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700'
+                    ? 'border-purple-500 text-purple-600 glass'
+                    : 'border-transparent text-gray-600 hover:text-gray-800 hover:glass'
                 }`}
               >
                 <Icon className="w-4 h-4" />
