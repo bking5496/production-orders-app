@@ -37,11 +37,12 @@ export default function AnalyticsPage() {
     
     try {
       const params = new URLSearchParams(dateRange).toString();
-      const [ordersData, machinesData, summaryData, downtimeData, employeesData, assignmentsData] = await Promise.all([
+      const [ordersData, machinesData, summaryData, downtimeData, downtimeRecordsData, employeesData, assignmentsData] = await Promise.all([
         API.get('/orders'),
         API.get('/machines'),
         API.get(`/analytics/summary?${params}`),
         API.get(`/analytics/downtime?${params}`),
+        API.get(`/reports/downtime?${params}`),
         API.get('/users'),
         API.get(`/planner/assignments?date=${dateRange.end_date}`)
       ]);
@@ -52,7 +53,10 @@ export default function AnalyticsPage() {
         employees: employeesData || [],
         assignments: assignmentsData || [],
         summary: summaryData?.summary || {},
-        downtime: downtimeData || {}
+        downtime: downtimeData || {},
+        downtimeRecords: downtimeRecordsData?.records || [],
+        downtimeSummary: downtimeRecordsData?.summary || {},
+        categoryBreakdown: downtimeRecordsData?.category_breakdown || {}
       });
     } catch (error) {
       console.error('Failed to load analytics:', error);
@@ -204,6 +208,45 @@ export default function AnalyticsPage() {
       showNotification(`Analytics exported as ${format.toUpperCase()}`, 'success');
     } catch (error) {
       showNotification('Failed to export data', 'danger');
+    }
+  };
+
+  // Downtime export functionality
+  const exportDowntimeData = () => {
+    try {
+      if (!analytics.downtimeRecords || analytics.downtimeRecords.length === 0) {
+        showNotification('No downtime records to export', 'warning');
+        return;
+      }
+
+      const csvContent = [
+        ['Start Time', 'End Time', 'Duration (min)', 'Reason', 'Category', 'Order', 'Machine', 'Stopped By', 'Status', 'Notes'],
+        ...analytics.downtimeRecords.map(record => [
+          record.start_time || 'N/A',
+          record.end_time || 'Active',
+          record.duration || 'N/A',
+          record.reason || 'N/A',
+          record.category || 'N/A',
+          record.order_number || 'N/A',
+          record.machine_name || 'N/A',
+          record.stopped_by || 'N/A',
+          record.status || 'N/A',
+          (record.notes || '').replace(/,/g, ';') // Replace commas to avoid CSV parsing issues
+        ])
+      ].map(row => row.join(',')).join('\n');
+
+      const blob = new Blob([csvContent], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `downtime-report-${dateRange.start_date}-to-${dateRange.end_date}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+      
+      showNotification('Downtime report exported successfully', 'success');
+    } catch (error) {
+      console.error('Export error:', error);
+      showNotification('Failed to export downtime data', 'danger');
     }
   };
 
@@ -501,7 +544,8 @@ export default function AnalyticsPage() {
             { id: 'orders', label: 'Order Analytics', icon: Package },
             { id: 'machines', label: 'Machine Analytics', icon: Factory },
             { id: 'labor', label: 'Labor Analytics', icon: Users },
-            { id: 'performance', label: 'Performance', icon: TrendingUp }
+            { id: 'performance', label: 'Performance', icon: TrendingUp },
+            { id: 'downtime', label: 'Downtime Report', icon: AlertTriangle }
           ].map(tab => {
             const Icon = tab.icon;
             return (
@@ -889,6 +933,150 @@ export default function AnalyticsPage() {
                 </tbody>
               </table>
             </div>
+          </Card>
+        </div>
+      )}
+
+      {activeTab === 'downtime' && (
+        <div className="space-y-6">
+          {/* Downtime Export Button */}
+          <div className="flex justify-end">
+            <Button onClick={exportDowntimeData} variant="outline">
+              <Download className="w-4 h-4 mr-2" />
+              Export Downtime Report
+            </Button>
+          </div>
+
+          {/* Downtime Summary Statistics */}
+          {analytics.downtimeSummary && (
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
+              <StatsCard
+                title="Total Stops"
+                value={analytics.downtimeSummary.total_stops || 0}
+                icon={AlertTriangle}
+                color="red"
+              />
+              <StatsCard
+                title="Active Stops"
+                value={analytics.downtimeSummary.active_stops || 0}
+                icon={Clock}
+                color="yellow"
+              />
+              <StatsCard
+                title="Total Downtime"
+                value={`${analytics.downtimeSummary.total_downtime_hours || 0}h`}
+                icon={TrendingDown}
+                color="blue"
+              />
+              <StatsCard
+                title="Avg Duration"
+                value={`${analytics.downtimeSummary.average_downtime_minutes || 0}m`}
+                icon={BarChart3}
+                color="purple"
+              />
+              <StatsCard
+                title="Resolved"
+                value={analytics.downtimeSummary.resolved_stops || 0}
+                icon={CheckCircle}
+                color="green"
+              />
+            </div>
+          )}
+
+          {/* Category Breakdown Chart */}
+          {analytics.categoryBreakdown && Object.keys(analytics.categoryBreakdown).length > 0 && (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <BarChart
+                data={Object.fromEntries(
+                  Object.entries(analytics.categoryBreakdown).map(([key, value]) => [
+                    key, Math.round(value.total_minutes || 0)
+                  ])
+                )}
+                title="Downtime by Category (Minutes)"
+                color="#ef4444"
+              />
+              <PieChart
+                data={Object.fromEntries(
+                  Object.entries(analytics.categoryBreakdown).map(([key, value]) => [
+                    key, value.count || 0
+                  ])
+                )}
+                title="Stop Count by Category"
+              />
+            </div>
+          )}
+
+          {/* Detailed Downtime Records Table */}
+          <Card>
+            <div className="p-6 border-b">
+              <h3 className="text-lg font-semibold">Recent Downtime Records</h3>
+              <p className="text-sm text-gray-600 mt-1">
+                Showing {analytics.downtimeRecords?.length || 0} records for selected period
+              </p>
+            </div>
+            
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    {['Start Time', 'Duration', 'Reason', 'Category', 'Order', 'Machine', 'Status'].map(header => (
+                      <th key={header} className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        {header}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {(!analytics.downtimeRecords || analytics.downtimeRecords.length === 0) ? (
+                    <tr>
+                      <td colSpan="7" className="text-center py-10 text-gray-500">
+                        No downtime records found for the selected period
+                      </td>
+                    </tr>
+                  ) : (
+                    analytics.downtimeRecords.slice(0, 20).map((record, index) => (
+                      <tr key={record.id || index} className="hover:bg-gray-50">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          {record.start_time ? new Date(record.start_time).toLocaleString() : 'N/A'}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                          {record.duration ? `${record.duration}m` : 'Active'}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <Badge variant={
+                            record.reason?.includes('breakdown') || record.reason?.includes('safety') ? 'danger' :
+                            record.reason?.includes('maintenance') || record.reason?.includes('material') ? 'warning' :
+                            record.reason?.includes('break') || record.reason?.includes('shift') ? 'info' : 'default'
+                          } size="sm">
+                            {record.reason?.replace(/_/g, ' ').toUpperCase() || 'N/A'}
+                          </Badge>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                          {record.category || 'N/A'}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                          {record.order_number || 'N/A'}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                          {record.machine_name || 'N/A'}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <Badge variant={record.status === 'Active' ? 'warning' : 'success'} size="sm">
+                            {record.status || 'N/A'}
+                          </Badge>
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+            
+            {analytics.downtimeRecords && analytics.downtimeRecords.length > 20 && (
+              <div className="p-4 text-center text-sm text-gray-500 border-t">
+                Showing first 20 of {analytics.downtimeRecords.length} records. Export for complete data.
+              </div>
+            )}
           </Card>
         </div>
       )}
