@@ -1,50 +1,5 @@
 🚀 API Server running on http://localhost:3000
 ✅ Connected to SQLite database
-Assignment request data: {
-  employee_id: 34,
-  machine_id: 7,
-  shift: 'day',
-  assignment_date: '2025-07-31'
-}
-User role: admin
-SQL parameters: [ 34, 34, 7, 'day', '2025-07-31', 'planned', 'Operator' ]
-Assignment created with ID: 95
-Assignment request data: {
-  employee_id: 65,
-  machine_id: 7,
-  shift: 'day',
-  assignment_date: '2025-07-31'
-}
-User role: admin
-SQL parameters: [ 65, 65, 7, 'day', '2025-07-31', 'planned', 'Operator(AR)' ]
-Assignment created with ID: 96
-Supervisor assignment request: {
-  supervisor_id: 32,
-  assignment_date: '2025-07-29',
-  shift: 'day',
-  user: {
-    id: 1,
-    username: 'admin',
-    role: 'admin',
-    iat: 1753911955,
-    exp: 1753998355
-  }
-}
-Checking for existing assignment...
-Creating new supervisor assignment...
-Supervisor assignment created successfully: 43
-Supervisor assignment request: {
-  supervisor_id: 63,
-  assignment_date: '2025-07-29',
-  shift: 'night',
-  user: {
-    id: 1,
-    username: 'admin',
-    role: 'admin',
-    iat: 1753911955,
-    exp: 1753998355
-  }
-}
-Checking for existing assignment...
-Creating new supervisor assignment...
-Supervisor assignment created successfully: 44
+✅ Foreign key constraints enabled
+🔗 New WebSocket connection attempt
+❌ WebSocket authentication failed: No token provided

@@ -46,9 +46,6 @@ export default function LoginForm() {
             {loading ? 'Signing in...' : 'Sign In'}
           </button>
         </form>
-         <div className="mt-6 text-center text-sm text-gray-600">
-            Default: username: admin, password: admin123
-        </div>
       </div>
     </div>
   );
