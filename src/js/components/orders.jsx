@@ -425,7 +425,7 @@ export default function OrdersPage() {
                   )}
                 </td></tr>
               ) : filteredOrders.map(order => (
-                <tr key={order.id} className="hover:bg-white/50 transition-all duration-300 hover:scale-[1.01] hover:shadow-md">
+                <tr key={order.id} className="hover:bg-white/50 transition-all duration-300 hover:shadow-md">
                   <td className="px-4 py-3 whitespace-nowrap">
                     <div className="text-sm font-medium text-gray-900">{order.order_number}</div>
                     {order.priority !== 'normal' && (
