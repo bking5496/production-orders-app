@@ -220,7 +220,7 @@ export default function AnalyticsPage() {
       }
 
       const csvContent = [
-        ['Start Time', 'End Time', 'Duration (min)', 'Reason', 'Category', 'Order', 'Machine', 'Stopped By', 'Status', 'Notes'],
+        ['Start Time', 'End Time', 'Duration (min)', 'Reason', 'Category', 'Order', 'Machine', 'Stopped By', 'Supervisor on Duty', 'Shift', 'Status', 'Notes'],
         ...analytics.downtimeRecords.map(record => [
           record.start_time || 'N/A',
           record.end_time || 'Active',
@@ -230,6 +230,8 @@ export default function AnalyticsPage() {
           record.order_number || 'N/A',
           record.machine_name || 'N/A',
           record.stopped_by || 'N/A',
+          record.supervisor_on_duty || 'N/A',
+          record.shift || 'N/A',
           record.status || 'N/A',
           (record.notes || '').replace(/,/g, ';') // Replace commas to avoid CSV parsing issues
         ])
