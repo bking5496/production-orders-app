@@ -4,6 +4,9 @@ import ReactDOM from 'react-dom/client';
 // Import EventBus first (before other modules that use it)
 import './js/core/event-bus.js';
 
+// Import WebSocket service
+import './js/core/websocket.js';
+
 // Import core services
 import { AuthProvider, useAuth } from './js/core/auth.js';
 import Router, { useRouter } from './js/core/router.js';

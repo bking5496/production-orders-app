@@ -12,6 +12,7 @@ const compression = require('compression');
 const cors = require('cors');
 const rateLimit = require('express-rate-limit');
 const http = require('http');
+const WebSocket = require('ws');
 const multer = require('multer');
 const xlsx = require('xlsx');
 const { body, validationResult } = require('express-validator');
@@ -45,6 +46,9 @@ const DATABASE_PATH = process.env.DATABASE_PATH || './production.db';
 // --- Initialization ---
 const app = express();
 const server = http.createServer(app);
+
+// --- WebSocket Server Setup ---
+const wss = new WebSocket.Server({ server });
 
 // --- Database Connection ---
 const db = new sqlite3.Database(DATABASE_PATH, (err) => {
@@ -90,6 +94,189 @@ const dbAll = (sql, params = []) => {
     });
 };
 
+// --- WebSocket Authentication Helper ---
+const authenticateWebSocket = (ws, token) => {
+    return new Promise((resolve, reject) => {
+        if (!token) {
+            reject(new Error('No token provided'));
+            return;
+        }
+        
+        jwt.verify(token, JWT_SECRET, (err, user) => {
+            if (err) {
+                reject(new Error('Invalid token'));
+                return;
+            }
+            ws.user = user;
+            resolve(user);
+        });
+    });
+};
+
+// --- WebSocket Connection Handling ---
+wss.on('connection', async (ws, req) => {
+    console.log('🔗 New WebSocket connection attempt');
+    
+    // Extract token from query params or headers
+    const url = new URL(req.url, `http://${req.headers.host}`);
+    const token = url.searchParams.get('token') || req.headers.authorization?.replace('Bearer ', '');
+    
+    try {
+        // Authenticate the WebSocket connection
+        await authenticateWebSocket(ws, token);
+        console.log(`✅ WebSocket authenticated for user: ${ws.user.username} (${ws.user.role})`);
+        
+        // Initialize connection state
+        ws.subscriptions = [];
+        ws.isAlive = true;
+        
+        // Send welcome message
+        ws.send(JSON.stringify({
+            type: 'welcome',
+            data: {
+                message: 'Connected to Production Management System',
+                user: ws.user.username,
+                role: ws.user.role,
+                timestamp: new Date().toISOString()
+            }
+        }));
+        
+    } catch (error) {
+        console.log(`❌ WebSocket authentication failed: ${error.message}`);
+        ws.send(JSON.stringify({
+            type: 'auth_error',
+            data: { error: 'Authentication failed' }
+        }));
+        ws.close(1008, 'Authentication failed');
+        return;
+    }
+    
+    // Handle incoming messages
+    ws.on('message', (message) => {
+        try {
+            const data = JSON.parse(message);
+            console.log(`📨 WebSocket message from ${ws.user.username}:`, data.type);
+            
+            switch (data.type) {
+                case 'ping':
+                    ws.send(JSON.stringify({ 
+                        type: 'pong',
+                        timestamp: new Date().toISOString()
+                    }));
+                    break;
+                    
+                case 'subscribe':
+                    // Subscribe to specific channels
+                    if (Array.isArray(data.channels)) {
+                        ws.subscriptions = [...new Set([...ws.subscriptions, ...data.channels])];
+                        ws.send(JSON.stringify({
+                            type: 'subscription_confirmed',
+                            data: { channels: ws.subscriptions }
+                        }));
+                        console.log(`📺 User ${ws.user.username} subscribed to:`, data.channels);
+                    }
+                    break;
+                    
+                case 'unsubscribe':
+                    // Unsubscribe from channels
+                    if (Array.isArray(data.channels)) {
+                        ws.subscriptions = ws.subscriptions.filter(ch => !data.channels.includes(ch));
+                        ws.send(JSON.stringify({
+                            type: 'unsubscription_confirmed',
+                            data: { channels: data.channels }
+                        }));
+                    }
+                    break;
+                    
+                default:
+                    console.log('❓ Unknown WebSocket message type:', data.type);
+            }
+        } catch (error) {
+            console.error('💥 WebSocket message error:', error);
+            ws.send(JSON.stringify({
+                type: 'error',
+                data: { error: 'Invalid message format' }
+            }));
+        }
+    });
+    
+    // Handle connection close
+    ws.on('close', (code, reason) => {
+        console.log(`🔌 WebSocket disconnected: ${ws.user?.username} - Code: ${code}, Reason: ${reason}`);
+    });
+    
+    // Handle WebSocket errors
+    ws.on('error', (error) => {
+        console.error('💥 WebSocket error:', error);
+    });
+    
+    // Heartbeat for connection health
+    ws.on('pong', () => {
+        ws.isAlive = true;
+    });
+});
+
+// --- WebSocket Broadcast Functions ---
+function broadcast(type, data, channel = 'all', userRole = null) {
+    const message = JSON.stringify({
+        type,
+        data,
+        channel,
+        timestamp: new Date().toISOString()
+    });
+    
+    let clientCount = 0;
+    wss.clients.forEach((client) => {
+        if (client.readyState === WebSocket.OPEN && client.user) {
+            // Check if client is subscribed to the channel
+            const isSubscribed = channel === 'all' || client.subscriptions.includes(channel);
+            
+            // Check role-based access if specified
+            const hasRoleAccess = !userRole || client.user.role === userRole || 
+                                (userRole === 'supervisor' && client.user.role === 'admin') ||
+                                (userRole === 'operator' && ['admin', 'supervisor'].includes(client.user.role));
+            
+            if (isSubscribed && hasRoleAccess) {
+                client.send(message);
+                clientCount++;
+            }
+        }
+    });
+    
+    if (clientCount > 0) {
+        console.log(`📡 Broadcasted ${type} to ${clientCount} clients on channel: ${channel}`);
+    }
+}
+
+function broadcastToUser(username, type, data) {
+    const message = JSON.stringify({
+        type,
+        data,
+        timestamp: new Date().toISOString()
+    });
+    
+    wss.clients.forEach((client) => {
+        if (client.readyState === WebSocket.OPEN && 
+            client.user && 
+            client.user.username === username) {
+            client.send(message);
+            console.log(`📤 Sent ${type} to user: ${username}`);
+        }
+    });
+}
+
+// WebSocket Health Check - Ping clients every 30 seconds
+setInterval(() => {
+    wss.clients.forEach((ws) => {
+        if (ws.isAlive === false) {
+            console.log(`💀 Terminating inactive WebSocket connection: ${ws.user?.username}`);
+            return ws.terminate();
+        }
+        
+        ws.isAlive = false;
+        ws.ping();
+    });
+}, 30000);
 
 // --- Middleware ---
 app.use(helmet());
@@ -708,6 +895,28 @@ apiRouter.post('/orders/:id/start',
             const machineUpdate = await dbRun('UPDATE machines SET status = "in_use" WHERE id = ? AND status = "available"', [machine_id]);
             if (machineUpdate.changes === 0) throw new Error('Machine not available.');
             await dbRun('COMMIT');
+            
+            // Broadcast real-time update
+            const updatedOrder = await dbGet(`
+                SELECT o.*, m.name as machine_name, u.username as operator_name 
+                FROM production_orders o 
+                LEFT JOIN machines m ON o.machine_id = m.id 
+                LEFT JOIN users u ON o.operator_id = u.id 
+                WHERE o.id = ?
+            `, [orderId]);
+            
+            broadcast('order_started', {
+                order: updatedOrder,
+                machine_id: machine_id,
+                operator: req.user.username
+            }, 'orders');
+            
+            broadcast('machine_status_changed', {
+                machine_id: machine_id,
+                status: 'in_use',
+                order_id: orderId
+            }, 'machines');
+            
             res.json({ message: 'Production started successfully.' });
         } catch (error) {
             await dbRun('ROLLBACK');
@@ -723,6 +932,23 @@ apiRouter.post('/orders/:id/stop', authenticateToken, requireRole(['admin', 'sup
         await dbRun(`UPDATE production_orders SET status = 'stopped', stop_reason = ? WHERE id = ? AND status = 'in_progress'`, [reason, req.params.id]);
         await dbRun("INSERT INTO production_stops (order_id, reason, notes, start_time, category, operator_id) VALUES (?, ?, ?, datetime('now'), ?, ?)", 
             [req.params.id, reason, notes, getCategoryFromReason(reason), req.user.id]);
+        
+        // Broadcast real-time update
+        const stoppedOrder = await dbGet(`
+            SELECT o.*, m.name as machine_name, u.username as operator_name 
+            FROM production_orders o 
+            LEFT JOIN machines m ON o.machine_id = m.id 
+            LEFT JOIN users u ON o.operator_id = u.id 
+            WHERE o.id = ?
+        `, [req.params.id]);
+        
+        broadcast('order_stopped', {
+            order: stoppedOrder,
+            reason: reason,
+            notes: notes,
+            stopped_by: req.user.username
+        }, 'orders');
+        
         res.json({message: 'Production stopped.'});
     }
 );
@@ -731,6 +957,21 @@ apiRouter.post('/orders/:id/resume', authenticateToken, requireRole(['admin', 's
         await dbRun(`UPDATE production_orders SET status = 'in_progress' WHERE id = ? AND status = 'stopped'`, [req.params.id]);
         // Resume production with SAST timestamp and calculate downtime
         await dbRun(`UPDATE production_stops SET end_time = datetime('now'), duration = CAST((julianday(datetime('now')) - julianday(start_time)) * 24 * 60 AS INTEGER), resolved_by = ? WHERE order_id = ? AND end_time IS NULL`, [req.user.id, req.params.id]);
+        
+        // Broadcast real-time update
+        const resumedOrder = await dbGet(`
+            SELECT o.*, m.name as machine_name, u.username as operator_name 
+            FROM production_orders o 
+            LEFT JOIN machines m ON o.machine_id = m.id 
+            LEFT JOIN users u ON o.operator_id = u.id 
+            WHERE o.id = ?
+        `, [req.params.id]);
+        
+        broadcast('order_resumed', {
+            order: resumedOrder,
+            resumed_by: req.user.username
+        }, 'orders');
+        
         res.json({message: 'Production resumed.'});
     }
 );
@@ -743,6 +984,29 @@ apiRouter.post('/orders/:id/complete', authenticateToken, requireRole(['admin', 
         // Complete order with SAST timestamp
         await dbRun(`UPDATE production_orders SET status = 'completed', actual_quantity = ?, complete_time = datetime('now'), efficiency_percentage = ?, archived = 1 WHERE id = ?`, [req.body.actual_quantity, efficiency, req.params.id]);
         await dbRun('UPDATE machines SET status = "available" WHERE id = ?', [order.machine_id]);
+        
+        // Broadcast real-time update
+        const completedOrder = await dbGet(`
+            SELECT o.*, m.name as machine_name, u.username as operator_name 
+            FROM production_orders o 
+            LEFT JOIN machines m ON o.machine_id = m.id 
+            LEFT JOIN users u ON o.operator_id = u.id 
+            WHERE o.id = ?
+        `, [req.params.id]);
+        
+        broadcast('order_completed', {
+            order: completedOrder,
+            actual_quantity: req.body.actual_quantity,
+            efficiency: efficiency,
+            completed_by: req.user.username
+        }, 'orders');
+        
+        broadcast('machine_status_changed', {
+            machine_id: order.machine_id,
+            status: 'available',
+            order_id: null
+        }, 'machines');
+        
         res.json({message: 'Order completed.'});
     }
 );
