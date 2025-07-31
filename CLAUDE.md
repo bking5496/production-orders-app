@@ -8,6 +8,8 @@
 **Timezone:** SAST (UTC+2) - South African Standard Time  
 
 ## Recent Major Changes
+- **2025-07-31:** **UI ENHANCEMENT:** Applied modern animations and glass morphism to orders.jsx with horizontal scroll fix
+- **2025-07-31:** **STANDARD FIX:** Established hover animation standards - removed scale transforms from table rows to prevent horizontal scrolling
 - **2025-07-30:** Fixed critical timezone conversion bug in labor-planner.jsx causing data synchronization issues
 - **2025-07-30:** Rebuilt labour-layout.jsx from ground up to resolve JSX syntax and build errors
 - **2025-07-30:** Resolved database schema issues - verified all required columns exist
@@ -291,6 +293,60 @@ Both components now correctly query same endpoints:
 - **Labour Layout:** `GET /labour/roster?date=2025-08-07`
 - **Labor Planner:** `GET /planner/assignments?date=2025-08-07`
 - **Database Tables:** `labor_assignments`, `shift_supervisors` (shared data source)
+
+## 🎨 Modern UI Standards & Guidelines (2025-07-31)
+
+### **Applied Enhancements (orders.jsx)**
+- ✅ **Gradient animated background** - Dynamic color-shifting background
+- ✅ **Glass morphism effects** - Semi-transparent cards with backdrop blur
+- ✅ **Floating animations** - Statistics icons with staggered timing
+- ✅ **Gradient buttons** - Modern gradient backgrounds on primary actions
+- ✅ **Hover lift effects** - Cards and buttons lift with smooth shadows
+- ✅ **Enhanced notifications** - Glass morphism with icons and animations
+
+### **🚨 CRITICAL HORIZONTAL SCROLL FIX**
+**Issue:** `hover:scale-[1.01]` on table rows caused horizontal scrolling on hover
+**Solution:** Removed scale transforms from table rows while preserving other hover effects
+
+**STANDARD RULE FOR ALL FUTURE COMPONENTS:**
+```css
+/* ❌ AVOID - Causes horizontal scroll in tables */
+.table-row {
+  hover:scale-[1.01]
+}
+
+/* ✅ RECOMMENDED - Safe hover effects for table rows */
+.table-row {
+  hover:bg-white/50 
+  transition-all 
+  duration-300 
+  hover:shadow-md
+}
+```
+
+### **Safe Animation Classes (Use These)**
+```css
+/* Cards & standalone elements - Safe to scale */
+.card-hover:hover { transform: scale(1.02); }
+
+/* Buttons - Safe micro-interactions */
+.btn-micro:active { transform: scale(0.95); }
+
+/* Table rows - NO SCALING, use background/shadow only */
+.table-row:hover { background: rgba(255,255,255,0.5); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+
+/* Lift effect - Safe for most elements */
+.hover-lift:hover { transform: translateY(-2px); }
+```
+
+### **Implementation Checklist for Future Components**
+- [ ] Apply glass morphism to main containers
+- [ ] Use gradient backgrounds for primary actions
+- [ ] Add floating animations to icons (with staggered delays)
+- [ ] Implement hover-lift for cards and buttons
+- [ ] **NEVER use scale transforms on table rows**
+- [ ] Test all hover states to ensure no horizontal scrolling
+- [ ] Use consistent transition timing (300ms cubic-bezier)
 
 ## Next Planned Features
 - Real-time WebSocket updates for production status
