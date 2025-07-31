@@ -176,17 +176,6 @@ export default function LabourLayoutPage() {
     const [exportFormat, setExportFormat] = useState('excel');
     const [selectedShift, setSelectedShift] = useState('all');
     const [selectedMachine, setSelectedMachine] = useState('all');
-    const [machines, setMachines] = useState([]);
-
-    const fetchMachines = async () => {
-        try {
-            const machinesData = await API.get('/machines');
-            setMachines(machinesData || []);
-        } catch (error) {
-            console.error('Failed to fetch machines:', error);
-            setMachines([]);
-        }
-    };
 
     const fetchRosterForDate = async (date) => {
         setLoading(true);
@@ -240,7 +229,6 @@ export default function LabourLayoutPage() {
 
     useEffect(() => {
         fetchRosterForDate(selectedDate);
-        fetchMachines();
     }, [selectedDate]);
 
     const handleVerify = async (workerId) => {
@@ -428,7 +416,6 @@ export default function LabourLayoutPage() {
                                 </div>
                                 <div className="flex flex-col gap-3">
                                     <div className="flex items-center gap-3">
-                                        <label className="text-sm font-medium text-gray-700">Shift Filter:</label>
                                         <select 
                                             value={selectedShift} 
                                             onChange={e => setSelectedShift(e.target.value)}
@@ -446,9 +433,10 @@ export default function LabourLayoutPage() {
                                             className="bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                         >
                                             <option value="all">Machine [all]</option>
-                                            {machines.map(machine => (
-                                                <option key={machine.id} value={machine.name}>
-                                                    {machine.name}
+                                            {/* Only show machines that have assigned employees */}
+                                            {Array.from(new Set(rosterData.assignments?.map(a => a.machine).filter(m => m))).sort().map((machineName, index) => (
+                                                <option key={index} value={machineName}>
+                                                    {machineName}
                                                 </option>
                                             ))}
                                         </select>
