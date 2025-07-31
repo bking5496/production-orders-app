@@ -1062,6 +1062,17 @@ export default function AnalyticsPage() {
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                           {record.machine_name || 'N/A'}
                         </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                          {record.stopped_by || 'N/A'}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                          {record.supervisor_on_duty || 'N/A'}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                          <Badge variant={record.shift === 'day' ? 'info' : record.shift === 'night' ? 'default' : 'warning'} size="sm">
+                            {record.shift ? record.shift.charAt(0).toUpperCase() + record.shift.slice(1) : 'N/A'}
+                          </Badge>
+                        </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <Badge variant={record.status === 'Active' ? 'warning' : 'success'} size="sm">
                             {record.status || 'N/A'}
