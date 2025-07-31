@@ -18,3 +18,33 @@ Assignment request data: {
 User role: admin
 SQL parameters: [ 65, 65, 7, 'day', '2025-07-31', 'planned', 'Operator(AR)' ]
 Assignment created with ID: 96
+Supervisor assignment request: {
+  supervisor_id: 32,
+  assignment_date: '2025-07-29',
+  shift: 'day',
+  user: {
+    id: 1,
+    username: 'admin',
+    role: 'admin',
+    iat: 1753911955,
+    exp: 1753998355
+  }
+}
+Checking for existing assignment...
+Creating new supervisor assignment...
+Supervisor assignment created successfully: 43
+Supervisor assignment request: {
+  supervisor_id: 63,
+  assignment_date: '2025-07-29',
+  shift: 'night',
+  user: {
+    id: 1,
+    username: 'admin',
+    role: 'admin',
+    iat: 1753911955,
+    exp: 1753998355
+  }
+}
+Checking for existing assignment...
+Creating new supervisor assignment...
+Supervisor assignment created successfully: 44
