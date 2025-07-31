@@ -1,5 +1,3 @@
 🚀 API Server running on http://localhost:3000
 ✅ Connected to SQLite database
 ✅ Foreign key constraints enabled
-🔗 New WebSocket connection attempt
-❌ WebSocket authentication failed: No token provided

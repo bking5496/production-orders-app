@@ -35,8 +35,12 @@ class WebSocketService {
             this.connectionState = 'connecting';
             this.lastConnectionAttempt = new Date();
             
-            // Get token from parameter or cookies
-            const authToken = token || this.getTokenFromCookie();
+            // Get token from parameter or fetch from API
+            let authToken = token;
+            if (!authToken) {
+                authToken = await this.getWebSocketToken();
+            }
+            
             if (!authToken) {
                 throw new Error('No authentication token available');
             }
@@ -370,7 +374,30 @@ class WebSocketService {
         }
     }
 
-    // Get JWT token from cookie
+    // Get WebSocket token from API
+    async getWebSocketToken() {
+        try {
+            const response = await fetch('/api/auth/websocket-token', {
+                method: 'GET',
+                credentials: 'include', // Include httpOnly cookies
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+
+            const data = await response.json();
+            return data.token;
+        } catch (error) {
+            console.error('Failed to get WebSocket token:', error);
+            return null;
+        }
+    }
+
+    // Get JWT token from cookie (fallback method)
     getTokenFromCookie() {
         const cookies = document.cookie.split(';');
         for (let cookie of cookies) {
@@ -399,22 +426,27 @@ class WebSocketService {
 // Create singleton instance
 const websocketService = new WebSocketService();
 
-// Auto-connect when DOM is loaded (if token exists)
-document.addEventListener('DOMContentLoaded', () => {
-    const token = websocketService.getTokenFromCookie();
-    if (token) {
-        console.log('🚀 Auto-connecting WebSocket on page load');
-        websocketService.connect();
-    }
+// Auto-connect when DOM is loaded (if authenticated)
+document.addEventListener('DOMContentLoaded', async () => {
+    // Small delay to ensure the page is fully loaded
+    setTimeout(async () => {
+        try {
+            console.log('🚀 Auto-connecting WebSocket on page load');
+            await websocketService.connect();
+        } catch (error) {
+            console.log('⚠️ Auto-connect failed - user may not be authenticated');
+        }
+    }, 1000);
 });
 
 // Handle page visibility changes to reconnect when page becomes visible
-document.addEventListener('visibilitychange', () => {
+document.addEventListener('visibilitychange', async () => {
     if (!document.hidden && !websocketService.isConnected()) {
-        const token = websocketService.getTokenFromCookie();
-        if (token) {
+        try {
             console.log('🔄 Page visible - attempting to reconnect WebSocket');
-            websocketService.connect();
+            await websocketService.connect();
+        } catch (error) {
+            console.log('⚠️ Reconnect failed - user may not be authenticated');
         }
     }
 });

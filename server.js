@@ -476,6 +476,32 @@ apiRouter.post('/auth/extend-session', authenticateToken, async (req, res) => {
     }
 });
 
+// WebSocket token endpoint - provides a token that can be used for WebSocket authentication
+apiRouter.get('/auth/websocket-token', authenticateToken, async (req, res) => {
+    try {
+        // Generate a short-lived token specifically for WebSocket connection
+        const wsToken = jwt.sign(
+            { 
+                id: req.user.id, 
+                username: req.user.username, 
+                role: req.user.role,
+                type: 'websocket' // Mark this as a WebSocket-specific token
+            },
+            JWT_SECRET,
+            { expiresIn: '1h' } // WebSocket token valid for 1 hour
+        );
+        
+        res.json({ 
+            token: wsToken,
+            expiresIn: 3600 // 1 hour in seconds
+        });
+        
+    } catch (error) {
+        console.error('WebSocket token generation error:', error);
+        res.status(500).json({ error: 'Failed to generate WebSocket token' });
+    }
+});
+
 // --- User Management (Workers) ---
 apiRouter.post('/workers', authenticateToken, requireRole(['admin']), 
     body('employee_code').notEmpty(), body('username').notEmpty(), body('role').notEmpty(), handleValidationErrors,
