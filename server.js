@@ -10,6 +10,7 @@ const cookieParser = require('cookie-parser');
 const helmet = require('helmet');
 const compression = require('compression');
 const cors = require('cors');
+const rateLimit = require('express-rate-limit');
 const http = require('http');
 const multer = require('multer');
 const xlsx = require('xlsx');
@@ -92,10 +93,50 @@ const dbAll = (sql, params = []) => {
 
 // --- Middleware ---
 app.use(helmet());
-app.use(cors({ origin: true, credentials: true }));
+
+// Environment-specific CORS configuration
+if (process.env.NODE_ENV === 'production') {
+  // Restrict CORS to specific domains in production
+  app.use(cors({
+    origin: [
+      'https://oracles.africa',
+      'https://www.oracles.africa'
+    ],
+    credentials: true
+  }));
+  
+  // Enable trust proxy for reverse proxy setups (nginx, etc.)
+  app.set('trust proxy', 1);
+} else {
+  // Allow all origins in development
+  app.use(cors({ origin: true, credentials: true }));
+}
+
 app.use(compression());
 app.use(express.json());
 app.use(cookieParser());
+
+// --- Rate Limiting ---
+// General API rate limiting
+const apiLimiter = rateLimit({
+  windowMs: parseInt(process.env.RATE_LIMIT_WINDOW) * 60 * 1000 || 15 * 60 * 1000, // 15 minutes default
+  max: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS) || 100, // limit each IP to 100 requests per windowMs
+  message: { error: 'Too many requests from this IP, please try again later.' },
+  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+});
+
+// Strict rate limiting for authentication endpoints
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 5, // limit each IP to 5 requests per windowMs for auth endpoints
+  message: { error: 'Too many authentication attempts, please try again later.' },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+// Apply rate limiting to all API routes
+app.use('/api/', apiLimiter);
 
 // --- JWT & Authorization Middleware ---
 const authenticateToken = (req, res, next) => {
@@ -142,6 +183,7 @@ const apiRouter = express.Router();
 
 // --- Auth Routes ---
 apiRouter.post('/auth/login',
+  authLimiter, // Apply strict rate limiting to login endpoint
   body('username').notEmpty(), body('password').notEmpty(), handleValidationErrors,
   async (req, res) => {
     try {

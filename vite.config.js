@@ -7,6 +7,12 @@ export default defineConfig({
   server: {
     host: true, // This makes the server accessible over your network
     port: 5173,
+    allowedHosts: [
+      'oracles.africa',
+      'www.oracles.africa',
+      'localhost',
+      '.oracles.africa' // Allow all subdomains
+    ],
     // This proxy forwards API requests to your backend server
     proxy: {
       '/api': {
