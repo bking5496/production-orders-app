@@ -2,7 +2,8 @@ import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { 
   BarChart3, TrendingUp, TrendingDown, Download, RefreshCw, Calendar, 
   Clock, Target, Activity, AlertTriangle, CheckCircle, Package, Users,
-  Factory, PieChart, LineChart, Filter, Search, Settings, Play, Pause
+  Factory, PieChart, LineChart, Filter, Search, Settings, Play, Pause,
+  FileText, Eye, Edit3, Save
 } from 'lucide-react';
 import API from '../core/api';
 import Time from '../core/time';
@@ -20,6 +21,17 @@ export default function AnalyticsPage() {
   const [refreshing, setRefreshing] = useState(false);
   const [notification, setNotification] = useState(null);
   const [activeTab, setActiveTab] = useState('overview');
+  const [completionReports, setCompletionReports] = useState([]);
+  const [selectedCompletionReport, setSelectedCompletionReport] = useState(null);
+  const [showReportModal, setShowReportModal] = useState(false);
+  const [reportFormData, setReportFormData] = useState({
+    title: '',
+    description: '',
+    findings: '',
+    recommendations: '',
+    created_by: '',
+    order_id: null
+  });
   const [dateRange, setDateRange] = useState(() => {
     const now = new Date();
     const year = now.getFullYear();
@@ -94,7 +106,116 @@ export default function AnalyticsPage() {
 
   useEffect(() => {
     loadAnalytics();
+    loadCompletionReports();
   }, [dateRange]);
+
+  // Load completion reports
+  const loadCompletionReports = async () => {
+    try {
+      const params = new URLSearchParams({
+        start_date: dateRange.start_date,
+        end_date: dateRange.end_date
+      }).toString();
+      
+      const reportsData = await API.get(`/reports/completion?${params}`);
+      setCompletionReports(reportsData || []);
+    } catch (error) {
+      console.error('Failed to load completion reports:', error);
+    }
+  };
+
+  // Create new completion report
+  const createCompletionReport = async (orderData) => {
+    try {
+      const completedOrders = analytics.orders.filter(o => o.status === 'completed');
+      const orderToReport = orderData || completedOrders[0];
+      
+      if (!orderToReport) {
+        showNotification('No completed orders found to create report', 'warning');
+        return;
+      }
+      
+      setReportFormData({
+        title: `Completion Report - Order ${orderToReport.order_number}`,
+        description: `Production completion report for ${orderToReport.product_name}`,
+        findings: '',
+        recommendations: '',
+        created_by: 'System',
+        order_id: orderToReport.id
+      });
+      setShowReportModal(true);
+    } catch (error) {
+      showNotification('Failed to create completion report', 'danger');
+    }
+  };
+
+  // Save completion report
+  const saveCompletionReport = async () => {
+    try {
+      if (!reportFormData.title || !reportFormData.description) {
+        showNotification('Please fill in required fields', 'warning');
+        return;
+      }
+      
+      const reportData = {
+        ...reportFormData,
+        created_at: Time.getCurrentSASTISOString(),
+        report_type: 'completion'
+      };
+      
+      await API.post('/reports/completion', reportData);
+      showNotification('Completion report saved successfully', 'success');
+      setShowReportModal(false);
+      loadCompletionReports();
+      setReportFormData({
+        title: '',
+        description: '',
+        findings: '',
+        recommendations: '',
+        created_by: '',
+        order_id: null
+      });
+    } catch (error) {
+      showNotification('Failed to save completion report', 'danger');
+    }
+  };
+
+  // Export completion reports
+  const exportCompletionReports = () => {
+    try {
+      if (!completionReports || completionReports.length === 0) {
+        showNotification('No completion reports to export', 'warning');
+        return;
+      }
+
+      const csvContent = [
+        ['Title', 'Order Number', 'Product', 'Created Date', 'Created By', 'Description', 'Findings', 'Recommendations'],
+        ...completionReports.map(report => [
+          report.title || 'N/A',
+          report.order_number || 'N/A',
+          report.product_name || 'N/A',
+          report.created_at ? Time.formatSASTDateTime(report.created_at) : 'N/A',
+          report.created_by || 'N/A',
+          (report.description || '').replace(/,/g, ';'),
+          (report.findings || '').replace(/,/g, ';'),
+          (report.recommendations || '').replace(/,/g, ';')
+        ])
+      ].map(row => row.join(',')).join('\n');
+
+      const blob = new Blob([csvContent], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `completion-reports-${dateRange.start_date}-to-${dateRange.end_date}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+      
+      showNotification('Completion reports exported successfully', 'success');
+    } catch (error) {
+      console.error('Export error:', error);
+      showNotification('Failed to export completion reports', 'danger');
+    }
+  };
 
   // Calculate comprehensive metrics
   const metrics = useMemo(() => {
@@ -568,7 +689,8 @@ export default function AnalyticsPage() {
             { id: 'machines', label: 'Machine Analytics', icon: Factory },
             { id: 'labor', label: 'Labor Analytics', icon: Users },
             { id: 'performance', label: 'Performance', icon: TrendingUp },
-            { id: 'downtime', label: 'Downtime Report', icon: AlertTriangle }
+            { id: 'downtime', label: 'Downtime Report', icon: AlertTriangle },
+            { id: 'completion-reports', label: 'Completion Reports', icon: FileText }
           ].map(tab => {
             const Icon = tab.icon;
             return (
@@ -1113,6 +1235,299 @@ export default function AnalyticsPage() {
             )}
           </Card>
         </div>
+      )}
+
+      {activeTab === 'completion-reports' && (
+        <div className="space-y-6">
+          {/* Header with actions */}
+          <div className="flex justify-between items-center">
+            <div>
+              <h3 className="text-lg font-semibold text-gray-800">Order Completion Reports</h3>
+              <p className="text-sm text-gray-600 mt-1">
+                Document and analyze completed production orders
+              </p>
+            </div>
+            <div className="flex gap-3">
+              <Button onClick={exportCompletionReports} variant="outline">
+                <Download className="w-4 h-4 mr-2" />
+                Export Reports
+              </Button>
+              <Button onClick={() => createCompletionReport()} className="bg-green-600 hover:bg-green-700">
+                <FileText className="w-4 h-4 mr-2" />
+                Create Report
+              </Button>
+            </div>
+          </div>
+
+          {/* Summary Stats */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <StatsCard
+              title="Total Reports"
+              value={completionReports.length}
+              icon={FileText}
+              color="blue"
+            />
+            <StatsCard
+              title="This Month"
+              value={completionReports.filter(r => Time.isSASTToday(r.created_at) || 
+                (r.created_at && new Date(r.created_at).getMonth() === new Date().getMonth())).length}
+              icon={Calendar}
+              color="green"
+            />
+            <StatsCard
+              title="Completed Orders"
+              value={analytics.orders.filter(o => o.status === 'completed').length}
+              icon={CheckCircle}
+              color="purple"
+            />
+            <StatsCard
+              title="Documentation Rate"
+              value={`${analytics.orders.filter(o => o.status === 'completed').length > 0 ? 
+                Math.round((completionReports.length / analytics.orders.filter(o => o.status === 'completed').length) * 100) : 0}%`}
+              icon={Target}
+              color="yellow"
+            />
+          </div>
+
+          {/* Completion Reports Table */}
+          <Card>
+            <div className="p-6 border-b">
+              <h3 className="text-lg font-semibold">Recent Completion Reports</h3>
+              <p className="text-sm text-gray-600 mt-1">
+                Showing {completionReports.length} reports for selected period
+              </p>
+            </div>
+            
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    {['Title', 'Order', 'Product', 'Created Date', 'Created By', 'Actions'].map(header => (
+                      <th key={header} className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        {header}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {(!completionReports || completionReports.length === 0) ? (
+                    <tr>
+                      <td colSpan="6" className="text-center py-10 text-gray-500">
+                        <FileText className="w-12 h-12 mx-auto mb-4 text-gray-300" />
+                        <p>No completion reports found for the selected period</p>
+                        <Button 
+                          onClick={() => createCompletionReport()} 
+                          className="mt-4 bg-blue-600 hover:bg-blue-700"
+                        >
+                          Create First Report
+                        </Button>
+                      </td>
+                    </tr>
+                  ) : (
+                    completionReports.map((report, index) => (
+                      <tr key={report.id || index} className="hover:bg-gray-50">
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="text-sm font-medium text-gray-900">
+                            {report.title || 'Untitled Report'}
+                          </div>
+                          <div className="text-sm text-gray-500 truncate max-w-xs">
+                            {report.description || 'No description'}
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                          {report.order_number || 'N/A'}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                          {report.product_name || 'N/A'}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                          {report.created_at ? Time.formatSASTDateTime(report.created_at) : 'N/A'}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                          {report.created_by || 'Unknown'}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                          <div className="flex gap-2">
+                            <Button 
+                              onClick={() => setSelectedCompletionReport(report)}
+                              variant="outline" 
+                              size="sm"
+                            >
+                              <Eye className="w-4 h-4" />
+                            </Button>
+                            <Button 
+                              onClick={() => {
+                                setReportFormData({
+                                  title: report.title || '',
+                                  description: report.description || '',
+                                  findings: report.findings || '',
+                                  recommendations: report.recommendations || '',
+                                  created_by: report.created_by || '',
+                                  order_id: report.order_id
+                                });
+                                setShowReportModal(true);
+                              }}
+                              variant="outline" 
+                              size="sm"
+                            >
+                              <Edit3 className="w-4 h-4" />
+                            </Button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </Card>
+
+          {/* Quick Actions for Completed Orders */}
+          {analytics.orders.filter(o => o.status === 'completed').length > 0 && (
+            <Card className="p-6">
+              <h3 className="text-lg font-semibold mb-4">Recently Completed Orders</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {analytics.orders
+                  .filter(o => o.status === 'completed')
+                  .slice(0, 6)
+                  .map(order => (
+                    <div key={order.id} className="p-4 border rounded-lg hover:bg-gray-50">
+                      <div className="flex justify-between items-start mb-2">
+                        <div>
+                          <p className="font-medium text-gray-900">{order.order_number}</p>
+                          <p className="text-sm text-gray-600">{order.product_name}</p>
+                        </div>
+                        <Badge variant="success" size="sm">Completed</Badge>
+                      </div>
+                      <div className="text-xs text-gray-500 mb-3">
+                        <p>Qty: {order.actual_quantity || order.quantity} units</p>
+                        <p>Finished: {order.complete_time ? Time.formatSASTDateTime(order.complete_time) : 'N/A'}</p>
+                      </div>
+                      <Button 
+                        onClick={() => createCompletionReport(order)}
+                        size="sm" 
+                        className="w-full bg-blue-600 hover:bg-blue-700"
+                      >
+                        <FileText className="w-4 h-4 mr-2" />
+                        Create Report
+                      </Button>
+                    </div>
+                  ))
+                }
+              </div>
+            </Card>
+          )}
+        </div>
+      )}
+
+      {/* Report Creation/Edit Modal */}
+      {showReportModal && (
+        <Modal title="Completion Report" onClose={() => setShowReportModal(false)} size="lg">
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Report Title *</label>
+              <input
+                type="text"
+                value={reportFormData.title}
+                onChange={(e) => setReportFormData({...reportFormData, title: e.target.value})}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                placeholder="Enter report title"
+              />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Description *</label>
+              <textarea
+                value={reportFormData.description}
+                onChange={(e) => setReportFormData({...reportFormData, description: e.target.value})}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                rows="3"
+                placeholder="Brief description of the production completion"
+              />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Key Findings</label>
+              <textarea
+                value={reportFormData.findings}
+                onChange={(e) => setReportFormData({...reportFormData, findings: e.target.value})}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                rows="4"
+                placeholder="Document key findings, issues encountered, quality observations, etc."
+              />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Recommendations</label>
+              <textarea
+                value={reportFormData.recommendations}
+                onChange={(e) => setReportFormData({...reportFormData, recommendations: e.target.value})}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                rows="4"
+                placeholder="Recommendations for future improvements, process optimizations, etc."
+              />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Created By</label>
+              <input
+                type="text"
+                value={reportFormData.created_by}
+                onChange={(e) => setReportFormData({...reportFormData, created_by: e.target.value})}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                placeholder="Report author name"
+              />
+            </div>
+            
+            <div className="flex justify-end gap-3 pt-4 border-t">
+              <Button onClick={() => setShowReportModal(false)} variant="outline">
+                Cancel
+              </Button>
+              <Button onClick={saveCompletionReport} className="bg-green-600 hover:bg-green-700">
+                <Save className="w-4 h-4 mr-2" />
+                Save Report
+              </Button>
+            </div>
+          </div>
+        </Modal>
+      )}
+
+      {/* Report View Modal */}
+      {selectedCompletionReport && (
+        <Modal title="View Completion Report" onClose={() => setSelectedCompletionReport(null)} size="lg">
+          <div className="space-y-4">
+            <div>
+              <h3 className="text-lg font-semibold text-gray-900">{selectedCompletionReport.title}</h3>
+              <p className="text-sm text-gray-600 mt-1">Order: {selectedCompletionReport.order_number}</p>
+              <p className="text-sm text-gray-600">Created: {Time.formatSASTDateTime(selectedCompletionReport.created_at)} by {selectedCompletionReport.created_by}</p>
+            </div>
+            
+            <div>
+              <h4 className="font-medium text-gray-900 mb-2">Description</h4>
+              <p className="text-gray-700">{selectedCompletionReport.description || 'No description provided'}</p>
+            </div>
+            
+            {selectedCompletionReport.findings && (
+              <div>
+                <h4 className="font-medium text-gray-900 mb-2">Key Findings</h4>
+                <p className="text-gray-700 whitespace-pre-wrap">{selectedCompletionReport.findings}</p>
+              </div>
+            )}
+            
+            {selectedCompletionReport.recommendations && (
+              <div>
+                <h4 className="font-medium text-gray-900 mb-2">Recommendations</h4>
+                <p className="text-gray-700 whitespace-pre-wrap">{selectedCompletionReport.recommendations}</p>
+              </div>
+            )}
+            
+            <div className="flex justify-end pt-4 border-t">
+              <Button onClick={() => setSelectedCompletionReport(null)} variant="outline">
+                Close
+              </Button>
+            </div>
+          </div>
+        </Modal>
       )}
     </div>
   );

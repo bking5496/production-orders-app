@@ -1,18 +1,25 @@
 /**
  * Core Time Module for Production Orders App
  * Handles all timezone operations for SAST (UTC+2)
- * Version: 1.0.0
+ * Version: 2.0.0 - Comprehensive timezone management
  */
 
-// SAST Timezone offset in milliseconds (2 hours)
-const SAST_OFFSET_MS = 2 * 60 * 60 * 1000;
+// SAST Timezone configuration
+export const TIMEZONE_CONFIG = {
+  name: 'SAST',
+  fullName: 'South African Standard Time',
+  offset: '+02:00',
+  offsetMinutes: 120, // 2 hours * 60 minutes
+  offsetHours: 2,
+  offsetMS: 2 * 60 * 60 * 1000 // 2 hours in milliseconds
+};
 
 /**
  * Get current SAST time as Date object
  * @returns {Date} Current time in SAST
  */
 export function getCurrentSASTTime() {
-  return new Date(Date.now() + SAST_OFFSET_MS);
+  return new Date(Date.now() + TIMEZONE_CONFIG.offsetMS);
 }
 
 /**
@@ -23,7 +30,20 @@ export function getCurrentSASTTime() {
 export function toSAST(dateTime) {
   if (!dateTime) return null;
   const date = typeof dateTime === 'string' ? new Date(dateTime) : dateTime;
-  return new Date(date.getTime() + SAST_OFFSET_MS);
+  if (isNaN(date.getTime())) return null;
+  return new Date(date.getTime() + TIMEZONE_CONFIG.offsetMS);
+}
+
+/**
+ * Convert SAST date to UTC
+ * @param {Date|string} sastDate - SAST date to convert
+ * @returns {Date} Date converted to UTC
+ */
+export function convertSASTToUTC(sastDate) {
+  if (!sastDate) return null;
+  const date = new Date(sastDate);
+  if (isNaN(date.getTime())) return null;
+  return new Date(date.getTime() - TIMEZONE_CONFIG.offsetMS);
 }
 
 /**
@@ -48,6 +68,7 @@ export function formatSASTDateTime(dateTime, options = {}) {
   const formatOptions = { ...defaultOptions, ...options };
   const sastDate = toSAST(dateTime);
   
+  if (!sastDate) return 'N/A';
   return sastDate.toLocaleString('en-ZA', formatOptions);
 }
 
@@ -60,6 +81,7 @@ export function formatSASTDate(dateTime) {
   if (!dateTime) return '';
   
   const sastDate = toSAST(dateTime);
+  if (!sastDate) return '';
   return sastDate.toISOString().split('T')[0];
 }
 
@@ -69,14 +91,44 @@ export function formatSASTDate(dateTime) {
  * @returns {string} Formatted time string (HH:MM:SS)
  */
 export function formatSASTTime(dateTime) {
-  if (!dateTime) return '';
+  if (!dateTime) return 'N/A';
   
-  return formatSASTDateTime(dateTime, {
+  const sastDate = toSAST(dateTime);
+  if (!sastDate) return 'N/A';
+  
+  return sastDate.toLocaleString('en-ZA', {
     hour: '2-digit',
     minute: '2-digit',
-    second: '2-digit',
     hour12: false
   });
+}
+
+/**
+ * Get SAST time for HTML datetime-local input
+ * @param {Date|string} date - Date to format (optional, defaults to current time)
+ * @returns {string} ISO string formatted for datetime-local input in SAST
+ */
+export function getSASTDateTimeLocal(date = null) {
+  const sastDate = date ? toSAST(date) : getCurrentSASTTime();
+  if (!sastDate) return '';
+  
+  // Format as YYYY-MM-DDTHH:mm for datetime-local input
+  const year = sastDate.getFullYear();
+  const month = String(sastDate.getMonth() + 1).padStart(2, '0');
+  const day = String(sastDate.getDate()).padStart(2, '0');
+  const hours = String(sastDate.getHours()).padStart(2, '0');
+  const minutes = String(sastDate.getMinutes()).padStart(2, '0');
+  
+  return `${year}-${month}-${day}T${hours}:${minutes}`;
+}
+
+/**
+ * Get SAST date for HTML date input
+ * @param {Date|string} date - Date to format (optional, defaults to current time)
+ * @returns {string} ISO date string formatted for date input in SAST
+ */
+export function getSASTDateOnly(date = null) {
+  return formatSASTDate(date || getCurrentSASTTime());
 }
 
 /**
@@ -95,7 +147,7 @@ export function getCurrentSASTISOString() {
  */
 export function toSASTDatabaseString(date = null) {
   const targetDate = date || new Date();
-  return new Date(targetDate.getTime() + SAST_OFFSET_MS).toISOString();
+  return new Date(targetDate.getTime() + TIMEZONE_CONFIG.offsetMS).toISOString();
 }
 
 /**
@@ -118,7 +170,7 @@ export function calculateDurationMinutes(startTime, endTime = null) {
  * @returns {number} Timestamp with SAST offset
  */
 export function getSASTTimestamp() {
-  return Date.now() + SAST_OFFSET_MS;
+  return Date.now() + TIMEZONE_CONFIG.offsetMS;
 }
 
 /**
@@ -156,18 +208,73 @@ export function getSASTDayRange(date = null) {
   };
 }
 
+/**
+ * Format duration in a human-readable way
+ * @param {number} milliseconds - Duration in milliseconds
+ * @returns {string} Formatted duration string
+ */
+export function formatDuration(milliseconds) {
+  if (milliseconds < 0) return '0 seconds';
+  
+  const seconds = Math.floor(milliseconds / 1000);
+  const minutes = Math.floor(seconds / 60);
+  const hours = Math.floor(minutes / 60);
+  const days = Math.floor(hours / 24);
+  
+  if (days > 0) {
+    return `${days} day${days !== 1 ? 's' : ''}, ${hours % 24} hour${(hours % 24) !== 1 ? 's' : ''}`;
+  } else if (hours > 0) {
+    return `${hours} hour${hours !== 1 ? 's' : ''}, ${minutes % 60} minute${(minutes % 60) !== 1 ? 's' : ''}`;
+  } else if (minutes > 0) {
+    return `${minutes} minute${minutes !== 1 ? 's' : ''}, ${seconds % 60} second${(seconds % 60) !== 1 ? 's' : ''}`;
+  } else {
+    return `${seconds} second${seconds !== 1 ? 's' : ''}`;
+  }
+}
+
+/**
+ * Get relative time string in SAST
+ * @param {Date|string} date - Date to get relative time for
+ * @returns {string} Relative time string (e.g., "2 hours ago", "in 3 days")
+ */
+export function getSASTRelativeTime(date) {
+  const sastDate = toSAST(date);
+  const now = getCurrentSASTTime();
+  const diffMs = now.getTime() - sastDate.getTime();
+  const diffMinutes = Math.floor(diffMs / (1000 * 60));
+  const diffHours = Math.floor(diffMinutes / 60);
+  const diffDays = Math.floor(diffHours / 24);
+  
+  if (Math.abs(diffMinutes) < 1) {
+    return 'just now';
+  } else if (Math.abs(diffMinutes) < 60) {
+    return diffMinutes > 0 ? `${diffMinutes} minutes ago` : `in ${Math.abs(diffMinutes)} minutes`;
+  } else if (Math.abs(diffHours) < 24) {
+    return diffHours > 0 ? `${diffHours} hours ago` : `in ${Math.abs(diffHours)} hours`;
+  } else if (Math.abs(diffDays) < 7) {
+    return diffDays > 0 ? `${diffDays} days ago` : `in ${Math.abs(diffDays)} days`;
+  } else {
+    return formatSASTDate(date);
+  }
+}
+
 // Default export for convenience
 export default {
+  TIMEZONE_CONFIG,
   getCurrentSASTTime,
   toSAST,
+  convertSASTToUTC,
   formatSASTDateTime,
   formatSASTDate,
   formatSASTTime,
+  getSASTDateTimeLocal,
+  getSASTDateOnly,
   getCurrentSASTISOString,
   toSASTDatabaseString,
   calculateDurationMinutes,
   getSASTTimestamp,
   isSASTToday,
   getSASTDayRange,
-  SAST_OFFSET_MS
+  formatDuration,
+  getSASTRelativeTime
 };
