@@ -374,27 +374,55 @@ class WebSocketService {
         }
     }
 
-    // Get WebSocket token from API
+    // Get WebSocket token from API with retry logic for rate limiting
     async getWebSocketToken() {
-        try {
-            const response = await fetch('/api/auth/websocket-token', {
-                method: 'GET',
-                credentials: 'include', // Include httpOnly cookies
-                headers: {
-                    'Content-Type': 'application/json'
+        const maxRetries = 3;
+        let attempt = 0;
+        
+        while (attempt < maxRetries) {
+            try {
+                const response = await fetch('/api/auth/websocket-token', {
+                    method: 'GET',
+                    credentials: 'include', // Include httpOnly cookies
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.status === 429) {
+                    // Rate limited - wait before retry
+                    const retryAfter = response.headers.get('Retry-After') || (Math.pow(2, attempt) * 1000);
+                    const delay = parseInt(retryAfter) * 1000 || (Math.pow(2, attempt) * 1000);
+                    console.warn(`⏳ Rate limited (429). Retrying in ${delay}ms... (attempt ${attempt + 1}/${maxRetries})`);
+                    
+                    if (attempt < maxRetries - 1) {
+                        await new Promise(resolve => setTimeout(resolve, delay));
+                        attempt++;
+                        continue;
+                    }
                 }
-            });
 
-            if (!response.ok) {
-                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                return data.token;
+            } catch (error) {
+                if (attempt === maxRetries - 1) {
+                    console.error('Failed to get WebSocket token after all retries:', error);
+                    return null;
+                }
+                
+                // Exponential backoff for other errors
+                const delay = Math.pow(2, attempt) * 1000;
+                console.warn(`⚠️ Token fetch failed, retrying in ${delay}ms... (attempt ${attempt + 1}/${maxRetries})`);
+                await new Promise(resolve => setTimeout(resolve, delay));
+                attempt++;
             }
-
-            const data = await response.json();
-            return data.token;
-        } catch (error) {
-            console.error('Failed to get WebSocket token:', error);
-            return null;
         }
+        
+        return null;
     }
 
     // Get JWT token from cookie (fallback method)

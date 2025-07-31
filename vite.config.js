@@ -11,6 +11,7 @@ export default defineConfig({
       'oracles.africa',
       'www.oracles.africa',
       'localhost',
+      '197.85.7.242',
       '.oracles.africa' // Allow all subdomains
     ],
     // This proxy forwards API requests to your backend server
