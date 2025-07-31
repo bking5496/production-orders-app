@@ -14,23 +14,20 @@ export default function ProductionCompletionModalWithWaste({ isOpen, onClose, or
   const [activeTab, setActiveTab] = useState('production');
   const [formData, setFormData] = useState({
     actual_quantity: 0,
-    quality_rating: 'good',
-    efficiency_score: 0,
-    notes: '',
-    completion_time: getSASTDateTimeLocal()
+    notes: ''
   });
   
   const [wasteData, setWasteData] = useState([
-    { type: 'Raw Material', category: 'material', amount: 0, unit: 'kg', cost_per_unit: 0 },
-    { type: 'Packaging Material', category: 'packaging', amount: 0, unit: 'kg', cost_per_unit: 0 },
-    { type: 'Finished Product', category: 'product', amount: 0, unit: 'units', cost_per_unit: 0 }
+    { item_type: 'Raw Material Scrap', description: '', weight: 0, unit: 'kg' },
+    { item_type: 'Packaging Waste', description: '', weight: 0, unit: 'kg' },
+    { item_type: 'Defective Products', description: '', weight: 0, unit: 'units' }
   ]);
 
   // Waste management functions
   const addWasteItem = useCallback(() => {
     setWasteData(prev => [
       ...prev,
-      { type: '', category: 'material', amount: 0, unit: 'kg', cost_per_unit: 0 }
+      { item_type: '', description: '', weight: 0, unit: 'kg' }
     ]);
   }, []);
 
@@ -50,21 +47,13 @@ export default function ProductionCompletionModalWithWaste({ isOpen, onClose, or
       ? Math.round((formData.actual_quantity / order.quantity) * 100) 
       : 0;
     
-    const qualityScore = {
-      excellent: 100,
-      good: 85,
-      fair: 70,
-      poor: 50
-    }[formData.quality_rating] || 85;
-    
-    const totalWasteAmount = wasteData.reduce((sum, waste) => sum + waste.amount, 0);
-    const totalWasteCost = wasteData.reduce((sum, waste) => sum + (waste.amount * waste.cost_per_unit), 0);
+    const totalWasteWeight = wasteData.reduce((sum, waste) => sum + (waste.weight || 0), 0);
+    const wasteItems = wasteData.filter(w => w.weight > 0).length;
     
     return {
       completionRate,
-      qualityScore,
-      totalWasteAmount,
-      totalWasteCost
+      totalWasteWeight,
+      wasteItems
     };
   }, [formData, wasteData, order]);
 
@@ -72,11 +61,8 @@ export default function ProductionCompletionModalWithWaste({ isOpen, onClose, or
   useEffect(() => {
     if (order) {
       setFormData({
-        actual_quantity: order.quantity || 0,
-        quality_rating: 'good',
-        efficiency_score: 0,
-        notes: '',
-        completion_time: getSASTDateTimeLocal()
+        actual_quantity: order.actual_quantity || order.quantity || 0,
+        notes: ''
       });
       setError('');
       setNotification(null);
@@ -97,17 +83,14 @@ export default function ProductionCompletionModalWithWaste({ isOpen, onClose, or
       errors.push('Actual quantity cannot exceed 120% of target quantity');
     }
     
-    if (!formData.completion_time) {
-      errors.push('Completion time is required');
-    }
     
     // Validate waste data
     const invalidWaste = wasteData.some(waste => 
-      waste.amount > 0 && (!waste.type.trim() || waste.cost_per_unit < 0)
+      waste.weight > 0 && !waste.item_type.trim()
     );
     
     if (invalidWaste) {
-      errors.push('All waste items with amounts must have a valid type and non-negative cost');
+      errors.push('All waste items with weight must have a valid item type');
     }
     
     return errors;
@@ -129,13 +112,12 @@ export default function ProductionCompletionModalWithWaste({ isOpen, onClose, or
     try {
       const submitData = {
         ...formData,
-        completion_time: convertSASTToUTC(formData.completion_time).toISOString(),
-        waste_data: wasteData.filter(waste => waste.amount > 0),
+        completion_time: new Date().toISOString(), // Current timestamp when button is pressed
+        waste_data: wasteData.filter(waste => waste.weight > 0),
         metrics: {
           completion_rate: metrics.completionRate,
-          quality_score: metrics.qualityScore,
-          total_waste_cost: metrics.totalWasteCost,
-          total_waste_amount: metrics.totalWasteAmount
+          total_waste_weight: metrics.totalWasteWeight,
+          waste_items_count: metrics.wasteItems
         }
       };
       
@@ -211,8 +193,7 @@ export default function ProductionCompletionModalWithWaste({ isOpen, onClose, or
         <div className="flex border-b border-gray-200">
           {[
             { id: 'production', label: 'Production Details', icon: Package },
-            { id: 'waste', label: 'Waste Tracking', icon: Trash2 },
-            { id: 'summary', label: 'Summary', icon: BarChart3 }
+            { id: 'waste', label: 'Waste Tracking', icon: Trash2 }
           ].map(tab => {
             const Icon = tab.icon;
             return (
@@ -236,7 +217,7 @@ export default function ProductionCompletionModalWithWaste({ isOpen, onClose, or
           {/* Production Details Tab */}
           {activeTab === 'production' && (
             <div className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 gap-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Actual Quantity Produced <span className="text-red-500">*</span>
@@ -248,65 +229,34 @@ export default function ProductionCompletionModalWithWaste({ isOpen, onClose, or
                     className="w-full px-3 py-2 glass border border-white/20 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 focus:scale-105"
                     required
                     min="0"
-                    max={order.quantity * 1.1}
+                    max={order.quantity * 1.2}
                   />
-                  <p className="text-xs text-gray-500 mt-1">Maximum: {Math.round(order.quantity * 1.1)} units (110% of target)</p>
+                  <p className="text-xs text-gray-500 mt-1">Maximum: {Math.round(order.quantity * 1.2)} units (120% of target allowed)</p>
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Quality Rating</label>
-                  <select
-                    value={formData.quality_rating}
-                    onChange={(e) => setFormData({ ...formData, quality_rating: e.target.value })}
-                    className="w-full px-3 py-2 glass border border-white/20 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 focus:scale-105"
-                  >
-                    <option value="excellent">Excellent (100%)</option>
-                    <option value="good">Good (85%)</option>
-                    <option value="fair">Fair (70%)</option>
-                    <option value="poor">Poor (50%)</option>
-                  </select>
-                </div>
-              </div>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Efficiency Score (%)</label>
-                  <input
-                    type="number"
-                    value={formData.efficiency_score}
-                    onChange={(e) => setFormData({ ...formData, efficiency_score: parseInt(e.target.value) || 0 })}
-                    className="w-full px-3 py-2 glass border border-white/20 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 focus:scale-105"
-                    min="0"
-                    max="150"
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Production Notes</label>
+                  <textarea
+                    value={formData.notes}
+                    onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+                    placeholder="Any additional notes about the production run (quality issues, machine performance, etc.)..."
+                    className="w-full px-3 py-2 glass border border-white/20 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300"
+                    rows="4"
                   />
-                  <p className="text-xs text-gray-500 mt-1">Calculated automatically or enter manually</p>
                 </div>
                 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Completion Time (SAST)
-                  </label>
-                  <input
-                    type="datetime-local"
-                    value={formData.completion_time}
-                    onChange={(e) => setFormData({ ...formData, completion_time: e.target.value })}
-                    className="w-full px-3 py-2 glass border border-white/20 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 focus:scale-105"
-                  />
+                <div className="glass p-4 rounded-lg border border-purple-300/50">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Clock className="w-5 h-5 text-purple-600" />
+                    <h4 className="font-medium text-gray-800">Completion Time</h4>
+                  </div>
+                  <p className="text-sm text-gray-600">
+                    Order will be marked as completed at the current time when you submit this form.
+                  </p>
                   <p className="text-xs text-gray-500 mt-1">
-                    Current SAST time: {formatSASTDate(getCurrentSASTTime(), { includeSeconds: true })}
+                    Current time: {formatSASTDate(getCurrentSASTTime(), { includeSeconds: true })} SAST
                   </p>
                 </div>
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Production Notes</label>
-                <textarea
-                  value={formData.notes}
-                  onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                  placeholder="Any additional notes about the production run..."
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  rows="3"
-                />
               </div>
             </div>
           )}
