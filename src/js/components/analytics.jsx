@@ -21,17 +21,9 @@ export default function AnalyticsPage() {
   const [refreshing, setRefreshing] = useState(false);
   const [notification, setNotification] = useState(null);
   const [activeTab, setActiveTab] = useState('overview');
-  const [completionReports, setCompletionReports] = useState([]);
-  const [selectedCompletionReport, setSelectedCompletionReport] = useState(null);
-  const [showReportModal, setShowReportModal] = useState(false);
-  const [reportFormData, setReportFormData] = useState({
-    title: '',
-    description: '',
-    findings: '',
-    recommendations: '',
-    created_by: '',
-    order_id: null
-  });
+  const [wasteReports, setWasteReports] = useState([]);
+  const [selectedWasteReport, setSelectedWasteReport] = useState(null);
+  const [showWasteReportModal, setShowWasteReportModal] = useState(false);
   const [dateRange, setDateRange] = useState(() => {
     const now = new Date();
     const year = now.getFullYear();
@@ -106,114 +98,126 @@ export default function AnalyticsPage() {
 
   useEffect(() => {
     loadAnalytics();
-    loadCompletionReports();
   }, [dateRange]);
+  
+  // Load completed orders after analytics data is loaded
+  useEffect(() => {
+    if (analytics.orders.length > 0) {
+      loadCompletedOrdersWithWaste();
+    }
+  }, [analytics.orders]);
 
-  // Load completion reports
-  const loadCompletionReports = async () => {
+  // Load completed orders with waste data
+  const loadCompletedOrdersWithWaste = async () => {
     try {
-      const params = new URLSearchParams({
-        start_date: dateRange.start_date,
-        end_date: dateRange.end_date
-      }).toString();
+      console.log('Loading completed orders, current analytics.orders:', analytics.orders.length);
+      console.log('Completed orders found:', analytics.orders.filter(o => o.status === 'completed').length);
       
-      const reportsData = await API.get(`/reports/completion?${params}`);
-      setCompletionReports(reportsData || []);
+      // Use existing analytics.orders data
+      const completedOrders = analytics.orders.filter(o => o.status === 'completed');
+      setCompletedOrdersWithWaste(completedOrders);
+      
+      // Try to load waste data if available
+      try {
+        const params = new URLSearchParams({
+          start_date: dateRange.start_date,
+          end_date: dateRange.end_date
+        }).toString();
+        const wasteData = await API.get(`/reports/waste?${params}`);
+        setWasteReports(wasteData || []);
+      } catch (wasteError) {
+        console.log('Waste data not available, continuing without it');
+        setWasteReports([]);
+      }
     } catch (error) {
-      console.error('Failed to load completion reports:', error);
+      console.error('Failed to load completed orders with waste:', error);
     }
   };
 
-  // Create new completion report
-  const createCompletionReport = async (orderData) => {
+  // View waste report for order
+  const viewWasteReport = async (order) => {
+    try {
+      // Get waste data for this specific order
+      const wasteData = await API.get(`/orders/${order.id}/waste`);
+      
+      setSelectedWasteReport({
+        order,
+        wasteData: wasteData || [],
+        metrics: wasteData ? {
+          totalWeight: wasteData.reduce((sum, w) => sum + (w.weight || 0), 0),
+          itemCount: wasteData.length,
+          categories: [...new Set(wasteData.map(w => w.item_type))]
+        } : { totalWeight: 0, itemCount: 0, categories: [] }
+      });
+      setShowWasteReportModal(true);
+    } catch (error) {
+      console.error('Failed to load waste report:', error);
+      showNotification('Failed to load waste report', 'danger');
+    }
+  };
+
+  // Get waste summary for all completed orders
+  const getWasteSummary = () => {
+    const completedOrders = analytics.orders.filter(o => o.status === 'completed');
+    const ordersWithWaste = completedOrders.filter(o => o.waste_data && o.waste_data.length > 0);
+    
+    const totalWaste = completedOrders.reduce((sum, order) => {
+      if (order.waste_data) {
+        return sum + order.waste_data.reduce((orderSum, waste) => orderSum + (waste.weight || 0), 0);
+      }
+      return sum;
+    }, 0);
+    
+    return {
+      totalOrders: completedOrders.length,
+      ordersWithWaste: ordersWithWaste.length,
+      totalWasteWeight: totalWaste,
+      wastePercentage: completedOrders.length > 0 ? Math.round((ordersWithWaste.length / completedOrders.length) * 100) : 0
+    };
+  };
+
+  // Export waste reports
+  const exportWasteReports = () => {
     try {
       const completedOrders = analytics.orders.filter(o => o.status === 'completed');
-      const orderToReport = orderData || completedOrders[0];
       
-      if (!orderToReport) {
-        showNotification('No completed orders found to create report', 'warning');
-        return;
-      }
-      
-      setReportFormData({
-        title: `Completion Report - Order ${orderToReport.order_number}`,
-        description: `Production completion report for ${orderToReport.product_name}`,
-        findings: '',
-        recommendations: '',
-        created_by: 'System',
-        order_id: orderToReport.id
-      });
-      setShowReportModal(true);
-    } catch (error) {
-      showNotification('Failed to create completion report', 'danger');
-    }
-  };
-
-  // Save completion report
-  const saveCompletionReport = async () => {
-    try {
-      if (!reportFormData.title || !reportFormData.description) {
-        showNotification('Please fill in required fields', 'warning');
-        return;
-      }
-      
-      const reportData = {
-        ...reportFormData,
-        created_at: Time.getCurrentSASTISOString(),
-        report_type: 'completion'
-      };
-      
-      await API.post('/reports/completion', reportData);
-      showNotification('Completion report saved successfully', 'success');
-      setShowReportModal(false);
-      loadCompletionReports();
-      setReportFormData({
-        title: '',
-        description: '',
-        findings: '',
-        recommendations: '',
-        created_by: '',
-        order_id: null
-      });
-    } catch (error) {
-      showNotification('Failed to save completion report', 'danger');
-    }
-  };
-
-  // Export completion reports
-  const exportCompletionReports = () => {
-    try {
-      if (!completionReports || completionReports.length === 0) {
-        showNotification('No completion reports to export', 'warning');
+      if (completedOrders.length === 0) {
+        showNotification('No completed orders to export', 'warning');
         return;
       }
 
       const csvContent = [
-        ['Title', 'Order Number', 'Product', 'Created Date', 'Created By', 'Description', 'Findings', 'Recommendations'],
-        ...completionReports.map(report => [
-          report.title || 'N/A',
-          report.order_number || 'N/A',
-          report.product_name || 'N/A',
-          report.created_at ? Time.formatSASTDateTime(report.created_at) : 'N/A',
-          report.created_by || 'N/A',
-          (report.description || '').replace(/,/g, ';'),
-          (report.findings || '').replace(/,/g, ';'),
-          (report.recommendations || '').replace(/,/g, ';')
-        ])
+        ['Order Number', 'Product', 'Completion Date', 'Target Qty', 'Actual Qty', 'Waste Items', 'Total Waste Weight', 'Waste Types'],
+        ...completedOrders.map(order => {
+          const wasteData = order.waste_data || [];
+          const totalWaste = wasteData.reduce((sum, w) => sum + (w.weight || 0), 0);
+          const wasteTypes = [...new Set(wasteData.map(w => w.item_type))].join('; ');
+          
+          return [
+            order.order_number || 'N/A',
+            order.product_name || 'N/A',
+            order.complete_time ? Time.formatSASTDateTime(order.complete_time) : 'N/A',
+            order.quantity || 0,
+            order.actual_quantity || 0,
+            wasteData.length,
+            totalWaste,
+            wasteTypes || 'No waste recorded'
+          ];
+        })
       ].map(row => row.join(',')).join('\n');
 
       const blob = new Blob([csvContent], { type: 'text/csv' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `completion-reports-${dateRange.start_date}-to-${dateRange.end_date}.csv`;
+      a.download = `waste-reports-${dateRange.start_date}-to-${dateRange.end_date}.csv`;
       a.click();
       URL.revokeObjectURL(url);
       
-      showNotification('Completion reports exported successfully', 'success');
+      showNotification('Waste reports exported successfully', 'success');
     } catch (error) {
       console.error('Export error:', error);
-      showNotification('Failed to export completion reports', 'danger');
+      showNotification('Failed to export waste reports', 'danger');
     }
   };
 
@@ -690,7 +694,7 @@ export default function AnalyticsPage() {
             { id: 'labor', label: 'Labor Analytics', icon: Users },
             { id: 'performance', label: 'Performance', icon: TrendingUp },
             { id: 'downtime', label: 'Downtime Report', icon: AlertTriangle },
-            { id: 'completion-reports', label: 'Completion Reports', icon: FileText }
+            { id: 'waste-reports', label: 'Waste Reports', icon: FileText }
           ].map(tab => {
             const Icon = tab.icon;
             return (
@@ -1237,24 +1241,24 @@ export default function AnalyticsPage() {
         </div>
       )}
 
-      {activeTab === 'completion-reports' && (
+      {activeTab === 'waste-reports' && (
         <div className="space-y-6">
           {/* Header with actions */}
           <div className="flex justify-between items-center">
             <div>
-              <h3 className="text-lg font-semibold text-gray-800">Order Completion Reports</h3>
+              <h3 className="text-lg font-semibold text-gray-800">Waste Reports</h3>
               <p className="text-sm text-gray-600 mt-1">
-                Document and analyze completed production orders
+                View waste tracking data for completed production orders
               </p>
             </div>
             <div className="flex gap-3">
-              <Button onClick={exportCompletionReports} variant="outline">
+              <Button onClick={exportWasteReports} variant="outline">
                 <Download className="w-4 h-4 mr-2" />
-                Export Reports
+                Export Waste Data
               </Button>
-              <Button onClick={() => createCompletionReport()} className="bg-green-600 hover:bg-green-700">
-                <FileText className="w-4 h-4 mr-2" />
-                Create Report
+              <Button onClick={loadCompletedOrdersWithWaste} variant="outline">
+                <RefreshCw className="w-4 h-4 mr-2" />
+                Refresh
               </Button>
             </div>
           </div>
@@ -1262,47 +1266,62 @@ export default function AnalyticsPage() {
           {/* Summary Stats */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             <StatsCard
-              title="Total Reports"
-              value={completionReports.length}
-              icon={FileText}
-              color="blue"
-            />
-            <StatsCard
-              title="This Month"
-              value={completionReports.filter(r => Time.isSASTToday(r.created_at) || 
-                (r.created_at && new Date(r.created_at).getMonth() === new Date().getMonth())).length}
-              icon={Calendar}
-              color="green"
-            />
-            <StatsCard
               title="Completed Orders"
               value={analytics.orders.filter(o => o.status === 'completed').length}
               icon={CheckCircle}
-              color="purple"
+              color="green"
             />
             <StatsCard
-              title="Documentation Rate"
-              value={`${analytics.orders.filter(o => o.status === 'completed').length > 0 ? 
-                Math.round((completionReports.length / analytics.orders.filter(o => o.status === 'completed').length) * 100) : 0}%`}
-              icon={Target}
+              title="Orders with Waste"
+              value={analytics.orders.filter(o => o.status === 'completed' && o.waste_data && o.waste_data.length > 0).length}
+              icon={AlertTriangle}
               color="yellow"
+            />
+            <StatsCard
+              title="Total Waste Weight"
+              value={`${analytics.orders
+                .filter(o => o.status === 'completed')
+                .reduce((sum, order) => {
+                  if (order.waste_data) {
+                    return sum + order.waste_data.reduce((orderSum, waste) => orderSum + (waste.weight || 0), 0);
+                  }
+                  return sum;
+                }, 0).toFixed(2)} kg`}
+              icon={Package}
+              color="red"
+            />
+            <StatsCard
+              title="Waste Tracking Rate"
+              value={`${analytics.orders.filter(o => o.status === 'completed').length > 0 ? 
+                Math.round((analytics.orders.filter(o => o.status === 'completed' && o.waste_data && o.waste_data.length > 0).length / 
+                analytics.orders.filter(o => o.status === 'completed').length) * 100) : 0}%`}
+              icon={Target}
+              color="blue"
             />
           </div>
 
-          {/* Completion Reports Table */}
+          {/* Completed Orders with Waste Data Table */}
           <Card>
             <div className="p-6 border-b">
-              <h3 className="text-lg font-semibold">Recent Completion Reports</h3>
+              <h3 className="text-lg font-semibold">Completed Orders - Waste Tracking</h3>
               <p className="text-sm text-gray-600 mt-1">
-                Showing {completionReports.length} reports for selected period
+                Showing {analytics.orders.filter(o => o.status === 'completed').length} completed orders for selected period
               </p>
+              <p className="text-xs text-gray-500 mt-1">
+                Debug: Total orders: {analytics.orders.length}, Date range: {dateRange.start_date} to {dateRange.end_date}
+              </p>
+              {analytics.orders.length > 0 && (
+                <p className="text-xs text-gray-500">
+                  Order statuses: {[...new Set(analytics.orders.map(o => o.status))].join(', ')}
+                </p>
+              )}
             </div>
             
             <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
                   <tr>
-                    {['Title', 'Order', 'Product', 'Created Date', 'Created By', 'Actions'].map(header => (
+                    {['Order', 'Product', 'Completion Date', 'Quantity', 'Waste Items', 'Total Waste', 'Actions'].map(header => (
                       <th key={header} className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         {header}
                       </th>
@@ -1310,219 +1329,234 @@ export default function AnalyticsPage() {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {(!completionReports || completionReports.length === 0) ? (
+                  {analytics.orders.filter(o => o.status === 'completed').length === 0 ? (
                     <tr>
-                      <td colSpan="6" className="text-center py-10 text-gray-500">
-                        <FileText className="w-12 h-12 mx-auto mb-4 text-gray-300" />
-                        <p>No completion reports found for the selected period</p>
-                        <Button 
-                          onClick={() => createCompletionReport()} 
-                          className="mt-4 bg-blue-600 hover:bg-blue-700"
-                        >
-                          Create First Report
-                        </Button>
+                      <td colSpan="7" className="text-center py-10 text-gray-500">
+                        <CheckCircle className="w-12 h-12 mx-auto mb-4 text-gray-300" />
+                        <p>No completed orders found for the selected period</p>
+                        <p className="text-sm mt-2">Adjust the date range to view completed orders</p>
                       </td>
                     </tr>
                   ) : (
-                    completionReports.map((report, index) => (
-                      <tr key={report.id || index} className="hover:bg-gray-50">
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm font-medium text-gray-900">
-                            {report.title || 'Untitled Report'}
-                          </div>
-                          <div className="text-sm text-gray-500 truncate max-w-xs">
-                            {report.description || 'No description'}
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                          {report.order_number || 'N/A'}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                          {report.product_name || 'N/A'}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                          {report.created_at ? Time.formatSASTDateTime(report.created_at) : 'N/A'}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                          {report.created_by || 'Unknown'}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                          <div className="flex gap-2">
-                            <Button 
-                              onClick={() => setSelectedCompletionReport(report)}
-                              variant="outline" 
-                              size="sm"
-                            >
-                              <Eye className="w-4 h-4" />
-                            </Button>
-                            <Button 
-                              onClick={() => {
-                                setReportFormData({
-                                  title: report.title || '',
-                                  description: report.description || '',
-                                  findings: report.findings || '',
-                                  recommendations: report.recommendations || '',
-                                  created_by: report.created_by || '',
-                                  order_id: report.order_id
-                                });
-                                setShowReportModal(true);
-                              }}
-                              variant="outline" 
-                              size="sm"
-                            >
-                              <Edit3 className="w-4 h-4" />
-                            </Button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))
+                    analytics.orders
+                      .filter(o => o.status === 'completed')
+                      .map((order, index) => {
+                        const wasteData = order.waste_data || [];
+                        const totalWaste = wasteData.reduce((sum, waste) => sum + (waste.weight || 0), 0);
+                        const hasWaste = wasteData.length > 0;
+                        
+                        return (
+                          <tr key={order.id || index} className="hover:bg-gray-50">
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <div className="text-sm font-medium text-gray-900">
+                                {order.order_number}
+                              </div>
+                              <div className="text-sm text-gray-500">
+                                ID: {order.id}
+                              </div>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                              {order.product_name || 'N/A'}
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                              {order.complete_time ? Time.formatSASTDateTime(order.complete_time) : 'N/A'}
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                              <div>{order.actual_quantity || order.quantity || 0} units</div>
+                              <div className="text-xs text-gray-500">Target: {order.quantity || 0}</div>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                              <div className="flex items-center gap-2">
+                                <span>{wasteData.length}</span>
+                                {hasWaste ? (
+                                  <Badge variant="warning" size="sm">Has Waste</Badge>
+                                ) : (
+                                  <Badge variant="success" size="sm">No Waste</Badge>
+                                )}
+                              </div>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                              {hasWaste ? (
+                                <div>
+                                  <div className="font-medium">{totalWaste.toFixed(2)} kg</div>
+                                  <div className="text-xs text-gray-500">
+                                    {[...new Set(wasteData.map(w => w.item_type))].join(', ')}
+                                  </div>
+                                </div>
+                              ) : (
+                                <span className="text-gray-400">No waste recorded</span>
+                              )}
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                              <Button 
+                                onClick={() => viewWasteReport(order)}
+                                variant="outline" 
+                                size="sm"
+                                disabled={!hasWaste}
+                              >
+                                <Eye className="w-4 h-4 mr-1" />
+                                {hasWaste ? 'View Waste' : 'No Data'}
+                              </Button>
+                            </td>
+                          </tr>
+                        );
+                      })
                   )}
                 </tbody>
               </table>
             </div>
           </Card>
 
-          {/* Quick Actions for Completed Orders */}
-          {analytics.orders.filter(o => o.status === 'completed').length > 0 && (
-            <Card className="p-6">
-              <h3 className="text-lg font-semibold mb-4">Recently Completed Orders</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {analytics.orders
-                  .filter(o => o.status === 'completed')
-                  .slice(0, 6)
-                  .map(order => (
-                    <div key={order.id} className="p-4 border rounded-lg hover:bg-gray-50">
-                      <div className="flex justify-between items-start mb-2">
-                        <div>
-                          <p className="font-medium text-gray-900">{order.order_number}</p>
-                          <p className="text-sm text-gray-600">{order.product_name}</p>
+          {/* Waste Summary Charts */}
+          {analytics.orders.filter(o => o.status === 'completed' && o.waste_data && o.waste_data.length > 0).length > 0 && (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <Card className="p-6">
+                <h3 className="text-lg font-semibold mb-4">Waste by Category</h3>
+                <div className="space-y-3">
+                  {(() => {
+                    const wasteByCategory = {};
+                    analytics.orders
+                      .filter(o => o.status === 'completed' && o.waste_data)
+                      .forEach(order => {
+                        order.waste_data.forEach(waste => {
+                          const category = waste.item_type || 'Unknown';
+                          wasteByCategory[category] = (wasteByCategory[category] || 0) + (waste.weight || 0);
+                        });
+                      });
+                    
+                    return Object.entries(wasteByCategory).map(([category, weight]) => {
+                      const percentage = Object.values(wasteByCategory).reduce((sum, w) => sum + w, 0) > 0 ?
+                        Math.round((weight / Object.values(wasteByCategory).reduce((sum, w) => sum + w, 0)) * 100) : 0;
+                      
+                      return (
+                        <div key={category} className="flex justify-between items-center">
+                          <span className="text-sm font-medium text-gray-600">{category}</span>
+                          <div className="flex items-center gap-2">
+                            <div className="w-24 bg-gray-200 rounded-full h-2">
+                              <div className="h-2 rounded-full bg-red-500" style={{ width: `${percentage}%` }}></div>
+                            </div>
+                            <span className="text-sm text-gray-500 w-16">{weight.toFixed(2)}kg</span>
+                          </div>
                         </div>
-                        <Badge variant="success" size="sm">Completed</Badge>
-                      </div>
-                      <div className="text-xs text-gray-500 mb-3">
-                        <p>Qty: {order.actual_quantity || order.quantity} units</p>
-                        <p>Finished: {order.complete_time ? Time.formatSASTDateTime(order.complete_time) : 'N/A'}</p>
-                      </div>
-                      <Button 
-                        onClick={() => createCompletionReport(order)}
-                        size="sm" 
-                        className="w-full bg-blue-600 hover:bg-blue-700"
-                      >
-                        <FileText className="w-4 h-4 mr-2" />
-                        Create Report
-                      </Button>
-                    </div>
-                  ))
-                }
-              </div>
-            </Card>
+                      );
+                    });
+                  })()
+                  }
+                </div>
+              </Card>
+              
+              <Card className="p-6">
+                <h3 className="text-lg font-semibold mb-4">Recent High-Waste Orders</h3>
+                <div className="space-y-3">
+                  {analytics.orders
+                    .filter(o => o.status === 'completed' && o.waste_data && o.waste_data.length > 0)
+                    .sort((a, b) => {
+                      const aWaste = a.waste_data.reduce((sum, w) => sum + (w.weight || 0), 0);
+                      const bWaste = b.waste_data.reduce((sum, w) => sum + (w.weight || 0), 0);
+                      return bWaste - aWaste;
+                    })
+                    .slice(0, 5)
+                    .map(order => {
+                      const totalWaste = order.waste_data.reduce((sum, w) => sum + (w.weight || 0), 0);
+                      return (
+                        <div key={order.id} className="flex justify-between items-center p-3 border rounded-lg">
+                          <div>
+                            <p className="font-medium text-gray-900">{order.order_number}</p>
+                            <p className="text-sm text-gray-600">{order.product_name}</p>
+                          </div>
+                          <div className="text-right">
+                            <p className="font-medium text-red-600">{totalWaste.toFixed(2)} kg</p>
+                            <p className="text-xs text-gray-500">{order.waste_data.length} items</p>
+                          </div>
+                        </div>
+                      );
+                    })
+                  }
+                </div>
+              </Card>
+            </div>
           )}
         </div>
       )}
 
-      {/* Report Creation/Edit Modal */}
-      {showReportModal && (
-        <Modal title="Completion Report" onClose={() => setShowReportModal(false)} size="lg">
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Report Title *</label>
-              <input
-                type="text"
-                value={reportFormData.title}
-                onChange={(e) => setReportFormData({...reportFormData, title: e.target.value})}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="Enter report title"
-              />
-            </div>
-            
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Description *</label>
-              <textarea
-                value={reportFormData.description}
-                onChange={(e) => setReportFormData({...reportFormData, description: e.target.value})}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                rows="3"
-                placeholder="Brief description of the production completion"
-              />
-            </div>
-            
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Key Findings</label>
-              <textarea
-                value={reportFormData.findings}
-                onChange={(e) => setReportFormData({...reportFormData, findings: e.target.value})}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                rows="4"
-                placeholder="Document key findings, issues encountered, quality observations, etc."
-              />
-            </div>
-            
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Recommendations</label>
-              <textarea
-                value={reportFormData.recommendations}
-                onChange={(e) => setReportFormData({...reportFormData, recommendations: e.target.value})}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                rows="4"
-                placeholder="Recommendations for future improvements, process optimizations, etc."
-              />
-            </div>
-            
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Created By</label>
-              <input
-                type="text"
-                value={reportFormData.created_by}
-                onChange={(e) => setReportFormData({...reportFormData, created_by: e.target.value})}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="Report author name"
-              />
-            </div>
-            
-            <div className="flex justify-end gap-3 pt-4 border-t">
-              <Button onClick={() => setShowReportModal(false)} variant="outline">
-                Cancel
-              </Button>
-              <Button onClick={saveCompletionReport} className="bg-green-600 hover:bg-green-700">
-                <Save className="w-4 h-4 mr-2" />
-                Save Report
-              </Button>
-            </div>
-          </div>
-        </Modal>
-      )}
-
-      {/* Report View Modal */}
-      {selectedCompletionReport && (
-        <Modal title="View Completion Report" onClose={() => setSelectedCompletionReport(null)} size="lg">
-          <div className="space-y-4">
-            <div>
-              <h3 className="text-lg font-semibold text-gray-900">{selectedCompletionReport.title}</h3>
-              <p className="text-sm text-gray-600 mt-1">Order: {selectedCompletionReport.order_number}</p>
-              <p className="text-sm text-gray-600">Created: {Time.formatSASTDateTime(selectedCompletionReport.created_at)} by {selectedCompletionReport.created_by}</p>
-            </div>
-            
-            <div>
-              <h4 className="font-medium text-gray-900 mb-2">Description</h4>
-              <p className="text-gray-700">{selectedCompletionReport.description || 'No description provided'}</p>
-            </div>
-            
-            {selectedCompletionReport.findings && (
-              <div>
-                <h4 className="font-medium text-gray-900 mb-2">Key Findings</h4>
-                <p className="text-gray-700 whitespace-pre-wrap">{selectedCompletionReport.findings}</p>
+      {/* Waste Report View Modal */}
+      {selectedWasteReport && (
+        <Modal title="Waste Report Details" onClose={() => setSelectedWasteReport(null)} size="lg">
+          <div className="space-y-6">
+            {/* Order Info */}
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h3 className="text-lg font-semibold text-gray-900">{selectedWasteReport.order.order_number}</h3>
+              <div className="grid grid-cols-2 gap-4 mt-2 text-sm">
+                <div>
+                  <p className="text-gray-600">Product: <span className="font-medium">{selectedWasteReport.order.product_name}</span></p>
+                  <p className="text-gray-600">Completed: <span className="font-medium">
+                    {selectedWasteReport.order.complete_time ? Time.formatSASTDateTime(selectedWasteReport.order.complete_time) : 'N/A'}
+                  </span></p>
+                </div>
+                <div>
+                  <p className="text-gray-600">Quantity: <span className="font-medium">{selectedWasteReport.order.actual_quantity || selectedWasteReport.order.quantity} units</span></p>
+                  <p className="text-gray-600">Target: <span className="font-medium">{selectedWasteReport.order.quantity} units</span></p>
+                </div>
               </div>
-            )}
+            </div>
             
-            {selectedCompletionReport.recommendations && (
-              <div>
-                <h4 className="font-medium text-gray-900 mb-2">Recommendations</h4>
-                <p className="text-gray-700 whitespace-pre-wrap">{selectedCompletionReport.recommendations}</p>
+            {/* Waste Summary */}
+            {selectedWasteReport.wasteData.length > 0 ? (
+              <>
+                <div className="grid grid-cols-3 gap-4">
+                  <div className="text-center p-4 bg-red-50 rounded-lg">
+                    <p className="text-2xl font-bold text-red-600">{selectedWasteReport.metrics.totalWeight.toFixed(2)}</p>
+                    <p className="text-sm text-red-700">Total Weight (kg)</p>
+                  </div>
+                  <div className="text-center p-4 bg-yellow-50 rounded-lg">
+                    <p className="text-2xl font-bold text-yellow-600">{selectedWasteReport.metrics.itemCount}</p>
+                    <p className="text-sm text-yellow-700">Waste Items</p>
+                  </div>
+                  <div className="text-center p-4 bg-blue-50 rounded-lg">
+                    <p className="text-2xl font-bold text-blue-600">{selectedWasteReport.metrics.categories.length}</p>
+                    <p className="text-sm text-blue-700">Categories</p>
+                  </div>
+                </div>
+                
+                {/* Waste Items Detail */}
+                <div>
+                  <h4 className="font-medium text-gray-900 mb-3">Waste Items Breakdown</h4>
+                  <div className="overflow-x-auto">
+                    <table className="min-w-full divide-y divide-gray-200">
+                      <thead className="bg-gray-50">
+                        <tr>
+                          <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Type</th>
+                          <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Description</th>
+                          <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Weight</th>
+                          <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Unit</th>
+                        </tr>
+                      </thead>
+                      <tbody className="bg-white divide-y divide-gray-200">
+                        {selectedWasteReport.wasteData.map((waste, index) => (
+                          <tr key={index}>
+                            <td className="px-4 py-2 text-sm text-gray-900">
+                              <Badge variant="warning" size="sm">{waste.item_type}</Badge>
+                            </td>
+                            <td className="px-4 py-2 text-sm text-gray-600">{waste.description || 'No description'}</td>
+                            <td className="px-4 py-2 text-sm font-medium text-gray-900">{waste.weight || 0}</td>
+                            <td className="px-4 py-2 text-sm text-gray-600">{waste.unit}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <div className="text-center py-8">
+                <CheckCircle className="w-16 h-16 mx-auto mb-4 text-green-400" />
+                <h3 className="text-lg font-medium text-gray-900 mb-2">No Waste Recorded</h3>
+                <p className="text-gray-600">This order was completed without recorded waste.</p>
               </div>
             )}
             
             <div className="flex justify-end pt-4 border-t">
-              <Button onClick={() => setSelectedCompletionReport(null)} variant="outline">
+              <Button onClick={() => setSelectedWasteReport(null)} variant="outline">
                 Close
               </Button>
             </div>
