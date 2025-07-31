@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { Modal, Card, Button, Badge } from './ui-components.jsx';
 import API from '../core/api.js';
+import { ActivityFeed } from './realtime-notifications.jsx';
 
 export default function Dashboard() {
   const [stats, setStats] = useState({
@@ -257,7 +258,7 @@ export default function Dashboard() {
       </div>
       
       {/* Production Overview */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Orders Overview */}
         <Card className="p-6">
           <div className="flex items-center justify-between mb-6">
@@ -365,6 +366,9 @@ export default function Dashboard() {
             </div>
           )}
         </Card>
+        
+        {/* Real-time Activity Feed */}
+        <ActivityFeed maxItems={8} />
       </div>
       
       {/* Quick Actions Modal */}

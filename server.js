@@ -399,6 +399,83 @@ apiRouter.get('/auth/verify-session', authenticateToken, async (req, res) => {
     res.json({ user });
 });
 
+// Session status endpoint for session management
+apiRouter.get('/auth/session-status', authenticateToken, async (req, res) => {
+    try {
+        // Get JWT token from cookie
+        const token = req.cookies.token;
+        if (!token) {
+            return res.status(401).json({ error: 'No token provided' });
+        }
+        
+        // Decode token to get expiration
+        const decoded = jwt.decode(token);
+        if (!decoded || !decoded.exp) {
+            return res.status(401).json({ error: 'Invalid token' });
+        }
+        
+        // Calculate time remaining in milliseconds
+        const currentTime = Math.floor(Date.now() / 1000);
+        const expirationTime = decoded.exp;
+        const timeRemainingSeconds = expirationTime - currentTime;
+        const timeRemainingMs = timeRemainingSeconds * 1000;
+        
+        res.json({
+            timeRemaining: Math.max(0, timeRemainingMs),
+            expiresAt: new Date(expirationTime * 1000).toISOString(),
+            user: {
+                id: req.user.id,
+                username: req.user.username,
+                role: req.user.role
+            }
+        });
+    } catch (error) {
+        console.error('Session status error:', error);
+        res.status(500).json({ error: 'Failed to check session status' });
+    }
+});
+
+// Session extension endpoint
+apiRouter.post('/auth/extend-session', authenticateToken, async (req, res) => {
+    try {
+        // Get current user info
+        const user = await dbGet('SELECT id, username, email, role FROM users WHERE id = ?', [req.user.id]);
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+        
+        // Generate new token with extended expiration
+        const newToken = jwt.sign(
+            { id: user.id, username: user.username, email: user.email, role: user.role },
+            JWT_SECRET,
+            { expiresIn: '1h' } // Extend session by 1 hour
+        );
+        
+        // Set new token in cookie
+        res.cookie('token', newToken, { 
+            httpOnly: true, 
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict',
+            maxAge: 60 * 60 * 1000 // 1 hour
+        });
+        
+        // Calculate new expiration time
+        const decoded = jwt.decode(newToken);
+        const timeRemainingMs = (decoded.exp * 1000) - Date.now();
+        
+        res.json({
+            message: 'Session extended successfully',
+            timeRemaining: timeRemainingMs,
+            expiresAt: new Date(decoded.exp * 1000).toISOString()
+        });
+        
+        console.log(`Session extended for user: ${user.username}`);
+    } catch (error) {
+        console.error('Session extension error:', error);
+        res.status(500).json({ error: 'Failed to extend session' });
+    }
+});
+
 // --- User Management (Workers) ---
 apiRouter.post('/workers', authenticateToken, requireRole(['admin']), 
     body('employee_code').notEmpty(), body('username').notEmpty(), body('role').notEmpty(), handleValidationErrors,

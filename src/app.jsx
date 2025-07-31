@@ -14,6 +14,11 @@ import Router, { useRouter } from './js/core/router.js';
 // Import layout and auth components (with .jsx extension)
 import MainLayout from './js/components/layout-components.jsx';
 import LoginForm from './js/components/auth-components.jsx';
+import RealtimeNotifications from './js/components/realtime-notifications.jsx';
+
+// Import new components for error handling and session management
+import ManufacturingErrorBoundary from './js/components/error-boundary.jsx';
+import SessionManager, { useSessionManager } from './js/components/session-manager.jsx';
 
 // Import page components (with .jsx extension)
 import Dashboard from "./js/components/dashboard.jsx";
@@ -48,8 +53,11 @@ routes.forEach(route => Router.addRoute(route));
 Router.init();
 
 function App() {
-  const { isAuthenticated, loading } = useAuth();
+  const { isAuthenticated, loading, user } = useAuth();
   const [currentPath, setCurrentPath] = useState(window.location.pathname);
+  
+  // Session management
+  const { sessionStatus, handleSessionExpiring, handleSessionExpired } = useSessionManager();
 
   useEffect(() => {
     // Use EventBus instead of Router.on
@@ -63,21 +71,41 @@ function App() {
   }, []);
 
   if (loading) {
-    return <div className="h-screen flex items-center justify-center text-xl">Loading Application...</div>;
+    return (
+      <div className="h-screen flex items-center justify-center text-xl bg-gray-50">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading Production Management System...</p>
+        </div>
+      </div>
+    );
   }
 
   if (!isAuthenticated) {
-    return <LoginForm />;
+    return (
+      <ManufacturingErrorBoundary>
+        <LoginForm />
+      </ManufacturingErrorBoundary>
+    );
   }
 
   const route = routes.find(r => r.path === currentPath);
   const ComponentToRender = route ? route.component : Dashboard;
-  const pageTitle = route ? route.name : 'Dashboard';
+  const pageTitle = route ? route.name || route.title : 'Dashboard';
 
   return (
-    <MainLayout title={pageTitle}>
-      <ComponentToRender />
-    </MainLayout>
+    <ManufacturingErrorBoundary>
+      <MainLayout title={pageTitle}>
+        <ComponentToRender />
+        <RealtimeNotifications />
+        {isAuthenticated && (
+          <SessionManager 
+            onSessionExpiring={handleSessionExpiring}
+            onSessionExpired={handleSessionExpired}
+          />
+        )}
+      </MainLayout>
+    </ManufacturingErrorBoundary>
   );
 }
 
