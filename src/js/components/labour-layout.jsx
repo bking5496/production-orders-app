@@ -175,6 +175,18 @@ export default function LabourLayoutPage() {
     const [showExportModal, setShowExportModal] = useState(false);
     const [exportFormat, setExportFormat] = useState('excel');
     const [selectedShift, setSelectedShift] = useState('all');
+    const [selectedMachine, setSelectedMachine] = useState('all');
+    const [machines, setMachines] = useState([]);
+
+    const fetchMachines = async () => {
+        try {
+            const machinesData = await API.get('/machines');
+            setMachines(machinesData || []);
+        } catch (error) {
+            console.error('Failed to fetch machines:', error);
+            setMachines([]);
+        }
+    };
 
     const fetchRosterForDate = async (date) => {
         setLoading(true);
@@ -228,6 +240,7 @@ export default function LabourLayoutPage() {
 
     useEffect(() => {
         fetchRosterForDate(selectedDate);
+        fetchMachines();
     }, [selectedDate]);
 
     const handleVerify = async (workerId) => {
