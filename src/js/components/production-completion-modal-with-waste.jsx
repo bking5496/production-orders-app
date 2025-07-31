@@ -165,33 +165,44 @@ export default function ProductionCompletionModalWithWaste({ isOpen, onClose, or
   }, [formData, wasteData, order, metrics, validateForm, onComplete, onClose]);
 
   return (
-    <Modal title="Complete Production Order" onClose={onClose} size="xl">
+    <Modal title="Complete Production Order" onClose={onClose} size="xl" className="glass backdrop-blur-xl">
       <div className="space-y-6">
         {/* Error Message */}
         {error && (
-          <div className="p-4 rounded-lg bg-red-100 text-red-800 border border-red-200" role="alert">
-            {error}
+          <div className="p-4 rounded-xl glass border-l-4 border-red-400 text-red-800 hover-lift" role="alert">
+            <div className="flex items-center gap-2">
+              <AlertTriangle className="w-5 h-5 text-red-600" />
+              <span className="font-medium">{error}</span>
+            </div>
           </div>
         )}
         
         {/* Notification */}
         {notification && (
-          <div className={`p-4 rounded-lg ${notification.type === 'success' ? 'bg-green-100 text-green-800 border border-green-200' : 'bg-red-100 text-red-800 border border-red-200'}`} role="alert">
-            {notification.message}
+          <div className={`p-4 rounded-xl glass border-l-4 hover-lift transition-all duration-500 transform animate-pulse ${
+            notification.type === 'success' ? 'border-green-400 text-green-800' : 'border-red-400 text-red-800'
+          }`} role="alert">
+            <div className="flex items-center gap-2">
+              {notification.type === 'success' ? 
+                <CheckCircle className="w-5 h-5 text-green-600" /> : 
+                <AlertTriangle className="w-5 h-5 text-red-600" />
+              }
+              <span className="font-medium">{notification.message}</span>
+            </div>
           </div>
         )}
         
         {/* Order Summary */}
-        <Card className="p-6 bg-blue-50">
+        <Card className="p-6 glass hover-lift card-hover gradient-animate">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-lg font-semibold text-blue-900">{order.order_number}</h3>
-              <p className="text-blue-700">{order.product_name}</p>
-              <p className="text-sm text-blue-600">Target: {order.quantity?.toLocaleString()} units</p>
+              <h3 className="text-lg font-semibold gradient-text float">{order.order_number}</h3>
+              <p className="text-white/90 font-medium">{order.product_name}</p>
+              <p className="text-sm text-white/80">Target: {order.quantity?.toLocaleString()} units</p>
             </div>
             <div className="text-right">
-              <p className="text-sm text-blue-600">Environment: {order.environment}</p>
-              <p className="text-sm text-blue-600">Machine: {order.machine_name || 'N/A'}</p>
+              <p className="text-sm text-white/80">Environment: {order.environment}</p>
+              <p className="text-sm text-white/80">Machine: {order.machine_name || 'N/A'}</p>
             </div>
           </div>
         </Card>
@@ -234,7 +245,7 @@ export default function ProductionCompletionModalWithWaste({ isOpen, onClose, or
                     type="number"
                     value={formData.actual_quantity}
                     onChange={(e) => setFormData({ ...formData, actual_quantity: parseInt(e.target.value) || 0 })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-3 py-2 glass border border-white/20 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 focus:scale-105"
                     required
                     min="0"
                     max={order.quantity * 1.1}
@@ -247,7 +258,7 @@ export default function ProductionCompletionModalWithWaste({ isOpen, onClose, or
                   <select
                     value={formData.quality_rating}
                     onChange={(e) => setFormData({ ...formData, quality_rating: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-3 py-2 glass border border-white/20 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 focus:scale-105"
                   >
                     <option value="excellent">Excellent (100%)</option>
                     <option value="good">Good (85%)</option>
@@ -264,7 +275,7 @@ export default function ProductionCompletionModalWithWaste({ isOpen, onClose, or
                     type="number"
                     value={formData.efficiency_score}
                     onChange={(e) => setFormData({ ...formData, efficiency_score: parseInt(e.target.value) || 0 })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-3 py-2 glass border border-white/20 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 focus:scale-105"
                     min="0"
                     max="150"
                   />
@@ -279,7 +290,7 @@ export default function ProductionCompletionModalWithWaste({ isOpen, onClose, or
                     type="datetime-local"
                     value={formData.completion_time}
                     onChange={(e) => setFormData({ ...formData, completion_time: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-3 py-2 glass border border-white/20 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 focus:scale-105"
                   />
                   <p className="text-xs text-gray-500 mt-1">
                     Current SAST time: {formatSASTDate(getCurrentSASTTime(), { includeSeconds: true })}
@@ -305,7 +316,7 @@ export default function ProductionCompletionModalWithWaste({ isOpen, onClose, or
             <div className="space-y-6">
               <div className="flex justify-between items-center">
                 <h3 className="text-lg font-medium text-gray-800">Waste Tracking</h3>
-                <Button type="button" onClick={addWasteItem} variant="outline" size="sm">
+                <Button type="button" onClick={addWasteItem} variant="outline" size="sm" className="hover-lift btn-micro glass border-white/20">
                   <Plus className="w-4 h-4 mr-2" />
                   Add Waste Item
                 </Button>
@@ -313,7 +324,7 @@ export default function ProductionCompletionModalWithWaste({ isOpen, onClose, or
               
               <div className="space-y-4">
                 {wasteData.map((waste, index) => (
-                  <Card key={index} className="p-4">
+                  <Card key={index} className="p-4 glass hover-lift card-hover">
                     <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Waste Type</label>
@@ -322,7 +333,7 @@ export default function ProductionCompletionModalWithWaste({ isOpen, onClose, or
                           value={waste.type}
                           onChange={(e) => updateWasteItem(index, 'type', e.target.value)}
                           placeholder="e.g., Raw Material"
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          className="w-full px-3 py-2 glass border border-white/20 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 focus:scale-105"
                         />
                       </div>
                       
@@ -331,7 +342,7 @@ export default function ProductionCompletionModalWithWaste({ isOpen, onClose, or
                         <select
                           value={waste.category}
                           onChange={(e) => updateWasteItem(index, 'category', e.target.value)}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          className="w-full px-3 py-2 glass border border-white/20 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 focus:scale-105"
                         >
                           <option value="material">Material</option>
                           <option value="packaging">Packaging</option>
@@ -348,7 +359,7 @@ export default function ProductionCompletionModalWithWaste({ isOpen, onClose, or
                           step="0.01"
                           value={waste.amount}
                           onChange={(e) => updateWasteItem(index, 'amount', parseFloat(e.target.value) || 0)}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          className="w-full px-3 py-2 glass border border-white/20 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 focus:scale-105"
                         />
                       </div>
                       
@@ -382,7 +393,7 @@ export default function ProductionCompletionModalWithWaste({ isOpen, onClose, or
                           onClick={() => removeWasteItem(index)}
                           variant="outline"
                           size="sm"
-                          className="text-red-600 hover:text-red-700 w-full"
+                          className="text-red-600 hover:text-red-700 w-full hover-lift btn-micro glass border-red-300/50"
                           disabled={wasteData.length === 1}
                         >
                           <Trash2 className="w-4 h-4" />
@@ -400,7 +411,7 @@ export default function ProductionCompletionModalWithWaste({ isOpen, onClose, or
               </div>
               
               {wasteData.some(w => w.amount > 0) && (
-                <Card className="p-4 bg-yellow-50">
+                <Card className="p-4 glass hover-lift status-pending">
                   <div className="flex items-center gap-2 mb-2">
                     <Calculator className="w-5 h-5 text-yellow-600" />
                     <h4 className="font-medium text-yellow-900">Waste Summary</h4>
@@ -426,7 +437,7 @@ export default function ProductionCompletionModalWithWaste({ isOpen, onClose, or
               <h3 className="text-lg font-medium text-gray-800">Production Summary</h3>
               
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <Card className="p-6 border-l-4 border-green-200">
+                <Card className="p-6 glass hover-lift card-hover border-l-4 border-green-400 status-completed">
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-sm text-gray-500">Completion Rate</p>
@@ -436,7 +447,7 @@ export default function ProductionCompletionModalWithWaste({ isOpen, onClose, or
                   </div>
                 </Card>
                 
-                <Card className="p-6 border-l-4 border-blue-200">
+                <Card className="p-6 glass hover-lift card-hover border-l-4 border-blue-400 status-progress">
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-sm text-gray-500">Quality Score</p>
@@ -446,7 +457,7 @@ export default function ProductionCompletionModalWithWaste({ isOpen, onClose, or
                   </div>
                 </Card>
                 
-                <Card className="p-6 border-l-4 border-purple-200">
+                <Card className="p-6 glass hover-lift card-hover border-l-4 border-purple-400">
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-sm text-gray-500">Efficiency</p>
@@ -458,7 +469,7 @@ export default function ProductionCompletionModalWithWaste({ isOpen, onClose, or
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <Card className="p-6">
+                <Card className="p-6 glass hover-lift">
                   <h4 className="font-medium text-gray-800 mb-4">Production Details</h4>
                   <div className="space-y-3 text-sm">
                     <div className="flex justify-between">
@@ -480,7 +491,7 @@ export default function ProductionCompletionModalWithWaste({ isOpen, onClose, or
                   </div>
                 </Card>
                 
-                <Card className="p-6">
+                <Card className="p-6 glass hover-lift">
                   <h4 className="font-medium text-gray-800 mb-4">Waste Impact</h4>
                   <div className="space-y-3 text-sm">
                     <div className="flex justify-between">
@@ -498,7 +509,7 @@ export default function ProductionCompletionModalWithWaste({ isOpen, onClose, or
                   </div>
                   
                   {metrics.totalWasteCost > 0 && (
-                    <div className="mt-4 p-3 bg-yellow-50 rounded-lg">
+                    <div className="mt-4 p-3 glass rounded-lg border border-yellow-300/50">
                       <p className="text-xs text-yellow-700">
                         <AlertTriangle className="w-4 h-4 inline mr-1" />
                         Waste cost represents {((metrics.totalWasteCost / (order.quantity * 10)) * 100).toFixed(1)}% of estimated production value
@@ -512,14 +523,14 @@ export default function ProductionCompletionModalWithWaste({ isOpen, onClose, or
           
           {/* Action Buttons */}
           <div className="flex justify-end gap-3 pt-6 border-t border-gray-200">
-            <Button type="button" onClick={onClose} variant="outline" disabled={loading}>
+            <Button type="button" onClick={onClose} variant="outline" disabled={loading} className="hover-lift btn-micro glass border-white/20">
               <X className="w-4 h-4 mr-2" />
               Cancel
             </Button>
             <Button 
               type="submit" 
               disabled={loading || formData.actual_quantity <= 0}
-              className={loading ? 'opacity-50 cursor-not-allowed' : ''}
+              className={`bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white border-0 hover-lift btn-micro ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
             >
               {loading && (
                 <svg className="animate-spin -ml-1 mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24">
