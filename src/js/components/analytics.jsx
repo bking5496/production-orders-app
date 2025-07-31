@@ -19,9 +19,21 @@ export default function AnalyticsPage() {
   const [refreshing, setRefreshing] = useState(false);
   const [notification, setNotification] = useState(null);
   const [activeTab, setActiveTab] = useState('overview');
-  const [dateRange, setDateRange] = useState({
-    start_date: new Date(new Date().setDate(new Date().getDate() - 30)).toISOString().split('T')[0],
-    end_date: new Date().toISOString().split('T')[0]
+  const [dateRange, setDateRange] = useState(() => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = now.getMonth() + 1; // getMonth() is 0-based, so add 1
+    
+    // Format first day of month as YYYY-MM-01
+    const startDate = `${year}-${month.toString().padStart(2, '0')}-01`;
+    
+    // Format current date as YYYY-MM-DD
+    const endDate = now.toISOString().split('T')[0];
+    
+    return {
+      start_date: startDate,
+      end_date: endDate
+    };
   });
 
   // Notification helper
@@ -36,7 +48,15 @@ export default function AnalyticsPage() {
     else setLoading(true);
     
     try {
-      const params = new URLSearchParams(dateRange).toString();
+      // Create proper date range with time components
+      const startDateTime = `${dateRange.start_date}T00:00:00`;
+      const endDateTime = `${dateRange.end_date}T23:59:59`;
+      
+      const params = new URLSearchParams({
+        start_date: startDateTime,
+        end_date: endDateTime
+      }).toString();
+      
       const [ordersData, machinesData, summaryData, downtimeData, downtimeRecordsData, employeesData, assignmentsData] = await Promise.all([
         API.get('/orders'),
         API.get('/machines'),
