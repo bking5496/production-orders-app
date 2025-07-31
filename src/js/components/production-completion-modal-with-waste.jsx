@@ -275,65 +275,63 @@ export default function ProductionCompletionModalWithWaste({ isOpen, onClose, or
               <div className="space-y-4">
                 {wasteData.map((waste, index) => (
                   <Card key={index} className="p-4 glass hover-lift card-hover">
-                    <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Waste Type</label>
-                        <input
-                          type="text"
-                          value={waste.type}
-                          onChange={(e) => updateWasteItem(index, 'type', e.target.value)}
-                          placeholder="e.g., Raw Material"
-                          className="w-full px-3 py-2 glass border border-white/20 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 focus:scale-105"
-                        />
-                      </div>
-                      
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Item Type</label>
                         <select
-                          value={waste.category}
-                          onChange={(e) => updateWasteItem(index, 'category', e.target.value)}
+                          value={waste.item_type}
+                          onChange={(e) => updateWasteItem(index, 'item_type', e.target.value)}
                           className="w-full px-3 py-2 glass border border-white/20 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 focus:scale-105"
                         >
-                          <option value="material">Material</option>
-                          <option value="packaging">Packaging</option>
-                          <option value="product">Product</option>
-                          <option value="energy">Energy</option>
-                          <option value="other">Other</option>
+                          <option value="">Select waste type...</option>
+                          <option value="Raw Material Scrap">Raw Material Scrap</option>
+                          <option value="Metal Offcuts">Metal Offcuts</option>
+                          <option value="Plastic Waste">Plastic Waste</option>
+                          <option value="Packaging Material">Packaging Material</option>
+                          <option value="Defective Products">Defective Products</option>
+                          <option value="Production Rejects">Production Rejects</option>
+                          <option value="Wood Offcuts">Wood Offcuts</option>
+                          <option value="Fabric Scraps">Fabric Scraps</option>
+                          <option value="Chemical Waste">Chemical Waste</option>
+                          <option value="Other">Other</option>
                         </select>
                       </div>
                       
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Amount</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
                         <input
-                          type="number"
-                          step="0.01"
-                          value={waste.amount}
-                          onChange={(e) => updateWasteItem(index, 'amount', parseFloat(e.target.value) || 0)}
+                          type="text"
+                          value={waste.description}
+                          onChange={(e) => updateWasteItem(index, 'description', e.target.value)}
+                          placeholder="e.g., Aluminum sheets, damaged packaging..."
                           className="w-full px-3 py-2 glass border border-white/20 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 focus:scale-105"
                         />
                       </div>
                       
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Unit & Cost</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Weight/Quantity</label>
                         <div className="flex gap-2">
-                          <select
-                            value={waste.unit}
-                            onChange={(e) => updateWasteItem(index, 'unit', e.target.value)}
-                            className="flex-1 px-2 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                          >
-                            <option value="kg">kg</option>
-                            <option value="units">units</option>
-                            <option value="liters">L</option>
-                            <option value="meters">m</option>
-                          </select>
                           <input
                             type="number"
                             step="0.01"
-                            value={waste.cost_per_unit}
-                            onChange={(e) => updateWasteItem(index, 'cost_per_unit', parseFloat(e.target.value) || 0)}
-                            placeholder="Cost/unit"
-                            className="flex-1 px-2 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            value={waste.weight}
+                            onChange={(e) => updateWasteItem(index, 'weight', parseFloat(e.target.value) || 0)}
+                            className="flex-2 px-3 py-2 glass border border-white/20 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 focus:scale-105"
+                            placeholder="0.00"
                           />
+                          <select
+                            value={waste.unit}
+                            onChange={(e) => updateWasteItem(index, 'unit', e.target.value)}
+                            className="flex-1 px-2 py-2 glass border border-white/20 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300"
+                          >
+                            <option value="kg">kg</option>
+                            <option value="g">g</option>
+                            <option value="tons">tons</option>
+                            <option value="units">units</option>
+                            <option value="liters">L</option>
+                            <option value="m³">m³</option>
+                            <option value="meters">m</option>
+                          </select>
                         </div>
                       </div>
                       
@@ -350,124 +348,34 @@ export default function ProductionCompletionModalWithWaste({ isOpen, onClose, or
                         </Button>
                       </div>
                     </div>
-                    
-                    {waste.amount > 0 && waste.cost_per_unit > 0 && (
-                      <div className="mt-2 text-sm text-gray-600">
-                        Total cost: ${(waste.amount * waste.cost_per_unit).toFixed(2)}
-                      </div>
-                    )}
                   </Card>
                 ))}
               </div>
               
-              {wasteData.some(w => w.amount > 0) && (
+              {wasteData.some(w => w.weight > 0) && (
                 <Card className="p-4 glass hover-lift status-pending">
                   <div className="flex items-center gap-2 mb-2">
-                    <Calculator className="w-5 h-5 text-yellow-600" />
+                    <Package className="w-5 h-5 text-yellow-600" />
                     <h4 className="font-medium text-yellow-900">Waste Summary</h4>
                   </div>
                   <div className="grid grid-cols-2 gap-4 text-sm">
                     <div>
-                      <span className="text-yellow-700">Total Material Waste:</span>
-                      <span className="ml-2 font-medium">{metrics.totalWasteAmount?.toFixed(2)} kg</span>
+                      <span className="text-yellow-700">Total Material Weight:</span>
+                      <span className="ml-2 font-medium">{metrics.totalWasteWeight?.toFixed(2)} kg</span>
                     </div>
                     <div>
-                      <span className="text-yellow-700">Total Cost Impact:</span>
-                      <span className="ml-2 font-medium">${metrics.totalWasteCost?.toFixed(2)}</span>
+                      <span className="text-yellow-700">Waste Items:</span>
+                      <span className="ml-2 font-medium">{metrics.wasteItems} recorded</span>
                     </div>
+                  </div>
+                  <div className="mt-3 p-3 glass rounded-lg border border-yellow-300/50">
+                    <p className="text-xs text-yellow-700">
+                      <AlertTriangle className="w-4 h-4 inline mr-1" />
+                      Waste tracking helps optimize material usage and identify improvement opportunities.
+                    </p>
                   </div>
                 </Card>
               )}
-            </div>
-          )}
-          
-          {/* Summary Tab */}
-          {activeTab === 'summary' && (
-            <div className="space-y-6">
-              <h3 className="text-lg font-medium text-gray-800">Production Summary</h3>
-              
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <Card className="p-6 glass hover-lift card-hover border-l-4 border-green-400 status-completed">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm text-gray-500">Completion Rate</p>
-                      <p className="text-3xl font-bold text-green-600">{metrics.completionRate}%</p>
-                    </div>
-                    <Target className="w-8 h-8 text-green-600" />
-                  </div>
-                </Card>
-                
-                <Card className="p-6 glass hover-lift card-hover border-l-4 border-blue-400 status-progress">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm text-gray-500">Quality Score</p>
-                      <p className="text-3xl font-bold text-blue-600">{metrics.qualityScore}%</p>
-                    </div>
-                    <CheckCircle className="w-8 h-8 text-blue-600" />
-                  </div>
-                </Card>
-                
-                <Card className="p-6 glass hover-lift card-hover border-l-4 border-purple-400">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm text-gray-500">Efficiency</p>
-                      <p className="text-3xl font-bold text-purple-600">{formData.efficiency_score}%</p>
-                    </div>
-                    <TrendingUp className="w-8 h-8 text-purple-600" />
-                  </div>
-                </Card>
-              </div>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <Card className="p-6 glass hover-lift">
-                  <h4 className="font-medium text-gray-800 mb-4">Production Details</h4>
-                  <div className="space-y-3 text-sm">
-                    <div className="flex justify-between">
-                      <span className="text-gray-500">Target Quantity:</span>
-                      <span className="font-medium">{order.quantity?.toLocaleString()} units</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-500">Actual Quantity:</span>
-                      <span className="font-medium">{formData.actual_quantity?.toLocaleString()} units</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-500">Quality Rating:</span>
-                      <span className="font-medium capitalize">{formData.quality_rating}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-500">Efficiency Score:</span>
-                      <span className="font-medium">{formData.efficiency_score}%</span>
-                    </div>
-                  </div>
-                </Card>
-                
-                <Card className="p-6 glass hover-lift">
-                  <h4 className="font-medium text-gray-800 mb-4">Waste Impact</h4>
-                  <div className="space-y-3 text-sm">
-                    <div className="flex justify-between">
-                      <span className="text-gray-500">Total Waste:</span>
-                      <span className="font-medium">{metrics.totalWasteAmount?.toFixed(2)} kg</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-500">Waste Cost:</span>
-                      <span className="font-medium">${metrics.totalWasteCost?.toFixed(2)}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-500">Waste Items:</span>
-                      <span className="font-medium">{wasteData.filter(w => w.amount > 0).length}</span>
-                    </div>
-                  </div>
-                  
-                  {metrics.totalWasteCost > 0 && (
-                    <div className="mt-4 p-3 glass rounded-lg border border-yellow-300/50">
-                      <p className="text-xs text-yellow-700">
-                        <AlertTriangle className="w-4 h-4 inline mr-1" />
-                        Waste cost represents {((metrics.totalWasteCost / (order.quantity * 10)) * 100).toFixed(1)}% of estimated production value
-                      </p>
-                    </div>
-                  )}
-                </Card>
-              </div>
             </div>
           )}
           
