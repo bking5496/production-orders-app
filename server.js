@@ -52,6 +52,15 @@ const db = new sqlite3.Database(DATABASE_PATH, (err) => {
     process.exit(1);
   }
   console.log('✅ Connected to SQLite database');
+  
+  // Enable foreign key constraints for data integrity
+  db.run('PRAGMA foreign_keys = ON;', (err) => {
+    if (err) {
+      console.error('Failed to enable foreign keys:', err);
+    } else {
+      console.log('✅ Foreign key constraints enabled');
+    }
+  });
 });
 
 // --- Promise-based DB methods for async/await ---
