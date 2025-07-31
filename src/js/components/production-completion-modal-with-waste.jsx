@@ -147,7 +147,7 @@ export default function ProductionCompletionModalWithWaste({ isOpen, onClose, or
   }, [formData, wasteData, order, metrics, validateForm, onComplete, onClose]);
 
   return (
-    <Modal title="Complete Production Order" onClose={onClose} size="xl" className="glass backdrop-blur-xl">
+    <Modal title="Complete Production Order" onClose={onClose} size="lg" className="glass backdrop-blur-xl">
       <div className="space-y-6">
         {/* Error Message */}
         {error && (
@@ -216,8 +216,8 @@ export default function ProductionCompletionModalWithWaste({ isOpen, onClose, or
         <form onSubmit={handleSubmit}>
           {/* Production Details Tab */}
           {activeTab === 'production' && (
-            <div className="space-y-6">
-              <div className="grid grid-cols-1 gap-6">
+            <div className="space-y-4">
+              <div className="grid grid-cols-1 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Actual Quantity Produced <span className="text-red-500">*</span>
@@ -241,20 +241,29 @@ export default function ProductionCompletionModalWithWaste({ isOpen, onClose, or
                     onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
                     placeholder="Any additional notes about the production run (quality issues, machine performance, etc.)..."
                     className="w-full px-3 py-2 glass border border-white/20 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300"
-                    rows="4"
+                    rows="3"
                   />
                 </div>
                 
-                <div className="glass p-4 rounded-lg border border-purple-300/50">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Clock className="w-5 h-5 text-purple-600" />
-                    <h4 className="font-medium text-gray-800">Completion Time</h4>
+                <div className="glass p-3 rounded-lg border border-purple-300/50">
+                  <div className="flex items-center gap-2 mb-1">
+                    <Clock className="w-4 h-4 text-purple-600" />
+                    <h4 className="text-sm font-medium text-gray-800">Completion Time</h4>
                   </div>
-                  <p className="text-sm text-gray-600">
-                    Order will be marked as completed at the current time when you submit this form.
+                  <p className="text-xs text-gray-600">
+                    Order will be marked as completed when you submit this form.
                   </p>
                   <p className="text-xs text-gray-500 mt-1">
-                    Current time: {formatSASTDate(getCurrentSASTTime(), { includeSeconds: true })}
+                    Current time: {new Date().toLocaleString('en-ZA', { 
+                      timeZone: 'Africa/Johannesburg',
+                      year: 'numeric',
+                      month: '2-digit', 
+                      day: '2-digit',
+                      hour: '2-digit',
+                      minute: '2-digit',
+                      second: '2-digit',
+                      hour12: false
+                    })} SAST
                   </p>
                 </div>
               </div>
@@ -263,7 +272,7 @@ export default function ProductionCompletionModalWithWaste({ isOpen, onClose, or
           
           {/* Waste Tracking Tab */}
           {activeTab === 'waste' && (
-            <div className="space-y-6">
+            <div className="space-y-4">
               <div className="flex justify-between items-center">
                 <h3 className="text-lg font-medium text-gray-800">Waste Tracking</h3>
                 <Button type="button" onClick={addWasteItem} variant="outline" size="sm" className="hover-lift btn-micro glass border-white/20">
@@ -272,16 +281,16 @@ export default function ProductionCompletionModalWithWaste({ isOpen, onClose, or
                 </Button>
               </div>
               
-              <div className="space-y-4">
+              <div className="space-y-3">
                 {wasteData.map((waste, index) => (
-                  <Card key={index} className="p-4 glass hover-lift card-hover">
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                  <Card key={index} className="p-3 glass hover-lift card-hover">
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Item Type</label>
+                        <label className="block text-xs font-medium text-gray-700 mb-1">Item Type</label>
                         <select
                           value={waste.item_type}
                           onChange={(e) => updateWasteItem(index, 'item_type', e.target.value)}
-                          className="w-full px-3 py-2 glass border border-white/20 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 focus:scale-105"
+                          className="w-full px-2 py-1.5 text-xs glass border border-white/20 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 focus:scale-105"
                         >
                           <option value="">Select waste type...</option>
                           <option value="Raw Material Scrap">Raw Material Scrap</option>
@@ -298,39 +307,39 @@ export default function ProductionCompletionModalWithWaste({ isOpen, onClose, or
                       </div>
                       
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                        <label className="block text-xs font-medium text-gray-700 mb-1">Description</label>
                         <input
                           type="text"
                           value={waste.description}
                           onChange={(e) => updateWasteItem(index, 'description', e.target.value)}
-                          placeholder="e.g., Aluminum sheets, damaged packaging..."
-                          className="w-full px-3 py-2 glass border border-white/20 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 focus:scale-105"
+                          placeholder="e.g., Aluminum sheets..."
+                          className="w-full px-2 py-1.5 text-xs glass border border-white/20 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 focus:scale-105"
                         />
                       </div>
                       
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Weight/Quantity</label>
-                        <div className="flex gap-2">
+                        <label className="block text-xs font-medium text-gray-700 mb-1">Weight/Quantity</label>
+                        <div className="grid grid-cols-3 gap-1">
                           <input
                             type="number"
                             step="0.01"
                             value={waste.weight}
                             onChange={(e) => updateWasteItem(index, 'weight', parseFloat(e.target.value) || 0)}
-                            className="flex-2 px-3 py-2 glass border border-white/20 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 focus:scale-105"
+                            className="col-span-2 px-2 py-1.5 text-xs glass border border-white/20 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 focus:scale-105"
                             placeholder="0.00"
                           />
                           <select
                             value={waste.unit}
                             onChange={(e) => updateWasteItem(index, 'unit', e.target.value)}
-                            className="flex-1 px-2 py-2 glass border border-white/20 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300"
+                            className="px-1 py-1.5 text-xs glass border border-white/20 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300"
                           >
                             <option value="kg">kg</option>
                             <option value="g">g</option>
                             <option value="tons">tons</option>
                             <option value="units">units</option>
-                            <option value="liters">L</option>
+                            <option value="L">L</option>
                             <option value="m³">m³</option>
-                            <option value="meters">m</option>
+                            <option value="m">m</option>
                           </select>
                         </div>
                       </div>
@@ -353,12 +362,12 @@ export default function ProductionCompletionModalWithWaste({ isOpen, onClose, or
               </div>
               
               {wasteData.some(w => w.weight > 0) && (
-                <Card className="p-4 glass hover-lift status-pending">
+                <Card className="p-3 glass hover-lift status-pending">
                   <div className="flex items-center gap-2 mb-2">
-                    <Package className="w-5 h-5 text-yellow-600" />
-                    <h4 className="font-medium text-yellow-900">Waste Summary</h4>
+                    <Package className="w-4 h-4 text-yellow-600" />
+                    <h4 className="text-sm font-medium text-yellow-900">Waste Summary</h4>
                   </div>
-                  <div className="grid grid-cols-2 gap-4 text-sm">
+                  <div className="grid grid-cols-2 gap-4 text-xs">
                     <div>
                       <span className="text-yellow-700">Total Material Weight:</span>
                       <span className="ml-2 font-medium">{metrics.totalWasteWeight?.toFixed(2)} kg</span>
@@ -368,10 +377,10 @@ export default function ProductionCompletionModalWithWaste({ isOpen, onClose, or
                       <span className="ml-2 font-medium">{metrics.wasteItems} recorded</span>
                     </div>
                   </div>
-                  <div className="mt-3 p-3 glass rounded-lg border border-yellow-300/50">
+                  <div className="mt-2 p-2 glass rounded-lg border border-yellow-300/50">
                     <p className="text-xs text-yellow-700">
-                      <AlertTriangle className="w-4 h-4 inline mr-1" />
-                      Waste tracking helps optimize material usage and identify improvement opportunities.
+                      <AlertTriangle className="w-3 h-3 inline mr-1" />
+                      Waste tracking helps optimize material usage.
                     </p>
                   </div>
                 </Card>
@@ -380,7 +389,7 @@ export default function ProductionCompletionModalWithWaste({ isOpen, onClose, or
           )}
           
           {/* Action Buttons */}
-          <div className="flex justify-end gap-3 pt-6 border-t border-gray-200">
+          <div className="flex justify-end gap-3 pt-4 border-t border-gray-200">
             <Button type="button" onClick={onClose} variant="outline" disabled={loading} className="hover-lift btn-micro glass border-white/20">
               <X className="w-4 h-4 mr-2" />
               Cancel
