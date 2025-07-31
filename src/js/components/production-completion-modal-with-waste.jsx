@@ -283,55 +283,48 @@ export default function ProductionCompletionModalWithWaste({ isOpen, onClose, or
               
               <div className="space-y-3">
                 {wasteData.map((waste, index) => (
-                  <Card key={index} className="p-3 glass hover-lift card-hover">
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
+                  <Card key={index} className="p-6 glass hover-lift card-hover border border-white/30 shadow-lg">
+                    <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
                       <div>
-                        <label className="block text-xs font-medium text-gray-700 mb-1">Item Type</label>
+                        <label className="block text-sm font-semibold text-gray-700 mb-2">Type</label>
                         <select
                           value={waste.item_type}
                           onChange={(e) => updateWasteItem(index, 'item_type', e.target.value)}
-                          className="w-full px-2 py-1.5 text-xs glass border border-white/20 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 focus:scale-105"
+                          className="w-full px-3 py-2.5 text-sm font-medium glass border border-white/20 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300"
                         >
-                          <option value="">Select waste type...</option>
-                          <option value="Raw Material Scrap">Raw Material Scrap</option>
-                          <option value="Metal Offcuts">Metal Offcuts</option>
-                          <option value="Plastic Waste">Plastic Waste</option>
-                          <option value="Packaging Material">Packaging Material</option>
-                          <option value="Defective Products">Defective Products</option>
-                          <option value="Production Rejects">Production Rejects</option>
-                          <option value="Wood Offcuts">Wood Offcuts</option>
-                          <option value="Fabric Scraps">Fabric Scraps</option>
-                          <option value="Chemical Waste">Chemical Waste</option>
-                          <option value="Other">Other</option>
+                          <option value="FP">FP</option>
+                          <option value="BP">BP</option>
+                          <option value="PM">PM</option>
+                          <option value="RM">RM</option>
                         </select>
                       </div>
                       
-                      <div>
-                        <label className="block text-xs font-medium text-gray-700 mb-1">Description</label>
+                      <div className="col-span-2">
+                        <label className="block text-sm font-semibold text-gray-700 mb-2">Description</label>
                         <input
                           type="text"
                           value={waste.description}
                           onChange={(e) => updateWasteItem(index, 'description', e.target.value)}
-                          placeholder="e.g., Aluminum sheets..."
-                          className="w-full px-2 py-1.5 text-xs glass border border-white/20 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 focus:scale-105"
+                          placeholder="Description"
+                          className="w-full px-3 py-2.5 text-sm glass border border-white/20 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300"
                         />
                       </div>
                       
                       <div>
-                        <label className="block text-xs font-medium text-gray-700 mb-1">Weight/Quantity</label>
-                        <div className="grid grid-cols-3 gap-1">
+                        <label className="block text-sm font-semibold text-gray-700 mb-2">Weight/Quantity</label>
+                        <div className="flex gap-2">
                           <input
                             type="number"
                             step="0.01"
                             value={waste.weight}
                             onChange={(e) => updateWasteItem(index, 'weight', parseFloat(e.target.value) || 0)}
-                            className="col-span-2 px-2 py-1.5 text-xs glass border border-white/20 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 focus:scale-105"
+                            className="flex-1 px-3 py-2.5 text-sm glass border border-white/20 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300"
                             placeholder="0.00"
                           />
                           <select
                             value={waste.unit}
                             onChange={(e) => updateWasteItem(index, 'unit', e.target.value)}
-                            className="px-1 py-1.5 text-xs glass border border-white/20 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300"
+                            className="w-20 px-2 py-2.5 text-sm glass border border-white/20 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 font-semibold text-center"
                           >
                             <option value="kg">kg</option>
                             <option value="g">g</option>
@@ -344,13 +337,13 @@ export default function ProductionCompletionModalWithWaste({ isOpen, onClose, or
                         </div>
                       </div>
                       
-                      <div className="flex items-end">
+                      <div className="flex items-end justify-center">
                         <Button
                           type="button"
                           onClick={() => removeWasteItem(index)}
                           variant="outline"
                           size="sm"
-                          className="text-red-600 hover:text-red-700 w-full hover-lift btn-micro glass border-red-300/50"
+                          className="text-red-600 hover:text-red-700 w-10 h-10 p-2 hover-lift btn-micro glass border-red-300/50 rounded-lg"
                           disabled={wasteData.length === 1}
                         >
                           <Trash2 className="w-4 h-4" />
