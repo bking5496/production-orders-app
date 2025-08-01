@@ -4,8 +4,8 @@ import ReactDOM from 'react-dom/client';
 // Import EventBus first (before other modules that use it)
 import './js/core/event-bus.js';
 
-// Import WebSocket service
-import './js/core/websocket.js';
+// Import Enhanced WebSocket service
+import './js/core/websocket-enhanced.js';
 
 // Import core services
 import { AuthProvider, useAuth } from './js/core/auth.js';
@@ -19,6 +19,10 @@ import RealtimeNotifications from './js/components/realtime-notifications.jsx';
 // Import new components for error handling and session management
 import ManufacturingErrorBoundary from './js/components/error-boundary.jsx';
 import SessionManager, { useSessionManager } from './js/components/session-manager.jsx';
+
+// Import WebSocket hooks and debug component
+import { useAutoConnect } from './js/core/websocket-hooks.js';
+import WebSocketDebug from './js/components/websocket-debug.jsx';
 
 // Import page components (with .jsx extension)
 import Dashboard from "./js/components/dashboard.jsx";
@@ -58,6 +62,9 @@ function App() {
   
   // Session management
   const { sessionStatus, handleSessionExpiring, handleSessionExpired } = useSessionManager();
+  
+  // WebSocket auto-connection (only when authenticated)
+  useAutoConnect();
 
   useEffect(() => {
     // Use EventBus instead of Router.on
@@ -104,6 +111,7 @@ function App() {
             onSessionExpired={handleSessionExpired}
           />
         )}
+        <WebSocketDebug />
       </MainLayout>
     </ManufacturingErrorBoundary>
   );
