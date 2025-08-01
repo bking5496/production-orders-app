@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { Activity, Clock, Users, AlertTriangle, Pause, Play, RefreshCw, Filter, TrendingUp, Eye, X } from 'lucide-react';
+import { Activity, Clock, Users, AlertTriangle, Pause, Play, RefreshCw, Filter, TrendingUp, Eye, X, Wifi } from 'lucide-react';
 import API from '../core/api';
 import Time from '../core/time';
 import { Icon } from './layout-components.jsx';
+import { useOrderUpdates, useMachineUpdates, useWebSocketEvent, useAutoConnect, useNotifications } from '../core/websocket-hooks.js';
+import { WebSocketStatusCompact, WebSocketIndicator } from './websocket-status.jsx';
 
 // Helper to format time from a start date to now, creating a running timer effect
 const formatDuration = (sastStartTime) => {

@@ -1,0 +1,190 @@
+{
+  "testDate": "2025-08-01T17:16:55.435Z",
+  "website": "https://oracles.africa",
+  "summary": {
+    "healthScore": 82,
+    "healthLevel": "Good",
+    "criticalIssues": 0,
+    "highIssues": 1,
+    "mediumIssues": 0,
+    "responseTime": 76,
+    "pageSize": 1012,
+    "technologies": {
+      "server": "nginx/1.24.0 (Ubuntu)",
+      "poweredBy": "Not disclosed",
+      "framework": "React",
+      "hasReact": true,
+      "hasJQuery": false,
+      "hasBootstrap": false,
+      "hasWordPress": false,
+      "hasCloudflare": false,
+      "hasCDN": true
+    }
+  },
+  "results": {
+    "connectivity": [
+      {
+        "test": "HTTPS Connection",
+        "status": "PASS",
+        "statusCode": 200,
+        "responseTime": "76ms",
+        "message": "Successfully connected to https://oracles.africa"
+      },
+      {
+        "test": "Alternative URL: https://www.oracles.africa",
+        "status": "PASS",
+        "statusCode": 200,
+        "responseTime": "52ms",
+        "redirect": null
+      },
+      {
+        "test": "Alternative URL: http://oracles.africa",
+        "status": "PASS",
+        "statusCode": 301,
+        "responseTime": "2ms",
+        "redirect": "https://oracles.africa/"
+      },
+      {
+        "test": "Alternative URL: http://www.oracles.africa",
+        "status": "PASS",
+        "statusCode": 301,
+        "responseTime": "2ms",
+        "redirect": "https://www.oracles.africa/"
+      },
+      {
+        "test": "Alternative URL: https://oracles.africa/admin",
+        "status": "PASS",
+        "statusCode": 200,
+        "responseTime": "7ms",
+        "redirect": null
+      },
+      {
+        "test": "Alternative URL: https://oracles.africa/login",
+        "status": "PASS",
+        "statusCode": 200,
+        "responseTime": "5ms",
+        "redirect": null
+      },
+      {
+        "test": "Alternative URL: https://oracles.africa/dashboard",
+        "status": "PASS",
+        "statusCode": 200,
+        "responseTime": "10ms",
+        "redirect": null
+      }
+    ],
+    "security": [
+      {
+        "test": "HSTS Protection",
+        "header": "strict-transport-security",
+        "status": "PASS",
+        "value": "max-age=31536000; includeSubDomains",
+        "severity": "low"
+      },
+      {
+        "test": "MIME Type Sniffing Protection",
+        "header": "x-content-type-options",
+        "status": "PASS",
+        "value": "nosniff",
+        "severity": "low"
+      },
+      {
+        "test": "Clickjacking Protection",
+        "header": "x-frame-options",
+        "status": "PASS",
+        "value": "SAMEORIGIN",
+        "severity": "low"
+      },
+      {
+        "test": "XSS Protection",
+        "header": "x-xss-protection",
+        "status": "PASS",
+        "value": "1; mode=block",
+        "severity": "low"
+      },
+      {
+        "test": "CSP Protection",
+        "header": "content-security-policy",
+        "status": "FAIL",
+        "value": "Not present",
+        "severity": "high"
+      },
+      {
+        "test": "Referrer Policy",
+        "header": "referrer-policy",
+        "status": "PASS",
+        "value": "strict-origin-when-cross-origin",
+        "severity": "low"
+      },
+      {
+        "test": "HTTPS Enforcement",
+        "status": "PASS",
+        "message": "Site uses HTTPS",
+        "severity": "low"
+      }
+    ],
+    "headers": {
+      "server": "nginx/1.24.0 (Ubuntu)",
+      "date": "Fri, 01 Aug 2025 17:16:55 GMT",
+      "content-type": "text/html",
+      "content-length": "1012",
+      "connection": "keep-alive",
+      "vary": "Accept-Encoding, Origin",
+      "cache-control": "no-cache",
+      "etag": "W/\"3f4-qiaCiRapHMAQsCx+ars6NvCW01I\"",
+      "strict-transport-security": "max-age=31536000; includeSubDomains",
+      "x-frame-options": "SAMEORIGIN",
+      "x-content-type-options": "nosniff",
+      "x-xss-protection": "1; mode=block",
+      "referrer-policy": "strict-origin-when-cross-origin"
+    },
+    "performance": {
+      "responseTime": 76,
+      "statusCode": 200
+    },
+    "content": {
+      "body": "<!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <script type=\"module\">import { injectIntoGlobalHook } from \"/@react-refresh\";\ninjectIntoGlobalHook(window);\nwindow.$RefreshReg$ = () => {};\nwindow.$RefreshSig$ = () => (type) => type;</script>\n\n    <script type=\"module\" src=\"/@vite/client\"></script>\n\n    <meta charset=\"UTF-8\" />\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n    <title>Production Management System</title>\n    <!-- ADD THIS SCRIPT TAG TO LOAD TAILWIND CSS -->\n    <script src=\"https://cdn.tailwindcss.com\"></script>\n    \n    <!-- This script is for the icons -->\n    <script src=\"https://unpkg.com/lucide@latest\"></script>\n    \n    <!-- XLSX library for Excel export functionality -->\n    <script src=\"https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js\"></script>\n  </head>\n  <body class=\"bg-gray-50\">\n    <div id=\"root\"></div>\n    <div id=\"portal-root\"></div>\n    <script type=\"module\" src=\"/src/app.jsx?t=1754068447408\"></script>\n  </body>\n</html>\n",
+      "size": 1012,
+      "analysis": {
+        "hasDoctype": true,
+        "hasTitle": true,
+        "hasMetaDescription": false,
+        "hasH1": false,
+        "hasImages": false,
+        "hasForms": false,
+        "hasLoginForm": false,
+        "hasJavaScript": true,
+        "hasCSS": false,
+        "elementCounts": {
+          "h1Tags": 0,
+          "images": 0,
+          "links": 0,
+          "forms": 0
+        },
+        "validation": {
+          "multipleH1": "OK",
+          "titleLength": "TOO_SHORT",
+          "descriptionLength": "MISSING"
+        }
+      },
+      "technologies": {
+        "server": "nginx/1.24.0 (Ubuntu)",
+        "poweredBy": "Not disclosed",
+        "framework": "React",
+        "hasReact": true,
+        "hasJQuery": false,
+        "hasBootstrap": false,
+        "hasWordPress": false,
+        "hasCloudflare": false,
+        "hasCDN": true
+      }
+    },
+    "seo": {
+      "title": "Production Management System",
+      "metaDescription": "No meta description found",
+      "titleLength": 28,
+      "descriptionLength": 0
+    },
+    "errors": []
+  }
+}
