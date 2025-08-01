@@ -154,7 +154,7 @@ wss.on('connection', async (ws, req) => {
     }
     
     // Handle incoming messages
-    ws.on('message', (message) => {
+    ws.on('message', async (message) => {
         try {
             const data = JSON.parse(message);
             console.log(`📨 WebSocket message from ${ws.user.username}:`, data.type);
