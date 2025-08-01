@@ -1,10 +1,19 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Package, Plus, Search, Filter, RefreshCw, Play, Square, Trash2, Clock, AlertTriangle, CheckCircle, BarChart3, Calendar, Target, Wifi } from 'lucide-react';
+import { Package, Plus, Search, Filter, RefreshCw, Play, Square, Trash2, Clock, AlertTriangle, CheckCircle, BarChart3, Calendar, Target, Wifi, ArrowLeft, Menu } from 'lucide-react';
 import API from '../core/api';
 import { Modal, Card, Button, Badge } from './ui-components.jsx';
 import ProductionCompletionModalWithWaste from './production-completion-modal-with-waste.jsx';
 import { useOrderUpdates, useWebSocketEvent, useAutoConnect, useNotifications } from '../core/websocket-hooks.js';
 import WebSocketStatus from './websocket-status.jsx';
+import { 
+  useDeviceDetection, 
+  useTouchGestures, 
+  ResponsiveTable, 
+  TouchDropdown, 
+  MobileActionMenu, 
+  TouchButton,
+  usePerformanceOptimization
+} from './mobile-responsive-utils.jsx';
 
 export default function OrdersPage() {
   const [orders, setOrders] = useState([]);
@@ -16,6 +25,11 @@ export default function OrdersPage() {
   const [statusFilter, setStatusFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [notification, setNotification] = useState(null);
+  
+  // Mobile-specific state
+  const { isMobile, isTablet } = useDeviceDetection();
+  const { shouldReduceAnimations, shouldLazyLoad } = usePerformanceOptimization();
+  const [showFilters, setShowFilters] = useState(false);
 
   // WebSocket integration
   useAutoConnect(); // Automatically connect when user is authenticated
@@ -304,47 +318,277 @@ export default function OrdersPage() {
     return <Badge variant={priorityConfig[priority] || 'default'} size="sm">{priority?.toUpperCase() || 'NORMAL'}</Badge>;
   };
 
-  // Statistics panel component - Simplified to 4 key metrics
-  const StatisticsPanel = () => (
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-      <Card className="p-4 glass hover-lift card-hover">
-        <div className="flex items-center gap-3">
-          <Package className="w-6 h-6 text-blue-600 float" />
+  // Render desktop table actions
+  const renderOrderActions = (order) => {
+    if (isMobile) return null; // Mobile uses MobileOrderCard actions
+    
+    return (
+      <div className="flex gap-1">
+        {order.status === 'pending' && (
+          <>
+            <Button 
+              onClick={() => { setSelectedOrder(order); setShowStartModal(true); }} 
+              size="sm"
+              variant="outline"
+              className="text-blue-600 hover:text-blue-700 hover-lift btn-micro"
+            >
+              <Play className="w-3 h-3" />
+            </Button>
+            <Button 
+              onClick={() => handleDeleteOrder(order.id)} 
+              size="sm"
+              variant="outline"
+              className="text-red-600 hover:text-red-700 hover-lift btn-micro"
+            >
+              <Trash2 className="w-3 h-3" />
+            </Button>
+          </>
+        )}
+        {order.status === 'in_progress' && (
+          <>
+            <Button 
+              onClick={() => { 
+                setSelectedOrder(order); 
+                setCurrentQuantity(order.actual_quantity || 0);
+                setShowQuantityModal(true); 
+              }} 
+              size="sm"
+              variant="outline"
+              className="text-blue-600 hover:text-blue-700 hover-lift btn-micro"
+              title="Update Quantity"
+            >
+              <Target className="w-3 h-3" />
+            </Button>
+            <Button 
+              onClick={() => { setSelectedOrder(order); setShowStopModal(true); }} 
+              size="sm"
+              variant="outline"
+              className="text-red-600 hover:text-red-700 hover-lift btn-micro"
+              title="Stop Production"
+            >
+              <Square className="w-3 h-3" />
+            </Button>
+            <Button 
+              onClick={() => { setSelectedOrder(order); setShowCompletionModal(true); }} 
+              size="sm"
+              variant="outline"
+              className="text-green-600 hover:text-green-700 hover-lift btn-micro"
+              title="Complete Order"
+            >
+              <CheckCircle className="w-3 h-3" />
+            </Button>
+          </>
+        )}
+        {order.status === 'stopped' && (
+          <Button 
+            onClick={() => handleResumeProduction(order.id)} 
+            size="sm"
+            variant="outline"
+            className="text-blue-600 hover:text-blue-700 hover-lift btn-micro btn-pulse"
+            title="Resume Production"
+          >
+            <Play className="w-3 h-3" />
+          </Button>
+        )}
+      </div>
+    );
+  };
+
+  // Mobile Order Card Component
+  const MobileOrderCard = ({ 
+    order, 
+    onStart, 
+    onStop, 
+    onResume, 
+    onComplete, 
+    onUpdateQuantity, 
+    onDelete,
+    getStatusBadge,
+    getPriorityBadge
+  }) => {
+    const actionMenuRef = useRef(null);
+    
+    // Touch gesture support for swipe actions
+    useTouchGestures(actionMenuRef.current, {
+      onSwipeLeft: () => {
+        // Quick action: Start or Resume production
+        if (order.status === 'pending') onStart();
+        else if (order.status === 'stopped') onResume();
+      },
+      onSwipeRight: () => {
+        // Quick action: Stop or Complete production
+        if (order.status === 'in_progress') onStop();
+      },
+      onLongPress: () => {
+        // Long press shows action menu (fallback for complex actions)
+        console.log('Long press detected on order:', order.order_number);
+      }
+    });
+
+    const getQuickActions = () => {
+      const actions = [];
+      
+      if (order.status === 'pending') {
+        actions.push(
+          { label: 'Start Production', icon: Play, onClick: onStart, primary: true },
+          { label: 'Delete Order', icon: Trash2, onClick: onDelete, danger: true }
+        );
+      } else if (order.status === 'in_progress') {
+        actions.push(
+          { label: 'Update Quantity', icon: Target, onClick: onUpdateQuantity },
+          { label: 'Stop Production', icon: Square, onClick: onStop, danger: true },
+          { label: 'Complete Order', icon: CheckCircle, onClick: onComplete, primary: true }
+        );
+      } else if (order.status === 'stopped') {
+        actions.push(
+          { label: 'Resume Production', icon: Play, onClick: onResume, primary: true }
+        );
+      }
+      
+      return actions;
+    };
+
+    return (
+      <div ref={actionMenuRef} className="bg-white rounded-lg border p-4 space-y-3">
+        {/* Header with Order Number and Status */}
+        <div className="flex items-start justify-between">
           <div>
-            <p className="text-sm text-gray-600">Total Orders</p>
-            <p className="text-2xl font-bold text-gray-800">{stats.total}</p>
+            <h3 className="font-medium text-gray-900">{order.order_number}</h3>
+            {order.priority !== 'normal' && (
+              <div className="mt-1">{getPriorityBadge(order.priority)}</div>
+            )}
+          </div>
+          <div className="flex items-center gap-2">
+            {getStatusBadge(order.status)}
+            <MobileActionMenu 
+              actions={getQuickActions()}
+              onActionSelect={(action) => action.onClick()}
+            />
           </div>
         </div>
-      </Card>
-      <Card className="p-4 glass hover-lift card-hover">
-        <div className="flex items-center gap-3">
-          <Clock className="w-6 h-6 text-orange-600 float" style={{animationDelay: '1s'}} />
-          <div>
-            <p className="text-sm text-gray-600">Pending</p>
-            <p className="text-2xl font-bold text-orange-600 status-pending rounded px-2">{stats.pending}</p>
+
+        {/* Product Information */}
+        <div className="space-y-2">
+          <div className="flex justify-between">
+            <span className="text-sm font-medium text-gray-600">Product:</span>
+            <span className="text-sm text-gray-900 text-right flex-1 ml-2">{order.product_name}</span>
           </div>
-        </div>
-      </Card>
-      <Card className="p-4 glass hover-lift card-hover">
-        <div className="flex items-center gap-3">
-          <Play className="w-6 h-6 text-blue-600 float" style={{animationDelay: '2s'}} />
-          <div>
-            <p className="text-sm text-gray-600">In Progress</p>
-            <p className="text-2xl font-bold text-blue-600 status-progress rounded px-2">{stats.inProgress}</p>
+          
+          <div className="flex justify-between">
+            <span className="text-sm font-medium text-gray-600">Quantity:</span>
+            <span className="text-sm text-gray-900">
+              {order.actual_quantity ? `${order.actual_quantity}/${order.quantity}` : order.quantity}
+            </span>
           </div>
-        </div>
-      </Card>
-      <Card className="p-4 glass hover-lift card-hover">
-        <div className="flex items-center gap-3">
-          <Square className="w-6 h-6 text-red-600 float" style={{animationDelay: '3s'}} />
-          <div>
-            <p className="text-sm text-gray-600">Stopped</p>
-            <p className="text-2xl font-bold text-red-600 status-stopped rounded px-2">{stats.stopped}</p>
+          
+          <div className="flex justify-between">
+            <span className="text-sm font-medium text-gray-600">Environment:</span>
+            <span className="text-sm text-gray-900 capitalize">{order.environment}</span>
           </div>
+          
+          {order.machine_name && (
+            <div className="flex justify-between">
+              <span className="text-sm font-medium text-gray-600">Machine:</span>
+              <span className="text-sm text-gray-900">{order.machine_name}</span>
+            </div>
+          )}
+          
+          {order.notes && (
+            <div className="pt-2 border-t border-gray-100">
+              <span className="text-sm font-medium text-gray-600">Notes:</span>
+              <p className="text-sm text-gray-700 mt-1">{order.notes}</p>
+            </div>
+          )}
         </div>
-      </Card>
-    </div>
-  );
+
+        {/* Quick Actions */}
+        <div className="flex gap-2 pt-2">
+          {getQuickActions().map((action, index) => (
+            <TouchButton
+              key={index}
+              onClick={action.onClick}
+              variant={action.primary ? 'primary' : action.danger ? 'danger' : 'secondary'}
+              size="sm"
+              className="flex-1"
+            >
+              <action.icon className="w-4 h-4" />
+              <span className="hidden sm:inline ml-1">{action.label.split(' ')[0]}</span>
+            </TouchButton>
+          ))}
+        </div>
+        
+        {/* Swipe hint for first-time users */}
+        <div className="text-xs text-gray-400 text-center pt-1">
+          ← Swipe for quick actions →
+        </div>
+      </div>
+    );
+  };
+
+  // Statistics panel component - Mobile-optimized with responsive grid
+  const StatisticsPanel = () => {
+    const { isMobile, isTablet } = useDeviceDetection();
+    const { shouldReduceAnimations } = usePerformanceOptimization();
+    
+    return (
+      <div className={`grid gap-4 mb-6 ${
+        isMobile ? 'grid-cols-2' : 
+        isTablet ? 'grid-cols-2' : 
+        'grid-cols-4'
+      }`}>
+        <Card className={`p-4 glass hover-lift ${!shouldReduceAnimations ? 'card-hover' : ''}`}>
+          <div className="flex items-center gap-3">
+            <Package className={`w-6 h-6 text-blue-600 ${!shouldReduceAnimations ? 'float' : ''}`} />
+            <div className="min-w-0 flex-1">
+              <p className="text-sm text-gray-600 truncate">Total Orders</p>
+              <p className={`font-bold text-gray-800 ${
+                isMobile ? 'text-xl' : 'text-2xl'
+              }`}>{stats.total}</p>
+            </div>
+          </div>
+        </Card>
+        <Card className={`p-4 glass hover-lift ${!shouldReduceAnimations ? 'card-hover' : ''}`}>
+          <div className="flex items-center gap-3">
+            <Clock className={`w-6 h-6 text-orange-600 ${
+              !shouldReduceAnimations ? 'float' : ''
+            }`} style={!shouldReduceAnimations ? {animationDelay: '1s'} : {}} />
+            <div className="min-w-0 flex-1">
+              <p className="text-sm text-gray-600 truncate">Pending</p>
+              <p className={`font-bold text-orange-600 status-pending rounded px-2 ${
+                isMobile ? 'text-xl' : 'text-2xl'
+              }`}>{stats.pending}</p>
+            </div>
+          </div>
+        </Card>
+        <Card className={`p-4 glass hover-lift ${!shouldReduceAnimations ? 'card-hover' : ''}`}>
+          <div className="flex items-center gap-3">
+            <Play className={`w-6 h-6 text-blue-600 ${
+              !shouldReduceAnimations ? 'float' : ''
+            }`} style={!shouldReduceAnimations ? {animationDelay: '2s'} : {}} />
+            <div className="min-w-0 flex-1">
+              <p className="text-sm text-gray-600 truncate">In Progress</p>
+              <p className={`font-bold text-blue-600 status-progress rounded px-2 ${
+                isMobile ? 'text-xl' : 'text-2xl'
+              }`}>{stats.inProgress}</p>
+            </div>
+          </div>
+        </Card>
+        <Card className={`p-4 glass hover-lift ${!shouldReduceAnimations ? 'card-hover' : ''}`}>
+          <div className="flex items-center gap-3">
+            <Square className={`w-6 h-6 text-red-600 ${
+              !shouldReduceAnimations ? 'float' : ''
+            }`} style={!shouldReduceAnimations ? {animationDelay: '3s'} : {}} />
+            <div className="min-w-0 flex-1">
+              <p className="text-sm text-gray-600 truncate">Stopped</p>
+              <p className={`font-bold text-red-600 status-stopped rounded px-2 ${
+                isMobile ? 'text-xl' : 'text-2xl'
+              }`}>{stats.stopped}</p>
+            </div>
+          </div>
+        </Card>
+      </div>
+    );
+  };
 
   if (loading && orders.length === 0) {
     return (
@@ -360,7 +604,9 @@ export default function OrdersPage() {
   }
 
   return (
-    <div className="p-6 space-y-6 min-h-screen gradient-animate">
+    <div className={`space-y-6 min-h-screen gradient-animate ${
+      isMobile ? 'p-4' : 'p-6'
+    }`}>
       {/* Notification */}
       {notification && (
         <div className={`fixed top-4 right-4 p-4 rounded-xl shadow-2xl z-50 glass backdrop-blur-xl hover-lift transition-all duration-500 transform animate-pulse ${
@@ -379,221 +625,216 @@ export default function OrdersPage() {
         </div>
       )}
 
-      {/* Header */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div className="float">
-          <div className="flex items-center gap-3">
-            <h1 className="text-3xl font-bold gradient-text mb-2">Production Orders</h1>
+      {/* Header - Mobile Responsive */}
+      <div className={`flex ${isMobile ? 'flex-col' : 'flex-col md:flex-row'} justify-between items-start md:items-center gap-4`}>
+        <div className={!shouldReduceAnimations ? 'float' : ''}>
+          <div className="flex items-center gap-3 flex-wrap">
+            <h1 className={`font-bold gradient-text mb-2 ${
+              isMobile ? 'text-2xl' : 'text-3xl'
+            }`}>Production Orders</h1>
             <WebSocketStatus />
           </div>
-          <p className="text-white/80 text-sm mb-4 backdrop-blur-sm">Manage production orders and track progress with real-time updates</p>
-          <Button 
+          <p className="text-white/80 text-sm mb-4 backdrop-blur-sm">
+            {isMobile ? 'Manage orders and track progress' : 'Manage production orders and track progress with real-time updates'}
+          </p>
+          <TouchButton 
             onClick={() => setShowCreateModal(true)}
-            className="hover-lift btn-micro bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white border-0 shadow-lg"
+            className={`bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white border-0 shadow-lg ${
+              !shouldReduceAnimations ? 'hover-lift btn-micro' : ''
+            }`}
+            size={isMobile ? 'md' : 'md'}
           >
-            <Plus className="w-4 h-4 mr-2" />
-            Create Order
-          </Button>
+            <Plus className="w-4 h-4" />
+            {isMobile ? 'Create' : 'Create Order'}
+          </TouchButton>
         </div>
         
-        <div className="flex items-center gap-3">
+        <div className={`flex items-center gap-3 ${isMobile ? 'w-full' : ''}`}>
           {/* Search */}
-          <div className="relative">
+          <div className={`relative ${isMobile ? 'flex-1' : ''}`}>
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
             <input
               type="text"
-              placeholder="Search orders..."
+              placeholder={isMobile ? 'Search...' : 'Search orders...'}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-64 pl-10 pr-4 py-2 glass border border-white/20 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 focus:scale-105"
+              className={`pl-10 pr-4 py-2 glass border border-white/20 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 ${
+                isMobile ? 'w-full min-h-[44px]' : 'w-64 focus:scale-105'
+              }`}
             />
           </div>
           
-          <Button 
+          {isMobile && (
+            <TouchButton 
+              onClick={() => setShowFilters(!showFilters)}
+              variant="outline"
+              size="md"
+              className="glass border-white/20 text-gray-700 hover:bg-white/20"
+            >
+              <Filter className="w-4 h-4" />
+            </TouchButton>
+          )}
+          
+          <TouchButton 
             onClick={handleRefresh}
             disabled={refreshing}
             variant="outline"
-            size="sm"
-            className="hover-lift btn-micro glass border-white/20 text-gray-700 hover:bg-white/20"
+            size={isMobile ? 'md' : 'sm'}
+            className={`glass border-white/20 text-gray-700 hover:bg-white/20 ${
+              !shouldReduceAnimations ? 'hover-lift btn-micro' : ''
+            }`}
           >
             <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
-          </Button>
+          </TouchButton>
         </div>
       </div>
 
       {/* Statistics Panel */}
       <StatisticsPanel />
 
-      {/* Filters */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 glass p-4 rounded-lg shadow-lg hover-lift">
-        <div className="flex flex-col sm:flex-row gap-3">
-          {/* Environment Filter */}
-          <div className="relative">
-            <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-            <select 
-              value={selectedEnvironment}
-              onChange={(e) => setSelectedEnvironment(e.target.value)}
-              className="pl-10 pr-8 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white"
-            >
-              <option value="all">All Environments</option>
-              {environments.map(env => (
-                <option key={env.id} value={env.code}>{env.name}</option>
-              ))}
-            </select>
+      {/* Filters - Mobile Responsive */}
+      <div className={`${
+        isMobile && !showFilters ? 'hidden' : 'block'
+      } glass p-4 rounded-lg shadow-lg ${!shouldReduceAnimations ? 'hover-lift' : ''}`}>
+        <div className={`flex ${
+          isMobile ? 'flex-col' : 'flex-col sm:flex-row'
+        } justify-between items-start sm:items-center gap-4`}>
+          <div className={`flex gap-3 ${
+            isMobile ? 'flex-col w-full' : 'flex-col sm:flex-row'
+          }`}>
+            {/* Environment Filter */}
+            {isMobile ? (
+              <TouchDropdown
+                value={selectedEnvironment}
+                onChange={setSelectedEnvironment}
+                options={[
+                  { value: 'all', label: 'All Environments' },
+                  ...environments.map(env => ({ value: env.code, label: env.name }))
+                ]}
+                placeholder="Select Environment"
+                className="w-full"
+              />
+            ) : (
+              <div className="relative">
+                <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                <select 
+                  value={selectedEnvironment}
+                  onChange={(e) => setSelectedEnvironment(e.target.value)}
+                  className="pl-10 pr-8 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white"
+                >
+                  <option value="all">All Environments</option>
+                  {environments.map(env => (
+                    <option key={env.id} value={env.code}>{env.name}</option>
+                  ))}
+                </select>
+              </div>
+            )}
+            
+            {/* Status Filter */}
+            {isMobile ? (
+              <TouchDropdown
+                value={statusFilter}
+                onChange={setStatusFilter}
+                options={[
+                  { value: 'all', label: 'All Statuses' },
+                  { value: 'pending', label: 'Pending' },
+                  { value: 'in_progress', label: 'In Progress' },
+                  { value: 'completed', label: 'Completed' },
+                  { value: 'stopped', label: 'Stopped' }
+                ]}
+                placeholder="Select Status"
+                className="w-full"
+              />
+            ) : (
+              <select 
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value)}
+                className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+              >
+                <option value="all">All Statuses</option>
+                <option value="pending">Pending</option>
+                <option value="in_progress">In Progress</option>
+                <option value="completed">Completed</option>
+                <option value="stopped">Stopped</option>
+              </select>
+            )}
           </div>
           
-          {/* Status Filter */}
-          <select 
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-            className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
-          >
-            <option value="all">All Statuses</option>
-            <option value="pending">Pending</option>
-            <option value="in_progress">In Progress</option>
-            <option value="completed">Completed</option>
-            <option value="stopped">Stopped</option>
-          </select>
-        </div>
-        
-        {/* Results Count */}
-        <div className="text-sm text-gray-600">
-          Showing {filteredOrders.length} of {orders.length} orders
+          {/* Results Count */}
+          <div className={`text-sm text-gray-600 ${
+            isMobile ? 'text-center w-full pt-2 border-t border-gray-200' : ''
+          }`}>
+            Showing {filteredOrders.length} of {orders.length} orders
+          </div>
         </div>
       </div>
 
-      {/* Orders Table */}
+      {/* Orders Table - Mobile Responsive */}
       <Card className="glass hover-lift shadow-2xl">
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                {['Order #', 'Product', 'Qty', 'Environment', 'Status', 'Machine', 'Actions'].map(h => (
-                  <th key={h} className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{h}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {loading ? (
-                <tr><td colSpan="7" className="text-center py-10">
-                  <div className="flex flex-col items-center gap-3">
-                    <RefreshCw className="w-8 h-8 animate-spin text-blue-600" />
-                    <span className="text-gray-600 shimmer">Loading orders...</span>
-                  </div>
-                </td></tr>
-              ) : filteredOrders.length === 0 ? (
-                <tr><td colSpan="7" className="text-center py-10">
-                  <Package className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                  <p className="text-gray-500 mb-2">No orders found</p>
-                  {!searchTerm && selectedEnvironment === 'all' && statusFilter === 'all' ? (
-                    <Button onClick={() => setShowCreateModal(true)} size="sm">
-                      <Plus className="w-4 h-4 mr-2" />
-                      Create First Order
-                    </Button>
-                  ) : (
-                    <p className="text-sm text-gray-400">Try adjusting your filters or search term</p>
-                  )}
-                </td></tr>
-              ) : filteredOrders.map(order => (
-                <tr key={order.id} className="hover:bg-white/50 transition-all duration-300 hover:shadow-md">
-                  <td className="px-4 py-3 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">{order.order_number}</div>
-                    {order.priority !== 'normal' && (
-                      <div className="text-xs text-gray-500">{getPriorityBadge(order.priority)}</div>
-                    )}
-                  </td>
-                  <td className="px-4 py-3 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">{order.product_name}</div>
-                    {order.notes && <div className="text-xs text-gray-500 truncate max-w-32">{order.notes}</div>}
-                  </td>
-                  <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
-                    {order.actual_quantity ? `${order.actual_quantity}/${order.quantity}` : order.quantity}
-                  </td>
-                  <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-600 capitalize">{order.environment}</td>
-                  <td className="px-4 py-3 whitespace-nowrap">{getStatusBadge(order.status)}</td>
-                  <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-600">{order.machine_name || '-'}</td>
-                  <td className="px-4 py-3 whitespace-nowrap text-sm">
-                    <div className="flex gap-1">
-                      {order.status === 'pending' && (
-                        <>
-                          <Button 
-                            onClick={() => { setSelectedOrder(order); setShowStartModal(true); }} 
-                            size="sm"
-                            variant="outline"
-                            className="text-blue-600 hover:text-blue-700 hover-lift btn-micro"
-                          >
-                            <Play className="w-3 h-3" />
-                          </Button>
-                          <Button 
-                            onClick={() => handleDeleteOrder(order.id)} 
-                            size="sm"
-                            variant="outline"
-                            className="text-red-600 hover:text-red-700 hover-lift btn-micro"
-                          >
-                            <Trash2 className="w-3 h-3" />
-                          </Button>
-                        </>
-                      )}
-                      {order.status === 'in_progress' && (
-                        <>
-                          <Button 
-                            onClick={() => { 
-                              setSelectedOrder(order); 
-                              setCurrentQuantity(order.actual_quantity || 0);
-                              setShowQuantityModal(true); 
-                            }} 
-                            size="sm"
-                            variant="outline"
-                            className="text-blue-600 hover:text-blue-700 hover-lift btn-micro"
-                            title="Update Quantity"
-                          >
-                            <Target className="w-3 h-3" />
-                          </Button>
-                          <Button 
-                            onClick={() => { setSelectedOrder(order); setShowStopModal(true); }} 
-                            size="sm"
-                            variant="outline"
-                            className="text-red-600 hover:text-red-700 hover-lift btn-micro"
-                            title="Stop Production"
-                          >
-                            <Square className="w-3 h-3" />
-                          </Button>
-                          <Button 
-                            onClick={() => { setSelectedOrder(order); setShowCompletionModal(true); }} 
-                            size="sm"
-                            variant="outline"
-                            className="text-green-600 hover:text-green-700 hover-lift btn-micro"
-                            title="Complete Order"
-                          >
-                            <CheckCircle className="w-3 h-3" />
-                          </Button>
-                        </>
-                      )}
-                      {order.status === 'stopped' && (
-                        <Button 
-                          onClick={() => handleResumeProduction(order.id)} 
-                          size="sm"
-                          variant="outline"
-                          className="text-blue-600 hover:text-blue-700 hover-lift btn-micro btn-pulse"
-                          title="Resume Production"
-                        >
-                          <Play className="w-3 h-3" />
-                        </Button>
-                      )}
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        {loading ? (
+          <div className="text-center py-10">
+            <div className="flex flex-col items-center gap-3">
+              <RefreshCw className="w-8 h-8 animate-spin text-blue-600" />
+              <span className="text-gray-600 shimmer">Loading orders...</span>
+            </div>
+          </div>
+        ) : (
+          <ResponsiveTable 
+            data={filteredOrders}
+            columns={[
+              { key: 'order_number', label: 'Order #' },
+              { key: 'product_name', label: 'Product' },
+              { key: 'quantity_display', label: 'Qty', render: (_, order) => 
+                order.actual_quantity ? `${order.actual_quantity}/${order.quantity}` : order.quantity
+              },
+              { key: 'environment', label: 'Environment' },
+              { key: 'status', label: 'Status', render: (status) => getStatusBadge(status) },
+              { key: 'machine_name', label: 'Machine', render: (machine) => machine || '-' },
+              { key: 'actions', label: 'Actions', render: (_, order) => renderOrderActions(order) }
+            ]}
+            renderMobileCard={(order) => (
+              <MobileOrderCard 
+                key={order.id}
+                order={order}
+                onStart={() => { setSelectedOrder(order); setShowStartModal(true); }}
+                onStop={() => { setSelectedOrder(order); setShowStopModal(true); }}
+                onResume={() => handleResumeProduction(order.id)}
+                onComplete={() => { setSelectedOrder(order); setShowCompletionModal(true); }}
+                onUpdateQuantity={() => {
+                  setSelectedOrder(order);
+                  setCurrentQuantity(order.actual_quantity || 0);
+                  setShowQuantityModal(true);
+                }}
+                onDelete={() => handleDeleteOrder(order.id)}
+                getStatusBadge={getStatusBadge}
+                getPriorityBadge={getPriorityBadge}
+              />
+            )}
+            emptyMessage={
+              <div className="text-center py-10">
+                <Package className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                <p className="text-gray-500 mb-2">No orders found</p>
+                {!searchTerm && selectedEnvironment === 'all' && statusFilter === 'all' ? (
+                  <TouchButton onClick={() => setShowCreateModal(true)} size="sm">
+                    <Plus className="w-4 h-4 mr-2" />
+                    Create First Order
+                  </TouchButton>
+                ) : (
+                  <p className="text-sm text-gray-400">Try adjusting your filters or search term</p>
+                )}
+              </div>
+            }
+          />
+        )}
       </Card>
 
-      {/* Create Order Modal */}
+      {/* Create Order Modal - Mobile Responsive */}
       {showCreateModal && (
         <Modal title="Create New Order" onClose={() => setShowCreateModal(false)} className="glass backdrop-blur-xl">
           <form onSubmit={handleCreateOrder} className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
+            <div className={`grid gap-4 ${
+              isMobile ? 'grid-cols-1' : 'grid-cols-2'
+            }`}>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Order Number</label>
                 <input 
@@ -601,24 +842,36 @@ export default function OrdersPage() {
                   placeholder="e.g. ORD-2024-001" 
                   value={formData.order_number}
                   onChange={(e) => setFormData({...formData, order_number: e.target.value})} 
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                  className={`w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                    isMobile ? 'min-h-[44px]' : ''
+                  }`}
                   required 
                 />
               </div>
               
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Environment</label>
-                <select 
-                  value={formData.environment}
-                  onChange={(e) => setFormData({...formData, environment: e.target.value})} 
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  required
-                >
-                  <option value="">Select Environment</option>
-                  {environments.map(env => (
-                    <option key={env.id} value={env.code}>{env.name}</option>
-                  ))}
-                </select>
+                {isMobile ? (
+                  <TouchDropdown
+                    value={formData.environment}
+                    onChange={(value) => setFormData({...formData, environment: value})}
+                    options={environments.map(env => ({ value: env.code, label: env.name }))}
+                    placeholder="Select Environment"
+                    className="w-full"
+                  />
+                ) : (
+                  <select 
+                    value={formData.environment}
+                    onChange={(e) => setFormData({...formData, environment: e.target.value})} 
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    required
+                  >
+                    <option value="">Select Environment</option>
+                    {environments.map(env => (
+                      <option key={env.id} value={env.code}>{env.name}</option>
+                    ))}
+                  </select>
+                )}
               </div>
             </div>
             
@@ -629,12 +882,16 @@ export default function OrdersPage() {
                 placeholder="Product name" 
                 value={formData.product_name}
                 onChange={(e) => setFormData({...formData, product_name: e.target.value})} 
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                className={`w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                  isMobile ? 'min-h-[44px]' : ''
+                }`}
                 required 
               />
             </div>
             
-            <div className="grid grid-cols-2 gap-4">
+            <div className={`grid gap-4 ${
+              isMobile ? 'grid-cols-1' : 'grid-cols-2'
+            }`}>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Quantity</label>
                 <input 
@@ -642,7 +899,9 @@ export default function OrdersPage() {
                   placeholder="1000" 
                   value={formData.quantity}
                   onChange={(e) => setFormData({...formData, quantity: e.target.value})} 
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                  className={`w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                    isMobile ? 'min-h-[44px]' : ''
+                  }`}
                   required 
                   min="1" 
                 />
@@ -650,16 +909,30 @@ export default function OrdersPage() {
               
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Priority</label>
-                <select 
-                  value={formData.priority}
-                  onChange={(e) => setFormData({...formData, priority: e.target.value})} 
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                >
-                  <option value="low">Low</option>
-                  <option value="normal">Normal</option>
-                  <option value="high">High</option>
-                  <option value="urgent">Urgent</option>
-                </select>
+                {isMobile ? (
+                  <TouchDropdown
+                    value={formData.priority}
+                    onChange={(value) => setFormData({...formData, priority: value})}
+                    options={[
+                      { value: 'low', label: 'Low' },
+                      { value: 'normal', label: 'Normal' },
+                      { value: 'high', label: 'High' },
+                      { value: 'urgent', label: 'Urgent' }
+                    ]}
+                    className="w-full"
+                  />
+                ) : (
+                  <select 
+                    value={formData.priority}
+                    onChange={(e) => setFormData({...formData, priority: e.target.value})} 
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  >
+                    <option value="low">Low</option>
+                    <option value="normal">Normal</option>
+                    <option value="high">High</option>
+                    <option value="urgent">Urgent</option>
+                  </select>
+                )}
               </div>
             </div>
             
@@ -669,7 +942,9 @@ export default function OrdersPage() {
                 type="date" 
                 value={formData.due_date}
                 onChange={(e) => setFormData({...formData, due_date: e.target.value})} 
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                className={`w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                  isMobile ? 'min-h-[44px]' : ''
+                }`}
               />
             </div>
             
@@ -680,18 +955,33 @@ export default function OrdersPage() {
                 value={formData.notes}
                 onChange={(e) => setFormData({...formData, notes: e.target.value})} 
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
-                rows="3"
+                rows={isMobile ? "2" : "3"}
               />
             </div>
             
-            <div className="flex justify-end gap-3 pt-4">
-              <Button type="button" onClick={() => setShowCreateModal(false)} variant="outline">
+            <div className={`flex gap-3 pt-4 ${
+              isMobile ? 'flex-col-reverse' : 'justify-end'
+            }`}>
+              <TouchButton 
+                type="button" 
+                onClick={() => setShowCreateModal(false)} 
+                variant="outline"
+                size={isMobile ? 'md' : 'md'}
+                className={isMobile ? 'w-full' : ''}
+              >
                 Cancel
-              </Button>
-              <Button type="submit" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white border-0 hover-lift btn-micro">
-                <Plus className="w-4 h-4 mr-2" />
-                Create Order
-              </Button>
+              </TouchButton>
+              <TouchButton 
+                type="submit" 
+                variant="primary"
+                size={isMobile ? 'md' : 'md'}
+                className={`bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white border-0 ${
+                  isMobile ? 'w-full' : ''
+                } ${!shouldReduceAnimations ? 'hover-lift btn-micro' : ''}`}
+              >
+                <Plus className="w-4 h-4" />
+                {isMobile ? 'Create Order' : 'Create Order'}
+              </TouchButton>
             </div>
           </form>
         </Modal>
