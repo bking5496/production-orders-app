@@ -20,6 +20,16 @@ const AuthProvider = ({ children }) => {
         setIsAuthenticated(true);
         // We can still keep user data in localStorage for quick UI access
         localStorage.setItem('user_data', JSON.stringify(sessionUser));
+        
+        // Connect WebSocket if user is already authenticated (page refresh)
+        if (window.WebSocketService && !window.WebSocketService.isConnected()) {
+          try {
+            console.log('🔐 User already authenticated - connecting WebSocket');
+            await window.WebSocketService.connectAfterAuth();
+          } catch (error) {
+            console.warn('⚠️ WebSocket connection failed for existing session:', error.message);
+          }
+        }
       }
     } catch (error) {
       // If the API call fails, it means no valid session exists
@@ -49,6 +59,16 @@ const AuthProvider = ({ children }) => {
       setUser(response.user);
       setIsAuthenticated(true);
       localStorage.setItem('user_data', JSON.stringify(response.user));
+      
+      // Connect WebSocket after successful login
+      if (window.WebSocketService) {
+        try {
+          console.log('🔐 Connecting WebSocket after successful login');
+          await window.WebSocketService.connectAfterAuth();
+        } catch (error) {
+          console.warn('⚠️ WebSocket connection failed after login:', error.message);
+        }
+      }
     }
     return response;
   };
@@ -60,6 +80,16 @@ const AuthProvider = ({ children }) => {
     } catch (error) {
         console.error('Logout failed:', error);
     } finally {
+        // Disconnect WebSocket on logout
+        if (window.WebSocketService) {
+          try {
+            console.log('🔌 Disconnecting WebSocket on logout');
+            window.WebSocketService.disconnect();
+          } catch (error) {
+            console.warn('⚠️ WebSocket disconnect failed on logout:', error.message);
+          }
+        }
+        
         // Clear client-side state regardless of API call success
         setUser(null);
         setIsAuthenticated(false);

@@ -124,13 +124,21 @@
         // Initial status check
         checkAuthStatus();
         
-        // Show handler counts every 5 seconds
-        setInterval(() => {
+        // Log initial WebSocket status
+        setTimeout(() => {
             if (window.WebSocketService) {
-                const counts = window.WebSocketService.getHandlerCounts();
-                log(`📊 Handler counts: ${JSON.stringify(counts)}`);
+                const status = window.WebSocketService.getStatus();
+                log(`🔌 Initial WebSocket status: ${JSON.stringify(status, null, 2)}`);
+                
+                // Show handler counts every 10 seconds (less frequent)
+                setInterval(() => {
+                    const counts = window.WebSocketService.getHandlerCounts();
+                    if (Object.keys(counts).length > 0) {
+                        log(`📊 Handler counts: ${JSON.stringify(counts)}`);
+                    }
+                }, 10000);
             }
-        }, 5000);
+        }, 1000);
     </script>
 </body>
 </html>
