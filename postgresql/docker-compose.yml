@@ -1,0 +1,262 @@
+# Docker Compose for Production Orders App with PostgreSQL
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:16-alpine
+    container_name: production_orders_db
+    restart: unless-stopped
+    
+    environment:
+      POSTGRES_DB: production_orders
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_INITDB_ARGS: "--timezone=Africa/Johannesburg"
+      TZ: Africa/Johannesburg
+    
+    volumes:
+      # Persistent data storage
+      - postgres_data:/var/lib/postgresql/data
+      
+      # Initialization scripts
+      - ./postgresql/01-schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
+      - ./postgresql/02-initial-data.sql:/docker-entrypoint-initdb.d/02-initial-data.sql
+      - ./postgresql/03-performance-indexes.sql:/docker-entrypoint-initdb.d/03-performance-indexes.sql
+      
+      # Configuration
+      - ./postgresql/postgresql.conf:/etc/postgresql/postgresql.conf
+      
+    ports:
+      - "5432:5432"
+    
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d production_orders"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    
+    # Performance optimizations
+    command: >
+      postgres
+      -c timezone=Africa/Johannesburg
+      -c shared_preload_libraries=pg_stat_statements
+      -c pg_stat_statements.track=all
+      -c max_connections=200
+      -c shared_buffers=256MB
+      -c effective_cache_size=1GB
+      -c maintenance_work_mem=64MB
+      -c checkpoint_completion_target=0.9
+      -c wal_buffers=16MB
+      -c default_statistics_target=100
+      -c random_page_cost=1.1
+      -c effective_io_concurrency=200
+      -c work_mem=4MB
+      -c min_wal_size=1GB
+      -c max_wal_size=4GB
+    
+    networks:
+      - production_network
+
+  # Application Server
+  app:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: production_orders_app
+    restart: unless-stopped
+    
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      
+      # PostgreSQL connection
+      DB_TYPE: postgresql
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: production_orders
+      DB_USER: postgres
+      DB_PASSWORD: ${DB_PASSWORD}
+      
+      # Timezone
+      TZ: Africa/Johannesburg
+      DB_TIMEZONE: Africa/Johannesburg
+      
+      # JWT
+      JWT_SECRET: ${JWT_SECRET}
+      
+      # Connection pool settings
+      DB_POOL_MIN: 2
+      DB_POOL_MAX: 20
+      DB_IDLE_TIMEOUT: 30000
+      DB_CONNECTION_TIMEOUT: 10000
+    
+    ports:
+      - "3000:3000"
+    
+    depends_on:
+      postgres:
+        condition: service_healthy
+    
+    volumes:
+      # Application logs
+      - app_logs:/app/logs
+      
+      # File uploads
+      - uploads:/app/uploads
+    
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    
+    networks:
+      - production_network
+
+  # Redis for caching and sessions (optional but recommended)
+  redis:
+    image: redis:7-alpine
+    container_name: production_orders_redis
+    restart: unless-stopped
+    
+    environment:
+      TZ: Africa/Johannesburg
+    
+    volumes:
+      - redis_data:/data
+    
+    ports:
+      - "6379:6379"
+    
+    command: redis-server --appendonly yes --maxmemory 512mb --maxmemory-policy allkeys-lru
+    
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+    
+    networks:
+      - production_network
+
+  # Nginx reverse proxy and load balancer
+  nginx:
+    image: nginx:alpine
+    container_name: production_orders_nginx
+    restart: unless-stopped
+    
+    environment:
+      TZ: Africa/Johannesburg
+    
+    ports:
+      - "80:80"
+      - "443:443"
+    
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/ssl:/etc/nginx/ssl
+      - nginx_logs:/var/log/nginx
+    
+    depends_on:
+      - app
+    
+    networks:
+      - production_network
+
+  # PostgreSQL backup service
+  postgres_backup:
+    image: postgres:16-alpine
+    container_name: production_orders_backup
+    restart: "no"
+    
+    environment:
+      POSTGRES_DB: production_orders
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      PGPASSWORD: ${DB_PASSWORD}
+      TZ: Africa/Johannesburg
+    
+    volumes:
+      - postgres_backups:/backups
+      - ./scripts/backup.sh:/backup.sh
+    
+    command: /bin/sh -c "chmod +x /backup.sh && /backup.sh"
+    
+    depends_on:
+      postgres:
+        condition: service_healthy
+    
+    networks:
+      - production_network
+
+  # Monitoring with Prometheus and Grafana (optional)
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: production_orders_prometheus
+    restart: unless-stopped
+    
+    ports:
+      - "9090:9090"
+    
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--web.enable-lifecycle'
+    
+    networks:
+      - production_network
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: production_orders_grafana
+    restart: unless-stopped
+    
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD}
+      TZ: Africa/Johannesburg
+    
+    ports:
+      - "3001:3000"
+    
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning
+    
+    depends_on:
+      - prometheus
+    
+    networks:
+      - production_network
+
+volumes:
+  postgres_data:
+    driver: local
+  postgres_backups:
+    driver: local
+  redis_data:
+    driver: local
+  app_logs:
+    driver: local
+  uploads:
+    driver: local
+  nginx_logs:
+    driver: local
+  prometheus_data:
+    driver: local
+  grafana_data:
+    driver: local
+
+networks:
+  production_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16

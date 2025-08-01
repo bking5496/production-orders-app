@@ -497,6 +497,48 @@ export const usePerformanceOptimization = () => {
   };
 };
 
+// Mobile-optimized tab navigation component
+export const TabNavigation = ({ activeTab, onTabChange, tabs = [], variant = "default" }) => {
+  const { isMobile } = useDeviceDetection();
+  const { shouldReduceAnimations } = usePerformanceOptimization();
+  
+  const baseClasses = variant === "white" 
+    ? "bg-white/10 backdrop-blur-sm" 
+    : "bg-white shadow-sm border border-gray-100";
+    
+  const activeTabClasses = variant === "white"
+    ? "bg-white text-blue-600 shadow-sm"
+    : "bg-blue-500 text-white shadow-sm";
+    
+  const inactiveTabClasses = variant === "white"
+    ? "text-white/90 hover:bg-white/20"
+    : "text-gray-600 hover:bg-gray-50";
+
+  return (
+    <div className={`flex gap-0 ${baseClasses} rounded-xl p-1`}>
+      {tabs.map(tab => {
+        const Icon = tab.icon;
+        const isActive = activeTab === tab.id;
+        
+        return (
+          <TouchButton
+            key={tab.id}
+            onClick={() => onTabChange(tab.id)}
+            variant="ghost"
+            size={isMobile ? "sm" : "md"}
+            className={`flex-1 min-h-[44px] flex items-center justify-center gap-2 rounded-lg font-medium transition-all duration-200 ${
+              isActive ? activeTabClasses : inactiveTabClasses
+            } ${!shouldReduceAnimations ? 'hover:scale-[1.02]' : ''}`}
+          >
+            <Icon className="w-4 h-4" />
+            <span className={isMobile ? "text-sm" : "text-base"}>{tab.label}</span>
+          </TouchButton>
+        );
+      })}
+    </div>
+  );
+};
+
 // Optimized image component for mobile
 export const OptimizedImage = ({ 
   src, 
