@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Settings, Plus, Search, Filter, RefreshCw, Edit3, Trash2, AlertTriangle, Activity, Clock, BarChart3, CheckCircle, XCircle, Wrench, Users, Calendar, RotateCcw, Info } from 'lucide-react';
+import { Settings, Plus, Search, Filter, RefreshCw, Edit3, Trash2, AlertTriangle, Activity, Clock, BarChart3, CheckCircle, XCircle, Wrench, Users, Calendar, RotateCcw, Info, Wifi } from 'lucide-react';
 import API from '../core/api';
 import { formatUserDisplayName, formatEmployeeCode } from '../utils/text-utils';
 import { Modal, Card, Button, Badge } from './ui-components.jsx';
+import { useMachineUpdates, useWebSocketEvent, useAutoConnect, useNotifications } from '../core/websocket-hooks.js';
+import { WebSocketStatusCompact } from './websocket-status.jsx';
 
 export default function MachinesPage() {
   // State for storing the list of machines and UI status
@@ -14,6 +16,11 @@ export default function MachinesPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [notification, setNotification] = useState(null);
+
+  // WebSocket integration
+  useAutoConnect();
+  const { lastUpdate, setMachines: setMachinesFromWS } = useMachineUpdates();
+  const { notifications: wsNotifications, clearNotification } = useNotifications();
   
   // State for managing modals
   const [showAddModal, setShowAddModal] = useState(false);
@@ -246,6 +253,60 @@ export default function MachinesPage() {
     return () => clearInterval(interval); // Clean up the interval when the component is unmounted
   }, []);
 
+  // WebSocket real-time updates
+  useWebSocketEvent('machine_status_changed', (data) => {
+    console.log('🔧 Machine status changed:', data.data);
+    setMachines(prevMachines => {
+      return prevMachines.map(machine => 
+        machine.id === data.data.machine_id
+          ? { ...machine, status: data.data.status, updated_at: new Date().toISOString() }
+          : machine
+      );
+    });
+    showNotification(`Machine ${data.data.machine_name} status changed to ${data.data.status}`, 'info');
+  }, []);
+
+  useWebSocketEvent('machine_created', (data) => {
+    console.log('🆕 New machine added:', data.data);
+    setMachines(prevMachines => [...prevMachines, data.data.machine]);
+    showNotification(`New machine "${data.data.machine.name}" added`, 'success');
+  }, []);
+
+  useWebSocketEvent('machine_updated', (data) => {
+    console.log('📝 Machine updated:', data.data);
+    setMachines(prevMachines => {
+      return prevMachines.map(machine => 
+        machine.id === data.data.machine.id ? data.data.machine : machine
+      );
+    });
+    showNotification(`Machine "${data.data.machine.name}" updated`, 'info');
+  }, []);
+
+  useWebSocketEvent('machine_deleted', (data) => {
+    console.log('🗑️ Machine deleted:', data.data);
+    setMachines(prevMachines => {
+      return prevMachines.filter(machine => machine.id !== data.data.machine_id);
+    });
+    showNotification(`Machine deleted`, 'warning');
+  }, []);
+
+  // Subscribe to relevant channels
+  useEffect(() => {
+    if (window.EnhancedWebSocketService?.isConnected()) {
+      window.EnhancedWebSocketService.subscribe(['machines', 'production']);
+    }
+  }, []);
+
+  // Show WebSocket notifications
+  useEffect(() => {
+    wsNotifications.forEach(notification => {
+      if (notification.type === 'alert' && notification.message.includes('machine')) {
+        showNotification(notification.message, 'danger');
+        clearNotification(notification.id);
+      }
+    });
+  }, [wsNotifications]);
+
   // Handler for submitting the "Add Machine" form
   const handleAddMachine = async (e) => {
     e.preventDefault();
@@ -438,8 +499,11 @@ export default function MachinesPage() {
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-800">Machine Management</h1>
-          <p className="text-gray-600 mt-1">Manage manufacturing equipment and monitor status</p>
+          <div className="flex items-center gap-3">
+            <h1 className="text-3xl font-bold text-gray-800">Machine Management</h1>
+            <WebSocketStatusCompact />
+          </div>
+          <p className="text-gray-600 mt-1">Manage manufacturing equipment and monitor real-time status</p>
         </div>
         
         <div className="flex items-center gap-4">
