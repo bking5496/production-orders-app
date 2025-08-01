@@ -61,10 +61,10 @@ const AuthProvider = ({ children }) => {
       localStorage.setItem('user_data', JSON.stringify(response.user));
       
       // Connect WebSocket after successful login
-      if (window.WebSocketService) {
+      if (window.EnhancedWebSocketService) {
         try {
           console.log('🔐 Connecting WebSocket after successful login');
-          await window.WebSocketService.connectAfterAuth();
+          await window.EnhancedWebSocketService.connect();
         } catch (error) {
           console.warn('⚠️ WebSocket connection failed after login:', error.message);
         }
@@ -81,10 +81,10 @@ const AuthProvider = ({ children }) => {
         console.error('Logout failed:', error);
     } finally {
         // Disconnect WebSocket on logout
-        if (window.WebSocketService) {
+        if (window.EnhancedWebSocketService) {
           try {
             console.log('🔌 Disconnecting WebSocket on logout');
-            window.WebSocketService.disconnect();
+            window.EnhancedWebSocketService.disconnect();
           } catch (error) {
             console.warn('⚠️ WebSocket disconnect failed on logout:', error.message);
           }
