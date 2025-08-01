@@ -87,3 +87,9 @@ Refer to docs https://vite.dev/config/server-options.html#server-fs-allow for co
 1:18:44 PM [vite] (client) page reload src/app.jsx
 1:21:44 PM [vite] .env changed, restarting server...
 1:21:44 PM [vite] server restarted.
+The request url "/home/production-app/production-orders-app/.env" is outside of Vite serving allow list.
+
+- /home/production-app/production-orders-app
+
+Refer to docs https://vite.dev/config/server-options.html#server-fs-allow for configurations and more details.
+
