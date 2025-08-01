@@ -635,45 +635,49 @@ export const ExportQueueMonitor = () => {
         
         const connectWebSocket = () => {
             try {
-                // Replace with actual WebSocket URL from config
-                ws = new WebSocket(`${window.location.protocol === 'https:' ? 'wss:' : 'ws:'}//${window.location.host}/ws/exports`);
-                
-                ws.onopen = () => {
+                // Use the enhanced WebSocket service instead of creating a new one
+                if (window.EnhancedWebSocketService && window.EnhancedWebSocketService.isConnected()) {
                     setWsConnected(true);
                     setError('');
-                };
-                
-                ws.onclose = () => {
+                    
+                    // Subscribe to export events
+                    window.EnhancedWebSocketService.subscribe(['exports', 'reports']);
+                    
+                    // Listen for export progress
+                    window.EnhancedWebSocketService.on('export_progress', (data) => {
+                        console.log('Export progress:', data);
+                        // Handle export progress updates here
+                    });
+                    
+                    window.EnhancedWebSocketService.on('export_complete', (data) => {
+                        console.log('Export complete:', data);
+                        // Handle export completion here
+                    });
+                } else {
                     setWsConnected(false);
-                    // Attempt to reconnect after 5 seconds
+                    setError('WebSocket service not available');
+                    // Try again after 5 seconds
                     setTimeout(connectWebSocket, 5000);
-                };
-                
-                ws.onerror = () => {
-                    setError('WebSocket connection failed');
-                };
-                
-                ws.onmessage = (event) => {
-                    try {
-                        const data = JSON.parse(event.data);
-                        if (data.type === 'export_update') {
-                            setQueue(data.queue);
-                        }
-                    } catch (err) {
-                        console.error('Failed to parse WebSocket message:', err);
-                    }
-                };
-            } catch (err) {
-                setError('Failed to establish WebSocket connection');
+                }
+            } catch (error) {
+                console.error('Failed to connect to WebSocket service:', error);
+                setWsConnected(false);
+                setError('Failed to connect to WebSocket service');
+                setTimeout(connectWebSocket, 5000);
             }
         };
-
-        loadQueue();
+        
+        // Initial connection attempt
         connectWebSocket();
-
+        
+        // Load initial queue data
+        loadQueue();
+        
         return () => {
-            if (ws) {
-                ws.close();
+            // Cleanup - unsubscribe from events if needed
+            if (window.EnhancedWebSocketService) {
+                window.EnhancedWebSocketService.off('export_progress');
+                window.EnhancedWebSocketService.off('export_complete');
             }
         };
     }, []);

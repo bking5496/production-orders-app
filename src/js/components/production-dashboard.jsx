@@ -35,6 +35,14 @@ const calculateEfficiency = (machine) => {
 
 const MachineStatusCard = ({ machine, onClick }) => {
     const [tick, setTick] = useState(0);
+    const [recentUpdate, setRecentUpdate] = useState(false);
+    
+    // Show pulse animation for recent updates
+    useEffect(() => {
+        setRecentUpdate(true);
+        const timer = setTimeout(() => setRecentUpdate(false), 2000);
+        return () => clearTimeout(timer);
+    }, [machine.status, machine.order_number]);
     
     useEffect(() => {
         if (machine.status === 'in_use') {
@@ -93,6 +101,9 @@ const MachineStatusCard = ({ machine, onClick }) => {
                         <p className="text-xs text-gray-500">{machine.type}</p>
                     </div>
                     <div className="flex items-center gap-2">
+                        {recentUpdate && (
+                            <div className="w-2 h-2 bg-blue-500 rounded-full animate-ping"></div>
+                        )}
                         {isRunning && efficiency > 0 && (
                             <span className="text-xs font-medium text-gray-600">{efficiency}%</span>
                         )}

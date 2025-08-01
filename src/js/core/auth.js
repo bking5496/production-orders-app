@@ -22,10 +22,10 @@ const AuthProvider = ({ children }) => {
         localStorage.setItem('user_data', JSON.stringify(sessionUser));
         
         // Connect WebSocket if user is already authenticated (page refresh)
-        if (window.WebSocketService && !window.WebSocketService.isConnected()) {
+        if (window.EnhancedWebSocketService && !window.EnhancedWebSocketService.isConnected()) {
           try {
             console.log('🔐 User already authenticated - connecting WebSocket');
-            await window.WebSocketService.connectAfterAuth();
+            await window.EnhancedWebSocketService.connect();
           } catch (error) {
             console.warn('⚠️ WebSocket connection failed for existing session:', error.message);
           }

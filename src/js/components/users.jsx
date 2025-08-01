@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import API from '../core/api';
 import { useAuth } from '../core/auth';
 import { Modal } from './ui-components.jsx';
+import { useAutoConnect } from '../core/websocket-hooks.js';
+import { WebSocketStatusCompact } from './websocket-status.jsx';
 
 export default function UsersPage() {
   const [users, setUsers] = useState([]);
@@ -13,6 +15,9 @@ export default function UsersPage() {
     username: '', email: '', password: '', confirmPassword: '', role: 'operator'
   });
   const [error, setError] = useState('');
+
+  // WebSocket integration
+  useAutoConnect();
   const { user: currentUser } = useAuth();
 
   const loadUsers = async () => {
@@ -98,7 +103,10 @@ export default function UsersPage() {
   return (
     <div className="p-6">
       <div className="mb-6 flex justify-between items-center">
-        <h1 className="text-2xl font-bold">User Management</h1>
+        <div className="flex items-center gap-3">
+          <h1 className="text-2xl font-bold">User Management</h1>
+          <WebSocketStatusCompact />
+        </div>
         {currentUser?.role === 'admin' && (
           <button onClick={() => { resetForm(); setShowAddModal(true); }} className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
             Add New User
