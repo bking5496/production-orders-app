@@ -4,20 +4,22 @@
 **Name:** Production Management System  
 **Version:** 2.0.0  
 **Type:** Multi-Environment Manufacturing Execution System (MES)  
-**Tech Stack:** Node.js, Express, SQLite, React, Vite  
+**Tech Stack:** Node.js, Express, SQLite, **React 19.1.0**, Vite 7.0.6, WebSocket (ws 8.16.0)  
+**Architecture:** Mobile-First, Real-time, Progressive Web App  
 **Timezone:** SAST (UTC+2) - South African Standard Time  
 
 ## Recent Major Changes
+- **2025-08-01:** **MAJOR UPGRADE:** Complete mobile responsiveness transformation with touch-optimized components
+- **2025-08-01:** **WEBSOCKET INTEGRATION:** Real-time WebSocket system with enhanced hooks and auto-reconnection
+- **2025-08-01:** **REACT 19 UPGRADE:** Upgraded to React 19.1.0 with modern concurrent features
+- **2025-08-01:** **MOBILE ARCHITECTURE:** Added comprehensive mobile components and adaptive refresh system
+- **2025-08-01:** **PERFORMANCE OPTIMIZATION:** Implemented adaptive refresh rates and mobile performance hooks
 - **2025-07-31:** **UI ENHANCEMENT:** Applied modern animations and glass morphism to orders.jsx with horizontal scroll fix
 - **2025-07-31:** **STANDARD FIX:** Established hover animation standards - removed scale transforms from table rows to prevent horizontal scrolling
 - **2025-07-30:** Fixed critical timezone conversion bug in labor-planner.jsx causing data synchronization issues
 - **2025-07-30:** Rebuilt labour-layout.jsx from ground up to resolve JSX syntax and build errors
 - **2025-07-30:** Resolved database schema issues - verified all required columns exist
 - **2025-07-30:** Fixed PM2 log errors and improved application stability
-- **2025-01-28:** Changed "Pause" to "Stop" functionality across all components
-- **2025-01-28:** Fixed production timer timezone issues (was showing 2 hours ahead)
-- **2025-01-28:** Added comprehensive downtime reporting system
-- **2025-01-28:** Enhanced stop tracking with categories and operator logging
 
 ## Current Architecture
 
@@ -32,26 +34,45 @@
   - `/api/auth/*` - Authentication
   - `/api/machines/*` - Machine management
   - `/api/environments/*` - Environment management
+- **WebSocket Server:** Real-time communication on same port with `/ws` endpoint
+- **Features:** Enhanced reconnection, message queuing, room-based subscriptions
 
 ### Frontend Structure
 ```
 src/js/
-├── components/          # React components
-│   ├── orders.jsx      # Main orders management
+├── components/          # React 19 components (32 total)
+│   ├── orders.jsx      # Mobile-responsive orders with WebSocket
 │   ├── machines.jsx    # Machine management
 │   ├── dashboard.jsx   # Main dashboard
-│   ├── downtime-report.jsx # New downtime reporting
-│   └── ui-components.jsx # Shared UI components
+│   ├── mobile-operator-dashboard.jsx # Touch-optimized operator interface
+│   ├── mobile-responsive-utils.jsx   # Mobile component library
+│   ├── mobile-theme-system.jsx       # High-contrast industrial themes
+│   ├── mobile-workflows.jsx          # Touch gesture workflows
+│   ├── mobile-offline-system.jsx     # Offline capability system
+│   ├── websocket-status.jsx          # Real-time connection monitoring
+│   ├── global-websocket-notifications.jsx # System-wide notifications
+│   ├── realtime-notifications.jsx    # Live alert system
+│   ├── downtime-report.jsx           # Advanced reporting
+│   └── ui-components.jsx             # Shared UI library
 ├── modules/            # Feature modules
-│   ├── production-module.jsx # Production timer & controls
-│   ├── reporting-module.jsx  # Report generation
-│   └── settings-module.jsx   # App settings
+│   ├── production-module.jsx # Real-time production controls
+│   ├── reporting-module.jsx  # Export & analytics
+│   └── settings-module.jsx   # Configuration management
+├── core/               # Core functionality
+│   ├── websocket-enhanced.js     # Advanced WebSocket service
+│   ├── websocket-hooks.js        # React hooks for real-time data
+│   ├── auth.js                   # JWT authentication
+│   ├── api.js                    # API client
+│   ├── event-bus.js              # Event management
+│   └── time.js                   # Timezone utilities
+├── hooks/              # Custom React hooks
+│   └── use-adaptive-refresh.js   # Smart data refresh system
 ├── utils/              # Utility functions
 │   ├── timezone.js     # SAST timezone handling
-│   └── api.js          # API client
-└── core/               # Core functionality
-    ├── auth.js         # Authentication
-    └── api.js          # API utilities
+│   ├── helpers.js      # General utilities
+│   └── file-utils.js   # File processing
+└── config/             # Configuration
+    └── app-config.js   # Application settings
 ```
 
 ### Database Schema (Key Tables)
@@ -105,44 +126,186 @@ CREATE TABLE environments (
 );
 ```
 
+## 📱 Mobile-First Architecture
+
+### Mobile Responsiveness Features
+- **TouchButton:** Large touch targets (44px minimum) with haptic feedback simulation
+- **TouchDropdown:** Mobile-optimized dropdowns with touch-friendly interfaces
+- **ResponsiveTable:** Automatically switches to card layout on mobile devices
+- **MobileActionMenu:** Context menus optimized for touch interaction
+- **MobileNavigation:** Slide-out navigation with hamburger menu
+
+### Touch Gesture System
+```javascript
+// Touch gesture detection with configurable thresholds
+const { useTouchGestures } = require('./mobile-responsive-utils.jsx');
+
+useTouchGestures(element, {
+  onSwipeLeft: handleNext,
+  onSwipeRight: handlePrevious,
+  onLongPress: showContextMenu,
+  swipeThreshold: 50,
+  longPressDelay: 500
+});
+```
+
+### Device Detection & Adaptation
+- **Screen Size Detection:** Automatic mobile (< 768px), tablet (768-1024px), desktop detection
+- **Performance Optimization:** Memory usage monitoring and animation reduction for low-power devices
+- **Connection Quality:** Adaptive behavior based on network speed (2G, 3G, 4G, WiFi)
+- **Battery Optimization:** Reduced refresh rates and animations when device is in power-saving mode
+
+### Mobile Theme System
+- **High-Contrast Colors:** Industrial-grade contrast ratios (4.5:1 minimum) for manufacturing environments
+- **Enhanced Visibility:** Optimized for various lighting conditions on production floors
+- **Touch-Safe Spacing:** Minimum 44px touch targets with adequate spacing
+- **Accessibility:** WCAG 2.1 AA compliant with screen reader support
+
+## 🔄 Real-Time WebSocket System
+
+### WebSocket Architecture
+```javascript
+// Enhanced WebSocket service with advanced features
+class EnhancedWebSocketService {
+  // Features:
+  // - Automatic reconnection with exponential backoff
+  // - Message queuing during disconnections
+  // - Room-based subscriptions
+  // - Connection health monitoring
+  // - Metrics tracking (messages sent/received, reconnections)
+}
+```
+
+### React Hooks for Real-Time Data
+```javascript
+// WebSocket integration hooks
+import { 
+  useWebSocket,           // Core WebSocket connection management
+  useWebSocketEvent,      // Event listener with dependency management
+  useOrderUpdates,        // Real-time order status updates
+  useMachineUpdates,      // Live machine status monitoring  
+  useNotifications,       // System-wide notification management
+  useAutoConnect          // Automatic connection on authentication
+} from '../core/websocket-hooks.js';
+```
+
+### Real-Time Event Types
+- **order_started, order_stopped, order_completed:** Production lifecycle events
+- **machine_update:** Live machine status changes
+- **user_joined, user_left:** User presence tracking
+- **system_alert, system_maintenance:** Critical system notifications
+- **notification:** General application notifications
+
+### Connection Management
+- **Auto-Reconnection:** Exponential backoff with maximum 10 attempts
+- **Health Monitoring:** 30-second heartbeat with connection quality metrics
+- **Message Queuing:** Automatic queuing of messages during disconnections
+- **Room Subscriptions:** Environment-based data filtering
+
+## 📊 Adaptive Data Refresh System
+
+### Smart Refresh Priorities
+```javascript
+const REFRESH_RATES = {
+  critical: 5000,   // Machine status, active production (5s)
+  high: 15000,      // Orders, quality metrics (15s)
+  normal: 30000,    // Dashboard overview (30s)  
+  low: 60000,       // Analytics, historical data (1m)
+  background: 300000 // User management, settings (5m)
+};
+```
+
+### Context-Aware Optimization
+- **Production Hours:** Faster refresh rates during 6 AM - 10 PM
+- **Page Visibility:** Slower refresh when page is hidden
+- **Error Recovery:** Exponential backoff on API failures
+- **Connection Quality:** Adaptive rates based on network conditions
+
+### Multi-Endpoint Management
+```javascript
+// Manage multiple data sources with different priorities
+const { results, pauseAll, resumeAll } = useMultipleAdaptiveRefresh([
+  { endpoint: '/api/production/status', priority: 'critical' },
+  { endpoint: '/api/machines/status', priority: 'critical' },
+  { endpoint: '/api/orders/active', priority: 'high' }
+]);
+```
+
 ## Key Features & Status
 
 ### ✅ Completed Features
-- **Order Management:** Create, start, stop, resume, complete orders
-- **Machine Management:** Add, edit, status tracking, environment-based grouping
+- **Mobile-First Design:** Complete touch-optimized interface for manufacturing floor use
+- **Real-time WebSocket System:** Live updates for orders, machines, and notifications
+- **Adaptive Data Refresh:** Smart refresh rates based on data criticality and user context
+- **Progressive Web App:** Offline capability and mobile app-like experience
+- **React 19 Architecture:** Modern concurrent features and enhanced performance
+- **Order Management:** Create, start, stop, resume, complete orders with real-time updates
+- **Machine Management:** Live status tracking with WebSocket integration
 - **Production Monitoring:** Real-time timers, progress tracking, efficiency calculations
+- **Mobile Operator Dashboard:** Tablet-optimized interface for production operators
+- **Touch Gesture Support:** Swipe actions, long press, and mobile-optimized interactions
+- **High-Contrast UI:** Industrial-grade color system optimized for manufacturing lighting
 - **Downtime Reporting:** Comprehensive stop analysis with categories and export
 - **User Authentication:** Role-based access (admin, supervisor, operator, viewer)
 - **Environment Management:** Dynamic environments with machine type configurations
 - **Timezone Handling:** Proper SAST (UTC+2) support throughout system
+- **Performance Optimization:** Device detection, memory management, and connection quality adaptation
 
 ### 🚧 Current Issues/Limitations
 - Production timer calculations require `+ (2 * 60 * 60 * 1000)` offset for proper SAST display
-- Some legacy components still use React.createElement syntax
-- No real-time WebSocket updates yet
+- Some legacy components may still use React.createElement syntax
+- Mobile offline functionality is implemented but requires further testing
+- WebSocket reconnection logic needs stress testing under poor network conditions
 
 ### 📋 Component Status Map
 
 | Component | Status | Last Updated | Notes |
 |-----------|--------|--------------|-------|
-| orders.jsx | ✅ Modern | 2025-01-28 | Updated to "Stop" terminology |
-| machines.jsx | ✅ Modern | 2025-01-27 | Dynamic environments |
-| dashboard.jsx | ✅ Modern | 2025-01-27 | Full feature set |
-| downtime-report.jsx | ✅ New | 2025-01-28 | Complete reporting system |
-| production-module.jsx | ✅ Modern | 2025-01-28 | Fixed timers, stop functionality |
-| production-control.jsx | ✅ Modern | 2025-01-28 | Enhanced stop tracking |
-| settings-module.jsx | ✅ Modern | 2025-01-27 | Full modernization |
-| reporting-module.jsx | ✅ Modern | 2025-01-27 | Export capabilities |
+| orders.jsx | ✅ Mobile + WebSocket | 2025-08-01 | Full mobile responsiveness, touch gestures, real-time updates |
+| mobile-operator-dashboard.jsx | ✅ New | 2025-08-01 | Touch-optimized tablet interface for operators |
+| mobile-responsive-utils.jsx | ✅ New | 2025-08-01 | Complete mobile component library with touch gestures |
+| mobile-theme-system.jsx | ✅ New | 2025-08-01 | High-contrast industrial design system |
+| mobile-workflows.jsx | ✅ New | 2025-08-01 | Touch-optimized production workflows |
+| mobile-offline-system.jsx | ✅ New | 2025-08-01 | Offline capability and sync system |
+| websocket-status.jsx | ✅ New | 2025-08-01 | Real-time connection monitoring |
+| global-websocket-notifications.jsx | ✅ New | 2025-08-01 | System-wide notification management |
+| realtime-notifications.jsx | ✅ New | 2025-08-01 | Live alert and notification system |
+| machines.jsx | ✅ Modern + WebSocket | 2025-08-01 | Dynamic environments with real-time updates |
+| dashboard.jsx | ✅ Modern + WebSocket | 2025-08-01 | Real-time data integration |
+| downtime-report.jsx | ✅ Enhanced | 2025-08-01 | Mobile-responsive reporting |
+| production-module.jsx | ✅ WebSocket | 2025-08-01 | Real-time production controls |
+| production-control.jsx | ✅ WebSocket | 2025-08-01 | Live status tracking |
+| settings-module.jsx | ✅ Modern | 2025-08-01 | Mobile-responsive settings |
+| reporting-module.jsx | ✅ Enhanced | 2025-08-01 | Advanced export with mobile support |
 
 ## API Endpoints Reference
 
-### Orders
-- `GET /api/orders` - List all orders
-- `POST /api/orders` - Create new order
-- `POST /api/orders/:id/start` - Start production
-- `POST /api/orders/:id/stop` - Stop production (requires reason)
+### Orders (Mobile + WebSocket Enhanced)
+- `GET /api/orders` - List all orders (supports mobile pagination)
+- `POST /api/orders` - Create new order (triggers WebSocket notification)
+- `POST /api/orders/:id/start` - Start production (real-time machine updates)
+- `POST /api/orders/:id/stop` - Stop production (requires reason, triggers alerts)
 - `POST /api/orders/:id/resume` - Resume stopped production
 - `POST /api/orders/:id/complete` - Mark order complete
+- `GET /api/orders/active` - Currently active orders (critical priority refresh)
+
+### Real-Time WebSocket Events
+- **Connection:** `wss://oracles.africa/ws?token=<jwt>` (Production)
+- **Connection:** `ws://localhost:3000?token=<jwt>` (Development)
+- **Events:** `order_started`, `order_stopped`, `order_completed`, `machine_update`
+- **Rooms:** Environment-based subscriptions (`production`, `testing`, `maintenance`)
+
+### Mobile-Optimized Endpoints
+- `GET /api/mobile/dashboard` - Condensed dashboard data for mobile
+- `GET /api/mobile/operator-status` - Operator-specific active orders
+- `GET /api/mobile/quick-actions` - Touch-optimized action list
+
+### Adaptive Refresh Endpoints
+- `GET /api/production/status` - Critical priority (5s refresh)
+- `GET /api/machines/status` - Critical priority (5s refresh)  
+- `GET /api/quality/current` - High priority (15s refresh)
+- `GET /api/performance/kpis` - Normal priority (30s refresh)
+- `GET /api/analytics/summary` - Low priority (60s refresh)
 
 ### Reporting
 - `GET /api/reports/downtime` - Downtime analysis with filters
@@ -153,7 +316,7 @@ CREATE TABLE environments (
 - `GET /api/machines` - List all machines
 - `POST /api/machines` - Add new machine
 - `PUT /api/machines/:id` - Update machine
-- `PATCH /api/machines/:id/status` - Update machine status
+- `PATCH /api/machines/:id/status` - Update machine status (triggers WebSocket update)
 
 ## Environment Variables
 ```bash
@@ -177,24 +340,49 @@ npm run lint     # Code linting
 - All user-facing times should display in SAST
 - Use `formatSASTDate()` utility for consistent time formatting
 
-## Recent Code Patterns
+## Modern Code Patterns (React 19 + WebSocket + Mobile)
 
-### Modern Component Structure
+### Mobile-First Component Structure
 ```jsx
 import React, { useState, useEffect, useMemo } from 'react';
 import { Icon } from 'lucide-react';
 import API from '../core/api';
+import { 
+  useDeviceDetection, 
+  useTouchGestures, 
+  ResponsiveTable, 
+  TouchButton,
+  usePerformanceOptimization
+} from './mobile-responsive-utils.jsx';
+import { useOrderUpdates, useAutoConnect, useNotifications } from '../core/websocket-hooks.js';
 
-export default function ComponentName() {
+export default function ModernMobileComponent() {
   const [state, setState] = useState([]);
   const [loading, setLoading] = useState(true);
   
-  // Use useMemo for computed values
+  // Mobile and performance detection
+  const { isMobile, isTablet } = useDeviceDetection();
+  const { shouldReduceAnimations } = usePerformanceOptimization();
+  
+  // WebSocket integration
+  useAutoConnect(); // Auto-connect when authenticated
+  const { lastUpdate } = useOrderUpdates();
+  const { notifications, clearNotification } = useNotifications();
+  
+  // Computed values with performance optimization
   const computedValue = useMemo(() => {
     return state.filter(item => item.active);
   }, [state]);
   
-  // Load data pattern
+  // Touch gesture support
+  const containerRef = useRef(null);
+  useTouchGestures(containerRef.current, {
+    onSwipeLeft: () => console.log('Next page'),
+    onSwipeRight: () => console.log('Previous page'),
+    onLongPress: (e) => showContextMenu(e)
+  });
+  
+  // Adaptive data loading
   const loadData = async () => {
     try {
       const data = await API.get('/endpoint');
@@ -210,25 +398,122 @@ export default function ComponentName() {
     loadData();
   }, []);
   
-  return <div>Component JSX</div>;
+  // Real-time updates from WebSocket
+  useEffect(() => {
+    if (lastUpdate) {
+      loadData(); // Refresh data on WebSocket updates
+    }
+  }, [lastUpdate]);
+  
+  return (
+    <div ref={containerRef} className={shouldReduceAnimations ? '' : 'animate-fade-in'}>
+      {isMobile ? (
+        <MobileLayout />
+      ) : (
+        <DesktopLayout />
+      )}
+    </div>
+  );
 }
 ```
 
-### API Call Pattern
+### WebSocket Integration Pattern
 ```javascript
-// Stop production (new pattern)
-await API.post(`/orders/${orderId}/stop`, { 
-  reason: 'machine_breakdown',
-  notes: 'Additional details...' 
-});
+// WebSocket-enabled API calls with real-time updates
+import { useWebSocketEvent, useAutoConnect } from '../core/websocket-hooks.js';
 
-// With proper error handling
-try {
-  const response = await API.post('/endpoint', data);
-  showNotification('Success message');
-} catch (error) {
-  showNotification('Error: ' + error.message, 'danger');
-}
+// Auto-connect WebSocket when user is authenticated
+useAutoConnect();
+
+// Listen for real-time order updates
+useWebSocketEvent('order_started', (data) => {
+  console.log('🟢 Order started:', data.data.order);
+  setOrders(prevOrders => 
+    prevOrders.map(order => 
+      order.id === data.data.order.id ? data.data.order : order
+    )
+  );
+}, []);
+
+// Stop production with WebSocket notification
+const handleStopOrder = async (orderId, reason) => {
+  try {
+    await API.post(`/orders/${orderId}/stop`, { 
+      reason,
+      notes: 'Stopped via mobile interface'
+    });
+    // WebSocket will automatically notify all clients
+    showNotification('Order stopped successfully');
+  } catch (error) {
+    showNotification('Error: ' + error.message, 'danger');
+  }
+};
+```
+
+### Mobile Touch Interface Pattern
+```jsx
+// Touch-optimized production controls
+import { TouchButton, MobileActionMenu } from './mobile-responsive-utils.jsx';
+
+const MobileProductionControls = ({ order, onStart, onStop, onComplete }) => {
+  const actions = [
+    { 
+      label: 'Start Production', 
+      icon: Play, 
+      action: () => onStart(order.id),
+      disabled: order.status !== 'pending'
+    },
+    { 
+      label: 'Stop Production', 
+      icon: Square, 
+      action: () => onStop(order.id),
+      danger: true,
+      disabled: order.status !== 'in_progress'
+    },
+    { 
+      label: 'Complete Order', 
+      icon: CheckCircle, 
+      action: () => onComplete(order.id),
+      disabled: order.status !== 'in_progress'
+    }
+  ];
+
+  return (
+    <div className="flex gap-2 md:gap-4">
+      {actions.map(action => (
+        <TouchButton
+          key={action.label}
+          onClick={action.action}
+          disabled={action.disabled}
+          variant={action.danger ? 'danger' : 'primary'}
+          size="lg" // Large touch targets
+          icon={action.icon}
+        >
+          {action.label}
+        </TouchButton>
+      ))}
+    </div>
+  );
+};
+```
+
+### Adaptive Refresh Pattern
+```javascript
+// Smart data refresh with priority-based rates
+import { useAdaptiveRefresh, useProductionData } from '../hooks/use-adaptive-refresh.js';
+
+// Single endpoint with adaptive refresh
+const { data, isLoading, refresh, pause, resume } = useAdaptiveRefresh(
+  '/api/orders/active', 
+  'critical' // 5-second refresh during production hours
+);
+
+// Multiple endpoints with different priorities
+const { results, pauseAll, resumeAll } = useProductionData();
+
+// Access individual data sources
+const productionStatus = results.find(r => r.endpoint === '/api/production/status')?.data;
+const machineStatus = results.find(r => r.endpoint === '/api/machines/status')?.data;
 ```
 
 ## Critical Fixes Implemented (2025-07-30)
