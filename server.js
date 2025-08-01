@@ -269,7 +269,47 @@ wss.on('connection', async (ws, req) => {
     });
 });
 
-// --- WebSocket Broadcast Functions ---
+// --- Enhanced WebSocket Broadcast Functions ---
+function getRoomMembers(roomName) {
+    const members = [];
+    wss.clients.forEach((client) => {
+        if (client.readyState === WebSocket.OPEN && 
+            client.user && 
+            client.rooms && 
+            client.rooms.includes(roomName)) {
+            members.push({
+                username: client.user.username,
+                role: client.user.role,
+                connectionId: client.connectionId
+            });
+        }
+    });
+    return members;
+}
+
+function broadcastToRoom(roomName, type, data, excludeUser = null) {
+    const message = JSON.stringify({
+        type,
+        data,
+        room: roomName,
+        timestamp: new Date().toISOString()
+    });
+    
+    let clientCount = 0;
+    wss.clients.forEach((client) => {
+        if (client.readyState === WebSocket.OPEN && 
+            client.user && 
+            client.rooms && 
+            client.rooms.includes(roomName) &&
+            client.user.username !== excludeUser) {
+            client.send(message);
+            clientCount++;
+        }
+    });
+    
+    console.log(`🏠 Broadcasted ${type} to ${clientCount} clients in room: ${roomName}`);
+}
+
 function broadcast(type, data, channel = 'all', userRole = null) {
     const message = JSON.stringify({
         type,
@@ -316,6 +356,46 @@ function broadcastToUser(username, type, data) {
             console.log(`📤 Sent ${type} to user: ${username}`);
         }
     });
+}
+
+// Get production statistics for dashboard
+async function getProductionStats() {
+    try {
+        const [orders, machines] = await Promise.all([
+            dbAll('SELECT * FROM production_orders WHERE archived = 0'),
+            dbAll('SELECT * FROM machines')
+        ]);
+
+        const stats = {
+            orders: {
+                total: orders.length,
+                pending: orders.filter(o => o.status === 'pending').length,
+                in_progress: orders.filter(o => o.status === 'in_progress').length,
+                completed: orders.filter(o => o.status === 'completed').length,
+                stopped: orders.filter(o => o.status === 'stopped').length
+            },
+            machines: {
+                total: machines.length,
+                available: machines.filter(m => m.status === 'available').length,
+                in_use: machines.filter(m => m.status === 'in_use').length,
+                maintenance: machines.filter(m => m.status === 'maintenance').length,
+                offline: machines.filter(m => m.status === 'offline').length
+            },
+            production: {
+                efficiency: orders.filter(o => o.efficiency_percentage).length > 0 
+                    ? orders.reduce((sum, o) => sum + (o.efficiency_percentage || 0), 0) / orders.filter(o => o.efficiency_percentage).length 
+                    : 0,
+                output: orders.reduce((sum, o) => sum + (o.actual_quantity || 0), 0),
+                active_production_time: orders.filter(o => o.status === 'in_progress').length * 60 // Simplified calculation
+            },
+            timestamp: new Date().toISOString()
+        };
+
+        return stats;
+    } catch (error) {
+        console.error('Failed to get production stats:', error);
+        throw error;
+    }
 }
 
 // WebSocket Health Check - Ping clients every 30 seconds
