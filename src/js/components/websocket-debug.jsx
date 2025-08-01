@@ -17,7 +17,6 @@ export default function WebSocketDebug() {
                 webSocketSupport: typeof WebSocket !== 'undefined',
                 enhancedServiceExists: typeof window.EnhancedWebSocketService !== 'undefined',
                 enhancedServiceStatus: window.EnhancedWebSocketService ? window.EnhancedWebSocketService.getConnectionStatus() : null,
-                connectionStatus: connectionStatus,
                 cookies: document.cookie ? 'Present' : 'None',
                 protocols: window.location.protocol
             };
@@ -27,7 +26,7 @@ export default function WebSocketDebug() {
         updateDebugInfo();
         const interval = setInterval(updateDebugInfo, 2000);
         return () => clearInterval(interval);
-    }, [connectionStatus]);
+    }, []); // Remove connectionStatus from dependencies to prevent infinite loop
 
     // Show debug panel only in development or when explicitly enabled
     const shouldShow = isVisible || 

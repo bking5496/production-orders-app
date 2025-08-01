@@ -21,28 +21,29 @@ export function useWebSocket() {
         // Update initial status
         updateStatus();
 
+        // Update metrics periodically
+        const metricsInterval = setInterval(() => {
+            setMetrics(enhancedWebSocketService.getMetrics());
+        }, 5000);
+
         // Listen for connection state changes
         const handleStateChange = (data) => {
             setConnectionStatus(data.state);
-            updateStatus();
         };
 
         const handleConnected = () => {
             setIsConnected(true);
             setConnectionStatus('connected');
-            updateStatus();
         };
 
         const handleDisconnected = () => {
             setIsConnected(false);
             setIsAuthenticated(false);
             setConnectionStatus('disconnected');
-            updateStatus();
         };
 
         const handleAuthenticated = () => {
             setIsAuthenticated(true);
-            updateStatus();
         };
 
         // Register event listeners
@@ -53,6 +54,7 @@ export function useWebSocket() {
 
         // Cleanup on unmount
         return () => {
+            clearInterval(metricsInterval);
             enhancedWebSocketService.off('connectionStateChanged', handleStateChange);
             enhancedWebSocketService.off('connected', handleConnected);
             enhancedWebSocketService.off('disconnected', handleDisconnected);
