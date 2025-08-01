@@ -85,3 +85,5 @@ Refer to docs https://vite.dev/config/server-options.html#server-fs-allow for co
 1:18:43 PM [vite] (client) hmr update /src/app.jsx
 1:18:44 PM [vite] (client) hmr invalidate /src/app.jsx Could not Fast Refresh ("true" export is incompatible). Learn more at https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#consistent-components-exports
 1:18:44 PM [vite] (client) page reload src/app.jsx
+1:21:44 PM [vite] .env changed, restarting server...
+1:21:44 PM [vite] server restarted.
