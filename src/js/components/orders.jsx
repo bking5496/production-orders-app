@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Package, Plus, Search, Filter, RefreshCw, Play, Square, Trash2, Clock, AlertTriangle, CheckCircle, BarChart3, Calendar, Target } from 'lucide-react';
+import { Package, Plus, Search, Filter, RefreshCw, Play, Square, Trash2, Clock, AlertTriangle, CheckCircle, BarChart3, Calendar, Target, Wifi } from 'lucide-react';
 import API from '../core/api';
 import { Modal, Card, Button, Badge } from './ui-components.jsx';
 import ProductionCompletionModalWithWaste from './production-completion-modal-with-waste.jsx';
+import { useOrderUpdates, useWebSocketEvent, useAutoConnect, useNotifications } from '../core/websocket-hooks.js';
+import WebSocketStatus from './websocket-status.jsx';
 
 export default function OrdersPage() {
   const [orders, setOrders] = useState([]);
@@ -14,6 +16,11 @@ export default function OrdersPage() {
   const [statusFilter, setStatusFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [notification, setNotification] = useState(null);
+
+  // WebSocket integration
+  useAutoConnect(); // Automatically connect when user is authenticated
+  const { notifications: wsNotifications, clearNotification } = useNotifications();
+  const { lastUpdate } = useOrderUpdates();
 
   // State for modals
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -68,6 +75,66 @@ export default function OrdersPage() {
     loadData();
     const interval = setInterval(loadData, 30000);
     return () => clearInterval(interval);
+  }, []);
+
+  // WebSocket real-time updates
+  useWebSocketEvent('order_started', (data) => {
+    console.log('🟢 Order started:', data.data.order);
+    setOrders(prevOrders => {
+      const updatedOrders = prevOrders.map(order => 
+        order.id === data.data.order.id ? data.data.order : order
+      );
+      return updatedOrders;
+    });
+    showNotification(`Order #${data.data.order.order_number} started on ${data.data.order.machine_name}`, 'success');
+  }, []);
+
+  useWebSocketEvent('order_stopped', (data) => {
+    console.log('🟡 Order stopped:', data.data.order);
+    setOrders(prevOrders => {
+      const updatedOrders = prevOrders.map(order => 
+        order.id === data.data.order.id ? data.data.order : order
+      );
+      return updatedOrders;
+    });
+    showNotification(`Order #${data.data.order.order_number} stopped: ${data.data.reason}`, 'warning');
+  }, []);
+
+  useWebSocketEvent('order_resumed', (data) => {
+    console.log('🔵 Order resumed:', data.data.order);
+    setOrders(prevOrders => {
+      const updatedOrders = prevOrders.map(order => 
+        order.id === data.data.order.id ? data.data.order : order
+      );
+      return updatedOrders;
+    });
+    showNotification(`Order #${data.data.order.order_number} resumed`, 'success');
+  }, []);
+
+  useWebSocketEvent('order_completed', (data) => {
+    console.log('✅ Order completed:', data.data.order);
+    setOrders(prevOrders => {
+      // Remove completed orders from active list
+      return prevOrders.filter(order => order.id !== data.data.order.id);
+    });
+    showNotification(`Order #${data.data.order.order_number} completed with ${data.data.actual_quantity} units`, 'success');
+  }, []);
+
+  // Show WebSocket notifications
+  useEffect(() => {
+    wsNotifications.forEach(notification => {
+      if (notification.type === 'alert') {
+        showNotification(notification.message, 'danger');
+        clearNotification(notification.id);
+      }
+    });
+  }, [wsNotifications]);
+
+  // Subscribe to relevant channels
+  useEffect(() => {
+    if (window.EnhancedWebSocketService?.isConnected()) {
+      window.EnhancedWebSocketService.subscribe(['orders', 'machines', 'production']);
+    }
   }, []);
 
   const handleCreateOrder = async (e) => {
