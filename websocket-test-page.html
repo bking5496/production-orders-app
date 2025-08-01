@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .status { padding: 10px; margin: 10px 0; border-radius: 5px; }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .info { background: #d1ecf1; color: #0c5460; }
+        #log { background: #f8f9fa; padding: 15px; border-radius: 5px; height: 300px; overflow-y: auto; font-family: monospace; font-size: 12px; }
+    </style>
+</head>
+<body>
+    <h1>WebSocket Connection Test</h1>
+    
+    <div id="status" class="status info">WebSocket Status: Checking...</div>
+    
+    <div>
+        <button onclick="testConnection()">Test Connection</button>
+        <button onclick="clearLog()">Clear Log</button>
+        <button onclick="checkAuthStatus()">Check Auth Status</button>
+    </div>
+    
+    <h3>Connection Log:</h3>
+    <div id="log"></div>
+
+    <script src="/src/js/core/websocket.js" type="module"></script>
+    <script>
+        const logElement = document.getElementById('log');
+        const statusElement = document.getElementById('status');
+        
+        function log(message) {
+            const timestamp = new Date().toLocaleTimeString();
+            logElement.innerHTML += `[${timestamp}] ${message}\n`;
+            logElement.scrollTop = logElement.scrollHeight;
+            console.log(message);
+        }
+        
+        function updateStatus(message, type = 'info') {
+            statusElement.textContent = `WebSocket Status: ${message}`;
+            statusElement.className = `status ${type}`;
+        }
+        
+        function clearLog() {
+            logElement.innerHTML = '';
+        }
+        
+        async function checkAuthStatus() {
+            try {
+                const response = await fetch('/api/auth/verify-session', {
+                    method: 'GET',
+                    credentials: 'include'
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    log(`✅ User authenticated: ${data.user.username} (${data.user.role})`);
+                    updateStatus('User authenticated', 'success');
+                } else {
+                    log('🚫 User not authenticated');
+                    updateStatus('User not authenticated', 'error');
+                }
+            } catch (error) {
+                log(`💥 Auth check failed: ${error.message}`);
+                updateStatus('Auth check failed', 'error');
+            }
+        }
+        
+        async function testConnection() {
+            log('🧪 Starting WebSocket connection test...');
+            
+            if (!window.WebSocketService) {
+                log('❌ WebSocketService not available');
+                updateStatus('WebSocketService not available', 'error');
+                return;
+            }
+            
+            // Check current status
+            const status = window.WebSocketService.getStatus();
+            log(`📊 Current WebSocket status: ${JSON.stringify(status, null, 2)}`);
+            
+            // Try to ensure connection
+            try {
+                const connected = await window.WebSocketService.ensureConnection();
+                if (connected) {
+                    log('✅ WebSocket connection established successfully');
+                    updateStatus('Connected', 'success');
+                } else {
+                    log('❌ WebSocket connection failed');
+                    updateStatus('Connection failed', 'error');
+                }
+            } catch (error) {
+                log(`💥 WebSocket connection error: ${error.message}`);
+                updateStatus('Connection error', 'error');
+            }
+        }
+        
+        // Log WebSocket events
+        if (window.WebSocketService) {
+            window.WebSocketService.on('connected', () => {
+                log('🔗 WebSocket connected');
+                updateStatus('Connected', 'success');
+            });
+            
+            window.WebSocketService.on('authenticated', (data) => {
+                log(`🎉 WebSocket authenticated: ${data.user}`);
+                updateStatus('Authenticated', 'success');
+            });
+            
+            window.WebSocketService.on('disconnected', (data) => {
+                log(`🔌 WebSocket disconnected: ${data.reason}`);
+                updateStatus('Disconnected', 'error');
+            });
+            
+            window.WebSocketService.on('error', (data) => {
+                log(`💥 WebSocket error: ${data.error}`);
+                updateStatus('Error', 'error');
+            });
+        }
+        
+        // Initial status check
+        checkAuthStatus();
+        
+        // Show handler counts every 5 seconds
+        setInterval(() => {
+            if (window.WebSocketService) {
+                const counts = window.WebSocketService.getHandlerCounts();
+                log(`📊 Handler counts: ${JSON.stringify(counts)}`);
+            }
+        }, 5000);
+    </script>
+</body>
+</html>

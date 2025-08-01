@@ -404,6 +404,11 @@ class WebSocketService {
                     }
                 });
 
+                if (response.status === 401) {
+                    console.warn('🚫 Not authenticated - cannot get WebSocket token');
+                    return null;
+                }
+
                 if (response.status === 429) {
                     // Rate limited - wait before retry
                     const retryAfter = response.headers.get('Retry-After') || (Math.pow(2, attempt) * 1000);
@@ -422,10 +427,17 @@ class WebSocketService {
                 }
 
                 const data = await response.json();
+                console.log('✅ WebSocket token retrieved successfully');
                 return data.token;
             } catch (error) {
                 if (attempt === maxRetries - 1) {
                     console.error('Failed to get WebSocket token after all retries:', error);
+                    return null;
+                }
+                
+                // Don't retry on authentication errors
+                if (error.message.includes('401')) {
+                    console.warn('🚫 Authentication error - stopping token retry attempts');
                     return null;
                 }
                 
@@ -484,32 +496,58 @@ class WebSocketService {
         console.log('🧹 Clearing all WebSocket event handlers');
         this.eventHandlers.clear();
     }
+
+    // Connect WebSocket after user authentication (called by auth system)
+    async connectAfterAuth() {
+        try {
+            console.log('🔐 Connecting WebSocket after authentication');
+            await this.connect();
+            return true;
+        } catch (error) {
+            console.error('💥 Failed to connect WebSocket after auth:', error);
+            return false;
+        }
+    }
+
+    // Check if user is authenticated and connect if needed
+    async ensureConnection() {
+        if (this.isConnected()) {
+            return true;
+        }
+
+        try {
+            const response = await fetch('/api/auth/verify-session', {
+                method: 'GET',
+                credentials: 'include'
+            });
+            
+            if (response.ok) {
+                return await this.connectAfterAuth();
+            } else {
+                console.log('ℹ️ User not authenticated - cannot establish WebSocket connection');
+                return false;
+            }
+        } catch (error) {
+            console.error('💥 Failed to verify session for WebSocket:', error);
+            return false;
+        }
+    }
 }
 
 // Create singleton instance
 const websocketService = new WebSocketService();
 
-// Auto-connect when DOM is loaded (if authenticated)
-document.addEventListener('DOMContentLoaded', async () => {
-    // Small delay to ensure the page is fully loaded
-    setTimeout(async () => {
-        try {
-            console.log('🚀 Auto-connecting WebSocket on page load');
-            await websocketService.connect();
-        } catch (error) {
-            console.log('⚠️ Auto-connect failed - user may not be authenticated');
-        }
-    }, 1000);
-});
+// DO NOT auto-connect on page load - wait for explicit connection after login
 
-// Handle page visibility changes to reconnect when page becomes visible
+// Handle page visibility changes to reconnect when page becomes visible (only if previously connected)
 document.addEventListener('visibilitychange', async () => {
-    if (!document.hidden && !websocketService.isConnected()) {
+    if (!document.hidden && !websocketService.isConnected() && websocketService.connectionId) {
+        // Only try to reconnect if we had a previous connection (connectionId exists)
         try {
             console.log('🔄 Page visible - attempting to reconnect WebSocket');
             await websocketService.connect();
         } catch (error) {
-            console.log('⚠️ Reconnect failed - user may not be authenticated');
+            console.log('⚠️ Reconnect failed:', error.message);
         }
     }
 });
