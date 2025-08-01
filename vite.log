@@ -19,3 +19,18 @@ Refer to docs https://vite.dev/config/server-options.html#server-fs-allow for co
 
 The request url "/home/production-app/production-orders-app/.git/config" is outside of Vite serving allow list.
 The request url "/home/production-app/production-orders-app/.git/config" is outside of Vite serving allow list.
+12:31:42 PM [vite] (client) hmr update /src/js/components/realtime-notifications.jsx
+12:32:36 PM [vite] .env changed, restarting server...
+12:32:36 PM [vite] server restarted.
+12:37:24 PM [vite] (client) hmr update /src/app.jsx
+12:37:24 PM [vite] (client) hmr invalidate /src/app.jsx Could not Fast Refresh ("true" export is incompatible). Learn more at https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#consistent-components-exports
+12:37:24 PM [vite] (client) page reload src/app.jsx
+12:37:45 PM [vite] (client) hmr update /src/app.jsx
+12:37:45 PM [vite] (client) hmr invalidate /src/app.jsx Could not Fast Refresh ("true" export is incompatible). Learn more at https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#consistent-components-exports
+12:37:45 PM [vite] (client) page reload src/app.jsx
+12:38:46 PM [vite] (client) hmr update /src/js/components/realtime-notifications.jsx
+12:39:39 PM [vite] (client) hmr update /src/app.jsx
+12:39:39 PM [vite] (client) hmr invalidate /src/app.jsx Could not Fast Refresh ("true" export is incompatible). Learn more at https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#consistent-components-exports
+12:39:39 PM [vite] (client) page reload src/app.jsx
+12:39:56 PM [vite] .env changed, restarting server...
+12:39:56 PM [vite] server restarted.

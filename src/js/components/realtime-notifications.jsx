@@ -1,7 +1,7 @@
 // js/components/realtime-notifications.jsx - Real-time Notification System
 // Handles WebSocket-based notifications and real-time updates
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Icon } from './layout-components.jsx';
 
 // Toast notification component
@@ -77,6 +77,7 @@ const Toast = ({ notification, onClose }) => {
 const RealtimeNotifications = () => {
   const [notifications, setNotifications] = useState([]);
   const [isConnected, setIsConnected] = useState(false);
+  const handlersRef = useRef({});
 
   useEffect(() => {
     if (!window.WebSocketService) {
@@ -87,7 +88,7 @@ const RealtimeNotifications = () => {
     // Connection status handlers
     const handleConnected = () => {
       setIsConnected(true);
-      // Subscribe to relevant channels
+      // Subscribe to relevant channels once
       window.WebSocketService.subscribe(['orders', 'machines', 'notifications']);
     };
 
@@ -161,6 +162,15 @@ const RealtimeNotifications = () => {
       });
     };
 
+    // Store handler references to ensure proper cleanup
+    handlersRef.current = {
+      handleConnected,
+      handleDisconnected,
+      handleOrderUpdate,
+      handleMachineUpdate,
+      handleNotification
+    };
+
     // Register event listeners
     window.WebSocketService.on('connected', handleConnected);
     window.WebSocketService.on('authenticated', handleConnected);
@@ -176,13 +186,14 @@ const RealtimeNotifications = () => {
     }
 
     return () => {
-      // Clean up event listeners
-      window.WebSocketService.off('connected', handleConnected);
-      window.WebSocketService.off('authenticated', handleConnected);
-      window.WebSocketService.off('disconnected', handleDisconnected);
-      window.WebSocketService.off('order_update', handleOrderUpdate);
-      window.WebSocketService.off('machine_update', handleMachineUpdate);
-      window.WebSocketService.off('notification', handleNotification);
+      // Clean up event listeners using stored references
+      const handlers = handlersRef.current;
+      window.WebSocketService.off('connected', handlers.handleConnected);
+      window.WebSocketService.off('authenticated', handlers.handleConnected);
+      window.WebSocketService.off('disconnected', handlers.handleDisconnected);
+      window.WebSocketService.off('order_update', handlers.handleOrderUpdate);
+      window.WebSocketService.off('machine_update', handlers.handleMachineUpdate);
+      window.WebSocketService.off('notification', handlers.handleNotification);
     };
   }, []);
 
@@ -234,6 +245,7 @@ const RealtimeNotifications = () => {
 export const ActivityFeed = ({ maxItems = 10 }) => {
   const [activities, setActivities] = useState([]);
   const [isConnected, setIsConnected] = useState(false);
+  const handlersRef = useRef({});
 
   useEffect(() => {
     if (!window.WebSocketService) {
@@ -242,7 +254,6 @@ export const ActivityFeed = ({ maxItems = 10 }) => {
 
     const handleConnected = () => {
       setIsConnected(true);
-      window.WebSocketService.subscribe(['orders', 'machines']);
     };
 
     const handleDisconnected = () => {
@@ -294,6 +305,13 @@ export const ActivityFeed = ({ maxItems = 10 }) => {
       setActivities(prev => [activity, ...prev.slice(0, maxItems - 1)]);
     };
 
+    // Store handler references for proper cleanup
+    handlersRef.current = {
+      handleConnected,
+      handleDisconnected,
+      handleActivity
+    };
+
     // Register listeners
     window.WebSocketService.on('connected', handleConnected);
     window.WebSocketService.on('authenticated', handleConnected);
@@ -308,11 +326,12 @@ export const ActivityFeed = ({ maxItems = 10 }) => {
     }
 
     return () => {
-      window.WebSocketService.off('connected', handleConnected);
-      window.WebSocketService.off('authenticated', handleConnected);
-      window.WebSocketService.off('disconnected', handleDisconnected);
-      window.WebSocketService.off('order_update', handleActivity);
-      window.WebSocketService.off('machine_update', handleActivity);
+      const handlers = handlersRef.current;
+      window.WebSocketService.off('connected', handlers.handleConnected);
+      window.WebSocketService.off('authenticated', handlers.handleConnected);
+      window.WebSocketService.off('disconnected', handlers.handleDisconnected);
+      window.WebSocketService.off('order_update', handlers.handleActivity);
+      window.WebSocketService.off('machine_update', handlers.handleActivity);
     };
   }, [maxItems]);
 

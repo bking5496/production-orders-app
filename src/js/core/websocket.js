@@ -346,9 +346,20 @@ class WebSocketService {
         if (!this.eventHandlers.has(event)) {
             this.eventHandlers.set(event, []);
         }
-        this.eventHandlers.get(event).push(handler);
         
-        console.log(`👂 Registered handler for event: ${event}`);
+        // Check if handler already exists to prevent duplicates
+        const handlers = this.eventHandlers.get(event);
+        if (handlers.includes(handler)) {
+            console.warn(`⚠️ Handler already registered for event: ${event}`);
+            return;
+        }
+        
+        handlers.push(handler);
+        
+        // Only log initial registration to reduce spam
+        if (handlers.length === 1) {
+            console.log(`👂 First handler registered for event: ${event}`);
+        }
     }
 
     off(event, handler) {
@@ -357,7 +368,11 @@ class WebSocketService {
             const index = handlers.indexOf(handler);
             if (index > -1) {
                 handlers.splice(index, 1);
-                console.log(`🚫 Removed handler for event: ${event}`);
+                
+                // Only log when all handlers are removed
+                if (handlers.length === 0) {
+                    console.log(`🚫 All handlers removed for event: ${event}`);
+                }
             }
         }
     }
@@ -448,6 +463,26 @@ class WebSocketService {
     resetReconnectionAttempts() {
         this.reconnectAttempts = 0;
         console.log('🔄 Reset reconnection attempts counter');
+    }
+
+    // Debug method to check handler counts
+    getHandlerCounts() {
+        const counts = {};
+        this.eventHandlers.forEach((handlers, event) => {
+            counts[event] = handlers.length;
+        });
+        return counts;
+    }
+
+    // Debug method to log current handler status
+    logHandlerStatus() {
+        console.log('📊 WebSocket Handler Status:', this.getHandlerCounts());
+    }
+
+    // Clean up all event handlers (useful for testing/debugging)
+    clearAllHandlers() {
+        console.log('🧹 Clearing all WebSocket event handlers');
+        this.eventHandlers.clear();
     }
 }
 
