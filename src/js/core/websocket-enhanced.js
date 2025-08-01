@@ -78,18 +78,21 @@ class EnhancedWebSocketService {
     // Build WebSocket URL with environment detection
     buildWebSocketUrl(token) {
         const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-        const host = window.location.host;
         
         // Development vs Production URL handling
-        if (window.location.hostname === 'localhost' && window.location.port === '5174') {
-            return `${protocol}//localhost:3000?token=${encodeURIComponent(token)}`;
+        if (window.location.hostname === 'localhost') {
+            return `ws://localhost:3000?token=${encodeURIComponent(token)}`;
         }
         
-        // Production URL - try multiple paths
-        const paths = ['/ws', '/websocket', ''];
-        const preferredPath = paths[0]; // Use /ws as primary
+        // Production - try multiple connection options
+        const urls = [
+            `${protocol}//oracles.africa:3000?token=${encodeURIComponent(token)}`, // Direct port 3000
+            `${protocol}//oracles.africa/ws?token=${encodeURIComponent(token)}`,   // Reverse proxy /ws
+            `${protocol}//oracles.africa?token=${encodeURIComponent(token)}`       // Same origin
+        ];
         
-        return `${protocol}//${host}${preferredPath}?token=${encodeURIComponent(token)}&client=enhanced&version=2.0`;
+        // Return first URL for now, will try others in attemptConnection if needed
+        return urls[0];
     }
 
     // Enhanced event handlers with better error recovery
