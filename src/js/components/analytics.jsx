@@ -8,8 +8,13 @@ import {
 import API from '../core/api';
 import Time from '../core/time';
 import { Modal, Card, Button, Badge } from './ui-components.jsx';
+import { useAutoConnect } from '../core/websocket-hooks.js';
+import { WebSocketStatusCompact } from './websocket-status.jsx';
 
 export default function AnalyticsPage() {
+  // WebSocket integration
+  useAutoConnect();
+  
   const [analytics, setAnalytics] = useState({
     orders: [],
     machines: [],
@@ -650,8 +655,11 @@ export default function AnalyticsPage() {
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-800">Analytics & Reports</h1>
-          <p className="text-gray-600 mt-1">Production insights and performance metrics</p>
+          <div className="flex items-center gap-3">
+            <h1 className="text-3xl font-bold text-gray-800">Analytics & Reports</h1>
+            <WebSocketStatusCompact />
+          </div>
+          <p className="text-gray-600 mt-1">Production insights and real-time performance metrics</p>
         </div>
         
         <div className="flex items-center gap-4">

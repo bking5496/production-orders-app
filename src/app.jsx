@@ -23,6 +23,7 @@ import SessionManager, { useSessionManager } from './js/components/session-manag
 // Import WebSocket hooks and debug component
 import { useAutoConnect } from './js/core/websocket-hooks.js';
 import WebSocketDebug from './js/components/websocket-debug.jsx';
+import GlobalWebSocketNotifications from './js/components/global-websocket-notifications.jsx';
 
 // Import page components (with .jsx extension)
 import Dashboard from "./js/components/dashboard.jsx";
@@ -112,6 +113,7 @@ function App() {
           />
         )}
         <WebSocketDebug />
+        <GlobalWebSocketNotifications />
       </MainLayout>
     </ManufacturingErrorBoundary>
   );
