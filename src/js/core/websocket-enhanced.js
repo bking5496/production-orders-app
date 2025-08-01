@@ -84,15 +84,8 @@ class EnhancedWebSocketService {
             return `ws://localhost:3000?token=${encodeURIComponent(token)}`;
         }
         
-        // Production - try multiple connection options
-        const urls = [
-            `${protocol}//oracles.africa:3000?token=${encodeURIComponent(token)}`, // Direct port 3000
-            `${protocol}//oracles.africa/ws?token=${encodeURIComponent(token)}`,   // Reverse proxy /ws
-            `${protocol}//oracles.africa?token=${encodeURIComponent(token)}`       // Same origin
-        ];
-        
-        // Return first URL for now, will try others in attemptConnection if needed
-        return urls[0];
+        // Production - use WSS for HTTPS sites with nginx /ws proxy
+        return `wss://oracles.africa/ws?token=${encodeURIComponent(token)}`;
     }
 
     // Enhanced event handlers with better error recovery
