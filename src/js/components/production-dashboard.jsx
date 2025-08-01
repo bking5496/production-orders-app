@@ -559,6 +559,12 @@ export default function ProductionDashboard() {
     const [selectedOrder, setSelectedOrder] = useState(null);
     const [showOrderModal, setShowOrderModal] = useState(false);
 
+    // WebSocket integration for real-time production monitoring
+    useAutoConnect();
+    const { lastUpdate: orderUpdate } = useOrderUpdates();
+    const { lastUpdate: machineUpdate } = useMachineUpdates();
+    const { notifications: wsNotifications } = useNotifications();
+
     const fetchData = useCallback(async () => {
         try {
             setError(null);
@@ -615,6 +621,79 @@ export default function ProductionDashboard() {
         return () => clearInterval(interval);
     }, [fetchData]);
 
+    // WebSocket real-time updates for production monitoring
+    useWebSocketEvent('order_started', (data) => {
+        console.log('🟢 Production started:', data.data.order);
+        // Refresh data to get latest machine assignments
+        fetchData();
+        setLastUpdated(new Date());
+    }, [fetchData]);
+
+    useWebSocketEvent('order_stopped', (data) => {
+        console.log('🟡 Production stopped:', data.data.order);
+        // Update machine status in real-time
+        setOverviewData(prevData => {
+            return prevData.map(machine => 
+                machine.id === data.data.order.machine_id
+                    ? { ...machine, status: 'available', order_number: null, order_id: null }
+                    : machine
+            );
+        });
+        setLastUpdated(new Date());
+    }, []);
+
+    useWebSocketEvent('order_resumed', (data) => {
+        console.log('🔵 Production resumed:', data.data.order);
+        // Update machine status back to in_use
+        setOverviewData(prevData => {
+            return prevData.map(machine => 
+                machine.id === data.data.order.machine_id
+                    ? { 
+                        ...machine, 
+                        status: 'in_use', 
+                        order_number: data.data.order.order_number,
+                        order_id: data.data.order.id,
+                        start_time: data.data.order.start_time
+                    }
+                    : machine
+            );
+        });
+        setLastUpdated(new Date());
+    }, []);
+
+    useWebSocketEvent('order_completed', (data) => {
+        console.log('✅ Production completed:', data.data.order);
+        // Free up the machine
+        setOverviewData(prevData => {
+            return prevData.map(machine => 
+                machine.id === data.data.order.machine_id
+                    ? { ...machine, status: 'available', order_number: null, order_id: null }
+                    : machine
+            );
+        });
+        setLastUpdated(new Date());
+    }, []);
+
+    useWebSocketEvent('machine_status_changed', (data) => {
+        console.log('🔧 Machine status changed:', data.data);
+        // Update machine status in real-time
+        setOverviewData(prevData => {
+            return prevData.map(machine => 
+                machine.id === data.data.machine_id
+                    ? { ...machine, status: data.data.status }
+                    : machine
+            );
+        });
+        setLastUpdated(new Date());
+    }, []);
+
+    // Subscribe to production monitoring channels
+    useEffect(() => {
+        if (window.EnhancedWebSocketService?.isConnected()) {
+            window.EnhancedWebSocketService.subscribe(['production', 'orders', 'machines']);
+        }
+    }, []);
+
     const filteredMachines = useMemo(() => {
         if (filterStatus === 'all') return overviewData;
         return overviewData.filter(machine => machine.status === filterStatus);
@@ -653,7 +732,10 @@ export default function ProductionDashboard() {
         <div className="p-6 space-y-6 bg-gray-50 min-h-screen">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
-                    <h1 className="text-3xl font-bold text-gray-800">Production Floor Monitor</h1>
+                    <div className="flex items-center gap-3">
+                        <h1 className="text-3xl font-bold text-gray-800">Production Floor Monitor</h1>
+                        <WebSocketStatusCompact />
+                    </div>
                     <p className="text-gray-600 mt-1">Real-time production monitoring and machine status</p>
                 </div>
                 
