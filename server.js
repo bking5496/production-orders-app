@@ -128,7 +128,9 @@ wss.on('connection', async (ws, req) => {
         
         // Initialize connection state
         ws.subscriptions = [];
+        ws.rooms = [];
         ws.isAlive = true;
+        ws.connectionId = `ws_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
         
         // Send welcome message
         ws.send(JSON.stringify({
@@ -185,6 +187,57 @@ wss.on('connection', async (ws, req) => {
                             type: 'unsubscription_confirmed',
                             data: { channels: data.channels }
                         }));
+                    }
+                    break;
+
+                case 'join_room':
+                    // Join a room for targeted messaging
+                    if (data.room && typeof data.room === 'string') {
+                        if (!ws.rooms.includes(data.room)) {
+                            ws.rooms.push(data.room);
+                            console.log(`🏠 User ${ws.user.username} joined room: ${data.room}`);
+                        }
+                        ws.send(JSON.stringify({
+                            type: 'room_joined',
+                            data: { room: data.room, members: getRoomMembers(data.room) }
+                        }));
+                    }
+                    break;
+
+                case 'leave_room':
+                    // Leave a room
+                    if (data.room && typeof data.room === 'string') {
+                        ws.rooms = ws.rooms.filter(room => room !== data.room);
+                        console.log(`🚪 User ${ws.user.username} left room: ${data.room}`);
+                        ws.send(JSON.stringify({
+                            type: 'room_left',
+                            data: { room: data.room }
+                        }));
+                    }
+                    break;
+
+                case 'room_message':
+                    // Send message to room
+                    if (data.room && data.message) {
+                        broadcastToRoom(data.room, 'room_message', {
+                            user: ws.user.username,
+                            message: data.message,
+                            room: data.room
+                        }, ws.user.username);
+                    }
+                    break;
+
+                case 'request_stats':
+                    // Send current production statistics
+                    try {
+                        const stats = await getProductionStats();
+                        ws.send(JSON.stringify({
+                            type: 'production_stats',
+                            data: stats,
+                            timestamp: new Date().toISOString()
+                        }));
+                    } catch (error) {
+                        console.error('Failed to get production stats:', error);
                     }
                     break;
                     

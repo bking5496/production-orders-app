@@ -382,8 +382,11 @@ export default function OrdersPage() {
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div className="float">
-          <h1 className="text-3xl font-bold gradient-text mb-2">Production Orders</h1>
-          <p className="text-white/80 text-sm mb-4 backdrop-blur-sm">Manage production orders and track progress</p>
+          <div className="flex items-center gap-3">
+            <h1 className="text-3xl font-bold gradient-text mb-2">Production Orders</h1>
+            <WebSocketStatus />
+          </div>
+          <p className="text-white/80 text-sm mb-4 backdrop-blur-sm">Manage production orders and track progress with real-time updates</p>
           <Button 
             onClick={() => setShowCreateModal(true)}
             className="hover-lift btn-micro bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white border-0 shadow-lg"

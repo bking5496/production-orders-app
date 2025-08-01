@@ -8,6 +8,8 @@ import {
 import { Modal, Card, Button, Badge } from './ui-components.jsx';
 import API from '../core/api.js';
 import { ActivityFeed } from './realtime-notifications.jsx';
+import { useOrderUpdates, useMachineUpdates, useAutoConnect, useNotifications } from '../core/websocket-hooks.js';
+import { WebSocketStatusCompact } from './websocket-status.jsx';
 
 export default function Dashboard() {
   const [stats, setStats] = useState({
@@ -26,6 +28,12 @@ export default function Dashboard() {
   
   const refreshIntervalRef = useRef(null);
 
+  // WebSocket integration
+  useAutoConnect();
+  const { lastUpdate: orderUpdate } = useOrderUpdates();
+  const { lastUpdate: machineUpdate } = useMachineUpdates();
+  const { notifications: wsNotifications } = useNotifications();
+
   useEffect(() => {
     loadDashboardData();
     
@@ -40,6 +48,30 @@ export default function Dashboard() {
       }
     };
   }, [timeRange]);
+
+  // WebSocket event handlers for real-time updates
+  useEffect(() => {
+    if (orderUpdate) {
+      console.log('Dashboard received order update:', orderUpdate);
+      // Refresh dashboard data when orders change
+      loadDashboardData(true);
+    }
+  }, [orderUpdate]);
+
+  useEffect(() => {
+    if (machineUpdate) {
+      console.log('Dashboard received machine update:', machineUpdate);
+      // Refresh dashboard data when machines change
+      loadDashboardData(true);
+    }
+  }, [machineUpdate]);
+
+  // Subscribe to dashboard-specific channels
+  useEffect(() => {
+    if (window.EnhancedWebSocketService?.isConnected()) {
+      window.EnhancedWebSocketService.subscribe(['dashboard', 'orders', 'machines', 'production', 'alerts']);
+    }
+  }, []);
 
   const showNotification = (message, type = 'success') => {
     setNotification({ message, type });
@@ -167,7 +199,10 @@ export default function Dashboard() {
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-800">Production Dashboard</h1>
+          <div className="flex items-center gap-3">
+            <h1 className="text-3xl font-bold text-gray-800">Production Dashboard</h1>
+            <WebSocketStatusCompact />
+          </div>
           <p className="text-gray-600 mt-1">Real-time overview of your manufacturing operations</p>
         </div>
         
