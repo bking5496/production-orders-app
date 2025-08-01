@@ -82,6 +82,16 @@
             const status = window.WebSocketService.getStatus();
             log(`📊 Current WebSocket status: ${JSON.stringify(status, null, 2)}`);
             
+            // Log the WebSocket URL that will be used
+            const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+            let wsHost;
+            if (window.location.hostname === 'localhost' && window.location.port === '5174') {
+                wsHost = `${window.location.hostname}:3000`;
+            } else {
+                wsHost = window.location.host;
+            }
+            log(`🔗 Will connect to: ${protocol}//${wsHost}`);
+            
             // Try to ensure connection
             try {
                 const connected = await window.WebSocketService.ensureConnection();

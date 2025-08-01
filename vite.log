@@ -69,3 +69,19 @@ Refer to docs https://vite.dev/config/server-options.html#server-fs-allow for co
 1:03:55 PM [vite] (client) hmr invalidate /src/app.jsx Could not Fast Refresh ("true" export is incompatible). Learn more at https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#consistent-components-exports
 1:03:55 PM [vite] (client) page reload src/app.jsx
 1:04:05 PM [vite] (client) page reload websocket-test-page.html
+1:10:32 PM [vite] (client) hmr update /src/app.jsx
+1:10:32 PM [vite] (client) hmr invalidate /src/app.jsx Could not Fast Refresh ("true" export is incompatible). Learn more at https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#consistent-components-exports
+1:10:32 PM [vite] (client) page reload src/app.jsx
+1:11:37 PM [vite] (client) page reload websocket-test-page.html
+1:16:38 PM [vite] (client) hmr update /src/app.jsx
+1:16:38 PM [vite] (client) hmr invalidate /src/app.jsx Could not Fast Refresh ("true" export is incompatible). Learn more at https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#consistent-components-exports
+1:16:38 PM [vite] (client) page reload src/app.jsx
+1:16:57 PM [vite] (client) hmr update /src/app.jsx
+1:16:57 PM [vite] (client) hmr invalidate /src/app.jsx Could not Fast Refresh ("true" export is incompatible). Learn more at https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#consistent-components-exports
+1:16:57 PM [vite] (client) page reload src/app.jsx
+1:17:55 PM [vite] (client) hmr update /src/app.jsx
+1:17:56 PM [vite] (client) hmr invalidate /src/app.jsx Could not Fast Refresh ("true" export is incompatible). Learn more at https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#consistent-components-exports
+1:17:56 PM [vite] (client) page reload src/app.jsx
+1:18:43 PM [vite] (client) hmr update /src/app.jsx
+1:18:44 PM [vite] (client) hmr invalidate /src/app.jsx Could not Fast Refresh ("true" export is incompatible). Learn more at https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#consistent-components-exports
+1:18:44 PM [vite] (client) page reload src/app.jsx

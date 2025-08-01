@@ -45,19 +45,99 @@ class WebSocketService {
                 throw new Error('No authentication token available');
             }
 
-            // Build WebSocket URL with token
-            const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-            const wsUrl = `${protocol}//${window.location.host}?token=${encodeURIComponent(authToken)}`;
+            // Try multiple WebSocket endpoints for production compatibility
+            const wsEndpoints = this.getWebSocketEndpoints(authToken);
             
-            console.log('🔗 Connecting to WebSocket:', wsUrl.replace(/token=[^&]+/, 'token=***'));
-            
-            this.ws = new WebSocket(wsUrl);
-            this.setupEventHandlers();
+            for (let i = 0; i < wsEndpoints.length; i++) {
+                const wsUrl = wsEndpoints[i];
+                console.log(`🔗 Attempting WebSocket connection ${i + 1}/${wsEndpoints.length}:`, wsUrl.replace(/token=[^&]+/, 'token=***'));
+                
+                try {
+                    await this.attemptConnection(wsUrl);
+                    console.log('✅ WebSocket connection successful');
+                    return; // Success, exit the loop
+                } catch (error) {
+                    console.warn(`⚠️ WebSocket attempt ${i + 1} failed:`, error.message);
+                    if (i === wsEndpoints.length - 1) {
+                        // Last attempt failed, throw the error
+                        throw new Error(`All WebSocket connection attempts failed. Last error: ${error.message}`);
+                    }
+                    // Continue to next endpoint
+                }
+            }
             
         } catch (error) {
             console.error('💥 WebSocket connection error:', error);
             this.handleConnectionError(error);
         }
+    }
+
+    // Get list of possible WebSocket endpoints to try
+    getWebSocketEndpoints(authToken) {
+        const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+        const endpoints = [];
+        
+        if (window.location.hostname === 'localhost' && window.location.port === '5174') {
+            // Development: Vite dev server, connect to backend on port 3000
+            endpoints.push(`${protocol}//${window.location.hostname}:3000?token=${encodeURIComponent(authToken)}`);
+        } else {
+            // Production: try multiple common WebSocket proxy paths
+            const host = window.location.host;
+            
+            // Try common WebSocket paths
+            endpoints.push(`${protocol}//${host}/ws?token=${encodeURIComponent(authToken)}`);
+            endpoints.push(`${protocol}//${host}/websocket?token=${encodeURIComponent(authToken)}`);
+            endpoints.push(`${protocol}//${host}?token=${encodeURIComponent(authToken)}`);
+        }
+        
+        return endpoints;
+    }
+
+    // Attempt a single WebSocket connection
+    attemptConnection(wsUrl) {
+        return new Promise((resolve, reject) => {
+            const ws = new WebSocket(wsUrl);
+            let resolved = false;
+            
+            const cleanup = () => {
+                if (!resolved) {
+                    resolved = true;
+                    ws.removeEventListener('open', onOpen);
+                    ws.removeEventListener('error', onError);
+                    ws.removeEventListener('close', onClose);
+                }
+            };
+            
+            const onOpen = () => {
+                cleanup();
+                this.ws = ws;
+                this.setupEventHandlers();
+                resolve();
+            };
+            
+            const onError = (error) => {
+                cleanup();
+                reject(new Error('Connection failed'));
+            };
+            
+            const onClose = (event) => {
+                cleanup();
+                reject(new Error(`Connection closed: ${event.code} ${event.reason}`));
+            };
+            
+            ws.addEventListener('open', onOpen);
+            ws.addEventListener('error', onError);
+            ws.addEventListener('close', onClose);
+            
+            // Timeout after 5 seconds
+            setTimeout(() => {
+                if (!resolved) {
+                    cleanup();
+                    ws.close();
+                    reject(new Error('Connection timeout'));
+                }
+            }, 5000);
+        });
     }
 
     // Set up WebSocket event handlers
@@ -96,8 +176,14 @@ class WebSocketService {
         };
 
         this.ws.onerror = (event) => {
-            console.error('💥 WebSocket error:', event);
-            this.handleConnectionError(new Error('WebSocket connection error'));
+            console.error('💥 WebSocket error event:', event);
+            console.error('💥 WebSocket error details:', {
+                type: event.type,
+                target: event.target,
+                readyState: this.ws?.readyState,
+                url: this.ws?.url
+            });
+            this.handleConnectionError(new Error(`WebSocket connection error: ${event.type}`));
         };
     }
 
