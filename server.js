@@ -156,8 +156,8 @@ const db = {
 
 console.log('✅ PostgreSQL database interface ready');
 
-// Initialize database (PostgreSQL schemas already exist)
-initializeDatabase();
+// PostgreSQL schemas already exist - no initialization needed
+console.log('✅ PostgreSQL schemas already exist, skipping table creation');
 
 // Database initialization
 function initializeDatabase() {
@@ -1948,8 +1948,30 @@ app.get('/api/production/floor-overview', authenticateToken, async (req, res) =>
       ORDER BY po.start_time DESC
     `;
     
-    // Get machine status summary
-    const machineStatusQuery = `
+    // Get all machines with their current status and any active orders
+    const machinesQuery = `
+      SELECT 
+        m.id,
+        m.name,
+        m.code,
+        m.type,
+        m.environment,
+        m.status,
+        m.capacity,
+        m.production_rate,
+        m.location,
+        po.id as order_id,
+        po.order_number,
+        po.product_name,
+        po.quantity,
+        po.start_time
+      FROM machines m
+      LEFT JOIN production_orders po ON m.id = po.machine_id AND po.status = 'in_progress'
+      ORDER BY m.name
+    `;
+    
+    // Get machine status summary for statistics
+    const machineStatusSummaryQuery = `
       SELECT 
         status,
         COUNT(*) as count
@@ -1968,9 +1990,10 @@ app.get('/api/production/floor-overview', authenticateToken, async (req, res) =>
       WHERE DATE(created_at) = CURRENT_DATE
     `;
     
-    const [activeOrders, machineStatus, todayStats] = await Promise.all([
+    const [activeOrders, machines, machineStatusSummary, todayStats] = await Promise.all([
       dbAll(activeOrdersQuery),
-      dbAll(machineStatusQuery),
+      dbAll(machinesQuery),
+      dbAll(machineStatusSummaryQuery),
       dbGet(todayProductionQuery)
     ]);
     
@@ -1981,7 +2004,9 @@ app.get('/api/production/floor-overview', authenticateToken, async (req, res) =>
     
     res.json({
       activeOrders: activeOrders || [],
-      machineStatus: machineStatus || [],
+      machines: machines || [],
+      machineStatus: machines || [], // For compatibility with frontend expecting machineStatus
+      machineStatusSummary: machineStatusSummary || [],
       todayStats: todayStats || { total_orders: 0, completed_orders: 0, active_orders: 0, pending_orders: 0 },
       efficiency,
       timestamp: new Date().toISOString()
