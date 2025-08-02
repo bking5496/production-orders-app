@@ -227,7 +227,7 @@ const authenticateToken = (req, res, next) => {
   const token = authHeader && authHeader.split(' ')[1];
 
   if (!token) {
-    return res.status(401).json({ 
+    return res.status(401).json({
       success: false,
       error: 'Access token required',
       code: 'NO_TOKEN'
@@ -237,7 +237,7 @@ const authenticateToken = (req, res, next) => {
   jwt.verify(token, JWT_SECRET, (err, user) => {
     if (err) {
       console.error('JWT verification failed:', err.message);
-      return res.status(403).json({ 
+      return res.status(403).json({
         success: false,
         error: 'Invalid or expired token',
         code: 'INVALID_TOKEN'
@@ -253,7 +253,7 @@ const requireRole = (roles) => {
   return (req, res, next) => {
     if (!roles.includes(req.user.role)) {
       console.warn(`Access denied for user ${req.user.username} (${req.user.role}) to ${req.path}`);
-      return res.status(403).json({ 
+      return res.status(403).json({
         success: false,
         error: 'Insufficient permissions',
         code: 'INSUFFICIENT_PERMISSIONS',
@@ -482,7 +482,7 @@ app.post('/api/auth/verify', authenticateToken, (req, res) => {
 
 // Session verification endpoint for WebSocket authentication
 app.get('/api/auth/verify-session', authenticateToken, (req, res) => {
-  res.json({ 
+  res.json({
     authenticated: true, 
     user: {
       id: req.user.id,
@@ -513,7 +513,7 @@ app.get('/api/auth/session-status', authenticateToken, (req, res) => {
       return res.status(401).json({ error: 'Token expired' });
     }
     
-    res.json({ 
+    res.json({
       timeRemaining: timeRemaining,
       expiresAt: decoded.exp * 1000,
       user: req.user 
@@ -541,7 +541,7 @@ app.get('/api/auth/websocket-token', authenticateToken, (req, res) => {
       return res.status(401).json({ error: 'Token expired' });
     }
     
-    res.json({ 
+    res.json({
       token: token,
       user: req.user,
       expiresAt: decoded.exp * 1000
@@ -649,7 +649,7 @@ app.post('/api/machines',
           return res.status(500).json({ error: 'Failed to create machine' });
         }
         
-        res.json({ 
+        res.json({
           id: this.lastID, 
           message: 'Machine created successfully' 
         });
@@ -749,7 +749,7 @@ app.patch('/api/machines/:id/status',
         }
         
         if (machine.status === 'in_use' || machine.status === 'paused') {
-          return res.status(400).json({ 
+          return res.status(400).json({
             error: 'Cannot change status while machine is in use or paused' 
           });
         }
@@ -800,7 +800,7 @@ app.delete('/api/machines/:id',
         }
         
         if (result.order_count > 0) {
-          return res.status(400).json({ 
+          return res.status(400).json({
             error: 'Cannot delete machine with production history. Set to offline instead.' 
           });
         }
@@ -1079,7 +1079,7 @@ app.post('/api/orders/:id/pause',
                     }
                     
                     db.run('COMMIT');
-                    res.json({ 
+                    res.json({
                       message: 'Production paused successfully',
                       stop_id: this.lastID
                     });
@@ -1087,7 +1087,7 @@ app.post('/api/orders/:id/pause',
                 );
               } else {
                 db.run('COMMIT');
-                res.json({ 
+                res.json({
                   message: 'Production paused successfully',
                   stop_id: this.lastID
                 });
@@ -1159,9 +1159,7 @@ app.post('/api/orders/:id/resume',
                        WHERE id = $1`,
                       [stopRecord.id],
                       (err) => {
-                        if (err) {
-                          console.error('Failed to update stop record:', err);
-                        }
+                        if (err) { console.error('Failed to update stop record:', err); }
                       }
                     );
                   }
@@ -1177,14 +1175,14 @@ app.post('/api/orders/:id/resume',
                         
                         db.run('COMMIT');
                         
-                        broadcast('order_resumed', { 
+                        broadcast('order_resumed', {
                           id: order.id, 
                           order_number: order.order_number,
                           resumed_by: req.user.username,
                           resume_time: resumeTime
                         });
                         
-                        res.json({ 
+                        res.json({
                           message: 'Production resumed successfully',
                           resume_time: resumeTime
                         });
@@ -1192,7 +1190,7 @@ app.post('/api/orders/:id/resume',
                     );
                   } else {
                     db.run('COMMIT');
-                    res.json({ 
+                    res.json({
                       message: 'Production resumed successfully',
                       resume_time: resumeTime
                     });
@@ -1251,7 +1249,7 @@ app.post('/api/orders/:id/stop',
           
           db.run('COMMIT');
           
-          broadcast('order_stopped', { 
+          broadcast('order_stopped', {
             id: id, 
             reason: reason,
             stopped_by: req.user.username 
@@ -1381,7 +1379,7 @@ app.post('/api/orders/:id/complete',
                     
                     db.run('COMMIT');
                     
-                    broadcast('order_completed', {
+                    broadcast('order_completed',{
                       id: order.id,
                       order_number: order.order_number,
                       actual_quantity: finalQuantity,
@@ -1389,7 +1387,7 @@ app.post('/api/orders/:id/complete',
                       completed_by: req.user.username
                     });
                     
-                    res.json({ 
+                    res.json({
                       message: 'Production completed successfully',
                       efficiency: efficiency,
                       actual_quantity: finalQuantity
@@ -1398,7 +1396,7 @@ app.post('/api/orders/:id/complete',
                 );
               } else {
                 db.run('COMMIT');
-                res.json({ 
+                res.json({
                   message: 'Production completed successfully',
                   efficiency: efficiency,
                   actual_quantity: finalQuantity
@@ -1671,7 +1669,7 @@ app.use((err, req, res, next) => {
     return res.status(400).json({ error: 'File upload error' });
   }
   
-  res.status(500).json({ 
+  res.status(500).json({
     error: 'Internal server error',
     message: process.env.NODE_ENV === 'development' ? err.message : undefined
   });
@@ -1688,7 +1686,7 @@ app.get('/api/test-login', (req, res) => {
     if (err) {
       return res.json({ error: err.message, stack: err.stack });
     }
-    res.json({ 
+    res.json({
       user: user ? {
         id: user.id,
         username: user.username,
@@ -1714,8 +1712,8 @@ app.get('/api/analytics/summary', authenticateToken, async (req, res) => {
     
     // Get basic summary data
     const totalOrdersQuery = 'SELECT COUNT(*) as count FROM production_orders';
-    const completedOrdersQuery = 'SELECT COUNT(*) as count FROM production_orders WHERE status = \'completed\'';
-    const activeOrdersQuery = 'SELECT COUNT(*) as count FROM production_orders WHERE status = \'in_progress\'';
+    const completedOrdersQuery = 'SELECT COUNT(*) as count FROM production_orders WHERE status = \'completed\'' ;
+    const activeOrdersQuery = 'SELECT COUNT(*) as count FROM production_orders WHERE status = \'in_progress\'' ;
     
     const [totalOrders, completedOrders, activeOrders] = await Promise.all([
       new Promise((resolve, reject) => {
@@ -1998,389 +1996,6 @@ app.get('/api/orders/active', authenticateToken, async (req, res) => {
   }
 });
 
-// Quality current - High priority endpoint
-app.get('/api/quality/current', authenticateToken, async (req, res) => {
-  try {
-    // For now, return basic quality metrics
-    // This can be expanded when quality tracking is implemented
-    const qualityQuery = `
-      SELECT 
-        COUNT(*) as total_orders,
-        AVG(efficiency_percentage) as avg_efficiency,
-        COUNT(CASE WHEN efficiency_percentage >= 90 THEN 1 END) as high_quality
-      FROM production_orders 
-      WHERE efficiency_percentage IS NOT NULL
-        AND DATE(created_at) = CURRENT_DATE
-    `;
-    
-    const quality = await dbGet(qualityQuery);
-    res.json(quality || { total_orders: 0, avg_efficiency: 0, high_quality: 0 });
-  } catch (error) {
-    console.error('Quality current error:', error);
-    res.status(500).json({ error: 'Failed to fetch quality data' });
-  }
-});
-
-// Performance KPIs - Normal priority endpoint
-app.get('/api/performance/kpis', authenticateToken, async (req, res) => {
-  try {
-    const kpiQuery = `
-      SELECT 
-        COUNT(*) as total_orders,
-        SUM(quantity) as total_quantity,
-        AVG(efficiency_percentage) as avg_efficiency,
-        COUNT(CASE WHEN status = 'completed' THEN 1 END) as completed_orders,
-        AVG(CASE WHEN complete_time IS NOT NULL AND start_time IS NOT NULL 
-             THEN EXTRACT(EPOCH FROM (complete_time - start_time)) / 3600 
-             END) as avg_completion_hours
-      FROM production_orders
-      WHERE DATE(created_at) >= CURRENT_DATE - INTERVAL '7 days'
-    `;
-    
-    const kpis = await dbGet(kpiQuery);
-    res.json(kpis || { 
-      total_orders: 0, 
-      total_quantity: 0, 
-      avg_efficiency: 0, 
-      completed_orders: 0, 
-      avg_completion_hours: 0 
-    });
-  } catch (error) {
-    console.error('Performance KPIs error:', error);
-    res.status(500).json({ error: 'Failed to fetch performance KPIs' });
-  }
-});
-
-// ================================
-// LABOR MANAGEMENT API ENDPOINTS
-// ================================
-
-// Get labor assignments for planner
-app.get('/api/planner/assignments', authenticateToken, async (req, res) => {
-  try {
-    const { date } = req.query;
-    
-    const query = `
-      SELECT 
-        la.id,
-        la.employee_id as user_id,
-        la.machine_id,
-        la.assignment_date,
-        la.shift_type as shift,
-        la.start_time,
-        la.end_time,
-        la.role,
-        la.hourly_rate,
-        u.username,
-        u.email,
-        m.name as machine_name,
-        m.type as machine_type
-      FROM labor_assignments la
-      JOIN users u ON la.employee_id = u.id
-      JOIN machines m ON la.machine_id = m.id
-      ${date ? 'WHERE la.assignment_date = $1' : ''}
-      ORDER BY la.assignment_date DESC, la.shift_type, m.name
-    `;
-    
-    const params = date ? [date] : [];
-    const assignments = await dbAll(query, params);
-    res.json(assignments);
-  } catch (error) {
-    console.error('Planner assignments error:', error);
-    res.status(500).json({ error: 'Failed to fetch assignments' });
-  }
-});
-
-// Create labor assignment
-app.post('/api/planner/assignments', authenticateToken, async (req, res) => {
-  try {
-    const { employee_id, machine_id, assignment_date, shift_type, start_time, end_time, role, hourly_rate } = req.body;
-    const created_by = req.user.id;
-    
-    const query = `
-      INSERT INTO labor_assignments 
-      (employee_id, machine_id, assignment_date, shift_type, start_time, end_time, role, hourly_rate, created_by)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
-      RETURNING id, employee_id as user_id, machine_id, assignment_date, shift_type as shift, start_time, end_time, role, hourly_rate
-    `;
-    
-    const result = await dbGet(query, [employee_id, machine_id, assignment_date, shift_type, start_time, end_time, role, hourly_rate, created_by]);
-    res.json(result);
-  } catch (error) {
-    console.error('Create assignment error:', error);
-    res.status(500).json({ error: 'Failed to create assignment' });
-  }
-});
-
-// Delete labor assignment
-app.delete('/api/planner/assignments/:id', authenticateToken, async (req, res) => {
-  try {
-    const { id } = req.params;
-    
-    const result = await dbRun('DELETE FROM labor_assignments WHERE id = $1', [id]);
-    res.json({ success: true, message: 'Assignment deleted successfully' });
-  } catch (error) {
-    console.error('Delete assignment error:', error);
-    res.status(500).json({ error: 'Failed to delete assignment' });
-  }
-});
-
-// Get supervisors for specific date/shift
-app.get('/api/planner/supervisors', authenticateToken, async (req, res) => {
-  try {
-    const { date, shift } = req.query;
-    
-    const query = `
-      SELECT 
-        ss.id,
-        ss.supervisor_id,
-        ss.shift_date,
-        ss.shift_type as shift,
-        ss.environment,
-        u.username,
-        u.email,
-        u.role
-      FROM shift_supervisors ss
-      JOIN users u ON ss.supervisor_id = u.id
-      ${date ? 'WHERE ss.shift_date = $1' : ''}
-      ${shift && date ? 'AND ss.shift_type = $2' : shift ? 'WHERE ss.shift_type = $1' : ''}
-      ORDER BY ss.shift_date DESC, ss.shift_type
-    `;
-    
-    let params = [];
-    if (date && shift) {
-      params = [date, shift];
-    } else if (date) {
-      params = [date];
-    } else if (shift) {
-      params = [shift];
-    }
-    
-    const supervisors = await dbAll(query, params);
-    res.json(supervisors);
-  } catch (error) {
-    console.error('Supervisor fetch error:', error);
-    res.status(500).json({ error: 'Failed to fetch supervisors' });
-  }
-});
-
-// Add supervisor assignment
-app.post('/api/planner/supervisors', authenticateToken, async (req, res) => {
-  try {
-    const { supervisor_id, shift_date, shift_type, environment } = req.body;
-    const created_by = req.user.id;
-    
-    const query = `
-      INSERT INTO shift_supervisors 
-      (supervisor_id, shift_date, shift_type, environment, created_by)
-      VALUES ($1, $2, $3, $4, $5)
-      RETURNING id, supervisor_id, shift_date, shift_type as shift, environment
-    `;
-    
-    const result = await dbGet(query, [supervisor_id, shift_date, shift_type, environment, created_by]);
-    res.json(result);
-  } catch (error) {
-    console.error('Create supervisor assignment error:', error);
-    res.status(500).json({ error: 'Failed to create supervisor assignment' });
-  }
-});
-
-// Delete supervisor assignment
-app.delete('/api/planner/supervisors/:id', authenticateToken, async (req, res) => {
-  try {
-    const { id } = req.params;
-    
-    const result = await dbRun('DELETE FROM shift_supervisors WHERE id = $1', [id]);
-    res.json({ success: true, message: 'Supervisor assignment deleted successfully' });
-  } catch (error) {
-    console.error('Delete supervisor assignment error:', error);
-    res.status(500).json({ error: 'Failed to delete supervisor assignment' });
-  }
-});
-
-// Get machine assignments for specific date
-app.get('/api/machines/:id/assignments/:date', authenticateToken, async (req, res) => {
-  try {
-    const { id, date } = req.params;
-    
-    const query = `
-      SELECT 
-        la.id,
-        la.employee_id as user_id,
-        la.assignment_date,
-        la.shift_type as shift,
-        la.start_time,
-        la.end_time,
-        la.role,
-        u.username,
-        u.email
-      FROM labor_assignments la
-      JOIN users u ON la.employee_id = u.id
-      WHERE la.machine_id = $1 AND la.assignment_date = $2
-      ORDER BY la.shift_type, la.start_time
-    `;
-    
-    const assignments = await dbAll(query, [id, date]);
-    res.json(assignments);
-  } catch (error) {
-    console.error('Machine assignments error:', error);
-    res.status(500).json({ error: 'Failed to fetch machine assignments' });
-  }
-});
-
-// Update user/worker information
-app.put('/api/users/:id', authenticateToken, requireRole(['admin', 'supervisor']), async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { username, email, role } = req.body;
-    
-    const query = `
-      UPDATE users 
-      SET username = $1, email = $2, role = $3, updated_at = NOW()
-      WHERE id = $4
-      RETURNING id, username, email, role, is_active, created_at, last_login
-    `;
-    
-    const result = await dbGet(query, [username, email, role, id]);
-    
-    if (!result) {
-      return res.status(404).json({ error: 'User not found' });
-    }
-    
-    res.json(result);
-  } catch (error) {
-    console.error('Update user error:', error);
-    res.status(500).json({ error: 'Failed to update user' });
-  }
-});
-
-// Get roster data for labour layout
-app.get('/api/labour/roster', authenticateToken, async (req, res) => {
-  try {
-    const { date } = req.query;
-    const targetDate = date || new Date().toISOString().split('T')[0];
-    
-    const query = `
-      SELECT 
-        lr.id,
-        lr.user_id,
-        lr.roster_date,
-        lr.shift,
-        lr.status,
-        lr.check_in_time,
-        lr.check_out_time,
-        u.username,
-        u.email,
-        u.role,
-        la.machine_id,
-        la.role as assignment_role,
-        m.name as machine_name
-      FROM labor_roster lr
-      JOIN users u ON lr.user_id = u.id
-      LEFT JOIN labor_assignments la ON la.employee_id = lr.user_id AND la.assignment_date = lr.roster_date
-      LEFT JOIN machines m ON la.machine_id = m.id
-      WHERE lr.roster_date = $1
-      ORDER BY lr.shift, u.username
-    `;
-    
-    const roster = await dbAll(query, [targetDate]);
-    res.json(roster);
-  } catch (error) {
-    console.error('Roster fetch error:', error);
-    res.status(500).json({ error: 'Failed to fetch roster data' });
-  }
-});
-
-// Get today's roster data (fallback)
-app.get('/api/labour/today', authenticateToken, async (req, res) => {
-  try {
-    const today = new Date().toISOString().split('T')[0];
-    
-    const query = `
-      SELECT 
-        lr.id,
-        lr.user_id,
-        lr.roster_date,
-        lr.shift,
-        lr.status,
-        lr.check_in_time,
-        lr.check_out_time,
-        u.username,
-        u.email,
-        u.role
-      FROM labor_roster lr
-      JOIN users u ON lr.user_id = u.id
-      WHERE lr.roster_date = $1
-      ORDER BY lr.shift, u.username
-    `;
-    
-    const roster = await dbAll(query, [today]);
-    res.json(roster);
-  } catch (error) {
-    console.error('Today roster fetch error:', error);
-    res.status(500).json({ error: 'Failed to fetch today\'s roster' });
-  }
-});
-
-// Verify worker attendance
-app.put('/api/labour/verify/:workerId', authenticateToken, requireRole(['admin', 'supervisor']), async (req, res) => {
-  try {
-    const { workerId } = req.params;
-    const { status, check_in_time, check_out_time, notes } = req.body;
-    const verified_by = req.user.id;
-    const today = new Date().toISOString().split('T')[0];
-    
-    // Update or insert roster record
-    const upsertQuery = `
-      INSERT INTO labor_roster (user_id, roster_date, status, check_in_time, check_out_time, verified_by, notes)
-      VALUES ($1, $2, $3, $4, $5, $6, $7)
-      ON CONFLICT (user_id, roster_date) 
-      DO UPDATE SET 
-        status = EXCLUDED.status,
-        check_in_time = EXCLUDED.check_in_time,
-        check_out_time = EXCLUDED.check_out_time,
-        verified_by = EXCLUDED.verified_by,
-        notes = EXCLUDED.notes,
-        updated_at = NOW()
-      RETURNING id, user_id, roster_date, status, check_in_time, check_out_time
-    `;
-    
-    const result = await dbGet(upsertQuery, [workerId, today, status, check_in_time, check_out_time, verified_by, notes]);
-    res.json(result);
-  } catch (error) {
-    console.error('Verify worker error:', error);
-    res.status(500).json({ error: 'Failed to verify worker attendance' });
-  }
-});
-
-// Settings endpoints
-app.get('/api/settings/general', authenticateToken, (req, res) => {
-  res.json({
-    theme: 'light',
-    language: 'en',
-    timezone: 'UTC',
-    dateFormat: 'MM/DD/YYYY',
-    pageSize: 25
-  });
-});
-
-app.put('/api/settings/general', authenticateToken, (req, res) => {
-  res.json({ success: true });
-});
-
-app.get('/api/settings/profile', authenticateToken, (req, res) => {
-  res.json({
-    username: req.user.username,
-    email: req.user.email || '',
-    fullName: '',
-    phone: ''
-  });
-});
-
-app.put('/api/settings/profile', authenticateToken, (req, res) => {
-  res.json({ success: true });
-});
-
 // Serve React app for all other routes
 
 app.get('*', (req, res) => {
@@ -2391,22 +2006,15 @@ app.get('*', (req, res) => {
 process.on('SIGTERM', () => {
   console.log('SIGTERM received, closing server...');
   server.close(() => {
-    db.close();
+    pool.end();
     console.log('Server closed');
     process.exit(0);
   });
 });
-
-// Load enhanced workflow endpoints - temporarily disabled for debugging
-// const enhancedWorkflowEndpoints = require('./enhanced-workflow-endpoints.js');
-// const enhancedDowntimeEndpoints = require('./enhanced-downtime-endpoints.js');
-// enhancedWorkflowEndpoints(app, db, authenticateToken, requireRole, body, broadcast);
-// enhancedDowntimeEndpoints(app, db, authenticateToken, requireRole, body, broadcast);
 
 // Start server
 server.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
   console.log(`📊 Environment: ${process.env.NODE_ENV || 'development'}`);
   console.log(`🔐 JWT Secret: ${JWT_SECRET.substring(0, 5)}...`);
-  console.log(`✨ Enhanced Production Workflow: ENABLED`);
 });
