@@ -26,7 +26,7 @@ app.post('/api/alerts/downtime/config',
         description
       } = req.body;
 
-      const config = await db.dbRun(
+      const config = await dbRun(
         `INSERT INTO downtime_alert_configs 
          (category_id, severity_level, threshold_minutes, auto_escalate, 
           escalation_delay_minutes, notify_roles, notification_channels, 

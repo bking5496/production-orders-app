@@ -2007,9 +2007,11 @@ try {
   const enhancedWorkflowEndpoints = require('./enhanced-workflow-endpoints.js');
   const enhancedDowntimeEndpoints = require('./enhanced-downtime-endpoints.js');
   const downtimeAnalyticsEndpoints = require('./downtime-analytics-endpoints.js');
+  const realtimeDowntimeAlerts = require('./real-time-downtime-alerts.js');
   enhancedWorkflowEndpoints(app, db, authenticateToken, requireRole, body, broadcast);
   enhancedDowntimeEndpoints(app, db, authenticateToken, requireRole, body, broadcast);
   downtimeAnalyticsEndpoints(app, db, authenticateToken, requireRole, body, broadcast);
+  realtimeDowntimeAlerts(app, db, authenticateToken, requireRole, body, broadcast);
   console.log('✨ Enhanced endpoints loaded successfully');
 } catch (error) {
   console.error('❌ Failed to load enhanced endpoints:', error.message);
