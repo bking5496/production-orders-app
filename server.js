@@ -83,8 +83,8 @@ app.use(helmet({
   },
 }));
 
-// Apply rate limiting to all requests
-app.use(limiter);
+// Rate limiting disabled for development
+// app.use(limiter);
 
 // Middleware
 app.use(compression());

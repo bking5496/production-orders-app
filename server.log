@@ -1,3 +1,7 @@
+
+> production-management-system@2.0.0 start
+> node server.js
+
 🐘 Initializing PostgreSQL database connection...
 ✅ PostgreSQL database interface ready
 🔍 About to run health check...
@@ -12,10 +16,35 @@ JWT_SECRET exists: true
 🔓 Client released back to pool
 🏥 Database health check: {
   status: 'healthy',
-  timestamp: 2025-08-02T14:57:27.900Z,
+  timestamp: 2025-08-02T15:00:33.020Z,
   version: 'PostgreSQL 16.9 (Ubuntu 16.9-0ubuntu0.24.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 13.3.0-6ubuntu2~24.04) 13.3.0, 64-bit',
   pool_total: 1,
   pool_idle: 1,
   pool_waiting: 0
 }
-JWT verification failed: jwt malformed
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+SIGTERM received, closing server...
+Server closed
