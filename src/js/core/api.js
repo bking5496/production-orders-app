@@ -45,17 +45,32 @@ class ApiService {
   // Central request method with cookie support
   async request(endpoint, options = {}) {
     const url = `${this.baseURL}${endpoint}`;
+    const headers = this.getHeaders();
     const config = {
       ...options,
-      headers: this.getHeaders(),
+      headers,
       // This is the crucial line that enables sending cookies
       credentials: 'include',
     };
+    
+    // Debug logging for API requests
+    console.log('🌐 API Request:', {
+      method: config.method || 'GET',
+      url,
+      hasAuthHeader: !!headers.Authorization,
+      authHeader: headers.Authorization ? `${headers.Authorization.substring(0, 20)}...` : 'None'
+    });
+    
     try {
       const response = await fetch(url, config);
+      console.log('📡 API Response:', {
+        status: response.status,
+        statusText: response.statusText,
+        contentType: response.headers.get('content-type')
+      });
       return this.handleResponse(response);
     } catch (error) {
-      console.error('API request failed:', error);
+      console.error('❌ API request failed:', error);
       throw error;
     }
   }
@@ -111,6 +126,27 @@ class ApiService {
   getUsers() { return this.get('/users'); }
   getMachines() { return this.get('/machines'); }
   getOrders() { return this.get('/orders'); }
+  
+  // Debug method to test authentication
+  async testAuth() {
+    const token = localStorage.getItem('token');
+    console.log('🔐 Current token:', token ? `${token.substring(0, 50)}...` : 'No token');
+    
+    if (!token) {
+      console.log('❌ No token found in localStorage');
+      return false;
+    }
+    
+    try {
+      const response = await this.get('/auth/verify-session');
+      console.log('✅ Auth test successful:', response);
+      return true;
+    } catch (error) {
+      console.log('❌ Auth test failed:', error.message);
+      return false;
+    }
+  }
+  
   // ... include all other specific methods from your original file
 }
 

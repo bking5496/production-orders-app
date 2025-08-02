@@ -56,6 +56,8 @@ const WorkersModule = ({ assignments = [], onShowNotification }) => {
   const fetchEmployees = async () => {
     // Check if user is authenticated before making any requests
     const token = localStorage.getItem('token');
+    console.log('🔐 Token check:', token ? `Token exists (${token.substring(0, 20)}...)` : 'No token found');
+    
     if (!token) {
       console.log('ℹ️ No authentication token, waiting for user login');
       setEmployees([]);
@@ -65,10 +67,18 @@ const WorkersModule = ({ assignments = [], onShowNotification }) => {
 
     try {
       setLoading(true);
+      console.log('🔍 Fetching users from /api/users with token...');
+      console.log('🌐 Current origin:', window.location.origin);
+      console.log('🌐 Full URL will be:', `${window.location.origin}/api/users`);
+      
       const response = await API.get('/api/users');
+      console.log('👥 Users loaded successfully:', response?.length || 0);
       setEmployees(response || []);
     } catch (error) {
-      console.error('Error fetching employees:', error);
+      console.error('❌ Error fetching employees:', error);
+      console.error('🔍 Error type:', typeof error);
+      console.error('🔍 Error message:', error.message);
+      console.error('🔍 Error stack:', error.stack);
       
       // Handle specific authentication errors
       if (error.message.includes('Session expired') || error.message.includes('unauthorized')) {
@@ -349,16 +359,23 @@ const LaborPlannerContainer = () => {
         }
 
         try {
+          console.log('🔍 Loading planning data...');
           const [machinesRes, employeesRes] = await Promise.all([
             API.get('/api/machines').catch((err) => {
               console.error('Failed to load machines:', err);
+              console.error('Machines error type:', typeof err);
+              console.error('Machines error message:', err.message);
               return [];
             }),
             API.get('/api/users').catch((err) => {
               console.error('Failed to load users:', err);
+              console.error('Users error type:', typeof err);
+              console.error('Users error message:', err.message);
               return [];
             })
           ]);
+          console.log('🏭 Machines loaded:', machinesRes?.length || 0);
+          console.log('👥 Employees loaded:', employeesRes?.length || 0);
           setMachines(machinesRes || []);
           setEmployees(employeesRes || []);
         } catch (error) {

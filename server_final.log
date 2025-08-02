@@ -16,3 +16,5 @@ JWT_SECRET exists: true
 🔓 Client released back to pool
 🔗 Client acquired from pool
 🔓 Client released back to pool
+SIGTERM received, closing server...
+Server closed

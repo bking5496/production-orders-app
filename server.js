@@ -448,7 +448,7 @@ app.post('/api/auth/login',
     const { username, password } = req.body;
 
     try {
-      const user = await db.get('SELECT * FROM users WHERE username = $1 AND is_active = true', [username]);
+      const user = await dbGet('SELECT * FROM users WHERE username = $1 AND is_active = true', [username]);
 
       if (!user || !(await bcrypt.compare(password, user.password_hash))) {
         return res.status(401).json({ error: 'Invalid credentials' });
@@ -461,7 +461,7 @@ app.post('/api/auth/login',
       );
 
       // Update last login
-      db.run('UPDATE users SET last_login = CURRENT_TIMESTAMP WHERE id = $1', [user.id]);
+      await dbRun('UPDATE users SET last_login = CURRENT_TIMESTAMP WHERE id = $1', [user.id]);
 
       res.json({
         token,
