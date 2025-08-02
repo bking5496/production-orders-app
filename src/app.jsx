@@ -4,6 +4,9 @@ import ReactDOM from 'react-dom/client';
 // Import EventBus first (before other modules that use it)
 import './js/core/event-bus.js';
 
+// Import API service (must be imported before auth and other components that use it)
+import './js/core/api.js';
+
 // Import Enhanced WebSocket service
 import './js/core/websocket-enhanced.js';
 
