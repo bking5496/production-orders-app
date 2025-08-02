@@ -21,6 +21,10 @@ const rateLimit = require('express-rate-limit');
 
 // Initialize Express app
 const app = express();
+
+// Trust proxy setting - required when behind reverse proxy/load balancer
+app.set('trust proxy', true);
+
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
