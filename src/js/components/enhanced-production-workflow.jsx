@@ -1,0 +1,710 @@
+import React, { useState, useEffect } from 'react';
+import { 
+  Clock, 
+  CheckCircle, 
+  AlertTriangle, 
+  Package, 
+  Settings, 
+  Play, 
+  Square,
+  FileCheck,
+  Activity,
+  Zap
+} from 'lucide-react';
+import API from '../core/api';
+
+const EnhancedProductionWorkflow = ({ orderId, onClose }) => {
+  const [orderDetails, setOrderDetails] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [activeStep, setActiveStep] = useState(0);
+  const [error, setError] = useState('');
+
+  // Material preparation state
+  const [materials, setMaterials] = useState([
+    { code: 'RAW001', name: 'Primary Ingredient A', required_qty: 100, unit: 'kg', allocated_qty: 100, lot_number: 'LOT2025001', supplier: 'Supplier A' },
+    { code: 'RAW002', name: 'Secondary Ingredient B', required_qty: 20, unit: 'kg', allocated_qty: 20, lot_number: 'LOT2025002', supplier: 'Supplier B' }
+  ]);
+
+  // Setup state
+  const [setupData, setSetupData] = useState({
+    machine_id: null,
+    setup_type: 'initial_setup',
+    previous_product: '',
+    setup_checklist: [
+      { task: 'Machine cleaned and sanitized', completed: false },
+      { task: 'Tools and fixtures installed', completed: false },
+      { task: 'Parameters configured', completed: false },
+      { task: 'Safety systems verified', completed: false }
+    ]
+  });
+
+  // Production state
+  const [productionData, setProductionData] = useState({
+    batch_number: `BAT${Date.now()}`,
+    environmental_conditions: {
+      temperature: 25.0,
+      humidity: 60.0,
+      pressure: 1013.25
+    }
+  });
+
+  // Quality checks state
+  const [qualityChecks, setQualityChecks] = useState([
+    {
+      checkpoint_name: 'Weight Check',
+      checkpoint_stage: 'final_inspection',
+      target_value: 100,
+      tolerance_min: 95,
+      tolerance_max: 105,
+      unit_of_measure: 'units',
+      measured_value: null
+    },
+    {
+      checkpoint_name: 'Temperature Control',
+      checkpoint_stage: 'in_process',
+      target_value: 75.0,
+      tolerance_min: 70.0,
+      tolerance_max: 80.0,
+      unit_of_measure: '°C',
+      measured_value: null
+    }
+  ]);
+
+  const workflowSteps = [
+    { 
+      id: 'materials', 
+      title: 'Material Preparation', 
+      icon: Package, 
+      description: 'Verify and allocate raw materials',
+      status: 'pending'
+    },
+    { 
+      id: 'setup', 
+      title: 'Machine Setup', 
+      icon: Settings, 
+      description: 'Configure machine and complete setup checklist',
+      status: 'pending'
+    },
+    { 
+      id: 'production', 
+      title: 'Production Start', 
+      icon: Play, 
+      description: 'Begin production with safety checks',
+      status: 'pending'
+    },
+    { 
+      id: 'quality', 
+      title: 'Quality Control', 
+      icon: FileCheck, 
+      description: 'Monitor quality checkpoints',
+      status: 'pending'
+    },
+    { 
+      id: 'completion', 
+      title: 'Completion', 
+      icon: CheckCircle, 
+      description: 'Complete production with final approval',
+      status: 'pending'
+    }
+  ];
+
+  useEffect(() => {
+    loadOrderDetails();
+  }, [orderId]);
+
+  const loadOrderDetails = async () => {
+    try {
+      setLoading(true);
+      const response = await API.get(`/orders/${orderId}/enhanced`);
+      setOrderDetails(response);
+      
+      // Update workflow status based on order
+      updateWorkflowStatus(response.order);
+      
+      if (response.materials?.length > 0) {
+        setMaterials(response.materials);
+      }
+      
+      if (response.setup) {
+        setSetupData(prev => ({ ...prev, ...response.setup }));
+      }
+      
+    } catch (error) {
+      setError('Failed to load order details');
+      console.error('Error loading enhanced order details:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const updateWorkflowStatus = (order) => {
+    let currentStep = 0;
+    
+    if (order.material_check_completed) currentStep = 1;
+    if (order.setup_complete_time) currentStep = 2;
+    if (order.workflow_stage === 'in_progress') currentStep = 3;
+    if (order.quality_approved) currentStep = 4;
+    if (order.workflow_stage === 'completed') currentStep = 5;
+    
+    setActiveStep(currentStep);
+  };
+
+  const handlePrepareMaterials = async () => {
+    try {
+      setLoading(true);
+      await API.post(`/orders/${orderId}/prepare-materials`, {
+        materials,
+        checked_by: 1, // Current user ID
+        notes: 'Materials prepared via enhanced workflow'
+      });
+      
+      setActiveStep(1);
+      await loadOrderDetails();
+      setError('');
+    } catch (error) {
+      setError('Failed to prepare materials: ' + error.response?.data?.error || error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleStartSetup = async () => {
+    try {
+      setLoading(true);
+      await API.post(`/orders/${orderId}/start-setup`, {
+        machine_id: setupData.machine_id,
+        setup_type: setupData.setup_type,
+        previous_product: setupData.previous_product
+      });
+      
+      await loadOrderDetails();
+      setError('');
+    } catch (error) {
+      setError('Failed to start setup: ' + error.response?.data?.error || error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCompleteSetup = async () => {
+    try {
+      setLoading(true);
+      await API.post(`/orders/${orderId}/complete-setup`, {
+        setup_checklist: setupData.setup_checklist,
+        notes: 'Setup completed via enhanced workflow'
+      });
+      
+      setActiveStep(2);
+      await loadOrderDetails();
+      setError('');
+    } catch (error) {
+      setError('Failed to complete setup: ' + error.response?.data?.error || error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleStartProduction = async () => {
+    try {
+      setLoading(true);
+      await API.post(`/orders/${orderId}/start-enhanced`, {
+        batch_number: productionData.batch_number,
+        environmental_conditions: productionData.environmental_conditions
+      });
+      
+      setActiveStep(3);
+      await loadOrderDetails();
+      setError('');
+    } catch (error) {
+      setError('Failed to start production: ' + error.response?.data?.error || error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleQualityCheck = async (checkIndex, measuredValue) => {
+    const check = qualityChecks[checkIndex];
+    try {
+      await API.post(`/orders/${orderId}/quality-check`, {
+        checkpoint_name: check.checkpoint_name,
+        checkpoint_stage: check.checkpoint_stage,
+        measured_value: parseFloat(measuredValue),
+        target_value: check.target_value,
+        tolerance_min: check.tolerance_min,
+        tolerance_max: check.tolerance_max,
+        unit_of_measure: check.unit_of_measure,
+        notes: 'Quality check via enhanced workflow'
+      });
+      
+      // Update local state
+      const updatedChecks = [...qualityChecks];
+      updatedChecks[checkIndex].measured_value = parseFloat(measuredValue);
+      setQualityChecks(updatedChecks);
+      
+      await loadOrderDetails();
+    } catch (error) {
+      setError('Failed to record quality check: ' + error.response?.data?.error || error.message);
+    }
+  };
+
+  const handleCompleteProduction = async () => {
+    try {
+      setLoading(true);
+      await API.post(`/orders/${orderId}/complete-enhanced`, {
+        actual_quantity: orderDetails?.order?.quantity,
+        quality_approved: true,
+        final_notes: 'Production completed via enhanced workflow'
+      });
+      
+      setActiveStep(5);
+      await loadOrderDetails();
+      setError('');
+    } catch (error) {
+      setError('Failed to complete production: ' + error.response?.data?.error || error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getStepStatus = (index) => {
+    if (index < activeStep) return 'completed';
+    if (index === activeStep) return 'active';
+    return 'pending';
+  };
+
+  if (loading && !orderDetails) {
+    return (
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="bg-white rounded-lg p-6">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-2 text-center">Loading workflow...</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-lg max-w-6xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="p-6 border-b border-gray-200">
+          <div className="flex justify-between items-center">
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900">Enhanced Production Workflow</h2>
+              <p className="text-gray-600">
+                Order: {orderDetails?.order?.order_number} - {orderDetails?.order?.product_name}
+              </p>
+            </div>
+            <button 
+              onClick={onClose}
+              className="text-gray-400 hover:text-gray-600"
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+
+        {error && (
+          <div className="mx-6 mt-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+            <div className="flex items-center">
+              <AlertTriangle className="h-5 w-5 text-red-500 mr-2" />
+              <span className="text-red-700">{error}</span>
+            </div>
+          </div>
+        )}
+
+        <div className="p-6">
+          {/* Workflow Progress */}
+          <div className="mb-8">
+            <div className="flex items-center justify-between mb-4">
+              {workflowSteps.map((step, index) => {
+                const status = getStepStatus(index);
+                const Icon = step.icon;
+                
+                return (
+                  <div key={step.id} className="flex items-center flex-1">
+                    <div className="flex flex-col items-center">
+                      <div className={`
+                        w-12 h-12 rounded-full flex items-center justify-center border-2
+                        ${status === 'completed' ? 'bg-green-500 border-green-500 text-white' :
+                          status === 'active' ? 'bg-blue-500 border-blue-500 text-white' :
+                          'bg-gray-100 border-gray-300 text-gray-400'}
+                      `}>
+                        <Icon className="h-6 w-6" />
+                      </div>
+                      <span className="text-sm font-medium mt-2 text-center">{step.title}</span>
+                      <span className="text-xs text-gray-500 text-center">{step.description}</span>
+                    </div>
+                    {index < workflowSteps.length - 1 && (
+                      <div className={`
+                        flex-1 h-0.5 mx-4
+                        ${index < activeStep ? 'bg-green-500' : 'bg-gray-300'}
+                      `} />
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Step Content */}
+          <div className="bg-gray-50 rounded-lg p-6">
+            {/* Material Preparation */}
+            {activeStep === 0 && (
+              <div>
+                <h3 className="text-lg font-semibold mb-4 flex items-center">
+                  <Package className="h-5 w-5 mr-2 text-blue-600" />
+                  Material Preparation
+                </h3>
+                <div className="space-y-4">
+                  {materials.map((material, index) => (
+                    <div key={material.code} className="bg-white p-4 rounded-lg border">
+                      <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
+                        <div>
+                          <label className="text-sm font-medium text-gray-700">Code</label>
+                          <p className="text-sm">{material.code}</p>
+                        </div>
+                        <div>
+                          <label className="text-sm font-medium text-gray-700">Material</label>
+                          <p className="text-sm">{material.name}</p>
+                        </div>
+                        <div>
+                          <label className="text-sm font-medium text-gray-700">Required</label>
+                          <p className="text-sm">{material.required_qty} {material.unit}</p>
+                        </div>
+                        <div>
+                          <label className="text-sm font-medium text-gray-700">Allocated</label>
+                          <p className="text-sm">{material.allocated_qty} {material.unit}</p>
+                        </div>
+                        <div>
+                          <label className="text-sm font-medium text-gray-700">Lot Number</label>
+                          <p className="text-sm">{material.lot_number}</p>
+                        </div>
+                        <div>
+                          <label className="text-sm font-medium text-gray-700">Supplier</label>
+                          <p className="text-sm">{material.supplier}</p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                  <button
+                    onClick={handlePrepareMaterials}
+                    disabled={loading}
+                    className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 disabled:opacity-50"
+                  >
+                    {loading ? 'Preparing...' : 'Confirm Material Preparation'}
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Machine Setup */}
+            {activeStep === 1 && (
+              <div>
+                <h3 className="text-lg font-semibold mb-4 flex items-center">
+                  <Settings className="h-5 w-5 mr-2 text-blue-600" />
+                  Machine Setup
+                </h3>
+                <div className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Machine</label>
+                      <select
+                        value={setupData.machine_id || ''}
+                        onChange={(e) => setSetupData(prev => ({ ...prev, machine_id: parseInt(e.target.value) }))}
+                        className="w-full border border-gray-300 rounded-lg px-3 py-2"
+                      >
+                        <option value="">Select Machine</option>
+                        <option value="1">Blending Machine A</option>
+                        <option value="2">Packaging Line B</option>
+                        <option value="3">Quality Station C</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Setup Type</label>
+                      <select
+                        value={setupData.setup_type}
+                        onChange={(e) => setSetupData(prev => ({ ...prev, setup_type: e.target.value }))}
+                        className="w-full border border-gray-300 rounded-lg px-3 py-2"
+                      >
+                        <option value="initial_setup">Initial Setup</option>
+                        <option value="changeover">Changeover</option>
+                        <option value="maintenance_setup">Maintenance Setup</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Previous Product</label>
+                      <input
+                        type="text"
+                        value={setupData.previous_product}
+                        onChange={(e) => setSetupData(prev => ({ ...prev, previous_product: e.target.value }))}
+                        className="w-full border border-gray-300 rounded-lg px-3 py-2"
+                        placeholder="Previous product (if changeover)"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="bg-white p-4 rounded-lg border">
+                    <h4 className="font-medium mb-3">Setup Checklist</h4>
+                    <div className="space-y-2">
+                      {setupData.setup_checklist.map((item, index) => (
+                        <label key={index} className="flex items-center">
+                          <input
+                            type="checkbox"
+                            checked={item.completed}
+                            onChange={(e) => {
+                              const updated = [...setupData.setup_checklist];
+                              updated[index].completed = e.target.checked;
+                              setSetupData(prev => ({ ...prev, setup_checklist: updated }));
+                            }}
+                            className="mr-2"
+                          />
+                          <span className={item.completed ? 'line-through text-gray-500' : ''}>{item.task}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="flex gap-4">
+                    {!orderDetails?.setup ? (
+                      <button
+                        onClick={handleStartSetup}
+                        disabled={!setupData.machine_id || loading}
+                        className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 disabled:opacity-50"
+                      >
+                        {loading ? 'Starting...' : 'Start Setup'}
+                      </button>
+                    ) : (
+                      <button
+                        onClick={handleCompleteSetup}
+                        disabled={!setupData.setup_checklist.every(item => item.completed) || loading}
+                        className="flex-1 bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 disabled:opacity-50"
+                      >
+                        {loading ? 'Completing...' : 'Complete Setup'}
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Production Start */}
+            {activeStep === 2 && (
+              <div>
+                <h3 className="text-lg font-semibold mb-4 flex items-center">
+                  <Play className="h-5 w-5 mr-2 text-green-600" />
+                  Production Start
+                </h3>
+                <div className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Batch Number</label>
+                      <input
+                        type="text"
+                        value={productionData.batch_number}
+                        onChange={(e) => setProductionData(prev => ({ ...prev, batch_number: e.target.value }))}
+                        className="w-full border border-gray-300 rounded-lg px-3 py-2"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="bg-white p-4 rounded-lg border">
+                    <h4 className="font-medium mb-3">Environmental Conditions</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Temperature (°C)</label>
+                        <input
+                          type="number"
+                          step="0.1"
+                          value={productionData.environmental_conditions.temperature}
+                          onChange={(e) => setProductionData(prev => ({
+                            ...prev,
+                            environmental_conditions: {
+                              ...prev.environmental_conditions,
+                              temperature: parseFloat(e.target.value)
+                            }
+                          }))}
+                          className="w-full border border-gray-300 rounded-lg px-3 py-2"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Humidity (%)</label>
+                        <input
+                          type="number"
+                          step="0.1"
+                          value={productionData.environmental_conditions.humidity}
+                          onChange={(e) => setProductionData(prev => ({
+                            ...prev,
+                            environmental_conditions: {
+                              ...prev.environmental_conditions,
+                              humidity: parseFloat(e.target.value)
+                            }
+                          }))}
+                          className="w-full border border-gray-300 rounded-lg px-3 py-2"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Pressure (hPa)</label>
+                        <input
+                          type="number"
+                          step="0.01"
+                          value={productionData.environmental_conditions.pressure}
+                          onChange={(e) => setProductionData(prev => ({
+                            ...prev,
+                            environmental_conditions: {
+                              ...prev.environmental_conditions,
+                              pressure: parseFloat(e.target.value)
+                            }
+                          }))}
+                          className="w-full border border-gray-300 rounded-lg px-3 py-2"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={handleStartProduction}
+                    disabled={loading}
+                    className="w-full bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 disabled:opacity-50"
+                  >
+                    {loading ? 'Starting Production...' : 'Start Production with Safety Checks'}
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Quality Control */}
+            {activeStep === 3 && (
+              <div>
+                <h3 className="text-lg font-semibold mb-4 flex items-center">
+                  <FileCheck className="h-5 w-5 mr-2 text-purple-600" />
+                  Quality Control Checkpoints
+                </h3>
+                <div className="space-y-4">
+                  {qualityChecks.map((check, index) => (
+                    <div key={index} className="bg-white p-4 rounded-lg border">
+                      <div className="grid grid-cols-1 md:grid-cols-5 gap-4 items-end">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">Checkpoint</label>
+                          <p className="text-sm">{check.checkpoint_name}</p>
+                          <p className="text-xs text-gray-500">{check.checkpoint_stage}</p>
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">Target</label>
+                          <p className="text-sm">{check.target_value} {check.unit_of_measure}</p>
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">Tolerance</label>
+                          <p className="text-sm">{check.tolerance_min} - {check.tolerance_max}</p>
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">Measured Value</label>
+                          <input
+                            type="number"
+                            step="0.1"
+                            value={check.measured_value || ''}
+                            onChange={(e) => {
+                              const updated = [...qualityChecks];
+                              updated[index].measured_value = parseFloat(e.target.value);
+                              setQualityChecks(updated);
+                            }}
+                            className="w-full border border-gray-300 rounded-lg px-3 py-2"
+                            placeholder={`Enter ${check.unit_of_measure}`}
+                          />
+                        </div>
+                        <div>
+                          <button
+                            onClick={() => handleQualityCheck(index, check.measured_value)}
+                            disabled={!check.measured_value}
+                            className="w-full bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700 disabled:opacity-50"
+                          >
+                            Record
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                  
+                  <button
+                    onClick={() => setActiveStep(4)}
+                    disabled={qualityChecks.some(check => check.measured_value === null)}
+                    className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 disabled:opacity-50"
+                  >
+                    Proceed to Completion
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Completion */}
+            {activeStep === 4 && (
+              <div>
+                <h3 className="text-lg font-semibold mb-4 flex items-center">
+                  <CheckCircle className="h-5 w-5 mr-2 text-green-600" />
+                  Production Completion
+                </h3>
+                <div className="space-y-4">
+                  <div className="bg-green-50 p-4 rounded-lg border border-green-200">
+                    <h4 className="font-medium text-green-800 mb-2">Final Quality Approval Required</h4>
+                    <p className="text-green-700 text-sm">
+                      All quality checkpoints have been completed successfully. 
+                      Supervisor approval is required to complete production.
+                    </p>
+                  </div>
+
+                  <div className="bg-white p-4 rounded-lg border">
+                    <h4 className="font-medium mb-3">Production Summary</h4>
+                    <div className="grid grid-cols-2 gap-4 text-sm">
+                      <div>
+                        <span className="text-gray-600">Order Number:</span>
+                        <span className="ml-2 font-medium">{orderDetails?.order?.order_number}</span>
+                      </div>
+                      <div>
+                        <span className="text-gray-600">Product:</span>
+                        <span className="ml-2 font-medium">{orderDetails?.order?.product_name}</span>
+                      </div>
+                      <div>
+                        <span className="text-gray-600">Batch Number:</span>
+                        <span className="ml-2 font-medium">{productionData.batch_number}</span>
+                      </div>
+                      <div>
+                        <span className="text-gray-600">Quantity:</span>
+                        <span className="ml-2 font-medium">{orderDetails?.order?.quantity} units</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={handleCompleteProduction}
+                    disabled={loading}
+                    className="w-full bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 disabled:opacity-50"
+                  >
+                    {loading ? 'Completing Production...' : 'Complete Production with Quality Approval'}
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Completed */}
+            {activeStep >= 5 && (
+              <div className="text-center">
+                <CheckCircle className="h-16 w-16 text-green-600 mx-auto mb-4" />
+                <h3 className="text-xl font-semibold text-green-800 mb-2">Production Completed Successfully!</h3>
+                <p className="text-gray-600 mb-4">
+                  Order {orderDetails?.order?.order_number} has been completed with full traceability and quality approval.
+                </p>
+                <button
+                  onClick={onClose}
+                  className="bg-blue-600 text-white py-2 px-6 rounded-lg hover:bg-blue-700"
+                >
+                  Close Workflow
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default EnhancedProductionWorkflow;

@@ -25,7 +25,10 @@ const wss = new WebSocket.Server({ server });
 
 // Configuration
 const PORT = process.env.PORT || 3000;
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
+const JWT_SECRET = process.env.JWT_SECRET || (() => {
+  console.error('🚨 WARNING: Using default JWT secret. Set JWT_SECRET environment variable in production!');
+  return 'production-orders-default-secret-change-immediately-in-production-' + Date.now();
+})();
 const DATABASE_PATH = process.env.DATABASE_PATH || './production.db';
 const UPLOAD_DIR = process.env.UPLOAD_DIR || 'uploads';
 
@@ -1237,16 +1240,14 @@ app.post('/api/orders/:id/stop',
           // No machine status change needed here
           
           db.run('COMMIT');
-              
-              broadcast('order_stopped', { 
-                id: id, 
-                reason: reason,
-                stopped_by: req.user.username 
-              });
-              
-              res.json({ message: 'Production stopped successfully' });
-            }
-          );
+          
+          broadcast('order_stopped', { 
+            id: id, 
+            reason: reason,
+            stopped_by: req.user.username 
+          });
+          
+          res.json({ message: 'Production stopped successfully' });
         }
       );
     });
@@ -2361,9 +2362,13 @@ process.on('SIGTERM', () => {
   });
 });
 
+// Load enhanced workflow endpoints
+require('./enhanced-workflow-endpoints.js');
+
 // Start server
 server.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
   console.log(`📊 Environment: ${process.env.NODE_ENV || 'development'}`);
   console.log(`🔐 JWT Secret: ${JWT_SECRET.substring(0, 5)}...`);
+  console.log(`✨ Enhanced Production Workflow: ENABLED`);
 });
