@@ -1,7 +1,7 @@
 // production-completion-modal.js - Production Completion Modal Component
 // Save as: public/js/components/production-completion-modal.js
 
-import Time from '../core/time';
+import Time from '../core/time-selector';
 
 window.ProductionCompletionModal = ({ isOpen, onClose, order, onComplete }) => {
   const [loading, setLoading] = React.useState(false);
@@ -105,12 +105,9 @@ window.ProductionCompletionModal = ({ isOpen, onClose, order, onComplete }) => {
           React.createElement('span', { className: 'text-gray-600' }, 'Production Time: '),
           React.createElement('span', { className: 'font-medium' }, 
             (() => {
-              // Use Time module for SAST timezone handling
-              const start = Time.toSAST(order.start_time).getTime();
-              const duration = Time.getSASTTimestamp() - start;
-              const hours = Math.floor(duration / (1000 * 60 * 60));
-              const minutes = Math.floor((duration % (1000 * 60 * 60)) / (1000 * 60));
-              return `${hours}h ${minutes}m`;
+              // Use PostgreSQL-compatible duration calculation
+              const duration = Time.calculateDuration(order.start_time);
+              return Time.formatDuration(duration);
             })()
           )
         )

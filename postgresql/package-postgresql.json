@@ -1,0 +1,114 @@
+{
+  "name": "production-management-system",
+  "version": "2.1.0",
+  "description": "Advanced Multi-Environment Manufacturing Execution System with PostgreSQL",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "vite --host",
+    "build": "vite build",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:migration": "node postgresql/03-migration-tests.js",
+    "lint": "eslint .",
+    "seed": "node scripts/seed.js",
+    "backup": "node scripts/backup-postgresql.js",
+    "migrate": "node scripts/migrate.js",
+    "migrate:postgresql": "bash postgresql/04-deploy-migration.sh",
+    "pm2": "npx pm2",
+    "pm2:start": "npx pm2 start ecosystem.config.js",
+    "pm2:stop": "npx pm2 stop all",
+    "pm2:restart": "npx pm2 restart all",
+    "pm2:logs": "npx pm2 logs",
+    "pm2:status": "npx pm2 status",
+    "pm2:monit": "npx pm2 monit",
+    "deploy": "./deploy.sh",
+    "db:create": "createdb -h ${DB_HOST:-localhost} -p ${DB_PORT:-5432} -U ${DB_USER:-postgres} ${DB_NAME:-production_orders}",
+    "db:drop": "dropdb -h ${DB_HOST:-localhost} -p ${DB_PORT:-5432} -U ${DB_USER:-postgres} ${DB_NAME:-production_orders}",
+    "db:reset": "npm run db:drop && npm run db:create && psql -h ${DB_HOST:-localhost} -p ${DB_PORT:-5432} -U ${DB_USER:-postgres} -d ${DB_NAME:-production_orders} -f postgresql/01-schema.sql",
+    "db:backup": "pg_dump -h ${DB_HOST:-localhost} -p ${DB_PORT:-5432} -U ${DB_USER:-postgres} -d ${DB_NAME:-production_orders} > backups/backup-$(date +%Y%m%d_%H%M%S).sql",
+    "db:restore": "psql -h ${DB_HOST:-localhost} -p ${DB_PORT:-5432} -U ${DB_USER:-postgres} -d ${DB_NAME:-production_orders} -f",
+    "docker:up": "docker-compose -f postgresql/docker-compose.yml up -d",
+    "docker:down": "docker-compose -f postgresql/docker-compose.yml down",
+    "docker:logs": "docker-compose -f postgresql/docker-compose.yml logs -f",
+    "docker:build": "docker-compose -f postgresql/docker-compose.yml build",
+    "health": "curl -f http://localhost:${PORT:-3000}/api/health || exit 1"
+  },
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "bcryptjs": "^3.0.2",
+    "compression": "^1.7.4",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.18.2",
+    "express-rate-limit": "^7.1.5",
+    "express-validator": "^7.0.1",
+    "helmet": "^7.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "lucide-react": "^0.526.0",
+    "multer": "^1.4.5-lts.1",
+    "node-cron": "^3.0.3",
+    "nodemailer": "^6.9.13",
+    "pg": "^8.11.3",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "winston": "^3.11.0",
+    "ws": "^8.16.0",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "@axe-core/puppeteer": "^4.10.2",
+    "@vitejs/plugin-react": "^4.7.0",
+    "eslint": "^8.56.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.29.1",
+    "jest": "^29.7.0",
+    "lighthouse": "^12.8.0",
+    "nodemon": "^3.0.1",
+    "pm2": "^5.4.3",
+    "psycopg2-binary": "^2.9.9",
+    "puppeteer": "^24.15.0",
+    "supertest": "^6.3.3",
+    "vite": "^7.0.6"
+  },
+  "optionalDependencies": {
+    "sqlite3": "^5.1.6",
+    "better-sqlite3": "^12.2.0"
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0",
+    "postgresql": ">=12.0.0"
+  },
+  "keywords": [
+    "production",
+    "manufacturing",
+    "MES",
+    "real-time",
+    "dashboard",
+    "postgresql",
+    "reporting",
+    "websocket"
+  ],
+  "author": "Production Orders Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourcompany/production-management-system.git"
+  },
+  "postgresql": {
+    "version": ">=12.0.0",
+    "extensions": [
+      "uuid-ossp",
+      "pg_stat_statements"
+    ],
+    "timezone": "Africa/Johannesburg"
+  },
+  "migration": {
+    "from": "sqlite",
+    "to": "postgresql",
+    "version": "2.1.0",
+    "timestamp": "2025-08-01T00:00:00Z"
+  }
+}
