@@ -442,7 +442,7 @@ app.post('/api/auth/login',
 
     const { username, password } = req.body;
 
-    db.get('SELECT * FROM users WHERE username = ? AND is_active = 1', [username], async (err, user) => {
+    db.get('SELECT * FROM users WHERE username = ? AND is_active = true', [username], async (err, user) => {
       if (err) {
         return res.status(500).json({ error: 'Database error' });
       }
@@ -789,7 +789,7 @@ app.get('/api/orders',
     
     // By default, exclude archived orders unless specifically requested
     if (include_archived !== 'true') {
-      query += ' AND (o.archived = 0 OR o.archived IS NULL)';
+      query += ' AND (o.archived = false OR o.archived IS NULL)';
     }
     
     if (environment) {
@@ -825,7 +825,7 @@ app.get('/api/orders/archived',
       FROM production_orders o
       LEFT JOIN machines m ON o.machine_id = m.id
       LEFT JOIN users u ON o.operator_id = u.id
-      WHERE o.archived = 1
+      WHERE o.archived = true
       ORDER BY o.complete_time DESC
     `;
     
@@ -1282,7 +1282,7 @@ app.post('/api/orders/:id/complete',
                  actual_quantity = ?,
                  efficiency_percentage = ?,
                  notes = CASE WHEN ? IS NOT NULL THEN notes || ' | Completion: ' || ? ELSE notes END,
-                 archived = 1,
+                 archived = true,
                  updated_at = datetime('now')
              WHERE id = ?`,
             [finalQuantity, efficiency, finalNotes, finalNotes, id],

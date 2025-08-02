@@ -1,0 +1,72 @@
+🔧 Database type: postgresql
+🐘 Loading PostgreSQL database module...
+✅ PostgreSQL database interface ready
+JWT_SECRET exists: true
+🚀 Server running on http://localhost:3000
+📊 Environment: production
+🔐 JWT Secret: your_...
+✅ New PostgreSQL client connected
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+❌ Database all error: error: operator does not exist: boolean = integer
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbAll (/home/production-app/production-orders-app/postgresql/db-postgresql.js:116:24) {
+  length: 203,
+  severity: 'ERROR',
+  code: '42883',
+  detail: undefined,
+  hint: 'No operator matches the given name and argument types. You might need to add explicit type casts.',
+  position: '263',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'parse_oper.c',
+  line: '647',
+  routine: 'op_error'
+}
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+❌ Database all error: error: operator does not exist: boolean = integer
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbAll (/home/production-app/production-orders-app/postgresql/db-postgresql.js:116:24) {
+  length: 203,
+  severity: 'ERROR',
+  code: '42883',
+  detail: undefined,
+  hint: 'No operator matches the given name and argument types. You might need to add explicit type casts.',
+  position: '263',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'parse_oper.c',
+  line: '647',
+  routine: 'op_error'
+}
+🔓 Client released back to pool
+SIGTERM received, closing server...
+Server closed
