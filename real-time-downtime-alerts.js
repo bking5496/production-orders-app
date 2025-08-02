@@ -3,6 +3,9 @@
 
 module.exports = function(app, db, authenticateToken, requireRole, body, broadcast) {
 
+// Import PostgreSQL functions for direct use
+const { dbRun, dbGet, dbAll, dbTransaction } = require('./postgresql/db-postgresql');
+
 // ================================
 // ALERT CONFIGURATION MANAGEMENT
 // ================================
@@ -64,7 +67,7 @@ app.get('/api/alerts/downtime/config',
   requireRole(['admin', 'supervisor']),
   async (req, res) => {
     try {
-      const configs = await db.dbAll(`
+      const configs = await dbAll(`
         SELECT ac.*, dc.category, dc.name as category_name, dc.severity_level as default_severity
         FROM downtime_alert_configs ac
         LEFT JOIN downtime_categories dc ON ac.category_id = dc.id
