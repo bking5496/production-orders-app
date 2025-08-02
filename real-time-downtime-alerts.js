@@ -97,7 +97,7 @@ app.post('/api/alerts/downtime/trigger',
       const { downtime_stop_id, alert_type, custom_message } = req.body;
 
       // Get downtime details
-      const downtime = await db.dbGet(`
+      const downtime = await dbGet(`
         SELECT ds.*, dc.category, dc.name as category_name, dc.severity_level,
                po.order_number, po.product_name, po.environment,
                m.name as machine_name, m.type as machine_type
@@ -113,13 +113,13 @@ app.post('/api/alerts/downtime/trigger',
       }
 
       // Get alert configuration for this category and severity
-      const alertConfig = await db.dbGet(`
+      const alertConfig = await dbGet(`
         SELECT * FROM downtime_alert_configs 
         WHERE category_id = $1 AND severity_level = $2
       `, [downtime.category_id, downtime.severity_level]);
 
       // Create alert record
-      const alertResult = await db.dbRun(`
+      const alertResult = await dbRun(`
         INSERT INTO downtime_alerts 
         (downtime_stop_id, alert_type, severity_level, message, 
          triggered_by, triggered_at, status, escalation_level)
@@ -158,13 +158,13 @@ app.post('/api/alerts/downtime/trigger',
 
       // If configuration exists, send targeted notifications
       if (alertConfig) {
-        await sendTargetedNotifications(alertConfig, alertData, db, broadcast);
+        await sendTargetedNotifications(alertConfig, alertData, broadcast);
       }
 
       // Schedule escalation if auto-escalate is enabled
       if (alertConfig && alertConfig.auto_escalate && alertConfig.escalation_delay_minutes > 0) {
         setTimeout(async () => {
-          await escalateAlert(alertId, db, broadcast);
+          await escalateAlert(alertId, broadcast);
         }, alertConfig.escalation_delay_minutes * 60 * 1000);
       }
 
@@ -194,7 +194,7 @@ app.post('/api/alerts/downtime/:alertId/acknowledge',
       const { alertId } = req.params;
       const { acknowledgment_notes } = req.body;
 
-      const result = await db.dbRun(`
+      const result = await dbRun(`
         UPDATE downtime_alerts 
         SET status = 'acknowledged',
             acknowledged_by = $1,
@@ -231,7 +231,7 @@ app.post('/api/alerts/downtime/:alertId/resolve',
       const { alertId } = req.params;
       const { resolution_notes, resolution_action } = req.body;
 
-      const result = await db.dbRun(`
+      const result = await dbRun(`
         UPDATE downtime_alerts 
         SET status = 'resolved',
             resolved_by = $1,
@@ -286,7 +286,7 @@ app.get('/api/alerts/downtime/active',
 
       const whereClause = whereConditions.join(' AND ');
 
-      const alerts = await db.dbAll(`
+      const alerts = await dbAll(`
         SELECT da.*, ds.primary_cause, ds.actual_duration_minutes,
                dc.category, dc.name as category_name,
                po.order_number, po.product_name, po.environment,
@@ -341,7 +341,7 @@ app.get('/api/alerts/downtime/history',
 
       const whereClause = whereConditions.join(' AND ');
 
-      const history = await db.dbAll(`
+      const history = await dbAll(`
         SELECT da.*, ds.primary_cause, ds.actual_duration_minutes,
                dc.category, dc.name as category_name,
                po.order_number, po.product_name, po.environment,
@@ -382,7 +382,7 @@ app.post('/api/alerts/downtime/monitor',
   async (req, res) => {
     try {
       // Get active downtime incidents
-      const activeDowntime = await db.dbAll(`
+      const activeDowntime = await dbAll(`
         SELECT ds.*, dc.category, dc.severity_level,
                po.order_number, po.environment,
                EXTRACT(EPOCH FROM (CURRENT_TIMESTAMP - ds.start_time)) / 60 as current_duration_minutes
@@ -394,7 +394,7 @@ app.post('/api/alerts/downtime/monitor',
       `);
 
       // Get alert configurations
-      const alertConfigs = await db.dbAll(`
+      const alertConfigs = await dbAll(`
         SELECT * FROM downtime_alert_configs 
         WHERE threshold_minutes > 0
       `);
@@ -409,14 +409,14 @@ app.post('/api/alerts/downtime/monitor',
 
         if (matchingConfig && downtime.current_duration_minutes >= matchingConfig.threshold_minutes) {
           // Check if alert already exists for this downtime
-          const existingAlert = await db.dbGet(`
+          const existingAlert = await dbGet(`
             SELECT id FROM downtime_alerts 
             WHERE downtime_stop_id = $1 AND alert_type = 'threshold_exceeded'
           `, [downtime.id]);
 
           if (!existingAlert) {
             // Trigger threshold exceeded alert
-            const alertResult = await db.dbRun(`
+            const alertResult = await dbRun(`
               INSERT INTO downtime_alerts 
               (downtime_stop_id, alert_type, severity_level, message, 
                triggered_by, triggered_at, status, escalation_level)
@@ -464,14 +464,14 @@ app.post('/api/alerts/downtime/monitor',
 // ================================
 
 // Send targeted notifications based on configuration
-async function sendTargetedNotifications(alertConfig, alertData, db, broadcast) {
+async function sendTargetedNotifications(alertConfig, alertData, broadcast) {
   try {
     const notifyRoles = JSON.parse(alertConfig.notify_roles || '[]');
     const channels = JSON.parse(alertConfig.notification_channels || '[]');
 
     // Get users to notify based on roles
     if (notifyRoles.length > 0) {
-      const users = await db.dbAll(`
+      const users = await dbAll(`
         SELECT u.id, u.username, u.email, u.role 
         FROM users u 
         WHERE u.role = ANY($1) AND u.active = true
@@ -489,7 +489,7 @@ async function sendTargetedNotifications(alertConfig, alertData, db, broadcast) 
     }
 
     // Log notification attempt
-    await db.dbRun(`
+    await dbRun(`
       INSERT INTO alert_notifications 
       (alert_id, target_roles, notification_channels, sent_at, status)
       VALUES ($1, $2, $3, CURRENT_TIMESTAMP, 'sent')
@@ -501,10 +501,10 @@ async function sendTargetedNotifications(alertConfig, alertData, db, broadcast) 
 }
 
 // Escalate alert after delay
-async function escalateAlert(alertId, db, broadcast) {
+async function escalateAlert(alertId, broadcast) {
   try {
     // Check if alert is still active
-    const alert = await db.dbGet(`
+    const alert = await dbGet(`
       SELECT * FROM downtime_alerts WHERE id = $1 AND status = 'active'
     `, [alertId]);
 
@@ -512,7 +512,7 @@ async function escalateAlert(alertId, db, broadcast) {
       // Increase escalation level
       const newEscalationLevel = alert.escalation_level + 1;
       
-      await db.dbRun(`
+      await dbRun(`
         UPDATE downtime_alerts 
         SET escalation_level = $1, 
             escalated_at = CURRENT_TIMESTAMP
