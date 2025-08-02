@@ -64,15 +64,40 @@ app.post('/api/orders/:id/prepare-materials',
   }
 );
 
+// Get available machines for setup
+app.get('/api/machines/available-for-setup',
+  authenticateToken,
+  async (req, res) => {
+    try {
+      const machines = await db.all(
+        `SELECT id, name, type, environment, status, capacity 
+         FROM machines 
+         WHERE status IN ('available', 'maintenance') 
+         ORDER BY name`
+      );
+      
+      res.json(machines || []);
+    } catch (error) {
+      console.error('Failed to get available machines:', error);
+      res.status(500).json({ error: 'Failed to get available machines' });
+    }
+  }
+);
+
 // Machine Setup Phase
 app.post('/api/orders/:id/start-setup',
   authenticateToken,
   requireRole(['admin', 'supervisor', 'operator']),
-  body('machine_id').isInt(),
+  body('machine_id').isInt().withMessage('Machine ID must be a valid integer'),
   body('setup_type').isIn(['initial_setup', 'changeover', 'maintenance_setup']),
   async (req, res) => {
     const { id } = req.params;
     const { machine_id, setup_type, previous_product } = req.body;
+    
+    // Additional validation
+    if (!machine_id || machine_id === null) {
+      return res.status(400).json({ error: 'Machine ID is required' });
+    }
     
     try {
       const result = await db.transaction(async (client) => {
@@ -84,6 +109,20 @@ app.post('/api/orders/:id/start-setup',
         
         if (!order.rows[0] || !order.rows[0].material_check_completed) {
           throw new Error('Materials must be prepared first');
+        }
+        
+        // Validate machine exists
+        const machine = await client.query(
+          'SELECT id, name, status FROM machines WHERE id = $1',
+          [machine_id]
+        );
+        
+        if (!machine.rows[0]) {
+          throw new Error(`Machine with ID ${machine_id} does not exist. Available machine IDs: 6-17`);
+        }
+        
+        if (machine.rows[0].status === 'offline') {
+          throw new Error(`Machine ${machine.rows[0].name} is offline and cannot be used`);
         }
         
         // Create setup record
