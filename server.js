@@ -3,7 +3,7 @@
 
 require('dotenv').config();
 const express = require('express');
-const sqlite3 = require('sqlite3').verbose();
+const { Client } = require('pg');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const multer = require('multer');
@@ -17,6 +17,7 @@ const compression = require('compression');
 const cors = require('cors');
 const WebSocket = require('ws');
 const http = require('http');
+const rateLimit = require('express-rate-limit');
 
 // Initialize Express app
 const app = express();
@@ -29,8 +30,33 @@ const JWT_SECRET = process.env.JWT_SECRET || (() => {
   console.error('🚨 WARNING: Using default JWT secret. Set JWT_SECRET environment variable in production!');
   return 'production-orders-default-secret-change-immediately-in-production-' + Date.now();
 })();
-const DATABASE_PATH = process.env.DATABASE_PATH || './production.db';
+const DATABASE_URL = process.env.DATABASE_URL || 'postgresql://postgres:prodapp123@localhost:5432/production_orders';
 const UPLOAD_DIR = process.env.UPLOAD_DIR || 'uploads';
+
+// Rate limiting configuration
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+  message: {
+    success: false,
+    error: 'Too many requests from this IP, please try again later.',
+    code: 'RATE_LIMITED'
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+// Login rate limiting (more restrictive)
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 5, // limit each IP to 5 login attempts per 15 minutes
+  skipSuccessfulRequests: true,
+  message: {
+    success: false,
+    error: 'Too many login attempts, please try again later.',
+    code: 'LOGIN_RATE_LIMITED'
+  }
+});
 
 // Ensure upload directory exists
 if (!fs.existsSync(UPLOAD_DIR)) {
@@ -63,83 +89,69 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static('dist'));
 
-// Database connection
-// Database Configuration - Support both SQLite and PostgreSQL
-const DB_TYPE = process.env.DB_TYPE || 'sqlite';
-console.log(`🔧 Database type: ${DB_TYPE}`);
+// PostgreSQL Database connection
+console.log('🐘 Initializing PostgreSQL database connection...');
 
-let db;
-let dbRun, dbGet, dbAll; // Global database function variables
+const dbModule = require('./postgresql/db-postgresql');
+const { dbRun, dbGet, dbAll } = dbModule;
 
-if (DB_TYPE === 'postgresql') {
-    console.log('🐘 Loading PostgreSQL database module...');
-    const dbModule = require('./postgresql/db-postgresql');
-    ({ dbRun, dbGet, dbAll } = dbModule); // Assign to global variables
-    
-    // Create a db object that mimics SQLite interface for compatibility
-    db = {
-        get: (sql, params, callback) => {
-            if (typeof params === 'function') {
-                callback = params;
-                params = [];
+// PostgreSQL database interface
+const db = {
+    get: (sql, params, callback) => {
+        if (typeof params === 'function') {
+            callback = params;
+            params = [];
+        }
+        // Convert SQLite ? syntax to PostgreSQL $1, $2 syntax
+        let pgSql = sql;
+        let pgParams = params;
+        if (params && params.length > 0) {
+            for (let i = 0; i < params.length; i++) {
+                pgSql = pgSql.replace('?', `$${i + 1}`);
             }
-            // Convert SQLite ? syntax to PostgreSQL $1, $2 syntax
-            let pgSql = sql;
-            let pgParams = params;
-            if (params && params.length > 0) {
-                for (let i = 0; i < params.length; i++) {
-                    pgSql = pgSql.replace('?', `$${i + 1}`);
-                }
+        }
+        dbGet(pgSql, pgParams).then(result => callback(null, result)).catch(callback);
+    },
+    all: (sql, params, callback) => {
+        if (typeof params === 'function') {
+            callback = params;
+            params = [];
+        }
+        // Convert SQLite ? syntax to PostgreSQL $1, $2 syntax
+        let pgSql = sql;
+        let pgParams = params;
+        if (params && params.length > 0) {
+            for (let i = 0; i < params.length; i++) {
+                pgSql = pgSql.replace('?', `$${i + 1}`);
             }
-            dbGet(pgSql, pgParams).then(result => callback(null, result)).catch(callback);
-        },
-        all: (sql, params, callback) => {
-            if (typeof params === 'function') {
-                callback = params;
-                params = [];
+        }
+        dbAll(pgSql, pgParams).then(result => callback(null, result)).catch(callback);
+    },
+    run: (sql, params, callback) => {
+        if (typeof params === 'function') {
+            callback = params;
+            params = [];
+        }
+        // Convert SQLite ? syntax to PostgreSQL $1, $2 syntax
+        let pgSql = sql;
+        let pgParams = params;
+        if (params && params.length > 0) {
+            for (let i = 0; i < params.length; i++) {
+                pgSql = pgSql.replace('?', `$${i + 1}`);
             }
-            // Convert SQLite ? syntax to PostgreSQL $1, $2 syntax
-            let pgSql = sql;
-            let pgParams = params;
-            if (params && params.length > 0) {
-                for (let i = 0; i < params.length; i++) {
-                    pgSql = pgSql.replace('?', `$${i + 1}`);
-                }
-            }
-            dbAll(pgSql, pgParams).then(result => callback(null, result)).catch(callback);
-        },
-        run: (sql, params, callback) => {
-            if (typeof params === 'function') {
-                callback = params;
-                params = [];
-            }
-            // Convert SQLite ? syntax to PostgreSQL $1, $2 syntax
-            let pgSql = sql;
-            let pgParams = params;
-            if (params && params.length > 0) {
-                for (let i = 0; i < params.length; i++) {
-                    pgSql = pgSql.replace('?', `$${i + 1}`);
-                }
-            }
-            dbRun(pgSql, pgParams).then(result => {
-                if (callback) callback.call({lastID: result.lastID, changes: result.changes});
-            }).catch(callback);
-        },
-        serialize: (fn) => fn(), // PostgreSQL doesn't need serialization
-        close: () => {} // Handled by connection pool
-    };
-    console.log('✅ PostgreSQL database interface ready');
-} else {
-    console.log('📁 Loading SQLite database module...');
-    db = new sqlite3.Database(DATABASE_PATH, (err) => {
-      if (err) {
-        console.error('Database connection error:', err);
-        process.exit(1);
-      }
-      console.log('✅ Connected to SQLite database');
-      initializeDatabase();
-    });
-}
+        }
+        dbRun(pgSql, pgParams).then(result => {
+            if (callback) callback.call({lastID: result.lastID, changes: result.changes});
+        }).catch(callback);
+    },
+    serialize: (fn) => fn(), // PostgreSQL doesn't need serialization
+    close: () => {} // Handled by connection pool
+};
+
+console.log('✅ PostgreSQL database interface ready');
+
+// Initialize database (PostgreSQL schemas already exist)
+initializeDatabase();
 
 // Database initialization
 function initializeDatabase() {

@@ -449,10 +449,10 @@ app.get('/api/orders/:id/enhanced', authenticateToken, (req, res) => {
   const setupQuery = 'SELECT * FROM machine_setups WHERE order_id = $1 ORDER BY setup_start_time DESC LIMIT 1';
   
   Promise.all([
-    new Promise((resolve, reject) => db.get(orderQuery, [id], (err, result) => err ? reject(err) : resolve(result))),
-    new Promise((resolve, reject) => db.all(materialQuery, [id], (err, result) => err ? reject(err) : resolve(result))),
-    new Promise((resolve, reject) => db.all(qualityQuery, [id], (err, result) => err ? reject(err) : resolve(result))),
-    new Promise((resolve, reject) => db.get(setupQuery, [id], (err, result) => err ? reject(err) : resolve(result)))
+    db.dbGet ? db.dbGet(orderQuery, [id]) : new Promise((resolve, reject) => db.get(orderQuery, [id], (err, result) => err ? reject(err) : resolve(result))),
+    db.dbAll ? db.dbAll(materialQuery, [id]) : new Promise((resolve, reject) => db.all(materialQuery, [id], (err, result) => err ? reject(err) : resolve(result))),
+    db.dbAll ? db.dbAll(qualityQuery, [id]) : new Promise((resolve, reject) => db.all(qualityQuery, [id], (err, result) => err ? reject(err) : resolve(result))),
+    db.dbGet ? db.dbGet(setupQuery, [id]) : new Promise((resolve, reject) => db.get(setupQuery, [id], (err, result) => err ? reject(err) : resolve(result)))
   ])
   .then(([order, materials, quality_checks, setup]) => {
     if (!order) {

@@ -118,7 +118,29 @@ const EnhancedProductionWorkflow = ({ orderId, onClose }) => {
   const loadOrderDetails = async () => {
     try {
       setLoading(true);
-      const response = await API.get(`/orders/${orderId}/enhanced`);
+      let response;
+      
+      try {
+        // Try enhanced endpoint first
+        response = await API.get(`/orders/${orderId}/enhanced`);
+      } catch (enhancedError) {
+        console.warn('Enhanced endpoint failed, falling back to regular order details:', enhancedError);
+        // Fallback to regular order details
+        const orderResponse = await API.get(`/orders/${orderId}`);
+        response = {
+          order: orderResponse,
+          materials: [],
+          quality_checks: [],
+          setup: null,
+          workflow_progress: {
+            materials_prepared: orderResponse.material_check_completed || false,
+            setup_completed: !!orderResponse.setup_complete_time,
+            production_started: orderResponse.workflow_stage === 'in_progress',
+            quality_approved: orderResponse.quality_approved || false
+          }
+        };
+      }
+      
       setOrderDetails(response);
       
       // Update workflow status based on order
@@ -134,7 +156,7 @@ const EnhancedProductionWorkflow = ({ orderId, onClose }) => {
       
     } catch (error) {
       setError('Failed to load order details');
-      console.error('Error loading enhanced order details:', error);
+      console.error('Error loading order details:', error);
     } finally {
       setLoading(false);
     }
