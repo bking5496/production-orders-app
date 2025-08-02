@@ -2377,7 +2377,9 @@ process.on('SIGTERM', () => {
 
 // Load enhanced workflow endpoints
 const enhancedWorkflowEndpoints = require('./enhanced-workflow-endpoints.js');
+const enhancedDowntimeEndpoints = require('./enhanced-downtime-endpoints.js');
 enhancedWorkflowEndpoints(app, db, authenticateToken, requireRole, body, broadcast);
+enhancedDowntimeEndpoints(app, db, authenticateToken, requireRole, body, broadcast);
 
 // Start server
 server.listen(PORT, () => {

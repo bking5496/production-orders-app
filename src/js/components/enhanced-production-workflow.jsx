@@ -9,7 +9,9 @@ import {
   Square,
   FileCheck,
   Activity,
-  Zap
+  Zap,
+  XCircle,
+  Pause
 } from 'lucide-react';
 import API from '../core/api';
 
@@ -18,6 +20,7 @@ const EnhancedProductionWorkflow = ({ orderId, onClose }) => {
   const [loading, setLoading] = useState(true);
   const [activeStep, setActiveStep] = useState(0);
   const [error, setError] = useState('');
+  const [showDowntimeModal, setShowDowntimeModal] = useState(false);
 
   // Material preparation state
   const [materials, setMaterials] = useState([
@@ -684,6 +687,39 @@ const EnhancedProductionWorkflow = ({ orderId, onClose }) => {
               </div>
             )}
 
+            {/* Production Monitoring & Downtime Tracking */}
+            {(orderDetails?.order?.workflow_stage === 'in_progress' || activeStep >= 3) && (
+              <div className="mt-6">
+                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                  <div className="flex items-center justify-between mb-3">
+                    <h3 className="font-medium text-yellow-800 flex items-center gap-2">
+                      <Activity className="w-5 h-5" />
+                      Production Monitoring
+                    </h3>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => setShowDowntimeModal(true)}
+                        className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-sm flex items-center gap-1 transition-colors"
+                      >
+                        <XCircle className="w-4 h-4" />
+                        Report Downtime
+                      </button>
+                      <button
+                        className="bg-orange-600 hover:bg-orange-700 text-white px-3 py-1 rounded text-sm flex items-center gap-1 transition-colors"
+                      >
+                        <Pause className="w-4 h-4" />
+                        Pause Production
+                      </button>
+                    </div>
+                  </div>
+                  <div className="text-sm text-yellow-700">
+                    <p>Production is active. Monitor for any issues and report downtime immediately if problems occur.</p>
+                    <p className="mt-1">Current batch: <span className="font-medium">{productionData.batch_number}</span></p>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {/* Completed */}
             {activeStep >= 5 && (
               <div className="text-center">
@@ -703,8 +739,260 @@ const EnhancedProductionWorkflow = ({ orderId, onClose }) => {
           </div>
         </div>
       </div>
+      
+      {/* Downtime Reporting Modal */}
+      {showDowntimeModal && (
+        <DowntimeReportModal
+          orderId={orderId}
+          onClose={() => setShowDowntimeModal(false)}
+          onSuccess={() => {
+            setShowDowntimeModal(false);
+            setError('Downtime reported successfully');
+          }}
+        />
+      )}
     </div>
   );
 };
+
+// Downtime Report Modal Component
+function DowntimeReportModal({ orderId, onClose, onSuccess }) {
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
+  const [formData, setFormData] = useState({
+    machine_id: '',
+    downtime_category_id: '',
+    primary_cause: '',
+    secondary_cause: '',
+    severity: 'medium',
+    production_impact: 'moderate',
+    estimated_duration: '',
+    notes: '',
+    workflow_stage: 'in_progress',
+    quality_impact: false,
+    safety_incident: false,
+    environmental_impact: false
+  });
+
+  useEffect(() => {
+    loadCategories();
+  }, []);
+
+  const loadCategories = async () => {
+    try {
+      const response = await API.get('/downtime/categories');
+      setCategories(response);
+    } catch (error) {
+      console.error('Error loading categories:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setSubmitting(true);
+    
+    try {
+      await API.post('/downtime/create', {
+        ...formData,
+        order_id: orderId
+      });
+      onSuccess();
+    } catch (error) {
+      console.error('Error creating downtime:', error);
+      alert('Failed to report downtime: ' + (error.response?.data?.error || error.message));
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="bg-white rounded-lg p-6">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-2 text-center">Loading categories...</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-white rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="text-lg font-medium flex items-center gap-2">
+            <XCircle className="w-5 h-5 text-red-600" />
+            Report Production Downtime
+          </h3>
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
+            <XCircle className="w-5 h-5" />
+          </button>
+        </div>
+        
+        <div className="bg-red-50 p-3 rounded-lg mb-4">
+          <p className="text-sm text-red-800">
+            <strong>Order #{orderId}</strong> - Reporting downtime will alert supervisors and track production impact.
+          </p>
+        </div>
+        
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Machine ID *</label>
+              <input
+                type="number"
+                required
+                value={formData.machine_id}
+                onChange={(e) => setFormData(prev => ({ ...prev, machine_id: e.target.value }))}
+                className="w-full border border-gray-300 rounded-md px-3 py-2"
+                placeholder="Enter machine ID"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Downtime Category *</label>
+              <select
+                required
+                value={formData.downtime_category_id}
+                onChange={(e) => setFormData(prev => ({ ...prev, downtime_category_id: e.target.value }))}
+                className="w-full border border-gray-300 rounded-md px-3 py-2"
+              >
+                <option value="">Select Category</option>
+                {categories.map(category => (
+                  <option key={category.id} value={category.id}>
+                    {category.category_name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+          
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Primary Cause *</label>
+            <input
+              type="text"
+              required
+              value={formData.primary_cause}
+              onChange={(e) => setFormData(prev => ({ ...prev, primary_cause: e.target.value }))}
+              className="w-full border border-gray-300 rounded-md px-3 py-2"
+              placeholder="Brief description of the issue"
+            />
+          </div>
+          
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Secondary Cause (Optional)</label>
+            <input
+              type="text"
+              value={formData.secondary_cause}
+              onChange={(e) => setFormData(prev => ({ ...prev, secondary_cause: e.target.value }))}
+              className="w-full border border-gray-300 rounded-md px-3 py-2"
+              placeholder="Additional contributing factors"
+            />
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Severity</label>
+              <select
+                value={formData.severity}
+                onChange={(e) => setFormData(prev => ({ ...prev, severity: e.target.value }))}
+                className="w-full border border-gray-300 rounded-md px-3 py-2"
+              >
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+                <option value="critical">Critical</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Production Impact</label>
+              <select
+                value={formData.production_impact}
+                onChange={(e) => setFormData(prev => ({ ...prev, production_impact: e.target.value }))}
+                className="w-full border border-gray-300 rounded-md px-3 py-2"
+              >
+                <option value="none">None</option>
+                <option value="minor">Minor</option>
+                <option value="moderate">Moderate</option>
+                <option value="major">Major</option>
+                <option value="severe">Severe</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Est. Duration (min)</label>
+              <input
+                type="number"
+                value={formData.estimated_duration}
+                onChange={(e) => setFormData(prev => ({ ...prev, estimated_duration: e.target.value }))}
+                className="w-full border border-gray-300 rounded-md px-3 py-2"
+                placeholder="0"
+              />
+            </div>
+          </div>
+          
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Notes</label>
+            <textarea
+              value={formData.notes}
+              onChange={(e) => setFormData(prev => ({ ...prev, notes: e.target.value }))}
+              className="w-full border border-gray-300 rounded-md px-3 py-2"
+              rows="3"
+              placeholder="Additional details, immediate actions taken, etc."
+            />
+          </div>
+          
+          <div className="flex gap-4">
+            <label className="flex items-center text-sm">
+              <input
+                type="checkbox"
+                checked={formData.quality_impact}
+                onChange={(e) => setFormData(prev => ({ ...prev, quality_impact: e.target.checked }))}
+                className="mr-2"
+              />
+              Quality Impact
+            </label>
+            <label className="flex items-center text-sm">
+              <input
+                type="checkbox"
+                checked={formData.safety_incident}
+                onChange={(e) => setFormData(prev => ({ ...prev, safety_incident: e.target.checked }))}
+                className="mr-2"
+              />
+              Safety Incident
+            </label>
+            <label className="flex items-center text-sm">
+              <input
+                type="checkbox"
+                checked={formData.environmental_impact}
+                onChange={(e) => setFormData(prev => ({ ...prev, environmental_impact: e.target.checked }))}
+                className="mr-2"
+              />
+              Environmental Impact
+            </label>
+          </div>
+          
+          <div className="flex gap-3 pt-4">
+            <button
+              type="submit"
+              disabled={submitting}
+              className="flex-1 bg-red-600 hover:bg-red-700 disabled:bg-red-400 text-white py-2 px-4 rounded-md transition-colors"
+            >
+              {submitting ? 'Reporting...' : 'Report Downtime'}
+            </button>
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors"
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
 
 export default EnhancedProductionWorkflow;
