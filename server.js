@@ -2002,6 +2002,19 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
+// Load enhanced endpoints
+try {
+  const enhancedWorkflowEndpoints = require('./enhanced-workflow-endpoints.js');
+  const enhancedDowntimeEndpoints = require('./enhanced-downtime-endpoints.js');
+  const downtimeAnalyticsEndpoints = require('./downtime-analytics-endpoints.js');
+  enhancedWorkflowEndpoints(app, db, authenticateToken, requireRole, body, broadcast);
+  enhancedDowntimeEndpoints(app, db, authenticateToken, requireRole, body, broadcast);
+  downtimeAnalyticsEndpoints(app, db, authenticateToken, requireRole, body, broadcast);
+  console.log('✨ Enhanced endpoints loaded successfully');
+} catch (error) {
+  console.error('❌ Failed to load enhanced endpoints:', error.message);
+}
+
 // Graceful shutdown
 process.on('SIGTERM', () => {
   console.log('SIGTERM received, closing server...');
