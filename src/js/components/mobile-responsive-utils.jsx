@@ -573,3 +573,65 @@ export const OptimizedImage = ({
     </div>
   );
 };
+
+// Mobile-optimized modal component
+export const Modal = ({ isOpen, onClose, title, children, size = 'medium' }) => {
+  const { isMobile } = useDeviceDetection();
+  
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+    
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, [isOpen]);
+
+  if (!isOpen) return null;
+
+  const sizes = {
+    small: isMobile ? 'w-full h-full' : 'w-96 max-h-[80vh]',
+    medium: isMobile ? 'w-full h-full' : 'w-[500px] max-h-[80vh]',
+    large: isMobile ? 'w-full h-full' : 'w-[800px] max-h-[80vh]',
+    full: 'w-full h-full'
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center">
+      {/* Backdrop */}
+      <div 
+        className="absolute inset-0 bg-black bg-opacity-50"
+        onClick={onClose}
+      />
+      
+      {/* Modal */}
+      <div className={`
+        relative bg-white rounded-lg shadow-xl
+        ${sizes[size]}
+        ${isMobile ? 'rounded-none' : 'rounded-lg'}
+        flex flex-col overflow-hidden
+      `}>
+        {/* Header */}
+        {title && (
+          <div className="flex items-center justify-between p-4 border-b bg-gray-50">
+            <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
+            <button
+              onClick={onClose}
+              className="p-2 hover:bg-gray-200 rounded-lg transition-colors"
+            >
+              <span className="text-xl">×</span>
+            </button>
+          </div>
+        )}
+        
+        {/* Content */}
+        <div className="flex-1 overflow-auto">
+          {children}
+        </div>
+      </div>
+    </div>
+  );
+};

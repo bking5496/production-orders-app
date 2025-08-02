@@ -511,6 +511,34 @@ app.get('/api/auth/session-status', authenticateToken, (req, res) => {
   }
 });
 
+// WebSocket token endpoint for enhanced WebSocket authentication
+app.get('/api/auth/websocket-token', authenticateToken, (req, res) => {
+  try {
+    // Return the current JWT token for WebSocket connection
+    const token = req.headers.authorization?.split(' ')[1];
+    if (!token) {
+      return res.status(401).json({ error: 'No token provided' });
+    }
+    
+    // Verify token is still valid
+    const decoded = jwt.verify(token, JWT_SECRET);
+    const currentTime = Math.floor(Date.now() / 1000);
+    
+    if (decoded.exp && decoded.exp <= currentTime) {
+      return res.status(401).json({ error: 'Token expired' });
+    }
+    
+    res.json({ 
+      token: token,
+      user: req.user,
+      expiresAt: decoded.exp * 1000
+    });
+  } catch (error) {
+    console.error('WebSocket token error:', error);
+    res.status(401).json({ error: 'Invalid token' });
+  }
+});
+
 console.log('JWT_SECRET exists:', !!JWT_SECRET);
 
 // User management routes

@@ -155,6 +155,30 @@ class EnhancedWebSocketService {
         };
     }
 
+    // Handle connection errors with logging and state management
+    handleConnectionError(error) {
+        console.error('❌ WebSocket connection error:', error);
+        this.connectionState = 'disconnected';
+        this.lastError = error;
+        
+        // Clear any pending timers
+        if (this.connectionTimeoutTimer) {
+            clearTimeout(this.connectionTimeoutTimer);
+            this.connectionTimeoutTimer = null;
+        }
+        
+        // Update metrics
+        this.metrics.connectionErrors = (this.metrics.connectionErrors || 0) + 1;
+        
+        // Emit error event for listeners
+        this.emit('error', error);
+        
+        // If this was an authentication error, clear stored tokens
+        if (error.message && error.message.includes('token')) {
+            console.warn('🔐 Token-related error, may need re-authentication');
+        }
+    }
+
     // Enhanced message handling with advanced routing
     handleEnhancedMessage(message) {
         const { type, data, room, channel, priority = 'normal', timestamp } = message;
