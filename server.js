@@ -2012,11 +2012,16 @@ try {
   const enhancedDowntimeEndpoints = require('./enhanced-downtime-endpoints.js');
   const downtimeAnalyticsEndpoints = require('./downtime-analytics-endpoints.js');
   const realtimeDowntimeAlerts = require('./real-time-downtime-alerts.js');
+  const configurationEndpoints = require('./configuration-endpoints.js');
+  
   enhancedWorkflowEndpoints(app, db, authenticateToken, requireRole, body, broadcast);
   enhancedDowntimeEndpoints(app, db, authenticateToken, requireRole, body, broadcast);
   downtimeAnalyticsEndpoints(app, db, authenticateToken, requireRole, body, broadcast);
   realtimeDowntimeAlerts(app, db, authenticateToken, requireRole, body, broadcast);
+  configurationEndpoints(app, db, authenticateToken, requireRole, broadcast);
+  
   console.log('✨ Enhanced endpoints loaded successfully');
+  console.log('🔧 Configuration management system enabled');
 } catch (error) {
   console.error('❌ Failed to load enhanced endpoints:', error.message);
 }
