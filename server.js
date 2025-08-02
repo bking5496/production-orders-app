@@ -83,10 +83,16 @@ app.use(helmet({
   },
 }));
 
+// Apply rate limiting to all requests
+app.use(limiter);
+
 // Middleware
 app.use(compression());
-app.use(cors());
-app.use(express.json());
+app.use(cors({
+  origin: process.env.ALLOWED_ORIGINS?.split(',') || ['http://localhost:3000'],
+  credentials: true
+}));
+app.use(express.json({ limit: '10mb' }));
 app.use(express.static('dist'));
 
 // PostgreSQL Database connection
@@ -299,29 +305,44 @@ const upload = multer({
   }
 });
 
-// JWT Middleware
+// Enhanced JWT Middleware with proper error handling
 const authenticateToken = (req, res, next) => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
 
   if (!token) {
-    return res.status(401).json({ error: 'Access token required' });
+    return res.status(401).json({ 
+      success: false,
+      error: 'Access token required',
+      code: 'NO_TOKEN'
+    });
   }
 
   jwt.verify(token, JWT_SECRET, (err, user) => {
     if (err) {
-      return res.status(403).json({ error: 'Invalid or expired token' });
+      console.error('JWT verification failed:', err.message);
+      return res.status(403).json({ 
+        success: false,
+        error: 'Invalid or expired token',
+        code: 'INVALID_TOKEN'
+      });
     }
     req.user = user;
     next();
   });
 };
 
-// Role-based access control
+// Enhanced role-based access control with logging
 const requireRole = (roles) => {
   return (req, res, next) => {
     if (!roles.includes(req.user.role)) {
-      return res.status(403).json({ error: 'Insufficient permissions' });
+      console.warn(`Access denied for user ${req.user.username} (${req.user.role}) to ${req.path}`);
+      return res.status(403).json({ 
+        success: false,
+        error: 'Insufficient permissions',
+        code: 'INSUFFICIENT_PERMISSIONS',
+        required_roles: roles
+      });
     }
     next();
   };
@@ -356,16 +377,57 @@ wss.on('connection', (ws, req) => {
   });
 });
 
-// Broadcast function for WebSocket
+// Enhanced broadcast function with channel filtering and authentication
 function broadcast(type, data, channel = 'all') {
+  const message = { 
+    type, 
+    data, 
+    channel,
+    timestamp: new Date().toISOString()
+  };
+  
   wss.clients.forEach((client) => {
-    if (client.readyState === WebSocket.OPEN) {
+    if (client.readyState === WebSocket.OPEN && client.user) {
       if (channel === 'all' || (client.subscriptions && client.subscriptions.includes(channel))) {
-        client.send(JSON.stringify({ type, data, timestamp: new Date() }));
+        client.send(JSON.stringify(message));
       }
     }
   });
+  
+  console.log(`📡 Broadcast sent: ${type} to channel: ${channel}`);
 }
+
+// Standardized API response helper
+const apiResponse = (res, data = null, message = 'Success', statusCode = 200) => {
+  const response = {
+    success: statusCode < 400,
+    message,
+    data,
+    timestamp: new Date().toISOString()
+  };
+  
+  if (statusCode >= 400) {
+    response.error = message;
+    delete response.message;
+  }
+  
+  return res.status(statusCode).json(response);
+};
+
+// Enhanced error handler
+const handleError = (res, error, context = 'Operation') => {
+  console.error(`${context} error:`, error);
+  
+  if (error.code === '23505') { // PostgreSQL unique constraint violation
+    return apiResponse(res, null, 'Duplicate entry found', 409);
+  }
+  
+  if (error.code === '23503') { // PostgreSQL foreign key violation
+    return apiResponse(res, null, 'Referenced record not found', 400);
+  }
+  
+  return apiResponse(res, null, `${context} failed`, 500);
+};
 
 // ==================== API ROUTES ====================
 
@@ -447,14 +509,17 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// Authentication routes
+// Authentication routes with rate limiting
 app.post('/api/auth/login',
-  body('username').notEmpty(),
-  body('password').notEmpty(),
+  loginLimiter, // Apply login rate limiting
+  [
+    body('username').trim().isLength({ min: 3 }).escape(),
+    body('password').isLength({ min: 6 })
+  ],
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      return apiResponse(res, null, 'Invalid input data', 400);
     }
 
     const { username, password } = req.body;
@@ -463,7 +528,7 @@ app.post('/api/auth/login',
       const user = await dbGet('SELECT * FROM users WHERE username = $1 AND is_active = true', [username]);
 
       if (!user || !(await bcrypt.compare(password, user.password_hash))) {
-        return res.status(401).json({ error: 'Invalid credentials' });
+        return apiResponse(res, null, 'Invalid credentials', 401);
       }
 
       const token = jwt.sign(
@@ -473,9 +538,9 @@ app.post('/api/auth/login',
       );
 
       // Update last login
-      await dbRun('UPDATE users SET last_login = CURRENT_TIMESTAMP WHERE id = $1', [user.id]);
+      await dbRun('UPDATE users SET last_login = NOW() WHERE id = $1', [user.id]);
 
-      res.json({
+      return apiResponse(res, {
         token,
         user: {
           id: user.id,
@@ -483,10 +548,9 @@ app.post('/api/auth/login',
           email: user.email,
           role: user.role
         }
-      });
+      }, 'Login successful');
     } catch (error) {
-      console.error('Login error:', error);
-      return res.status(500).json({ error: 'Database error' });
+      return handleError(res, error, 'Login');
     }
   }
 );
