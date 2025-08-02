@@ -968,13 +968,13 @@ app.post('/api/orders/:id/start',
              updated_at = NOW()
          WHERE id = $3 AND status = 'pending'`,
         [machine_id, req.user.id, id],
-        function(err) {
+        function(err, result) {
           if (err) {
             db.run('ROLLBACK');
             return res.status(500).json({ error: 'Database error' });
           }
           
-          if (this.changes === 0) {
+          if (!result || result.changes === 0) {
             db.run('ROLLBACK');
             return res.status(400).json({ error: 'Order not found or already started' });
           }
@@ -1222,34 +1222,21 @@ app.post('/api/orders/:id/stop',
              updated_at = CURRENT_TIMESTAMP
          WHERE id = $3 AND status IN ('pending', 'in_progress', 'stopped')`,
         [reason, notes, id],
-        function(err) {
+        function(err, result) {
           if (err) {
             db.run('ROLLBACK');
             return res.status(500).json({ error: 'Database error' });
           }
           
-          if (this.changes === 0) {
+          if (!result || result.changes === 0) {
             db.run('ROLLBACK');
             return res.status(400).json({ error: 'Order not found or cannot be stopped' });
           }
           
-          // Get order details to free up machine
-          db.get(
-            'SELECT machine_id FROM production_orders WHERE id = $1',
-            [id],
-            (err, order) => {
-              if (!err && order && order.machine_id) {
-                // Free up the machine
-                db.run(
-                  'UPDATE machines SET status = $1 WHERE id = $2',
-                  ['available', order.machine_id],
-                  (err) => {
-                    if (err) console.error('Failed to update machine status:', err);
-                  }
-                );
-              }
-              
-              db.run('COMMIT');
+          // Machine remains locked (in_use) during stop - only freed on completion
+          // No machine status change needed here
+          
+          db.run('COMMIT');
               
               broadcast('order_stopped', { 
                 id: id, 

@@ -117,3 +117,68 @@ JWT_SECRET exists: true
 🔗 Client acquired from pool
 🔓 Client released back to pool
 🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+❌ Database run error: error: canceling statement due to statement timeout
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:87:24) {
+  length: 157,
+  severity: 'ERROR',
+  code: '57014',
+  detail: undefined,
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: 'while locking tuple (8,13) in relation "users"',
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'postgres.c',
+  line: '3418',
+  routine: 'ProcessInterrupts'
+}
+🔓 Client released back to pool
+node:internal/process/promises:391
+    triggerUncaughtException(err, true /* fromPromise */);
+    ^
+
+error: canceling statement due to statement timeout
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:87:24) {
+  length: 157,
+  severity: 'ERROR',
+  code: '57014',
+  detail: undefined,
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: 'while locking tuple (8,13) in relation "users"',
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'postgres.c',
+  line: '3418',
+  routine: 'ProcessInterrupts'
+}
+
+Node.js v20.19.4
