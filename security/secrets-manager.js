@@ -50,7 +50,7 @@ class SecretsManager {
     encrypt(plaintext) {
         const key = this.getMasterKey();
         const iv = crypto.randomBytes(this.ivLength);
-        const cipher = crypto.createCipher(this.algorithm, key, iv);
+        const cipher = crypto.createCipheriv(this.algorithm, key, iv);
         
         let encrypted = cipher.update(plaintext, 'utf8', 'hex');
         encrypted += cipher.final('hex');
@@ -69,13 +69,17 @@ class SecretsManager {
         const key = this.getMasterKey();
         const { encrypted, iv, tag } = encryptedData;
         
-        const decipher = crypto.createDecipher(this.algorithm, key, Buffer.from(iv, 'hex'));
-        decipher.setAuthTag(Buffer.from(tag, 'hex'));
-        
-        let decrypted = decipher.update(encrypted, 'hex', 'utf8');
-        decrypted += decipher.final('utf8');
-        
-        return decrypted;
+        try {
+            const decipher = crypto.createDecipheriv(this.algorithm, key, Buffer.from(iv, 'hex'));
+            decipher.setAuthTag(Buffer.from(tag, 'hex'));
+            
+            let decrypted = decipher.update(encrypted, 'hex', 'utf8');
+            decrypted += decipher.final('utf8');
+            
+            return decrypted;
+        } catch (error) {
+            throw new Error(`Decryption failed: ${error.message}`);
+        }
     }
 
     // Store a secret

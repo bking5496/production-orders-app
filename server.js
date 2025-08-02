@@ -19,6 +19,7 @@ const WebSocket = require('ws');
 const http = require('http');
 const rateLimit = require('express-rate-limit');
 const { getSecret } = require('./security/secrets-manager');
+const { securityLogger } = require('./security/security-logger');
 
 // Initialize Express app
 const app = express();
@@ -31,9 +32,9 @@ const wss = new WebSocket.Server({ server });
 
 // Configuration
 const PORT = process.env.PORT || 3000;
-const JWT_SECRET = process.env.JWT_SECRET || (() => {
-  console.error('🚨 FATAL: JWT_SECRET environment variable not set');
-  console.error('Please set a secure JWT_SECRET in your environment variables');
+const JWT_SECRET = getSecret('JWT_SECRET') || process.env.JWT_SECRET || (() => {
+  console.error('🚨 FATAL: JWT_SECRET not found in secrets manager or environment');
+  console.error('Please store JWT_SECRET in secrets manager or set as environment variable');
   process.exit(1);
 })();
 const DATABASE_URL = process.env.DATABASE_URL;
@@ -532,6 +533,7 @@ app.post('/api/auth/login',
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
+      securityLogger.logAuthFailure(req.body.username || 'unknown', req.ip, 'Invalid input', req.get('User-Agent'));
       return apiResponse(res, null, 'Invalid input data', 400);
     }
 
@@ -541,6 +543,8 @@ app.post('/api/auth/login',
       const user = await dbGet('SELECT * FROM users WHERE username = $1 AND is_active = true', [username]);
 
       if (!user || !(await bcrypt.compare(password, user.password_hash))) {
+        // Log authentication failure
+        securityLogger.logAuthFailure(username, req.ip, 'Invalid credentials', req.get('User-Agent'));
         return apiResponse(res, null, 'Invalid credentials', 401);
       }
 
@@ -553,6 +557,9 @@ app.post('/api/auth/login',
       // Update last login
       await dbRun('UPDATE users SET last_login = NOW() WHERE id = $1', [user.id]);
 
+      // Log successful authentication
+      securityLogger.logAuthSuccess(username, req.ip, req.get('User-Agent'));
+
       return apiResponse(res, {
         token,
         user: {
@@ -563,6 +570,7 @@ app.post('/api/auth/login',
         }
       }, 'Login successful');
     } catch (error) {
+      securityLogger.logAuthFailure(username, req.ip, `System error: ${error.message}`, req.get('User-Agent'));
       return handleError(res, error, 'Login');
     }
   }
