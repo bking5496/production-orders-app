@@ -3,6 +3,7 @@ import { Package, Plus, Search, Filter, RefreshCw, Play, Square, Trash2, Clock, 
 import API from '../core/api';
 import { Modal, Card, Button, Badge } from './ui-components.jsx';
 import ProductionCompletionModalWithWaste from './production-completion-modal-with-waste.jsx';
+import EnhancedProductionWorkflow from './enhanced-production-workflow.jsx';
 import { useOrderUpdates, useWebSocketEvent, useAutoConnect, useNotifications } from '../core/websocket-hooks.js';
 import WebSocketStatus from './websocket-status.jsx';
 import { 
@@ -42,6 +43,7 @@ export default function OrdersPage() {
   const [showCompletionModal, setShowCompletionModal] = useState(false);
   const [showStopModal, setShowStopModal] = useState(false);
   const [showQuantityModal, setShowQuantityModal] = useState(false);
+  const [showEnhancedWorkflow, setShowEnhancedWorkflow] = useState(false);
   
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [selectedMachine, setSelectedMachine] = useState('');
@@ -430,7 +432,11 @@ export default function OrdersPage() {
       
       if (order.status === 'pending') {
         actions.push(
-          { label: 'Start Production', icon: Play, onClick: onStart, primary: true },
+          { label: 'Enhanced Workflow', icon: BarChart3, onClick: () => {
+            setSelectedOrder(order);
+            setShowEnhancedWorkflow(true);
+          }, primary: true },
+          { label: 'Quick Start', icon: Play, onClick: onStart },
           { label: 'Delete Order', icon: Trash2, onClick: onDelete, danger: true }
         );
       } else if (order.status === 'in_progress') {
@@ -646,6 +652,26 @@ export default function OrdersPage() {
           >
             <Plus className="w-4 h-4" />
             {isMobile ? 'Create' : 'Create Order'}
+          </TouchButton>
+          
+          {/* Test Enhanced Workflow Button */}
+          <TouchButton
+            onClick={() => {
+              // Find first pending order or use a default
+              const pendingOrder = orders.find(o => o.status === 'pending');
+              if (pendingOrder) {
+                setSelectedOrder(pendingOrder);
+                setShowEnhancedWorkflow(true);
+              } else {
+                showNotification('Create a pending order first to test the enhanced workflow', 'info');
+              }
+            }}
+            variant="outline"
+            className="glass border-purple-300 text-purple-700 hover:bg-purple-50"
+            size={isMobile ? 'md' : 'md'}
+          >
+            <BarChart3 className="w-4 h-4" />
+            {isMobile ? 'Enhanced' : 'Test Enhanced Workflow'}
           </TouchButton>
         </div>
         
@@ -1179,6 +1205,18 @@ export default function OrdersPage() {
             </div>
           </form>
         </Modal>
+      )}
+
+      {/* Enhanced Production Workflow Modal */}
+      {showEnhancedWorkflow && selectedOrder && (
+        <EnhancedProductionWorkflow
+          orderId={selectedOrder.id}
+          onClose={() => {
+            setShowEnhancedWorkflow(false);
+            setSelectedOrder(null);
+            loadData(); // Refresh orders when workflow completes
+          }}
+        />
       )}
     </div>
   );

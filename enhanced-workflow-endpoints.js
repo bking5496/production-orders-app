@@ -1,5 +1,7 @@
 // Enhanced Production Workflow API Endpoints
-// Add this to server.js before the final "Start server" section
+// This file is loaded by server.js
+
+module.exports = function(app, db, authenticateToken, requireRole, body, broadcast) {
 
 // ================================
 // ENHANCED PRODUCTION WORKFLOW ENDPOINTS  
@@ -571,3 +573,5 @@ app.post('/api/orders/:id/complete-enhanced',
 );
 
 console.log('✨ Enhanced Production Workflow Endpoints Loaded');
+
+}; // End of module.exports

@@ -247,7 +247,7 @@ function initializeDatabase() {
     bcrypt.hash(defaultPassword, 10, (err, hash) => {
       if (!err) {
         db.run(
-          `INSERT INTO users (username, email, password, role) VALUES ($1, $2, $3, $4) ON CONFLICT (username) DO NOTHING`,
+          `INSERT OR IGNORE INTO users (username, email, password, role) VALUES (?, ?, ?, ?)`,
           ['admin', 'admin@example.com', hash, 'admin'],
           (err) => {
             if (!err) {
@@ -447,12 +447,12 @@ app.post('/api/auth/login',
 
     const { username, password } = req.body;
 
-    db.get('SELECT * FROM users WHERE username = $1 AND is_active = $2', [username, true], async (err, user) => {
+    db.get('SELECT * FROM users WHERE username = ? AND active = 1', [username], async (err, user) => {
       if (err) {
         return res.status(500).json({ error: 'Database error' });
       }
 
-      if (!user || !(await bcrypt.compare(password, user.password_hash))) {
+      if (!user || !(await bcrypt.compare(password, user.password))) {
         return res.status(401).json({ error: 'Invalid credentials' });
       }
 
@@ -546,7 +546,7 @@ console.log('JWT_SECRET exists:', !!JWT_SECRET);
 
 // User management routes
 app.get('/api/users', authenticateToken, requireRole(['admin', 'supervisor']), (req, res) => {
-  db.all('SELECT id, username, email, role, is_active, created_at, last_login FROM users', (err, users) => {
+  db.all('SELECT id, username, email, role, active, created_at, last_login FROM users', (err, users) => {
     if (err) {
       return res.status(500).json({ error: 'Database error' });
     }
@@ -573,7 +573,7 @@ app.post('/api/users',
       const hashedPassword = await bcrypt.hash(password, 10);
       
       db.run(
-        `INSERT INTO users (username, email, password_hash, role) VALUES ($1, $2, $3, $4)`,
+        `INSERT INTO users (username, email, password, role) VALUES (?, ?, ?, ?)`,
         [username, email, hashedPassword, role],
         function(err) {
           if (err) {
@@ -632,7 +632,7 @@ app.post('/api/machines',
 
     db.run(
       `INSERT INTO machines (name, type, environment, capacity, status, created_at, updated_at) 
-       VALUES ($1, $2, $3, $4, 'available', NOW(), NOW())`,
+       VALUES (?, ?, ?, ?, 'available', datetime('now', '+2 hours'), datetime('now', '+2 hours'))`,
       [name, type, environment, capacity],
       function(err) {
         if (err) {
@@ -924,8 +924,8 @@ app.post('/api/orders',
     db.run(
       `INSERT INTO production_orders (
         order_number, product_name, quantity, environment, priority, 
-        due_date, notes, created_by, created_at, updated_at
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, NOW(), NOW())`,
+        due_date, notes, created_by, created_at
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, datetime('now', '+2 hours'))`,
       [order_number, product_name, quantity, environment, priority || 'normal', due_date, notes, req.user.id],
       function(err) {
         if (err) {
@@ -2363,7 +2363,8 @@ process.on('SIGTERM', () => {
 });
 
 // Load enhanced workflow endpoints
-require('./enhanced-workflow-endpoints.js');
+const enhancedWorkflowEndpoints = require('./enhanced-workflow-endpoints.js');
+enhancedWorkflowEndpoints(app, db, authenticateToken, requireRole, body, broadcast);
 
 // Start server
 server.listen(PORT, () => {
