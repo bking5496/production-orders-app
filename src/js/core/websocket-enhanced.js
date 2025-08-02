@@ -48,7 +48,10 @@ class EnhancedWebSocketService {
                 // Get authentication token
                 const authToken = token || await this.getWebSocketToken();
                 if (!authToken) {
-                    throw new Error('No authentication token available');
+                    console.log('ℹ️ No authentication token available, skipping WebSocket connection');
+                    this.connectionState = 'disconnected';
+                    this.emit('connectionStateChanged', { state: 'disconnected' });
+                    return;
                 }
 
                 // Build WebSocket URL with enhanced parameters

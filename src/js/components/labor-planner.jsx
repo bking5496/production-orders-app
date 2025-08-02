@@ -54,18 +54,17 @@ const WorkersModule = ({ assignments = [], onShowNotification }) => {
   const [loading, setLoading] = useState(true);
 
   const fetchEmployees = async () => {
+    // Check if user is authenticated before making any requests
+    const token = localStorage.getItem('token');
+    if (!token) {
+      console.log('ℹ️ No authentication token, waiting for user login');
+      setEmployees([]);
+      setLoading(false);
+      return;
+    }
+
     try {
       setLoading(true);
-      
-      // Check if user is authenticated
-      const token = localStorage.getItem('token');
-      if (!token) {
-        console.warn('No authentication token found');
-        onShowNotification?.('Please log in to view employee data', 'warning');
-        setEmployees([]);
-        return;
-      }
-      
       const response = await API.get('/api/users');
       setEmployees(response || []);
     } catch (error) {
@@ -106,6 +105,30 @@ const WorkersModule = ({ assignments = [], onShowNotification }) => {
              role.includes(searchTerm);
     });
   }, [employees, workerSearch]);
+
+  const token = localStorage.getItem('token');
+  
+  if (!token) {
+    return (
+      <div className="flex-1 p-4 md:p-6">
+        <div className="bg-white rounded-xl shadow-sm border p-6">
+          <div className="flex items-center justify-center py-16">
+            <div className="text-center">
+              <Users className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+              <h3 className="text-lg font-medium text-gray-700 mb-2">Authentication Required</h3>
+              <p className="text-gray-500 mb-4">Please log in to view employee data</p>
+              <button 
+                onClick={() => window.location.href = '/login'}
+                className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+              >
+                Go to Login
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (loading) {
     return (
@@ -316,15 +339,16 @@ const LaborPlannerContainer = () => {
     useEffect(() => {
       // Load basic data for planning
       const loadPlanningData = async () => {
+        // Check if user is authenticated before making any requests
+        const token = localStorage.getItem('token');
+        if (!token) {
+          console.log('ℹ️ No authentication token, waiting for user login');
+          setMachines([]);
+          setEmployees([]);
+          return;
+        }
+
         try {
-          // Check if user is authenticated
-          const token = localStorage.getItem('token');
-          if (!token) {
-            console.warn('No authentication token found');
-            showNotification('Please log in to access planning data', 'warning');
-            return;
-          }
-          
           const [machinesRes, employeesRes] = await Promise.all([
             API.get('/api/machines').catch((err) => {
               console.error('Failed to load machines:', err);

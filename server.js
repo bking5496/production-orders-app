@@ -447,12 +447,10 @@ app.post('/api/auth/login',
 
     const { username, password } = req.body;
 
-    db.get('SELECT * FROM users WHERE username = $1 AND is_active = true', [username], async (err, user) => {
-      if (err) {
-        return res.status(500).json({ error: 'Database error' });
-      }
+    try {
+      const user = await db.get('SELECT * FROM users WHERE username = $1 AND is_active = true', [username]);
 
-      if (!user || !(await bcrypt.compare(password, user.password))) {
+      if (!user || !(await bcrypt.compare(password, user.password_hash))) {
         return res.status(401).json({ error: 'Invalid credentials' });
       }
 
@@ -463,7 +461,7 @@ app.post('/api/auth/login',
       );
 
       // Update last login
-      db.run('UPDATE users SET last_login = CURRENT_TIMESTAMP WHERE id = ?', [user.id]);
+      db.run('UPDATE users SET last_login = CURRENT_TIMESTAMP WHERE id = $1', [user.id]);
 
       res.json({
         token,
@@ -474,12 +472,27 @@ app.post('/api/auth/login',
           role: user.role
         }
       });
-    });
+    } catch (error) {
+      console.error('Login error:', error);
+      return res.status(500).json({ error: 'Database error' });
+    }
   }
 );
 
 app.post('/api/auth/verify', authenticateToken, (req, res) => {
   res.json({ valid: true, user: req.user });
+});
+
+// Session verification endpoint for WebSocket authentication
+app.get('/api/auth/verify-session', authenticateToken, (req, res) => {
+  res.json({ 
+    authenticated: true, 
+    user: {
+      id: req.user.id,
+      username: req.user.username,
+      role: req.user.role
+    }
+  });
 });
 
 // Session status endpoint for frontend session management

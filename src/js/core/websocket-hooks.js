@@ -286,19 +286,45 @@ export function useAutoConnect() {
     useEffect(() => {
         const checkAuthAndConnect = async () => {
             try {
+                // Only check auth if there's a token in localStorage
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    console.log('ℹ️ No token found, skipping WebSocket connection');
+                    return;
+                }
+
+                // Verify the token is still valid
                 const response = await fetch('/api/auth/verify-session', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
                     credentials: 'include'
                 });
 
                 if (response.ok && !isConnected) {
                     console.log('🔐 User authenticated, connecting WebSocket...');
                     await connect();
+                } else if (response.status === 401) {
+                    console.log('🚫 Token expired or invalid, removing from localStorage');
+                    localStorage.removeItem('token');
                 }
             } catch (error) {
                 console.log('ℹ️ Not authenticated, skipping WebSocket connection');
+                // If there's an error and we have a token, it might be invalid
+                const token = localStorage.getItem('token');
+                if (token) {
+                    console.log('🧹 Removing potentially invalid token');
+                    localStorage.removeItem('token');
+                }
             }
         };
 
-        checkAuthAndConnect();
+        // Only run if there's a token
+        const token = localStorage.getItem('token');
+        if (token) {
+            checkAuthAndConnect();
+        }
     }, [connect, isConnected]);
 }
