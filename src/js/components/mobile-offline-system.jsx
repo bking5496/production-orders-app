@@ -1,124 +1,40 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { 
-  WifiOff, Wifi, AlertTriangle, CheckCircle, RefreshCw, 
-  Upload, Download, Database, Clock, Sync
-} from 'lucide-react';
+import React, { useState, useEffect, useContext, createContext } from 'react';
+import { WifiOff, Wifi, Upload, AlertTriangle, CheckCircle, Clock } from 'lucide-react';
+import API from '../core/api';
 
 /**
- * Offline-Capable Interface System for Manufacturing
- * Ensures production continuity even when connectivity is poor
- * Features local storage, sync queues, and optimistic updates
+ * Mobile Offline System for Production Tracking
+ * Handles offline data storage and synchronization for manufacturing environments
  */
 
-// Local Storage Manager for Offline Data
-class OfflineStorageManager {
-  constructor() {
-    this.dbName = 'ProductionOfflineDB';
-    this.version = 1;
-    this.db = null;
-    this.init();
-  }
+// Offline Context
+const OfflineContext = createContext();
 
-  async init() {
-    return new Promise((resolve, reject) => {
-      const request = indexedDB.open(this.dbName, this.version);
-      
-      request.onerror = () => reject(request.error);
-      request.onsuccess = () => {
-        this.db = request.result;
-        resolve(this.db);
-      };
-      
-      request.onupgradeneeded = (event) => {
-        const db = event.target.result;
-        
-        // Orders store
-        if (!db.objectStoreNames.contains('orders')) {
-          const ordersStore = db.createObjectStore('orders', { keyPath: 'id' });
-          ordersStore.createIndex('status', 'status', { unique: false });
-          ordersStore.createIndex('timestamp', 'timestamp', { unique: false });
-        }
-        
-        // Sync queue store
-        if (!db.objectStoreNames.contains('syncQueue')) {
-          const syncStore = db.createObjectStore('syncQueue', { keyPath: 'id', autoIncrement: true });
-          syncStore.createIndex('timestamp', 'timestamp', { unique: false });
-          syncStore.createIndex('priority', 'priority', { unique: false });
-        }
-        
-        // Production data store
-        if (!db.objectStoreNames.contains('productionData')) {
-          const productionStore = db.createObjectStore('productionData', { keyPath: 'id', autoIncrement: true });
-          productionStore.createIndex('orderId', 'orderId', { unique: false });
-          productionStore.createIndex('timestamp', 'timestamp', { unique: false });
-        }
-      };
-    });
+export const useOffline = () => {
+  const context = useContext(OfflineContext);
+  if (!context) {
+    throw new Error('useOffline must be used within OfflineProvider');
   }
+  return context;
+};
 
-  async storeOrder(order) {
-    const transaction = this.db.transaction(['orders'], 'readwrite');
-    const store = transaction.objectStore('orders');
-    await store.put({ ...order, lastModified: Date.now() });
-  }
-
-  async getOrders() {
-    const transaction = this.db.transaction(['orders'], 'readonly');
-    const store = transaction.objectStore('orders');
-    const request = store.getAll();
-    
-    return new Promise((resolve) => {
-      request.onsuccess = () => resolve(request.result);
-    });
-  }
-
-  async addToSyncQueue(operation) {
-    const transaction = this.db.transaction(['syncQueue'], 'readwrite');
-    const store = transaction.objectStore('syncQueue');
-    
-    const syncItem = {
-      ...operation,
-      timestamp: Date.now(),
-      attempts: 0,
-      maxAttempts: 3
-    };
-    
-    await store.add(syncItem);
-  }
-
-  async getSyncQueue() {
-    const transaction = this.db.transaction(['syncQueue'], 'readonly');
-    const store = transaction.objectStore('syncQueue');
-    const request = store.getAll();
-    
-    return new Promise((resolve) => {
-      request.onsuccess = () => resolve(request.result);
-    });
-  }
-
-  async removeFromSyncQueue(id) {
-    const transaction = this.db.transaction(['syncQueue'], 'readwrite');
-    const store = transaction.objectStore('syncQueue');
-    await store.delete(id);
-  }
-
-  async storeProductionData(data) {
-    const transaction = this.db.transaction(['productionData'], 'readwrite');
-    const store = transaction.objectStore('productionData');
-    await store.add({ ...data, timestamp: Date.now() });
-  }
-}
-
-// Offline Status Hook
-export const useOfflineStatus = () => {
+/**
+ * Offline Provider Component
+ */
+export const OfflineProvider = ({ children }) => {
   const [isOnline, setIsOnline] = useState(navigator.onLine);
-  const [lastOnline, setLastOnline] = useState(Date.now());
-  const [syncStatus, setSyncStatus] = useState('idle'); // idle, syncing, error
+  const [pendingActions, setPendingActions] = useState([]);
+  const [syncInProgress, setSyncInProgress] = useState(false);
+  const [lastSync, setLastSync] = useState(null);
 
   useEffect(() => {
+    // Load pending actions from localStorage on startup
+    loadPendingActions();
+    
+    // Set up online/offline listeners
     const handleOnline = () => {
       setIsOnline(true);
-      setLastOnline(Date.now());
+      syncPendingActions();
     };
     
     const handleOffline = () => {
@@ -134,424 +50,448 @@ export const useOfflineStatus = () => {
     };
   }, []);
 
-  return { isOnline, lastOnline, syncStatus, setSyncStatus };
-};
-
-// Offline-First Data Hook
-export const useOfflineData = (endpoint, dependencies = []) => {
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [isStale, setIsStale] = useState(false);
-  
-  const storageManager = useRef(new OfflineStorageManager());
-  const { isOnline } = useOfflineStatus();
-
-  const fetchData = useCallback(async () => {
+  const loadPendingActions = () => {
     try {
-      setLoading(true);
-      setError(null);
-
-      if (isOnline) {
-        // Try to fetch from API first
-        const response = await fetch(endpoint);
-        if (response.ok) {
-          const freshData = await response.json();
-          setData(freshData);
-          setIsStale(false);
-          
-          // Store in local storage
-          if (endpoint.includes('orders')) {
-            await storageManager.current.storeOrder(freshData);
-          }
-          
-          return freshData;
-        }
+      const stored = localStorage.getItem('production_offline_actions');
+      if (stored) {
+        setPendingActions(JSON.parse(stored));
       }
-
-      // Fallback to local storage
-      if (endpoint.includes('orders')) {
-        const localData = await storageManager.current.getOrders();
-        if (localData.length > 0) {
-          setData(localData);
-          setIsStale(!isOnline);
-          return localData;
-        }
-      }
-
-      throw new Error('No data available offline');
-    } catch (err) {
-      setError(err.message);
-      console.error('Data fetch error:', err);
-    } finally {
-      setLoading(false);
-    }
-  }, [endpoint, isOnline]);
-
-  useEffect(() => {
-    fetchData();
-  }, [fetchData, ...dependencies]);
-
-  return { data, loading, error, isStale, refetch: fetchData };
-};
-
-// Offline Sync Manager Component
-export const OfflineSyncManager = ({ onSyncComplete, onSyncError }) => {
-  const [syncQueue, setSyncQueue] = useState([]);
-  const [syncing, setSyncing] = useState(false);
-  const { isOnline, syncStatus, setSyncStatus } = useOfflineStatus();
-  
-  const storageManager = useRef(new OfflineStorageManager());
-
-  useEffect(() => {
-    loadSyncQueue();
-  }, []);
-
-  useEffect(() => {
-    if (isOnline && syncQueue.length > 0 && !syncing) {
-      processSyncQueue();
-    }
-  }, [isOnline, syncQueue.length, syncing]);
-
-  const loadSyncQueue = async () => {
-    try {
-      const queue = await storageManager.current.getSyncQueue();
-      setSyncQueue(queue);
     } catch (error) {
-      console.error('Failed to load sync queue:', error);
+      console.error('Failed to load offline actions:', error);
     }
   };
 
-  const processSyncQueue = async () => {
-    if (!isOnline || syncing) return;
-
-    setSyncing(true);
-    setSyncStatus('syncing');
-
+  const savePendingActions = (actions) => {
     try {
-      const queue = await storageManager.current.getSyncQueue();
-      
-      for (const item of queue) {
-        if (item.attempts >= item.maxAttempts) {
-          console.warn('Max sync attempts reached for item:', item);
-          await storageManager.current.removeFromSyncQueue(item.id);
-          continue;
-        }
+      localStorage.setItem('production_offline_actions', JSON.stringify(actions));
+    } catch (error) {
+      console.error('Failed to save offline actions:', error);
+    }
+  };
 
+  /**
+   * Add an action to the offline queue
+   */
+  const addOfflineAction = (action) => {
+    const offlineAction = {
+      id: Date.now() + Math.random().toString(36).substr(2, 9),
+      timestamp: new Date().toISOString(),
+      retries: 0,
+      maxRetries: 3,
+      ...action
+    };
+
+    const newActions = [...pendingActions, offlineAction];
+    setPendingActions(newActions);
+    savePendingActions(newActions);
+
+    // Try to sync immediately if online
+    if (isOnline) {
+      syncPendingActions();
+    }
+
+    return offlineAction.id;
+  };
+
+  /**
+   * Sync pending actions when coming back online
+   */
+  const syncPendingActions = async () => {
+    if (syncInProgress || pendingActions.length === 0) return;
+
+    setSyncInProgress(true);
+    
+    try {
+      const successfulActions = [];
+      const failedActions = [];
+
+      for (const action of pendingActions) {
         try {
-          await syncItem(item);
-          await storageManager.current.removeFromSyncQueue(item.id);
+          await executeOfflineAction(action);
+          successfulActions.push(action.id);
         } catch (error) {
-          console.error('Sync failed for item:', item, error);
-          // Increment attempt count
-          item.attempts++;
-          // Could implement exponential backoff here
+          console.error('Failed to sync action:', error);
+          action.retries += 1;
+          if (action.retries < action.maxRetries) {
+            failedActions.push(action);
+          }
         }
       }
 
-      setSyncStatus('idle');
-      onSyncComplete?.();
+      // Remove successful actions and keep failed ones for retry
+      const remainingActions = pendingActions.filter(action => 
+        !successfulActions.includes(action.id)
+      );
+      
+      setPendingActions(remainingActions);
+      savePendingActions(remainingActions);
+      setLastSync(new Date().toISOString());
+
     } catch (error) {
-      setSyncStatus('error');
-      onSyncError?.(error);
+      console.error('Sync process failed:', error);
     } finally {
-      setSyncing(false);
-      await loadSyncQueue();
+      setSyncInProgress(false);
     }
   };
 
-  const syncItem = async (item) => {
-    const { operation, endpoint, data, method = 'POST' } = item;
-
-    const response = await fetch(endpoint, {
-      method,
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
-      },
-      body: JSON.stringify(data)
-    });
-
-    if (!response.ok) {
-      throw new Error(`Sync failed: ${response.statusText}`);
-    }
-
-    return response.json();
-  };
-
-  return null; // This is a background service component
-};
-
-// Offline-Capable Production Control
-export const OfflineProductionControl = ({ order, onUpdate }) => {
-  const [localQuantity, setLocalQuantity] = useState(order.actual_quantity || 0);
-  const [pendingUpdates, setPendingUpdates] = useState([]);
-  const { isOnline } = useOfflineStatus();
-  
-  const storageManager = useRef(new OfflineStorageManager());
-
-  const updateQuantity = async (newQuantity) => {
-    // Optimistic update
-    setLocalQuantity(newQuantity);
-    
-    const updateData = {
-      orderId: order.id,
-      quantity: newQuantity,
-      timestamp: Date.now(),
-      operator: localStorage.getItem('userId')
-    };
-
-    // Store locally immediately
-    await storageManager.current.storeProductionData(updateData);
-
-    if (isOnline) {
-      try {
-        // Try to sync immediately
-        const response = await fetch(`/api/orders/${order.id}/quantity`, {
-          method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('authToken')}`
-          },
-          body: JSON.stringify({ actual_quantity: newQuantity })
-        });
-
-        if (response.ok) {
-          onUpdate?.();
-        } else {
-          throw new Error('Sync failed');
-        }
-      } catch (error) {
-        // Add to sync queue for later
-        await storageManager.current.addToSyncQueue({
-          operation: 'updateQuantity',
-          endpoint: `/api/orders/${order.id}/quantity`,
-          method: 'PATCH',
-          data: { actual_quantity: newQuantity },
-          priority: 'high'
+  /**
+   * Execute an offline action
+   */
+  const executeOfflineAction = async (action) => {
+    switch (action.type) {
+      case 'update_production_quantity':
+        return await API.patch(`/orders/${action.orderId}/quantity`, {
+          actual_quantity: action.quantity,
+          timestamp: action.timestamp
         });
         
-        setPendingUpdates(prev => [...prev, updateData]);
-      }
-    } else {
-      // Add to sync queue
-      await storageManager.current.addToSyncQueue({
-        operation: 'updateQuantity',
-        endpoint: `/api/orders/${order.id}/quantity`,
-        method: 'PATCH',
-        data: { actual_quantity: newQuantity },
-        priority: 'high'
-      });
-      
-      setPendingUpdates(prev => [...prev, updateData]);
+      case 'stop_production':
+        return await API.post(`/orders/${action.orderId}/stop`, {
+          reason: action.reason,
+          notes: action.notes,
+          timestamp: action.timestamp
+        });
+        
+      case 'start_production':
+        return await API.post(`/orders/${action.orderId}/start`, {
+          machine_id: action.machineId,
+          timestamp: action.timestamp
+        });
+        
+      case 'complete_production':
+        return await API.post(`/orders/${action.orderId}/complete`, {
+          actual_quantity: action.actualQuantity,
+          notes: action.notes,
+          timestamp: action.timestamp
+        });
+        
+      case 'update_machine_status':
+        return await API.patch(`/machines/${action.machineId}/status`, {
+          status: action.status,
+          reason: action.reason,
+          timestamp: action.timestamp
+        });
+        
+      default:
+        throw new Error(`Unknown action type: ${action.type}`);
     }
   };
 
-  const recordStop = async (reason) => {
-    const stopData = {
-      orderId: order.id,
-      reason,
-      timestamp: Date.now(),
-      operator: localStorage.getItem('userId')
-    };
+  /**
+   * Clear all pending actions (use with caution)
+   */
+  const clearPendingActions = () => {
+    setPendingActions([]);
+    localStorage.removeItem('production_offline_actions');
+  };
 
-    // Store locally
-    await storageManager.current.storeProductionData(stopData);
-
+  /**
+   * Manual sync trigger
+   */
+  const manualSync = () => {
     if (isOnline) {
-      try {
-        await fetch(`/api/orders/${order.id}/stop`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('authToken')}`
-          },
-          body: JSON.stringify({ reason })
-        });
-        
-        onUpdate?.();
-      } catch (error) {
-        await storageManager.current.addToSyncQueue({
-          operation: 'recordStop',
-          endpoint: `/api/orders/${order.id}/stop`,
-          method: 'POST',
-          data: { reason },
-          priority: 'critical'
-        });
-      }
-    } else {
-      await storageManager.current.addToSyncQueue({
-        operation: 'recordStop',
-        endpoint: `/api/orders/${order.id}/stop`,
-        method: 'POST',
-        data: { reason },
-        priority: 'critical'
-      });
+      syncPendingActions();
     }
+  };
+
+  const value = {
+    isOnline,
+    pendingActions,
+    syncInProgress,
+    lastSync,
+    addOfflineAction,
+    syncPendingActions,
+    clearPendingActions,
+    manualSync
   };
 
   return (
-    <div className="offline-production-control">
-      {/* Offline Status Indicator */}
-      <OfflineStatusBanner />
-      
-      {/* Quantity Update */}
-      <div className="mb-4">
-        <label className="block text-sm font-medium mb-2">
-          Current Quantity
-          {pendingUpdates.length > 0 && (
-            <span className="ml-2 text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded">
-              {pendingUpdates.length} pending sync
-            </span>
-          )}
-        </label>
-        
-        <div className="flex items-center gap-3">
-          <input
-            type="number"
-            value={localQuantity}
-            onChange={(e) => updateQuantity(parseInt(e.target.value) || 0)}
-            className="flex-1 h-12 px-4 text-lg font-mono border-2 border-gray-300 rounded-lg focus:border-blue-500"
-            min="0"
-            max={order.quantity}
-          />
-          <span className="text-lg text-gray-600">/ {order.quantity}</span>
-        </div>
-      </div>
-
-      {/* Stop Production */}
-      <OfflineStopButton onStop={recordStop} />
-    </div>
+    <OfflineContext.Provider value={value}>
+      {children}
+    </OfflineContext.Provider>
   );
 };
 
-// Offline Status Banner
+/**
+ * Offline Status Banner Component
+ */
 export const OfflineStatusBanner = () => {
-  const { isOnline, lastOnline, syncStatus } = useOfflineStatus();
-  const [showDetails, setShowDetails] = useState(false);
+  const { isOnline, pendingActions, syncInProgress, manualSync } = useOffline();
 
-  if (isOnline && syncStatus === 'idle') return null;
-
-  const getStatusMessage = () => {
-    if (!isOnline) {
-      const minutesOffline = Math.floor((Date.now() - lastOnline) / 60000);
-      return `Offline for ${minutesOffline}m - Data saved locally`;
-    }
-    
-    if (syncStatus === 'syncing') return 'Syncing data...';
-    if (syncStatus === 'error') return 'Sync error - Data saved locally';
-    
-    return 'Online';
-  };
-
-  const getStatusColor = () => {
-    if (!isOnline) return 'bg-yellow-600';
-    if (syncStatus === 'syncing') return 'bg-blue-600';
-    if (syncStatus === 'error') return 'bg-red-600';
-    return 'bg-green-600';
-  };
+  if (isOnline && pendingActions.length === 0) {
+    return null;
+  }
 
   return (
-    <div className={`${getStatusColor()} text-white p-3 rounded-lg mb-4`}>
+    <div className={`sticky top-0 z-40 px-4 py-3 text-sm font-medium ${
+      isOnline ? 'bg-blue-100 text-blue-800' : 'bg-red-100 text-red-800'
+    }`}>
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center">
           {isOnline ? (
-            syncStatus === 'syncing' ? (
-              <RefreshCw className="w-4 h-4 animate-spin" />
-            ) : (
-              <Wifi className="w-4 h-4" />
-            )
+            <Wifi className="w-4 h-4 mr-2" />
           ) : (
-            <WifiOff className="w-4 h-4" />
+            <WifiOff className="w-4 h-4 mr-2" />
           )}
-          <span className="font-medium">{getStatusMessage()}</span>
+          <span>
+            {isOnline 
+              ? `${pendingActions.length} actions pending sync`
+              : 'Working offline - data will sync when connected'
+            }
+          </span>
         </div>
         
-        <button
-          onClick={() => setShowDetails(!showDetails)}
-          className="text-sm underline"
-        >
-          {showDetails ? 'Hide' : 'Details'}
-        </button>
-      </div>
-      
-      {showDetails && (
-        <div className="mt-3 p-3 bg-black bg-opacity-20 rounded text-sm">
-          <div className="space-y-1">
-            <div>Status: {isOnline ? 'Connected' : 'Offline'}</div>
-            <div>Last sync: {new Date(lastOnline).toLocaleTimeString()}</div>
-            <div>Local storage: Active</div>
-            {!isOnline && (
-              <div className="text-yellow-200">
-                ⚠ Changes will sync when connection is restored
-              </div>
+        {isOnline && pendingActions.length > 0 && (
+          <button
+            onClick={manualSync}
+            disabled={syncInProgress}
+            className="flex items-center px-3 py-1 bg-blue-600 text-white rounded text-xs hover:bg-blue-700 disabled:opacity-50"
+          >
+            {syncInProgress ? (
+              <>
+                <Upload className="w-3 h-3 mr-1 animate-spin" />
+                Syncing...
+              </>
+            ) : (
+              <>
+                <Upload className="w-3 h-3 mr-1" />
+                Sync Now
+              </>
             )}
-          </div>
-        </div>
-      )}
+          </button>
+        )}
+      </div>
     </div>
   );
 };
 
-// Offline-Capable Stop Button
-const OfflineStopButton = ({ onStop }) => {
-  const [showReasons, setShowReasons] = useState(false);
-  const { isOnline } = useOfflineStatus();
+/**
+ * Offline-capable production action hooks
+ */
+export const useOfflineProductionActions = () => {
+  const { addOfflineAction, isOnline } = useOffline();
 
-  const reasons = [
-    { id: 'material_shortage', label: 'Material Shortage', priority: 'high' },
-    { id: 'operator_break', label: 'Break Time', priority: 'normal' },
-    { id: 'machine_issue', label: 'Machine Issue', priority: 'critical' },
-    { id: 'quality_issue', label: 'Quality Issue', priority: 'high' }
-  ];
+  const updateProductionQuantity = async (orderId, quantity) => {
+    if (isOnline) {
+      // Try online first
+      try {
+        return await API.patch(`/orders/${orderId}/quantity`, { actual_quantity: quantity });
+      } catch (error) {
+        // If failed, add to offline queue
+        addOfflineAction({
+          type: 'update_production_quantity',
+          orderId,
+          quantity
+        });
+        throw error;
+      }
+    } else {
+      // Add to offline queue
+      return addOfflineAction({
+        type: 'update_production_quantity',
+        orderId,
+        quantity
+      });
+    }
+  };
 
-  const handleStop = (reason) => {
-    onStop(reason);
-    setShowReasons(false);
+  const stopProduction = async (orderId, reason, notes = '') => {
+    if (isOnline) {
+      try {
+        return await API.post(`/orders/${orderId}/stop`, { reason, notes });
+      } catch (error) {
+        addOfflineAction({
+          type: 'stop_production',
+          orderId,
+          reason,
+          notes
+        });
+        throw error;
+      }
+    } else {
+      return addOfflineAction({
+        type: 'stop_production',
+        orderId,
+        reason,
+        notes
+      });
+    }
+  };
+
+  const startProduction = async (orderId, machineId) => {
+    if (isOnline) {
+      try {
+        return await API.post(`/orders/${orderId}/start`, { machine_id: machineId });
+      } catch (error) {
+        addOfflineAction({
+          type: 'start_production',
+          orderId,
+          machineId
+        });
+        throw error;
+      }
+    } else {
+      return addOfflineAction({
+        type: 'start_production',
+        orderId,
+        machineId
+      });
+    }
+  };
+
+  const completeProduction = async (orderId, actualQuantity, notes = '') => {
+    if (isOnline) {
+      try {
+        return await API.post(`/orders/${orderId}/complete`, { 
+          actual_quantity: actualQuantity, 
+          notes 
+        });
+      } catch (error) {
+        addOfflineAction({
+          type: 'complete_production',
+          orderId,
+          actualQuantity,
+          notes
+        });
+        throw error;
+      }
+    } else {
+      return addOfflineAction({
+        type: 'complete_production',
+        orderId,
+        actualQuantity,
+        notes
+      });
+    }
+  };
+
+  const updateMachineStatus = async (machineId, status, reason = '') => {
+    if (isOnline) {
+      try {
+        return await API.patch(`/machines/${machineId}/status`, { status, reason });
+      } catch (error) {
+        addOfflineAction({
+          type: 'update_machine_status',
+          machineId,
+          status,
+          reason
+        });
+        throw error;
+      }
+    } else {
+      return addOfflineAction({
+        type: 'update_machine_status',
+        machineId,
+        status,
+        reason
+      });
+    }
+  };
+
+  return {
+    updateProductionQuantity,
+    stopProduction,
+    startProduction,
+    completeProduction,
+    updateMachineStatus,
+    isOnline
+  };
+};
+
+/**
+ * Offline Actions List Component
+ */
+export const OfflineActionsList = ({ onClose }) => {
+  const { pendingActions, clearPendingActions, syncInProgress } = useOffline();
+
+  const formatActionDescription = (action) => {
+    switch (action.type) {
+      case 'update_production_quantity':
+        return `Update quantity to ${action.quantity} for order ${action.orderId}`;
+      case 'stop_production':
+        return `Stop production for order ${action.orderId} (${action.reason})`;
+      case 'start_production':
+        return `Start production for order ${action.orderId}`;
+      case 'complete_production':
+        return `Complete order ${action.orderId} with ${action.actualQuantity} units`;
+      case 'update_machine_status':
+        return `Update machine ${action.machineId} status to ${action.status}`;
+      default:
+        return 'Unknown action';
+    }
+  };
+
+  const getActionIcon = (action) => {
+    switch (action.type) {
+      case 'update_production_quantity':
+        return <CheckCircle className="w-4 h-4 text-blue-600" />;
+      case 'stop_production':
+        return <AlertTriangle className="w-4 h-4 text-red-600" />;
+      case 'start_production':
+        return <CheckCircle className="w-4 h-4 text-green-600" />;
+      case 'complete_production':
+        return <CheckCircle className="w-4 h-4 text-green-600" />;
+      case 'update_machine_status':
+        return <Clock className="w-4 h-4 text-yellow-600" />;
+      default:
+        return <Clock className="w-4 h-4 text-gray-600" />;
+    }
   };
 
   return (
-    <div className="offline-stop-button">
-      {!showReasons ? (
-        <button
-          onClick={() => setShowReasons(true)}
-          className="w-full h-14 bg-red-600 text-white font-bold rounded-lg flex items-center justify-center gap-3 hover:bg-red-700 active:scale-95 transition-all"
-        >
-          <Square className="w-6 h-6" />
-          Stop Production
-          {!isOnline && (
-            <div className="bg-yellow-500 text-yellow-900 px-2 py-1 rounded text-xs font-normal">
-              Offline
-            </div>
-          )}
-        </button>
-      ) : (
-        <div className="space-y-3">
-          <p className="text-sm font-medium text-gray-700">Select stop reason:</p>
-          {reasons.map(reason => (
-            <button
-              key={reason.id}
-              onClick={() => handleStop(reason.id)}
-              className="w-full h-12 bg-white border-2 border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 active:scale-95 transition-all text-left px-4"
-            >
-              {reason.label}
-              {!isOnline && (
-                <span className="float-right text-xs text-yellow-600">
-                  Will sync
-                </span>
-              )}
-            </button>
-          ))}
-          <button
-            onClick={() => setShowReasons(false)}
-            className="w-full h-10 bg-gray-200 text-gray-600 font-medium rounded-lg hover:bg-gray-300"
-          >
-            Cancel
+    <div className="fixed inset-0 z-50 bg-white">
+      <div className="sticky top-0 bg-gray-900 text-white p-4">
+        <div className="flex items-center justify-between">
+          <h2 className="text-lg font-bold">Offline Actions ({pendingActions.length})</h2>
+          <button onClick={onClose} className="text-white hover:text-gray-300">
+            ×
           </button>
         </div>
-      )}
+      </div>
+
+      <div className="p-4">
+        {pendingActions.length === 0 ? (
+          <div className="text-center py-8 text-gray-500">
+            <CheckCircle className="w-12 h-12 mx-auto mb-4 text-green-500" />
+            <p>No pending offline actions</p>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {pendingActions.map(action => (
+              <div key={action.id} className="bg-white border rounded-lg p-4 shadow-sm">
+                <div className="flex items-start justify-between">
+                  <div className="flex items-start">
+                    {getActionIcon(action)}
+                    <div className="ml-3">
+                      <p className="text-sm font-medium text-gray-900">
+                        {formatActionDescription(action)}
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        {new Date(action.timestamp).toLocaleString()}
+                      </p>
+                      {action.retries > 0 && (
+                        <p className="text-xs text-red-600">
+                          Failed {action.retries} time(s)
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+            
+            <div className="pt-4 border-t">
+              <button
+                onClick={clearPendingActions}
+                disabled={syncInProgress}
+                className="w-full px-4 py-2 text-red-600 border border-red-300 rounded-lg hover:bg-red-50 disabled:opacity-50"
+              >
+                Clear All Actions
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
-
-export default OfflineStorageManager;

@@ -3,6 +3,7 @@
  * High-contrast colors optimized for industrial lighting conditions
  * Supports both standard and enhanced contrast modes
  */
+import React, { useState, useEffect, createContext, useContext } from 'react';
 
 // Color System - Industrial Grade Contrast
 export const MobileTheme = {
@@ -509,5 +510,42 @@ export const IndustrialCSS = `
     }
   }
 `;
+
+// High Contrast Theme Hook
+export const useHighContrastTheme = () => {
+  const [contrastMode, setContrastMode] = useState('standard');
+  
+  useEffect(() => {
+    // Load saved preference
+    const saved = localStorage.getItem('mobile_contrast_mode');
+    if (saved && ['standard', 'enhanced'].includes(saved)) {
+      setContrastMode(saved);
+    }
+  }, []);
+
+  const toggleContrast = () => {
+    const newMode = contrastMode === 'standard' ? 'enhanced' : 'standard';
+    setContrastMode(newMode);
+    localStorage.setItem('mobile_contrast_mode', newMode);
+  };
+
+  const setEnhanced = () => {
+    setContrastMode('enhanced');
+    localStorage.setItem('mobile_contrast_mode', 'enhanced');
+  };
+
+  const setStandard = () => {
+    setContrastMode('standard');
+    localStorage.setItem('mobile_contrast_mode', 'standard');
+  };
+
+  return {
+    contrastMode,
+    isEnhanced: contrastMode === 'enhanced',
+    toggleContrast,
+    setEnhanced,
+    setStandard
+  };
+};
 
 export default MobileTheme;

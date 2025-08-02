@@ -953,8 +953,8 @@ app.post('/api/orders/:id/start',
           
           // Update machine status
           db.run(
-            'UPDATE machines SET status = "in_use" WHERE id = ?',
-            [machine_id],
+            'UPDATE machines SET status = ? WHERE id = ?',
+            ['in_use', machine_id],
             function(err) {
               if (err) {
                 db.run('ROLLBACK');
@@ -1127,8 +1127,8 @@ app.post('/api/orders/:id/resume',
                   
                   if (order.machine_id) {
                     db.run(
-                      'UPDATE machines SET status = "in_use" WHERE id = ?',
-                      [order.machine_id],
+                      'UPDATE machines SET status = ? WHERE id = ?',
+                      ['in_use', order.machine_id],
                       function(err) {
                         if (err) {
                           console.error('Failed to update machine status:', err);

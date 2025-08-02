@@ -539,6 +539,7 @@ export const TabNavigation = ({ activeTab, onTabChange, tabs = [], variant = "de
   );
 };
 
+
 // Optimized image component for mobile
 export const OptimizedImage = ({ 
   src, 
