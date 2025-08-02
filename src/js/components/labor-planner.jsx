@@ -8,7 +8,8 @@ import {
   RefreshCw,
   Settings,
   ArrowLeft,
-  ArrowRight
+  ArrowRight,
+  X
 } from 'lucide-react';
 import API from '../core/api';
 import AttendanceModule from '../modules/attendance-module-simple.jsx';
@@ -55,7 +56,7 @@ const WorkersModule = ({ assignments = [], onShowNotification }) => {
   const fetchEmployees = async () => {
     try {
       setLoading(true);
-      const response = await API.get('/planner/employees');
+      const response = await API.get('/api/users');
       setEmployees(response || []);
     } catch (error) {
       console.error('Error fetching employees:', error);
@@ -297,8 +298,8 @@ const LaborPlannerContainer = () => {
       const loadPlanningData = async () => {
         try {
           const [machinesRes, employeesRes] = await Promise.all([
-            API.get('/planner/machines').catch(() => []),
-            API.get('/planner/employees').catch(() => [])
+            API.get('/api/machines').catch(() => []),
+            API.get('/api/users').catch(() => [])
           ]);
           setMachines(machinesRes || []);
           setEmployees(employeesRes || []);
@@ -311,7 +312,7 @@ const LaborPlannerContainer = () => {
 
     const assignEmployee = async (employeeId, machineId, shift) => {
       try {
-        await API.post('/planner/assignments', {
+        await API.post('/api/labor/assignments', {
           employee_id: employeeId,
           machine_id: machineId,
           shift: shift,
