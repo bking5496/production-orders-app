@@ -2013,8 +2013,12 @@ process.on('SIGTERM', () => {
 });
 
 // Start server
-server.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
-  console.log(`📊 Environment: ${process.env.NODE_ENV || 'development'}`);
-  console.log(`🔐 JWT Secret: ${JWT_SECRET.substring(0, 5)}...`);
-});
+if (require.main === module) {
+  server.listen(PORT, () => {
+    console.log(`🚀 Server running on http://localhost:${PORT}`);
+    console.log(`📊 Environment: ${process.env.NODE_ENV || 'development'}`);
+    console.log(`🔐 JWT Secret: ${JWT_SECRET.substring(0, 5)}...`);
+  });
+}
+
+module.exports = server;
