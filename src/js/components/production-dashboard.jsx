@@ -168,19 +168,31 @@ const MachineStatusCard = ({ machine, onClick }) => {
 };
 
 // Summary stats component
-const ProductionSummary = ({ machines }) => {
+const ProductionSummary = ({ machines, activeOrders, todayStats, efficiency }) => {
     const stats = useMemo(() => {
         const total = machines.length;
         const running = machines.filter(m => m.status === 'in_use').length;
         const available = machines.filter(m => m.status === 'available').length;
         const maintenance = machines.filter(m => m.status === 'maintenance').length;
         const offline = machines.filter(m => m.status === 'offline').length;
-        const avgEfficiency = running > 0 ? 
+        
+        // Use efficiency from API if available, otherwise calculate
+        const avgEfficiency = efficiency || (running > 0 ? 
             Math.round(machines.filter(m => m.status === 'in_use')
-                .reduce((acc, m) => acc + calculateEfficiency(m), 0) / running) : 0;
+                .reduce((acc, m) => acc + calculateEfficiency(m), 0) / running) : 0);
 
-        return { total, running, available, maintenance, offline, avgEfficiency };
-    }, [machines]);
+        return { 
+            total, 
+            running, 
+            available, 
+            maintenance, 
+            offline, 
+            avgEfficiency,
+            activeOrders: activeOrders.length,
+            totalOrders: todayStats.total_orders || 0,
+            completedOrders: todayStats.completed_orders || 0
+        };
+    }, [machines, activeOrders, todayStats, efficiency]);
 
     return (
         <div className="grid grid-cols-2 md:grid-cols-6 gap-4 mb-6">
@@ -561,7 +573,12 @@ const OrderDetailsModal = ({ isOpen, onClose, orderId, orderNumber }) => {
 };
 
 export default function ProductionDashboard() {
-    const [overviewData, setOverviewData] = useState([]);
+    const [overviewData, setOverviewData] = useState({
+        activeOrders: [],
+        machineStatus: [],
+        todayStats: {},
+        efficiency: 0
+    });
     const [loading, setLoading] = useState(true);
     const [lastUpdated, setLastUpdated] = useState(new Date());
     const [error, setError] = useState(null);
@@ -582,19 +599,16 @@ export default function ProductionDashboard() {
             const data = await API.get('/production/floor-overview');
             console.log('Production floor overview data:', data);
             
-            // Log machines with orders to debug stopped orders
-            const machinesWithOrders = (data || []).filter(machine => machine.order_number);
-            console.log('Machines with orders:', machinesWithOrders);
+            // Handle the structured response from API
+            const activeOrders = data.activeOrders || [];
+            const machineStatus = data.machineStatus || [];
+            const todayStats = data.todayStats || {};
             
-            // Log all machine statuses to see what's happening
-            console.log('All machine statuses:', (data || []).map(m => ({
-                name: m.name,
-                status: m.status,
-                order_number: m.order_number,
-                order_id: m.order_id
-            })));
+            console.log('Active orders:', activeOrders);
+            console.log('Machine status:', machineStatus);
+            console.log('Today stats:', todayStats);
             
-            setOverviewData(data || []);
+            setOverviewData(data || {});
         } catch (error) {
             console.error("Failed to fetch production data:", error);
             setError(error.message || 'Failed to fetch production data');
@@ -706,8 +720,9 @@ export default function ProductionDashboard() {
     }, []);
 
     const filteredMachines = useMemo(() => {
-        if (filterStatus === 'all') return overviewData;
-        return overviewData.filter(machine => machine.status === filterStatus);
+        const machines = overviewData.machineStatus || [];
+        if (filterStatus === 'all') return machines;
+        return machines.filter(machine => machine.status === filterStatus);
     }, [overviewData, filterStatus]);
 
     if (loading) {
@@ -778,7 +793,12 @@ export default function ProductionDashboard() {
                 </div>
             </div>
 
-            <ProductionSummary machines={overviewData} />
+            <ProductionSummary 
+                machines={overviewData.machineStatus || []} 
+                activeOrders={overviewData.activeOrders || []}
+                todayStats={overviewData.todayStats || {}}
+                efficiency={overviewData.efficiency || 0}
+            />
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
                 {filteredMachines.map(machine => (

@@ -748,7 +748,7 @@ export default function OrdersPage() {
                   onChange={(e) => setSelectedEnvironment(e.target.value)}
                   className="pl-10 pr-8 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white"
                 >
-                  <option value="all">All Environments</option>
+                  <option key="all" value="all">All Environments</option>
                   {environments.map(env => (
                     <option key={env.id} value={env.code}>{env.name}</option>
                   ))}
@@ -892,7 +892,7 @@ export default function OrdersPage() {
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     required
                   >
-                    <option value="">Select Environment</option>
+                    <option key="select" value="">Select Environment</option>
                     {environments.map(env => (
                       <option key={env.id} value={env.code}>{env.name}</option>
                     ))}
@@ -953,10 +953,10 @@ export default function OrdersPage() {
                     onChange={(e) => setFormData({...formData, priority: e.target.value})} 
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   >
-                    <option value="low">Low</option>
-                    <option value="normal">Normal</option>
-                    <option value="high">High</option>
-                    <option value="urgent">Urgent</option>
+                    <option key="low" value="low">Low</option>
+                    <option key="normal" value="normal">Normal</option>
+                    <option key="high" value="high">High</option>
+                    <option key="urgent" value="urgent">Urgent</option>
                   </select>
                 )}
               </div>
@@ -1033,7 +1033,7 @@ export default function OrdersPage() {
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
                 required
               >
-                <option value="">Choose an available machine...</option>
+                <option key="choose" value="">Choose an available machine...</option>
                 {machines
                   .filter(m => m.environment === selectedOrder.environment && m.status === 'available')
                   .map(m => (
@@ -1087,16 +1087,16 @@ export default function OrdersPage() {
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent mb-3"
                 required
               >
-                <option value="">Select stop reason...</option>
-                <option value="machine_breakdown">Machine Breakdown</option>
-                <option value="material_shortage">Material Shortage</option>
-                <option value="quality_issue">Quality Issue</option>
-                <option value="operator_break">Operator Break</option>
-                <option value="shift_change">Shift Change</option>
-                <option value="maintenance">Scheduled Maintenance</option>
-                <option value="safety_incident">Safety Incident</option>
-                <option value="power_outage">Power Outage</option>
-                <option value="other">Other</option>
+                <option key="select-reason" value="">Select stop reason...</option>
+                <option key="machine_breakdown" value="machine_breakdown">Machine Breakdown</option>
+                <option key="material_shortage" value="material_shortage">Material Shortage</option>
+                <option key="quality_issue" value="quality_issue">Quality Issue</option>
+                <option key="operator_break" value="operator_break">Operator Break</option>
+                <option key="shift_change" value="shift_change">Shift Change</option>
+                <option key="maintenance" value="maintenance">Scheduled Maintenance</option>
+                <option key="safety_incident" value="safety_incident">Safety Incident</option>
+                <option key="power_outage" value="power_outage">Power Outage</option>
+                <option key="other" value="other">Other</option>
               </select>
               
               {stopReason && (
