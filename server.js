@@ -1485,13 +1485,13 @@ app.post('/api/orders/:id/resume',
              stop_reason = NULL::TEXT
          WHERE id = $1 AND status = 'stopped'`,
         [id],
-        function(err) {
+        function(err, result) {
           if (err) {
             db.run('ROLLBACK');
             return res.status(500).json({ error: 'Database error' });
           }
           
-          if (this.changes === 0) {
+          if (!result || result.changes === 0) {
             db.run('ROLLBACK');
             return res.status(400).json({ error: 'Order not found or not stopped' });
           }
