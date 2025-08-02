@@ -244,7 +244,7 @@ function initializeDatabase() {
     bcrypt.hash(defaultPassword, 10, (err, hash) => {
       if (!err) {
         db.run(
-          `INSERT OR IGNORE INTO users (username, email, password, role) VALUES (?, ?, ?, ?)`,
+          `INSERT INTO users (username, email, password, role) VALUES ($1, $2, $3, $4) ON CONFLICT (username) DO NOTHING`,
           ['admin', 'admin@example.com', hash, 'admin'],
           (err) => {
             if (!err) {
@@ -570,7 +570,7 @@ app.post('/api/users',
       const hashedPassword = await bcrypt.hash(password, 10);
       
       db.run(
-        `INSERT INTO users (username, email, password_hash, role) VALUES (?, ?, ?, ?)`
+        `INSERT INTO users (username, email, password_hash, role) VALUES ($1, $2, $3, $4)`,
         [username, email, hashedPassword, role],
         function(err) {
           if (err) {
@@ -1029,9 +1029,9 @@ app.post('/api/orders/:id/pause',
         `UPDATE production_orders 
          SET status = 'stopped', 
              stop_time = CURRENT_TIMESTAMP,
-             stop_reason = ?,
+             stop_reason = $1,
              updated_at = CURRENT_TIMESTAMP
-         WHERE id = ? AND status = 'in_progress'`,
+         WHERE id = $2 AND status = 'in_progress'`,
         [reason, id],
         function(updateErr) {
           if (updateErr) {
@@ -1048,7 +1048,7 @@ app.post('/api/orders/:id/pause',
           // Create stop record - simpler version
           db.run(
             `INSERT INTO production_stops (order_id, reason, notes, created_by) 
-             VALUES (?, ?, ?, ?)`,
+             VALUES ($1, $2, $3, $4)`,
             [id, reason, notes || '', req.user.id],
             function(insertErr) {
               if (insertErr) {
@@ -1056,7 +1056,7 @@ app.post('/api/orders/:id/pause',
                 // Try without created_by if that's the issue
                 db.run(
                   `INSERT INTO production_stops (order_id, reason, notes) 
-                   VALUES (?, ?, ?)`,
+                   VALUES ($1, $2, $3)`,
                   [id, reason, notes || ''],
                   function(retryErr) {
                     if (retryErr) {
@@ -1102,7 +1102,7 @@ app.post('/api/orders/:id/resume',
       db.run('BEGIN TRANSACTION');
       
       db.get(
-        'SELECT * FROM production_orders WHERE id = ? AND status = "stopped"',
+        'SELECT * FROM production_orders WHERE id = $1 AND status = \'stopped\'',
         [id],
         (err, order) => {
           if (err) {
@@ -1212,10 +1212,10 @@ app.post('/api/orders/:id/stop',
     db.serialize(() => {
       db.run('BEGIN TRANSACTION');
       
-      // Update order status to cancelled
+      // Update order status to stopped (so it can be resumed)
       db.run(
         `UPDATE production_orders 
-         SET status = 'cancelled',
+         SET status = 'stopped',
              stop_time = CURRENT_TIMESTAMP,
              stop_reason = $1,
              notes = CASE WHEN $2::TEXT IS NOT NULL THEN COALESCE(notes, '') || ' | Stopped: ' || $2::TEXT ELSE COALESCE(notes, '') END,
@@ -1299,7 +1299,7 @@ app.post('/api/orders/:id/complete',
       db.run('BEGIN TRANSACTION');
       
       db.get(
-        'SELECT * FROM production_orders WHERE id = ? AND status = "in_progress"',
+        'SELECT * FROM production_orders WHERE id = $1 AND status = \'in_progress\'',
         [id],
         (err, order) => {
           if (err) {
@@ -1431,8 +1431,8 @@ app.post('/api/orders/:id/pause',
         `UPDATE production_orders 
          SET status = 'stopped', 
              stop_time = CURRENT_TIMESTAMP,
-             stop_reason = ?
-         WHERE id = ? AND status = 'in_progress'`,
+             stop_reason = $1
+         WHERE id = $2 AND status = 'in_progress'`,
         [reason, id],
         function(err) {
           if (err) {
@@ -1448,7 +1448,7 @@ app.post('/api/orders/:id/pause',
           // Create stop record
           db.run(
             `INSERT INTO production_stops (order_id, reason, created_by) 
-             VALUES (?, ?, ?)`,
+             VALUES ($1, $2, $3)`,
             [id, reason, req.user.id],
             function(err) {
               if (err) {
@@ -1500,8 +1500,8 @@ app.post('/api/orders/:id/resume',
           db.run(
             `UPDATE production_stops 
              SET resolved_at = CURRENT_TIMESTAMP,
-                 duration = CAST((julianday(CURRENT_TIMESTAMP) - julianday(created_at)) * 24 * 60 AS INTEGER)
-             WHERE order_id = ? AND resolved_at IS NULL`,
+                 duration = CAST(EXTRACT(EPOCH FROM (CURRENT_TIMESTAMP - created_at)) / 60 AS INTEGER)
+             WHERE order_id = $1 AND resolved_at IS NULL`,
             [id],
             function(err) {
               if (err) {
@@ -1620,7 +1620,7 @@ app.post('/api/upload-orders',
             db.run(
               `INSERT INTO production_orders 
                (order_number, product_name, quantity, environment, priority, due_date, notes, created_by) 
-               VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+               VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
               [
                 row.order_number || row['Order Number'],
                 row.product_name || row['Product Name'],
