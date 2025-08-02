@@ -477,11 +477,43 @@ app.post('/api/auth/verify', authenticateToken, (req, res) => {
   res.json({ valid: true, user: req.user });
 });
 
+// Session status endpoint for frontend session management
+app.get('/api/auth/session-status', authenticateToken, (req, res) => {
+  try {
+    // Extract token expiration from JWT payload
+    const token = req.headers.authorization?.split(' ')[1];
+    if (!token) {
+      return res.status(401).json({ error: 'No token provided' });
+    }
+    
+    const decoded = jwt.decode(token);
+    if (!decoded || !decoded.exp) {
+      return res.status(401).json({ error: 'Invalid token' });
+    }
+    
+    const currentTime = Math.floor(Date.now() / 1000);
+    const timeRemaining = (decoded.exp - currentTime) * 1000; // Convert to milliseconds
+    
+    if (timeRemaining <= 0) {
+      return res.status(401).json({ error: 'Token expired' });
+    }
+    
+    res.json({ 
+      timeRemaining: timeRemaining,
+      expiresAt: decoded.exp * 1000,
+      user: req.user 
+    });
+  } catch (error) {
+    console.error('Session status error:', error);
+    res.status(500).json({ error: 'Failed to check session status' });
+  }
+});
+
 console.log('JWT_SECRET exists:', !!JWT_SECRET);
 
 // User management routes
 app.get('/api/users', authenticateToken, requireRole(['admin', 'supervisor']), (req, res) => {
-  db.all('SELECT id, username, email, role, active, created_at, last_login FROM users', (err, users) => {
+  db.all('SELECT id, username, email, role, is_active, created_at, last_login FROM users', (err, users) => {
     if (err) {
       return res.status(500).json({ error: 'Database error' });
     }
@@ -1645,6 +1677,154 @@ app.get('/api/test-login', (req, res) => {
 app.get('/api/analytics/stops', authenticateToken, async (req, res) => {
   const { start_date, end_date, environment } = req.query;
   res.json([]); // Return empty array for now
+});
+
+// Analytics summary endpoint
+app.get('/api/analytics/summary', authenticateToken, async (req, res) => {
+  try {
+    const { start_date, end_date } = req.query;
+    
+    // Get basic summary data
+    const totalOrdersQuery = 'SELECT COUNT(*) as count FROM production_orders';
+    const completedOrdersQuery = 'SELECT COUNT(*) as count FROM production_orders WHERE status = \'completed\'';
+    const activeOrdersQuery = 'SELECT COUNT(*) as count FROM production_orders WHERE status = \'in_progress\'';
+    
+    const [totalOrders, completedOrders, activeOrders] = await Promise.all([
+      new Promise((resolve, reject) => {
+        db.get(totalOrdersQuery, [], (err, result) => {
+          if (err) reject(err);
+          else resolve(result.count);
+        });
+      }),
+      new Promise((resolve, reject) => {
+        db.get(completedOrdersQuery, [], (err, result) => {
+          if (err) reject(err);
+          else resolve(result.count);
+        });
+      }),
+      new Promise((resolve, reject) => {
+        db.get(activeOrdersQuery, [], (err, result) => {
+          if (err) reject(err);
+          else resolve(result.count);
+        });
+      })
+    ]);
+    
+    res.json({
+      summary: {
+        totalOrders,
+        completedOrders,
+        activeOrders,
+        totalProduction: totalOrders * 100, // Mock data
+        efficiency: completedOrders > 0 ? Math.round((completedOrders / totalOrders) * 100) : 0
+      }
+    });
+  } catch (error) {
+    console.error('Analytics summary error:', error);
+    res.status(500).json({ error: 'Failed to fetch analytics summary' });
+  }
+});
+
+// Analytics downtime endpoint
+app.get('/api/analytics/downtime', authenticateToken, async (req, res) => {
+  try {
+    const { start_date, end_date } = req.query;
+    
+    // Get downtime data from production_stops
+    const downtimeQuery = `
+      SELECT 
+        category,
+        COUNT(*) as count,
+        SUM(duration) as total_duration
+      FROM production_stops 
+      GROUP BY category
+    `;
+    
+    const downtime = await new Promise((resolve, reject) => {
+      db.all(downtimeQuery, [], (err, results) => {
+        if (err) reject(err);
+        else resolve(results || []);
+      });
+    });
+    
+    res.json({
+      downtime: downtime.reduce((acc, item) => {
+        acc[item.category] = {
+          count: item.count,
+          duration: item.total_duration || 0
+        };
+        return acc;
+      }, {})
+    });
+  } catch (error) {
+    console.error('Analytics downtime error:', error);
+    res.status(500).json({ error: 'Failed to fetch downtime analytics' });
+  }
+});
+
+// Reports downtime endpoint
+app.get('/api/reports/downtime', authenticateToken, async (req, res) => {
+  try {
+    const { start_date, end_date } = req.query;
+    
+    // Get detailed downtime records
+    const recordsQuery = `
+      SELECT 
+        ps.*,
+        po.order_number,
+        po.product_name
+      FROM production_stops ps
+      LEFT JOIN production_orders po ON ps.order_id = po.id
+      ORDER BY ps.start_time DESC
+      LIMIT 50
+    `;
+    
+    const records = await new Promise((resolve, reject) => {
+      db.all(recordsQuery, [], (err, results) => {
+        if (err) reject(err);
+        else resolve(results || []);
+      });
+    });
+    
+    // Generate summary
+    const summary = {
+      totalStops: records.length,
+      totalDuration: records.reduce((sum, record) => sum + (record.duration || 0), 0),
+      averageDuration: records.length > 0 ? Math.round(records.reduce((sum, record) => sum + (record.duration || 0), 0) / records.length) : 0
+    };
+    
+    const categoryBreakdown = records.reduce((acc, record) => {
+      const category = record.category || 'Other';
+      if (!acc[category]) {
+        acc[category] = { count: 0, duration: 0 };
+      }
+      acc[category].count++;
+      acc[category].duration += (record.duration || 0);
+      return acc;
+    }, {});
+    
+    res.json({
+      records,
+      summary,
+      category_breakdown: categoryBreakdown
+    });
+  } catch (error) {
+    console.error('Downtime reports error:', error);
+    res.status(500).json({ error: 'Failed to fetch downtime reports' });
+  }
+});
+
+// Planner assignments endpoint  
+app.get('/api/planner/assignments', authenticateToken, async (req, res) => {
+  try {
+    const { date } = req.query;
+    
+    // Return empty assignments for now (this would need proper labor_assignments table)
+    res.json([]);
+  } catch (error) {
+    console.error('Planner assignments error:', error);
+    res.status(500).json({ error: 'Failed to fetch assignments' });
+  }
 });
 
 // Settings endpoints

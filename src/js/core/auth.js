@@ -10,10 +10,16 @@ const AuthProvider = ({ children }) => {
   const [loading, setLoading] = React.useState(true);
   const [isAuthenticated, setIsAuthenticated] = React.useState(false);
   
-  // Checks if a valid session cookie exists by calling the backend
+  // Checks if a valid JWT token exists by calling the backend
   const checkAuth = async () => {
     setLoading(true);
     try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        setLoading(false);
+        return;
+      }
+      
       const { user: sessionUser } = await window.API.verifySession();
       if (sessionUser) {
         setUser(sessionUser);
@@ -48,17 +54,19 @@ const AuthProvider = ({ children }) => {
         setUser(null);
         setIsAuthenticated(false);
         localStorage.removeItem('user_data');
+        localStorage.removeItem('token');
     });
     return () => unsubscribe();
   }, []);
   
-  // Login now relies on the server to set the cookie
+  // Login now uses JWT tokens
   const login = async (username, password) => {
     const response = await window.API.login(username, password);
-    if (response.user) {
+    if (response.user && response.token) {
       setUser(response.user);
       setIsAuthenticated(true);
       localStorage.setItem('user_data', JSON.stringify(response.user));
+      localStorage.setItem('token', response.token);
       
       // Connect WebSocket after successful login
       if (window.EnhancedWebSocketService) {
@@ -94,6 +102,7 @@ const AuthProvider = ({ children }) => {
         setUser(null);
         setIsAuthenticated(false);
         localStorage.removeItem('user_data');
+        localStorage.removeItem('token');
     }
   };
   

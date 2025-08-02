@@ -5,7 +5,15 @@ class ApiService {
   }
   
   getHeaders() {
-    return { 'Content-Type': 'application/json' };
+    const headers = { 'Content-Type': 'application/json' };
+    
+    // Add JWT token if available in localStorage  
+    const token = localStorage.getItem('token');
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+    
+    return headers;
   }
   
   async handleResponse(response) {

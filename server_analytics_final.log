@@ -1,0 +1,12 @@
+🔧 Database type: postgresql
+🐘 Loading PostgreSQL database module...
+✅ PostgreSQL database interface ready
+JWT_SECRET exists: true
+🚀 Server running on http://localhost:3000
+📊 Environment: production
+🔐 JWT Secret: your_...
+✅ New PostgreSQL client connected
+🔗 Client acquired from pool
+🔓 Client released back to pool
+SIGTERM received, closing server...
+Server closed
