@@ -18,6 +18,7 @@
 - **2025-07-31:** **STANDARD FIX:** Established hover animation standards - removed scale transforms from table rows to prevent horizontal scrolling
 - **2025-07-30:** Fixed critical timezone conversion bug in labor-planner.jsx causing data synchronization issues
 - **2025-07-30:** Rebuilt labour-layout.jsx from ground up to resolve JSX syntax and build errors
+- **2025-08-02:** **POSTGRESQL MIGRATION:** Complete migration from SQLite to PostgreSQL with enhanced performance
 - **2025-07-30:** Resolved database schema issues - verified all required columns exist
 - **2025-07-30:** Fixed PM2 log errors and improved application stability
 
@@ -25,7 +26,7 @@
 
 ### Backend (server.js)
 - **Port:** 3000
-- **Database:** SQLite (`production.db`)
+- **Database:** PostgreSQL (`production_orders` database)
 - **Authentication:** JWT tokens
 - **Key Routes:**
   - `/api/orders/:id/stop` - Stop production (was pause)
@@ -323,7 +324,12 @@ const { results, pauseAll, resumeAll } = useMultipleAdaptiveRefresh([
 PORT=3000
 JWT_SECRET=your_jwt_secret_here
 NODE_ENV=production
-DB_PATH=./production.db
+DATABASE_URL=postgresql://postgres:prodapp123@localhost:5432/production_orders
+PGUSER=postgres
+PGHOST=localhost
+PGPASSWORD=prodapp123
+PGDATABASE=production_orders
+PGPORT=5432
 ```
 
 ## Build & Deploy Commands
@@ -335,7 +341,7 @@ npm run lint     # Code linting
 ```
 
 ## Timezone Implementation Notes
-- Database stores SAST time using `datetime('now', '+2 hours')`
+- Database stores SAST time using PostgreSQL `NOW() + INTERVAL '2 hours'`
 - Frontend adds 2-hour offset for timer calculations: `+ (2 * 60 * 60 * 1000)`
 - All user-facing times should display in SAST
 - Use `formatSASTDate()` utility for consistent time formatting
@@ -649,7 +655,7 @@ Both components now correctly query same endpoints:
 ### Current Technology Stack
 - **Frontend:** React 19.1.0 with mobile-first design
 - **Backend:** Node.js + Express with WebSocket support  
-- **Database:** SQLite with real-time triggers
+- **Database:** PostgreSQL with real-time triggers
 - **Real-time:** Enhanced WebSocket service with reconnection
 - **Mobile:** Complete touch interface with gesture support
 - **Performance:** Adaptive refresh system with priority-based rates
