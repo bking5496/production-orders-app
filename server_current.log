@@ -9,6 +9,8 @@ JWT_SECRET exists: true
 ✨ Enhanced Production Workflow: ENABLED
 ✅ New PostgreSQL client connected
 🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
 ❌ Database get error: error: column "active" does not exist
     at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
@@ -31,8 +33,6 @@ JWT_SECRET exists: true
   line: '3729',
   routine: 'errorMissingColumn'
 }
-🔓 Client released back to pool
-🔗 Client acquired from pool
 🔓 Client released back to pool
 SIGTERM received, closing server...
 Server closed

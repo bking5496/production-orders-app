@@ -56,11 +56,31 @@ const WorkersModule = ({ assignments = [], onShowNotification }) => {
   const fetchEmployees = async () => {
     try {
       setLoading(true);
+      
+      // Check if user is authenticated
+      const token = localStorage.getItem('token');
+      if (!token) {
+        console.warn('No authentication token found');
+        onShowNotification?.('Please log in to view employee data', 'warning');
+        setEmployees([]);
+        return;
+      }
+      
       const response = await API.get('/api/users');
       setEmployees(response || []);
     } catch (error) {
       console.error('Error fetching employees:', error);
-      onShowNotification?.('Failed to load employee data', 'danger');
+      
+      // Handle specific authentication errors
+      if (error.message.includes('Session expired') || error.message.includes('unauthorized')) {
+        onShowNotification?.('Session expired. Please log in again.', 'warning');
+      } else if (error.message.includes('<!DOCTYPE')) {
+        onShowNotification?.('Authentication required. Please log in.', 'warning');
+      } else {
+        onShowNotification?.('Failed to load employee data: ' + error.message, 'danger');
+      }
+      
+      setEmployees([]);
     } finally {
       setLoading(false);
     }
@@ -297,14 +317,33 @@ const LaborPlannerContainer = () => {
       // Load basic data for planning
       const loadPlanningData = async () => {
         try {
+          // Check if user is authenticated
+          const token = localStorage.getItem('token');
+          if (!token) {
+            console.warn('No authentication token found');
+            showNotification('Please log in to access planning data', 'warning');
+            return;
+          }
+          
           const [machinesRes, employeesRes] = await Promise.all([
-            API.get('/api/machines').catch(() => []),
-            API.get('/api/users').catch(() => [])
+            API.get('/api/machines').catch((err) => {
+              console.error('Failed to load machines:', err);
+              return [];
+            }),
+            API.get('/api/users').catch((err) => {
+              console.error('Failed to load users:', err);
+              return [];
+            })
           ]);
           setMachines(machinesRes || []);
           setEmployees(employeesRes || []);
         } catch (error) {
           console.error('Error loading planning data:', error);
+          if (error.message.includes('<!DOCTYPE')) {
+            showNotification('Authentication required. Please log in.', 'warning');
+          } else {
+            showNotification('Failed to load planning data', 'danger');
+          }
         }
       };
       loadPlanningData();
@@ -312,7 +351,7 @@ const LaborPlannerContainer = () => {
 
     const assignEmployee = async (employeeId, machineId, shift) => {
       try {
-        await API.post('/api/labor/assignments', {
+        await API.post('/api/planner/assignments', {
           employee_id: employeeId,
           machine_id: machineId,
           shift: shift,

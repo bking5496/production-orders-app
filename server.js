@@ -447,7 +447,7 @@ app.post('/api/auth/login',
 
     const { username, password } = req.body;
 
-    db.get('SELECT * FROM users WHERE username = ? AND active = 1', [username], async (err, user) => {
+    db.get('SELECT * FROM users WHERE username = $1 AND is_active = true', [username], async (err, user) => {
       if (err) {
         return res.status(500).json({ error: 'Database error' });
       }
@@ -546,7 +546,7 @@ console.log('JWT_SECRET exists:', !!JWT_SECRET);
 
 // User management routes
 app.get('/api/users', authenticateToken, requireRole(['admin', 'supervisor']), (req, res) => {
-  db.all('SELECT id, username, email, role, active, created_at, last_login FROM users', (err, users) => {
+  db.all('SELECT id, username, email, role, is_active as active, created_at, last_login FROM users', (err, users) => {
     if (err) {
       return res.status(500).json({ error: 'Database error' });
     }
