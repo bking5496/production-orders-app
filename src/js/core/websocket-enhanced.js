@@ -56,10 +56,10 @@ class EnhancedWebSocketService {
 
                 // Build WebSocket URL with enhanced parameters
                 const wsUrl = this.buildWebSocketUrl(authToken);
-                console.log('🔗 Connecting to:', wsUrl.replace(/token=[^&]+/, 'token=***'));
+                console.log('🔗 Connecting to:', wsUrl);
 
-                // Create WebSocket connection
-                this.ws = new WebSocket(wsUrl);
+                // Create WebSocket connection with token in protocol header for security
+                this.ws = new WebSocket(wsUrl, authToken);
                 
                 // Set connection timeout
                 this.connectionTimeoutTimer = setTimeout(() => {
@@ -78,17 +78,20 @@ class EnhancedWebSocketService {
         });
     }
 
-    // Build WebSocket URL with environment detection
+    // Build WebSocket URL with environment detection (token moved to headers)
     buildWebSocketUrl(token) {
         const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
         
         // Development vs Production URL handling
         if (window.location.hostname === 'localhost') {
-            return `ws://localhost:3000?token=${encodeURIComponent(token)}`;
+            // Store token for header-based auth
+            this.authToken = token;
+            return `ws://localhost:3000`;
         }
         
         // Production - use WSS for HTTPS sites with nginx /ws proxy
-        return `wss://oracles.africa/ws?token=${encodeURIComponent(token)}`;
+        this.authToken = token;
+        return `wss://oracles.africa/ws`;
     }
 
     // Enhanced event handlers with better error recovery

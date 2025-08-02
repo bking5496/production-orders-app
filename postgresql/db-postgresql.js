@@ -4,6 +4,7 @@
 const { Pool } = require('pg');
 const fs = require('fs');
 const path = require('path');
+const { getSecret } = require('../security/secrets-manager');
 
 // SAST Timezone Utility Functions
 // PostgreSQL handles timezone conversion natively
@@ -29,7 +30,10 @@ const dbConfig = {
     port: parseInt(process.env.DB_PORT) || 5432,
     database: process.env.DB_NAME || 'production_orders',
     user: process.env.DB_USER || 'postgres',
-    password: process.env.DB_PASSWORD || 'prodapp123',
+    password: getSecret('DB_PASSWORD') || process.env.DB_PASSWORD || (() => {
+        console.error('🚨 FATAL: DB_PASSWORD not found in secrets manager or environment');
+        process.exit(1);
+    })(),
     
     // Connection pool settings for high availability
     min: parseInt(process.env.DB_POOL_MIN) || 2,

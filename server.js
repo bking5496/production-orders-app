@@ -18,6 +18,7 @@ const cors = require('cors');
 const WebSocket = require('ws');
 const http = require('http');
 const rateLimit = require('express-rate-limit');
+const { getSecret } = require('./security/secrets-manager');
 
 // Initialize Express app
 const app = express();
@@ -31,10 +32,11 @@ const wss = new WebSocket.Server({ server });
 // Configuration
 const PORT = process.env.PORT || 3000;
 const JWT_SECRET = process.env.JWT_SECRET || (() => {
-  console.error('🚨 WARNING: Using default JWT secret. Set JWT_SECRET environment variable in production!');
-  return 'production-orders-default-secret-change-immediately-in-production-' + Date.now();
+  console.error('🚨 FATAL: JWT_SECRET environment variable not set');
+  console.error('Please set a secure JWT_SECRET in your environment variables');
+  process.exit(1);
 })();
-const DATABASE_URL = process.env.DATABASE_URL || 'postgresql://postgres:prodapp123@localhost:5432/production_orders';
+const DATABASE_URL = process.env.DATABASE_URL;
 const UPLOAD_DIR = process.env.UPLOAD_DIR || 'uploads';
 
 // Rate limiting configuration
@@ -87,8 +89,8 @@ app.use(helmet({
   },
 }));
 
-// Rate limiting disabled for development
-// app.use(limiter);
+// Rate limiting enabled for production security
+app.use(limiter);
 
 // Middleware
 app.use(compression());
@@ -268,32 +270,110 @@ const requireRole = (roles) => {
   };
 };
 
-// WebSocket connection handling
+// WebSocket connection handling with authentication
 wss.on('connection', (ws, req) => {
-  console.log('New WebSocket connection');
+  console.log('New WebSocket connection attempt');
+  
+  // Authenticate WebSocket connection using token from query or headers
+  const token = new URL(req.url, `http://${req.headers.host}`).searchParams.get('token') || 
+                req.headers['sec-websocket-protocol'];
+  
+  if (!token) {
+    console.log('❌ WebSocket connection denied: No token provided');
+    ws.close(1008, 'Authentication required');
+    return;
+  }
+  
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    ws.user = decoded;
+    ws.subscriptions = [];
+    ws.isAuthenticated = true;
+    
+    console.log(`✅ WebSocket authenticated: ${decoded.username} (${decoded.role})`);
+    
+    // Send welcome message
+    ws.send(JSON.stringify({
+      type: 'welcome',
+      data: {
+        user: { id: decoded.id, username: decoded.username, role: decoded.role },
+        message: 'WebSocket connection authenticated'
+      }
+    }));
+    
+  } catch (error) {
+    console.log('❌ WebSocket authentication failed:', error.message);
+    ws.close(1008, 'Invalid token');
+    return;
+  }
   
   ws.on('message', (message) => {
     try {
       const data = JSON.parse(message);
       
+      // Only handle messages from authenticated connections
+      if (!ws.isAuthenticated) {
+        ws.send(JSON.stringify({ type: 'error', data: { error: 'Not authenticated' } }));
+        return;
+      }
+      
       // Handle different message types
       switch (data.type) {
         case 'ping':
-          ws.send(JSON.stringify({ type: 'pong' }));
+          ws.send(JSON.stringify({ 
+            type: 'pong', 
+            data: { serverTime: new Date().toISOString() }
+          }));
           break;
+          
         case 'subscribe':
-          ws.subscriptions = data.channels || [];
+          ws.subscriptions = data.data?.channels || [];
+          ws.send(JSON.stringify({
+            type: 'subscription_confirmed',
+            data: { channels: ws.subscriptions }
+          }));
+          console.log(`📺 ${ws.user.username} subscribed to:`, ws.subscriptions);
           break;
+          
+        case 'join_room':
+          ws.room = data.data?.room;
+          ws.send(JSON.stringify({
+            type: 'room_joined',
+            data: { room: ws.room }
+          }));
+          console.log(`🏠 ${ws.user.username} joined room:`, ws.room);
+          break;
+          
+        case 'leave_room':
+          ws.room = null;
+          ws.send(JSON.stringify({
+            type: 'room_left',
+            data: { room: data.data?.room }
+          }));
+          break;
+          
         default:
           console.log('Unknown message type:', data.type);
+          ws.send(JSON.stringify({
+            type: 'error',
+            data: { error: `Unknown message type: ${data.type}` }
+          }));
       }
     } catch (error) {
       console.error('WebSocket message error:', error);
+      ws.send(JSON.stringify({
+        type: 'error',
+        data: { error: 'Invalid message format' }
+      }));
     }
   });
   
   ws.on('close', () => {
-    console.log('WebSocket connection closed');
+    console.log(`🔌 WebSocket disconnected: ${ws.user?.username || 'Unknown'}`);
+  });
+  
+  ws.on('error', (error) => {
+    console.error('WebSocket error:', error);
   });
 });
 
@@ -306,15 +386,23 @@ function broadcast(type, data, channel = 'all') {
     timestamp: new Date().toISOString()
   };
   
+  let sentCount = 0;
+  
   wss.clients.forEach((client) => {
-    if (client.readyState === WebSocket.OPEN && client.user) {
+    if (client.readyState === WebSocket.OPEN && client.isAuthenticated && client.user) {
+      // Check channel permissions
       if (channel === 'all' || (client.subscriptions && client.subscriptions.includes(channel))) {
-        client.send(JSON.stringify(message));
+        try {
+          client.send(JSON.stringify(message));
+          sentCount++;
+        } catch (error) {
+          console.error(`Failed to send message to client ${client.user.username}:`, error);
+        }
       }
     }
   });
   
-  console.log(`📡 Broadcast sent: ${type} to channel: ${channel}`);
+  console.log(`📡 Broadcast sent: ${type} to channel: ${channel} (${sentCount} clients)`);
 }
 
 // Standardized API response helper
