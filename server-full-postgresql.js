@@ -58,83 +58,17 @@ app.use(helmet({
 app.use(compression());
 app.use(cors());
 app.use(express.json());
-app.use(express.static('dist'));
+app.use(express.static('public'));
 
 // Database connection
-// Database Configuration - Support both SQLite and PostgreSQL
-const DB_TYPE = process.env.DB_TYPE || 'sqlite';
-console.log(`🔧 Database type: ${DB_TYPE}`);
-
-let db;
-if (DB_TYPE === 'postgresql') {
-    console.log('🐘 Loading PostgreSQL database module...');
-    const dbModule = require('./postgresql/db-postgresql');
-    const { dbRun, dbGet, dbAll } = dbModule;
-    
-    // Create a db object that mimics SQLite interface for compatibility
-    db = {
-        get: (sql, params, callback) => {
-            if (typeof params === 'function') {
-                callback = params;
-                params = [];
-            }
-            // Convert SQLite ? syntax to PostgreSQL $1, $2 syntax
-            let pgSql = sql;
-            let pgParams = params;
-            if (params && params.length > 0) {
-                for (let i = 0; i < params.length; i++) {
-                    pgSql = pgSql.replace('?', `$${i + 1}`);
-                }
-            }
-            dbGet(pgSql, pgParams).then(result => callback(null, result)).catch(callback);
-        },
-        all: (sql, params, callback) => {
-            if (typeof params === 'function') {
-                callback = params;
-                params = [];
-            }
-            // Convert SQLite ? syntax to PostgreSQL $1, $2 syntax
-            let pgSql = sql;
-            let pgParams = params;
-            if (params && params.length > 0) {
-                for (let i = 0; i < params.length; i++) {
-                    pgSql = pgSql.replace('?', `$${i + 1}`);
-                }
-            }
-            dbAll(pgSql, pgParams).then(result => callback(null, result)).catch(callback);
-        },
-        run: (sql, params, callback) => {
-            if (typeof params === 'function') {
-                callback = params;
-                params = [];
-            }
-            // Convert SQLite ? syntax to PostgreSQL $1, $2 syntax
-            let pgSql = sql;
-            let pgParams = params;
-            if (params && params.length > 0) {
-                for (let i = 0; i < params.length; i++) {
-                    pgSql = pgSql.replace('?', `$${i + 1}`);
-                }
-            }
-            dbRun(pgSql, pgParams).then(result => {
-                if (callback) callback.call({lastID: result.lastID, changes: result.changes});
-            }).catch(callback);
-        },
-        serialize: (fn) => fn(), // PostgreSQL doesn't need serialization
-        close: () => {} // Handled by connection pool
-    };
-    console.log('✅ PostgreSQL database interface ready');
-} else {
-    console.log('📁 Loading SQLite database module...');
-    db = new sqlite3.Database(DATABASE_PATH, (err) => {
-      if (err) {
-        console.error('Database connection error:', err);
-        process.exit(1);
-      }
-      console.log('✅ Connected to SQLite database');
-      initializeDatabase();
-    });
-}
+const db = new sqlite3.Database(DATABASE_PATH, (err) => {
+  if (err) {
+    console.error('Database connection error:', err);
+    process.exit(1);
+  }
+  console.log('✅ Connected to SQLite database');
+  initializeDatabase();
+});
 
 // Database initialization
 function initializeDatabase() {
@@ -1678,7 +1612,7 @@ app.put('/api/settings/profile', authenticateToken, (req, res) => {
 // Serve React app for all other routes
 
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 // Graceful shutdown
