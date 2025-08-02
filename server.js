@@ -494,19 +494,24 @@ app.put('/api/settings/general', authenticateToken, (req, res) => {
   res.json({ success: true });
 });
 
-// Health check
-app.get('/api/health', (req, res) => {
-  db.get('SELECT 1', (err) => {
-    if (err) {
-      return res.status(500).json({ status: 'unhealthy', database: false });
-    }
-    res.json({ 
-      status: 'healthy', 
-      database: true,
+// Enhanced health check with database status
+app.get('/api/health', async (req, res) => {
+  try {
+    await dbGet('SELECT 1 as health_check');
+    return apiResponse(res, {
+      status: 'healthy',
+      database: { status: 'connected', type: 'PostgreSQL' },
       uptime: process.uptime(),
-      timestamp: new Date()
+      memory: process.memoryUsage(),
+      environment: process.env.NODE_ENV || 'development',
+      websocket_clients: wss.clients.size
     });
-  });
+  } catch (error) {
+    return apiResponse(res, {
+      status: 'unhealthy',
+      database: { status: 'disconnected', error: error.message }
+    }, 'Service unhealthy', 503);
+  }
 });
 
 // Authentication routes with rate limiting
@@ -556,7 +561,7 @@ app.post('/api/auth/login',
 );
 
 app.post('/api/auth/verify', authenticateToken, (req, res) => {
-  res.json({ valid: true, user: req.user });
+  return apiResponse(res, { user: req.user }, 'Token valid');
 });
 
 // Session verification endpoint for WebSocket authentication

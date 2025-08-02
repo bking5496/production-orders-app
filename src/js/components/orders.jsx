@@ -777,11 +777,11 @@ export default function OrdersPage() {
                 onChange={(e) => setStatusFilter(e.target.value)}
                 className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
               >
-                <option value="all">All Statuses</option>
-                <option value="pending">Pending</option>
-                <option value="in_progress">In Progress</option>
-                <option value="completed">Completed</option>
-                <option value="stopped">Stopped</option>
+                <option key="all" value="all">All Statuses</option>
+                <option key="pending" value="pending">Pending</option>
+                <option key="in_progress" value="in_progress">In Progress</option>
+                <option key="completed" value="completed">Completed</option>
+                <option key="stopped" value="stopped">Stopped</option>
               </select>
             )}
           </div>
