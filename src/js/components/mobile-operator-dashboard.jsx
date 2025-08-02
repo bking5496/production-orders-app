@@ -193,28 +193,46 @@ const ActiveOrderCard = ({ order, onUpdate, onNotify }) => {
           </div>
         </div>
 
-        {/* Primary Action Button - 56px Height for Easy Touch */}
-        <div className="p-4 bg-gray-50 border-t">
+        {/* One-Tap Production Controls - Extra Large Touch Targets */}
+        <div className="p-6 bg-gray-50 border-t space-y-4">
           {!showActions ? (
-            <TouchButton
-              onClick={handlePrimaryAction}
-              disabled={isUpdating}
-              variant={order.status === 'in_progress' ? 'danger' : 'success'}
-              size="large"
-              loading={isUpdating}
-            >
-              {order.status === 'in_progress' ? (
-                <>
-                  <Square className="w-6 h-6 mr-3" />
-                  Stop Production
-                </>
-              ) : (
-                <>
-                  <Play className="w-6 h-6 mr-3" />
-                  Start Production
-                </>
+            <div className="grid grid-cols-1 gap-4">
+              {/* Primary Action - Start/Stop */}
+              <TouchButton
+                onClick={handlePrimaryAction}
+                disabled={isUpdating}
+                variant={order.status === 'in_progress' ? 'danger' : 'success'}
+                size="large"
+                loading={isUpdating}
+                className="h-16 text-xl font-bold"
+              >
+                {order.status === 'in_progress' ? (
+                  <>
+                    <Square className="w-8 h-8 mr-4" />
+                    STOP PRODUCTION
+                  </>
+                ) : (
+                  <>
+                    <Play className="w-8 h-8 mr-4" />
+                    START PRODUCTION
+                  </>
+                )}
+              </TouchButton>
+              
+              {/* Quick Pause for Break */}
+              {order.status === 'in_progress' && (
+                <TouchButton
+                  onClick={() => handleStopProduction('operator_break')}
+                  disabled={isUpdating}
+                  variant="warning"
+                  size="medium"
+                  className="h-14 text-lg"
+                >
+                  <Clock className="w-6 h-6 mr-3" />
+                  Quick Break
+                </TouchButton>
               )}
-            </TouchButton>
+            </div>
           ) : (
             <StopReasonSelector 
               onSelect={handleStopProduction}
@@ -292,43 +310,47 @@ const TouchButton = ({
 };
 
 /**
- * Stop Reason Selector - Quick Single-Tap Options
+ * Stop Reason Selector - Quick Single-Tap Options with Emergency Stop
  */
 const StopReasonSelector = ({ onSelect, onCancel, loading }) => {
   const reasons = [
-    { id: 'material_shortage', label: 'Material Shortage', icon: Package, color: 'red' },
-    { id: 'operator_break', label: 'Break Time', icon: Clock, color: 'yellow' },
+    { id: 'emergency_stop', label: '🚨 EMERGENCY STOP', icon: AlertTriangle, color: 'red', urgent: true },
+    { id: 'material_shortage', label: 'Material Shortage', icon: Package, color: 'orange' },
+    { id: 'operator_break', label: 'Break Time', icon: Clock, color: 'blue' },
     { id: 'machine_issue', label: 'Machine Issue', icon: AlertTriangle, color: 'red' },
-    { id: 'shift_change', label: 'Shift Change', icon: User, color: 'blue' }
+    { id: 'quality_issue', label: 'Quality Problem', icon: AlertTriangle, color: 'red' },
+    { id: 'shift_change', label: 'Shift Change', icon: User, color: 'green' }
   ];
 
   return (
-    <div className="space-y-3">
-      <p className="text-sm font-medium text-gray-700 mb-3">Select stop reason:</p>
+    <div className="space-y-2">
+      <p className="text-lg font-bold text-gray-800 mb-4 text-center">Stop Production</p>
       {reasons.map(reason => {
         const Icon = reason.icon;
         return (
           <TouchButton
             key={reason.id}
             onClick={() => onSelect(reason.id)}
-            variant="outline"
-            size="small"
+            variant={reason.urgent ? "danger" : "outline"}
+            size={reason.urgent ? "large" : "medium"}
             disabled={loading}
-            className="justify-start"
+            className={`justify-start ${reason.urgent ? 'animate-pulse border-4 border-red-400' : ''}`}
           >
-            <Icon className={`w-4 h-4 mr-3 text-${reason.color}-600`} />
-            {reason.label}
+            <Icon className={`w-6 h-6 mr-4 ${reason.urgent ? 'text-white' : `text-${reason.color}-600`}`} />
+            <span className={reason.urgent ? 'text-xl font-bold' : 'text-lg'}>{reason.label}</span>
           </TouchButton>
         );
       })}
-      <TouchButton
-        onClick={onCancel}
-        variant="outline"
-        size="small"
-        className="mt-4 text-gray-500"
-      >
-        Cancel
-      </TouchButton>
+      <div className="pt-4 border-t">
+        <TouchButton
+          onClick={onCancel}
+          variant="outline"
+          size="medium"
+          className="text-gray-600"
+        >
+          ← Cancel
+        </TouchButton>
+      </div>
     </div>
   );
 };

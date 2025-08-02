@@ -444,7 +444,7 @@ app.post('/api/auth/login',
 
     const { username, password } = req.body;
 
-    db.get('SELECT * FROM users WHERE username = ? AND is_active = true', [username], async (err, user) => {
+    db.get('SELECT * FROM users WHERE username = $1 AND is_active = $2', [username, true], async (err, user) => {
       if (err) {
         return res.status(500).json({ error: 'Database error' });
       }
@@ -601,7 +601,7 @@ app.post('/api/machines',
 
     db.run(
       `INSERT INTO machines (name, type, environment, capacity, status, created_at, updated_at) 
-       VALUES (?, ?, ?, ?, 'available', datetime('now', '+2 hours'), datetime('now', '+2 hours'))`,
+       VALUES ($1, $2, $3, $4, 'available', NOW(), NOW())`,
       [name, type, environment, capacity],
       function(err) {
         if (err) {
@@ -715,8 +715,8 @@ app.patch('/api/machines/:id/status',
         
         db.run(
           `UPDATE machines 
-           SET status = ?, updated_at = datetime('now', '+2 hours')
-           WHERE id = ?`,
+           SET status = $1, updated_at = NOW()
+           WHERE id = $2`,
           [status, id],
           function(err) {
             if (err) {
@@ -879,7 +879,7 @@ app.post('/api/orders',
     body('order_number').notEmpty().trim(),
     body('product_name').notEmpty().trim(),
     body('quantity').isInt({ min: 1 }),
-    body('environment').isIn(['blending', 'packaging']),
+    body('environment').isIn(['blending', 'packaging', 'production', 'Beverage', 'Processing']),
     body('priority').isIn(['low', 'normal', 'high', 'urgent']).optional(),
   ],
   (req, res) => {
@@ -894,7 +894,7 @@ app.post('/api/orders',
       `INSERT INTO production_orders (
         order_number, product_name, quantity, environment, priority, 
         due_date, notes, created_by, created_at, updated_at
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, datetime('now'), datetime('now'))`,
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, NOW(), NOW())`,
       [order_number, product_name, quantity, environment, priority || 'normal', due_date, notes, req.user.id],
       function(err) {
         if (err) {
@@ -934,11 +934,11 @@ app.post('/api/orders/:id/start',
       db.run(
         `UPDATE production_orders 
          SET status = 'in_progress', 
-             machine_id = ?, 
-             operator_id = ?, 
-             start_time = datetime('now', '+2 hours'),
-             updated_at = datetime('now', '+2 hours')
-         WHERE id = ? AND status = 'pending'`,
+             machine_id = $1, 
+             operator_id = $2, 
+             start_time = NOW(),
+             updated_at = NOW()
+         WHERE id = $3 AND status = 'pending'`,
         [machine_id, req.user.id, id],
         function(err) {
           if (err) {
@@ -1091,10 +1091,10 @@ app.post('/api/orders/:id/resume',
           db.run(
             `UPDATE production_orders 
              SET status = 'in_progress',
-                 stop_time = datetime('now', '+2 hours')
+                 stop_time = NOW(),
                  stop_reason = NULL,
-                 updated_at = datetime('now', '+2 hours')
-             WHERE id = ?`,
+                 updated_at = NOW()
+             WHERE id = $1`,
             [id],
             function(err) {
               if (err) {
@@ -1113,9 +1113,9 @@ app.post('/api/orders/:id/resume',
                   if (!err && stopRecord) {
                     db.run(
                       `UPDATE production_stops 
-                       SET resolved_at = datetime('now', '+2 hours'),
-                           duration = CAST((julianday(datetime('now')) - julianday(created_at)) * 24 * 60 AS INTEGER)
-                       WHERE id = ?`,
+                       SET resolved_at = NOW(),
+                           duration = EXTRACT(EPOCH FROM (NOW() - created_at)) / 60
+                       WHERE id = $1`,
                       [stopRecord.id],
                       (err) => {
                         if (err) {
@@ -1312,13 +1312,13 @@ app.post('/api/orders/:id/complete',
           db.run(
             `UPDATE production_orders 
              SET status = 'completed', 
-                 complete_time = datetime('now'),
-                 actual_quantity = ?,
-                 efficiency_percentage = ?,
-                 notes = CASE WHEN ? IS NOT NULL THEN notes || ' | Completion: ' || ? ELSE notes END,
+                 complete_time = NOW(),
+                 actual_quantity = $1,
+                 efficiency_percentage = $2,
+                 notes = CASE WHEN $3 IS NOT NULL THEN notes || ' | Completion: ' || $4 ELSE notes END,
                  archived = true,
-                 updated_at = datetime('now')
-             WHERE id = ?`,
+                 updated_at = NOW()
+             WHERE id = $5`,
             [finalQuantity, efficiency, finalNotes, finalNotes, id],
             function(err) {
               if (err) {
@@ -1334,7 +1334,7 @@ app.post('/api/orders/:id/complete',
                 
                 db.run(
                   `INSERT INTO production_waste (order_id, waste_type, quantity, created_by, created_at)
-                   VALUES (?, ?, ?, ?, datetime('now'))`,
+                   VALUES ($1, $2, $3, $4, NOW())`,
                   [id, 'packaging_mixed', totalWaste, req.user.id],
                   (err) => {
                     if (err) console.error('Failed to log waste:', err);
