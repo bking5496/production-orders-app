@@ -98,10 +98,9 @@ app.use(express.static('dist'));
 // PostgreSQL Database connection
 console.log('🐘 Initializing PostgreSQL database connection...');
 
-const dbModule = require('./postgresql/db-postgresql');
-const { dbRun, dbGet, dbAll } = dbModule;
+const { dbRun, dbGet, dbAll, dbTransaction, pool, checkHealth } = require('./postgresql/db-postgresql');
 
-// PostgreSQL database interface
+// PostgreSQL database interface with automatic SQLite to PostgreSQL conversion
 const db = {
     get: (sql, params, callback) => {
         if (typeof params === 'function') {
@@ -110,14 +109,14 @@ const db = {
         }
         // Convert SQLite ? syntax to PostgreSQL $1, $2 syntax
         let pgSql = sql;
-        let pgParams = params;
         if (params && params.length > 0) {
             for (let i = 0; i < params.length; i++) {
                 pgSql = pgSql.replace('?', `$${i + 1}`);
             }
         }
-        dbGet(pgSql, pgParams).then(result => callback(null, result)).catch(callback);
+        dbGet(pgSql, params).then(result => callback(null, result)).catch(callback);
     },
+    
     all: (sql, params, callback) => {
         if (typeof params === 'function') {
             callback = params;
@@ -125,14 +124,14 @@ const db = {
         }
         // Convert SQLite ? syntax to PostgreSQL $1, $2 syntax
         let pgSql = sql;
-        let pgParams = params;
         if (params && params.length > 0) {
             for (let i = 0; i < params.length; i++) {
                 pgSql = pgSql.replace('?', `$${i + 1}`);
             }
         }
-        dbAll(pgSql, pgParams).then(result => callback(null, result)).catch(callback);
+        dbAll(pgSql, params).then(result => callback(null, result)).catch(callback);
     },
+    
     run: (sql, params, callback) => {
         if (typeof params === 'function') {
             callback = params;
@@ -140,143 +139,59 @@ const db = {
         }
         // Convert SQLite ? syntax to PostgreSQL $1, $2 syntax
         let pgSql = sql;
-        let pgParams = params;
         if (params && params.length > 0) {
             for (let i = 0; i < params.length; i++) {
                 pgSql = pgSql.replace('?', `$${i + 1}`);
             }
         }
-        dbRun(pgSql, pgParams).then(result => {
+        dbRun(pgSql, params).then(result => {
             if (callback) callback.call({lastID: result.lastID, changes: result.changes});
         }).catch(callback);
     },
-    serialize: (fn) => fn(), // PostgreSQL doesn't need serialization
+    
+    // Transaction support using PostgreSQL transactions
+    serialize: (fn) => fn(), // PostgreSQL handles concurrency differently
+    transaction: dbTransaction,
     close: () => {} // Handled by connection pool
 };
 
 console.log('✅ PostgreSQL database interface ready');
 
-// PostgreSQL schemas already exist - no initialization needed
+// Database health check
+checkHealth().then(health => {
+    console.log('🏥 Database health check:', health);
+}).catch(err => {
+    console.error('❌ Database health check failed:', err);
+});
+
+// PostgreSQL schemas already exist - no table creation needed
 console.log('✅ PostgreSQL schemas already exist, skipping table creation');
 
-// Database initialization
-function initializeDatabase() {
-  db.serialize(() => {
-    // Users table
-    db.run(`CREATE TABLE IF NOT EXISTS users (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      username TEXT UNIQUE NOT NULL,
-      email TEXT UNIQUE NOT NULL,
-      password TEXT NOT NULL,
-      role TEXT NOT NULL CHECK(role IN ('admin', 'supervisor', 'operator', 'viewer')),
-      active INTEGER DEFAULT 1,
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-      last_login DATETIME
-    )`);
-
-    // Machines table
-    db.run(`CREATE TABLE IF NOT EXISTS machines (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      name TEXT NOT NULL,
-      type TEXT NOT NULL,
-      status TEXT DEFAULT 'available' CHECK(status IN ('available', 'in_use', 'maintenance', 'offline')),
-      environment TEXT NOT NULL,
-      capacity INTEGER DEFAULT 100,
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
-    )`);
-
-    // Production orders table
-    db.run(`CREATE TABLE IF NOT EXISTS production_orders (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      order_number TEXT UNIQUE NOT NULL,
-      product_name TEXT NOT NULL,
-      quantity INTEGER NOT NULL,
-      completed_quantity INTEGER DEFAULT 0,
-      environment TEXT NOT NULL,
-      priority TEXT DEFAULT 'normal' CHECK(priority IN ('low', 'normal', 'high', 'urgent')),
-      status TEXT DEFAULT 'pending' CHECK(status IN ('pending', 'in_progress', 'paused', 'completed', 'cancelled')),
-      machine_id INTEGER,
-      operator_id INTEGER,
-      due_date DATE,
-      notes TEXT,
-      created_by INTEGER NOT NULL,
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-      started_at DATETIME,
-      completed_time DATETIME,
-      FOREIGN KEY (machine_id) REFERENCES machines(id),
-      FOREIGN KEY (operator_id) REFERENCES users(id),
-      FOREIGN KEY (created_by) REFERENCES users(id)
-    )`);
-
-    // Production stops table
-    db.run(`CREATE TABLE IF NOT EXISTS production_stops (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      order_id INTEGER NOT NULL,
-      reason TEXT NOT NULL,
-      duration INTEGER,
-      notes TEXT,
-      created_by INTEGER NOT NULL,
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-      resolved_at DATETIME,
-      FOREIGN KEY (order_id) REFERENCES production_orders(id),
-      FOREIGN KEY (created_by) REFERENCES users(id)
-    )`);
-
-    // Add this to your initializeDatabase function:
-    db.run(`CREATE TABLE IF NOT EXISTS production_stops (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      order_id INTEGER NOT NULL,
-      reason TEXT NOT NULL,
-      duration INTEGER,
-      notes TEXT,
-      created_by INTEGER NOT NULL,
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-      resolved_at DATETIME,
-      FOREIGN KEY (order_id) REFERENCES production_orders(id),
-      FOREIGN KEY (created_by) REFERENCES users(id)
-    )`);
-
-    db.run(`ALTER TABLE production_orders ADD COLUMN archived BOOLEAN DEFAULT 0`, (err) => {
-      if (err && !err.message.includes('duplicate column')) {
-        console.log('Note: archived column may already exist');
-      }
-    });
-
-    // Add this to your database initialization:
-    db.run(`CREATE TABLE IF NOT EXISTS production_waste (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      order_id INTEGER NOT NULL,
-      waste_type TEXT NOT NULL,
-      quantity REAL NOT NULL,
-      created_by INTEGER NOT NULL,
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-      FOREIGN KEY (order_id) REFERENCES production_orders(id),
-      FOREIGN KEY (created_by) REFERENCES users(id)
-    )`);
-
-    // Create indexes
-    db.run('CREATE INDEX IF NOT EXISTS idx_orders_status ON production_orders(status)');
-    db.run('CREATE INDEX IF NOT EXISTS idx_orders_environment ON production_orders(environment)');
-    db.run('CREATE INDEX IF NOT EXISTS idx_machines_environment ON machines(environment)');
-
-    // Create default admin user if not exists
+// Create default admin user if not exists (PostgreSQL version)
+async function createDefaultAdmin() {
+  try {
     const defaultPassword = 'admin123';
-    bcrypt.hash(defaultPassword, 10, (err, hash) => {
-      if (!err) {
-        db.run(
-          `INSERT OR IGNORE INTO users (username, email, password, role) VALUES (?, ?, ?, ?)`,
-          ['admin', 'admin@example.com', hash, 'admin'],
-          (err) => {
-            if (!err) {
-              console.log('✅ Default admin user created (username: admin, password: admin123)');
-            }
-          }
-        );
-      }
-    });
-  });
+    const hashedPassword = await bcrypt.hash(defaultPassword, 10);
+    
+    const result = await dbRun(
+      `INSERT INTO users (username, email, password, role, is_active, created_at) 
+       VALUES ($1, $2, $3, $4, $5, NOW()) 
+       ON CONFLICT (username) DO NOTHING`,
+      ['admin', 'admin@example.com', hashedPassword, 'admin', true]
+    );
+    
+    if (result.changes > 0) {
+      console.log('✅ Default admin user created (username: admin, password: admin123)');
+    } else {
+      console.log('ℹ️ Default admin user already exists');
+    }
+  } catch (error) {
+    console.error('❌ Failed to create default admin user:', error);
+  }
 }
+
+// Initialize default data
+createDefaultAdmin();
 
 // File upload configuration
 const storage = multer.diskStorage({

@@ -1,5 +1,4 @@
-🔧 Database type: postgresql
-🐘 Loading PostgreSQL database module...
+🐘 Initializing PostgreSQL database connection...
 ✅ PostgreSQL database interface ready
 JWT_SECRET exists: true
 ✨ Enhanced Production Workflow Endpoints Loaded
@@ -10,368 +9,70 @@ JWT_SECRET exists: true
 ✨ Enhanced Production Workflow: ENABLED
 ✅ New PostgreSQL client connected
 🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
 ✅ New PostgreSQL client connected
 🔗 Client acquired from pool
 ✅ New PostgreSQL client connected
 🔗 Client acquired from pool
-🔓 Client released back to pool
-🔓 Client released back to pool
+✅ New PostgreSQL client connected
 🔗 Client acquired from pool
-🔓 Client released back to pool
+✅ New PostgreSQL client connected
 🔗 Client acquired from pool
+✅ New PostgreSQL client connected
 🔗 Client acquired from pool
-🔓 Client released back to pool
-🔓 Client released back to pool
+✅ New PostgreSQL client connected
 🔗 Client acquired from pool
+✅ New PostgreSQL client connected
 🔗 Client acquired from pool
-🔓 Client released back to pool
-🔓 Client released back to pool
+✅ New PostgreSQL client connected
 🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-❌ Database run error: error: insert or update on table "machine_setups" violates foreign key constraint "machine_setups_machine_id_fkey"
+❌ Database run error: error: syntax error at or near "AUTOINCREMENT"
     at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
     at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:87:24) {
-  length: 290,
+  length: 102,
   severity: 'ERROR',
-  code: '23503',
-  detail: 'Key (machine_id)=(1) is not present in table "machines".',
+  code: '42601',
+  detail: undefined,
   hint: undefined,
-  position: undefined,
+  position: '76',
   internalPosition: undefined,
   internalQuery: undefined,
   where: undefined,
-  schema: 'public',
-  table: 'machine_setups',
+  schema: undefined,
+  table: undefined,
   column: undefined,
   dataType: undefined,
-  constraint: 'machine_setups_machine_id_fkey',
-  file: 'ri_triggers.c',
-  line: '2608',
-  routine: 'ri_ReportViolation'
+  constraint: undefined,
+  file: 'scan.l',
+  line: '1244',
+  routine: 'scanner_yyerror'
 }
 🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-✅ New PostgreSQL client connected
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-✅ New PostgreSQL client connected
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-✅ New PostgreSQL client connected
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-✅ New PostgreSQL client connected
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-SIGTERM received, closing server...
-Server closed
+node:internal/process/promises:391
+    triggerUncaughtException(err, true /* fromPromise */);
+    ^
+
+error: syntax error at or near "AUTOINCREMENT"
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:87:24) {
+  length: 102,
+  severity: 'ERROR',
+  code: '42601',
+  detail: undefined,
+  hint: undefined,
+  position: '76',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'scan.l',
+  line: '1244',
+  routine: 'scanner_yyerror'
+}
+
+Node.js v20.19.4

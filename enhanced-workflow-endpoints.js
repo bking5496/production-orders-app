@@ -13,67 +13,54 @@ app.post('/api/orders/:id/prepare-materials',
   requireRole(['admin', 'supervisor', 'operator']),
   body('materials').isArray(),
   body('checked_by').isInt(),
-  (req, res) => {
+  async (req, res) => {
     const { id } = req.params;
     const { materials, notes } = req.body;
     const checked_by = req.user.id;
     
-    db.serialize(() => {
-      db.run('BEGIN TRANSACTION');
-      
-      // Update order workflow stage
-      db.run(
-        `UPDATE production_orders 
-         SET workflow_stage = 'materials_prepared',
-             material_check_completed = TRUE,
-             material_checked_by = $1,
-             material_check_time = CURRENT_TIMESTAMP,
-             updated_at = CURRENT_TIMESTAMP
-         WHERE id = $2 AND workflow_stage = 'created'`,
-        [checked_by, id],
-        function(err) {
-          if (err) {
-            db.run('ROLLBACK');
-            return res.status(500).json({ error: 'Failed to update order' });
-          }
-          
-          if (this.changes === 0) {
-            db.run('ROLLBACK');
-            return res.status(400).json({ error: 'Order not found or not in correct stage' });
-          }
-          
-          // Record material allocations
-          const materialPromises = materials.map(material => {
-            return new Promise((resolve, reject) => {
-              db.run(
-                `INSERT INTO material_requirements 
-                 (order_id, material_code, material_name, required_quantity, unit_of_measure, 
-                  allocated_quantity, lot_number, supplier, status)
-                 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, 'allocated')`,
-                [id, material.code, material.name, material.required_qty, 
-                 material.unit, material.allocated_qty, material.lot_number, material.supplier],
-                (err) => err ? reject(err) : resolve()
-              );
-            });
-          });
-          
-          Promise.all(materialPromises)
-            .then(() => {
-              db.run('COMMIT');
-              broadcast('materials_prepared', { 
-                order_id: id, 
-                prepared_by: req.user.username,
-                material_count: materials.length 
-              });
-              res.json({ message: 'Materials prepared successfully' });
-            })
-            .catch(err => {
-              db.run('ROLLBACK');
-              res.status(500).json({ error: 'Failed to record materials' });
-            });
+    try {
+      await db.transaction(async (client) => {
+        // Update order workflow stage
+        const updateResult = await client.query(
+          `UPDATE production_orders 
+           SET workflow_stage = 'materials_prepared',
+               material_check_completed = TRUE,
+               material_checked_by = $1,
+               material_check_time = CURRENT_TIMESTAMP,
+               updated_at = CURRENT_TIMESTAMP
+           WHERE id = $2 AND workflow_stage = 'created'`,
+          [checked_by, id]
+        );
+        
+        if (updateResult.rowCount === 0) {
+          throw new Error('Order not found or not in correct stage');
         }
-      );
-    });
+        
+        // Record material allocations
+        for (const material of materials) {
+          await client.query(
+            `INSERT INTO material_requirements 
+             (order_id, material_code, material_name, required_quantity, unit_of_measure, 
+              allocated_quantity, lot_number, supplier, status)
+             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, 'allocated')`,
+            [id, material.code, material.name, material.required_qty, 
+             material.unit, material.allocated_qty, material.lot_number, material.supplier]
+          );
+        }
+        
+        // Broadcast success
+        broadcast('materials_prepared', { 
+          order_id: id, 
+          prepared_by: req.user.username,
+          material_count: materials.length 
+        });
+        
+        res.json({ message: 'Materials prepared successfully' });
+      });
+    } catch (error) {
+      console.error('Materials preparation error:', error);
+      res.status(500).json({ error: error.message || 'Failed to prepare materials' });
+    }
   }
 );
 

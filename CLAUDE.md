@@ -669,8 +669,57 @@ Both components now correctly query same endpoints:
 - **Context-aware refresh rates** optimizing for production vs. off-hours
 - **Progressive enhancement** ensuring functionality across all device types
 
+## 🔧 Development Rules & Standards
+
+### **CRITICAL DEVELOPMENT GUIDELINES** (Must Follow)
+
+1. **📁 File Management:**
+   - **NEVER create new files if existing ones serve the purpose**
+   - Always check for existing components, utilities, or modules first
+   - Prefer editing/extending existing files over creating duplicates
+   - Only create new files when implementing entirely new features
+
+2. **🗃️ Database Schema:**
+   - **NEVER create new database columns if existing ones exist**
+   - Always check current schema before adding columns
+   - Use `ALTER TABLE ADD COLUMN IF NOT EXISTS` for safety
+   - Verify column existence with information_schema queries
+
+3. **🔌 API Development:**
+   - **NEVER create duplicate API endpoints**
+   - Check existing routes in server.js before adding new ones
+   - Extend existing endpoints with new functionality when possible
+   - Follow REST conventions and existing naming patterns
+
+4. **⚡ Full-Stack Integration:**
+   - **ALL new features must update backend, frontend, AND database**
+   - Database changes require corresponding API updates
+   - API changes require frontend component updates
+   - Test integration across all three layers
+
+5. **🏗️ File Structure Preservation:**
+   - **Maintain existing file organization structure**
+   - Follow established patterns in `/src/js/components/`
+   - Use existing utility files in `/src/js/utils/`
+   - Respect the modular architecture
+
+6. **📤 Version Control:**
+   - **COMMIT ALL CHANGES to GitHub after completion**
+   - Use descriptive commit messages with feature context
+   - Include all modified files (backend, frontend, database)
+   - Follow existing commit message patterns
+
+### **Integration Checklist for New Features**
+- [ ] Database schema updated (if needed)
+- [ ] Backend API endpoints created/updated
+- [ ] Frontend components updated
+- [ ] WebSocket events added (if real-time needed)
+- [ ] Mobile responsiveness tested
+- [ ] Error handling implemented
+- [ ] All files committed to git
+
 ---
-**Last Updated:** 2025-08-01  
-**Version:** 2.0.0 (Mobile + WebSocket Architecture)  
+**Last Updated:** 2025-08-02  
+**Version:** 2.1.0 (PostgreSQL + Enhanced Development Standards)  
 **Maintained by:** Claude AI Assistant  
 **Purpose:** Comprehensive development context for Production Management System

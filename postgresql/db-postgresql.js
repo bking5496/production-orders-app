@@ -29,7 +29,7 @@ const dbConfig = {
     port: parseInt(process.env.DB_PORT) || 5432,
     database: process.env.DB_NAME || 'production_orders',
     user: process.env.DB_USER || 'postgres',
-    password: process.env.DB_PASSWORD,
+    password: process.env.DB_PASSWORD || 'prodapp123',
     
     // Connection pool settings for high availability
     min: parseInt(process.env.DB_POOL_MIN) || 2,
