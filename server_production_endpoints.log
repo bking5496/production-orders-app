@@ -7,82 +7,6 @@ JWT_SECRET exists: true
 🔐 JWT Secret: your_...
 ✅ New PostgreSQL client connected
 🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-✅ New PostgreSQL client connected
-🔗 Client acquired from pool
-✅ New PostgreSQL client connected
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-✅ New PostgreSQL client connected
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-✅ New PostgreSQL client connected
-🔗 Client acquired from pool
-✅ New PostgreSQL client connected
-🔗 Client acquired from pool
-✅ New PostgreSQL client connected
-🔗 Client acquired from pool
 ✅ New PostgreSQL client connected
 🔗 Client acquired from pool
 ✅ New PostgreSQL client connected
@@ -90,139 +14,11 @@ JWT_SECRET exists: true
 🔓 Client released back to pool
 🔓 Client released back to pool
 🔓 Client released back to pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-✅ New PostgreSQL client connected
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
 🔗 Client acquired from pool
 🔓 Client released back to pool
-🔓 Client released back to pool
-✅ New PostgreSQL client connected
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔓 Client released back to pool
-🔓 Client released back to pool
 🔗 Client acquired from pool
-🔓 Client released back to pool
 🔗 Client acquired from pool
 🔓 Client released back to pool
-🔗 Client acquired from pool
 🔓 Client released back to pool
 🔗 Client acquired from pool
 🔓 Client released back to pool
@@ -231,41 +27,25 @@ JWT_SECRET exists: true
 🔗 Client acquired from pool
 🔓 Client released back to pool
 🔗 Client acquired from pool
-🔓 Client released back to pool
 🔗 Client acquired from pool
-🔓 Client released back to pool
 🔗 Client acquired from pool
 🔓 Client released back to pool
-🔗 Client acquired from pool
 🔓 Client released back to pool
-🔗 Client acquired from pool
 🔓 Client released back to pool
 🔗 Client acquired from pool
-🔓 Client released back to pool
 🔗 Client acquired from pool
-🔓 Client released back to pool
 🔗 Client acquired from pool
 🔓 Client released back to pool
-🔗 Client acquired from pool
 🔓 Client released back to pool
-🔗 Client acquired from pool
 🔓 Client released back to pool
 🔗 Client acquired from pool
-🔓 Client released back to pool
-✅ New PostgreSQL client connected
 🔗 Client acquired from pool
-🔓 Client released back to pool
 🔗 Client acquired from pool
 🔓 Client released back to pool
-🔗 Client acquired from pool
-🔗 Client acquired from pool
 🔓 Client released back to pool
 🔓 Client released back to pool
 🔗 Client acquired from pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
 🔓 Client released back to pool
-✅ New PostgreSQL client connected
 🔗 Client acquired from pool
 🔓 Client released back to pool
 🔗 Client acquired from pool
@@ -304,65 +84,251 @@ JWT_SECRET exists: true
 🔓 Client released back to pool
 🔗 Client acquired from pool
 🔗 Client acquired from pool
+🔗 Client acquired from pool
 🔓 Client released back to pool
-❌ Database run error: error: could not determine data type of parameter $2
-    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
-    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
-    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:87:24) {
-  length: 124,
-  severity: 'ERROR',
-  code: '42P18',
-  detail: undefined,
-  hint: undefined,
-  position: undefined,
-  internalPosition: undefined,
-  internalQuery: undefined,
-  where: undefined,
-  schema: undefined,
-  table: undefined,
-  column: undefined,
-  dataType: undefined,
-  constraint: undefined,
-  file: 'postgres.c',
-  line: '740',
-  routine: 'pg_analyze_and_rewrite_varparams'
-}
+🔓 Client released back to pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+✅ New PostgreSQL client connected
+🔗 Client acquired from pool
+🔓 Client released back to pool
+✅ New PostgreSQL client connected
+🔗 Client acquired from pool
+✅ New PostgreSQL client connected
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+✅ New PostgreSQL client connected
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+✅ New PostgreSQL client connected
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
 🔓 Client released back to pool
 🔗 Client acquired from pool
 🔓 Client released back to pool
 🔗 Client acquired from pool
 🔗 Client acquired from pool
 🔓 Client released back to pool
-❌ Database run error: error: could not determine data type of parameter $2
-    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
-    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
-    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:87:24) {
-  length: 124,
-  severity: 'ERROR',
-  code: '42P18',
-  detail: undefined,
-  hint: undefined,
-  position: undefined,
-  internalPosition: undefined,
-  internalQuery: undefined,
-  where: undefined,
-  schema: undefined,
-  table: undefined,
-  column: undefined,
-  dataType: undefined,
-  constraint: undefined,
-  file: 'postgres.c',
-  line: '740',
-  routine: 'pg_analyze_and_rewrite_varparams'
-}
+🔓 Client released back to pool
+✅ New PostgreSQL client connected
+🔗 Client acquired from pool
 🔓 Client released back to pool
 🔗 Client acquired from pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
 🔓 Client released back to pool
 🔗 Client acquired from pool
 🔗 Client acquired from pool
 🔗 Client acquired from pool
 🔓 Client released back to pool
 🔓 Client released back to pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔗 Client acquired from pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔗 Client acquired from pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔗 Client acquired from pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔗 Client acquired from pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔗 Client acquired from pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔗 Client acquired from pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔗 Client acquired from pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+✅ New PostgreSQL client connected
+🔗 Client acquired from pool
+✅ New PostgreSQL client connected
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔗 Client acquired from pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔗 Client acquired from pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
 🔓 Client released back to pool
 SIGTERM received, closing server...
 Server closed

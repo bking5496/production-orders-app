@@ -981,7 +981,7 @@ app.post('/api/orders/:id/start',
           
           // Update machine status
           db.run(
-            'UPDATE machines SET status = ? WHERE id = ?',
+            'UPDATE machines SET status = $1 WHERE id = $2',
             ['in_use', machine_id],
             function(err) {
               if (err) {
@@ -1120,7 +1120,7 @@ app.post('/api/orders/:id/resume',
             `UPDATE production_orders 
              SET status = 'in_progress',
                  stop_time = NOW(),
-                 stop_reason = NULL,
+                 stop_reason = NULL::TEXT,
                  updated_at = NOW()
              WHERE id = $1`,
             [id],
@@ -1133,7 +1133,7 @@ app.post('/api/orders/:id/resume',
               // Update stop record with resume time
               db.get(
                 `SELECT id, created_at FROM production_stops 
-                 WHERE order_id = ? AND resolved_at IS NULL 
+                 WHERE order_id = $1 AND resolved_at IS NULL 
                  ORDER BY created_at DESC 
                  LIMIT 1`,
                 [id],
@@ -1155,7 +1155,7 @@ app.post('/api/orders/:id/resume',
                   
                   if (order.machine_id) {
                     db.run(
-                      'UPDATE machines SET status = ? WHERE id = ?',
+                      'UPDATE machines SET status = $1 WHERE id = $2',
                       ['in_use', order.machine_id],
                       function(err) {
                         if (err) {
@@ -1217,11 +1217,11 @@ app.post('/api/orders/:id/stop',
         `UPDATE production_orders 
          SET status = 'cancelled',
              stop_time = CURRENT_TIMESTAMP,
-             stop_reason = ?,
-             notes = CASE WHEN ? IS NOT NULL THEN notes || ' | Stopped: ' || ? ELSE notes END,
+             stop_reason = $1,
+             notes = CASE WHEN $2::TEXT IS NOT NULL THEN COALESCE(notes, '') || ' | Stopped: ' || $2::TEXT ELSE COALESCE(notes, '') END,
              updated_at = CURRENT_TIMESTAMP
-         WHERE id = ? AND status IN ('pending', 'in_progress', 'stopped')`,
-        [reason, notes, notes, id],
+         WHERE id = $3 AND status IN ('pending', 'in_progress', 'stopped')`,
+        [reason, notes, id],
         function(err) {
           if (err) {
             db.run('ROLLBACK');
@@ -1235,14 +1235,14 @@ app.post('/api/orders/:id/stop',
           
           // Get order details to free up machine
           db.get(
-            'SELECT machine_id FROM production_orders WHERE id = ?',
+            'SELECT machine_id FROM production_orders WHERE id = $1',
             [id],
             (err, order) => {
               if (!err && order && order.machine_id) {
                 // Free up the machine
                 db.run(
-                  'UPDATE machines SET status = "available" WHERE id = ?',
-                  [order.machine_id],
+                  'UPDATE machines SET status = $1 WHERE id = $2',
+                  ['available', order.machine_id],
                   (err) => {
                     if (err) console.error('Failed to update machine status:', err);
                   }
@@ -1343,11 +1343,11 @@ app.post('/api/orders/:id/complete',
                  complete_time = NOW(),
                  actual_quantity = $1,
                  efficiency_percentage = $2,
-                 notes = CASE WHEN $3 IS NOT NULL THEN notes || ' | Completion: ' || $4 ELSE notes END,
+                 notes = CASE WHEN $3::TEXT IS NOT NULL THEN COALESCE(notes, '') || ' | Completion: ' || $3::TEXT ELSE COALESCE(notes, '') END,
                  archived = true,
                  updated_at = NOW()
              WHERE id = $5`,
-            [finalQuantity, efficiency, finalNotes, finalNotes, id],
+            [finalQuantity, efficiency, finalNotes, id],
             function(err) {
               if (err) {
                 db.run('ROLLBACK');
@@ -1373,8 +1373,8 @@ app.post('/api/orders/:id/complete',
               // Update machine status
               if (order.machine_id) {
                 db.run(
-                  'UPDATE machines SET status = "available" WHERE id = ?',
-                  [order.machine_id],
+                  'UPDATE machines SET status = $1 WHERE id = $2',
+                  ['available', order.machine_id],
                   function(err) {
                     if (err) {
                       db.run('ROLLBACK');
@@ -1481,9 +1481,9 @@ app.post('/api/orders/:id/resume',
       db.run(
         `UPDATE production_orders 
          SET status = 'in_progress',
-             stop_time = NULL,
-             stop_reason = NULL
-         WHERE id = ? AND status = 'stopped'`,
+             stop_time = NULL::TIMESTAMP,
+             stop_reason = NULL::TEXT
+         WHERE id = $1 AND status = 'stopped'`,
         [id],
         function(err) {
           if (err) {
@@ -1841,6 +1841,190 @@ app.get('/api/reports/downtime', authenticateToken, async (req, res) => {
   } catch (error) {
     console.error('Downtime reports error:', error);
     res.status(500).json({ error: 'Failed to fetch downtime reports' });
+  }
+});
+
+// ================================
+// PRODUCTION DATA API ENDPOINTS
+// ================================
+
+// Production floor overview - Main dashboard endpoint
+app.get('/api/production/floor-overview', authenticateToken, async (req, res) => {
+  try {
+    // Get active orders with machine and progress information
+    const activeOrdersQuery = `
+      SELECT 
+        po.*,
+        m.name as machine_name,
+        m.type as machine_type,
+        u.username as operator_name,
+        EXTRACT(EPOCH FROM (NOW() - po.start_time)) / 3600 as hours_running
+      FROM production_orders po
+      LEFT JOIN machines m ON po.machine_id = m.id
+      LEFT JOIN users u ON po.operator_id = u.id
+      WHERE po.status = 'in_progress'
+      ORDER BY po.start_time DESC
+    `;
+    
+    // Get machine status summary
+    const machineStatusQuery = `
+      SELECT 
+        status,
+        COUNT(*) as count
+      FROM machines
+      GROUP BY status
+    `;
+    
+    // Get production summary for today
+    const todayProductionQuery = `
+      SELECT 
+        COUNT(*) as total_orders,
+        SUM(CASE WHEN status = 'completed' THEN 1 ELSE 0 END) as completed_orders,
+        SUM(CASE WHEN status = 'in_progress' THEN 1 ELSE 0 END) as active_orders,
+        SUM(CASE WHEN status = 'pending' THEN 1 ELSE 0 END) as pending_orders
+      FROM production_orders
+      WHERE DATE(created_at) = CURRENT_DATE
+    `;
+    
+    const [activeOrders, machineStatus, todayStats] = await Promise.all([
+      dbAll(activeOrdersQuery),
+      dbAll(machineStatusQuery),
+      dbGet(todayProductionQuery)
+    ]);
+    
+    // Calculate efficiency metrics
+    const efficiency = todayStats.total_orders > 0 
+      ? Math.round((todayStats.completed_orders / todayStats.total_orders) * 100)
+      : 0;
+    
+    res.json({
+      activeOrders: activeOrders || [],
+      machineStatus: machineStatus || [],
+      todayStats: todayStats || { total_orders: 0, completed_orders: 0, active_orders: 0, pending_orders: 0 },
+      efficiency,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    console.error('Production floor overview error:', error);
+    res.status(500).json({ error: 'Failed to fetch production floor overview' });
+  }
+});
+
+// Production status - Critical priority endpoint
+app.get('/api/production/status', authenticateToken, async (req, res) => {
+  try {
+    const statusQuery = `
+      SELECT 
+        COUNT(*) as total,
+        SUM(CASE WHEN status = 'in_progress' THEN 1 ELSE 0 END) as active,
+        SUM(CASE WHEN status = 'completed' THEN 1 ELSE 0 END) as completed,
+        SUM(CASE WHEN status = 'stopped' THEN 1 ELSE 0 END) as stopped,
+        SUM(CASE WHEN status = 'pending' THEN 1 ELSE 0 END) as pending
+      FROM production_orders
+      WHERE DATE(created_at) = CURRENT_DATE
+    `;
+    
+    const status = await dbGet(statusQuery);
+    res.json(status || { total: 0, active: 0, completed: 0, stopped: 0, pending: 0 });
+  } catch (error) {
+    console.error('Production status error:', error);
+    res.status(500).json({ error: 'Failed to fetch production status' });
+  }
+});
+
+// Machines status - Critical priority endpoint
+app.get('/api/machines/status', authenticateToken, async (req, res) => {
+  try {
+    const statusQuery = `
+      SELECT 
+        id,
+        name,
+        type,
+        status,
+        environment
+      FROM machines
+      ORDER BY name
+    `;
+    
+    const machines = await dbAll(statusQuery);
+    res.json(machines || []);
+  } catch (error) {
+    console.error('Machines status error:', error);
+    res.status(500).json({ error: 'Failed to fetch machines status' });
+  }
+});
+
+// Active orders - High priority endpoint
+app.get('/api/orders/active', authenticateToken, async (req, res) => {
+  try {
+    const activeQuery = `
+      SELECT 
+        po.*,
+        m.name as machine_name
+      FROM production_orders po
+      LEFT JOIN machines m ON po.machine_id = m.id
+      WHERE po.status = 'in_progress'
+      ORDER BY po.start_time DESC
+    `;
+    
+    const orders = await dbAll(activeQuery);
+    res.json(orders || []);
+  } catch (error) {
+    console.error('Active orders error:', error);
+    res.status(500).json({ error: 'Failed to fetch active orders' });
+  }
+});
+
+// Quality current - High priority endpoint
+app.get('/api/quality/current', authenticateToken, async (req, res) => {
+  try {
+    // For now, return basic quality metrics
+    // This can be expanded when quality tracking is implemented
+    const qualityQuery = `
+      SELECT 
+        COUNT(*) as total_orders,
+        AVG(efficiency_percentage) as avg_efficiency,
+        COUNT(CASE WHEN efficiency_percentage >= 90 THEN 1 END) as high_quality
+      FROM production_orders 
+      WHERE efficiency_percentage IS NOT NULL
+        AND DATE(created_at) = CURRENT_DATE
+    `;
+    
+    const quality = await dbGet(qualityQuery);
+    res.json(quality || { total_orders: 0, avg_efficiency: 0, high_quality: 0 });
+  } catch (error) {
+    console.error('Quality current error:', error);
+    res.status(500).json({ error: 'Failed to fetch quality data' });
+  }
+});
+
+// Performance KPIs - Normal priority endpoint
+app.get('/api/performance/kpis', authenticateToken, async (req, res) => {
+  try {
+    const kpiQuery = `
+      SELECT 
+        COUNT(*) as total_orders,
+        SUM(quantity) as total_quantity,
+        AVG(efficiency_percentage) as avg_efficiency,
+        COUNT(CASE WHEN status = 'completed' THEN 1 END) as completed_orders,
+        AVG(CASE WHEN complete_time IS NOT NULL AND start_time IS NOT NULL 
+             THEN EXTRACT(EPOCH FROM (complete_time - start_time)) / 3600 
+             END) as avg_completion_hours
+      FROM production_orders
+      WHERE DATE(created_at) >= CURRENT_DATE - INTERVAL '7 days'
+    `;
+    
+    const kpis = await dbGet(kpiQuery);
+    res.json(kpis || { 
+      total_orders: 0, 
+      total_quantity: 0, 
+      avg_efficiency: 0, 
+      completed_orders: 0, 
+      avg_completion_hours: 0 
+    });
+  } catch (error) {
+    console.error('Performance KPIs error:', error);
+    res.status(500).json({ error: 'Failed to fetch performance KPIs' });
   }
 });
 

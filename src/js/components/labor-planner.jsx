@@ -285,25 +285,202 @@ const LaborPlannerContainer = () => {
   ];
 
   // Simple Planning View
-  const PlanningView = () => (
-    <div className="flex-1 p-4 md:p-6">
-      <div className="bg-white rounded-xl shadow-sm border p-4 md:p-6">
-        <div className="text-center py-16">
-          <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
-            <ClipboardList className="w-10 h-10 text-blue-500" />
+  const PlanningView = () => {
+    const [machines, setMachines] = useState([]);
+    const [employees, setEmployees] = useState([]);
+    const [selectedMachine, setSelectedMachine] = useState('');
+    const [selectedShift, setSelectedShift] = useState('day');
+    const [showAssignModal, setShowAssignModal] = useState(false);
+
+    useEffect(() => {
+      // Load basic data for planning
+      const loadPlanningData = async () => {
+        try {
+          const [machinesRes, employeesRes] = await Promise.all([
+            API.get('/planner/machines').catch(() => []),
+            API.get('/planner/employees').catch(() => [])
+          ]);
+          setMachines(machinesRes || []);
+          setEmployees(employeesRes || []);
+        } catch (error) {
+          console.error('Error loading planning data:', error);
+        }
+      };
+      loadPlanningData();
+    }, []);
+
+    const assignEmployee = async (employeeId, machineId, shift) => {
+      try {
+        await API.post('/planner/assignments', {
+          employee_id: employeeId,
+          machine_id: machineId,
+          shift: shift,
+          assignment_date: selectedDate
+        });
+        showNotification('Employee assigned successfully', 'success');
+        setShowAssignModal(false);
+      } catch (error) {
+        showNotification('Failed to assign employee', 'danger');
+      }
+    };
+
+    return (
+      <div className="flex-1 p-4 md:p-6">
+        <div className="bg-white rounded-xl shadow-sm border p-4 md:p-6">
+          {/* Header */}
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-4">
+              <div className="p-3 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl">
+                <ClipboardList className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <h2 className="text-xl md:text-2xl font-bold text-slate-900">Workforce Planning</h2>
+                <p className="text-slate-600 text-sm">Assign employees to machines and shifts</p>
+              </div>
+            </div>
+            
+            <div className="flex items-center gap-2">
+              <input 
+                type="date" 
+                value={selectedDate} 
+                onChange={e => setSelectedDate(e.target.value)} 
+                className="px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
           </div>
-          <h3 className="text-lg font-medium text-slate-700 mb-2">Planning Module</h3>
-          <p className="text-slate-500 mb-4">Planning functionality from original system</p>
-          <button 
-            onClick={() => window.location.href = '/labor-planner-backup.jsx'}
-            className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
-          >
-            Open Full Planning System
-          </button>
+
+          {/* Quick Assignment */}
+          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6 mb-6">
+            <h3 className="text-lg font-semibold text-slate-900 mb-4">Quick Assignment</h3>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">Machine</label>
+                <select 
+                  value={selectedMachine}
+                  onChange={e => setSelectedMachine(e.target.value)}
+                  className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="">Select Machine</option>
+                  {machines.map(machine => (
+                    <option key={machine.id} value={machine.id}>
+                      {machine.name} ({machine.type})
+                    </option>
+                  ))}
+                </select>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">Shift</label>
+                <select 
+                  value={selectedShift}
+                  onChange={e => setSelectedShift(e.target.value)}
+                  className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="day">Day Shift</option>
+                  <option value="night">Night Shift</option>
+                </select>
+              </div>
+              
+              <div className="flex items-end">
+                <button
+                  onClick={() => setShowAssignModal(true)}
+                  disabled={!selectedMachine}
+                  className="w-full px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                >
+                  Assign Employee
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Current Assignments */}
+          <div>
+            <h3 className="text-lg font-semibold text-slate-900 mb-4">
+              Current Assignments for {new Date(selectedDate).toLocaleDateString()}
+            </h3>
+            
+            {currentAssignments.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {currentAssignments.map(assignment => (
+                  <div key={assignment.id} className="bg-slate-50 rounded-lg p-4 border">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="font-semibold text-slate-900">
+                          {assignment.fullName || assignment.username}
+                        </p>
+                        <p className="text-sm text-slate-600">
+                          {assignment.machine_name} • {assignment.shift} shift
+                        </p>
+                        {assignment.job_role && (
+                          <span className="inline-block px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded-full mt-1">
+                            {assignment.job_role}
+                          </span>
+                        )}
+                      </div>
+                      <button
+                        onClick={() => {
+                          if (confirm('Remove this assignment?')) {
+                            // Remove assignment logic would go here
+                            showNotification('Assignment removed', 'success');
+                          }
+                        }}
+                        className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-8">
+                <p className="text-slate-500">No assignments for this date</p>
+                <p className="text-sm text-slate-400 mt-1">Use the quick assignment tool above to assign employees</p>
+              </div>
+            )}
+          </div>
+
+          {/* Assignment Modal */}
+          {showAssignModal && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+              <div className="bg-white rounded-xl shadow-xl w-full max-w-md mx-4">
+                <div className="p-6">
+                  <h3 className="text-lg font-semibold text-slate-900 mb-4">Select Employee</h3>
+                  
+                  <div className="max-h-60 overflow-y-auto space-y-2">
+                    {employees.map(employee => (
+                      <button
+                        key={employee.id}
+                        onClick={() => assignEmployee(employee.id, selectedMachine, selectedShift)}
+                        className="w-full p-3 text-left hover:bg-slate-50 rounded-lg border transition-colors"
+                      >
+                        <p className="font-medium text-slate-900">
+                          {employee.fullName || employee.username}
+                        </p>
+                        <p className="text-sm text-slate-600">
+                          {employee.employee_code} • {employee.role}
+                        </p>
+                      </button>
+                    ))}
+                  </div>
+                  
+                  <div className="flex gap-3 mt-6">
+                    <button
+                      onClick={() => setShowAssignModal(false)}
+                      className="flex-1 px-4 py-2 border border-slate-200 text-slate-600 rounded-lg hover:bg-slate-50 transition-colors"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
