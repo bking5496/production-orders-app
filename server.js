@@ -2102,6 +2102,136 @@ app.get('/api/orders/active', authenticateToken, async (req, res) => {
   }
 });
 
+// Labour/Roster endpoints
+app.get('/api/labour/roster', authenticateToken, async (req, res) => {
+  try {
+    const date = req.query.date || new Date().toISOString().split('T')[0];
+    
+    // Get labor assignments for the date
+    const assignmentsQuery = `
+      SELECT 
+        la.*,
+        u.username,
+        u.email,
+        u.role,
+        m.name as machine,
+        m.environment
+      FROM labor_assignments la
+      LEFT JOIN users u ON la.user_id = u.id
+      LEFT JOIN machines m ON la.machine_id = m.id
+      WHERE la.assignment_date = $1
+      ORDER BY la.shift, m.name
+    `;
+    
+    // Get supervisors for the date
+    const supervisorsQuery = `
+      SELECT 
+        ss.*,
+        u.username,
+        u.email,
+        u.role
+      FROM shift_supervisors ss
+      LEFT JOIN users u ON ss.supervisor_id = u.id
+      WHERE ss.assignment_date = $1 AND ss.is_active = true
+      ORDER BY ss.shift
+    `;
+    
+    // Get roster/attendance for the date
+    const rosterQuery = `
+      SELECT 
+        lr.*,
+        u.username,
+        u.email,
+        u.role
+      FROM labor_roster lr
+      LEFT JOIN users u ON lr.user_id = u.id
+      WHERE lr.roster_date = $1
+      ORDER BY lr.shift, u.username
+    `;
+    
+    const [assignments, supervisors, attendance] = await Promise.all([
+      dbAll(assignmentsQuery, [date]),
+      dbAll(supervisorsQuery, [date]),
+      dbAll(rosterQuery, [date])
+    ]);
+    
+    // Get machines in use
+    const machinesInUse = [...new Set(assignments.map(a => a.machine).filter(Boolean))];
+    
+    const response = {
+      supervisors: supervisors.map(s => ({
+        ...s,
+        fullName: s.username,
+        name: s.username,
+        employee_code: `EMP${s.supervisor_id.toString().padStart(4, '0')}`,
+        status: s.is_active ? 'active' : 'inactive'
+      })),
+      assignments: assignments.map(a => ({
+        ...a,
+        fullName: a.username,
+        name: a.username,
+        employee_code: `EMP${a.user_id.toString().padStart(4, '0')}`,
+        position: a.role,
+        company: 'Production Company',
+        status: a.is_verified ? 'verified' : 'pending'
+      })),
+      attendance: attendance.map(a => ({
+        ...a,
+        name: a.username,
+        employee_code: `EMP${a.user_id.toString().padStart(4, '0')}`,
+        production_area: 'Production Floor',
+        position: a.role
+      })),
+      machinesInUse,
+      summary: {
+        total_supervisors: supervisors.length,
+        total_assignments: assignments.length,
+        total_attendance: attendance.length,
+        total_machines_in_use: machinesInUse.length
+      }
+    };
+    
+    res.json(response);
+  } catch (error) {
+    console.error('Labour roster error:', error);
+    res.status(500).json({ error: 'Failed to fetch labour roster' });
+  }
+});
+
+app.get('/api/labour/today', authenticateToken, async (req, res) => {
+  try {
+    const today = new Date().toISOString().split('T')[0];
+    
+    // Get today's roster/attendance
+    const rosterQuery = `
+      SELECT 
+        lr.*,
+        u.username,
+        u.email,
+        u.role
+      FROM labor_roster lr
+      LEFT JOIN users u ON lr.user_id = u.id
+      WHERE lr.roster_date = $1
+      ORDER BY lr.shift, u.username
+    `;
+    
+    const attendance = await dbAll(rosterQuery, [today]);
+    
+    const response = attendance.map(a => ({
+      ...a,
+      name: a.username,
+      employee_code: `EMP${a.user_id.toString().padStart(4, '0')}`,
+      production_area: 'Production Floor',
+      position: a.role
+    }));
+    
+    res.json(response);
+  } catch (error) {
+    console.error('Labour today error:', error);
+    res.status(500).json({ error: 'Failed to fetch today\'s labour data' });
+  }
+});
+
 // Serve React app for all other routes
 
 app.get('*', (req, res) => {
