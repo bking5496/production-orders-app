@@ -10,6 +10,7 @@ export default defineConfig({
     allowedHosts: [
       'oracles.africa',
       'www.oracles.africa',
+      'dev.oracles.africa',
       'localhost',
       '197.85.7.242',
       '.oracles.africa' // Allow all subdomains

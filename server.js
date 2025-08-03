@@ -96,7 +96,13 @@ app.use(limiter);
 // Middleware
 app.use(compression());
 app.use(cors({
-  origin: process.env.ALLOWED_ORIGINS?.split(',') || ['http://localhost:3000'],
+  origin: process.env.ALLOWED_ORIGINS?.split(',') || [
+    'http://localhost:3000',
+    'http://localhost:5173',
+    'https://oracles.africa',
+    'https://www.oracles.africa',
+    'https://dev.oracles.africa'
+  ],
   credentials: true
 }));
 app.use(express.json({ limit: '10mb' }));
