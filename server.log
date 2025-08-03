@@ -554,3 +554,15 @@ New WebSocket connection attempt
 🔓 Client released back to pool
 🔗 Client acquired from pool
 🔓 Client released back to pool
+🔌 WebSocket disconnected: admin
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+✅ New PostgreSQL client connected
+🔗 Client acquired from pool
+🔓 Client released back to pool
+New WebSocket connection attempt
+✅ WebSocket authenticated: admin (admin)
+📺 admin subscribed to: [ 'dashboard', 'orders', 'machines', 'production', 'alerts' ]
+🔌 WebSocket disconnected: admin
