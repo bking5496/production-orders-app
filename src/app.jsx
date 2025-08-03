@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
 
+// Import app configuration first (required by API service)
+import './js/config/app-config.js';
+
 // Import EventBus first (before other modules that use it)
 import './js/core/event-bus.js';
 
