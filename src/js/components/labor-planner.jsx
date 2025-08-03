@@ -647,7 +647,7 @@ const LaborPlannerContainer = () => {
 
     const assignEmployee = async (employeeId, machineId, shift) => {
       try {
-        await API.post('/api/planner/assignments', {
+        await API.post('/planner/assignments', {
           employee_id: employeeId,
           machine_id: machineId,
           shift: shift,
