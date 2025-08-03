@@ -334,9 +334,264 @@ const LaborPlannerContainer = () => {
   // Tab configuration
   const tabs = [
     { id: 'planning', label: 'Planning', icon: ClipboardList },
+    { id: 'roster', label: 'Roster', icon: Calendar },
     { id: 'attendance', label: 'Attendance', icon: UserCheck },
     { id: 'workers', label: 'Workers', icon: Users }
   ];
+
+  // Labour Roster View
+  const RosterView = () => {
+    const [rosterData, setRosterData] = useState({
+      supervisors: [],
+      assignments: [],
+      attendance: [],
+      machinesInUse: [],
+      summary: { total_supervisors: 0, total_assignments: 0, total_attendance: 0, total_machines_in_use: 0 }
+    });
+    const [rosterLoading, setRosterLoading] = useState(true);
+    const [selectedShift, setSelectedShift] = useState('all');
+
+    const fetchRosterData = async () => {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        console.log('ℹ️ No authentication token, waiting for user login');
+        setRosterData({
+          supervisors: [],
+          assignments: [],
+          attendance: [],
+          machinesInUse: [],
+          summary: { total_supervisors: 0, total_assignments: 0, total_attendance: 0, total_machines_in_use: 0 }
+        });
+        setRosterLoading(false);
+        return;
+      }
+
+      try {
+        setRosterLoading(true);
+        console.log('🔍 Fetching roster data for:', selectedDate);
+        const data = await API.get(`/labour/roster?date=${selectedDate}`);
+        console.log('📋 Roster data loaded:', data);
+        setRosterData(data);
+      } catch (error) {
+        console.error('❌ Failed to fetch roster data:', error);
+        if (error.message.includes('<!DOCTYPE')) {
+          showNotification('Authentication required. Please log in.', 'warning');
+        } else {
+          showNotification('Failed to load roster data: ' + error.message, 'danger');
+        }
+        setRosterData({
+          supervisors: [],
+          assignments: [],
+          attendance: [],
+          machinesInUse: [],
+          summary: { total_supervisors: 0, total_assignments: 0, total_attendance: 0, total_machines_in_use: 0 }
+        });
+      } finally {
+        setRosterLoading(false);
+      }
+    };
+
+    useEffect(() => {
+      fetchRosterData();
+    }, [selectedDate]);
+
+    const filteredData = useMemo(() => {
+      if (selectedShift === 'all') return rosterData;
+      
+      return {
+        ...rosterData,
+        supervisors: rosterData.supervisors.filter(s => s.shift === selectedShift),
+        assignments: rosterData.assignments.filter(a => a.shift === selectedShift),
+        attendance: rosterData.attendance.filter(a => a.shift === selectedShift)
+      };
+    }, [rosterData, selectedShift]);
+
+    const token = localStorage.getItem('token');
+    
+    if (!token) {
+      return (
+        <div className="flex-1 p-4 md:p-6">
+          <div className="bg-white rounded-xl shadow-sm border p-6">
+            <div className="flex items-center justify-center py-16">
+              <div className="text-center">
+                <Calendar className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-gray-700 mb-2">Authentication Required</h3>
+                <p className="text-gray-500 mb-4">Please log in to view roster data</p>
+                <button 
+                  onClick={() => window.location.href = '/login'}
+                  className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+                >
+                  Go to Login
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    if (rosterLoading) {
+      return (
+        <div className="flex-1 p-4 md:p-6">
+          <div className="bg-white rounded-xl shadow-sm border p-6">
+            <div className="flex items-center justify-center py-16">
+              <RefreshCw className="w-8 h-8 animate-spin text-blue-500" />
+              <span className="ml-3 text-gray-600">Loading roster data...</span>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="flex-1 p-4 md:p-6">
+        <div className="bg-white rounded-xl shadow-sm border">
+          {/* Header */}
+          <div className="p-6 border-b">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div>
+                <h2 className="text-xl font-bold text-gray-800 mb-1">Labour Roster</h2>
+                <p className="text-gray-600">Date: {selectedDate}</p>
+              </div>
+              <div className="flex items-center gap-3">
+                <select
+                  value={selectedShift}
+                  onChange={(e) => setSelectedShift(e.target.value)}
+                  className="px-4 py-2 border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="all">All Shifts</option>
+                  <option value="morning">Morning</option>
+                  <option value="afternoon">Afternoon</option>
+                  <option value="night">Night</option>
+                </select>
+                <button
+                  onClick={fetchRosterData}
+                  className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center gap-2"
+                >
+                  <RefreshCw className="w-4 h-4" />
+                  Refresh
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Summary Cards */}
+          <div className="p-6 border-b">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="bg-blue-50 p-4 rounded-lg">
+                <h3 className="text-lg font-bold text-blue-700">{filteredData.summary.total_supervisors}</h3>
+                <p className="text-blue-600 text-sm">Supervisors</p>
+              </div>
+              <div className="bg-green-50 p-4 rounded-lg">
+                <h3 className="text-lg font-bold text-green-700">{filteredData.summary.total_assignments}</h3>
+                <p className="text-green-600 text-sm">Assignments</p>
+              </div>
+              <div className="bg-yellow-50 p-4 rounded-lg">
+                <h3 className="text-lg font-bold text-yellow-700">{filteredData.summary.total_attendance}</h3>
+                <p className="text-yellow-600 text-sm">Attendance</p>
+              </div>
+              <div className="bg-purple-50 p-4 rounded-lg">
+                <h3 className="text-lg font-bold text-purple-700">{filteredData.summary.total_machines_in_use}</h3>
+                <p className="text-purple-600 text-sm">Machines</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Roster Tables */}
+          <div className="p-6 space-y-6">
+            {/* Supervisors */}
+            {filteredData.supervisors.length > 0 && (
+              <div>
+                <h3 className="text-lg font-semibold text-gray-800 mb-3">Supervisors on Duty</h3>
+                <div className="overflow-x-auto">
+                  <table className="w-full table-auto">
+                    <thead>
+                      <tr className="bg-gray-50">
+                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Employee Code</th>
+                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Name</th>
+                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Shift</th>
+                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-200">
+                      {filteredData.supervisors.map((supervisor, index) => (
+                        <tr key={supervisor.id || index} className="hover:bg-gray-50">
+                          <td className="px-4 py-3 text-sm font-medium text-gray-900">{supervisor.employee_code}</td>
+                          <td className="px-4 py-3 text-sm text-gray-700">{supervisor.fullName}</td>
+                          <td className="px-4 py-3 text-sm text-gray-700 capitalize">{supervisor.shift}</td>
+                          <td className="px-4 py-3">
+                            <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
+                              supervisor.status === 'active' 
+                                ? 'bg-green-100 text-green-700' 
+                                : 'bg-red-100 text-red-700'
+                            }`}>
+                              {supervisor.status}
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+
+            {/* Machine Assignments */}
+            {filteredData.assignments.length > 0 && (
+              <div>
+                <h3 className="text-lg font-semibold text-gray-800 mb-3">Machine Assignments</h3>
+                <div className="overflow-x-auto">
+                  <table className="w-full table-auto">
+                    <thead>
+                      <tr className="bg-gray-50">
+                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Employee Code</th>
+                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Name</th>
+                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Machine</th>
+                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Position</th>
+                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Shift</th>
+                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-200">
+                      {filteredData.assignments.map((assignment, index) => (
+                        <tr key={assignment.id || index} className="hover:bg-gray-50">
+                          <td className="px-4 py-3 text-sm font-medium text-gray-900">{assignment.employee_code}</td>
+                          <td className="px-4 py-3 text-sm text-gray-700">{assignment.fullName}</td>
+                          <td className="px-4 py-3 text-sm text-gray-700">{assignment.machine}</td>
+                          <td className="px-4 py-3 text-sm text-gray-700 capitalize">{assignment.position}</td>
+                          <td className="px-4 py-3 text-sm text-gray-700 capitalize">{assignment.shift}</td>
+                          <td className="px-4 py-3">
+                            <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
+                              assignment.status === 'verified' 
+                                ? 'bg-green-100 text-green-700' 
+                                : assignment.status === 'scheduled'
+                                ? 'bg-blue-100 text-blue-700'
+                                : 'bg-yellow-100 text-yellow-700'
+                            }`}>
+                              {assignment.status}
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+
+            {/* No data message */}
+            {filteredData.supervisors.length === 0 && filteredData.assignments.length === 0 && (
+              <div className="text-center py-12">
+                <Calendar className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-gray-700 mb-2">No Roster Data</h3>
+                <p className="text-gray-500">No roster information available for {selectedDate}</p>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   // Simple Planning View
   const PlanningView = () => {
@@ -475,6 +730,39 @@ const LaborPlannerContainer = () => {
             </div>
           </div>
 
+          {/* Available Machines */}
+          <div className="mb-6">
+            <h3 className="text-lg font-semibold text-slate-900 mb-4">Available Machines</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {machines.map(machine => (
+                <div key={machine.id} className="bg-white border rounded-lg p-4 hover:shadow-md transition-shadow">
+                  <div className="flex items-center justify-between mb-2">
+                    <h4 className="font-semibold text-gray-900">{machine.name}</h4>
+                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                      machine.status === 'active' 
+                        ? 'bg-green-100 text-green-700' 
+                        : machine.status === 'maintenance'
+                        ? 'bg-yellow-100 text-yellow-700'
+                        : 'bg-red-100 text-red-700'
+                    }`}>
+                      {machine.status}
+                    </span>
+                  </div>
+                  <p className="text-sm text-gray-600 mb-1">Type: {machine.type}</p>
+                  <p className="text-sm text-gray-600">Environment: {machine.environment}</p>
+                  {machine.capacity && (
+                    <p className="text-sm text-gray-600">Capacity: {machine.capacity}</p>
+                  )}
+                </div>
+              ))}
+            </div>
+            {machines.length === 0 && (
+              <div className="text-center py-8 text-gray-500">
+                <p>No machines available</p>
+              </div>
+            )}
+          </div>
+
           {/* Current Assignments */}
           <div>
             <h3 className="text-lg font-semibold text-slate-900 mb-4">
@@ -594,6 +882,7 @@ const LaborPlannerContainer = () => {
       {/* Main Content */}
       <div className="flex flex-col min-h-screen">
         {currentView === 'planning' && <PlanningView />}
+        {currentView === 'roster' && <RosterView />}
         {currentView === 'attendance' && (
           <AttendanceModule 
             onShowNotification={showNotification}
