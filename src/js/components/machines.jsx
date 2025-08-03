@@ -109,11 +109,26 @@ export default function MachinesPage() {
     else setLoading(true);
     
     try {
+      console.log('🔧 Loading machines...');
       const data = await API.get('/machines');
+      console.log('✅ Machines loaded successfully:', data?.length || 0, 'machines');
       setMachines(data);
     } catch (error) {
-      console.error('Failed to load machines:', error);
-      showNotification('Failed to load machines', 'danger');
+      console.error('❌ Failed to load machines:', error);
+      
+      // Provide more specific error messages
+      let errorMessage = 'Failed to load machines';
+      if (error.message.includes('Unexpected token')) {
+        errorMessage = 'Authentication error - please refresh the page and try again';
+      } else if (error.message.includes('unauthorized') || error.message.includes('Session expired')) {
+        errorMessage = 'Your session has expired. Please log in again.';
+      } else if (error.response?.status === 500) {
+        errorMessage = 'Server error - please try again later';
+      } else {
+        errorMessage = `Failed to load machines: ${error.message}`;
+      }
+      
+      showNotification(errorMessage, 'danger');
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -246,6 +261,13 @@ export default function MachinesPage() {
 
   // useEffect runs when the component loads.
   useEffect(() => {
+    // Only load data if we have a valid token
+    const token = localStorage.getItem('token');
+    if (!token) {
+      console.warn('⚠️ No authentication token found, skipping data load');
+      return;
+    }
+    
     loadEnvironments(); // Load environments first
     loadMachines(); // Fetch data immediately
     loadEmployees(); // Load employees for crew assignments
