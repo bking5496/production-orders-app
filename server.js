@@ -53,10 +53,10 @@ const limiter = rateLimit({
   legacyHeaders: false,
 });
 
-// Login rate limiting (more restrictive)
+// Login rate limiting (more permissive for development/production usage)
 const loginLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 5, // limit each IP to 5 login attempts per 15 minutes
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 50, // limit each IP to 50 login attempts per 15 minutes
   skipSuccessfulRequests: true,
   message: {
     success: false,
