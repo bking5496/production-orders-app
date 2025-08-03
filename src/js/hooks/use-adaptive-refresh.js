@@ -1,13 +1,13 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import API from '../core/api.js';
 
-// Adaptive refresh rates based on data criticality
+// Adaptive refresh rates based on data criticality (Conservative rates to prevent refresh loops)
 const REFRESH_RATES = {
-  critical: 5000,   // 5 seconds for critical data (machine status, active production)
-  high: 15000,      // 15 seconds for high priority (orders, quality metrics)
-  normal: 30000,    // 30 seconds for normal data (dashboard overview)
-  low: 60000,       // 1 minute for low priority (analytics, historical data)
-  background: 300000 // 5 minutes for background data (user management, settings)
+  critical: 30000,   // 30 seconds for critical data (machine status, active production)
+  high: 60000,       // 1 minute for high priority (orders, quality metrics)
+  normal: 120000,    // 2 minutes for normal data (dashboard overview)
+  low: 300000,       // 5 minutes for low priority (analytics, historical data)
+  background: 600000 // 10 minutes for background data (user management, settings)
 };
 
 export const useAdaptiveRefresh = (endpoint, priority = 'normal', options = {}) => {
@@ -114,21 +114,23 @@ export const useAdaptiveRefresh = (endpoint, priority = 'normal', options = {}) 
     setIsPaused(false);
   }, []);
 
-  // Main effect for setting up refresh interval
+  // Main effect for setting up refresh interval (DISABLED to prevent rate limiting)
   useEffect(() => {
     if (isPaused) return;
 
+    // Only fetch initial data, disable automatic refresh
     fetchData();
     
-    const refreshRate = getRefreshRate();
-    intervalRef.current = setInterval(fetchData, refreshRate);
+    // DISABLED: Automatic refresh causing rate limiting
+    // const refreshRate = getRefreshRate();
+    // intervalRef.current = setInterval(fetchData, refreshRate);
     
     return () => {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
       }
     };
-  }, [fetchData, getRefreshRate, isPaused]);
+  }, [fetchData, isPaused]);
 
   // Handle page visibility changes
   useEffect(() => {

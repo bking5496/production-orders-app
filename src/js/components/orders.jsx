@@ -26,6 +26,7 @@ export default function OrdersPage() {
   const [selectedEnvironment, setSelectedEnvironment] = useState('all');
   const [statusFilter, setStatusFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
+  const [viewMode, setViewMode] = useState('active'); // 'active' or 'archive'
   const [notification, setNotification] = useState(null);
   
   // Mobile-specific state
@@ -203,7 +204,7 @@ export default function OrdersPage() {
     setShowWorkflow(true);
   };
 
-  // Filter orders based on search and filters
+  // Filter orders based on search, filters, and archive mode
   const filteredOrders = useMemo(() => {
     return orders.filter(order => {
       const matchesSearch = order.order_number?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -211,15 +212,20 @@ export default function OrdersPage() {
       const matchesEnvironment = selectedEnvironment === 'all' || order.environment === selectedEnvironment;
       const matchesStatus = statusFilter === 'all' || order.status === statusFilter;
       
-      return matchesSearch && matchesEnvironment && matchesStatus;
+      // Archive filtering
+      const isArchived = order.status === 'completed' || order.status === 'cancelled';
+      const matchesViewMode = viewMode === 'archive' ? isArchived : !isArchived;
+      
+      return matchesSearch && matchesEnvironment && matchesStatus && matchesViewMode;
     });
-  }, [orders, searchTerm, selectedEnvironment, statusFilter]);
+  }, [orders, searchTerm, selectedEnvironment, statusFilter, viewMode]);
 
   const getStatusColor = (status) => {
     switch (status) {
       case 'completed': return 'bg-green-100 text-green-800 border-green-200';
       case 'in_progress': return 'bg-blue-100 text-blue-800 border-blue-200';
       case 'stopped': return 'bg-red-100 text-red-800 border-red-200';
+      case 'cancelled': return 'bg-gray-400 text-white border-gray-500';
       default: return 'bg-gray-100 text-gray-800 border-gray-200';
     }
   };
@@ -229,6 +235,7 @@ export default function OrdersPage() {
       case 'completed': return <CheckCircle className="w-4 h-4" />;
       case 'in_progress': return <Play className="w-4 h-4" />;
       case 'stopped': return <Square className="w-4 h-4" />;
+      case 'cancelled': return <AlertTriangle className="w-4 h-4" />;
       default: return <Clock className="w-4 h-4" />;
     }
   };
@@ -324,6 +331,30 @@ export default function OrdersPage() {
             </div>
           </div>
           
+          {/* View Mode Toggle */}
+          <div className="flex bg-gray-100 rounded-lg p-1">
+            <button
+              onClick={() => setViewMode('active')}
+              className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${
+                viewMode === 'active'
+                  ? 'bg-white text-blue-600 shadow-sm'
+                  : 'text-gray-600 hover:text-gray-900'
+              }`}
+            >
+              Active Orders
+            </button>
+            <button
+              onClick={() => setViewMode('archive')}
+              className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${
+                viewMode === 'archive'
+                  ? 'bg-white text-blue-600 shadow-sm'
+                  : 'text-gray-600 hover:text-gray-900'
+              }`}
+            >
+              Archive
+            </button>
+          </div>
+          
           <div className="flex gap-3">
             <select 
               value={selectedEnvironment}
@@ -346,6 +377,7 @@ export default function OrdersPage() {
               <option key="in_progress" value="in_progress">In Progress</option>
               <option key="completed" value="completed">Completed</option>
               <option key="stopped" value="stopped">Stopped</option>
+              <option key="cancelled" value="cancelled">Cancelled</option>
             </select>
           </div>
         </div>
@@ -355,7 +387,7 @@ export default function OrdersPage() {
       <Card className="overflow-hidden">
         <div className="p-4 border-b border-gray-200">
           <h3 className="font-medium text-gray-900">
-            Orders ({filteredOrders.length})
+            {viewMode === 'archive' ? 'Archived Orders' : 'Active Orders'} ({filteredOrders.length})
           </h3>
         </div>
         

@@ -21,10 +21,10 @@ export function useWebSocket() {
         // Update initial status
         updateStatus();
 
-        // Update metrics periodically
+        // Update metrics periodically (less frequent to prevent refresh loops)
         const metricsInterval = setInterval(() => {
             setMetrics(enhancedWebSocketService.getMetrics());
-        }, 5000);
+        }, 30000);
 
         // Listen for connection state changes
         const handleStateChange = (data) => {
