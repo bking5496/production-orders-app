@@ -35,17 +35,43 @@ class ApiService {
       };
       throw error;
     }
+    
     // Handle responses that might not have a JSON body
     if (response.headers.get('content-length') === '0') {
         return null;
     }
-    return response.json();
+    
+    // Get the response text first to check if it's HTML
+    const text = await response.text();
+    
+    // Check if we received HTML instead of JSON
+    if (text.includes('<!DOCTYPE') || text.includes('<html>')) {
+      console.error('🚨 Received HTML response instead of JSON:', text.substring(0, 200) + '...');
+      throw new Error('Server returned HTML instead of JSON. This usually means authentication failed or there\'s a server routing issue.');
+    }
+    
+    // Try to parse as JSON
+    try {
+      return JSON.parse(text);
+    } catch (error) {
+      console.error('🚨 Failed to parse JSON response:', text.substring(0, 200) + '...');
+      throw new Error(`Failed to parse server response: ${error.message}`);
+    }
   }
   
   // Central request method with cookie support
   async request(endpoint, options = {}) {
     const url = `${this.baseURL}${endpoint}`;
     const headers = this.getHeaders();
+    
+    // Debug logging
+    console.log('🌐 API Request:', {
+      method: options.method || 'GET',
+      url: url,
+      hasAuthHeader: !!headers.Authorization,
+      authHeader: headers.Authorization ? headers.Authorization.substring(0, 20) + '...' : 'None'
+    });
+    
     const config = {
       ...options,
       headers,

@@ -71,7 +71,7 @@ const WorkersModule = ({ assignments = [], onShowNotification }) => {
       console.log('🌐 Current origin:', window.location.origin);
       console.log('🌐 Full URL will be:', `${window.location.origin}/api/users`);
       
-      const response = await API.get('/api/users');
+      const response = await API.get('/users');
       console.log('👥 Users loaded successfully:', response?.length || 0);
       setEmployees(response || []);
     } catch (error) {
@@ -616,13 +616,13 @@ const LaborPlannerContainer = () => {
         try {
           console.log('🔍 Loading planning data...');
           const [machinesRes, employeesRes] = await Promise.all([
-            API.get('/api/machines').catch((err) => {
+            API.get('/machines').catch((err) => {
               console.error('Failed to load machines:', err);
               console.error('Machines error type:', typeof err);
               console.error('Machines error message:', err.message);
               return [];
             }),
-            API.get('/api/users').catch((err) => {
+            API.get('/users').catch((err) => {
               console.error('Failed to load users:', err);
               console.error('Users error type:', typeof err);
               console.error('Users error message:', err.message);
