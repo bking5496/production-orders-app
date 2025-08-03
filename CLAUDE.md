@@ -26,6 +26,9 @@
 - **2025-07-30:** Resolved database schema issues - verified all required columns exist
 - **2025-07-30:** Fixed PM2 log errors and improved application stability
 
+## Knowledge Management
+- Use byterover-mcp to store and retrieve knowledge and context
+
 ## 🔧 Dynamic Configuration System
 
 ### **Core Principle**
