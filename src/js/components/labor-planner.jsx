@@ -47,11 +47,52 @@ const TabNavigation = ({ activeTab, onTabChange, tabs = [] }) => {
   );
 };
 
-// Simple Workers Module
-const WorkersModule = ({ assignments = [], onShowNotification }) => {
+// Enhanced Workers Module with Shift Planning and 2-2-2 System
+const WorkersModule = ({ assignments = [], onShowNotification, selectedDate }) => {
   const [employees, setEmployees] = useState([]);
   const [workerSearch, setWorkerSearch] = useState('');
   const [loading, setLoading] = useState(true);
+  const [activeView, setActiveView] = useState('planning'); // planning, attendance, shifts
+  const [selectedShift, setSelectedShift] = useState('all');
+  const [shiftAssignments, setShiftAssignments] = useState({
+    'A': { day: [], night: [] },
+    'B': { day: [], night: [] },
+    'C': { day: [], night: [] }
+  });
+  const [cycleStartDate, setCycleStartDate] = useState(() => {
+    // Default to current Monday
+    const today = new Date();
+    const monday = new Date(today);
+    monday.setDate(today.getDate() - today.getDay() + 1);
+    return monday.toISOString().split('T')[0];
+  });
+
+  // 2-2-2 Shift System Calculation
+  const calculate222Shift = (startDate, currentDate, crew) => {
+    if (!startDate) return 'rest';
+    
+    const start = new Date(startDate);
+    const current = new Date(currentDate);
+    const daysDiff = Math.floor((current - start) / (1000 * 60 * 60 * 24));
+    
+    const crewOffsets = { 'A': 0, 'B': 2, 'C': 4 };
+    const cycleDay = (daysDiff + crewOffsets[crew]) % 6;
+    
+    if (cycleDay < 2) return 'day';
+    if (cycleDay < 4) return 'night'; 
+    return 'rest';
+  };
+
+  // Get current shift status for display
+  const getShiftStatus = (crew, date = selectedDate) => {
+    const shift = calculate222Shift(cycleStartDate, date, crew);
+    const colors = {
+      'day': 'bg-yellow-100 text-yellow-800',
+      'night': 'bg-blue-100 text-blue-800', 
+      'rest': 'bg-gray-100 text-gray-600'
+    };
+    return { shift, color: colors[shift] };
+  };
 
   const fetchEmployees = async () => {
     // Check if user is authenticated before making any requests
@@ -68,17 +109,22 @@ const WorkersModule = ({ assignments = [], onShowNotification }) => {
     try {
       setLoading(true);
       console.log('🔍 Fetching users from /api/users with token...');
-      console.log('🌐 Current origin:', window.location.origin);
-      console.log('🌐 Full URL will be:', `${window.location.origin}/api/users`);
       
       const response = await API.get('/users');
       console.log('👥 Users loaded successfully:', response?.length || 0);
-      setEmployees(response || []);
+      
+      // Add employee codes and shift assignments
+      const enhancedEmployees = (response || []).map(emp => ({
+        ...emp,
+        employee_code: emp.employee_code || `EMP${emp.id.toString().padStart(4, '0')}`,
+        fullName: emp.fullName || emp.username?.replace(/\./g, ' ').replace(/\b\w/g, l => l.toUpperCase()) || 'N/A',
+        assignedCrew: null, // Will be set when assigned to crew
+        currentShift: 'unassigned'
+      }));
+      
+      setEmployees(enhancedEmployees);
     } catch (error) {
       console.error('❌ Error fetching employees:', error);
-      console.error('🔍 Error type:', typeof error);
-      console.error('🔍 Error message:', error.message);
-      console.error('🔍 Error stack:', error.stack);
       
       // Handle specific authentication errors
       if (error.message.includes('Session expired') || error.message.includes('unauthorized')) {
@@ -99,22 +145,57 @@ const WorkersModule = ({ assignments = [], onShowNotification }) => {
     fetchEmployees();
   }, []);
 
-  const filteredWorkers = useMemo(() => {  
-    if (!workerSearch) return employees;
+  const filteredWorkers = useMemo(() => {
+    let filtered = employees;
     
-    return employees.filter(employee => {
-      const searchTerm = workerSearch.toLowerCase();
-      const fullName = employee.fullName?.toLowerCase() || '';
-      const username = employee.username?.toLowerCase() || '';
-      const employeeCode = employee.employee_code?.toLowerCase() || '';
-      const role = employee.role?.toLowerCase() || '';
-      
-      return fullName.includes(searchTerm) ||
-             username.includes(searchTerm) ||
-             employeeCode.includes(searchTerm) ||
-             role.includes(searchTerm);
-    });
-  }, [employees, workerSearch]);
+    // Apply search filter
+    if (workerSearch) {
+      filtered = filtered.filter(employee => {
+        const searchTerm = workerSearch.toLowerCase();
+        const fullName = employee.fullName?.toLowerCase() || '';
+        const username = employee.username?.toLowerCase() || '';
+        const employeeCode = employee.employee_code?.toLowerCase() || '';
+        const role = employee.role?.toLowerCase() || '';
+        
+        return fullName.includes(searchTerm) ||
+               username.includes(searchTerm) ||
+               employeeCode.includes(searchTerm) ||
+               role.includes(searchTerm);
+      });
+    }
+    
+    // Apply shift filter
+    if (selectedShift !== 'all') {
+      filtered = filtered.filter(employee => {
+        if (selectedShift === 'unassigned') {
+          return !employee.assignedCrew;
+        }
+        return employee.assignedCrew === selectedShift;
+      });
+    }
+    
+    return filtered;
+  }, [employees, workerSearch, selectedShift]);
+
+  // Assign worker to crew
+  const assignToCrew = (employeeId, crew) => {
+    setEmployees(prev => prev.map(emp => 
+      emp.id === employeeId 
+        ? { ...emp, assignedCrew: crew, currentShift: getShiftStatus(crew, selectedDate).shift }
+        : emp
+    ));
+    onShowNotification?.(`Employee assigned to Crew ${crew}`, 'success');
+  };
+
+  // Remove worker from crew
+  const removeFromCrew = (employeeId) => {
+    setEmployees(prev => prev.map(emp => 
+      emp.id === employeeId 
+        ? { ...emp, assignedCrew: null, currentShift: 'unassigned' }
+        : emp
+    ));
+    onShowNotification?.('Employee removed from crew', 'info');
+  };
 
   const token = localStorage.getItem('token');
   
@@ -126,7 +207,7 @@ const WorkersModule = ({ assignments = [], onShowNotification }) => {
             <div className="text-center">
               <Users className="w-16 h-16 text-gray-300 mx-auto mb-4" />
               <h3 className="text-lg font-medium text-gray-700 mb-2">Authentication Required</h3>
-              <p className="text-gray-500 mb-4">Please log in to view employee data</p>
+              <p className="text-gray-500 mb-4">Please log in to view workforce data</p>
               <button 
                 onClick={() => window.location.href = '/login'}
                 className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
@@ -146,7 +227,7 @@ const WorkersModule = ({ assignments = [], onShowNotification }) => {
         <div className="bg-white rounded-xl shadow-sm border p-6">
           <div className="flex items-center justify-center py-16">
             <RefreshCw className="w-8 h-8 animate-spin text-blue-500" />
-            <span className="ml-3 text-gray-600">Loading employee data...</span>
+            <span className="ml-3 text-gray-600">Loading workforce data...</span>
           </div>
         </div>
       </div>
@@ -163,29 +244,81 @@ const WorkersModule = ({ assignments = [], onShowNotification }) => {
               <Users className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h2 className="text-xl md:text-2xl font-bold text-slate-900">Team Management</h2>
-              <p className="text-slate-600 text-sm">Manage employee information and roles</p>
+              <h2 className="text-xl font-bold text-gray-800">Workforce Management</h2>
+              <p className="text-gray-600">2-2-2 Shift System | {employees.length} Total Employees</p>
             </div>
           </div>
           
-          {/* Search */}
-          <div className="flex items-center gap-2">
-            <div className="relative flex-1 md:flex-none">
+          {/* Controls */}
+          <div className="flex flex-wrap items-center gap-3">
+            <div className="flex items-center gap-2">
+              <label className="text-sm font-medium text-gray-700">Cycle Start:</label>
+              <input
+                type="date"
+                value={cycleStartDate}
+                onChange={(e) => setCycleStartDate(e.target.value)}
+                className="px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+            
+            <select
+              value={selectedShift}
+              onChange={(e) => setSelectedShift(e.target.value)}
+              className="px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="all">All Crews</option>
+              <option value="A">Crew A</option>
+              <option value="B">Crew B</option>
+              <option value="C">Crew C</option>
+              <option value="unassigned">Unassigned</option>
+            </select>
+            
+            <div className="relative">
               <input
                 type="text"
                 placeholder="Search employees..."
                 value={workerSearch}
                 onChange={e => setWorkerSearch(e.target.value)}
-                className="pl-4 pr-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent w-full md:w-64 text-sm"
+                className="pl-4 pr-4 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-blue-500 w-48"
               />
             </div>
             
             <button
               onClick={() => fetchEmployees()}
-              className="min-w-[44px] min-h-[44px] p-2 hover:bg-gray-100 rounded-lg transition-colors flex items-center justify-center"
+              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
             >
               <RefreshCw className="w-4 h-4" />
             </button>
+          </div>
+        </div>
+
+        {/* 2-2-2 Shift System Overview */}
+        <div className="p-6 bg-gradient-to-r from-gray-50 to-blue-50 border-b">
+          <h3 className="text-lg font-semibold text-gray-800 mb-4">Current Shift Status - {selectedDate}</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {['A', 'B', 'C'].map(crew => {
+              const status = getShiftStatus(crew, selectedDate);
+              const crewMembers = employees.filter(emp => emp.assignedCrew === crew);
+              
+              return (
+                <div key={crew} className="bg-white rounded-lg p-4 border">
+                  <div className="flex items-center justify-between mb-3">
+                    <h4 className="text-lg font-bold text-gray-800">Crew {crew}</h4>
+                    <span className={`px-3 py-1 rounded-full text-sm font-medium capitalize ${status.color}`}>
+                      {status.shift}
+                    </span>
+                  </div>
+                  <div className="text-sm text-gray-600">
+                    <p>{crewMembers.length} members assigned</p>
+                    <p className="text-xs mt-1">
+                      {status.shift === 'day' && '06:00 - 18:00'}
+                      {status.shift === 'night' && '18:00 - 06:00'}
+                      {status.shift === 'rest' && 'Rest Day'}
+                    </p>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
 
@@ -892,6 +1025,7 @@ const LaborPlannerContainer = () => {
           <WorkersModule 
             assignments={currentAssignments}
             onShowNotification={showNotification}
+            selectedDate={selectedDate}
           />
         )}
       </div>

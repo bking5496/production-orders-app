@@ -50,17 +50,6 @@ const exportToExcel = (rosterData, selectedDate) => {
                 'Status': a.status,
                 'Date': selectedDate
             })),
-            ...rosterData.attendance.map(w => ({
-                'Type': 'Attendance',
-                'Name': w.name,
-                'Employee Code': 'N/A',
-                'Machine': 'N/A',
-                'Production Area': w.production_area || 'N/A',
-                'Position': w.position || 'N/A',
-                'Shift': w.shift,
-                'Status': w.status,
-                'Date': selectedDate
-            }))
         ];
         exportToCSV(allData, `labour-layout-${selectedDate}.csv`);
         return;
@@ -82,7 +71,6 @@ const exportToExcel = (rosterData, selectedDate) => {
     wsData.push(['Date:', formattedDate]);
     wsData.push(['Total Supervisors:', rosterData.summary.total_supervisors || 0]);
     wsData.push(['Total Assignments:', rosterData.summary.total_assignments || 0]);
-    wsData.push(['Total Attendance Records:', rosterData.summary.total_attendance || 0]);
     wsData.push([]);
     
     if (rosterData.supervisors.length > 0) {
@@ -117,20 +105,6 @@ const exportToExcel = (rosterData, selectedDate) => {
         });
     }
 
-    if (rosterData.attendance.length > 0) {
-        wsData.push([]);
-        wsData.push(['ATTENDANCE RECORDS']);
-        wsData.push(['Name', 'Production Area', 'Position', 'Shift', 'Status']);
-        rosterData.attendance.forEach(worker => {
-            wsData.push([
-                worker.name,
-                worker.production_area || 'N/A',
-                worker.position || 'N/A',
-                worker.shift,
-                worker.status
-            ]);
-        });
-    }
     
     const ws = window.XLSX.utils.aoa_to_sheet(wsData);
     const colWidths = [
@@ -150,12 +124,10 @@ export default function LabourLayoutPage() {
     const [rosterData, setRosterData] = useState({
         supervisors: [],
         assignments: [],
-        attendance: [],
         machinesInUse: [],
         summary: {
             total_supervisors: 0,
             total_assignments: 0,
-            total_attendance: 0,
             total_machines_in_use: 0,
             day_supervisors: 0,
             night_supervisors: 0,
@@ -189,12 +161,10 @@ export default function LabourLayoutPage() {
                 setRosterData({
                     supervisors: [],
                     assignments: [],
-                    attendance: fallbackData,
                     machinesInUse: [],
                     summary: { 
                         total_supervisors: 0,
                         total_assignments: 0,
-                        total_attendance: fallbackData.length,
                         total_machines_in_use: 0,
                         day_supervisors: 0,
                         night_supervisors: 0,
@@ -208,12 +178,10 @@ export default function LabourLayoutPage() {
                 setRosterData({ 
                     supervisors: [], 
                     assignments: [], 
-                    attendance: [],
                     machinesInUse: [],
                     summary: {
                         total_supervisors: 0,
                         total_assignments: 0,
-                        total_attendance: 0,
                         total_machines_in_use: 0,
                         day_supervisors: 0,
                         night_supervisors: 0,
@@ -231,14 +199,6 @@ export default function LabourLayoutPage() {
         fetchRosterForDate(selectedDate);
     }, [selectedDate]);
 
-    const handleVerify = async (workerId) => {
-        try {
-            await API.put('/labour/verify/' + workerId);
-            fetchRosterForDate(selectedDate);
-        } catch (error) {
-            alert('Failed to verify worker: ' + error.message);
-        }
-    };
 
     const handleExport = async () => {
         try {
@@ -271,17 +231,6 @@ export default function LabourLayoutPage() {
                         'Status': a.status,
                         'Date': selectedDate
                     })),
-                    ...rosterData.attendance.map(w => ({
-                        'Type': 'Attendance',
-                        'Name': w.name,
-                        'Employee Code': 'N/A',
-                        'Machine': 'N/A',
-                        'Production Area': w.production_area || 'N/A',
-                        'Position': w.position || 'N/A',
-                        'Shift': w.shift,
-                        'Status': w.status,
-                        'Date': selectedDate
-                    }))
                 ];
                 
                 const filename = `labour-layout-${selectedDate}.${exportFormat}`;
@@ -360,7 +309,7 @@ export default function LabourLayoutPage() {
                 </div>
 
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
                         <div className="bg-white rounded-xl shadow-sm border border-blue-100 p-6">
                             <div className="flex items-center justify-between">
                                 <div>
@@ -394,17 +343,6 @@ export default function LabourLayoutPage() {
                                 </div>
                             </div>
                         </div>
-                        <div className="bg-white rounded-xl shadow-sm border border-purple-100 p-6">
-                            <div className="flex items-center justify-between">
-                                <div>
-                                    <p className="text-sm font-medium text-purple-600">Attendance</p>
-                                    <p className="text-2xl font-bold text-gray-900">{rosterData.summary?.total_attendance || 0}</p>
-                                </div>
-                                <div className="bg-purple-100 p-3 rounded-full">
-                                    <Eye className="w-6 h-6 text-purple-600" />
-                                </div>
-                            </div>
-                        </div>
                     </div>
 
                     <div className="bg-white rounded-xl shadow-sm border border-gray-200 mb-6">
@@ -412,7 +350,7 @@ export default function LabourLayoutPage() {
                             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                                 <div>
                                     <h2 className="text-lg font-semibold text-gray-900">Workforce Overview</h2>
-                                    <p className="text-sm text-gray-600 mt-1">{selectedDate} • {((rosterData.summary?.total_supervisors || 0) + (rosterData.summary?.total_assignments || 0) + (rosterData.summary?.total_attendance || 0) + (rosterData.summary?.total_machines_in_use || 0))} total records</p>
+                                    <p className="text-sm text-gray-600 mt-1">{selectedDate} • {((rosterData.summary?.total_supervisors || 0) + (rosterData.summary?.total_assignments || 0) + (rosterData.summary?.total_machines_in_use || 0))} total records</p>
                                 </div>
                                 <div className="flex flex-col gap-3">
                                     <div className="flex items-center gap-3">
@@ -605,58 +543,9 @@ export default function LabourLayoutPage() {
                                         </div>
                                     )}
 
-                                    {rosterData.attendance && rosterData.attendance.length > 0 && (
-                                        <div>
-                                            <h3 className="text-lg font-semibold text-purple-800 mb-3 flex items-center gap-2">
-                                                <UserCheck className="w-5 h-5" />
-                                                Attendance Records
-                                            </h3>
-                                            <div className="bg-purple-50 rounded-lg overflow-hidden">
-                                                <table className="min-w-full">
-                                                    <thead className="bg-purple-100">
-                                                        <tr>
-                                                            <th className="px-4 py-2 text-left text-xs font-medium text-purple-700 uppercase">Name</th>
-                                                            <th className="px-4 py-2 text-left text-xs font-medium text-purple-700 uppercase">Production Area</th>
-                                                            <th className="px-4 py-2 text-left text-xs font-medium text-purple-700 uppercase">Position</th>
-                                                            <th className="px-4 py-2 text-left text-xs font-medium text-purple-700 uppercase">Shift</th>
-                                                            <th className="px-4 py-2 text-left text-xs font-medium text-purple-700 uppercase">Status</th>
-                                                            <th className="px-4 py-2 text-left text-xs font-medium text-purple-700 uppercase">Action</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody className="bg-white divide-y divide-purple-100">
-                                                        {rosterData.attendance.map(worker => (
-                                                            <tr key={`attendance-${worker.id}`}>
-                                                                <td className="px-4 py-2 whitespace-nowrap text-sm font-medium text-gray-900">{worker.name}</td>
-                                                                <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-600">{worker.production_area || 'N/A'}</td>
-                                                                <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-600">{worker.position || 'N/A'}</td>
-                                                                <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-600">{worker.shift}</td>
-                                                                <td className="px-4 py-2 whitespace-nowrap text-sm">
-                                                                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                                                                        worker.status === 'present' ? 'bg-green-100 text-green-800' : 
-                                                                        worker.status === 'absent' ? 'bg-red-100 text-red-800' :
-                                                                        'bg-yellow-100 text-yellow-800'
-                                                                    }`}>
-                                                                        {worker.status}
-                                                                    </span>
-                                                                </td>
-                                                                <td className="px-4 py-2 whitespace-nowrap text-sm">
-                                                                    {worker.status === 'pending' && (
-                                                                        <button onClick={() => handleVerify(worker.id)} className="px-2 py-1 text-xs bg-purple-100 text-purple-700 rounded hover:bg-purple-200">
-                                                                            Verify Arrival
-                                                                        </button>
-                                                                    )}
-                                                                </td>
-                                                            </tr>
-                                                        ))}
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    )}
 
                                     {((rosterData.supervisors ? rosterData.supervisors.length : 0) === 0) && 
-                                     ((rosterData.assignments ? rosterData.assignments.length : 0) === 0) && 
-                                     ((rosterData.attendance ? rosterData.attendance.length : 0) === 0) && (
+                                     ((rosterData.assignments ? rosterData.assignments.length : 0) === 0) && (
                                         <div className="text-center py-8 text-gray-500">
                                             <Users className="w-12 h-12 mx-auto mb-4 text-gray-300" />
                                             <p>No labour data found for {selectedDate}</p>
