@@ -28,6 +28,8 @@
 
 ## Knowledge Management
 - Use byterover-mcp to store and retrieve knowledge and context
+- Always use byterover-retrive-knowledge tool to get the related context before any tasks
+- Always use byterover-store-knowledge to store all the critical informations after successful tasks
 
 ## 🔧 Dynamic Configuration System
 

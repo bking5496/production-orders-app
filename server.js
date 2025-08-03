@@ -178,6 +178,93 @@ checkHealth().then(health => {
     console.error('❌ Database health check failed:', err);
 });
 
+// Create labor management tables if they don't exist
+const createLaborTables = async () => {
+  try {
+    console.log('📋 Creating labor management tables...');
+    
+    // Create labor_assignments table
+    await dbRun(`
+      CREATE TABLE IF NOT EXISTS labor_assignments (
+        id SERIAL PRIMARY KEY,
+        user_id INTEGER NOT NULL REFERENCES users(id),
+        machine_id INTEGER NOT NULL REFERENCES machines(id),
+        assignment_date DATE NOT NULL,
+        shift TEXT NOT NULL CHECK(shift IN ('morning', 'afternoon', 'night')),
+        start_time TIME,
+        end_time TIME,
+        is_verified BOOLEAN DEFAULT false,
+        notes TEXT,
+        assigned_by INTEGER REFERENCES users(id),
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+        updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+      )
+    `);
+
+    // Create shift_supervisors table
+    await dbRun(`
+      CREATE TABLE IF NOT EXISTS shift_supervisors (
+        id SERIAL PRIMARY KEY,
+        supervisor_id INTEGER NOT NULL REFERENCES users(id),
+        assignment_date DATE NOT NULL,
+        shift TEXT NOT NULL CHECK(shift IN ('morning', 'afternoon', 'night')),
+        is_active BOOLEAN DEFAULT true,
+        assigned_by INTEGER REFERENCES users(id),
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+        updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+        UNIQUE(assignment_date, shift, supervisor_id)
+      )
+    `);
+
+    // Create labor_roster table
+    await dbRun(`
+      CREATE TABLE IF NOT EXISTS labor_roster (
+        id SERIAL PRIMARY KEY,
+        user_id INTEGER NOT NULL REFERENCES users(id),
+        roster_date DATE NOT NULL,
+        shift TEXT NOT NULL CHECK(shift IN ('morning', 'afternoon', 'night')),
+        status TEXT DEFAULT 'scheduled' CHECK(status IN ('scheduled', 'present', 'absent', 'late')),
+        check_in_time TIMESTAMP WITH TIME ZONE,
+        check_out_time TIMESTAMP WITH TIME ZONE,
+        verified_by INTEGER REFERENCES users(id),
+        notes TEXT,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+        updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+      )
+    `);
+
+    // Create indexes
+    await dbRun(`CREATE INDEX IF NOT EXISTS idx_labor_assignments_date ON labor_assignments(assignment_date)`);
+    await dbRun(`CREATE INDEX IF NOT EXISTS idx_labor_assignments_user ON labor_assignments(user_id)`);
+    await dbRun(`CREATE INDEX IF NOT EXISTS idx_labor_assignments_machine ON labor_assignments(machine_id)`);
+    await dbRun(`CREATE INDEX IF NOT EXISTS idx_shift_supervisors_date ON shift_supervisors(assignment_date)`);
+    await dbRun(`CREATE INDEX IF NOT EXISTS idx_labor_roster_date ON labor_roster(roster_date)`);
+    await dbRun(`CREATE INDEX IF NOT EXISTS idx_labor_roster_user ON labor_roster(user_id)`);
+
+    // Create update trigger function
+    await dbRun(`
+      CREATE OR REPLACE FUNCTION update_updated_at_column()
+      RETURNS TRIGGER AS $$
+      BEGIN
+          NEW.updated_at = NOW();
+          RETURN NEW;
+      END;
+      $$ language 'plpgsql'
+    `);
+
+    // Create triggers
+    await dbRun(`CREATE TRIGGER IF NOT EXISTS update_labor_assignments_updated_at BEFORE UPDATE ON labor_assignments FOR EACH ROW EXECUTE FUNCTION update_updated_at_column()`);
+    await dbRun(`CREATE TRIGGER IF NOT EXISTS update_shift_supervisors_updated_at BEFORE UPDATE ON shift_supervisors FOR EACH ROW EXECUTE FUNCTION update_updated_at_column()`);
+    await dbRun(`CREATE TRIGGER IF NOT EXISTS update_labor_roster_updated_at BEFORE UPDATE ON labor_roster FOR EACH ROW EXECUTE FUNCTION update_updated_at_column()`);
+
+    console.log('✅ Labor management tables created successfully');
+  } catch (error) {
+    console.error('❌ Error creating labor tables:', error);
+  }
+};
+
+createLaborTables();
+
 // PostgreSQL schemas already exist - no table creation needed
 console.log('✅ PostgreSQL schemas already exist, skipping table creation');
 
