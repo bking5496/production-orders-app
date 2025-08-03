@@ -35,3 +35,90 @@ ValidationError: The Express 'trust proxy' setting is true, which allows anyone 
 }
 🔗 Client acquired from pool
 🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+✅ New PostgreSQL client connected
+🔗 Client acquired from pool
+✅ New PostgreSQL client connected
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+New WebSocket connection attempt
+✅ WebSocket authenticated: admin (admin)
+🔌 WebSocket disconnected: admin
+ValidationError: The Express 'trust proxy' setting is true, which allows anyone to trivially bypass IP-based rate limiting. See https://express-rate-limit.github.io/ERR_ERL_PERMISSIVE_TRUST_PROXY/ for more information.
+    at Object.trustProxy (/home/production-app/production-orders-app/node_modules/express-rate-limit/dist/index.cjs:167:13)
+    at wrappedValidations.<computed> [as trustProxy] (/home/production-app/production-orders-app/node_modules/express-rate-limit/dist/index.cjs:397:22)
+    at Object.keyGenerator (/home/production-app/production-orders-app/node_modules/express-rate-limit/dist/index.cjs:657:20)
+    at /home/production-app/production-orders-app/node_modules/express-rate-limit/dist/index.cjs:710:32
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async /home/production-app/production-orders-app/node_modules/express-rate-limit/dist/index.cjs:691:5 {
+  code: 'ERR_ERL_PERMISSIVE_TRUST_PROXY',
+  help: 'https://express-rate-limit.github.io/ERR_ERL_PERMISSIVE_TRUST_PROXY/'
+}
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+New WebSocket connection attempt
+✅ WebSocket authenticated: admin (admin)
+✅ New PostgreSQL client connected
+🔗 Client acquired from pool
+✅ New PostgreSQL client connected
+🔗 Client acquired from pool
+✅ New PostgreSQL client connected
+🔗 Client acquired from pool
+✅ New PostgreSQL client connected
+🔗 Client acquired from pool
+✅ New PostgreSQL client connected
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+✅ New PostgreSQL client connected
+🔗 Client acquired from pool
+🔓 Client released back to pool
+✅ New PostgreSQL client connected
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+✅ New PostgreSQL client connected
+🔗 Client acquired from pool
+✅ New PostgreSQL client connected
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+📺 admin subscribed to: [ 'dashboard', 'orders', 'machines', 'production', 'alerts' ]
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+✅ New PostgreSQL client connected
+🔗 Client acquired from pool
+✅ New PostgreSQL client connected
+🔗 Client acquired from pool
+🔓 Client released back to pool
+✅ New PostgreSQL client connected
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+✅ New PostgreSQL client connected
+🔗 Client acquired from pool
+✅ New PostgreSQL client connected
+🔗 Client acquired from pool
+✅ New PostgreSQL client connected
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔓 Client released back to pool
