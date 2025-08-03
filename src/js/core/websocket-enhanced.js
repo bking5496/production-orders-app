@@ -511,10 +511,18 @@ class EnhancedWebSocketService {
     // Get WebSocket token with enhanced error handling
     async getWebSocketToken() {
         try {
+            const token = localStorage.getItem('token');
+            const headers = { 'Content-Type': 'application/json' };
+            
+            // Add Authorization header if token exists
+            if (token) {
+                headers.Authorization = `Bearer ${token}`;
+            }
+            
             const response = await fetch('/api/auth/websocket-token', {
                 method: 'GET',
                 credentials: 'include',
-                headers: { 'Content-Type': 'application/json' }
+                headers: headers
             });
 
             if (response.status === 401) {

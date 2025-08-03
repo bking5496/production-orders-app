@@ -62,11 +62,12 @@ const AuthProvider = ({ children }) => {
   // Login now uses JWT tokens
   const login = async (username, password) => {
     const response = await window.API.login(username, password);
-    if (response.user && response.token) {
-      setUser(response.user);
+    // API returns data nested under 'data' property
+    if (response.data?.user && response.data?.token) {
+      setUser(response.data.user);
       setIsAuthenticated(true);
-      localStorage.setItem('user_data', JSON.stringify(response.user));
-      localStorage.setItem('token', response.token);
+      localStorage.setItem('user_data', JSON.stringify(response.data.user));
+      localStorage.setItem('token', response.data.token);
       
       // Connect WebSocket after successful login
       if (window.EnhancedWebSocketService) {
