@@ -2424,3 +2424,68 @@ Error: SQLITE_ERROR: table waste_records has no column named waste_type
 2025-08-04T09:39:33: ✅ New PostgreSQL client connected
 2025-08-04T09:39:33: 🔗 Client acquired from pool
 2025-08-04T09:39:33: 🔓 Client released back to pool
+2025-08-04T09:40:03: ✅ New PostgreSQL client connected
+2025-08-04T09:40:03: 🔗 Client acquired from pool
+2025-08-04T09:40:03: ✅ New PostgreSQL client connected
+2025-08-04T09:40:03: 🔗 Client acquired from pool
+2025-08-04T09:40:03: ✅ New PostgreSQL client connected
+2025-08-04T09:40:03: 🔗 Client acquired from pool
+2025-08-04T09:40:03: 🔓 Client released back to pool
+2025-08-04T09:40:03: 🔓 Client released back to pool
+2025-08-04T09:40:03: 🔓 Client released back to pool
+2025-08-04T09:40:33: 🔗 Client acquired from pool
+2025-08-04T09:40:33: 🔗 Client acquired from pool
+2025-08-04T09:40:33: 🔓 Client released back to pool
+2025-08-04T09:40:33: 🔓 Client released back to pool
+2025-08-04T09:40:33: 🔗 Client acquired from pool
+2025-08-04T09:40:33: 🔓 Client released back to pool
+2025-08-04T09:41:55: ✅ New PostgreSQL client connected
+2025-08-04T09:41:55: 🔗 Client acquired from pool
+2025-08-04T09:41:55: ✅ New PostgreSQL client connected
+2025-08-04T09:41:55: 🔗 Client acquired from pool
+2025-08-04T09:41:55: 🔓 Client released back to pool
+2025-08-04T09:41:55: ✅ New PostgreSQL client connected
+2025-08-04T09:41:55: 🔗 Client acquired from pool
+2025-08-04T09:41:55: 🔓 Client released back to pool
+2025-08-04T09:41:55: 🔓 Client released back to pool
+2025-08-04T09:42:34: ✅ New PostgreSQL client connected
+2025-08-04T09:42:34: 🔗 Client acquired from pool
+2025-08-04T09:42:34: 🔓 Client released back to pool
+2025-08-04T09:42:34: ✅ New PostgreSQL client connected
+2025-08-04T09:42:34: 🔗 Client acquired from pool
+2025-08-04T09:42:34: 🔓 Client released back to pool
+2025-08-04T09:42:34: ✅ New PostgreSQL client connected
+2025-08-04T09:42:34: 🔗 Client acquired from pool
+2025-08-04T09:42:34: 🔓 Client released back to pool
+2025-08-04T09:42:36: 📺 admin subscribed to: [ 'machines', 'production' ]
+2025-08-04T09:42:36: 🔗 Client acquired from pool
+2025-08-04T09:42:36: 🔗 Client acquired from pool
+2025-08-04T09:42:36: 🔓 Client released back to pool
+2025-08-04T09:42:36: 🔓 Client released back to pool
+2025-08-04T09:42:36: 🔗 Client acquired from pool
+2025-08-04T09:42:36: 🔓 Client released back to pool
+2025-08-04T09:43:06: ✅ New PostgreSQL client connected
+2025-08-04T09:43:06: 🔗 Client acquired from pool
+2025-08-04T09:43:06: 🔓 Client released back to pool
+2025-08-04T09:43:36: 🔗 Client acquired from pool
+2025-08-04T09:43:36: 🔓 Client released back to pool
+2025-08-04T09:44:06: 🔗 Client acquired from pool
+2025-08-04T09:44:06: 🔓 Client released back to pool
+2025-08-04T09:44:36: 🔗 Client acquired from pool
+2025-08-04T09:44:36: 🔓 Client released back to pool
+2025-08-04T09:45:06: 🔗 Client acquired from pool
+2025-08-04T09:45:06: 🔓 Client released back to pool
+2025-08-04T09:45:36: 🔗 Client acquired from pool
+2025-08-04T09:45:36: 🔓 Client released back to pool
+2025-08-04T09:46:09: 🔗 Client acquired from pool
+2025-08-04T09:46:09: 🔓 Client released back to pool
+2025-08-04T09:46:36: 🔗 Client acquired from pool
+2025-08-04T09:46:36: 🔓 Client released back to pool
+2025-08-04T09:47:06: 🔗 Client acquired from pool
+2025-08-04T09:47:06: 🔓 Client released back to pool
+2025-08-04T09:47:55: 🔗 Client acquired from pool
+2025-08-04T09:47:55: 🔓 Client released back to pool
+2025-08-04T09:48:55: 🔗 Client acquired from pool
+2025-08-04T09:48:55: 🔓 Client released back to pool
+2025-08-04T09:49:55: 🔗 Client acquired from pool
+2025-08-04T09:49:55: 🔓 Client released back to pool
