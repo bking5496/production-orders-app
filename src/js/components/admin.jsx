@@ -776,9 +776,9 @@ export default function AdminPanel() {
                                   </span>
                                 )}
                               </Badge>
-                              {machineTypeInfo && (
+                              {machineTypeInfo && machineTypeInfo.machines && Array.isArray(machineTypeInfo.machines) && (
                                 <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-black text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity z-10 whitespace-nowrap">
-                                  {machineTypeInfo.machines.join(', ')}
+                                  {machineTypeInfo.machines.filter(m => m && m !== null).join(', ')}
                                 </div>
                               )}
                             </div>
@@ -869,11 +869,11 @@ export default function AdminPanel() {
                 </div>
                 
                 {/* Machines using this type */}
-                {machineType.machines && machineType.machines.length > 0 && (
+                {machineType.machines && Array.isArray(machineType.machines) && machineType.machines.length > 0 && (
                   <div className="space-y-2 mb-4">
                     <p className="text-sm font-medium text-gray-700">Machines:</p>
                     <div className="flex flex-wrap gap-1">
-                      {machineType.machines.slice(0, 3).map((machine, index) => (
+                      {machineType.machines.filter(m => m && m !== null).slice(0, 3).map((machine, index) => (
                         <Badge key={index} variant="default" size="sm">{machine}</Badge>
                       ))}
                       {machineType.machines.length > 3 && (
@@ -1117,16 +1117,17 @@ export default function AdminPanel() {
               <div className="space-y-3">
                 {availableMachineTypes.length > 0 ? (
                   availableMachineTypes.map((machineType) => (
-                    <div key={machineType.type} className="flex items-start space-x-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50">
+                    <div key={machineType.name || machineType.type} className="flex items-start space-x-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50">
                       <input
                         type="checkbox"
-                        id={`machine-type-${machineType.type}`}
-                        checked={environmentFormData.machine_types.includes(machineType.type)}
+                        id={`machine-type-${machineType.name || machineType.type}`}
+                        checked={environmentFormData.machine_types.includes(machineType.name || machineType.type)}
                         onChange={(e) => {
                           const isChecked = e.target.checked;
+                          const machineTypeName = machineType.name || machineType.type;
                           const updatedTypes = isChecked 
-                            ? [...environmentFormData.machine_types, machineType.type]
-                            : environmentFormData.machine_types.filter(type => type !== machineType.type);
+                            ? [...environmentFormData.machine_types, machineTypeName]
+                            : environmentFormData.machine_types.filter(type => type !== machineTypeName);
                           setEnvironmentFormData({
                             ...environmentFormData,
                             machine_types: updatedTypes
