@@ -755,7 +755,7 @@ app.post('/api/machines',
 
     db.run(
       `INSERT INTO machines (name, type, environment, capacity, status, created_at, updated_at) 
-       VALUES (?, ?, ?, ?, 'available', datetime('now', '+2 hours'), datetime('now', '+2 hours'))`,
+       VALUES (?, ?, ?, ?, 'available', NOW(), NOW())`,
       [name, type, environment, capacity],
       function(err) {
         if (err) {
@@ -809,7 +809,7 @@ app.put('/api/machines/:id',
         
         // Build update query
         const fields = Object.keys(updates).map(key => `${key} = ?`);
-        fields.push('updated_at = datetime("now", "+2 hours")');
+        fields.push('updated_at = NOW()');
         const values = Object.values(updates);
         values.push(id);
         
