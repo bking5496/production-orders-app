@@ -1022,6 +1022,38 @@ app.get('/api/orders/archived',
   }
 );
 
+// Get individual order details by ID
+app.get('/api/orders/:id',
+  authenticateToken,
+  (req, res) => {
+    const orderId = req.params.id;
+    
+    const query = `
+      SELECT 
+        o.*,
+        m.name as machine_name,
+        u.username as operator_name
+      FROM production_orders o
+      LEFT JOIN machines m ON o.machine_id = m.id
+      LEFT JOIN users u ON o.operator_id = u.id
+      WHERE o.id = ?
+    `;
+    
+    db.get(query, [orderId], (err, order) => {
+      if (err) {
+        console.error('Error fetching order details:', err);
+        return res.status(500).json({ error: 'Database error' });
+      }
+      
+      if (!order) {
+        return res.status(404).json({ error: 'Order not found' });
+      }
+      
+      res.json(order);
+    });
+  }
+);
+
 app.post('/api/orders',
   authenticateToken,
   requireRole(['admin', 'supervisor']),
