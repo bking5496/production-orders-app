@@ -157,46 +157,8 @@ export default function OrdersPage() {
     }
   };
 
-  // Quick action handlers for simple operations
-  const handleQuickStart = async (order) => {
-    try {
-      await API.post(`/orders/${order.id}/start`);
-      showNotification(`Order ${order.order_number} started`, 'success');
-      loadOrders();
-    } catch (error) {
-      console.error('Error starting order:', error);
-      showNotification('Failed to start order. Use Enhanced Workflow for complex operations.', 'warning');
-    }
-  };
-
-  const handleQuickStop = async (order) => {
-    try {
-      await API.post(`/orders/${order.id}/stop`, { 
-        reason: 'Quick stop from orders page',
-        notes: 'Stopped via quick action'
-      });
-      showNotification(`Order ${order.order_number} stopped`, 'success');
-      loadOrders();
-    } catch (error) {
-      console.error('Error stopping order:', error);
-      showNotification('Failed to stop order', 'error');
-    }
-  };
-
-  const handleQuickComplete = async (order) => {
-    try {
-      await API.post(`/orders/${order.id}/complete`, { 
-        actual_quantity: order.quantity,
-        quality_approved: true,
-        completion_notes: 'Completed via quick action'
-      });
-      showNotification(`Order ${order.order_number} completed`, 'success');
-      loadOrders();
-    } catch (error) {
-      console.error('Error completing order:', error);
-      showNotification('Failed to complete order. Use Enhanced Workflow for complex completion.', 'warning');
-    }
-  };
+  // All production operations must go through Enhanced Workflow
+  // No quick actions allowed - everything is linked and controlled
 
   // Open Enhanced Workflow for comprehensive operations
   const openEnhancedWorkflow = (order) => {
@@ -426,32 +388,13 @@ export default function OrdersPage() {
                   </Badge>
                   
                   <div className="flex gap-2">
-                    {order.status === 'pending' && (
-                      <TouchButton 
-                        onClick={() => handleQuickStart(order)} 
-                        size="xs" 
-                        icon={Play}
-                      >
-                        Start
-                      </TouchButton>
-                    )}
-                    {order.status === 'in_progress' && (
-                      <TouchButton 
-                        onClick={() => handleQuickStop(order)} 
-                        size="xs" 
-                        variant="outline"
-                        icon={Square}
-                      >
-                        Stop
-                      </TouchButton>
-                    )}
                     <TouchButton 
                       onClick={() => openEnhancedWorkflow(order)} 
                       size="xs" 
-                      variant="secondary"
+                      variant="primary"
                       icon={BarChart3}
                     >
-                      Workflow
+                      Enhanced Workflow
                     </TouchButton>
                   </div>
                 </div>
@@ -502,36 +445,10 @@ export default function OrdersPage() {
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-2">
-                        {order.status === 'pending' && (
-                          <Button 
-                            onClick={() => handleQuickStart(order)} 
-                            size="sm" 
-                            variant="outline"
-                          >
-                            Quick Start
-                          </Button>
-                        )}
-                        {order.status === 'in_progress' && (
-                          <>
-                            <Button 
-                              onClick={() => handleQuickStop(order)} 
-                              size="sm" 
-                              variant="outline"
-                            >
-                              Quick Stop
-                            </Button>
-                            <Button 
-                              onClick={() => handleQuickComplete(order)} 
-                              size="sm" 
-                              variant="outline"
-                            >
-                              Quick Complete
-                            </Button>
-                          </>
-                        )}
                         <Button 
                           onClick={() => openEnhancedWorkflow(order)} 
                           size="sm"
+                          variant="primary"
                         >
                           Enhanced Workflow
                         </Button>

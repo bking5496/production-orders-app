@@ -2279,7 +2279,7 @@ app.post('/api/orders/:id/start-setup',
   }
 );
 
-// Complete setup for an order
+// Complete setup for an order - FIXED with direct PostgreSQL
 app.post('/api/orders/:id/complete-setup',
   authenticateToken,
   async (req, res) => {
@@ -2287,7 +2287,7 @@ app.post('/api/orders/:id/complete-setup',
     const { checklist, setup_time, notes } = req.body;
     
     try {
-      // Update workflow progress - direct PostgreSQL connection to avoid conversion issues
+      // Use direct PostgreSQL client to completely bypass conversion layer
       const { Client } = require('pg');
       const { getSecret } = require('./security/secrets-manager');
       const client = new Client({
@@ -2299,34 +2299,27 @@ app.post('/api/orders/:id/complete-setup',
       });
       
       await client.connect();
+      
+      // Update workflow progress
       await client.query(`
         UPDATE workflow_progress 
         SET status = $1, completed_at = NOW(), operator_id = $2, notes = $3, data = $4
         WHERE order_id = $5 AND stage = $6
       `, ['completed', parseInt(req.user.id), notes || null, JSON.stringify({ checklist, setup_time }), parseInt(orderId), 'setup']);
-      await client.end();
       
-      // Update order status - also use direct connection
-      const client2 = new Client({
-        host: 'localhost',
-        port: 5432,
-        database: 'production_orders',
-        user: 'postgres',
-        password: getSecret('DB_PASSWORD')
-      });
-      
-      await client2.connect();
-      await client2.query(`
+      // Update order status  
+      await client.query(`
         UPDATE production_orders 
         SET setup_complete_time = NOW(), updated_at = NOW()
         WHERE id = $1
       `, [parseInt(orderId)]);
-      await client2.end();
+      
+      await client.end();
       
       res.json({ success: true, message: 'Setup completed successfully' });
     } catch (error) {
-      console.error('Error completing setup:', error);
-      res.status(500).json({ error: 'Failed to complete setup' });
+      console.error('Complete setup error:', error);
+      res.status(500).json({ error: 'Failed to complete setup: ' + error.message });
     }
   }
 );

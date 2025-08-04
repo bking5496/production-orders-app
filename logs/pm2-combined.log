@@ -3489,3 +3489,559 @@ Error: SQLITE_ERROR: table waste_records has no column named waste_type
   line: '1244',
   routine: 'scanner_yyerror'
 }
+2025-08-04T12:40:04: 🔗 Client acquired from pool
+2025-08-04T12:40:04: 🔓 Client released back to pool
+2025-08-04T12:40:05: 📺 admin subscribed to: [ 'machines', 'production' ]
+2025-08-04T12:40:05: 🔗 Client acquired from pool
+2025-08-04T12:40:05: 🔓 Client released back to pool
+2025-08-04T12:40:05: 🔗 Client acquired from pool
+2025-08-04T12:40:05: 🔗 Client acquired from pool
+2025-08-04T12:40:05: 🔓 Client released back to pool
+2025-08-04T12:40:05: 🔓 Client released back to pool
+2025-08-04T12:40:11: 🔗 Client acquired from pool
+2025-08-04T12:40:11: 🔓 Client released back to pool
+2025-08-04T12:40:11: 🔗 Client acquired from pool
+2025-08-04T12:40:11: 🔓 Client released back to pool
+2025-08-04T12:40:13: 🔗 Client acquired from pool
+2025-08-04T12:40:13: 🔗 Client acquired from pool
+2025-08-04T12:40:13: 🔓 Client released back to pool
+2025-08-04T12:40:13: 🔓 Client released back to pool
+2025-08-04T12:40:13: ✅ New PostgreSQL client connected
+2025-08-04T12:40:13: 🔗 Client acquired from pool
+2025-08-04T12:40:13: 🔓 Client released back to pool
+2025-08-04T12:40:15: 🔗 Client acquired from pool
+2025-08-04T12:40:15: 🔗 Client acquired from pool
+2025-08-04T12:40:15: 🔓 Client released back to pool
+2025-08-04T12:40:15: 🔗 Client acquired from pool
+2025-08-04T12:40:15: 🔓 Client released back to pool
+2025-08-04T12:40:15: 🔓 Client released back to pool
+2025-08-04T12:40:15: 🔗 Client acquired from pool
+2025-08-04T12:40:15: 🔓 Client released back to pool
+2025-08-04T12:40:15: 🔗 Client acquired from pool
+2025-08-04T12:40:15: 🔓 Client released back to pool
+2025-08-04T12:40:15: 🔗 Client acquired from pool
+2025-08-04T12:40:15: 🔓 Client released back to pool
+2025-08-04T12:40:32: 🔗 Client acquired from pool
+2025-08-04T12:40:32: 🔓 Client released back to pool
+2025-08-04T12:40:33: 📺 admin subscribed to: [ 'machines', 'production' ]
+2025-08-04T12:40:33: 🔗 Client acquired from pool
+2025-08-04T12:40:33: 🔗 Client acquired from pool
+2025-08-04T12:40:33: 🔗 Client acquired from pool
+2025-08-04T12:40:33: 🔓 Client released back to pool
+2025-08-04T12:40:33: 🔓 Client released back to pool
+2025-08-04T12:40:33: 🔓 Client released back to pool
+2025-08-04T12:40:42: 🔗 Client acquired from pool
+2025-08-04T12:40:42: 🔓 Client released back to pool
+2025-08-04T12:40:42: 🔗 Client acquired from pool
+2025-08-04T12:40:42: 🔗 Client acquired from pool
+2025-08-04T12:40:42: 🔓 Client released back to pool
+2025-08-04T12:40:42: 🔓 Client released back to pool
+2025-08-04T12:40:45: 🔗 Client acquired from pool
+2025-08-04T12:40:45: 🔗 Client acquired from pool
+2025-08-04T12:40:45: 🔓 Client released back to pool
+2025-08-04T12:40:45: 🔓 Client released back to pool
+2025-08-04T12:40:45: 🔗 Client acquired from pool
+2025-08-04T12:40:45: 🔓 Client released back to pool
+2025-08-04T12:40:47: 🔗 Client acquired from pool
+2025-08-04T12:40:47: 🔗 Client acquired from pool
+2025-08-04T12:40:47: 🔓 Client released back to pool
+2025-08-04T12:40:47: 🔓 Client released back to pool
+2025-08-04T12:40:47: 🔗 Client acquired from pool
+2025-08-04T12:40:47: 🔓 Client released back to pool
+2025-08-04T12:40:49: 🔌 WebSocket disconnected: admin
+2025-08-04T12:40:50: New WebSocket connection attempt
+2025-08-04T12:40:50: ✅ WebSocket authenticated: admin (admin)
+2025-08-04T12:40:53: 🔗 Client acquired from pool
+2025-08-04T12:40:53: 🔓 Client released back to pool
+2025-08-04T12:40:53: 🔗 Client acquired from pool
+2025-08-04T12:40:53: 🔓 Client released back to pool
+2025-08-04T12:40:53: 🔗 Client acquired from pool
+2025-08-04T12:40:53: 🔓 Client released back to pool
+2025-08-04T12:40:53: 🔗 Client acquired from pool
+2025-08-04T12:40:53: 🔗 Client acquired from pool
+2025-08-04T12:40:53: 🔓 Client released back to pool
+2025-08-04T12:40:53: 🔓 Client released back to pool
+2025-08-04T12:40:56: 🔗 Client acquired from pool
+2025-08-04T12:40:56: 🔓 Client released back to pool
+2025-08-04T12:41:02: 🔗 Client acquired from pool
+2025-08-04T12:41:02: 🔗 Client acquired from pool
+2025-08-04T12:41:02: 🔓 Client released back to pool
+2025-08-04T12:41:02: 🔗 Client acquired from pool
+2025-08-04T12:41:02: 🔓 Client released back to pool
+2025-08-04T12:41:02: 🔓 Client released back to pool
+2025-08-04T12:41:02: 🔗 Client acquired from pool
+2025-08-04T12:41:02: 🔓 Client released back to pool
+2025-08-04T12:41:02: 🔗 Client acquired from pool
+2025-08-04T12:41:02: 🔓 Client released back to pool
+2025-08-04T12:41:02: 🔗 Client acquired from pool
+2025-08-04T12:41:02: 🔓 Client released back to pool
+2025-08-04T12:41:05: 🔗 Client acquired from pool
+2025-08-04T12:41:05: 🔓 Client released back to pool
+2025-08-04T12:45:33: 🔗 Client acquired from pool
+2025-08-04T12:45:33: 🔓 Client released back to pool
+2025-08-04T12:45:33: 🔗 Client acquired from pool
+2025-08-04T12:45:33: 🔓 Client released back to pool
+2025-08-04T12:45:33: 🔗 Client acquired from pool
+2025-08-04T12:45:33: 🔓 Client released back to pool
+2025-08-04T12:45:33: 🔗 Client acquired from pool
+2025-08-04T12:45:33: 🔓 Client released back to pool
+2025-08-04T12:45:33: 🔗 Client acquired from pool
+2025-08-04T12:45:33: 🔓 Client released back to pool
+2025-08-04T12:45:33: ✅ New PostgreSQL client connected
+2025-08-04T12:45:33: 🔗 Client acquired from pool
+2025-08-04T12:45:33: 🔓 Client released back to pool
+2025-08-04T12:45:37: 🔗 Client acquired from pool
+2025-08-04T12:45:37: 🔓 Client released back to pool
+2025-08-04T12:45:39: 🔗 Client acquired from pool
+2025-08-04T12:45:39: 🔓 Client released back to pool
+2025-08-04T12:45:41: 📺 admin subscribed to: [ 'machines', 'production' ]
+2025-08-04T12:45:41: 🔗 Client acquired from pool
+2025-08-04T12:45:41: 🔗 Client acquired from pool
+2025-08-04T12:45:41: 🔓 Client released back to pool
+2025-08-04T12:45:41: 🔓 Client released back to pool
+2025-08-04T12:45:41: ✅ New PostgreSQL client connected
+2025-08-04T12:45:41: 🔗 Client acquired from pool
+2025-08-04T12:45:41: 🔓 Client released back to pool
+2025-08-04T12:45:45: 📺 admin subscribed to: [ 'production', 'orders', 'machines' ]
+2025-08-04T12:45:45: 🔗 Client acquired from pool
+2025-08-04T12:45:45: 🔗 Client acquired from pool
+2025-08-04T12:45:45: 🔗 Client acquired from pool
+2025-08-04T12:45:45: 🔓 Client released back to pool
+2025-08-04T12:45:45: 🔓 Client released back to pool
+2025-08-04T12:45:45: 🔓 Client released back to pool
+2025-08-04T12:45:45: ✅ New PostgreSQL client connected
+2025-08-04T12:45:45: 🔗 Client acquired from pool
+2025-08-04T12:45:45: 🔓 Client released back to pool
+2025-08-04T12:45:50: 🔗 Client acquired from pool
+2025-08-04T12:45:50: 🔗 Client acquired from pool
+2025-08-04T12:45:50: 🔗 Client acquired from pool
+2025-08-04T12:45:50: 🔗 Client acquired from pool
+2025-08-04T12:45:50: 🔓 Client released back to pool
+2025-08-04T12:45:50: 🔓 Client released back to pool
+2025-08-04T12:45:50: 🔓 Client released back to pool
+2025-08-04T12:45:50: 🔓 Client released back to pool
+2025-08-04T12:45:53: 📺 admin subscribed to: [ 'dashboard', 'orders', 'machines', 'production', 'alerts' ]
+2025-08-04T12:45:53: 🔗 Client acquired from pool
+2025-08-04T12:45:53: 🔗 Client acquired from pool
+2025-08-04T12:45:53: 🔗 Client acquired from pool
+2025-08-04T12:45:53: 🔓 Client released back to pool
+2025-08-04T12:45:53: 🔓 Client released back to pool
+2025-08-04T12:45:53: 🔓 Client released back to pool
+2025-08-04T12:45:55: 📺 admin subscribed to: [ 'production', 'orders', 'machines' ]
+2025-08-04T12:45:55: 🔗 Client acquired from pool
+2025-08-04T12:45:55: 🔗 Client acquired from pool
+2025-08-04T12:45:55: 🔗 Client acquired from pool
+2025-08-04T12:45:55: 🔗 Client acquired from pool
+2025-08-04T12:45:55: 🔓 Client released back to pool
+2025-08-04T12:45:55: 🔓 Client released back to pool
+2025-08-04T12:45:55: 🔓 Client released back to pool
+2025-08-04T12:45:55: 🔓 Client released back to pool
+2025-08-04T12:45:55: 📺 admin subscribed to: [ 'dashboard', 'orders', 'machines', 'production', 'alerts' ]
+2025-08-04T12:45:55: 🔗 Client acquired from pool
+2025-08-04T12:45:55: 🔓 Client released back to pool
+2025-08-04T12:45:55: 🔗 Client acquired from pool
+2025-08-04T12:45:55: 🔗 Client acquired from pool
+2025-08-04T12:45:55: 🔓 Client released back to pool
+2025-08-04T12:45:55: 🔓 Client released back to pool
+2025-08-04T12:45:58: 🔗 Client acquired from pool
+2025-08-04T12:45:58: 🔗 Client acquired from pool
+2025-08-04T12:45:58: 🔗 Client acquired from pool
+2025-08-04T12:45:58: 🔓 Client released back to pool
+2025-08-04T12:45:58: 🔓 Client released back to pool
+2025-08-04T12:45:58: 🔓 Client released back to pool
+2025-08-04T12:46:26: 🔗 Client acquired from pool
+2025-08-04T12:46:26: 🔗 Client acquired from pool
+2025-08-04T12:46:26: 🔗 Client acquired from pool
+2025-08-04T12:46:26: 🔓 Client released back to pool
+2025-08-04T12:46:26: 🔓 Client released back to pool
+2025-08-04T12:46:26: 🔓 Client released back to pool
+2025-08-04T12:46:56: 🔗 Client acquired from pool
+2025-08-04T12:46:56: 🔓 Client released back to pool
+2025-08-04T12:46:56: 🔗 Client acquired from pool
+2025-08-04T12:46:56: 🔓 Client released back to pool
+2025-08-04T12:46:56: 🔗 Client acquired from pool
+2025-08-04T12:46:56: 🔓 Client released back to pool
+2025-08-04T12:47:16: 🔗 Client acquired from pool
+2025-08-04T12:47:16: 🔓 Client released back to pool
+2025-08-04T12:47:16: ✅ New PostgreSQL client connected
+2025-08-04T12:47:16: 🔗 Client acquired from pool
+2025-08-04T12:47:16: ✅ New PostgreSQL client connected
+2025-08-04T12:47:16: 🔗 Client acquired from pool
+2025-08-04T12:47:16: 🔓 Client released back to pool
+2025-08-04T12:47:16: 🔓 Client released back to pool
+2025-08-04T12:47:19: 🔌 WebSocket disconnected: admin
+2025-08-04T12:47:20: New WebSocket connection attempt
+2025-08-04T12:47:20: ✅ WebSocket authenticated: admin (admin)
+2025-08-04T12:47:23: 🔗 Client acquired from pool
+2025-08-04T12:47:23: 🔓 Client released back to pool
+2025-08-04T12:47:23: 🔗 Client acquired from pool
+2025-08-04T12:47:23: 🔓 Client released back to pool
+2025-08-04T12:47:23: 🔗 Client acquired from pool
+2025-08-04T12:47:23: 🔗 Client acquired from pool
+2025-08-04T12:47:23: 🔗 Client acquired from pool
+2025-08-04T12:47:23: 🔓 Client released back to pool
+2025-08-04T12:47:23: 🔓 Client released back to pool
+2025-08-04T12:47:23: 🔓 Client released back to pool
+2025-08-04T12:47:25: 🔗 Client acquired from pool
+2025-08-04T12:47:25: 🔗 Client acquired from pool
+2025-08-04T12:47:25: 🔓 Client released back to pool
+2025-08-04T12:47:25: 🔗 Client acquired from pool
+2025-08-04T12:47:25: 🔓 Client released back to pool
+2025-08-04T12:47:25: 🔓 Client released back to pool
+2025-08-04T12:47:25: 🔗 Client acquired from pool
+2025-08-04T12:47:25: 🔓 Client released back to pool
+2025-08-04T12:47:25: 🔗 Client acquired from pool
+2025-08-04T12:47:25: 🔓 Client released back to pool
+2025-08-04T12:47:25: 🔗 Client acquired from pool
+2025-08-04T12:47:25: 🔓 Client released back to pool
+2025-08-04T12:47:30: 🔗 Client acquired from pool
+2025-08-04T12:47:30: ❌ Database run error: error: syntax error at or near ","
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24)
+    at async /home/production-app/production-orders-app/server.js:2291:7 {
+  length: 90,
+  severity: 'ERROR',
+  code: '42601',
+  detail: undefined,
+  hint: undefined,
+  position: '58',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'scan.l',
+  line: '1244',
+  routine: 'scanner_yyerror'
+}
+2025-08-04T12:47:30: 🔓 Client released back to pool
+2025-08-04T12:47:30: Error completing setup: error: syntax error at or near ","
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24)
+    at async /home/production-app/production-orders-app/server.js:2291:7 {
+  length: 90,
+  severity: 'ERROR',
+  code: '42601',
+  detail: undefined,
+  hint: undefined,
+  position: '58',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'scan.l',
+  line: '1244',
+  routine: 'scanner_yyerror'
+}
+2025-08-04T12:47:31: 🔗 Client acquired from pool
+2025-08-04T12:47:31: ❌ Database run error: error: syntax error at or near ","
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24)
+    at async /home/production-app/production-orders-app/server.js:2291:7 {
+  length: 90,
+  severity: 'ERROR',
+  code: '42601',
+  detail: undefined,
+  hint: undefined,
+  position: '58',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'scan.l',
+  line: '1244',
+  routine: 'scanner_yyerror'
+}
+2025-08-04T12:47:31: 🔓 Client released back to pool
+2025-08-04T12:47:31: Error completing setup: error: syntax error at or near ","
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24)
+    at async /home/production-app/production-orders-app/server.js:2291:7 {
+  length: 90,
+  severity: 'ERROR',
+  code: '42601',
+  detail: undefined,
+  hint: undefined,
+  position: '58',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'scan.l',
+  line: '1244',
+  routine: 'scanner_yyerror'
+}
+2025-08-04T12:47:34: 🔗 Client acquired from pool
+2025-08-04T12:47:34: ❌ Database run error: error: syntax error at or near ","
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24)
+    at async /home/production-app/production-orders-app/server.js:2291:7 {
+  length: 90,
+  severity: 'ERROR',
+  code: '42601',
+  detail: undefined,
+  hint: undefined,
+  position: '58',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'scan.l',
+  line: '1244',
+  routine: 'scanner_yyerror'
+}
+2025-08-04T12:47:34: 🔓 Client released back to pool
+2025-08-04T12:47:34: Error completing setup: error: syntax error at or near ","
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24)
+    at async /home/production-app/production-orders-app/server.js:2291:7 {
+  length: 90,
+  severity: 'ERROR',
+  code: '42601',
+  detail: undefined,
+  hint: undefined,
+  position: '58',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'scan.l',
+  line: '1244',
+  routine: 'scanner_yyerror'
+}
+2025-08-04T12:47:35: 🔗 Client acquired from pool
+2025-08-04T12:47:35: 🔓 Client released back to pool
+2025-08-04T12:47:51: 🔗 Client acquired from pool
+2025-08-04T12:47:51: 🔓 Client released back to pool
+2025-08-04T12:47:51: 📡 Broadcast sent: order_created to channel: all (1 clients)
+2025-08-04T12:47:51: 🔗 Client acquired from pool
+2025-08-04T12:47:51: 🔓 Client released back to pool
+2025-08-04T12:47:52: 🔗 Client acquired from pool
+2025-08-04T12:47:52: 🔗 Client acquired from pool
+2025-08-04T12:47:52: 🔓 Client released back to pool
+2025-08-04T12:47:52: 🔓 Client released back to pool
+2025-08-04T12:47:52: 🔗 Client acquired from pool
+2025-08-04T12:47:52: 🔓 Client released back to pool
+2025-08-04T12:47:52: 🔗 Client acquired from pool
+2025-08-04T12:47:52: 🔓 Client released back to pool
+2025-08-04T12:47:52: 🔗 Client acquired from pool
+2025-08-04T12:47:52: 🔓 Client released back to pool
+2025-08-04T12:47:52: 🔗 Client acquired from pool
+2025-08-04T12:47:52: 🔓 Client released back to pool
+2025-08-04T12:47:53: 🔗 Client acquired from pool
+2025-08-04T12:47:53: 🔓 Client released back to pool
+2025-08-04T12:47:53: 🔗 Client acquired from pool
+2025-08-04T12:47:53: 🔓 Client released back to pool
+2025-08-04T12:47:54: 🔗 Client acquired from pool
+2025-08-04T12:47:54: 🔓 Client released back to pool
+2025-08-04T12:47:54: 🔗 Client acquired from pool
+2025-08-04T12:47:54: 🔓 Client released back to pool
+2025-08-04T12:47:54: 🔗 Client acquired from pool
+2025-08-04T12:47:54: 🔓 Client released back to pool
+2025-08-04T12:47:54: 🔗 Client acquired from pool
+2025-08-04T12:47:54: 🔓 Client released back to pool
+2025-08-04T12:47:54: 🔗 Client acquired from pool
+2025-08-04T12:47:54: 🔓 Client released back to pool
+2025-08-04T12:48:01: 🔗 Client acquired from pool
+2025-08-04T12:48:01: ❌ Database run error: error: syntax error at or near ","
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24)
+    at async /home/production-app/production-orders-app/server.js:2291:7 {
+  length: 90,
+  severity: 'ERROR',
+  code: '42601',
+  detail: undefined,
+  hint: undefined,
+  position: '58',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'scan.l',
+  line: '1244',
+  routine: 'scanner_yyerror'
+}
+2025-08-04T12:48:01: 🔓 Client released back to pool
+2025-08-04T12:48:01: Error completing setup: error: syntax error at or near ","
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24)
+    at async /home/production-app/production-orders-app/server.js:2291:7 {
+  length: 90,
+  severity: 'ERROR',
+  code: '42601',
+  detail: undefined,
+  hint: undefined,
+  position: '58',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'scan.l',
+  line: '1244',
+  routine: 'scanner_yyerror'
+}
+2025-08-04T12:48:03: 🔗 Client acquired from pool
+2025-08-04T12:48:03: ❌ Database run error: error: syntax error at or near ","
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24)
+    at async /home/production-app/production-orders-app/server.js:2291:7 {
+  length: 90,
+  severity: 'ERROR',
+  code: '42601',
+  detail: undefined,
+  hint: undefined,
+  position: '58',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'scan.l',
+  line: '1244',
+  routine: 'scanner_yyerror'
+}
+2025-08-04T12:48:03: 🔓 Client released back to pool
+2025-08-04T12:48:03: Error completing setup: error: syntax error at or near ","
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24)
+    at async /home/production-app/production-orders-app/server.js:2291:7 {
+  length: 90,
+  severity: 'ERROR',
+  code: '42601',
+  detail: undefined,
+  hint: undefined,
+  position: '58',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'scan.l',
+  line: '1244',
+  routine: 'scanner_yyerror'
+}
+2025-08-04T12:48:05: 🔗 Client acquired from pool
+2025-08-04T12:48:05: ❌ Database run error: error: syntax error at or near ","
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24)
+    at async /home/production-app/production-orders-app/server.js:2291:7 {
+  length: 90,
+  severity: 'ERROR',
+  code: '42601',
+  detail: undefined,
+  hint: undefined,
+  position: '58',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'scan.l',
+  line: '1244',
+  routine: 'scanner_yyerror'
+}
+2025-08-04T12:48:05: 🔓 Client released back to pool
+2025-08-04T12:48:05: Error completing setup: error: syntax error at or near ","
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24)
+    at async /home/production-app/production-orders-app/server.js:2291:7 {
+  length: 90,
+  severity: 'ERROR',
+  code: '42601',
+  detail: undefined,
+  hint: undefined,
+  position: '58',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'scan.l',
+  line: '1244',
+  routine: 'scanner_yyerror'
+}
+2025-08-04T12:48:54: 🔗 Client acquired from pool
+2025-08-04T12:48:54: 🔓 Client released back to pool
+2025-08-04T12:48:55: 🔗 Client acquired from pool
+2025-08-04T12:48:55: 🔓 Client released back to pool
+2025-08-04T12:48:56: 🔗 Client acquired from pool
+2025-08-04T12:48:56: 🔓 Client released back to pool
+2025-08-04T12:48:56: 🔗 Client acquired from pool
+2025-08-04T12:48:56: 🔓 Client released back to pool
+2025-08-04T12:48:56: 🔗 Client acquired from pool
+2025-08-04T12:48:56: 🔓 Client released back to pool
+2025-08-04T12:48:56: 🔗 Client acquired from pool
+2025-08-04T12:48:56: 🔓 Client released back to pool
+2025-08-04T12:48:56: ✅ New PostgreSQL client connected
+2025-08-04T12:48:56: 🔗 Client acquired from pool
+2025-08-04T12:48:56: 🔓 Client released back to pool
+2025-08-04T12:49:00: 🔗 Client acquired from pool
+2025-08-04T12:49:00: 🔓 Client released back to pool
+2025-08-04T12:49:14: 📺 admin subscribed to: [ 'dashboard', 'orders', 'machines', 'production', 'alerts' ]
+2025-08-04T12:49:14: 🔗 Client acquired from pool
+2025-08-04T12:49:14: 🔓 Client released back to pool
+2025-08-04T12:49:14: 🔗 Client acquired from pool
+2025-08-04T12:49:14: 🔗 Client acquired from pool
+2025-08-04T12:49:14: 🔓 Client released back to pool
+2025-08-04T12:49:14: 🔓 Client released back to pool
+2025-08-04T12:49:44: 🔗 Client acquired from pool
+2025-08-04T12:49:44: 🔓 Client released back to pool
+2025-08-04T12:49:44: 🔗 Client acquired from pool
+2025-08-04T12:49:44: 🔗 Client acquired from pool
+2025-08-04T12:49:44: 🔓 Client released back to pool
+2025-08-04T12:49:44: 🔓 Client released back to pool
