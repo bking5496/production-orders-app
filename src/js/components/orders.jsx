@@ -131,12 +131,7 @@ export default function ProductionOrdersSystem() {
     machine_id: null,
     operator_id: null,
     batch_number: '',
-    start_notes: '',
-    environmental_conditions: {
-      temperature: 25.0,
-      humidity: 60.0,
-      pressure: 1013.25
-    }
+    start_notes: ''
   });
 
   // Waste Capture Data
@@ -170,12 +165,6 @@ export default function ProductionOrdersSystem() {
   useWebSocketEvent('order_started', (data) => {
     console.log('▶️ Order production started:', data.data);
     showNotification(`Production started for Order ${data.data.order_number}`, 'success');
-    loadOrders();
-  }, []);
-
-  useWebSocketEvent('order_paused', (data) => {
-    console.log('⏸️ Order paused:', data.data);
-    showNotification(`Order ${data.data.order_number} paused: ${data.data.reason}`, 'warning');
     loadOrders();
   }, []);
 
@@ -304,7 +293,6 @@ export default function ProductionOrdersSystem() {
         machine_id: productionData.machine_id,
         operator_id: productionData.operator_id || 1,
         batch_number: productionData.batch_number || `BAT-${Date.now()}`,
-        environmental_conditions: productionData.environmental_conditions,
         start_notes: productionData.start_notes
       });
       
@@ -321,22 +309,6 @@ export default function ProductionOrdersSystem() {
     }
   };
 
-  const handlePauseProduction = async (order) => {
-    const reason = prompt('Please provide reason for pausing production:');
-    if (!reason) return;
-
-    try {
-      setLoading(true);
-      await API.post(`/orders/${order.id}/pause`, { reason });
-      showNotification(`Order ${order.order_number} paused`, 'warning');
-      loadOrders();
-    } catch (error) {
-      console.error('Error pausing production:', error);
-      showNotification(error.message || 'Failed to pause production', 'error');
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleResumeProduction = async (order) => {
     try {
@@ -415,12 +387,7 @@ export default function ProductionOrdersSystem() {
       machine_id: null,
       operator_id: null,
       batch_number: '',
-      start_notes: '',
-      environmental_conditions: {
-        temperature: 25.0,
-        humidity: 60.0,
-        pressure: 1013.25
-      }
+      start_notes: ''
     });
   };
 
@@ -464,7 +431,7 @@ export default function ProductionOrdersSystem() {
       // Machine filter
       const matchesMachine = filters.machine === 'all' || order.machine_id?.toString() === filters.machine;
       
-      // Archive filtering based on view mode
+      // Archive filtering based on view mode - keep stopped orders in active view
       const isArchived = order.status === 'completed' || order.status === 'cancelled';
       const matchesViewMode = viewMode === 'archive' ? isArchived : !isArchived;
       
@@ -794,14 +761,6 @@ export default function ProductionOrdersSystem() {
                       {order.status === 'in_progress' && (
                         <>
                           <TouchButton 
-                            onClick={() => handlePauseProduction(order)} 
-                            size="xs" 
-                            className="bg-orange-600 hover:bg-orange-700"
-                            icon={Pause}
-                          >
-                            Pause
-                          </TouchButton>
-                          <TouchButton 
                             onClick={() => handleStopProduction(order)} 
                             size="xs" 
                             className="bg-red-600 hover:bg-red-700"
@@ -812,7 +771,7 @@ export default function ProductionOrdersSystem() {
                         </>
                       )}
                       
-                      {order.status === 'paused' && (
+                      {order.status === 'stopped' && (
                         <TouchButton 
                           onClick={() => handleResumeProduction(order)} 
                           size="xs" 
@@ -823,7 +782,7 @@ export default function ProductionOrdersSystem() {
                         </TouchButton>
                       )}
                       
-                      {(order.status === 'in_progress' || order.status === 'paused') && (
+                      {(order.status === 'in_progress' || order.status === 'stopped') && (
                         <TouchButton 
                           onClick={() => {
                             setSelectedOrder(order);
@@ -947,14 +906,6 @@ export default function ProductionOrdersSystem() {
                           {order.status === 'in_progress' && (
                             <>
                               <Button 
-                                onClick={() => handlePauseProduction(order)} 
-                                size="sm"
-                                className="bg-orange-600 hover:bg-orange-700"
-                              >
-                                <Pause className="w-4 h-4 mr-1" />
-                                Pause
-                              </Button>
-                              <Button 
                                 onClick={() => handleStopProduction(order)} 
                                 size="sm"
                                 className="bg-red-600 hover:bg-red-700"
@@ -965,7 +916,7 @@ export default function ProductionOrdersSystem() {
                             </>
                           )}
                           
-                          {order.status === 'paused' && (
+                          {order.status === 'stopped' && (
                             <Button 
                               onClick={() => handleResumeProduction(order)} 
                               size="sm"
@@ -976,7 +927,7 @@ export default function ProductionOrdersSystem() {
                             </Button>
                           )}
                           
-                          {(order.status === 'in_progress' || order.status === 'paused') && (
+                          {(order.status === 'in_progress' || order.status === 'stopped') && (
                             <Button 
                               onClick={() => {
                                 setSelectedOrder(order);
@@ -1232,59 +1183,6 @@ export default function ProductionOrdersSystem() {
               </div>
             </div>
 
-            <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
-              <h4 className="font-medium text-gray-900 mb-3">Environmental Conditions</h4>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Temperature (°C)</label>
-                  <input
-                    type="number"
-                    step="0.1"
-                    value={productionData.environmental_conditions.temperature}
-                    onChange={(e) => setProductionData(prev => ({
-                      ...prev,
-                      environmental_conditions: {
-                        ...prev.environmental_conditions,
-                        temperature: parseFloat(e.target.value)
-                      }
-                    }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Humidity (%)</label>
-                  <input
-                    type="number"
-                    step="0.1"
-                    value={productionData.environmental_conditions.humidity}
-                    onChange={(e) => setProductionData(prev => ({
-                      ...prev,
-                      environmental_conditions: {
-                        ...prev.environmental_conditions,
-                        humidity: parseFloat(e.target.value)
-                      }
-                    }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Pressure (hPa)</label>
-                  <input
-                    type="number"
-                    step="0.01"
-                    value={productionData.environmental_conditions.pressure}
-                    onChange={(e) => setProductionData(prev => ({
-                      ...prev,
-                      environmental_conditions: {
-                        ...prev.environmental_conditions,
-                        pressure: parseFloat(e.target.value)
-                      }
-                    }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                  />
-                </div>
-              </div>
-            </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
