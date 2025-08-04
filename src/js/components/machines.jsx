@@ -10,6 +10,7 @@ export default function MachinesPage() {
   // State for storing the list of machines and UI status
   const [machines, setMachines] = useState([]);
   const [environments, setEnvironments] = useState([]);
+  const [machineTypes, setMachineTypes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [selectedEnvironment, setSelectedEnvironment] = useState('all');
@@ -59,25 +60,28 @@ export default function MachinesPage() {
     }
   }, [environments, formData.environment]);
 
-  // Machine types will be loaded from environments
+  // Machine types are now managed separately and filtered by environment
   const MACHINE_TYPES = useMemo(() => {
     const types = {};
     environments.forEach(env => {
-      if (env.machine_types) {
-        try {
-          types[env.code] = typeof env.machine_types === 'string' 
-            ? JSON.parse(env.machine_types) 
-            : env.machine_types;
-        } catch (e) {
-          console.error('Failed to parse machine types for environment:', env.name, e);
-          types[env.code] = [];
-        }
-      } else {
-        types[env.code] = [];
+      // Get machine types allowed for this environment
+      let allowedTypes = [];
+      try {
+        allowedTypes = typeof env.machine_types === 'string' 
+          ? JSON.parse(env.machine_types) 
+          : env.machine_types || [];
+      } catch (e) {
+        console.error('Failed to parse machine types for environment:', env.name, e);
+        allowedTypes = [];
       }
+      
+      // Filter managed machine types to only those allowed in this environment
+      types[env.code] = machineTypes
+        .filter(mt => allowedTypes.includes(mt.name))
+        .map(mt => ({ id: mt.id, name: mt.name, description: mt.description }));
     });
     return types;
-  }, [environments]);
+  }, [environments, machineTypes]);
 
   const STATUS_COLORS = {
     available: { bg: 'bg-green-50', text: 'text-green-600', border: 'border-green-200', icon: CheckCircle },
@@ -100,6 +104,17 @@ export default function MachinesPage() {
     } catch (error) {
       console.error('Failed to load environments:', error);
       showNotification('Failed to load environments', 'danger');
+    }
+  };
+
+  // Function to fetch machine types from the backend API
+  const loadMachineTypes = async () => {
+    try {
+      const data = await API.get('/machine-types');
+      setMachineTypes(data);
+    } catch (error) {
+      console.error('Failed to load machine types:', error);
+      showNotification('Failed to load machine types', 'danger');
     }
   };
 

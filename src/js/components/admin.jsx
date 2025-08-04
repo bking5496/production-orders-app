@@ -262,6 +262,64 @@ export default function AdminPanel() {
     setShowEnvironmentModal(true);
   };
 
+  // Machine types management functions
+  const handleCreateMachineType = async (e) => {
+    e.preventDefault();
+    try {
+      await API.post('/machine-types', machineTypeFormData);
+      setShowMachineTypeModal(false);
+      setMachineTypeFormData({ name: '', description: '', category: 'Production', specifications: {} });
+      loadMachineTypes();
+      showNotification('Machine type created successfully');
+    } catch (error) {
+      showNotification('Failed to create machine type: ' + (error.response?.data?.error || error.message), 'danger');
+    }
+  };
+
+  const handleEditMachineType = async (e) => {
+    e.preventDefault();
+    
+    if (!editingMachineType?.id) {
+      showNotification('Invalid machine type selected', 'danger');
+      return;
+    }
+    
+    try {
+      await API.put(`/machine-types/${editingMachineType.id}`, machineTypeFormData);
+      setShowMachineTypeModal(false);
+      setEditingMachineType(null);
+      setMachineTypeFormData({ name: '', description: '', category: 'Production', specifications: {} });
+      loadMachineTypes();
+      showNotification('Machine type updated successfully');
+    } catch (error) {
+      console.error('Edit machine type error:', error);
+      showNotification('Failed to update machine type: ' + (error.response?.data?.error || error.message), 'danger');
+    }
+  };
+
+  const handleDeleteMachineType = async (machineTypeId) => {
+    if (window.confirm('Are you sure you want to delete this machine type? This action cannot be undone.')) {
+      try {
+        await API.delete(`/machine-types/${machineTypeId}`);
+        loadMachineTypes();
+        showNotification('Machine type deleted successfully');
+      } catch (error) {
+        showNotification('Failed to delete machine type: ' + (error.response?.data?.error || error.message), 'danger');
+      }
+    }
+  };
+
+  const openEditMachineType = (machineType) => {
+    setEditingMachineType(machineType);
+    setMachineTypeFormData({
+      name: machineType.name,
+      description: machineType.description || '',
+      category: machineType.category || 'Production',
+      specifications: machineType.specifications || {}
+    });
+    setShowMachineTypeModal(true);
+  };
+
   // Filter users
   const filteredUsers = useMemo(() => {
     let filtered = users;
@@ -453,6 +511,7 @@ export default function AdminPanel() {
             { id: 'overview', label: 'Overview', icon: BarChart3 },
             { id: 'users', label: 'User Management', icon: Users },
             { id: 'environments', label: 'Environments', icon: Settings },
+            { id: 'machine-types', label: 'Machine Types', icon: Wrench },
             { id: 'settings', label: 'System Settings', icon: Settings },
             { id: 'tools', label: 'Admin Tools', icon: Wrench }
           ].map(tab => {
@@ -760,6 +819,102 @@ export default function AdminPanel() {
         </div>
       )}
 
+      {activeTab === 'machine-types' && (
+        <div className="space-y-6">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div>
+              <h2 className="text-xl font-semibold text-gray-800">Machine Types Management</h2>
+              <p className="text-gray-600">Manage machine types used throughout the production system</p>
+            </div>
+            
+            <Button onClick={() => {
+              setMachineTypeFormData({ name: '', description: '', category: 'Production', specifications: {} });
+              setEditingMachineType(null);
+              setShowMachineTypeModal(true);
+            }}>
+              <Plus className="w-4 h-4 mr-2" />
+              Add Machine Type
+            </Button>
+          </div>
+
+          {/* Machine Types Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {availableMachineTypes.length === 0 ? (
+              <Card className="col-span-full p-12 text-center">
+                <Wrench className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-gray-600 mb-2">No machine types configured</h3>
+                <p className="text-gray-500 mb-4">Create your first machine type to get started</p>
+                <Button onClick={() => {
+                  setMachineTypeFormData({ name: '', description: '', category: 'Production', specifications: {} });
+                  setEditingMachineType(null);
+                  setShowMachineTypeModal(true);
+                }}>
+                  <Plus className="w-4 h-4 mr-2" />
+                  Add First Machine Type
+                </Button>
+              </Card>
+            ) : availableMachineTypes.map(machineType => (
+              <Card key={machineType.id} className="p-6 hover:shadow-lg transition-all duration-300">
+                <div className="flex justify-between items-start mb-4">
+                  <div className="flex-1">
+                    <h3 className="text-lg font-semibold text-gray-800 mb-1">{machineType.name}</h3>
+                    <p className="text-sm text-gray-500 mb-2">{machineType.category}</p>
+                    {machineType.description && (
+                      <p className="text-sm text-gray-600">{machineType.description}</p>
+                    )}
+                  </div>
+                  <Badge variant="info">
+                    {machineType.machine_count || 0} machines
+                  </Badge>
+                </div>
+                
+                {/* Machines using this type */}
+                {machineType.machines && machineType.machines.length > 0 && (
+                  <div className="space-y-2 mb-4">
+                    <p className="text-sm font-medium text-gray-700">Machines:</p>
+                    <div className="flex flex-wrap gap-1">
+                      {machineType.machines.slice(0, 3).map((machine, index) => (
+                        <Badge key={index} variant="default" size="sm">{machine}</Badge>
+                      ))}
+                      {machineType.machines.length > 3 && (
+                        <Badge variant="default" size="sm">+{machineType.machines.length - 3} more</Badge>
+                      )}
+                    </div>
+                  </div>
+                )}
+                
+                {/* Action Buttons */}
+                <div className="flex gap-2 mt-4">
+                  <Button 
+                    onClick={() => openEditMachineType(machineType)}
+                    variant="outline"
+                    size="sm"
+                    className="flex-1"
+                  >
+                    <Edit3 className="w-4 h-4 mr-1" />
+                    Edit
+                  </Button>
+                  
+                  <Button 
+                    onClick={() => handleDeleteMachineType(machineType.id)}
+                    variant="outline"
+                    size="sm"
+                    className="text-red-600 hover:text-red-700 hover:border-red-300"
+                    disabled={machineType.machine_count > 0}
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
+                </div>
+                
+                {machineType.machine_count > 0 && (
+                  <p className="text-xs text-gray-500 mt-2">Cannot delete: machines are using this type</p>
+                )}
+              </Card>
+            ))}
+          </div>
+        </div>
+      )}
+
       {activeTab === 'settings' && (
         <div className="space-y-6">
           <div>
@@ -1016,6 +1171,72 @@ export default function AdminPanel() {
               <Button type="submit">
                 {editingEnvironment ? <Save className="w-4 h-4 mr-2" /> : <Plus className="w-4 h-4 mr-2" />}
                 {editingEnvironment ? 'Update Environment' : 'Create Environment'}
+              </Button>
+            </div>
+          </form>
+        </Modal>
+      )}
+
+      {/* Machine Type Modal */}
+      {showMachineTypeModal && (
+        <Modal title={editingMachineType ? "Edit Machine Type" : "Add New Machine Type"} onClose={() => {
+          setShowMachineTypeModal(false);
+          setEditingMachineType(null);
+          setMachineTypeFormData({ name: '', description: '', category: 'Production', specifications: {} });
+        }}>
+          <form onSubmit={editingMachineType ? handleEditMachineType : handleCreateMachineType} className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Machine Type Name</label>
+                <input 
+                  type="text" 
+                  placeholder="e.g. Bulk Line, Processing Unit" 
+                  value={machineTypeFormData.name}
+                  onChange={(e) => setMachineTypeFormData({...machineTypeFormData, name: e.target.value})} 
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                  required 
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
+                <select 
+                  value={machineTypeFormData.category}
+                  onChange={(e) => setMachineTypeFormData({...machineTypeFormData, category: e.target.value})} 
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
+                  <option value="Production">Production</option>
+                  <option value="Processing">Processing</option>
+                  <option value="Packaging">Packaging</option>
+                  <option value="Quality Control">Quality Control</option>
+                  <option value="Maintenance">Maintenance</option>
+                  <option value="Utility">Utility</option>
+                </select>
+              </div>
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
+              <textarea 
+                placeholder="Describe the machine type and its capabilities" 
+                value={machineTypeFormData.description}
+                onChange={(e) => setMachineTypeFormData({...machineTypeFormData, description: e.target.value})} 
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                rows="3"
+              />
+            </div>
+            
+            <div className="flex justify-end gap-3 pt-4">
+              <Button type="button" onClick={() => {
+                setShowMachineTypeModal(false);
+                setEditingMachineType(null);
+                setMachineTypeFormData({ name: '', description: '', category: 'Production', specifications: {} });
+              }} variant="outline">
+                Cancel
+              </Button>
+              <Button type="submit">
+                {editingMachineType ? <Save className="w-4 h-4 mr-2" /> : <Plus className="w-4 h-4 mr-2" />}
+                {editingMachineType ? 'Update Machine Type' : 'Create Machine Type'}
               </Button>
             </div>
           </form>
