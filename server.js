@@ -1737,15 +1737,95 @@ app.get('/api/export/:type',
   }
 );
 
-// Environment management
-app.get('/api/environments', authenticateToken, (req, res) => {
-  db.all('SELECT DISTINCT environment FROM machines ORDER BY environment', (err, rows) => {
-    if (err) {
-      return res.status(500).json({ error: 'Database error' });
-    }
-    res.json(rows.map(r => ({ name: r.environment })));
-  });
+// Environment management - Full CRUD operations
+app.get('/api/environments', authenticateToken, async (req, res) => {
+  try {
+    const environments = await dbAll('SELECT * FROM environments WHERE is_active = true ORDER BY name');
+    res.json(environments);
+  } catch (error) {
+    console.error('Error fetching environments:', error);
+    res.status(500).json({ error: 'Database error' });
+  }
 });
+
+app.post('/api/environments', 
+  authenticateToken,
+  requireRole(['admin']),
+  async (req, res) => {
+    const { name, code, description, color, machine_types } = req.body;
+    
+    try {
+      const result = await dbRun(`
+        INSERT INTO environments (name, code, description, color, machine_types, is_active, created_at, updated_at)
+        VALUES ($1, $2, $3, $4, $5, true, NOW(), NOW())
+        RETURNING id
+      `, [name, code, description || null, color || 'blue', machine_types || []]);
+      
+      res.json({ id: result.lastID, message: 'Environment created successfully' });
+    } catch (error) {
+      console.error('Error creating environment:', error);
+      if (error.message.includes('unique') || error.message.includes('UNIQUE')) {
+        return res.status(400).json({ error: 'Environment code already exists' });
+      }
+      res.status(500).json({ error: 'Database error' });
+    }
+  }
+);
+
+app.put('/api/environments/:id', 
+  authenticateToken,
+  requireRole(['admin']),
+  async (req, res) => {
+    const { id } = req.params;
+    const { name, code, description, color, machine_types } = req.body;
+    
+    try {
+      const result = await dbRun(`
+        UPDATE environments 
+        SET name = $1, code = $2, description = $3, color = $4, machine_types = $5, updated_at = NOW()
+        WHERE id = $6 AND is_active = true
+      `, [name, code, description || null, color || 'blue', machine_types || [], parseInt(id)]);
+      
+      if (result.changes === 0) {
+        return res.status(404).json({ error: 'Environment not found' });
+      }
+      
+      res.json({ message: 'Environment updated successfully' });
+    } catch (error) {
+      console.error('Error updating environment:', error);
+      if (error.message.includes('unique') || error.message.includes('UNIQUE')) {
+        return res.status(400).json({ error: 'Environment code already exists' });
+      }
+      res.status(500).json({ error: 'Database error' });
+    }
+  }
+);
+
+app.delete('/api/environments/:id', 
+  authenticateToken,
+  requireRole(['admin']),
+  async (req, res) => {
+    const { id } = req.params;
+    
+    try {
+      // Soft delete - mark as inactive instead of actual deletion
+      const result = await dbRun(`
+        UPDATE environments 
+        SET is_active = false, updated_at = NOW()
+        WHERE id = $1
+      `, [parseInt(id)]);
+      
+      if (result.changes === 0) {
+        return res.status(404).json({ error: 'Environment not found' });
+      }
+      
+      res.json({ message: 'Environment deleted successfully' });
+    } catch (error) {
+      console.error('Error deleting environment:', error);
+      res.status(500).json({ error: 'Database error' });
+    }
+  }
+);
 
 // File upload for bulk orders
 app.post('/api/upload-orders',

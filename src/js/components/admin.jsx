@@ -63,15 +63,40 @@ export default function AdminPanel() {
     else setLoading(true);
     
     try {
-      const [usersData, environmentsData] = await Promise.all([
-        API.get('/users'),
-        API.get('/environments').catch(() => []) // Fallback if environments endpoint doesn't exist
-      ]);
+      const usersData = await API.get('/users');
       setUsers(usersData);
+    } catch (error) {
+      console.error('Failed to load users:', error);
+      showNotification('Failed to load users', 'danger');
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
+  };
+
+  const loadEnvironments = async () => {
+    try {
+      const environmentsData = await API.get('/environments');
+      console.log('Loaded environments:', environmentsData);
       setEnvironments(environmentsData);
     } catch (error) {
+      console.error('Failed to load environments:', error);
+      showNotification('Failed to load environments', 'danger');
+      setEnvironments([]);
+    }
+  };
+
+  const loadAllData = async (showRefreshIndicator = false) => {
+    if (showRefreshIndicator) setRefreshing(true);
+    else setLoading(true);
+    
+    try {
+      await Promise.all([
+        loadUsers(false),
+        loadEnvironments()
+      ]);
+    } catch (error) {
       console.error('Failed to load data:', error);
-      showNotification('Failed to load users', 'danger');
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -83,7 +108,7 @@ export default function AdminPanel() {
   };
 
   useEffect(() => {
-    loadUsers();
+    loadAllData();
   }, []);
 
   // User management functions
@@ -93,7 +118,7 @@ export default function AdminPanel() {
       await API.post('/users', userFormData);
       setShowUserModal(false);
       setUserFormData({ username: '', email: '', password: '', role: 'operator', employee_code: '', company: 'Workforce' });
-      loadUsers();
+      loadEnvironments();
       showNotification('User created successfully');
     } catch (error) {
       showNotification('Failed to create user: ' + error.message, 'danger');
@@ -107,7 +132,7 @@ export default function AdminPanel() {
       setShowUserModal(false);
       setEditingUser(null);
       setUserFormData({ username: '', email: '', password: '', role: 'operator', employee_code: '', company: 'Workforce' });
-      loadUsers();
+      loadEnvironments();
       showNotification('User updated successfully');
     } catch (error) {
       showNotification('Failed to update user: ' + error.message, 'danger');
@@ -118,7 +143,7 @@ export default function AdminPanel() {
     if (window.confirm('Are you sure you want to delete this user?')) {
       try {
         await API.delete(`/users/${userId}`);
-        loadUsers();
+        loadEnvironments();
         showNotification('User deleted successfully');
       } catch (error) {
         showNotification('Failed to delete user: ' + error.message, 'danger');
@@ -146,7 +171,7 @@ export default function AdminPanel() {
       await API.post('/environments', environmentFormData);
       setShowEnvironmentModal(false);
       setEnvironmentFormData({ name: '', code: '', description: '', color: 'blue', machine_types: [] });
-      loadUsers();
+      loadEnvironments();
       showNotification('Environment created successfully');
     } catch (error) {
       showNotification('Failed to create environment: ' + error.message, 'danger');
@@ -155,15 +180,24 @@ export default function AdminPanel() {
 
   const handleEditEnvironment = async (e) => {
     e.preventDefault();
+    
+    // Validate that we have an environment to edit
+    if (!editingEnvironment || !editingEnvironment.id) {
+      showNotification('No environment selected for editing', 'danger');
+      return;
+    }
+    
     try {
+      console.log('Editing environment:', editingEnvironment.id, environmentFormData);
       await API.put(`/environments/${editingEnvironment.id}`, environmentFormData);
       setShowEnvironmentModal(false);
       setEditingEnvironment(null);
       setEnvironmentFormData({ name: '', code: '', description: '', color: 'blue', machine_types: [] });
-      loadUsers();
+      loadEnvironments(); // Reload environments after update
       showNotification('Environment updated successfully');
     } catch (error) {
-      showNotification('Failed to update environment: ' + error.message, 'danger');
+      console.error('Edit environment error:', error);
+      showNotification('Failed to update environment: ' + (error.response?.data?.error || error.message), 'danger');
     }
   };
 
@@ -171,7 +205,7 @@ export default function AdminPanel() {
     if (window.confirm('Are you sure you want to delete this environment? This action cannot be undone.')) {
       try {
         await API.delete(`/environments/${environmentId}`);
-        loadUsers();
+        loadEnvironments();
         showNotification('Environment deleted successfully');
       } catch (error) {
         showNotification('Failed to delete environment: ' + error.message, 'danger');

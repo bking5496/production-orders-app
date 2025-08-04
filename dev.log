@@ -21,3 +21,8 @@ NODE_ENV=production is not supported in the .env file. Only NODE_ENV=development
 12:45:08 PM [vite] (client) hmr update /src/js/components/orders.jsx
 12:45:25 PM [vite] (client) hmr update /src/js/components/orders.jsx
 12:46:11 PM [vite] (client) hmr update /src/js/components/orders.jsx
+1:03:50 PM [vite] (client) hmr update /src/js/components/admin.jsx
+1:04:10 PM [vite] (client) hmr update /src/js/components/admin.jsx
+1:04:17 PM [vite] (client) hmr update /src/js/components/admin.jsx
+1:04:27 PM [vite] (client) hmr update /src/js/components/admin.jsx
+1:04:34 PM [vite] (client) hmr update /src/js/components/admin.jsx
