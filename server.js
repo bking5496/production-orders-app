@@ -2173,14 +2173,14 @@ app.post('/api/orders/:id/prepare-materials',
       // Update workflow progress
       await dbRun(`
         INSERT INTO workflow_progress (order_id, stage, status, started_at, operator_id, notes, data)
-        VALUES ($1, 'materials', 'completed', NOW(), $2, $3, $4)
+        VALUES ($1::INTEGER, 'materials', 'completed', NOW(), $2::INTEGER, $3, $4::JSONB)
         ON CONFLICT (order_id, stage) DO UPDATE SET
           status = 'completed',
           completed_at = NOW(),
-          operator_id = $2,
+          operator_id = $2::INTEGER,
           notes = $3,
-          data = $4
-      `, [orderId, req.user.id, notes, JSON.stringify({ materials, checked_by })]);
+          data = $4::JSONB
+      `, [parseInt(orderId), parseInt(req.user.id), notes || null, JSON.stringify({ materials, checked_by })]);
       
       // Update order status
       await dbRun(`
@@ -2235,9 +2235,9 @@ app.post('/api/orders/:id/complete-setup',
       // Update workflow progress
       await dbRun(`
         UPDATE workflow_progress 
-        SET status = 'completed', completed_at = NOW(), operator_id = $2, notes = $3, data = $4
-        WHERE order_id = $1 AND stage = 'setup'
-      `, [orderId, req.user.id, notes, JSON.stringify({ checklist, setup_time })]);
+        SET status = ?, completed_at = NOW(), operator_id = ?, notes = ?, data = ?
+        WHERE order_id = ? AND stage = ?
+      `, ['completed', parseInt(req.user.id), notes || null, JSON.stringify({ checklist, setup_time }), parseInt(orderId), 'setup']);
       
       // Update order status
       await dbRun(`
@@ -2265,13 +2265,13 @@ app.post('/api/orders/:id/start-enhanced',
       // Update workflow progress
       await dbRun(`
         INSERT INTO workflow_progress (order_id, stage, status, started_at, operator_id, data)
-        VALUES ($1, 'production', 'in_progress', NOW(), $2, $3)
+        VALUES ($1::INTEGER, 'production', 'in_progress', NOW(), $2::INTEGER, $3::JSONB)
         ON CONFLICT (order_id, stage) DO UPDATE SET
           status = 'in_progress',
           started_at = NOW(),
-          operator_id = $2,
-          data = $3
-      `, [orderId, req.user.id, JSON.stringify({ batch_number, environmental_conditions, production_parameters })]);
+          operator_id = $2::INTEGER,
+          data = $3::JSONB
+      `, [parseInt(orderId), parseInt(req.user.id), JSON.stringify({ batch_number, environmental_conditions, production_parameters })]);
       
       // Update order status
       await dbRun(`
@@ -2340,14 +2340,14 @@ app.post('/api/orders/:id/complete-enhanced',
       // Update workflow progress
       await dbRun(`
         INSERT INTO workflow_progress (order_id, stage, status, completed_at, operator_id, notes, data)
-        VALUES ($1, 'completion', 'completed', NOW(), $2, $3, $4)
+        VALUES ($1::INTEGER, 'completion', 'completed', NOW(), $2::INTEGER, $3, $4::JSONB)
         ON CONFLICT (order_id, stage) DO UPDATE SET
           status = 'completed',
           completed_at = NOW(),
-          operator_id = $2,
+          operator_id = $2::INTEGER,
           notes = $3,
-          data = $4
-      `, [orderId, req.user.id, completion_notes, JSON.stringify({ actual_quantity, quality_approved, final_checks })]);
+          data = $4::JSONB
+      `, [parseInt(orderId), parseInt(req.user.id), completion_notes || null, JSON.stringify({ actual_quantity, quality_approved, final_checks })]);
       
       // Complete the order
       await dbRun(`
