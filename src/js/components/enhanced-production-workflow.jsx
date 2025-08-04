@@ -21,6 +21,7 @@ const EnhancedProductionWorkflow = ({ orderId, onClose }) => {
   const [activeStep, setActiveStep] = useState(0);
   const [error, setError] = useState('');
   const [showDowntimeModal, setShowDowntimeModal] = useState(false);
+  const [machines, setMachines] = useState([]);
 
   // Material preparation state (will be loaded from API)
   const [materials, setMaterials] = useState([]);
@@ -84,8 +85,21 @@ const EnhancedProductionWorkflow = ({ orderId, onClose }) => {
     }
   ];
 
+  // Load machines data
+  const loadMachines = async () => {
+    try {
+      const machinesData = await API.get('/machines');
+      setMachines(machinesData || []);
+    } catch (error) {
+      console.error('Error loading machines:', error);
+      // Set fallback machines if API fails
+      setMachines([]);
+    }
+  };
+
   useEffect(() => {
     loadOrderDetails();
+    loadMachines();
   }, [orderId]);
 
   const loadOrderDetails = async () => {
@@ -458,9 +472,11 @@ const EnhancedProductionWorkflow = ({ orderId, onClose }) => {
                         className="w-full border border-gray-300 rounded-lg px-3 py-2"
                       >
                         <option value="">Select Machine</option>
-                        <option value="1">Blending Machine A</option>
-                        <option value="2">Packaging Line B</option>
-                        <option value="3">Quality Station C</option>
+                        {machines.map(machine => (
+                          <option key={machine.id} value={machine.id}>
+                            {machine.name} ({machine.type})
+                          </option>
+                        ))}
                       </select>
                     </div>
                     <div>
