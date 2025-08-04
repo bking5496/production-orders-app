@@ -927,3 +927,154 @@ Materials preparation error: Error: Order not found or not in correct stage
 🔗 Client acquired from pool
 🔓 Client released back to pool
 🔌 WebSocket disconnected: admin
+✅ New PostgreSQL client connected
+🔗 Client acquired from pool
+🔓 Client released back to pool
+✅ New PostgreSQL client connected
+🔗 Client acquired from pool
+✅ New PostgreSQL client connected
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+New WebSocket connection attempt
+✅ WebSocket authenticated: admin (admin)
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔗 Client acquired from pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+📺 admin subscribed to: [ 'machines', 'production' ]
+🔗 Client acquired from pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+❌ Transaction error: Error: Order not found or not in correct stage
+    at /home/production-app/production-orders-app/enhanced-workflow-endpoints.js:36:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async Object.dbTransaction [as transaction] (/home/production-app/production-orders-app/postgresql/db-postgresql.js:135:24)
+    at async /home/production-app/production-orders-app/enhanced-workflow-endpoints.js:22:7
+🔓 Client released back to pool
+Materials preparation error: Error: Order not found or not in correct stage
+    at /home/production-app/production-orders-app/enhanced-workflow-endpoints.js:36:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async Object.dbTransaction [as transaction] (/home/production-app/production-orders-app/postgresql/db-postgresql.js:135:24)
+    at async /home/production-app/production-orders-app/enhanced-workflow-endpoints.js:22:7
+🔗 Client acquired from pool
+❌ Transaction error: Error: Order not found or not in correct stage
+    at /home/production-app/production-orders-app/enhanced-workflow-endpoints.js:36:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async Object.dbTransaction [as transaction] (/home/production-app/production-orders-app/postgresql/db-postgresql.js:135:24)
+    at async /home/production-app/production-orders-app/enhanced-workflow-endpoints.js:22:7
+🔓 Client released back to pool
+Materials preparation error: Error: Order not found or not in correct stage
+    at /home/production-app/production-orders-app/enhanced-workflow-endpoints.js:36:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async Object.dbTransaction [as transaction] (/home/production-app/production-orders-app/postgresql/db-postgresql.js:135:24)
+    at async /home/production-app/production-orders-app/enhanced-workflow-endpoints.js:22:7
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+❌ Transaction error: Error: Order not found or not in correct stage
+    at /home/production-app/production-orders-app/enhanced-workflow-endpoints.js:36:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async Object.dbTransaction [as transaction] (/home/production-app/production-orders-app/postgresql/db-postgresql.js:135:24)
+    at async /home/production-app/production-orders-app/enhanced-workflow-endpoints.js:22:7
+🔓 Client released back to pool
+Materials preparation error: Error: Order not found or not in correct stage
+    at /home/production-app/production-orders-app/enhanced-workflow-endpoints.js:36:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async Object.dbTransaction [as transaction] (/home/production-app/production-orders-app/postgresql/db-postgresql.js:135:24)
+    at async /home/production-app/production-orders-app/enhanced-workflow-endpoints.js:22:7
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+✅ New PostgreSQL client connected
+🔗 Client acquired from pool
+🔓 Client released back to pool
+New WebSocket connection attempt
+✅ WebSocket authenticated: admin (admin)
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔌 WebSocket disconnected: admin
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+New WebSocket connection attempt
+✅ WebSocket authenticated: admin (admin)
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔌 WebSocket disconnected: admin
+🔗 Client acquired from pool
+❌ Transaction error: Error: Order not found or not in correct stage
+    at /home/production-app/production-orders-app/enhanced-workflow-endpoints.js:36:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async Object.dbTransaction [as transaction] (/home/production-app/production-orders-app/postgresql/db-postgresql.js:135:24)
+    at async /home/production-app/production-orders-app/enhanced-workflow-endpoints.js:22:7
+🔓 Client released back to pool
+Materials preparation error: Error: Order not found or not in correct stage
+    at /home/production-app/production-orders-app/enhanced-workflow-endpoints.js:36:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async Object.dbTransaction [as transaction] (/home/production-app/production-orders-app/postgresql/db-postgresql.js:135:24)
+    at async /home/production-app/production-orders-app/enhanced-workflow-endpoints.js:22:7
+🔗 Client acquired from pool
+🔓 Client released back to pool
