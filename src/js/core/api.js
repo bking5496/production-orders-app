@@ -1,7 +1,9 @@
-// js/core/api.js - API Service Layer (with Cookie Support)
-class ApiService {
+// api.js - Enhanced API Service Layer with proper error handling
+class EnhancedApiService {
   constructor() {
     this.baseURL = window.APP_CONFIG?.API_BASE || '/api';
+    this.retryAttempts = 3;
+    this.retryDelay = 1000;
   }
   
   getHeaders() {
@@ -18,171 +20,380 @@ class ApiService {
   
   async handleResponse(response) {
     if (!response.ok) {
+      // Handle authentication errors
       if (response.status === 401 || response.status === 403) {
-        // Broadcast a logout event if unauthorized
+        // Clear token and redirect to login
+        localStorage.removeItem('token');
         if (window.EventBus) {
           window.EventBus.emit('auth:logout');
         }
-        throw new Error('Session expired or unauthorized. Please login again.');
+        throw new Error('Session expired. Please login again.');
       }
-      const errorData = await response.json().catch(() => ({ error: 'Request failed' }));
       
-      // Create error with response structure for better error handling
+      // Parse error response
+      let errorData;
+      try {
+        errorData = await response.json();
+      } catch {
+        errorData = { error: 'Request failed', success: false };
+      }
+      
+      // Create structured error
       const error = new Error(errorData.error || errorData.message || 'Request failed');
       error.response = {
         status: response.status,
-        data: errorData
+        data: errorData,
+        success: errorData.success || false
       };
       throw error;
     }
     
-    // Handle responses that might not have a JSON body
+    // Handle empty responses
     if (response.headers.get('content-length') === '0') {
-        return null;
+      return { success: true, data: null };
     }
     
-    // Get the response text first to check if it's HTML
-    const text = await response.text();
-    
-    // Check if we received HTML instead of JSON
-    if (text.includes('<!DOCTYPE') || text.includes('<html>')) {
-      console.error('🚨 Received HTML response instead of JSON:', text.substring(0, 200) + '...');
-      throw new Error('Server returned HTML instead of JSON. This usually means authentication failed or there\'s a server routing issue.');
-    }
-    
-    // Try to parse as JSON
     try {
-      return JSON.parse(text);
-    } catch (error) {
-      console.error('🚨 Failed to parse JSON response:', text.substring(0, 200) + '...');
-      throw new Error(`Failed to parse server response: ${error.message}`);
+      const data = await response.json();
+      return data;
+    } catch {
+      return { success: true, data: null };
     }
   }
   
-  // Central request method with cookie support
+  // Retry logic for failed requests
+  async retryRequest(requestFn, attempts = this.retryAttempts) {
+    for (let i = 0; i < attempts; i++) {
+      try {
+        return await requestFn();
+      } catch (error) {
+        // Don't retry authentication errors
+        if (error.response?.status === 401 || error.response?.status === 403) {
+          throw error;
+        }
+        
+        // Don't retry validation errors
+        if (error.response?.status === 400) {
+          throw error;
+        }
+        
+        // If this is the last attempt, throw the error
+        if (i === attempts - 1) {
+          throw error;
+        }
+        
+        // Wait before retrying
+        await new Promise(resolve => setTimeout(resolve, this.retryDelay * (i + 1)));
+        console.warn(`API request failed, retrying... (${i + 1}/${attempts})`);
+      }
+    }
+  }
+  
+  // Central request method with retry logic
   async request(endpoint, options = {}) {
     const url = `${this.baseURL}${endpoint}`;
-    const headers = this.getHeaders();
-    
-    // Debug logging
-    console.log('🌐 API Request:', {
-      method: options.method || 'GET',
-      url: url,
-      hasAuthHeader: !!headers.Authorization,
-      authHeader: headers.Authorization ? headers.Authorization.substring(0, 20) + '...' : 'None'
-    });
-    
     const config = {
       ...options,
-      headers,
-      // This is the crucial line that enables sending cookies
-      credentials: 'include',
+      headers: { ...this.getHeaders(), ...options.headers },
+      credentials: 'include', // Include cookies for authentication
     };
     
-    // Debug logging for API requests
-    console.log('🌐 API Request:', {
-      method: config.method || 'GET',
-      url,
-      hasAuthHeader: !!headers.Authorization,
-      authHeader: headers.Authorization ? `${headers.Authorization.substring(0, 20)}...` : 'None'
+    return this.retryRequest(async () => {
+      try {
+        const response = await fetch(url, config);
+        return this.handleResponse(response);
+      } catch (error) {
+        console.error('API request failed:', {
+          url,
+          method: config.method || 'GET',
+          error: error.message
+        });
+        throw error;
+      }
     });
-    
-    try {
-      const response = await fetch(url, config);
-      console.log('📡 API Response:', {
-        status: response.status,
-        statusText: response.statusText,
-        contentType: response.headers.get('content-type')
-      });
-      return this.handleResponse(response);
-    } catch (error) {
-      console.error('❌ API request failed:', error);
-      throw error;
-    }
   }
   
-  // --- API Methods ---
-  get(endpoint, params = {}) {
-    const queryString = new URLSearchParams(params).toString();
+  // HTTP Methods with proper parameter handling
+  async get(endpoint, params = {}) {
+    const queryString = new URLSearchParams(
+      Object.entries(params).filter(([_, value]) => value !== null && value !== undefined)
+    ).toString();
     const url = queryString ? `${endpoint}?${queryString}` : endpoint;
     return this.request(url, { method: 'GET' });
   }
   
-  post(endpoint, data = {}) {
+  async post(endpoint, data = {}) {
     return this.request(endpoint, {
       method: 'POST',
       body: JSON.stringify(data),
     });
   }
   
-  put(endpoint, data = {}) {
+  async put(endpoint, data = {}) {
     return this.request(endpoint, {
       method: 'PUT',
       body: JSON.stringify(data),
     });
   }
   
-  patch(endpoint, data = {}) {
+  async patch(endpoint, data = {}) {
     return this.request(endpoint, {
       method: 'PATCH',
       body: JSON.stringify(data),
     });
   }
   
-  delete(endpoint) {
+  async delete(endpoint) {
     return this.request(endpoint, {
       method: 'DELETE',
     });
   }
   
-  // --- Auth Endpoints ---
-  login(username, password) {
-    return this.post('/auth/login', { username, password });
-  }
-  
-  logout() {
-    return this.post('/auth/logout');
-  }
-  
-  verifySession() {
-    return this.get('/auth/verify-session');
-  }
-  
-  // --- Other Endpoints (Examples) ---
-  getUsers() { return this.get('/users'); }
-  getMachines() { return this.get('/machines'); }
-  getOrders() { return this.get('/orders'); }
-  
-  // Debug method to test authentication
-  async testAuth() {
-    const token = localStorage.getItem('token');
-    console.log('🔐 Current token:', token ? `${token.substring(0, 50)}...` : 'No token');
+  // File upload with progress tracking
+  async uploadFile(endpoint, file, onProgress = null) {
+    const formData = new FormData();
+    formData.append('file', file);
     
-    if (!token) {
-      console.log('❌ No token found in localStorage');
-      return false;
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      
+      // Add authorization header
+      const token = localStorage.getItem('token');
+      if (token) {
+        xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+      }
+      
+      // Track upload progress
+      if (onProgress) {
+        xhr.upload.addEventListener('progress', (e) => {
+          if (e.lengthComputable) {
+            const percentComplete = (e.loaded / e.total) * 100;
+            onProgress(percentComplete);
+          }
+        });
+      }
+      
+      xhr.addEventListener('load', () => {
+        if (xhr.status >= 200 && xhr.status < 300) {
+          try {
+            const response = JSON.parse(xhr.responseText);
+            resolve(response);
+          } catch {
+            resolve({ success: true });
+          }
+        } else {
+          reject(new Error(`Upload failed: ${xhr.statusText}`));
+        }
+      });
+      
+      xhr.addEventListener('error', () => {
+        reject(new Error('Upload failed'));
+      });
+      
+      xhr.open('POST', `${this.baseURL}${endpoint}`);
+      xhr.send(formData);
+    });
+  }
+  
+  // ==================== Enhanced API Methods ====================
+  
+  // Authentication
+  async login(username, password) {
+    const response = await this.post('/auth/login', { username, password });
+    if (response.success && response.data?.token) {
+      localStorage.setItem('token', response.data.token);
     }
-    
+    return response;
+  }
+  
+  async logout() {
     try {
-      const response = await this.get('/auth/verify-session');
-      console.log('✅ Auth test successful:', response);
-      return true;
-    } catch (error) {
-      console.log('❌ Auth test failed:', error.message);
-      return false;
+      await this.post('/auth/logout');
+    } finally {
+      localStorage.removeItem('token');
+      if (window.EventBus) {
+        window.EventBus.emit('auth:logout');
+      }
     }
   }
   
-  // ... include all other specific methods from your original file
+  async verifySession() {
+    return this.post('/auth/verify');
+  }
+  
+  async getWebSocketToken() {
+    return this.get('/auth/websocket-token');
+  }
+  
+  // Orders
+  async getOrders(filters = {}) {
+    return this.get('/orders', filters);
+  }
+  
+  async createOrder(orderData) {
+    return this.post('/orders', orderData);
+  }
+  
+  async updateOrder(id, updates) {
+    return this.put(`/orders/${id}`, updates);
+  }
+  
+  async deleteOrder(id) {
+    return this.delete(`/orders/${id}`);
+  }
+  
+  async startProduction(orderId, machineId) {
+    return this.post(`/orders/${orderId}/start`, { machine_id: machineId });
+  }
+  
+  async stopProduction(orderId, reason, notes = '') {
+    return this.post(`/orders/${orderId}/stop`, { reason, notes });
+  }
+  
+  async pauseProduction(orderId, reason) {
+    return this.post(`/orders/${orderId}/pause`, { reason });
+  }
+  
+  async resumeProduction(orderId) {
+    return this.post(`/orders/${orderId}/resume`);
+  }
+  
+  async completeProduction(orderId, data = {}) {
+    return this.post(`/orders/${orderId}/complete`, data);
+  }
+  
+  // Machines
+  async getMachines(environment = null) {
+    return this.get('/machines', environment ? { environment } : {});
+  }
+  
+  async createMachine(machineData) {
+    return this.post('/machines', machineData);
+  }
+  
+  async updateMachine(id, updates) {
+    return this.put(`/machines/${id}`, updates);
+  }
+  
+  async updateMachineStatus(id, status) {
+    return this.patch(`/machines/${id}/status`, { status });
+  }
+  
+  async deleteMachine(id) {
+    return this.delete(`/machines/${id}`);
+  }
+  
+  async getMachineStats() {
+    return this.get('/machines/stats');
+  }
+  
+  // Users
+  async getUsers() {
+    return this.get('/users');
+  }
+  
+  async createUser(userData) {
+    return this.post('/users', userData);
+  }
+  
+  async updateUser(id, updates) {
+    return this.put(`/users/${id}`, updates);
+  }
+  
+  // Production Data
+  async getProductionStatus() {
+    return this.get('/production/status');
+  }
+  
+  async getMachineStatus() {
+    return this.get('/machines/status');
+  }
+  
+  async getActiveOrders() {
+    return this.get('/orders/active');
+  }
+  
+  async getProductionFloorOverview() {
+    return this.get('/production/floor-overview');
+  }
+  
+  // Analytics
+  async getAnalyticsSummary(filters = {}) {
+    return this.get('/analytics/summary', filters);
+  }
+  
+  async getDowntimeAnalytics(filters = {}) {
+    return this.get('/analytics/downtime', filters);
+  }
+  
+  async getDowntimeReports(filters = {}) {
+    return this.get('/reports/downtime', filters);
+  }
+  
+  // Labor Management
+  async getLaborAssignments(date = null) {
+    return this.get('/planner/assignments', date ? { date } : {});
+  }
+  
+  async createLaborAssignment(assignmentData) {
+    return this.post('/planner/assignments', assignmentData);
+  }
+  
+  async deleteLaborAssignment(id) {
+    return this.delete(`/planner/assignments/${id}`);
+  }
+  
+  async getSupervisors(date = null, shift = null) {
+    const params = {};
+    if (date) params.date = date;
+    if (shift) params.shift = shift;
+    return this.get('/planner/supervisors', params);
+  }
+  
+  async addSupervisor(supervisorData) {
+    return this.post('/planner/supervisors', supervisorData);
+  }
+  
+  async deleteSupervisor(id) {
+    return this.delete(`/planner/supervisors/${id}`);
+  }
+  
+  // Environment Management
+  async getEnvironments() {
+    return this.get('/environments');
+  }
+  
+  // Export/Import
+  async exportData(type, filters = {}) {
+    const response = await fetch(`${this.baseURL}/export/${type}?${new URLSearchParams(filters)}`, {
+      headers: this.getHeaders(),
+      credentials: 'include'
+    });
+    
+    if (!response.ok) {
+      throw new Error('Export failed');
+    }
+    
+    return response.blob();
+  }
+  
+  async uploadOrders(file, onProgress = null) {
+    return this.uploadFile('/upload-orders', file, onProgress);
+  }
+  
+  // Health Check
+  async checkHealth() {
+    return this.get('/health');
+  }
 }
 
-// Create instance
-const apiInstance = new ApiService();
+// Create enhanced instance
+const enhancedApiInstance = new EnhancedApiService();
 
 // Attach to window for backward compatibility
-window.API = apiInstance;
+window.API = enhancedApiInstance;
 
 // ES6 exports
-export { ApiService };
-export const API = apiInstance;
-export default apiInstance;
+export { EnhancedApiService };
+export const API = enhancedApiInstance;
+export default enhancedApiInstance;

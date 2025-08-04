@@ -463,12 +463,12 @@ app.put('/api/orders/:id',
     const { id } = req.params;
     const updates = req.body;
     
-    const fields = Object.keys(updates).map(key => `${key} = ?`).join(', ');
+    const fields = Object.keys(updates).map((key, i) => `${key} = ${i + 1}`).join(', ');
     const values = Object.values(updates);
     values.push(id);
     
     db.run(
-      `UPDATE production_orders SET ${fields} WHERE id = ?`,
+      `UPDATE production_orders SET ${fields} WHERE id = ${values.length}`,
       values,
       function(err) {
         if (err) {
@@ -487,7 +487,7 @@ app.delete('/api/orders/:id',
   (req, res) => {
     const { id } = req.params;
     
-    db.run('DELETE FROM production_orders WHERE id = ?', [id], function(err) {
+    db.run('DELETE FROM production_orders WHERE id = $1', [id], function(err) {
       if (err) {
         return res.status(500).json({ error: 'Database error' });
       }
@@ -696,7 +696,7 @@ app.post('/api/users',
       const hashedPassword = await bcrypt.hash(password, 10);
       
       db.run(
-        `INSERT INTO users (username, email, password_hash, role) VALUES (?, ?, ?, ?)`,
+        `INSERT INTO users (username, email, password_hash, role) VALUES ($1, $2, $3, $4)`,
         [username, email, hashedPassword, role],
         function(err) {
           if (err) {
@@ -723,7 +723,7 @@ app.get('/api/machines', authenticateToken, (req, res) => {
   const params = [];
 
   if (environment) {
-    query += ' WHERE environment = ?';
+    query += ' WHERE environment = $1';
     params.push(environment);
   }
 
@@ -755,7 +755,7 @@ app.post('/api/machines',
 
     db.run(
       `INSERT INTO machines (name, type, environment, capacity, status, created_at, updated_at) 
-       VALUES (?, ?, ?, ?, 'available', NOW(), NOW())`,
+       VALUES ($1, $2, $3, $4, 'available', NOW(), NOW())`,
       [name, type, environment, capacity],
       function(err) {
         if (err) {
