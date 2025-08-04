@@ -16,12 +16,20 @@ const AuthProvider = ({ children }) => {
     try {
       const token = localStorage.getItem('token');
       if (!token) {
+        console.log('🔐 No token found in localStorage');
+        setUser(null);
+        setIsAuthenticated(false);
         setLoading(false);
         return;
       }
       
-      const { user: sessionUser } = await window.API.verifySession();
+      console.log('🔐 Token found, verifying session...');
+      const response = await window.API.verifySession();
+      
+      // Handle the response structure properly
+      const sessionUser = response?.data?.user || response?.user;
       if (sessionUser) {
+        console.log('🔐 Session verified successfully:', sessionUser.username);
         setUser(sessionUser);
         setIsAuthenticated(true);
         // We can still keep user data in localStorage for quick UI access
@@ -36,12 +44,17 @@ const AuthProvider = ({ children }) => {
             console.warn('⚠️ WebSocket connection failed for existing session:', error.message);
           }
         }
+      } else {
+        console.log('🔐 Session verification failed - no user data returned');
+        throw new Error('No user data returned from session verification');
       }
     } catch (error) {
       // If the API call fails, it means no valid session exists
+      console.log('🔐 Session verification failed:', error.message);
       setUser(null);
       setIsAuthenticated(false);
       localStorage.removeItem('user_data');
+      localStorage.removeItem('token');
     } finally {
       setLoading(false);
     }

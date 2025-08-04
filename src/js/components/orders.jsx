@@ -93,6 +93,12 @@ export default function OrdersPage() {
     showNotification(`Downtime reported on Machine ${data.data.machine_id}: ${data.data.primary_cause}`, 'error');
   }, []);
 
+  useWebSocketEvent('order_assigned', (data) => {
+    console.log('🔧 Order assigned to machine:', data.data);
+    showNotification(`Order ${data.data.orderId} assigned to machine and status updated`, 'success');
+    loadOrders(); // Refresh orders to show updated status and machine assignment
+  }, []);
+
   const loadOrders = async () => {
     try {
       if (!refreshing) setLoading(true);

@@ -2521,10 +2521,10 @@ app.post('/api/orders/:id/complete-setup',
         WHERE order_id = $5 AND stage = $6
       `, ['completed', parseInt(req.user.id), notes || null, JSON.stringify({ checklist, setup_time }), parseInt(orderId), 'setup']);
       
-      // Update order status and assign machine
+      // Update order status to in_progress and assign machine
       await client.query(`
         UPDATE production_orders 
-        SET machine_id = $1, setup_complete_time = NOW(), updated_at = NOW()
+        SET machine_id = $1, setup_complete_time = NOW(), status = 'in_progress', updated_at = NOW()
         WHERE id = $2
       `, [machine_id ? parseInt(machine_id) : null, parseInt(orderId)]);
       
@@ -2538,6 +2538,14 @@ app.post('/api/orders/:id/complete-setup',
       }
       
       await client.end();
+      
+      // Broadcast status update via WebSocket
+      broadcastToClients('order_assigned', {
+        orderId: parseInt(orderId),
+        machineId: machine_id ? parseInt(machine_id) : null,
+        status: 'in_progress',
+        message: `Order ${orderId} assigned to machine and status updated to in_progress`
+      });
       
       res.json({ success: true, message: 'Setup completed successfully' });
     } catch (error) {

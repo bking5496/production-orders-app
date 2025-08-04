@@ -22,8 +22,10 @@ class EnhancedApiService {
     if (!response.ok) {
       // Handle authentication errors
       if (response.status === 401 || response.status === 403) {
+        console.log('🔐 Authentication failed - clearing tokens and triggering logout');
         // Clear token and redirect to login
         localStorage.removeItem('token');
+        localStorage.removeItem('user_data');
         if (window.EventBus) {
           window.EventBus.emit('auth:logout');
         }
