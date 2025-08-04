@@ -1152,7 +1152,13 @@ app.post('/api/orders/:id/start',
              updated_at = NOW()
          WHERE id = $5 AND status IN ('pending', 'stopped')
          RETURNING *`,
-        [machine_id, operator_id || req.user.id, batch_number, start_notes || null, id]
+        [
+          machine_id, 
+          operator_id || req.user.id, 
+          batch_number || null, 
+          start_notes ? String(start_notes) : null, 
+          parseInt(id)
+        ]
       );
       
       if (orderResult.rows.length === 0) {
@@ -1311,7 +1317,11 @@ app.post('/api/orders/:id/stop',
              updated_at = NOW()
          WHERE id = $3 AND status IN ('pending', 'in_progress')
          RETURNING *`,
-        [reason, notes || null, id]
+        [
+          String(reason), 
+          notes ? String(notes) : null, 
+          parseInt(id)
+        ]
       );
       
       if (orderResult.rows.length === 0) {

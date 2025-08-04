@@ -1367,9 +1367,9 @@ export default function ProductionOrdersSystem() {
             setSelectedOrder(null);
           }}
           size="large"
-          className="max-w-5xl mx-auto my-8"
+          className="max-w-7xl mx-auto my-8 w-[95vw]"
         >
-          <div className="p-8 bg-white min-h-[600px] max-h-[80vh] overflow-y-auto">
+          <div className="p-12 bg-white min-h-[600px] max-h-[80vh] overflow-y-auto">
             {/* Enhanced Header */}
             <div className="mb-8 pb-6 border-b-2 border-blue-200 bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-lg">
               <div className="flex items-center justify-between">
@@ -1544,24 +1544,27 @@ export default function ProductionOrdersSystem() {
 
             {/* Production Notes */}
             {selectedOrder.notes && (
-              <div className="mb-6">
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">Production Notes</h3>
-                <div className="bg-gray-50 border border-gray-300 p-4 rounded">
-                  <p className="text-gray-900 whitespace-pre-wrap">{selectedOrder.notes}</p>
+              <div className="mb-10">
+                <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
+                  <div className="w-1 h-8 bg-green-600 mr-4 rounded"></div>
+                  Production Notes
+                </h3>
+                <div className="bg-gradient-to-r from-green-50 to-blue-50 border-2 border-green-200 p-6 rounded-lg shadow-lg">
+                  <p className="text-gray-900 whitespace-pre-wrap text-lg leading-relaxed">{selectedOrder.notes}</p>
                 </div>
               </div>
             )}
 
-            {/* Close Button */}
-            <div className="flex justify-end pt-4 border-t border-gray-200">
+            {/* Enhanced Close Button */}
+            <div className="flex justify-center pt-8 border-t-2 border-gray-300">
               <Button 
                 onClick={() => {
                   setShowDetailsModal(false);
                   setSelectedOrder(null);
                 }}
-                className="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2"
+                className="bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white px-12 py-4 text-lg font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
               >
-                Close
+                Close Details
               </Button>
             </div>
           </div>
