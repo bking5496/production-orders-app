@@ -284,6 +284,7 @@ export default function MachinesPage() {
     }
     
     loadEnvironments(); // Load environments first
+    loadMachineTypes(); // Load managed machine types
     loadMachines(); // Fetch data immediately
     loadEmployees(); // Load employees for crew assignments
     const interval = setInterval(loadMachines, 30000); // And refresh every 30 seconds
@@ -765,7 +766,7 @@ export default function MachinesPage() {
               >
                 <option value="">Select machine type...</option>
                 {(MACHINE_TYPES[formData.environment] || []).map(type => 
-                  <option key={type} value={type}>{type}</option>
+                  <option key={type.id || type.name} value={type.name || type}>{type.name || type}</option>
                 )}
               </select>
             </div>
@@ -848,7 +849,7 @@ export default function MachinesPage() {
                 required
               >
                 {(MACHINE_TYPES[formData.environment] || []).map(type => 
-                  <option key={type} value={type}>{type}</option>
+                  <option key={type.id || type.name} value={type.name || type}>{type.name || type}</option>
                 )}
               </select>
             </div>
