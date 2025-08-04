@@ -28,6 +28,9 @@ export default function AdminPanel() {
     color: 'blue',
     machine_types: []
   });
+  
+  // Machine types state
+  const [availableMachineTypes, setAvailableMachineTypes] = useState([]);
 
   // Modal states
   const [showUserModal, setShowUserModal] = useState(false);
@@ -86,6 +89,17 @@ export default function AdminPanel() {
     }
   };
 
+  const loadMachineTypes = async () => {
+    try {
+      const machineTypesData = await API.get('/machine-types');
+      console.log('Loaded machine types:', machineTypesData);
+      setAvailableMachineTypes(machineTypesData);
+    } catch (error) {
+      console.error('Failed to load machine types:', error);
+      setAvailableMachineTypes([]);
+    }
+  };
+
   const loadAllData = async (showRefreshIndicator = false) => {
     if (showRefreshIndicator) setRefreshing(true);
     else setLoading(true);
@@ -93,7 +107,8 @@ export default function AdminPanel() {
     try {
       await Promise.all([
         loadUsers(false),
-        loadEnvironments()
+        loadEnvironments(),
+        loadMachineTypes()
       ]);
     } catch (error) {
       console.error('Failed to load data:', error);

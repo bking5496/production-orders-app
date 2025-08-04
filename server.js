@@ -1827,6 +1827,34 @@ app.delete('/api/environments/:id',
   }
 );
 
+// Get machine types for environments configuration
+app.get('/api/machine-types', authenticateToken, async (req, res) => {
+  try {
+    const client = await pool.connect();
+    try {
+      // Get distinct machine types with machine counts
+      const result = await client.query(`
+        SELECT 
+          type,
+          COUNT(*) as machine_count,
+          array_agg(name ORDER BY name) as machines,
+          array_agg(DISTINCT environment) as environments
+        FROM machines 
+        WHERE type IS NOT NULL AND type <> ''
+        GROUP BY type 
+        ORDER BY type
+      `);
+      
+      res.json(result.rows);
+    } finally {
+      client.release();
+    }
+  } catch (error) {
+    console.error('Error fetching machine types:', error);
+    res.status(500).json({ error: 'Failed to fetch machine types' });
+  }
+});
+
 // File upload for bulk orders
 app.post('/api/upload-orders',
   authenticateToken,
