@@ -8,6 +8,7 @@ import {
 import API from '../core/api';
 import Time from '../core/time';
 import { Modal, Card, Button, Badge } from './ui-components.jsx';
+import DowntimeReport from './downtime-report.jsx';
 import { useAutoConnect } from '../core/websocket-hooks.js';
 import { WebSocketStatusCompact } from './websocket-status.jsx';
 

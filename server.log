@@ -2674,3 +2674,17 @@ New WebSocket connection attempt
 ✅ New PostgreSQL client connected
 🔗 Client acquired from pool
 🔓 Client released back to pool
+🔗 Client acquired from pool
+🔗 Client acquired from pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+SIGTERM received, closing server...
+📺 admin subscribed to: [ 'machines', 'production' ]
+📺 admin subscribed to: [ 'machines', 'production' ]
+📺 admin subscribed to: [ 'machines', 'production' ]
+📺 admin subscribed to: [ 'production', 'orders', 'machines' ]
+📺 admin subscribed to: [ 'machines', 'production' ]
+📺 admin subscribed to: [ 'machines', 'production' ]
+Server closed

@@ -48,13 +48,14 @@ const EnhancedProductionWorkflow = ({ orderId, onClose }) => {
   const [qualityChecks, setQualityChecks] = useState([]);
 
   const workflowSteps = [
-    { 
-      id: 'materials', 
-      title: 'Material Preparation', 
-      icon: Package, 
-      description: 'Verify and allocate raw materials',
-      status: 'pending'
-    },
+    // Material Preparation temporarily disabled
+    // { 
+    //   id: 'materials', 
+    //   title: 'Material Preparation', 
+    //   icon: Package, 
+    //   description: 'Verify and allocate raw materials',
+    //   status: 'pending'
+    // },
     { 
       id: 'setup', 
       title: 'Machine Setup', 
@@ -69,13 +70,14 @@ const EnhancedProductionWorkflow = ({ orderId, onClose }) => {
       description: 'Begin production with safety checks',
       status: 'pending'
     },
-    { 
-      id: 'quality', 
-      title: 'Quality Control', 
-      icon: FileCheck, 
-      description: 'Monitor quality checkpoints',
-      status: 'pending'
-    },
+    // Quality Control temporarily disabled
+    // { 
+    //   id: 'quality', 
+    //   title: 'Quality Control', 
+    //   icon: FileCheck, 
+    //   description: 'Monitor quality checkpoints',
+    //   status: 'pending'
+    // },
     { 
       id: 'completion', 
       title: 'Completion', 
@@ -216,7 +218,7 @@ const EnhancedProductionWorkflow = ({ orderId, onClose }) => {
         notes: 'Materials prepared via enhanced workflow'
       });
       
-      setActiveStep(1);
+      setActiveStep(0);
       await loadOrderDetails();
       setError('');
     } catch (error) {
@@ -255,7 +257,7 @@ const EnhancedProductionWorkflow = ({ orderId, onClose }) => {
         notes: 'Setup completed via enhanced workflow'
       });
       
-      setActiveStep(2);
+      setActiveStep(1);
       await loadOrderDetails();
       setError('');
     } catch (error) {
@@ -273,7 +275,7 @@ const EnhancedProductionWorkflow = ({ orderId, onClose }) => {
         environmental_conditions: productionData.environmental_conditions
       });
       
-      setActiveStep(3);
+      setActiveStep(2);
       await loadOrderDetails();
       setError('');
     } catch (error) {
@@ -317,7 +319,7 @@ const EnhancedProductionWorkflow = ({ orderId, onClose }) => {
         final_notes: 'Production completed via enhanced workflow'
       });
       
-      setActiveStep(5);
+      setActiveStep(2);
       await loadOrderDetails();
       setError('');
     } catch (error) {
@@ -409,57 +411,8 @@ const EnhancedProductionWorkflow = ({ orderId, onClose }) => {
 
           {/* Step Content */}
           <div className="bg-gray-50 rounded-lg p-6">
-            {/* Material Preparation */}
-            {activeStep === 0 && (
-              <div>
-                <h3 className="text-lg font-semibold mb-4 flex items-center">
-                  <Package className="h-5 w-5 mr-2 text-blue-600" />
-                  Material Preparation
-                </h3>
-                <div className="space-y-4">
-                  {materials.map((material, index) => (
-                    <div key={material.code} className="bg-white p-4 rounded-lg border">
-                      <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
-                        <div>
-                          <label className="text-sm font-medium text-gray-700">Code</label>
-                          <p className="text-sm">{material.code}</p>
-                        </div>
-                        <div>
-                          <label className="text-sm font-medium text-gray-700">Material</label>
-                          <p className="text-sm">{material.name}</p>
-                        </div>
-                        <div>
-                          <label className="text-sm font-medium text-gray-700">Required</label>
-                          <p className="text-sm">{material.required_qty} {material.unit}</p>
-                        </div>
-                        <div>
-                          <label className="text-sm font-medium text-gray-700">Allocated</label>
-                          <p className="text-sm">{material.allocated_qty} {material.unit}</p>
-                        </div>
-                        <div>
-                          <label className="text-sm font-medium text-gray-700">Lot Number</label>
-                          <p className="text-sm">{material.lot_number}</p>
-                        </div>
-                        <div>
-                          <label className="text-sm font-medium text-gray-700">Supplier</label>
-                          <p className="text-sm">{material.supplier}</p>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                  <button
-                    onClick={handlePrepareMaterials}
-                    disabled={loading}
-                    className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 disabled:opacity-50"
-                  >
-                    {loading ? 'Preparing...' : 'Confirm Material Preparation'}
-                  </button>
-                </div>
-              </div>
-            )}
-
             {/* Machine Setup */}
-            {activeStep === 1 && (
+            {activeStep === 0 && (
               <div>
                 <h3 className="text-lg font-semibold mb-4 flex items-center">
                   <Settings className="h-5 w-5 mr-2 text-blue-600" />
@@ -551,7 +504,7 @@ const EnhancedProductionWorkflow = ({ orderId, onClose }) => {
             )}
 
             {/* Production Start */}
-            {activeStep === 2 && (
+            {activeStep === 1 && (
               <div>
                 <h3 className="text-lg font-semibold mb-4 flex items-center">
                   <Play className="h-5 w-5 mr-2 text-green-600" />
@@ -635,8 +588,8 @@ const EnhancedProductionWorkflow = ({ orderId, onClose }) => {
               </div>
             )}
 
-            {/* Quality Control */}
-            {activeStep === 3 && (
+            {/* Quality Control - Temporarily Disabled */}
+            {false && (
               <div>
                 <h3 className="text-lg font-semibold mb-4 flex items-center">
                   <FileCheck className="h-5 w-5 mr-2 text-purple-600" />
@@ -688,7 +641,7 @@ const EnhancedProductionWorkflow = ({ orderId, onClose }) => {
                   ))}
                   
                   <button
-                    onClick={() => setActiveStep(4)}
+                    onClick={() => setActiveStep(2)}
                     disabled={qualityChecks.some(check => check.measured_value === null)}
                     className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 disabled:opacity-50"
                   >
@@ -699,7 +652,7 @@ const EnhancedProductionWorkflow = ({ orderId, onClose }) => {
             )}
 
             {/* Completion */}
-            {activeStep === 4 && (
+            {activeStep === 2 && (
               <div>
                 <h3 className="text-lg font-semibold mb-4 flex items-center">
                   <CheckCircle className="h-5 w-5 mr-2 text-green-600" />
