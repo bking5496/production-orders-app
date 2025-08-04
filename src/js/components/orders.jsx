@@ -485,9 +485,9 @@ export default function ProductionOrdersSystem() {
   }
 
   return (
-    <div className="space-y-6 p-4 md:p-6 bg-gradient-to-br from-gray-50 to-blue-50 min-h-screen">
+    <div className="space-y-6 p-6 bg-gradient-to-br from-gray-50 to-blue-50 min-h-screen">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 bg-white rounded-xl p-6 shadow-lg border border-gray-200">
+      <div className="flex flex-row justify-between items-center gap-4 bg-white rounded-xl p-6 shadow-lg border border-gray-200">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
             <Factory className="w-8 h-8 text-blue-600" />
@@ -582,7 +582,7 @@ export default function ProductionOrdersSystem() {
           </div>
 
           {/* Filter Controls */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+          <div className="grid grid-cols-5 gap-4">
             {/* View Mode Toggle */}
             <div className="flex bg-gray-100 rounded-lg p-1">
               <button
@@ -970,7 +970,7 @@ export default function ProductionOrdersSystem() {
           size="large"
         >
           <form onSubmit={handleCreateOrder} className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Order Number
@@ -1013,7 +1013,7 @@ export default function ProductionOrdersSystem() {
               />
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Priority
@@ -1144,7 +1144,7 @@ export default function ProductionOrdersSystem() {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Select Machine *
@@ -1260,7 +1260,7 @@ export default function ProductionOrdersSystem() {
                 Material Waste Tracking
               </h4>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Material Waste Type
@@ -1358,7 +1358,7 @@ export default function ProductionOrdersSystem() {
         </Modal>
       )}
 
-      {/* Enhanced Order Details Modal */}
+      {/* Desktop-Optimized Order Details Modal */}
       {showDetailsModal && selectedOrder && (
         <Modal 
           title={`Order Details - ${selectedOrder.order_number}`} 
@@ -1366,331 +1366,372 @@ export default function ProductionOrdersSystem() {
             setShowDetailsModal(false);
             setSelectedOrder(null);
           }}
-          size="xl"
+          size="full"
         >
-          <div className="space-y-6 max-h-[80vh] overflow-y-auto">
-            {/* Order Header with Status */}
-            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-lg border border-blue-200">
-              <div className="flex justify-between items-start">
-                <div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-1">{selectedOrder.product_name}</h3>
-                  <p className="text-gray-600 text-lg">Order #{selectedOrder.order_number}</p>
-                  {selectedOrder.batch_number && (
-                    <p className="text-gray-500 text-sm mt-1">Batch: {selectedOrder.batch_number}</p>
-                  )}
+          <div className="min-h-[90vh] p-8 bg-gray-50">
+            {/* Header Section */}
+            <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-8 mb-8">
+              <div className="flex justify-between items-start mb-6">
+                <div className="flex items-center space-x-6">
+                  <div className="w-16 h-16 bg-blue-100 rounded-lg flex items-center justify-center">
+                    <Package className="w-8 h-8 text-blue-600" />
+                  </div>
+                  <div>
+                    <h2 className="text-3xl font-bold text-gray-900 mb-2">{selectedOrder.product_name}</h2>
+                    <div className="flex items-center space-x-4 text-lg text-gray-600">
+                      <span>Order #{selectedOrder.order_number}</span>
+                      {selectedOrder.batch_number && (
+                        <>
+                          <span>•</span>
+                          <span>Batch: {selectedOrder.batch_number}</span>
+                        </>
+                      )}
+                      {selectedOrder.product_code && (
+                        <>
+                          <span>•</span>
+                          <span>Code: {selectedOrder.product_code}</span>
+                        </>
+                      )}
+                    </div>
+                  </div>
                 </div>
-                <div className="text-right space-y-2">
-                  <Badge className={getOrderStatusInfo(selectedOrder.status).color + ' px-3 py-1 text-sm'}>
-                    {React.createElement(getOrderStatusInfo(selectedOrder.status).icon, { className: "w-4 h-4 mr-1" })}
+                <div className="flex items-center space-x-4">
+                  <Badge className={getOrderStatusInfo(selectedOrder.status).color + ' px-4 py-2 text-base'}>
+                    {React.createElement(getOrderStatusInfo(selectedOrder.status).icon, { className: "w-5 h-5 mr-2" })}
                     {getOrderStatusInfo(selectedOrder.status).label}
                   </Badge>
-                  <br />
-                  <Badge className={getPriorityInfo(selectedOrder.priority).color + ' px-3 py-1 text-sm'}>
+                  <Badge className={getPriorityInfo(selectedOrder.priority).color + ' px-4 py-2 text-base'}>
                     {getPriorityInfo(selectedOrder.priority).label}
                   </Badge>
                 </div>
               </div>
+
+              {/* Key Performance Metrics */}
+              <div className="grid grid-cols-6 gap-6">
+                <div className="bg-green-50 rounded-lg p-6 border border-green-200">
+                  <div className="flex items-center justify-between mb-3">
+                    <Target className="w-8 h-8 text-green-600" />
+                    <span className="text-green-600 text-sm font-semibold uppercase tracking-wide">Target</span>
+                  </div>
+                  <div className="text-3xl font-bold text-green-900 mb-1">{selectedOrder.quantity}</div>
+                  <div className="text-green-700 text-sm">Units</div>
+                </div>
+                
+                <div className="bg-blue-50 rounded-lg p-6 border border-blue-200">
+                  <div className="flex items-center justify-between mb-3">
+                    <CheckCircle className="w-8 h-8 text-blue-600" />
+                    <span className="text-blue-600 text-sm font-semibold uppercase tracking-wide">Actual</span>
+                  </div>
+                  <div className="text-3xl font-bold text-blue-900 mb-1">{selectedOrder.actual_quantity || 0}</div>
+                  <div className="text-blue-700 text-sm">Units</div>
+                </div>
+                
+                <div className="bg-purple-50 rounded-lg p-6 border border-purple-200">
+                  <div className="flex items-center justify-between mb-3">
+                    <Clock className="w-8 h-8 text-purple-600" />
+                    <span className="text-purple-600 text-sm font-semibold uppercase tracking-wide">Runtime</span>
+                  </div>
+                  <div className="text-3xl font-bold text-purple-900 mb-1">
+                    {getProductionTime(selectedOrder) || '0h 0m'}
+                  </div>
+                  <div className="text-purple-700 text-sm">Duration</div>
+                </div>
+                
+                <div className="bg-yellow-50 rounded-lg p-6 border border-yellow-200">
+                  <div className="flex items-center justify-between mb-3">
+                    <Gauge className="w-8 h-8 text-yellow-600" />
+                    <span className="text-yellow-600 text-sm font-semibold uppercase tracking-wide">Efficiency</span>
+                  </div>
+                  <div className="text-3xl font-bold text-yellow-900 mb-1">
+                    {selectedOrder.efficiency_percentage ? `${selectedOrder.efficiency_percentage}%` : 'N/A'}
+                  </div>
+                  <div className="text-yellow-700 text-sm">Performance</div>
+                </div>
+
+                <div className="bg-indigo-50 rounded-lg p-6 border border-indigo-200">
+                  <div className="flex items-center justify-between mb-3">
+                    <Factory className="w-8 h-8 text-indigo-600" />
+                    <span className="text-indigo-600 text-sm font-semibold uppercase tracking-wide">Machine</span>
+                  </div>
+                  <div className="text-lg font-bold text-indigo-900 mb-1">
+                    {selectedOrder.machine_id ? getMachineName(selectedOrder.machine_id) : 'Unassigned'}
+                  </div>
+                  <div className="text-indigo-700 text-sm">Assignment</div>
+                </div>
+
+                <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
+                  <div className="flex items-center justify-between mb-3">
+                    <User className="w-8 h-8 text-gray-600" />
+                    <span className="text-gray-600 text-sm font-semibold uppercase tracking-wide">Operator</span>
+                  </div>
+                  <div className="text-lg font-bold text-gray-900 mb-1">
+                    {selectedOrder.operator_id ? `Op #${selectedOrder.operator_id}` : 'TBD'}
+                  </div>
+                  <div className="text-gray-700 text-sm">Assigned</div>
+                </div>
+              </div>
             </div>
 
-            {/* Key Metrics Cards */}
-            <div className="grid grid-cols-4 gap-4">
-              <Card className="p-4 bg-green-50 border-green-200">
-                <div className="flex items-center">
-                  <Target className="w-8 h-8 text-green-600 mr-3" />
-                  <div>
-                    <p className="text-green-600 text-sm font-medium">Target Quantity</p>
-                    <p className="text-2xl font-bold text-green-900">{selectedOrder.quantity}</p>
-                  </div>
-                </div>
-              </Card>
-              
-              <Card className="p-4 bg-blue-50 border-blue-200">
-                <div className="flex items-center">
-                  <CheckCircle className="w-8 h-8 text-blue-600 mr-3" />
-                  <div>
-                    <p className="text-blue-600 text-sm font-medium">Actual Quantity</p>
-                    <p className="text-2xl font-bold text-blue-900">{selectedOrder.actual_quantity || 0}</p>
-                  </div>
-                </div>
-              </Card>
-              
-              <Card className="p-4 bg-purple-50 border-purple-200">
-                <div className="flex items-center">
-                  <Clock className="w-8 h-8 text-purple-600 mr-3" />
-                  <div>
-                    <p className="text-purple-600 text-sm font-medium">Runtime</p>
-                    <p className="text-2xl font-bold text-purple-900">
-                      {getProductionTime(selectedOrder) || '0h 0m'}
-                    </p>
-                  </div>
-                </div>
-              </Card>
-              
-              <Card className="p-4 bg-yellow-50 border-yellow-200">
-                <div className="flex items-center">
-                  <Gauge className="w-8 h-8 text-yellow-600 mr-3" />
-                  <div>
-                    <p className="text-yellow-600 text-sm font-medium">Efficiency</p>
-                    <p className="text-2xl font-bold text-yellow-900">
-                      {selectedOrder.efficiency_percentage ? `${selectedOrder.efficiency_percentage}%` : 'N/A'}
-                    </p>
-                  </div>
-                </div>
-              </Card>
-            </div>
-
-            {/* Main Information Grid */}
-            <div className="grid grid-cols-2 gap-6">
-              {/* Order Information */}
-              <Card className="p-6">
-                <h4 className="font-semibold text-gray-900 mb-4 flex items-center">
-                  <FileText className="w-5 h-5 mr-2" />
-                  Order Information
-                </h4>
-                
-                <div className="space-y-3">
-                  <div className="flex justify-between py-2 border-b border-gray-100">
-                    <span className="text-gray-600">Environment:</span>
-                    <span className="font-medium">{getEnvironmentName(selectedOrder.environment)}</span>
-                  </div>
+            {/* Main Content Grid */}
+            <div className="grid grid-cols-3 gap-8">
+              {/* Left Column - Order & Production Info */}
+              <div className="space-y-6">
+                {/* Order Information */}
+                <Card className="p-6 bg-white shadow-lg">
+                  <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center">
+                    <FileText className="w-6 h-6 mr-3 text-blue-600" />
+                    Order Information
+                  </h3>
                   
-                  <div className="flex justify-between py-2 border-b border-gray-100">
-                    <span className="text-gray-600">Product Code:</span>
-                    <span className="font-medium">{selectedOrder.product_code || 'N/A'}</span>
-                  </div>
-                  
-                  {selectedOrder.due_date && (
-                    <div className="flex justify-between py-2 border-b border-gray-100">
-                      <span className="text-gray-600">Due Date:</span>
-                      <span className="font-medium">
-                        {new Date(selectedOrder.due_date).toLocaleDateString()}
-                      </span>
+                  <div className="space-y-4">
+                    <div className="flex justify-between items-center py-3 border-b border-gray-100">
+                      <span className="text-gray-600 font-medium">Environment:</span>
+                      <span className="font-semibold text-gray-900">{getEnvironmentName(selectedOrder.environment)}</span>
                     </div>
-                  )}
-                  
-                  <div className="flex justify-between py-2 border-b border-gray-100">
-                    <span className="text-gray-600">Created:</span>
-                    <span className="font-medium">
-                      {new Date(selectedOrder.created_at).toLocaleDateString()}
-                    </span>
-                  </div>
-                  
-                  <div className="flex justify-between py-2 border-b border-gray-100">
-                    <span className="text-gray-600">Last Updated:</span>
-                    <span className="font-medium">
-                      {new Date(selectedOrder.updated_at || selectedOrder.created_at).toLocaleDateString()}
-                    </span>
-                  </div>
-                </div>
-              </Card>
-
-              {/* Production Information */}
-              <Card className="p-6">
-                <h4 className="font-semibold text-gray-900 mb-4 flex items-center">
-                  <Factory className="w-5 h-5 mr-2" />
-                  Production Information
-                </h4>
-                
-                <div className="space-y-3">
-                  <div className="flex justify-between py-2 border-b border-gray-100">
-                    <span className="text-gray-600">Assigned Machine:</span>
-                    <span className="font-medium text-blue-600">
-                      {selectedOrder.machine_id ? getMachineName(selectedOrder.machine_id) : 'Not assigned'}
-                    </span>
-                  </div>
-                  
-                  {selectedOrder.operator_id && (
-                    <div className="flex justify-between py-2 border-b border-gray-100">
-                      <span className="text-gray-600">Operator:</span>
-                      <span className="font-medium">Operator #{selectedOrder.operator_id}</span>
-                    </div>
-                  )}
-                  
-                  {selectedOrder.start_time && (
-                    <div className="flex justify-between py-2 border-b border-gray-100">
-                      <span className="text-gray-600">Started:</span>
-                      <span className="font-medium">
-                        {new Date(selectedOrder.start_time).toLocaleString()}
-                      </span>
-                    </div>
-                  )}
-                  
-                  {selectedOrder.setup_complete_time && (
-                    <div className="flex justify-between py-2 border-b border-gray-100">
-                      <span className="text-gray-600">Setup Completed:</span>
-                      <span className="font-medium">
-                        {new Date(selectedOrder.setup_complete_time).toLocaleString()}
-                      </span>
-                    </div>
-                  )}
-                  
-                  {selectedOrder.complete_time && (
-                    <div className="flex justify-between py-2 border-b border-gray-100">
-                      <span className="text-gray-600">Completed:</span>
-                      <span className="font-medium">
-                        {new Date(selectedOrder.complete_time).toLocaleString()}
-                      </span>
-                    </div>
-                  )}
-                  
-                  {selectedOrder.setup_time && (
-                    <div className="flex justify-between py-2 border-b border-gray-100">
-                      <span className="text-gray-600">Setup Time:</span>
-                      <span className="font-medium">{selectedOrder.setup_time} min</span>
-                    </div>
-                  )}
-                </div>
-              </Card>
-            </div>
-
-            {/* Timeline Section */}
-            {(selectedOrder.start_time || selectedOrder.stop_time || selectedOrder.complete_time) && (
-              <Card className="p-6">
-                <h4 className="font-semibold text-gray-900 mb-4 flex items-center">
-                  <Activity className="w-5 h-5 mr-2" />
-                  Production Timeline
-                </h4>
-                
-                <div className="space-y-4">
-                  <div className="flex items-center space-x-4">
-                    <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-                    <div className="flex-1">
-                      <p className="font-medium">Order Created</p>
-                      <p className="text-sm text-gray-600">
-                        {new Date(selectedOrder.created_at).toLocaleString()}
-                      </p>
-                    </div>
-                  </div>
-                  
-                  {selectedOrder.start_time && (
-                    <div className="flex items-center space-x-4">
-                      <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                      <div className="flex-1">
-                        <p className="font-medium">Production Started</p>
-                        <p className="text-sm text-gray-600">
-                          {new Date(selectedOrder.start_time).toLocaleString()}
-                        </p>
+                    
+                    {selectedOrder.due_date && (
+                      <div className="flex justify-between items-center py-3 border-b border-gray-100">
+                        <span className="text-gray-600 font-medium">Due Date:</span>
+                        <span className="font-semibold text-gray-900">
+                          {new Date(selectedOrder.due_date).toLocaleDateString()}
+                        </span>
                       </div>
+                    )}
+                    
+                    <div className="flex justify-between items-center py-3 border-b border-gray-100">
+                      <span className="text-gray-600 font-medium">Created:</span>
+                      <span className="font-semibold text-gray-900">
+                        {new Date(selectedOrder.created_at).toLocaleString()}
+                      </span>
                     </div>
-                  )}
+                    
+                    <div className="flex justify-between items-center py-3">
+                      <span className="text-gray-600 font-medium">Last Updated:</span>
+                      <span className="font-semibold text-gray-900">
+                        {new Date(selectedOrder.updated_at || selectedOrder.created_at).toLocaleString()}
+                      </span>
+                    </div>
+                  </div>
+                </Card>
+
+                {/* Production Timing */}
+                <Card className="p-6 bg-white shadow-lg">
+                  <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center">
+                    <Timer className="w-6 h-6 mr-3 text-purple-600" />
+                    Production Timing
+                  </h3>
                   
-                  {selectedOrder.stop_time && (
-                    <div className="flex items-center space-x-4">
-                      <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-                      <div className="flex-1">
-                        <p className="font-medium">Production Stopped</p>
-                        <p className="text-sm text-gray-600">
+                  <div className="space-y-4">
+                    {selectedOrder.start_time && (
+                      <div className="flex justify-between items-center py-3 border-b border-gray-100">
+                        <span className="text-gray-600 font-medium">Started:</span>
+                        <span className="font-semibold text-gray-900">
+                          {new Date(selectedOrder.start_time).toLocaleString()}
+                        </span>
+                      </div>
+                    )}
+                    
+                    {selectedOrder.setup_complete_time && (
+                      <div className="flex justify-between items-center py-3 border-b border-gray-100">
+                        <span className="text-gray-600 font-medium">Setup Complete:</span>
+                        <span className="font-semibold text-gray-900">
+                          {new Date(selectedOrder.setup_complete_time).toLocaleString()}
+                        </span>
+                      </div>
+                    )}
+                    
+                    {selectedOrder.stop_time && (
+                      <div className="flex justify-between items-center py-3 border-b border-gray-100">
+                        <span className="text-gray-600 font-medium">Stopped:</span>
+                        <span className="font-semibold text-gray-900">
                           {new Date(selectedOrder.stop_time).toLocaleString()}
-                        </p>
-                        {selectedOrder.stop_reason && (
-                          <p className="text-sm text-gray-500">Reason: {selectedOrder.stop_reason}</p>
+                        </span>
+                      </div>
+                    )}
+                    
+                    {selectedOrder.complete_time && (
+                      <div className="flex justify-between items-center py-3 border-b border-gray-100">
+                        <span className="text-gray-600 font-medium">Completed:</span>
+                        <span className="font-semibold text-gray-900">
+                          {new Date(selectedOrder.complete_time).toLocaleString()}
+                        </span>
+                      </div>
+                    )}
+                    
+                    {selectedOrder.setup_time && (
+                      <div className="flex justify-between items-center py-3">
+                        <span className="text-gray-600 font-medium">Setup Duration:</span>
+                        <span className="font-semibold text-gray-900">{selectedOrder.setup_time} minutes</span>
+                      </div>
+                    )}
+                  </div>
+                </Card>
+              </div>
+
+              {/* Center Column - Timeline & Quality */}
+              <div className="space-y-6">
+                {/* Production Timeline */}
+                {(selectedOrder.start_time || selectedOrder.stop_time || selectedOrder.complete_time) && (
+                  <Card className="p-6 bg-white shadow-lg">
+                    <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center">
+                      <Activity className="w-6 h-6 mr-3 text-green-600" />
+                      Production Timeline
+                    </h3>
+                    
+                    <div className="space-y-6">
+                      <div className="flex items-start space-x-4">
+                        <div className="w-4 h-4 bg-blue-500 rounded-full mt-1"></div>
+                        <div className="flex-1">
+                          <h4 className="font-semibold text-gray-900">Order Created</h4>
+                          <p className="text-gray-600 mt-1">
+                            {new Date(selectedOrder.created_at).toLocaleString()}
+                          </p>
+                        </div>
+                      </div>
+                      
+                      {selectedOrder.start_time && (
+                        <div className="flex items-start space-x-4">
+                          <div className="w-4 h-4 bg-green-500 rounded-full mt-1"></div>
+                          <div className="flex-1">
+                            <h4 className="font-semibold text-gray-900">Production Started</h4>
+                            <p className="text-gray-600 mt-1">
+                              {new Date(selectedOrder.start_time).toLocaleString()}
+                            </p>
+                          </div>
+                        </div>
+                      )}
+                      
+                      {selectedOrder.stop_time && (
+                        <div className="flex items-start space-x-4">
+                          <div className="w-4 h-4 bg-yellow-500 rounded-full mt-1"></div>
+                          <div className="flex-1">
+                            <h4 className="font-semibold text-gray-900">Production Stopped</h4>
+                            <p className="text-gray-600 mt-1">
+                              {new Date(selectedOrder.stop_time).toLocaleString()}
+                            </p>
+                            {selectedOrder.stop_reason && (
+                              <p className="text-sm text-gray-500 mt-1 bg-yellow-50 p-2 rounded">
+                                Reason: {selectedOrder.stop_reason}
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                      )}
+                      
+                      {selectedOrder.complete_time && (
+                        <div className="flex items-start space-x-4">
+                          <div className="w-4 h-4 bg-green-600 rounded-full mt-1"></div>
+                          <div className="flex-1">
+                            <h4 className="font-semibold text-gray-900">Production Completed</h4>
+                            <p className="text-gray-600 mt-1">
+                              {new Date(selectedOrder.complete_time).toLocaleString()}
+                            </p>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </Card>
+                )}
+
+                {/* Quality Information */}
+                {(selectedOrder.quality_score || selectedOrder.quality_approved !== undefined) && (
+                  <Card className="p-6 bg-white shadow-lg">
+                    <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center">
+                      <CheckCircle className="w-6 h-6 mr-3 text-green-600" />
+                      Quality Information
+                    </h3>
+                    
+                    <div className="space-y-4">
+                      {selectedOrder.quality_score && (
+                        <div className="bg-green-50 rounded-lg p-4 border border-green-200">
+                          <div className="flex justify-between items-center">
+                            <span className="text-green-700 font-medium">Quality Score</span>
+                            <span className="text-2xl font-bold text-green-900">{selectedOrder.quality_score}/100</span>
+                          </div>
+                        </div>
+                      )}
+                      
+                      <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
+                        <div className="flex justify-between items-center">
+                          <span className="text-blue-700 font-medium">Approval Status</span>
+                          <span className="text-lg font-semibold text-blue-900">
+                            {selectedOrder.quality_approved ? 'Approved' : 'Pending Review'}
+                          </span>
+                        </div>
+                        {selectedOrder.quality_check_time && (
+                          <p className="text-sm text-blue-600 mt-2">
+                            Checked: {new Date(selectedOrder.quality_check_time).toLocaleString()}
+                          </p>
                         )}
                       </div>
                     </div>
-                  )}
-                  
-                  {selectedOrder.complete_time && (
-                    <div className="flex items-center space-x-4">
-                      <div className="w-3 h-3 bg-green-600 rounded-full"></div>
-                      <div className="flex-1">
-                        <p className="font-medium">Production Completed</p>
-                        <p className="text-sm text-gray-600">
-                          {new Date(selectedOrder.complete_time).toLocaleString()}
-                        </p>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </Card>
-            )}
+                  </Card>
+                )}
+              </div>
 
-            {/* Notes and Specifications */}
-            {(selectedOrder.notes || selectedOrder.specifications) && (
-              <div className="grid grid-cols-2 gap-6">
+              {/* Right Column - Notes & Specifications */}
+              <div className="space-y-6">
                 {selectedOrder.notes && (
-                  <Card className="p-6">
-                    <h4 className="font-semibold text-gray-900 mb-3 flex items-center">
-                      <AlertCircle className="w-5 h-5 mr-2" />
-                      Notes
-                    </h4>
-                    <div className="bg-gray-50 p-4 rounded-lg">
-                      <p className="text-gray-700 whitespace-pre-wrap">{selectedOrder.notes}</p>
+                  <Card className="p-6 bg-white shadow-lg">
+                    <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center">
+                      <AlertCircle className="w-6 h-6 mr-3 text-orange-600" />
+                      Production Notes
+                    </h3>
+                    <div className="bg-orange-50 rounded-lg p-4 border border-orange-200">
+                      <p className="text-gray-800 whitespace-pre-wrap leading-relaxed">{selectedOrder.notes}</p>
                     </div>
                   </Card>
                 )}
                 
                 {selectedOrder.specifications && (
-                  <Card className="p-6">
-                    <h4 className="font-semibold text-gray-900 mb-3 flex items-center">
-                      <Settings className="w-5 h-5 mr-2" />
+                  <Card className="p-6 bg-white shadow-lg">
+                    <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center">
+                      <Settings className="w-6 h-6 mr-3 text-indigo-600" />
                       Specifications
-                    </h4>
-                    <div className="bg-blue-50 p-4 rounded-lg">
-                      <p className="text-gray-700 whitespace-pre-wrap">
+                    </h3>
+                    <div className="bg-indigo-50 rounded-lg p-4 border border-indigo-200">
+                      <pre className="text-gray-800 whitespace-pre-wrap text-sm leading-relaxed">
                         {typeof selectedOrder.specifications === 'object' 
                           ? JSON.stringify(selectedOrder.specifications, null, 2)
                           : selectedOrder.specifications
                         }
-                      </p>
+                      </pre>
                     </div>
                   </Card>
                 )}
-              </div>
-            )}
 
-            {/* Quality Information */}
-            {(selectedOrder.quality_score || selectedOrder.quality_approved) && (
-              <Card className="p-6">
-                <h4 className="font-semibold text-gray-900 mb-4 flex items-center">
-                  <CheckCircle className="w-5 h-5 mr-2" />
-                  Quality Information
-                </h4>
-                
-                <div className="grid grid-cols-2 gap-4">
-                  {selectedOrder.quality_score && (
-                    <div className="bg-green-50 p-4 rounded-lg">
-                      <p className="text-green-600 font-medium">Quality Score</p>
-                      <p className="text-2xl font-bold text-green-900">{selectedOrder.quality_score}/100</p>
-                    </div>
-                  )}
+                {/* Actions Card */}
+                <Card className="p-6 bg-white shadow-lg">
+                  <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center">
+                    <Zap className="w-6 h-6 mr-3 text-purple-600" />
+                    Actions
+                  </h3>
                   
-                  <div className="bg-blue-50 p-4 rounded-lg">
-                    <p className="text-blue-600 font-medium">Quality Status</p>
-                    <p className="text-lg font-semibold text-blue-900">
-                      {selectedOrder.quality_approved ? 'Approved' : 'Pending Review'}
-                    </p>
-                    {selectedOrder.quality_check_time && (
-                      <p className="text-sm text-blue-600 mt-1">
-                        Checked: {new Date(selectedOrder.quality_check_time).toLocaleString()}
-                      </p>
+                  <div className="space-y-4">
+                    {selectedOrder.status === 'pending' && (
+                      <Button
+                        onClick={() => {
+                          setShowDetailsModal(false);
+                          setSelectedOrder(selectedOrder);
+                          setShowProductionModal(true);
+                        }}
+                        className="w-full bg-green-600 hover:bg-green-700 py-3 text-lg"
+                      >
+                        <Play className="w-5 h-5 mr-2" />
+                        Start Production
+                      </Button>
                     )}
+                    
+                    <Button
+                      onClick={() => setShowDetailsModal(false)}
+                      variant="outline"
+                      className="w-full py-3 text-lg"
+                    >
+                      Close Details
+                    </Button>
                   </div>
-                </div>
-              </Card>
-            )}
-
-            {/* Action Buttons */}
-            <div className="flex gap-3 pt-6 border-t border-gray-200">
-              <Button
-                onClick={() => setShowDetailsModal(false)}
-                variant="outline"
-                className="flex-1"
-              >
-                Close
-              </Button>
-              {selectedOrder.status === 'pending' && (
-                <Button
-                  onClick={() => {
-                    setShowDetailsModal(false);
-                    setSelectedOrder(selectedOrder);
-                    setShowProductionModal(true);
-                  }}
-                  className="flex-1 bg-green-600 hover:bg-green-700"
-                >
-                  <Play className="w-4 h-4 mr-2" />
-                  Start Production
-                </Button>
-              )}
+                </Card>
+              </div>
             </div>
           </div>
         </Modal>
