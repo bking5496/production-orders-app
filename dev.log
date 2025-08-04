@@ -129,3 +129,7 @@ Instead of /public/uploads/s3-keys.json, use /uploads/s3-keys.json.
 5:35:11 PM [vite] (client) hmr update /src/js/components/machines.jsx
 5:36:13 PM [vite] (client) hmr update /src/js/components/machines.jsx
 5:36:26 PM [vite] (client) hmr update /src/js/components/machines.jsx
+5:57:11 PM [vite] (client) hmr update /src/js/components/enhanced-production-workflow.jsx
+5:57:50 PM [vite] (client) page reload server.js
+5:58:04 PM [vite] (client) page reload server.js
+5:58:51 PM [vite] (client) hmr update /src/js/components/orders.jsx

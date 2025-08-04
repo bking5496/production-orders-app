@@ -421,7 +421,9 @@ export default function OrdersPage() {
                   <tr key={order.id} className="hover:bg-gray-50 transition-colors">
                     <td className="px-4 py-3">
                       <div className="font-medium text-gray-900">{order.order_number}</div>
-                      <div className="text-sm text-gray-500">ID: {order.id}</div>
+                      {order.machine_name && (
+                        <div className="text-sm text-blue-600 font-medium">📍 {order.machine_name}</div>
+                      )}
                     </td>
                     <td className="px-4 py-3">
                       <div className="text-sm text-gray-900">{order.product_name}</div>

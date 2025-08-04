@@ -248,7 +248,10 @@ const EnhancedProductionWorkflow = ({ orderId, onClose }) => {
     try {
       setLoading(true);
       await API.post(`/orders/${orderId}/complete-setup`, {
+        machine_id: setupData.machine_id,
         setup_checklist: setupData.setup_checklist,
+        setup_type: setupData.setup_type,
+        previous_product: setupData.previous_product,
         notes: 'Setup completed via enhanced workflow'
       });
       

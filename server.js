@@ -2517,7 +2517,7 @@ app.post('/api/orders/:id/complete-setup',
   authenticateToken,
   async (req, res) => {
     const orderId = req.params.id;
-    const { checklist, setup_time, notes } = req.body;
+    const { machine_id, checklist, setup_time, notes, setup_type, previous_product } = req.body;
     
     try {
       // Use direct PostgreSQL client to completely bypass conversion layer
@@ -2540,12 +2540,21 @@ app.post('/api/orders/:id/complete-setup',
         WHERE order_id = $5 AND stage = $6
       `, ['completed', parseInt(req.user.id), notes || null, JSON.stringify({ checklist, setup_time }), parseInt(orderId), 'setup']);
       
-      // Update order status  
+      // Update order status and assign machine
       await client.query(`
         UPDATE production_orders 
-        SET setup_complete_time = NOW(), updated_at = NOW()
-        WHERE id = $1
-      `, [parseInt(orderId)]);
+        SET machine_id = $1, setup_complete_time = NOW(), updated_at = NOW()
+        WHERE id = $2
+      `, [machine_id ? parseInt(machine_id) : null, parseInt(orderId)]);
+      
+      // Update machine status to in_use if machine was assigned
+      if (machine_id) {
+        await client.query(`
+          UPDATE machines 
+          SET status = 'in_use', updated_at = NOW()
+          WHERE id = $1
+        `, [parseInt(machine_id)]);
+      }
       
       await client.end();
       
