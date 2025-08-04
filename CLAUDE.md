@@ -4,7 +4,7 @@
 **Name:** Production Management System  
 **Version:** 2.0.0  
 **Type:** Multi-Environment Manufacturing Execution System (MES)  
-**Tech Stack:** Node.js, Express, SQLite, **React 19.1.0**, Vite 7.0.6, WebSocket (ws 8.16.0)  
+**Tech Stack:** Node.js, Express, PostgreSQL, **React 19.1.0**, Vite 7.0.6, WebSocket (ws 8.16.0)  
 **Architecture:** Mobile-First, Real-time, Progressive Web App  
 **Timezone:** SAST (UTC+2) - South African Standard Time  
 
