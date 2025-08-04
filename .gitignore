@@ -9,3 +9,4 @@ logs
 production.db
 /node_modules
 /uploads
+/archived

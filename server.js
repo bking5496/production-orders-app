@@ -520,9 +520,20 @@ app.put('/api/settings/general', authenticateToken, (req, res) => {
 app.get('/api/health', async (req, res) => {
   try {
     await dbGet('SELECT 1 as health_check');
+    const tables = await dbAll("SELECT tablename FROM pg_catalog.pg_tables WHERE schemaname != 'pg_catalog' AND schemaname != 'information_schema';");
+    const productionStopsSchema = await dbAll("SELECT column_name, data_type FROM information_schema.columns WHERE table_name = 'production_stops';");
+    const productionStopsEnhancedSchema = await dbAll("SELECT column_name, data_type FROM information_schema.columns WHERE table_name = 'production_stops_enhanced';");
     return apiResponse(res, {
       status: 'healthy',
-      database: { status: 'connected', type: 'PostgreSQL' },
+      database: { 
+        status: 'connected', 
+        type: 'PostgreSQL', 
+        tables: tables.map(t => t.tablename),
+        schemas: {
+          production_stops: productionStopsSchema,
+          production_stops_enhanced: productionStopsEnhancedSchema
+        }
+      },
       uptime: process.uptime(),
       memory: process.memoryUsage(),
       environment: process.env.NODE_ENV || 'development',

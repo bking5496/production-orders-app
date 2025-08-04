@@ -2513,3 +2513,53 @@ Error: SQLITE_ERROR: table waste_records has no column named waste_type
 2025-08-04T09:58:55: 🔓 Client released back to pool
 2025-08-04T09:59:55: 🔗 Client acquired from pool
 2025-08-04T09:59:55: 🔓 Client released back to pool
+2025-08-04T10:00:55: 🔗 Client acquired from pool
+2025-08-04T10:00:55: 🔓 Client released back to pool
+2025-08-04T10:01:55: 🔗 Client acquired from pool
+2025-08-04T10:01:55: 🔓 Client released back to pool
+2025-08-04T10:02:55: 🔗 Client acquired from pool
+2025-08-04T10:02:55: 🔓 Client released back to pool
+2025-08-04T10:03:55: 🔗 Client acquired from pool
+2025-08-04T10:03:55: 🔓 Client released back to pool
+2025-08-04T10:04:55: 🔗 Client acquired from pool
+2025-08-04T10:04:55: 🔓 Client released back to pool
+2025-08-04T10:05:55: 🔗 Client acquired from pool
+2025-08-04T10:05:55: 🔓 Client released back to pool
+2025-08-04T10:06:55: 🔗 Client acquired from pool
+2025-08-04T10:06:55: 🔓 Client released back to pool
+2025-08-04T10:07:55: 🔗 Client acquired from pool
+2025-08-04T10:07:55: 🔓 Client released back to pool
+2025-08-04T10:08:34: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T10:08:34: ✅ PostgreSQL database interface ready
+2025-08-04T10:08:34: 🔍 About to run health check...
+2025-08-04T10:08:34: 📋 Labor roster will use existing users table
+2025-08-04T10:08:34: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T10:08:34: JWT_SECRET exists: true
+2025-08-04T10:08:34: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T10:08:34: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T10:08:34: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T10:08:34: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T10:08:34: ✨ Enhanced endpoints loaded successfully
+2025-08-04T10:08:34: 🔧 Configuration management system enabled
+2025-08-04T10:08:34: 🚀 Server running on http://localhost:3000
+2025-08-04T10:08:34: 📊 Environment: production
+2025-08-04T10:08:34: 🔐 JWT Secret: Gmqbm...
+2025-08-04T10:08:34: ✅ New PostgreSQL client connected
+2025-08-04T10:08:34: 🔗 Client acquired from pool
+2025-08-04T10:08:34: 🔓 Client released back to pool
+2025-08-04T10:08:34: 🏥 Database health check: {
+  status: 'healthy',
+  timestamp: 2025-08-04T08:08:34.764Z,
+  version: 'PostgreSQL 16.9 (Ubuntu 16.9-0ubuntu0.24.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 13.3.0-6ubuntu2~24.04) 13.3.0, 64-bit',
+  pool_total: 1,
+  pool_idle: 1,
+  pool_waiting: 0
+}
+2025-08-04T10:08:55: 🔗 Client acquired from pool
+2025-08-04T10:08:55: 🔓 Client released back to pool
+2025-08-04T10:09:30: 🔗 Client acquired from pool
+2025-08-04T10:09:30: 🔓 Client released back to pool
+2025-08-04T10:09:30: 🔗 Client acquired from pool
+2025-08-04T10:09:30: 🔓 Client released back to pool
+2025-08-04T10:09:55: 🔗 Client acquired from pool
+2025-08-04T10:09:55: 🔓 Client released back to pool
