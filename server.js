@@ -1080,7 +1080,7 @@ app.post('/api/orders',
       `INSERT INTO production_orders (
         order_number, product_name, quantity, environment, priority, 
         due_date, notes, created_by, created_at
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, datetime('now', '+2 hours'))`,
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())`,
       [order_number, product_name, quantity, environment, priority || 'normal', due_date, notes, req.user.id],
       function(err) {
         if (err) {

@@ -31,6 +31,24 @@
 - Always use byterover-retrive-knowledge tool to get the related context before any tasks
 - Always use byterover-store-knowledge to store all the critical informations after successful tasks
 
+## 🔐 Secrets Management
+**CRITICAL: Always use secrets manager for sensitive data**
+- **Database password:** `getSecret('DB_PASSWORD')` - NEVER use hardcoded passwords
+- **JWT secret:** `getSecret('JWT_SECRET')`
+- **Email credentials:** `getSecret('EMAIL_PASSWORD')`
+- **API keys:** `getSecret('API_KEY_NAME')`
+
+**Usage:**
+```javascript
+const { getSecret } = require('./security/secrets-manager');
+const dbPassword = getSecret('DB_PASSWORD');
+```
+
+**Database Connection:**
+- PostgreSQL Database: `production_orders`
+- Host: localhost, Port: 5432, User: postgres
+- Password: **Retrieved from secrets manager only**
+
 ## 🔧 Dynamic Configuration System
 
 ### **Core Principle**
