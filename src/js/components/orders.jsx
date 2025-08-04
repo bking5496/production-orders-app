@@ -1366,9 +1366,9 @@ export default function ProductionOrdersSystem() {
             setShowDetailsModal(false);
             setSelectedOrder(null);
           }}
-          size="full"
+          size="large"
         >
-          <div className="min-h-[90vh] p-12 bg-gray-50">
+          <div className="p-6 bg-white">
             {/* Header Section */}
             <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-12 mb-12">
               <div className="flex justify-between items-start mb-12">
