@@ -2895,3 +2895,87 @@ Error: SQLITE_ERROR: table waste_records has no column named waste_type
 2025-08-04T10:23:54: 🔗 Client acquired from pool
 2025-08-04T10:23:54: 🔓 Client released back to pool
 2025-08-04T10:28:54: 🔌 WebSocket disconnected: admin
+2025-08-04T10:52:09: ValidationError: The Express 'trust proxy' setting is true, which allows anyone to trivially bypass IP-based rate limiting. See https://express-rate-limit.github.io/ERR_ERL_PERMISSIVE_TRUST_PROXY/ for more information.
+    at Object.trustProxy (/home/production-app/production-orders-app/node_modules/express-rate-limit/dist/index.cjs:167:13)
+    at wrappedValidations.<computed> [as trustProxy] (/home/production-app/production-orders-app/node_modules/express-rate-limit/dist/index.cjs:397:22)
+    at Object.keyGenerator (/home/production-app/production-orders-app/node_modules/express-rate-limit/dist/index.cjs:657:20)
+    at /home/production-app/production-orders-app/node_modules/express-rate-limit/dist/index.cjs:710:32
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async /home/production-app/production-orders-app/node_modules/express-rate-limit/dist/index.cjs:691:5 {
+  code: 'ERR_ERL_PERMISSIVE_TRUST_PROXY',
+  help: 'https://express-rate-limit.github.io/ERR_ERL_PERMISSIVE_TRUST_PROXY/'
+}
+2025-08-04T10:52:09: 🔗 Client acquired from pool
+2025-08-04T10:52:09: 🔓 Client released back to pool
+2025-08-04T10:52:09: 🔗 Client acquired from pool
+2025-08-04T10:52:09: 🔓 Client released back to pool
+2025-08-04T10:52:10: 🔗 Client acquired from pool
+2025-08-04T10:52:10: 🔗 Client acquired from pool
+2025-08-04T10:52:10: 🔓 Client released back to pool
+2025-08-04T10:52:10: 🔗 Client acquired from pool
+2025-08-04T10:52:10: 🔓 Client released back to pool
+2025-08-04T10:52:10: 🔓 Client released back to pool
+2025-08-04T10:52:10: New WebSocket connection attempt
+2025-08-04T10:52:10: ✅ WebSocket authenticated: admin (admin)
+2025-08-04T10:52:13: 🔗 Client acquired from pool
+2025-08-04T10:52:13: 🔓 Client released back to pool
+2025-08-04T10:52:13: 🔗 Client acquired from pool
+2025-08-04T10:52:13: 🔓 Client released back to pool
+2025-08-04T10:52:14: 🔗 Client acquired from pool
+2025-08-04T10:52:14: 🔓 Client released back to pool
+2025-08-04T10:52:14: 🔗 Client acquired from pool
+2025-08-04T10:52:14: 🔓 Client released back to pool
+2025-08-04T10:52:17: 📺 admin subscribed to: [ 'dashboard', 'orders', 'machines', 'production', 'alerts' ]
+2025-08-04T10:52:17: 🔗 Client acquired from pool
+2025-08-04T10:52:17: 🔗 Client acquired from pool
+2025-08-04T10:52:17: 🔓 Client released back to pool
+2025-08-04T10:52:17: 🔓 Client released back to pool
+2025-08-04T10:52:17: ✅ New PostgreSQL client connected
+2025-08-04T10:52:17: 🔗 Client acquired from pool
+2025-08-04T10:52:17: 🔓 Client released back to pool
+2025-08-04T10:52:18: 📺 admin subscribed to: [ 'production', 'orders', 'machines' ]
+2025-08-04T10:52:18: 🔗 Client acquired from pool
+2025-08-04T10:52:18: 🔗 Client acquired from pool
+2025-08-04T10:52:18: 🔗 Client acquired from pool
+2025-08-04T10:52:18: 🔓 Client released back to pool
+2025-08-04T10:52:18: 🔓 Client released back to pool
+2025-08-04T10:52:18: 🔓 Client released back to pool
+2025-08-04T10:52:18: ✅ New PostgreSQL client connected
+2025-08-04T10:52:18: 🔗 Client acquired from pool
+2025-08-04T10:52:18: 🔓 Client released back to pool
+2025-08-04T10:52:23: 🔗 Client acquired from pool
+2025-08-04T10:52:23: 🔗 Client acquired from pool
+2025-08-04T10:52:23: 🔗 Client acquired from pool
+2025-08-04T10:52:23: 🔗 Client acquired from pool
+2025-08-04T10:52:23: 🔓 Client released back to pool
+2025-08-04T10:52:23: 🔓 Client released back to pool
+2025-08-04T10:52:23: 🔓 Client released back to pool
+2025-08-04T10:52:23: 🔓 Client released back to pool
+2025-08-04T10:52:25: 🔗 Client acquired from pool
+2025-08-04T10:52:25: 🔓 Client released back to pool
+2025-08-04T10:52:25: 🔗 Client acquired from pool
+2025-08-04T10:52:25: 🔓 Client released back to pool
+2025-08-04T10:52:27: 🔗 Client acquired from pool
+2025-08-04T10:52:27: 🔓 Client released back to pool
+2025-08-04T10:52:54: 🔗 Client acquired from pool
+2025-08-04T10:52:54: 🔓 Client released back to pool
+2025-08-04T10:52:54: ✅ New PostgreSQL client connected
+2025-08-04T10:52:54: 🔗 Client acquired from pool
+2025-08-04T10:52:54: 🔓 Client released back to pool
+2025-08-04T10:52:54: ✅ New PostgreSQL client connected
+2025-08-04T10:52:54: 🔗 Client acquired from pool
+2025-08-04T10:52:54: 🔓 Client released back to pool
+2025-08-04T10:52:59: 🔗 Client acquired from pool
+2025-08-04T10:52:59: 🔗 Client acquired from pool
+2025-08-04T10:52:59: 🔓 Client released back to pool
+2025-08-04T10:52:59: 🔓 Client released back to pool
+2025-08-04T10:52:59: 🔗 Client acquired from pool
+2025-08-04T10:52:59: 🔓 Client released back to pool
+2025-08-04T10:52:59: 🔗 Client acquired from pool
+2025-08-04T10:52:59: 🔓 Client released back to pool
+2025-08-04T10:52:59: 🔗 Client acquired from pool
+2025-08-04T10:52:59: 🔓 Client released back to pool
+2025-08-04T10:52:59: 🔗 Client acquired from pool
+2025-08-04T10:52:59: 🔓 Client released back to pool
+2025-08-04T10:53:12: 🔗 Client acquired from pool
+2025-08-04T10:53:12: 🔓 Client released back to pool
