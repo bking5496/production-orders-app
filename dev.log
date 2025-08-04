@@ -116,3 +116,11 @@ Files in the public directory are served at the root path.
 Instead of /public/env.js, use /env.js.
 Files in the public directory are served at the root path.
 Instead of /public/js/main.js, use /js/main.js.
+Files in the public directory are served at the root path.
+Instead of /public/s3-bucket.json, use /s3-bucket.json.
+Files in the public directory are served at the root path.
+Instead of /public/s3.json, use /s3.json.
+Files in the public directory are served at the root path.
+Instead of /public/storage.json, use /storage.json.
+Files in the public directory are served at the root path.
+Instead of /public/uploads/s3-keys.json, use /uploads/s3-keys.json.
