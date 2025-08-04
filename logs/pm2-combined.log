@@ -2035,3 +2035,159 @@ Error: SQLITE_ERROR: table waste_records has no column named waste_type
 2025-08-04T09:19:48: 🔓 Client released back to pool
 2025-08-04T09:19:49: 🔗 Client acquired from pool
 2025-08-04T09:19:49: 🔓 Client released back to pool
+2025-08-04T09:21:26: ✅ New PostgreSQL client connected
+2025-08-04T09:21:26: 🔗 Client acquired from pool
+2025-08-04T09:21:26: ❌ Database run error: error: function datetime(unknown, unknown) does not exist
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24) {
+  length: 220,
+  severity: 'ERROR',
+  code: '42883',
+  detail: undefined,
+  hint: 'No function matches the given name and argument types. You might need to add explicit type casts.',
+  position: '199',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'parse_func.c',
+  line: '629',
+  routine: 'ParseFuncOrColumn'
+}
+2025-08-04T09:21:26: 🔓 Client released back to pool
+2025-08-04T09:21:44: 🔗 Client acquired from pool
+2025-08-04T09:21:44: ❌ Database run error: error: function datetime(unknown, unknown) does not exist
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24) {
+  length: 220,
+  severity: 'ERROR',
+  code: '42883',
+  detail: undefined,
+  hint: 'No function matches the given name and argument types. You might need to add explicit type casts.',
+  position: '199',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'parse_func.c',
+  line: '629',
+  routine: 'ParseFuncOrColumn'
+}
+2025-08-04T09:21:44: 🔓 Client released back to pool
+2025-08-04T09:22:40: 🔌 WebSocket disconnected: admin
+2025-08-04T09:22:42: 🔗 Client acquired from pool
+2025-08-04T09:22:42: 🔓 Client released back to pool
+2025-08-04T09:22:42: ✅ New PostgreSQL client connected
+2025-08-04T09:22:42: 🔗 Client acquired from pool
+2025-08-04T09:22:42: 🔓 Client released back to pool
+2025-08-04T09:22:42: ✅ New PostgreSQL client connected
+2025-08-04T09:22:42: 🔗 Client acquired from pool
+2025-08-04T09:22:42: 🔓 Client released back to pool
+2025-08-04T09:22:42: New WebSocket connection attempt
+2025-08-04T09:22:42: ✅ WebSocket authenticated: admin (admin)
+2025-08-04T09:23:01: 🔗 Client acquired from pool
+2025-08-04T09:23:01: ❌ Database run error: error: function datetime(unknown, unknown) does not exist
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24) {
+  length: 220,
+  severity: 'ERROR',
+  code: '42883',
+  detail: undefined,
+  hint: 'No function matches the given name and argument types. You might need to add explicit type casts.',
+  position: '199',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'parse_func.c',
+  line: '629',
+  routine: 'ParseFuncOrColumn'
+}
+2025-08-04T09:23:01: 🔓 Client released back to pool
+2025-08-04T09:23:04: 🔗 Client acquired from pool
+2025-08-04T09:23:04: ❌ Database run error: error: function datetime(unknown, unknown) does not exist
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24) {
+  length: 220,
+  severity: 'ERROR',
+  code: '42883',
+  detail: undefined,
+  hint: 'No function matches the given name and argument types. You might need to add explicit type casts.',
+  position: '199',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'parse_func.c',
+  line: '629',
+  routine: 'ParseFuncOrColumn'
+}
+2025-08-04T09:23:04: 🔓 Client released back to pool
+2025-08-04T09:23:06: 🔗 Client acquired from pool
+2025-08-04T09:23:06: ❌ Database run error: error: function datetime(unknown, unknown) does not exist
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24) {
+  length: 220,
+  severity: 'ERROR',
+  code: '42883',
+  detail: undefined,
+  hint: 'No function matches the given name and argument types. You might need to add explicit type casts.',
+  position: '199',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'parse_func.c',
+  line: '629',
+  routine: 'ParseFuncOrColumn'
+}
+2025-08-04T09:23:06: 🔓 Client released back to pool
+2025-08-04T09:23:06: 🔗 Client acquired from pool
+2025-08-04T09:23:06: ❌ Database run error: error: function datetime(unknown, unknown) does not exist
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24) {
+  length: 220,
+  severity: 'ERROR',
+  code: '42883',
+  detail: undefined,
+  hint: 'No function matches the given name and argument types. You might need to add explicit type casts.',
+  position: '199',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'parse_func.c',
+  line: '629',
+  routine: 'ParseFuncOrColumn'
+}
+2025-08-04T09:23:06: 🔓 Client released back to pool

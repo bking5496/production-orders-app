@@ -713,3 +713,27 @@
 2025-08-04T09:19:48: 🔓 Client released back to pool
 2025-08-04T09:19:49: 🔗 Client acquired from pool
 2025-08-04T09:19:49: 🔓 Client released back to pool
+2025-08-04T09:21:26: ✅ New PostgreSQL client connected
+2025-08-04T09:21:26: 🔗 Client acquired from pool
+2025-08-04T09:21:26: 🔓 Client released back to pool
+2025-08-04T09:21:44: 🔗 Client acquired from pool
+2025-08-04T09:21:44: 🔓 Client released back to pool
+2025-08-04T09:22:40: 🔌 WebSocket disconnected: admin
+2025-08-04T09:22:42: 🔗 Client acquired from pool
+2025-08-04T09:22:42: 🔓 Client released back to pool
+2025-08-04T09:22:42: ✅ New PostgreSQL client connected
+2025-08-04T09:22:42: 🔗 Client acquired from pool
+2025-08-04T09:22:42: 🔓 Client released back to pool
+2025-08-04T09:22:42: ✅ New PostgreSQL client connected
+2025-08-04T09:22:42: 🔗 Client acquired from pool
+2025-08-04T09:22:42: 🔓 Client released back to pool
+2025-08-04T09:22:42: New WebSocket connection attempt
+2025-08-04T09:22:42: ✅ WebSocket authenticated: admin (admin)
+2025-08-04T09:23:01: 🔗 Client acquired from pool
+2025-08-04T09:23:01: 🔓 Client released back to pool
+2025-08-04T09:23:04: 🔗 Client acquired from pool
+2025-08-04T09:23:04: 🔓 Client released back to pool
+2025-08-04T09:23:06: 🔗 Client acquired from pool
+2025-08-04T09:23:06: 🔓 Client released back to pool
+2025-08-04T09:23:06: 🔗 Client acquired from pool
+2025-08-04T09:23:06: 🔓 Client released back to pool
