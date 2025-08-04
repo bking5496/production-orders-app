@@ -124,3 +124,8 @@ Files in the public directory are served at the root path.
 Instead of /public/storage.json, use /storage.json.
 Files in the public directory are served at the root path.
 Instead of /public/uploads/s3-keys.json, use /uploads/s3-keys.json.
+5:30:03 PM [vite] (client) hmr update /src/js/components/admin.jsx
+5:34:39 PM [vite] (client) hmr update /src/js/components/admin.jsx
+5:35:11 PM [vite] (client) hmr update /src/js/components/machines.jsx
+5:36:13 PM [vite] (client) hmr update /src/js/components/machines.jsx
+5:36:26 PM [vite] (client) hmr update /src/js/components/machines.jsx

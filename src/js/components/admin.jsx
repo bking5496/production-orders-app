@@ -320,6 +320,24 @@ export default function AdminPanel() {
     setShowMachineTypeModal(true);
   };
 
+  // Create machine type inline (without modal)
+  const handleCreateMachineTypeInline = async (name) => {
+    try {
+      const newMachineType = {
+        name: name,
+        description: `Created for environment management`,
+        category: 'Production'
+      };
+      
+      await API.post('/machine-types', newMachineType);
+      loadMachineTypes(); // Refresh the machine types list
+      showNotification(`Machine type "${name}" created successfully`);
+    } catch (error) {
+      console.error('Error creating machine type:', error);
+      showNotification(`Failed to create machine type "${name}": ` + (error.response?.data?.error || error.message), 'danger');
+    }
+  };
+
   // Filter users
   const filteredUsers = useMemo(() => {
     let filtered = users;
@@ -1162,7 +1180,35 @@ export default function AdminPanel() {
                   </div>
                 )}
               </div>
-              <p className="text-xs text-gray-500 mt-2">Select the machine types that can operate in this environment</p>
+              
+              {/* Add new machine type option */}
+              <div className="mt-4 p-3 border-2 border-dashed border-gray-300 rounded-lg">
+                <div className="flex items-center gap-3">
+                  <input
+                    type="text"
+                    placeholder="Type new machine type name and press Enter"
+                    className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                    onKeyPress={(e) => {
+                      if (e.key === 'Enter' && e.target.value.trim()) {
+                        const newTypeName = e.target.value.trim();
+                        // Add to environment form data
+                        if (!environmentFormData.machine_types.includes(newTypeName)) {
+                          setEnvironmentFormData({
+                            ...environmentFormData,
+                            machine_types: [...environmentFormData.machine_types, newTypeName]
+                          });
+                        }
+                        // Create the machine type in the database
+                        handleCreateMachineTypeInline(newTypeName);
+                        e.target.value = '';
+                      }
+                    }}
+                  />
+                  <span className="text-xs text-gray-500">Press Enter to add</span>
+                </div>
+              </div>
+              
+              <p className="text-xs text-gray-500 mt-2">Select existing machine types or add new ones by typing above</p>
             </div>
             
             <div className="flex justify-end gap-3 pt-4">

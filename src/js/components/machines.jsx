@@ -118,6 +118,24 @@ export default function MachinesPage() {
     }
   };
 
+  // Create machine type inline (without modal)
+  const createMachineTypeInline = async (name) => {
+    try {
+      const newMachineType = {
+        name: name,
+        description: `Created during machine setup`,
+        category: 'Production'
+      };
+      
+      await API.post('/machine-types', newMachineType);
+      loadMachineTypes(); // Refresh the machine types list
+      showNotification(`Machine type "${name}" created successfully`);
+    } catch (error) {
+      console.error('Error creating machine type:', error);
+      showNotification(`Failed to create machine type "${name}": ` + (error.response?.data?.error || error.message), 'danger');
+    }
+  };
+
   // Function to fetch machines from the backend API
   const loadMachines = async (showRefreshIndicator = false) => {
     if (showRefreshIndicator) setRefreshing(true);
@@ -769,6 +787,22 @@ export default function MachinesPage() {
                   <option key={type.id || type.name} value={type.name || type}>{type.name || type}</option>
                 )}
               </select>
+              <div className="mt-2 p-2 bg-gray-50 rounded-lg">
+                <input
+                  type="text"
+                  placeholder="Or type new machine type and press Enter"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter' && e.target.value.trim()) {
+                      const newTypeName = e.target.value.trim();
+                      setFormData({...formData, type: newTypeName});
+                      createMachineTypeInline(newTypeName);
+                      e.target.value = '';
+                    }
+                  }}
+                />
+                <p className="text-xs text-gray-500 mt-1">Press Enter to create and select new machine type</p>
+              </div>
             </div>
             
             <div className="grid grid-cols-2 gap-4">
@@ -852,6 +886,22 @@ export default function MachinesPage() {
                   <option key={type.id || type.name} value={type.name || type}>{type.name || type}</option>
                 )}
               </select>
+              <div className="mt-2 p-2 bg-gray-50 rounded-lg">
+                <input
+                  type="text"
+                  placeholder="Or type new machine type and press Enter"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter' && e.target.value.trim()) {
+                      const newTypeName = e.target.value.trim();
+                      setFormData({...formData, type: newTypeName});
+                      createMachineTypeInline(newTypeName);
+                      e.target.value = '';
+                    }
+                  }}
+                />
+                <p className="text-xs text-gray-500 mt-1">Press Enter to create and select new machine type</p>
+              </div>
             </div>
             
             <div className="grid grid-cols-2 gap-4">
