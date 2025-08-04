@@ -1368,17 +1368,17 @@ export default function ProductionOrdersSystem() {
           }}
           size="full"
         >
-          <div className="min-h-[90vh] p-8 bg-gray-50">
+          <div className="min-h-[90vh] p-12 bg-gray-50">
             {/* Header Section */}
-            <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-8 mb-8">
-              <div className="flex justify-between items-start mb-6">
-                <div className="flex items-center space-x-6">
-                  <div className="w-16 h-16 bg-blue-100 rounded-lg flex items-center justify-center">
-                    <Package className="w-8 h-8 text-blue-600" />
+            <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-12 mb-12">
+              <div className="flex justify-between items-start mb-12">
+                <div className="flex items-center space-x-8">
+                  <div className="w-20 h-20 bg-blue-100 rounded-xl flex items-center justify-center">
+                    <Package className="w-10 h-10 text-blue-600" />
                   </div>
                   <div>
-                    <h2 className="text-3xl font-bold text-gray-900 mb-2">{selectedOrder.product_name}</h2>
-                    <div className="flex items-center space-x-4 text-lg text-gray-600">
+                    <h2 className="text-4xl font-bold text-gray-900 mb-4">{selectedOrder.product_name}</h2>
+                    <div className="flex items-center space-x-6 text-xl text-gray-600">
                       <span>Order #{selectedOrder.order_number}</span>
                       {selectedOrder.batch_number && (
                         <>
@@ -1395,119 +1395,119 @@ export default function ProductionOrdersSystem() {
                     </div>
                   </div>
                 </div>
-                <div className="flex items-center space-x-4">
-                  <Badge className={getOrderStatusInfo(selectedOrder.status).color + ' px-4 py-2 text-base'}>
-                    {React.createElement(getOrderStatusInfo(selectedOrder.status).icon, { className: "w-5 h-5 mr-2" })}
+                <div className="flex items-center space-x-6">
+                  <Badge className={getOrderStatusInfo(selectedOrder.status).color + ' px-6 py-3 text-lg'}>
+                    {React.createElement(getOrderStatusInfo(selectedOrder.status).icon, { className: "w-6 h-6 mr-3" })}
                     {getOrderStatusInfo(selectedOrder.status).label}
                   </Badge>
-                  <Badge className={getPriorityInfo(selectedOrder.priority).color + ' px-4 py-2 text-base'}>
+                  <Badge className={getPriorityInfo(selectedOrder.priority).color + ' px-6 py-3 text-lg'}>
                     {getPriorityInfo(selectedOrder.priority).label}
                   </Badge>
                 </div>
               </div>
 
               {/* Key Performance Metrics */}
-              <div className="grid grid-cols-6 gap-6">
-                <div className="bg-green-50 rounded-lg p-6 border border-green-200">
-                  <div className="flex items-center justify-between mb-3">
-                    <Target className="w-8 h-8 text-green-600" />
+              <div className="grid grid-cols-6 gap-8">
+                <div className="bg-green-50 rounded-xl p-8 border border-green-200">
+                  <div className="flex items-center justify-between mb-6">
+                    <Target className="w-10 h-10 text-green-600" />
                     <span className="text-green-600 text-sm font-semibold uppercase tracking-wide">Target</span>
                   </div>
-                  <div className="text-3xl font-bold text-green-900 mb-1">{selectedOrder.quantity}</div>
-                  <div className="text-green-700 text-sm">Units</div>
+                  <div className="text-4xl font-bold text-green-900 mb-3">{selectedOrder.quantity}</div>
+                  <div className="text-green-700 text-base">Units</div>
                 </div>
                 
-                <div className="bg-blue-50 rounded-lg p-6 border border-blue-200">
-                  <div className="flex items-center justify-between mb-3">
-                    <CheckCircle className="w-8 h-8 text-blue-600" />
+                <div className="bg-blue-50 rounded-xl p-8 border border-blue-200">
+                  <div className="flex items-center justify-between mb-6">
+                    <CheckCircle className="w-10 h-10 text-blue-600" />
                     <span className="text-blue-600 text-sm font-semibold uppercase tracking-wide">Actual</span>
                   </div>
-                  <div className="text-3xl font-bold text-blue-900 mb-1">{selectedOrder.actual_quantity || 0}</div>
-                  <div className="text-blue-700 text-sm">Units</div>
+                  <div className="text-4xl font-bold text-blue-900 mb-3">{selectedOrder.actual_quantity || 0}</div>
+                  <div className="text-blue-700 text-base">Units</div>
                 </div>
                 
-                <div className="bg-purple-50 rounded-lg p-6 border border-purple-200">
-                  <div className="flex items-center justify-between mb-3">
-                    <Clock className="w-8 h-8 text-purple-600" />
+                <div className="bg-purple-50 rounded-xl p-8 border border-purple-200">
+                  <div className="flex items-center justify-between mb-6">
+                    <Clock className="w-10 h-10 text-purple-600" />
                     <span className="text-purple-600 text-sm font-semibold uppercase tracking-wide">Runtime</span>
                   </div>
-                  <div className="text-3xl font-bold text-purple-900 mb-1">
+                  <div className="text-4xl font-bold text-purple-900 mb-3">
                     {getProductionTime(selectedOrder) || '0h 0m'}
                   </div>
-                  <div className="text-purple-700 text-sm">Duration</div>
+                  <div className="text-purple-700 text-base">Duration</div>
                 </div>
                 
-                <div className="bg-yellow-50 rounded-lg p-6 border border-yellow-200">
-                  <div className="flex items-center justify-between mb-3">
-                    <Gauge className="w-8 h-8 text-yellow-600" />
+                <div className="bg-yellow-50 rounded-xl p-8 border border-yellow-200">
+                  <div className="flex items-center justify-between mb-6">
+                    <Gauge className="w-10 h-10 text-yellow-600" />
                     <span className="text-yellow-600 text-sm font-semibold uppercase tracking-wide">Efficiency</span>
                   </div>
-                  <div className="text-3xl font-bold text-yellow-900 mb-1">
+                  <div className="text-4xl font-bold text-yellow-900 mb-3">
                     {selectedOrder.efficiency_percentage ? `${selectedOrder.efficiency_percentage}%` : 'N/A'}
                   </div>
-                  <div className="text-yellow-700 text-sm">Performance</div>
+                  <div className="text-yellow-700 text-base">Performance</div>
                 </div>
 
-                <div className="bg-indigo-50 rounded-lg p-6 border border-indigo-200">
-                  <div className="flex items-center justify-between mb-3">
-                    <Factory className="w-8 h-8 text-indigo-600" />
+                <div className="bg-indigo-50 rounded-xl p-8 border border-indigo-200">
+                  <div className="flex items-center justify-between mb-6">
+                    <Factory className="w-10 h-10 text-indigo-600" />
                     <span className="text-indigo-600 text-sm font-semibold uppercase tracking-wide">Machine</span>
                   </div>
-                  <div className="text-lg font-bold text-indigo-900 mb-1">
+                  <div className="text-xl font-bold text-indigo-900 mb-3">
                     {selectedOrder.machine_id ? getMachineName(selectedOrder.machine_id) : 'Unassigned'}
                   </div>
-                  <div className="text-indigo-700 text-sm">Assignment</div>
+                  <div className="text-indigo-700 text-base">Assignment</div>
                 </div>
 
-                <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
-                  <div className="flex items-center justify-between mb-3">
-                    <User className="w-8 h-8 text-gray-600" />
+                <div className="bg-gray-50 rounded-xl p-8 border border-gray-200">
+                  <div className="flex items-center justify-between mb-6">
+                    <User className="w-10 h-10 text-gray-600" />
                     <span className="text-gray-600 text-sm font-semibold uppercase tracking-wide">Operator</span>
                   </div>
-                  <div className="text-lg font-bold text-gray-900 mb-1">
+                  <div className="text-xl font-bold text-gray-900 mb-3">
                     {selectedOrder.operator_id ? `Op #${selectedOrder.operator_id}` : 'TBD'}
                   </div>
-                  <div className="text-gray-700 text-sm">Assigned</div>
+                  <div className="text-gray-700 text-base">Assigned</div>
                 </div>
               </div>
             </div>
 
             {/* Main Content Grid */}
-            <div className="grid grid-cols-3 gap-8">
+            <div className="grid grid-cols-3 gap-12">
               {/* Left Column - Order & Production Info */}
-              <div className="space-y-6">
+              <div className="space-y-10">
                 {/* Order Information */}
-                <Card className="p-6 bg-white shadow-lg">
-                  <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center">
-                    <FileText className="w-6 h-6 mr-3 text-blue-600" />
+                <Card className="p-10 bg-white shadow-lg">
+                  <h3 className="text-2xl font-bold text-gray-900 mb-8 flex items-center">
+                    <FileText className="w-8 h-8 mr-4 text-blue-600" />
                     Order Information
                   </h3>
                   
-                  <div className="space-y-4">
-                    <div className="flex justify-between items-center py-3 border-b border-gray-100">
-                      <span className="text-gray-600 font-medium">Environment:</span>
-                      <span className="font-semibold text-gray-900">{getEnvironmentName(selectedOrder.environment)}</span>
+                  <div className="space-y-10">
+                    <div className="flex justify-between items-center py-4 border-b border-gray-100">
+                      <span className="text-gray-600 font-medium text-lg">Environment:</span>
+                      <span className="font-semibold text-gray-900 text-lg">{getEnvironmentName(selectedOrder.environment)}</span>
                     </div>
                     
                     {selectedOrder.due_date && (
-                      <div className="flex justify-between items-center py-3 border-b border-gray-100">
-                        <span className="text-gray-600 font-medium">Due Date:</span>
-                        <span className="font-semibold text-gray-900">
+                      <div className="flex justify-between items-center py-4 border-b border-gray-100">
+                        <span className="text-gray-600 font-medium text-lg">Due Date:</span>
+                        <span className="font-semibold text-gray-900 text-lg">
                           {new Date(selectedOrder.due_date).toLocaleDateString()}
                         </span>
                       </div>
                     )}
                     
-                    <div className="flex justify-between items-center py-3 border-b border-gray-100">
-                      <span className="text-gray-600 font-medium">Created:</span>
-                      <span className="font-semibold text-gray-900">
+                    <div className="flex justify-between items-center py-4 border-b border-gray-100">
+                      <span className="text-gray-600 font-medium text-lg">Created:</span>
+                      <span className="font-semibold text-gray-900 text-lg">
                         {new Date(selectedOrder.created_at).toLocaleString()}
                       </span>
                     </div>
                     
-                    <div className="flex justify-between items-center py-3">
-                      <span className="text-gray-600 font-medium">Last Updated:</span>
-                      <span className="font-semibold text-gray-900">
+                    <div className="flex justify-between items-center py-4">
+                      <span className="text-gray-600 font-medium text-lg">Last Updated:</span>
+                      <span className="font-semibold text-gray-900 text-lg">
                         {new Date(selectedOrder.updated_at || selectedOrder.created_at).toLocaleString()}
                       </span>
                     </div>
@@ -1515,24 +1515,24 @@ export default function ProductionOrdersSystem() {
                 </Card>
 
                 {/* Production Timing */}
-                <Card className="p-6 bg-white shadow-lg">
-                  <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center">
-                    <Timer className="w-6 h-6 mr-3 text-purple-600" />
+                <Card className="p-10 bg-white shadow-lg">
+                  <h3 className="text-2xl font-bold text-gray-900 mb-8 flex items-center">
+                    <Timer className="w-8 h-8 mr-4 text-purple-600" />
                     Production Timing
                   </h3>
                   
-                  <div className="space-y-4">
+                  <div className="space-y-10">
                     {selectedOrder.start_time && (
-                      <div className="flex justify-between items-center py-3 border-b border-gray-100">
-                        <span className="text-gray-600 font-medium">Started:</span>
-                        <span className="font-semibold text-gray-900">
+                      <div className="flex justify-between items-center py-4 border-b border-gray-100">
+                        <span className="text-gray-600 font-medium text-lg">Started:</span>
+                        <span className="font-semibold text-gray-900 text-lg">
                           {new Date(selectedOrder.start_time).toLocaleString()}
                         </span>
                       </div>
                     )}
                     
                     {selectedOrder.setup_complete_time && (
-                      <div className="flex justify-between items-center py-3 border-b border-gray-100">
+                      <div className="flex justify-between items-center py-4 border-b border-gray-100">
                         <span className="text-gray-600 font-medium">Setup Complete:</span>
                         <span className="font-semibold text-gray-900">
                           {new Date(selectedOrder.setup_complete_time).toLocaleString()}
@@ -1541,7 +1541,7 @@ export default function ProductionOrdersSystem() {
                     )}
                     
                     {selectedOrder.stop_time && (
-                      <div className="flex justify-between items-center py-3 border-b border-gray-100">
+                      <div className="flex justify-between items-center py-4 border-b border-gray-100">
                         <span className="text-gray-600 font-medium">Stopped:</span>
                         <span className="font-semibold text-gray-900">
                           {new Date(selectedOrder.stop_time).toLocaleString()}
@@ -1550,7 +1550,7 @@ export default function ProductionOrdersSystem() {
                     )}
                     
                     {selectedOrder.complete_time && (
-                      <div className="flex justify-between items-center py-3 border-b border-gray-100">
+                      <div className="flex justify-between items-center py-4 border-b border-gray-100">
                         <span className="text-gray-600 font-medium">Completed:</span>
                         <span className="font-semibold text-gray-900">
                           {new Date(selectedOrder.complete_time).toLocaleString()}
@@ -1559,7 +1559,7 @@ export default function ProductionOrdersSystem() {
                     )}
                     
                     {selectedOrder.setup_time && (
-                      <div className="flex justify-between items-center py-3">
+                      <div className="flex justify-between items-center py-4">
                         <span className="text-gray-600 font-medium">Setup Duration:</span>
                         <span className="font-semibold text-gray-900">{selectedOrder.setup_time} minutes</span>
                       </div>
@@ -1569,16 +1569,16 @@ export default function ProductionOrdersSystem() {
               </div>
 
               {/* Center Column - Timeline & Quality */}
-              <div className="space-y-6">
+              <div className="space-y-10">
                 {/* Production Timeline */}
                 {(selectedOrder.start_time || selectedOrder.stop_time || selectedOrder.complete_time) && (
-                  <Card className="p-6 bg-white shadow-lg">
-                    <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center">
+                  <Card className="p-10 bg-white shadow-lg">
+                    <h3 className="text-2xl font-bold text-gray-900 mb-8 flex items-center">
                       <Activity className="w-6 h-6 mr-3 text-green-600" />
                       Production Timeline
                     </h3>
                     
-                    <div className="space-y-6">
+                    <div className="space-y-10">
                       <div className="flex items-start space-x-4">
                         <div className="w-4 h-4 bg-blue-500 rounded-full mt-1"></div>
                         <div className="flex-1">
@@ -1635,8 +1635,8 @@ export default function ProductionOrdersSystem() {
 
                 {/* Quality Information */}
                 {(selectedOrder.quality_score || selectedOrder.quality_approved !== undefined) && (
-                  <Card className="p-6 bg-white shadow-lg">
-                    <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center">
+                  <Card className="p-10 bg-white shadow-lg">
+                    <h3 className="text-2xl font-bold text-gray-900 mb-8 flex items-center">
                       <CheckCircle className="w-6 h-6 mr-3 text-green-600" />
                       Quality Information
                     </h3>
@@ -1670,10 +1670,10 @@ export default function ProductionOrdersSystem() {
               </div>
 
               {/* Right Column - Notes & Specifications */}
-              <div className="space-y-6">
+              <div className="space-y-10">
                 {selectedOrder.notes && (
-                  <Card className="p-6 bg-white shadow-lg">
-                    <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center">
+                  <Card className="p-10 bg-white shadow-lg">
+                    <h3 className="text-2xl font-bold text-gray-900 mb-8 flex items-center">
                       <AlertCircle className="w-6 h-6 mr-3 text-orange-600" />
                       Production Notes
                     </h3>
@@ -1684,8 +1684,8 @@ export default function ProductionOrdersSystem() {
                 )}
                 
                 {selectedOrder.specifications && (
-                  <Card className="p-6 bg-white shadow-lg">
-                    <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center">
+                  <Card className="p-10 bg-white shadow-lg">
+                    <h3 className="text-2xl font-bold text-gray-900 mb-8 flex items-center">
                       <Settings className="w-6 h-6 mr-3 text-indigo-600" />
                       Specifications
                     </h3>
@@ -1701,8 +1701,8 @@ export default function ProductionOrdersSystem() {
                 )}
 
                 {/* Actions Card */}
-                <Card className="p-6 bg-white shadow-lg">
-                  <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center">
+                <Card className="p-10 bg-white shadow-lg">
+                  <h3 className="text-2xl font-bold text-gray-900 mb-8 flex items-center">
                     <Zap className="w-6 h-6 mr-3 text-purple-600" />
                     Actions
                   </h3>
