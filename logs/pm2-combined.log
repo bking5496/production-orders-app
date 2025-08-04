@@ -33012,3 +33012,1527 @@ Error: bind EADDRINUSE null:3000
 2025-08-04T16:29:57: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
 2025-08-04T16:29:57: ✨ Enhanced endpoints loaded successfully
 2025-08-04T16:29:57: 🔧 Configuration management system enabled
+2025-08-04T16:30:02: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:30:02: ✅ PostgreSQL database interface ready
+2025-08-04T16:30:02: 🔍 About to run health check...
+2025-08-04T16:30:02: 📋 Labor roster will use existing users table
+2025-08-04T16:30:02: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:30:02: JWT_SECRET exists: true
+2025-08-04T16:30:02: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:30:02: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:30:02: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:30:02: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:30:02: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:30:02: 🔧 Configuration management system enabled
+2025-08-04T16:30:07: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:30:07: ✅ PostgreSQL database interface ready
+2025-08-04T16:30:07: 🔍 About to run health check...
+2025-08-04T16:30:07: 📋 Labor roster will use existing users table
+2025-08-04T16:30:07: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:30:07: JWT_SECRET exists: true
+2025-08-04T16:30:07: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:30:07: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:30:07: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:30:07: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:30:07: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:30:07: 🔧 Configuration management system enabled
+2025-08-04T16:30:12: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:30:12: ✅ PostgreSQL database interface ready
+2025-08-04T16:30:12: 🔍 About to run health check...
+2025-08-04T16:30:12: 📋 Labor roster will use existing users table
+2025-08-04T16:30:12: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:30:12: JWT_SECRET exists: true
+2025-08-04T16:30:12: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:30:12: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:30:12: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:30:12: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:30:12: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:30:12: 🔧 Configuration management system enabled
+2025-08-04T16:30:17: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:30:17: ✅ PostgreSQL database interface ready
+2025-08-04T16:30:17: 🔍 About to run health check...
+2025-08-04T16:30:17: 📋 Labor roster will use existing users table
+2025-08-04T16:30:17: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:30:17: JWT_SECRET exists: true
+2025-08-04T16:30:17: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:30:17: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:30:17: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:30:17: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:30:17: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:30:17: 🔧 Configuration management system enabled
+2025-08-04T16:30:21: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:30:21: ✅ PostgreSQL database interface ready
+2025-08-04T16:30:21: 🔍 About to run health check...
+2025-08-04T16:30:21: 📋 Labor roster will use existing users table
+2025-08-04T16:30:21: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:30:21: JWT_SECRET exists: true
+2025-08-04T16:30:21: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:30:21: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:30:21: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:30:21: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:30:21: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:30:21: 🔧 Configuration management system enabled
+2025-08-04T16:30:26: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:30:26: ✅ PostgreSQL database interface ready
+2025-08-04T16:30:26: 🔍 About to run health check...
+2025-08-04T16:30:26: 📋 Labor roster will use existing users table
+2025-08-04T16:30:26: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:30:26: JWT_SECRET exists: true
+2025-08-04T16:30:26: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:30:26: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:30:26: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:30:26: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:30:26: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:30:26: 🔧 Configuration management system enabled
+2025-08-04T16:30:31: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:30:31: ✅ PostgreSQL database interface ready
+2025-08-04T16:30:31: 🔍 About to run health check...
+2025-08-04T16:30:31: 📋 Labor roster will use existing users table
+2025-08-04T16:30:31: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:30:31: JWT_SECRET exists: true
+2025-08-04T16:30:31: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:30:31: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:30:31: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:30:31: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:30:31: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:30:31: 🔧 Configuration management system enabled
+2025-08-04T16:30:35: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:30:35: ✅ PostgreSQL database interface ready
+2025-08-04T16:30:35: 🔍 About to run health check...
+2025-08-04T16:30:35: 📋 Labor roster will use existing users table
+2025-08-04T16:30:35: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:30:35: JWT_SECRET exists: true
+2025-08-04T16:30:35: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:30:35: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:30:35: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:30:35: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:30:35: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:30:35: 🔧 Configuration management system enabled
+2025-08-04T16:30:40: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:30:40: ✅ PostgreSQL database interface ready
+2025-08-04T16:30:40: 🔍 About to run health check...
+2025-08-04T16:30:40: 📋 Labor roster will use existing users table
+2025-08-04T16:30:40: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:30:40: JWT_SECRET exists: true
+2025-08-04T16:30:40: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:30:40: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:30:40: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:30:40: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:30:40: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:30:40: 🔧 Configuration management system enabled
+2025-08-04T16:30:45: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:30:45: ✅ PostgreSQL database interface ready
+2025-08-04T16:30:45: 🔍 About to run health check...
+2025-08-04T16:30:45: 📋 Labor roster will use existing users table
+2025-08-04T16:30:45: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:30:45: JWT_SECRET exists: true
+2025-08-04T16:30:45: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:30:45: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:30:45: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:30:45: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:30:45: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:30:45: 🔧 Configuration management system enabled
+2025-08-04T16:30:50: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:30:50: ✅ PostgreSQL database interface ready
+2025-08-04T16:30:50: 🔍 About to run health check...
+2025-08-04T16:30:50: 📋 Labor roster will use existing users table
+2025-08-04T16:30:50: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:30:50: JWT_SECRET exists: true
+2025-08-04T16:30:50: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:30:50: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:30:50: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:30:50: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:30:50: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:30:50: 🔧 Configuration management system enabled
+2025-08-04T16:30:54: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:30:54: ✅ PostgreSQL database interface ready
+2025-08-04T16:30:54: 🔍 About to run health check...
+2025-08-04T16:30:54: 📋 Labor roster will use existing users table
+2025-08-04T16:30:54: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:30:54: JWT_SECRET exists: true
+2025-08-04T16:30:54: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:30:54: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:30:54: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:30:54: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:30:54: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:30:54: 🔧 Configuration management system enabled
+2025-08-04T16:30:59: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:30:59: ✅ PostgreSQL database interface ready
+2025-08-04T16:30:59: 🔍 About to run health check...
+2025-08-04T16:30:59: 📋 Labor roster will use existing users table
+2025-08-04T16:30:59: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:30:59: JWT_SECRET exists: true
+2025-08-04T16:30:59: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:30:59: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:30:59: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:30:59: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:30:59: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:30:59: 🔧 Configuration management system enabled
+2025-08-04T16:31:04: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:31:04: ✅ PostgreSQL database interface ready
+2025-08-04T16:31:04: 🔍 About to run health check...
+2025-08-04T16:31:04: 📋 Labor roster will use existing users table
+2025-08-04T16:31:04: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:31:04: JWT_SECRET exists: true
+2025-08-04T16:31:04: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:31:04: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:31:04: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:31:04: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:31:04: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:31:04: 🔧 Configuration management system enabled
+2025-08-04T16:31:08: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:31:08: ✅ PostgreSQL database interface ready
+2025-08-04T16:31:08: 🔍 About to run health check...
+2025-08-04T16:31:09: 📋 Labor roster will use existing users table
+2025-08-04T16:31:09: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:31:09: JWT_SECRET exists: true
+2025-08-04T16:31:09: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:31:09: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:31:09: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:31:09: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:31:09: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:31:09: 🔧 Configuration management system enabled
+2025-08-04T16:31:13: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:31:13: ✅ PostgreSQL database interface ready
+2025-08-04T16:31:13: 🔍 About to run health check...
+2025-08-04T16:31:13: 📋 Labor roster will use existing users table
+2025-08-04T16:31:13: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:31:13: JWT_SECRET exists: true
+2025-08-04T16:31:13: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:31:13: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:31:13: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:31:13: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:31:13: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:31:13: 🔧 Configuration management system enabled
+2025-08-04T16:31:18: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:31:18: ✅ PostgreSQL database interface ready
+2025-08-04T16:31:18: 🔍 About to run health check...
+2025-08-04T16:31:18: 📋 Labor roster will use existing users table
+2025-08-04T16:31:18: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:31:18: JWT_SECRET exists: true
+2025-08-04T16:31:18: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:31:18: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:31:18: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:31:18: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:31:18: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:31:18: 🔧 Configuration management system enabled
+2025-08-04T16:31:23: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:31:23: ✅ PostgreSQL database interface ready
+2025-08-04T16:31:23: 🔍 About to run health check...
+2025-08-04T16:31:23: 📋 Labor roster will use existing users table
+2025-08-04T16:31:23: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:31:23: JWT_SECRET exists: true
+2025-08-04T16:31:23: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:31:23: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:31:23: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:31:23: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:31:23: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:31:23: 🔧 Configuration management system enabled
+2025-08-04T16:31:27: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:31:27: ✅ PostgreSQL database interface ready
+2025-08-04T16:31:27: 🔍 About to run health check...
+2025-08-04T16:31:27: 📋 Labor roster will use existing users table
+2025-08-04T16:31:27: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:31:27: JWT_SECRET exists: true
+2025-08-04T16:31:27: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:31:27: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:31:27: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:31:27: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:31:27: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:31:27: 🔧 Configuration management system enabled
+2025-08-04T16:31:32: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:31:32: ✅ PostgreSQL database interface ready
+2025-08-04T16:31:32: 🔍 About to run health check...
+2025-08-04T16:31:32: 📋 Labor roster will use existing users table
+2025-08-04T16:31:32: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:31:32: JWT_SECRET exists: true
+2025-08-04T16:31:32: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:31:32: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:31:32: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:31:32: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:31:32: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:31:32: 🔧 Configuration management system enabled
+2025-08-04T16:31:37: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:31:37: ✅ PostgreSQL database interface ready
+2025-08-04T16:31:37: 🔍 About to run health check...
+2025-08-04T16:31:37: 📋 Labor roster will use existing users table
+2025-08-04T16:31:37: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:31:37: JWT_SECRET exists: true
+2025-08-04T16:31:37: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:31:37: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:31:37: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:31:37: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:31:37: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:31:37: 🔧 Configuration management system enabled
+2025-08-04T16:31:42: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:31:42: ✅ PostgreSQL database interface ready
+2025-08-04T16:31:42: 🔍 About to run health check...
+2025-08-04T16:31:42: 📋 Labor roster will use existing users table
+2025-08-04T16:31:42: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:31:42: JWT_SECRET exists: true
+2025-08-04T16:31:42: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:31:42: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:31:42: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:31:42: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:31:42: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:31:42: 🔧 Configuration management system enabled
+2025-08-04T16:31:46: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:31:46: ✅ PostgreSQL database interface ready
+2025-08-04T16:31:46: 🔍 About to run health check...
+2025-08-04T16:31:46: 📋 Labor roster will use existing users table
+2025-08-04T16:31:46: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:31:46: JWT_SECRET exists: true
+2025-08-04T16:31:46: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:31:46: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:31:46: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:31:46: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:31:46: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:31:46: 🔧 Configuration management system enabled
+2025-08-04T16:31:51: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:31:51: ✅ PostgreSQL database interface ready
+2025-08-04T16:31:51: 🔍 About to run health check...
+2025-08-04T16:31:51: 📋 Labor roster will use existing users table
+2025-08-04T16:31:51: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:31:51: JWT_SECRET exists: true
+2025-08-04T16:31:51: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:31:51: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:31:51: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:31:51: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:31:51: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:31:51: 🔧 Configuration management system enabled
+2025-08-04T16:31:56: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:31:56: ✅ PostgreSQL database interface ready
+2025-08-04T16:31:56: 🔍 About to run health check...
+2025-08-04T16:31:56: 📋 Labor roster will use existing users table
+2025-08-04T16:31:56: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:31:56: JWT_SECRET exists: true
+2025-08-04T16:31:56: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:31:56: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:31:56: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:31:56: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:31:56: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:31:56: 🔧 Configuration management system enabled
+2025-08-04T16:32:01: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:32:01: ✅ PostgreSQL database interface ready
+2025-08-04T16:32:01: 🔍 About to run health check...
+2025-08-04T16:32:01: 📋 Labor roster will use existing users table
+2025-08-04T16:32:01: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:32:01: JWT_SECRET exists: true
+2025-08-04T16:32:01: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:32:01: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:32:01: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:32:01: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:32:01: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:32:01: 🔧 Configuration management system enabled
+2025-08-04T16:32:05: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:32:05: ✅ PostgreSQL database interface ready
+2025-08-04T16:32:05: 🔍 About to run health check...
+2025-08-04T16:32:05: 📋 Labor roster will use existing users table
+2025-08-04T16:32:05: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:32:05: JWT_SECRET exists: true
+2025-08-04T16:32:05: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:32:05: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:32:05: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:32:05: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:32:05: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:32:05: 🔧 Configuration management system enabled
+2025-08-04T16:32:10: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:32:10: ✅ PostgreSQL database interface ready
+2025-08-04T16:32:10: 🔍 About to run health check...
+2025-08-04T16:32:10: 📋 Labor roster will use existing users table
+2025-08-04T16:32:10: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:32:10: JWT_SECRET exists: true
+2025-08-04T16:32:10: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:32:10: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:32:10: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:32:10: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:32:10: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:32:10: 🔧 Configuration management system enabled
+2025-08-04T16:32:15: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:32:15: ✅ PostgreSQL database interface ready
+2025-08-04T16:32:15: 🔍 About to run health check...
+2025-08-04T16:32:15: 📋 Labor roster will use existing users table
+2025-08-04T16:32:15: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:32:15: JWT_SECRET exists: true
+2025-08-04T16:32:15: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:32:15: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:32:15: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:32:15: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:32:15: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:32:15: 🔧 Configuration management system enabled
+2025-08-04T16:32:19: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:32:19: ✅ PostgreSQL database interface ready
+2025-08-04T16:32:19: 🔍 About to run health check...
+2025-08-04T16:32:19: 📋 Labor roster will use existing users table
+2025-08-04T16:32:19: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:32:19: JWT_SECRET exists: true
+2025-08-04T16:32:19: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:32:19: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:32:19: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:32:19: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:32:19: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:32:19: 🔧 Configuration management system enabled
+2025-08-04T16:32:24: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:32:24: ✅ PostgreSQL database interface ready
+2025-08-04T16:32:24: 🔍 About to run health check...
+2025-08-04T16:32:24: 📋 Labor roster will use existing users table
+2025-08-04T16:32:24: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:32:24: JWT_SECRET exists: true
+2025-08-04T16:32:24: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:32:24: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:32:24: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:32:24: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:32:24: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:32:24: 🔧 Configuration management system enabled
+2025-08-04T16:32:29: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:32:29: ✅ PostgreSQL database interface ready
+2025-08-04T16:32:29: 🔍 About to run health check...
+2025-08-04T16:32:29: 📋 Labor roster will use existing users table
+2025-08-04T16:32:29: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:32:29: JWT_SECRET exists: true
+2025-08-04T16:32:29: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:32:29: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:32:29: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:32:29: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:32:29: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:32:29: 🔧 Configuration management system enabled
+2025-08-04T16:32:34: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:32:34: ✅ PostgreSQL database interface ready
+2025-08-04T16:32:34: 🔍 About to run health check...
+2025-08-04T16:32:34: 📋 Labor roster will use existing users table
+2025-08-04T16:32:34: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:32:34: JWT_SECRET exists: true
+2025-08-04T16:32:34: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:32:34: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:32:34: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:32:34: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:32:34: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:32:34: 🔧 Configuration management system enabled
+2025-08-04T16:32:38: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:32:38: ✅ PostgreSQL database interface ready
+2025-08-04T16:32:38: 🔍 About to run health check...
+2025-08-04T16:32:38: 📋 Labor roster will use existing users table
+2025-08-04T16:32:38: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:32:38: JWT_SECRET exists: true
+2025-08-04T16:32:38: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:32:38: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:32:38: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:32:38: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:32:38: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:32:38: 🔧 Configuration management system enabled
+2025-08-04T16:32:43: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:32:43: ✅ PostgreSQL database interface ready
+2025-08-04T16:32:43: 🔍 About to run health check...
+2025-08-04T16:32:43: 📋 Labor roster will use existing users table
+2025-08-04T16:32:43: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:32:43: JWT_SECRET exists: true
+2025-08-04T16:32:43: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:32:43: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:32:43: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:32:43: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:32:43: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:32:43: 🔧 Configuration management system enabled
+2025-08-04T16:32:48: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:32:48: ✅ PostgreSQL database interface ready
+2025-08-04T16:32:48: 🔍 About to run health check...
+2025-08-04T16:32:48: 📋 Labor roster will use existing users table
+2025-08-04T16:32:48: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:32:48: JWT_SECRET exists: true
+2025-08-04T16:32:48: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:32:48: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:32:48: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:32:48: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:32:48: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:32:48: 🔧 Configuration management system enabled
+2025-08-04T16:32:52: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:32:52: ✅ PostgreSQL database interface ready
+2025-08-04T16:32:52: 🔍 About to run health check...
+2025-08-04T16:32:52: 📋 Labor roster will use existing users table
+2025-08-04T16:32:52: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:32:52: JWT_SECRET exists: true
+2025-08-04T16:32:52: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:32:52: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:32:52: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:32:52: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:32:52: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:32:52: 🔧 Configuration management system enabled
+2025-08-04T16:32:57: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:32:57: ✅ PostgreSQL database interface ready
+2025-08-04T16:32:57: 🔍 About to run health check...
+2025-08-04T16:32:57: 📋 Labor roster will use existing users table
+2025-08-04T16:32:57: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:32:57: JWT_SECRET exists: true
+2025-08-04T16:32:57: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:32:57: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:32:57: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:32:57: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:32:57: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:32:57: 🔧 Configuration management system enabled
+2025-08-04T16:33:02: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:33:02: ✅ PostgreSQL database interface ready
+2025-08-04T16:33:02: 🔍 About to run health check...
+2025-08-04T16:33:02: 📋 Labor roster will use existing users table
+2025-08-04T16:33:02: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:33:02: JWT_SECRET exists: true
+2025-08-04T16:33:02: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:33:02: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:33:02: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:33:02: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:33:02: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:33:02: 🔧 Configuration management system enabled
+2025-08-04T16:33:07: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:33:07: ✅ PostgreSQL database interface ready
+2025-08-04T16:33:07: 🔍 About to run health check...
+2025-08-04T16:33:07: 📋 Labor roster will use existing users table
+2025-08-04T16:33:07: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:33:07: JWT_SECRET exists: true
+2025-08-04T16:33:07: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:33:07: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:33:07: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:33:07: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:33:07: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:33:07: 🔧 Configuration management system enabled
+2025-08-04T16:33:11: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:33:11: ✅ PostgreSQL database interface ready
+2025-08-04T16:33:11: 🔍 About to run health check...
+2025-08-04T16:33:11: 📋 Labor roster will use existing users table
+2025-08-04T16:33:11: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:33:11: JWT_SECRET exists: true
+2025-08-04T16:33:11: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:33:11: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:33:11: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:33:11: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:33:11: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:33:11: 🔧 Configuration management system enabled
+2025-08-04T16:33:16: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:33:16: ✅ PostgreSQL database interface ready
+2025-08-04T16:33:16: 🔍 About to run health check...
+2025-08-04T16:33:16: 📋 Labor roster will use existing users table
+2025-08-04T16:33:16: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:33:16: JWT_SECRET exists: true
+2025-08-04T16:33:16: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:33:16: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:33:16: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:33:16: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:33:16: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:33:16: 🔧 Configuration management system enabled
+2025-08-04T16:33:21: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:33:21: ✅ PostgreSQL database interface ready
+2025-08-04T16:33:21: 🔍 About to run health check...
+2025-08-04T16:33:21: 📋 Labor roster will use existing users table
+2025-08-04T16:33:21: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:33:21: JWT_SECRET exists: true
+2025-08-04T16:33:21: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:33:21: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:33:21: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:33:21: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:33:21: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:33:21: 🔧 Configuration management system enabled
+2025-08-04T16:33:25: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:33:25: ✅ PostgreSQL database interface ready
+2025-08-04T16:33:25: 🔍 About to run health check...
+2025-08-04T16:33:25: 📋 Labor roster will use existing users table
+2025-08-04T16:33:25: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:33:25: JWT_SECRET exists: true
+2025-08-04T16:33:25: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:33:25: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:33:25: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:33:25: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:33:25: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:33:25: 🔧 Configuration management system enabled
+2025-08-04T16:33:30: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:33:30: ✅ PostgreSQL database interface ready
+2025-08-04T16:33:30: 🔍 About to run health check...
+2025-08-04T16:33:30: 📋 Labor roster will use existing users table
+2025-08-04T16:33:30: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:33:30: JWT_SECRET exists: true
+2025-08-04T16:33:30: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:33:30: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:33:30: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:33:30: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:33:30: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:33:30: 🔧 Configuration management system enabled
+2025-08-04T16:33:35: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:33:35: ✅ PostgreSQL database interface ready
+2025-08-04T16:33:35: 🔍 About to run health check...
+2025-08-04T16:33:35: 📋 Labor roster will use existing users table
+2025-08-04T16:33:35: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:33:35: JWT_SECRET exists: true
+2025-08-04T16:33:35: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:33:35: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:33:35: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:33:35: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:33:35: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:33:35: 🔧 Configuration management system enabled
+2025-08-04T16:33:39: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:33:39: ✅ PostgreSQL database interface ready
+2025-08-04T16:33:39: 🔍 About to run health check...
+2025-08-04T16:33:39: 📋 Labor roster will use existing users table
+2025-08-04T16:33:39: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:33:39: JWT_SECRET exists: true
+2025-08-04T16:33:39: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:33:39: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:33:39: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:33:39: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:33:39: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:33:39: 🔧 Configuration management system enabled
+2025-08-04T16:33:44: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:33:44: ✅ PostgreSQL database interface ready
+2025-08-04T16:33:44: 🔍 About to run health check...
+2025-08-04T16:33:44: 📋 Labor roster will use existing users table
+2025-08-04T16:33:44: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:33:44: JWT_SECRET exists: true
+2025-08-04T16:33:44: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:33:44: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:33:44: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:33:44: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:33:44: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:33:44: 🔧 Configuration management system enabled
+2025-08-04T16:33:49: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:33:49: ✅ PostgreSQL database interface ready
+2025-08-04T16:33:49: 🔍 About to run health check...
+2025-08-04T16:33:49: 📋 Labor roster will use existing users table
+2025-08-04T16:33:49: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:33:49: JWT_SECRET exists: true
+2025-08-04T16:33:49: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:33:49: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:33:49: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:33:49: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:33:49: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:33:49: 🔧 Configuration management system enabled
+2025-08-04T16:33:53: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:33:53: ✅ PostgreSQL database interface ready
+2025-08-04T16:33:53: 🔍 About to run health check...
+2025-08-04T16:33:53: 📋 Labor roster will use existing users table
+2025-08-04T16:33:53: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:33:53: JWT_SECRET exists: true
+2025-08-04T16:33:53: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:33:53: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:33:53: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:33:53: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:33:53: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:33:53: 🔧 Configuration management system enabled
+2025-08-04T16:33:58: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:33:58: ✅ PostgreSQL database interface ready
+2025-08-04T16:33:58: 🔍 About to run health check...
+2025-08-04T16:33:58: 📋 Labor roster will use existing users table
+2025-08-04T16:33:58: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:33:58: JWT_SECRET exists: true
+2025-08-04T16:33:58: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:33:58: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:33:58: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:33:58: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:33:58: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:33:58: 🔧 Configuration management system enabled
+2025-08-04T16:34:03: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:34:03: ✅ PostgreSQL database interface ready
+2025-08-04T16:34:03: 🔍 About to run health check...
+2025-08-04T16:34:03: 📋 Labor roster will use existing users table
+2025-08-04T16:34:03: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:34:03: JWT_SECRET exists: true
+2025-08-04T16:34:03: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:34:03: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:34:03: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:34:03: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:34:03: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:34:03: 🔧 Configuration management system enabled
+2025-08-04T16:34:08: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:34:08: ✅ PostgreSQL database interface ready
+2025-08-04T16:34:08: 🔍 About to run health check...
+2025-08-04T16:34:08: 📋 Labor roster will use existing users table
+2025-08-04T16:34:08: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:34:08: JWT_SECRET exists: true
+2025-08-04T16:34:08: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:34:08: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:34:08: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:34:08: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:34:08: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:34:08: 🔧 Configuration management system enabled
+2025-08-04T16:34:12: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:34:12: ✅ PostgreSQL database interface ready
+2025-08-04T16:34:12: 🔍 About to run health check...
+2025-08-04T16:34:12: 📋 Labor roster will use existing users table
+2025-08-04T16:34:12: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:34:12: JWT_SECRET exists: true
+2025-08-04T16:34:12: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:34:12: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:34:12: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:34:12: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:34:12: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:34:12: 🔧 Configuration management system enabled
+2025-08-04T16:34:17: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:34:17: ✅ PostgreSQL database interface ready
+2025-08-04T16:34:17: 🔍 About to run health check...
+2025-08-04T16:34:17: 📋 Labor roster will use existing users table
+2025-08-04T16:34:17: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:34:17: JWT_SECRET exists: true
+2025-08-04T16:34:17: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:34:17: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:34:17: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:34:17: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:34:17: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:34:17: 🔧 Configuration management system enabled
+2025-08-04T16:34:22: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:34:22: ✅ PostgreSQL database interface ready
+2025-08-04T16:34:22: 🔍 About to run health check...
+2025-08-04T16:34:22: 📋 Labor roster will use existing users table
+2025-08-04T16:34:22: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:34:22: JWT_SECRET exists: true
+2025-08-04T16:34:22: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:34:22: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:34:22: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:34:22: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:34:22: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:34:22: 🔧 Configuration management system enabled
+2025-08-04T16:34:26: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:34:26: ✅ PostgreSQL database interface ready
+2025-08-04T16:34:26: 🔍 About to run health check...
+2025-08-04T16:34:26: 📋 Labor roster will use existing users table
+2025-08-04T16:34:26: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:34:26: JWT_SECRET exists: true
+2025-08-04T16:34:26: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:34:26: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:34:26: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:34:26: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:34:26: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:34:26: 🔧 Configuration management system enabled
+2025-08-04T16:34:31: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:34:31: ✅ PostgreSQL database interface ready
+2025-08-04T16:34:31: 🔍 About to run health check...
+2025-08-04T16:34:31: 📋 Labor roster will use existing users table
+2025-08-04T16:34:31: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:34:31: JWT_SECRET exists: true
+2025-08-04T16:34:31: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:34:31: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:34:31: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:34:31: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:34:31: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:34:31: 🔧 Configuration management system enabled
+2025-08-04T16:34:36: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:34:36: ✅ PostgreSQL database interface ready
+2025-08-04T16:34:36: 🔍 About to run health check...
+2025-08-04T16:34:36: 📋 Labor roster will use existing users table
+2025-08-04T16:34:36: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:34:36: JWT_SECRET exists: true
+2025-08-04T16:34:36: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:34:36: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:34:36: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:34:36: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:34:36: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:34:36: 🔧 Configuration management system enabled
+2025-08-04T16:34:41: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:34:41: ✅ PostgreSQL database interface ready
+2025-08-04T16:34:41: 🔍 About to run health check...
+2025-08-04T16:34:41: 📋 Labor roster will use existing users table
+2025-08-04T16:34:41: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:34:41: JWT_SECRET exists: true
+2025-08-04T16:34:41: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:34:41: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:34:41: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:34:41: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:34:41: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:34:41: 🔧 Configuration management system enabled
+2025-08-04T16:34:45: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:34:45: ✅ PostgreSQL database interface ready
+2025-08-04T16:34:45: 🔍 About to run health check...
+2025-08-04T16:34:45: 📋 Labor roster will use existing users table
+2025-08-04T16:34:45: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:34:45: JWT_SECRET exists: true
+2025-08-04T16:34:45: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:34:45: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:34:45: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:34:45: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:34:45: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:34:45: 🔧 Configuration management system enabled
+2025-08-04T16:34:50: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:34:50: ✅ PostgreSQL database interface ready
+2025-08-04T16:34:50: 🔍 About to run health check...
+2025-08-04T16:34:50: 📋 Labor roster will use existing users table
+2025-08-04T16:34:50: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:34:50: JWT_SECRET exists: true
+2025-08-04T16:34:50: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:34:50: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:34:50: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:34:50: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:34:50: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:34:50: 🔧 Configuration management system enabled
+2025-08-04T16:34:55: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:34:55: ✅ PostgreSQL database interface ready
+2025-08-04T16:34:55: 🔍 About to run health check...
+2025-08-04T16:34:55: 📋 Labor roster will use existing users table
+2025-08-04T16:34:55: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:34:55: JWT_SECRET exists: true
+2025-08-04T16:34:55: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:34:55: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:34:55: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:34:55: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:34:55: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:34:55: 🔧 Configuration management system enabled
+2025-08-04T16:34:59: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:34:59: ✅ PostgreSQL database interface ready
+2025-08-04T16:34:59: 🔍 About to run health check...
+2025-08-04T16:34:59: 📋 Labor roster will use existing users table
+2025-08-04T16:34:59: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:34:59: JWT_SECRET exists: true
+2025-08-04T16:34:59: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:34:59: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:34:59: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:34:59: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:34:59: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:34:59: 🔧 Configuration management system enabled
+2025-08-04T16:35:04: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:35:04: ✅ PostgreSQL database interface ready
+2025-08-04T16:35:04: 🔍 About to run health check...
+2025-08-04T16:35:04: 📋 Labor roster will use existing users table
+2025-08-04T16:35:04: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:35:04: JWT_SECRET exists: true
+2025-08-04T16:35:04: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:35:04: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:35:04: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:35:04: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:35:04: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:35:04: 🔧 Configuration management system enabled
+2025-08-04T16:35:09: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:35:09: ✅ PostgreSQL database interface ready
+2025-08-04T16:35:09: 🔍 About to run health check...
+2025-08-04T16:35:09: 📋 Labor roster will use existing users table
+2025-08-04T16:35:09: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:35:09: JWT_SECRET exists: true
+2025-08-04T16:35:09: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:35:09: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:35:09: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:35:09: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:35:09: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:35:09: 🔧 Configuration management system enabled
+2025-08-04T16:35:14: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:35:14: ✅ PostgreSQL database interface ready
+2025-08-04T16:35:14: 🔍 About to run health check...
+2025-08-04T16:35:14: 📋 Labor roster will use existing users table
+2025-08-04T16:35:14: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:35:14: JWT_SECRET exists: true
+2025-08-04T16:35:14: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:35:14: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:35:14: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:35:14: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:35:14: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:35:14: 🔧 Configuration management system enabled
+2025-08-04T16:35:18: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:35:18: ✅ PostgreSQL database interface ready
+2025-08-04T16:35:18: 🔍 About to run health check...
+2025-08-04T16:35:18: 📋 Labor roster will use existing users table
+2025-08-04T16:35:18: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:35:18: JWT_SECRET exists: true
+2025-08-04T16:35:18: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:35:18: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:35:18: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:35:18: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:35:18: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:35:18: 🔧 Configuration management system enabled
+2025-08-04T16:35:23: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:35:23: ✅ PostgreSQL database interface ready
+2025-08-04T16:35:23: 🔍 About to run health check...
+2025-08-04T16:35:23: 📋 Labor roster will use existing users table
+2025-08-04T16:35:23: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:35:23: JWT_SECRET exists: true
+2025-08-04T16:35:23: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:35:23: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:35:23: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:35:23: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:35:23: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:35:23: 🔧 Configuration management system enabled
+2025-08-04T16:35:28: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:35:28: ✅ PostgreSQL database interface ready
+2025-08-04T16:35:28: 🔍 About to run health check...
+2025-08-04T16:35:28: 📋 Labor roster will use existing users table
+2025-08-04T16:35:28: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:35:28: JWT_SECRET exists: true
+2025-08-04T16:35:28: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:35:28: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:35:28: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:35:28: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:35:28: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:35:28: 🔧 Configuration management system enabled
+2025-08-04T16:35:32: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:35:32: ✅ PostgreSQL database interface ready
+2025-08-04T16:35:32: 🔍 About to run health check...
+2025-08-04T16:35:32: 📋 Labor roster will use existing users table
+2025-08-04T16:35:32: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:35:32: JWT_SECRET exists: true
+2025-08-04T16:35:32: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:35:32: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:35:32: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:35:32: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:35:32: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:35:32: 🔧 Configuration management system enabled
+2025-08-04T16:35:37: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:35:37: ✅ PostgreSQL database interface ready
+2025-08-04T16:35:37: 🔍 About to run health check...
+2025-08-04T16:35:37: 📋 Labor roster will use existing users table
+2025-08-04T16:35:37: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:35:37: JWT_SECRET exists: true
+2025-08-04T16:35:37: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:35:37: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:35:37: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:35:37: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:35:37: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:35:37: 🔧 Configuration management system enabled
+2025-08-04T16:35:42: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:35:42: ✅ PostgreSQL database interface ready
+2025-08-04T16:35:42: 🔍 About to run health check...
+2025-08-04T16:35:42: 📋 Labor roster will use existing users table
+2025-08-04T16:35:42: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:35:42: JWT_SECRET exists: true
+2025-08-04T16:35:42: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:35:42: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:35:42: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:35:42: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:35:42: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:35:42: 🔧 Configuration management system enabled
+2025-08-04T16:35:47: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:35:47: ✅ PostgreSQL database interface ready
+2025-08-04T16:35:47: 🔍 About to run health check...
+2025-08-04T16:35:47: 📋 Labor roster will use existing users table
+2025-08-04T16:35:47: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:35:47: JWT_SECRET exists: true
+2025-08-04T16:35:47: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:35:47: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:35:47: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:35:47: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:35:47: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:35:47: 🔧 Configuration management system enabled
+2025-08-04T16:35:51: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:35:51: ✅ PostgreSQL database interface ready
+2025-08-04T16:35:51: 🔍 About to run health check...
+2025-08-04T16:35:51: 📋 Labor roster will use existing users table
+2025-08-04T16:35:51: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:35:51: JWT_SECRET exists: true
+2025-08-04T16:35:51: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:35:51: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:35:51: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:35:51: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:35:51: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:35:51: 🔧 Configuration management system enabled
+2025-08-04T16:35:56: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:35:56: ✅ PostgreSQL database interface ready
+2025-08-04T16:35:56: 🔍 About to run health check...
+2025-08-04T16:35:56: 📋 Labor roster will use existing users table
+2025-08-04T16:35:56: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:35:56: JWT_SECRET exists: true
+2025-08-04T16:35:56: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:35:56: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:35:56: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:35:56: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:35:56: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:35:56: 🔧 Configuration management system enabled
+2025-08-04T16:36:01: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:36:01: ✅ PostgreSQL database interface ready
+2025-08-04T16:36:01: 🔍 About to run health check...
+2025-08-04T16:36:01: 📋 Labor roster will use existing users table
+2025-08-04T16:36:01: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:36:01: JWT_SECRET exists: true
+2025-08-04T16:36:01: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:36:01: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:36:01: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:36:01: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:36:01: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:36:01: 🔧 Configuration management system enabled
+2025-08-04T16:36:06: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:36:06: ✅ PostgreSQL database interface ready
+2025-08-04T16:36:06: 🔍 About to run health check...
+2025-08-04T16:36:06: 📋 Labor roster will use existing users table
+2025-08-04T16:36:06: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:36:06: JWT_SECRET exists: true
+2025-08-04T16:36:06: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:36:06: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:36:06: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:36:06: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:36:06: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:36:06: 🔧 Configuration management system enabled
+2025-08-04T16:36:10: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:36:10: ✅ PostgreSQL database interface ready
+2025-08-04T16:36:10: 🔍 About to run health check...
+2025-08-04T16:36:10: 📋 Labor roster will use existing users table
+2025-08-04T16:36:10: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:36:10: JWT_SECRET exists: true
+2025-08-04T16:36:10: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:36:10: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:36:10: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:36:10: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:36:10: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:36:10: 🔧 Configuration management system enabled
+2025-08-04T16:36:15: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:36:15: ✅ PostgreSQL database interface ready
+2025-08-04T16:36:15: 🔍 About to run health check...
+2025-08-04T16:36:15: 📋 Labor roster will use existing users table
+2025-08-04T16:36:15: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:36:15: JWT_SECRET exists: true
+2025-08-04T16:36:15: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:36:15: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:36:15: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:36:15: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:36:15: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:36:15: 🔧 Configuration management system enabled
+2025-08-04T16:36:20: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:36:20: ✅ PostgreSQL database interface ready
+2025-08-04T16:36:20: 🔍 About to run health check...
+2025-08-04T16:36:20: 📋 Labor roster will use existing users table
+2025-08-04T16:36:20: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:36:20: JWT_SECRET exists: true
+2025-08-04T16:36:20: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:36:20: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:36:20: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:36:20: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:36:20: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:36:20: 🔧 Configuration management system enabled
+2025-08-04T16:36:24: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:36:24: ✅ PostgreSQL database interface ready
+2025-08-04T16:36:24: 🔍 About to run health check...
+2025-08-04T16:36:24: 📋 Labor roster will use existing users table
+2025-08-04T16:36:24: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:36:24: JWT_SECRET exists: true
+2025-08-04T16:36:24: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:36:24: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:36:24: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:36:24: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:36:24: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:36:24: 🔧 Configuration management system enabled
+2025-08-04T16:36:29: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:36:29: ✅ PostgreSQL database interface ready
+2025-08-04T16:36:29: 🔍 About to run health check...
+2025-08-04T16:36:29: 📋 Labor roster will use existing users table
+2025-08-04T16:36:29: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:36:29: JWT_SECRET exists: true
+2025-08-04T16:36:29: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:36:29: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:36:29: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:36:29: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:36:29: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:36:29: 🔧 Configuration management system enabled
+2025-08-04T16:36:34: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:36:34: ✅ PostgreSQL database interface ready
+2025-08-04T16:36:34: 🔍 About to run health check...
+2025-08-04T16:36:34: 📋 Labor roster will use existing users table
+2025-08-04T16:36:34: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:36:34: JWT_SECRET exists: true
+2025-08-04T16:36:34: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:36:34: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:36:34: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:36:34: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:36:34: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:36:34: 🔧 Configuration management system enabled
+2025-08-04T16:36:39: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:36:39: ✅ PostgreSQL database interface ready
+2025-08-04T16:36:39: 🔍 About to run health check...
+2025-08-04T16:36:39: 📋 Labor roster will use existing users table
+2025-08-04T16:36:39: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:36:39: JWT_SECRET exists: true
+2025-08-04T16:36:39: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:36:39: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:36:39: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:36:39: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:36:39: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:36:39: 🔧 Configuration management system enabled
+2025-08-04T16:36:43: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:36:43: ✅ PostgreSQL database interface ready
+2025-08-04T16:36:43: 🔍 About to run health check...
+2025-08-04T16:36:43: 📋 Labor roster will use existing users table
+2025-08-04T16:36:43: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:36:43: JWT_SECRET exists: true
+2025-08-04T16:36:43: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:36:43: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:36:43: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:36:43: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:36:43: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:36:43: 🔧 Configuration management system enabled
+2025-08-04T16:36:48: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:36:48: ✅ PostgreSQL database interface ready
+2025-08-04T16:36:48: 🔍 About to run health check...
+2025-08-04T16:36:48: 📋 Labor roster will use existing users table
+2025-08-04T16:36:48: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:36:48: JWT_SECRET exists: true
+2025-08-04T16:36:48: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:36:48: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:36:48: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:36:48: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:36:48: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:36:48: 🔧 Configuration management system enabled
+2025-08-04T16:36:53: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:36:53: ✅ PostgreSQL database interface ready
+2025-08-04T16:36:53: 🔍 About to run health check...
+2025-08-04T16:36:53: 📋 Labor roster will use existing users table
+2025-08-04T16:36:53: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:36:53: JWT_SECRET exists: true
+2025-08-04T16:36:53: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:36:53: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:36:53: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:36:53: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:36:53: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:36:53: 🔧 Configuration management system enabled
+2025-08-04T16:36:58: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:36:58: ✅ PostgreSQL database interface ready
+2025-08-04T16:36:58: 🔍 About to run health check...
+2025-08-04T16:36:58: 📋 Labor roster will use existing users table
+2025-08-04T16:36:58: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:36:58: JWT_SECRET exists: true
+2025-08-04T16:36:58: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:36:58: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:36:58: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:36:58: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:36:58: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:36:58: 🔧 Configuration management system enabled
+2025-08-04T16:37:02: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:37:02: ✅ PostgreSQL database interface ready
+2025-08-04T16:37:02: 🔍 About to run health check...
+2025-08-04T16:37:02: 📋 Labor roster will use existing users table
+2025-08-04T16:37:02: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:37:02: JWT_SECRET exists: true
+2025-08-04T16:37:02: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:37:02: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:37:02: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:37:02: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:37:02: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:37:02: 🔧 Configuration management system enabled
+2025-08-04T16:37:07: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:37:07: ✅ PostgreSQL database interface ready
+2025-08-04T16:37:07: 🔍 About to run health check...
+2025-08-04T16:37:07: 📋 Labor roster will use existing users table
+2025-08-04T16:37:07: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:37:07: JWT_SECRET exists: true
+2025-08-04T16:37:07: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:37:07: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:37:07: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:37:07: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:37:07: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:37:07: 🔧 Configuration management system enabled
+2025-08-04T16:37:12: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:37:12: ✅ PostgreSQL database interface ready
+2025-08-04T16:37:12: 🔍 About to run health check...
+2025-08-04T16:37:12: 📋 Labor roster will use existing users table
+2025-08-04T16:37:12: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:37:12: JWT_SECRET exists: true
+2025-08-04T16:37:12: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:37:12: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:37:12: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:37:12: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:37:12: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:37:12: 🔧 Configuration management system enabled
+2025-08-04T16:37:16: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:37:16: ✅ PostgreSQL database interface ready
+2025-08-04T16:37:16: 🔍 About to run health check...
+2025-08-04T16:37:16: 📋 Labor roster will use existing users table
+2025-08-04T16:37:16: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:37:16: JWT_SECRET exists: true
+2025-08-04T16:37:16: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:37:16: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:37:16: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:37:16: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:37:16: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:37:16: 🔧 Configuration management system enabled
+2025-08-04T16:37:21: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:37:21: ✅ PostgreSQL database interface ready
+2025-08-04T16:37:21: 🔍 About to run health check...
+2025-08-04T16:37:21: 📋 Labor roster will use existing users table
+2025-08-04T16:37:21: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:37:21: JWT_SECRET exists: true
+2025-08-04T16:37:21: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:37:21: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:37:21: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:37:21: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:37:21: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:37:21: 🔧 Configuration management system enabled
+2025-08-04T16:37:26: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:37:26: ✅ PostgreSQL database interface ready
+2025-08-04T16:37:26: 🔍 About to run health check...
+2025-08-04T16:37:26: 📋 Labor roster will use existing users table
+2025-08-04T16:37:26: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:37:26: JWT_SECRET exists: true
+2025-08-04T16:37:26: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:37:26: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:37:26: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:37:26: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:37:26: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:37:26: 🔧 Configuration management system enabled
+2025-08-04T16:37:31: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:37:31: ✅ PostgreSQL database interface ready
+2025-08-04T16:37:31: 🔍 About to run health check...
+2025-08-04T16:37:31: 📋 Labor roster will use existing users table
+2025-08-04T16:37:31: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:37:31: JWT_SECRET exists: true
+2025-08-04T16:37:31: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:37:31: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:37:31: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:37:31: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:37:31: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:37:31: 🔧 Configuration management system enabled
+2025-08-04T16:37:35: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:37:35: ✅ PostgreSQL database interface ready
+2025-08-04T16:37:35: 🔍 About to run health check...
+2025-08-04T16:37:35: 📋 Labor roster will use existing users table
+2025-08-04T16:37:35: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:37:35: JWT_SECRET exists: true
+2025-08-04T16:37:35: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:37:35: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:37:35: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:37:35: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:37:35: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:37:35: 🔧 Configuration management system enabled
+2025-08-04T16:37:40: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:37:40: ✅ PostgreSQL database interface ready
+2025-08-04T16:37:40: 🔍 About to run health check...
+2025-08-04T16:37:40: 📋 Labor roster will use existing users table
+2025-08-04T16:37:40: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:37:40: JWT_SECRET exists: true
+2025-08-04T16:37:40: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:37:40: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:37:40: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:37:40: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:37:40: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:37:40: 🔧 Configuration management system enabled
+2025-08-04T16:37:45: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:37:45: ✅ PostgreSQL database interface ready
+2025-08-04T16:37:45: 🔍 About to run health check...
+2025-08-04T16:37:45: 📋 Labor roster will use existing users table
+2025-08-04T16:37:45: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:37:45: JWT_SECRET exists: true
+2025-08-04T16:37:45: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:37:45: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:37:45: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:37:45: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:37:45: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:37:45: 🔧 Configuration management system enabled
+2025-08-04T16:37:49: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:37:49: ✅ PostgreSQL database interface ready
+2025-08-04T16:37:49: 🔍 About to run health check...
+2025-08-04T16:37:49: 📋 Labor roster will use existing users table
+2025-08-04T16:37:49: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:37:49: JWT_SECRET exists: true
+2025-08-04T16:37:49: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:37:49: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:37:49: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:37:49: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:37:49: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:37:49: 🔧 Configuration management system enabled
+2025-08-04T16:37:54: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:37:54: ✅ PostgreSQL database interface ready
+2025-08-04T16:37:54: 🔍 About to run health check...
+2025-08-04T16:37:54: 📋 Labor roster will use existing users table
+2025-08-04T16:37:54: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:37:54: JWT_SECRET exists: true
+2025-08-04T16:37:54: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:37:54: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:37:54: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:37:54: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:37:54: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:37:54: 🔧 Configuration management system enabled
+2025-08-04T16:37:59: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:37:59: ✅ PostgreSQL database interface ready
+2025-08-04T16:37:59: 🔍 About to run health check...
+2025-08-04T16:37:59: 📋 Labor roster will use existing users table
+2025-08-04T16:37:59: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:37:59: JWT_SECRET exists: true
+2025-08-04T16:37:59: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:37:59: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:37:59: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:37:59: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:37:59: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:37:59: 🔧 Configuration management system enabled
+2025-08-04T16:38:04: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:38:04: ✅ PostgreSQL database interface ready
+2025-08-04T16:38:04: 🔍 About to run health check...
+2025-08-04T16:38:04: 📋 Labor roster will use existing users table
+2025-08-04T16:38:04: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:38:04: JWT_SECRET exists: true
+2025-08-04T16:38:04: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:38:04: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:38:04: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:38:04: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:38:04: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:38:04: 🔧 Configuration management system enabled
+2025-08-04T16:38:08: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:38:08: ✅ PostgreSQL database interface ready
+2025-08-04T16:38:08: 🔍 About to run health check...
+2025-08-04T16:38:08: 📋 Labor roster will use existing users table
+2025-08-04T16:38:08: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:38:08: JWT_SECRET exists: true
+2025-08-04T16:38:08: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:38:08: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:38:08: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:38:08: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:38:08: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:38:08: 🔧 Configuration management system enabled
+2025-08-04T16:38:13: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:38:13: ✅ PostgreSQL database interface ready
+2025-08-04T16:38:13: 🔍 About to run health check...
+2025-08-04T16:38:13: 📋 Labor roster will use existing users table
+2025-08-04T16:38:13: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:38:13: JWT_SECRET exists: true
+2025-08-04T16:38:13: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:38:13: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:38:13: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:38:13: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:38:13: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:38:13: 🔧 Configuration management system enabled
+2025-08-04T16:38:18: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:38:18: ✅ PostgreSQL database interface ready
+2025-08-04T16:38:18: 🔍 About to run health check...
+2025-08-04T16:38:18: 📋 Labor roster will use existing users table
+2025-08-04T16:38:18: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:38:18: JWT_SECRET exists: true
+2025-08-04T16:38:18: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:38:18: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:38:18: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:38:18: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:38:18: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:38:18: 🔧 Configuration management system enabled
+2025-08-04T16:38:22: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:38:22: ✅ PostgreSQL database interface ready
+2025-08-04T16:38:22: 🔍 About to run health check...
+2025-08-04T16:38:22: 📋 Labor roster will use existing users table
+2025-08-04T16:38:22: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:38:22: JWT_SECRET exists: true
+2025-08-04T16:38:22: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:38:22: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:38:22: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:38:22: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:38:22: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:38:22: 🔧 Configuration management system enabled
+2025-08-04T16:38:27: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:38:27: ✅ PostgreSQL database interface ready
+2025-08-04T16:38:27: 🔍 About to run health check...
+2025-08-04T16:38:27: 📋 Labor roster will use existing users table
+2025-08-04T16:38:27: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:38:27: JWT_SECRET exists: true
+2025-08-04T16:38:27: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:38:27: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:38:27: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:38:27: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:38:27: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:38:27: 🔧 Configuration management system enabled
+2025-08-04T16:38:32: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:38:32: ✅ PostgreSQL database interface ready
+2025-08-04T16:38:32: 🔍 About to run health check...
+2025-08-04T16:38:32: 📋 Labor roster will use existing users table
+2025-08-04T16:38:32: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:38:32: JWT_SECRET exists: true
+2025-08-04T16:38:32: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:38:32: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:38:32: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:38:32: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:38:32: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:38:32: 🔧 Configuration management system enabled
+2025-08-04T16:38:36: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:38:36: ✅ PostgreSQL database interface ready
+2025-08-04T16:38:36: 🔍 About to run health check...
+2025-08-04T16:38:36: 📋 Labor roster will use existing users table
+2025-08-04T16:38:36: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:38:36: JWT_SECRET exists: true
+2025-08-04T16:38:36: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:38:36: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:38:36: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:38:36: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:38:36: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:38:36: 🔧 Configuration management system enabled
+2025-08-04T16:38:41: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:38:41: ✅ PostgreSQL database interface ready
+2025-08-04T16:38:41: 🔍 About to run health check...
+2025-08-04T16:38:41: 📋 Labor roster will use existing users table
+2025-08-04T16:38:41: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:38:41: JWT_SECRET exists: true
+2025-08-04T16:38:41: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:38:41: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:38:41: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:38:41: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:38:41: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:38:41: 🔧 Configuration management system enabled
+2025-08-04T16:38:46: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:38:46: ✅ PostgreSQL database interface ready
+2025-08-04T16:38:46: 🔍 About to run health check...
+2025-08-04T16:38:46: 📋 Labor roster will use existing users table
+2025-08-04T16:38:46: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:38:46: JWT_SECRET exists: true
+2025-08-04T16:38:46: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:38:46: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:38:46: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:38:46: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:38:46: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:38:46: 🔧 Configuration management system enabled
+2025-08-04T16:38:51: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:38:51: ✅ PostgreSQL database interface ready
+2025-08-04T16:38:51: 🔍 About to run health check...
+2025-08-04T16:38:51: 📋 Labor roster will use existing users table
+2025-08-04T16:38:51: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:38:51: JWT_SECRET exists: true
+2025-08-04T16:38:51: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:38:51: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:38:51: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:38:51: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:38:51: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:38:51: 🔧 Configuration management system enabled
+2025-08-04T16:38:55: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:38:55: ✅ PostgreSQL database interface ready
+2025-08-04T16:38:55: 🔍 About to run health check...
+2025-08-04T16:38:55: 📋 Labor roster will use existing users table
+2025-08-04T16:38:55: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:38:55: JWT_SECRET exists: true
+2025-08-04T16:38:55: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:38:55: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:38:55: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:38:55: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:38:55: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:38:55: 🔧 Configuration management system enabled
+2025-08-04T16:39:00: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:39:00: ✅ PostgreSQL database interface ready
+2025-08-04T16:39:00: 🔍 About to run health check...
+2025-08-04T16:39:00: 📋 Labor roster will use existing users table
+2025-08-04T16:39:00: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:39:00: JWT_SECRET exists: true
+2025-08-04T16:39:00: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:39:00: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:39:00: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:39:00: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:39:00: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:39:00: 🔧 Configuration management system enabled
+2025-08-04T16:39:05: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:39:05: ✅ PostgreSQL database interface ready
+2025-08-04T16:39:05: 🔍 About to run health check...
+2025-08-04T16:39:05: 📋 Labor roster will use existing users table
+2025-08-04T16:39:05: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:39:05: JWT_SECRET exists: true
+2025-08-04T16:39:05: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:39:05: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:39:05: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:39:05: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:39:05: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:39:05: 🔧 Configuration management system enabled
+2025-08-04T16:39:10: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:39:10: ✅ PostgreSQL database interface ready
+2025-08-04T16:39:10: 🔍 About to run health check...
+2025-08-04T16:39:10: 📋 Labor roster will use existing users table
+2025-08-04T16:39:10: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:39:10: JWT_SECRET exists: true
+2025-08-04T16:39:10: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:39:10: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:39:10: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:39:10: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:39:10: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:39:10: 🔧 Configuration management system enabled
+2025-08-04T16:39:14: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:39:14: ✅ PostgreSQL database interface ready
+2025-08-04T16:39:14: 🔍 About to run health check...
+2025-08-04T16:39:14: 📋 Labor roster will use existing users table
+2025-08-04T16:39:14: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:39:14: JWT_SECRET exists: true
+2025-08-04T16:39:14: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:39:14: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:39:14: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:39:14: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:39:14: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:39:14: 🔧 Configuration management system enabled
+2025-08-04T16:39:19: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:39:19: ✅ PostgreSQL database interface ready
+2025-08-04T16:39:19: 🔍 About to run health check...
+2025-08-04T16:39:19: 📋 Labor roster will use existing users table
+2025-08-04T16:39:19: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:39:19: JWT_SECRET exists: true
+2025-08-04T16:39:19: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:39:19: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:39:19: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:39:19: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:39:19: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:39:19: 🔧 Configuration management system enabled
+2025-08-04T16:39:24: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:39:24: ✅ PostgreSQL database interface ready
+2025-08-04T16:39:24: 🔍 About to run health check...
+2025-08-04T16:39:24: 📋 Labor roster will use existing users table
+2025-08-04T16:39:24: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:39:24: JWT_SECRET exists: true
+2025-08-04T16:39:24: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:39:24: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:39:24: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:39:24: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:39:24: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:39:24: 🔧 Configuration management system enabled
+2025-08-04T16:39:29: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:39:29: ✅ PostgreSQL database interface ready
+2025-08-04T16:39:29: 🔍 About to run health check...
+2025-08-04T16:39:29: 📋 Labor roster will use existing users table
+2025-08-04T16:39:29: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:39:29: JWT_SECRET exists: true
+2025-08-04T16:39:29: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:39:29: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:39:29: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:39:29: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:39:29: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:39:29: 🔧 Configuration management system enabled
+2025-08-04T16:39:33: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:39:33: ✅ PostgreSQL database interface ready
+2025-08-04T16:39:33: 🔍 About to run health check...
+2025-08-04T16:39:33: 📋 Labor roster will use existing users table
+2025-08-04T16:39:33: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:39:33: JWT_SECRET exists: true
+2025-08-04T16:39:33: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:39:33: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:39:33: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:39:33: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:39:33: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:39:33: 🔧 Configuration management system enabled
+2025-08-04T16:39:38: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:39:38: ✅ PostgreSQL database interface ready
+2025-08-04T16:39:38: 🔍 About to run health check...
+2025-08-04T16:39:38: 📋 Labor roster will use existing users table
+2025-08-04T16:39:38: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:39:38: JWT_SECRET exists: true
+2025-08-04T16:39:38: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:39:38: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:39:38: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:39:38: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:39:38: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:39:38: 🔧 Configuration management system enabled
+2025-08-04T16:39:43: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:39:43: ✅ PostgreSQL database interface ready
+2025-08-04T16:39:43: 🔍 About to run health check...
+2025-08-04T16:39:43: 📋 Labor roster will use existing users table
+2025-08-04T16:39:43: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:39:43: JWT_SECRET exists: true
+2025-08-04T16:39:43: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:39:43: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:39:43: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:39:43: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:39:43: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:39:43: 🔧 Configuration management system enabled
+2025-08-04T16:39:48: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:39:48: ✅ PostgreSQL database interface ready
+2025-08-04T16:39:48: 🔍 About to run health check...
+2025-08-04T16:39:48: 📋 Labor roster will use existing users table
+2025-08-04T16:39:48: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:39:48: JWT_SECRET exists: true
+2025-08-04T16:39:48: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:39:48: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:39:48: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:39:48: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:39:48: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:39:48: 🔧 Configuration management system enabled
+2025-08-04T16:39:52: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:39:52: ✅ PostgreSQL database interface ready
+2025-08-04T16:39:52: 🔍 About to run health check...
+2025-08-04T16:39:53: 📋 Labor roster will use existing users table
+2025-08-04T16:39:53: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:39:53: JWT_SECRET exists: true
+2025-08-04T16:39:53: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:39:53: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:39:53: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:39:53: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:39:53: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:39:53: 🔧 Configuration management system enabled
+2025-08-04T16:39:57: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T16:39:57: ✅ PostgreSQL database interface ready
+2025-08-04T16:39:57: 🔍 About to run health check...
+2025-08-04T16:39:57: 📋 Labor roster will use existing users table
+2025-08-04T16:39:57: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T16:39:57: JWT_SECRET exists: true
+2025-08-04T16:39:57: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T16:39:57: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T16:39:57: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T16:39:57: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T16:39:57: ✨ Enhanced endpoints loaded successfully
+2025-08-04T16:39:57: 🔧 Configuration management system enabled
