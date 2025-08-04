@@ -137,7 +137,7 @@ export default function ProductionOrdersSystem() {
   // Waste Capture Data
   const [wasteData, setWasteData] = useState({
     material_waste: 0,
-    time_waste: 0,
+    waste_type: 'BLND',
     waste_reason: '',
     waste_category: 'material',
     recovery_possible: false,
@@ -394,7 +394,7 @@ export default function ProductionOrdersSystem() {
   const resetWasteData = () => {
     setWasteData({
       material_waste: 0,
-      time_waste: 0,
+      waste_type: 'BLND',
       waste_reason: '',
       waste_category: 'material',
       recovery_possible: false,
@@ -1257,54 +1257,40 @@ export default function ProductionOrdersSystem() {
             <div className="bg-orange-50 p-4 rounded-lg border border-orange-200">
               <h4 className="font-medium text-orange-900 mb-3 flex items-center">
                 <AlertTriangle className="w-5 h-5 mr-2" />
-                Waste Tracking
+                Material Waste Tracking
               </h4>
+              
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Material Waste (units)
+                    Material Waste Type
+                  </label>
+                  <select
+                    value={wasteData.waste_type || 'BLND'}
+                    onChange={(e) => setWasteData(prev => ({ ...prev, waste_type: e.target.value, waste_category: 'material' }))}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                  >
+                    <option value="BLND">BLND - Blending Material</option>
+                    <option value="FP">FP - Finished Product</option>
+                    <option value="RM">RM - Raw Material</option>
+                    <option value="PM">PM - Packaging Material</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Waste Quantity (units)
                   </label>
                   <input
                     type="number"
                     min="0"
                     step="0.1"
-                    value={wasteData.material_waste}
+                    value={wasteData.material_waste || 0}
                     onChange={(e) => setWasteData(prev => ({ ...prev, material_waste: parseFloat(e.target.value) || 0 }))}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                    placeholder="Enter waste quantity"
                   />
                 </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Time Waste (minutes)
-                  </label>
-                  <input
-                    type="number"
-                    min="0"
-                    step="1"
-                    value={wasteData.time_waste}
-                    onChange={(e) => setWasteData(prev => ({ ...prev, time_waste: parseInt(e.target.value) || 0 }))}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                  />
-                </div>
-              </div>
-
-              <div className="mt-4">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Waste Category
-                </label>
-                <select
-                  value={wasteData.waste_category}
-                  onChange={(e) => setWasteData(prev => ({ ...prev, waste_category: e.target.value }))}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                >
-                  <option value="material">Material Waste</option>
-                  <option value="time">Time Waste</option>
-                  <option value="setup">Setup Issues</option>
-                  <option value="quality">Quality Issues</option>
-                  <option value="equipment">Equipment Problems</option>
-                  <option value="other">Other</option>
-                </select>
               </div>
 
               <div className="mt-4">
@@ -1313,7 +1299,7 @@ export default function ProductionOrdersSystem() {
                 </label>
                 <input
                   type="text"
-                  value={wasteData.waste_reason}
+                  value={wasteData.waste_reason || ''}
                   onChange={(e) => setWasteData(prev => ({ ...prev, waste_reason: e.target.value }))}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                   placeholder="Brief description of waste cause"
@@ -1324,7 +1310,7 @@ export default function ProductionOrdersSystem() {
                 <label className="flex items-center">
                   <input
                     type="checkbox"
-                    checked={wasteData.recovery_possible}
+                    checked={wasteData.recovery_possible || false}
                     onChange={(e) => setWasteData(prev => ({ ...prev, recovery_possible: e.target.checked }))}
                     className="mr-3 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                   />
@@ -1339,11 +1325,11 @@ export default function ProductionOrdersSystem() {
                   Additional Notes
                 </label>
                 <textarea
-                  value={wasteData.waste_notes}
+                  value={wasteData.waste_notes || ''}
                   onChange={(e) => setWasteData(prev => ({ ...prev, waste_notes: e.target.value }))}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                   rows="3"
-                  placeholder="Additional details about waste or production issues..."
+                  placeholder="Additional details about material waste..."
                 />
               </div>
             </div>

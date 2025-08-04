@@ -191,3 +191,9 @@ Instead of /public/js/main.js, use /js/main.js.
 10:03:08 PM [vite] (client) page reload server.js
 10:03:22 PM [vite] (client) page reload server.js
 10:03:36 PM [vite] (client) page reload server.js
+10:24:44 PM [vite] (client) page reload server.js
+10:25:25 PM [vite] (client) page reload server.js
+10:26:06 PM [vite] (client) page reload server.js
+10:27:30 PM [vite] (client) hmr update /src/js/components/orders.jsx
+10:27:45 PM [vite] (client) hmr update /src/js/components/orders.jsx
+10:27:53 PM [vite] (client) hmr update /src/js/components/orders.jsx
