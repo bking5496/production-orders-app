@@ -1588,3 +1588,5 @@ New WebSocket connection attempt
 🔓 Client released back to pool
 🔗 Client acquired from pool
 🔓 Client released back to pool
+🔌 WebSocket disconnected: admin
+🔌 WebSocket disconnected: admin
