@@ -47319,3 +47319,239 @@ Error: bind EADDRINUSE null:3000
 2025-08-04T18:10:00: 🔓 Client released back to pool
 2025-08-04T18:10:00: 🔗 Client acquired from pool
 2025-08-04T18:10:00: 🔓 Client released back to pool
+2025-08-04T18:15:56: ValidationError: The Express 'trust proxy' setting is true, which allows anyone to trivially bypass IP-based rate limiting. See https://express-rate-limit.github.io/ERR_ERL_PERMISSIVE_TRUST_PROXY/ for more information.
+    at Object.trustProxy (/home/production-app/production-orders-app/node_modules/express-rate-limit/dist/index.cjs:167:13)
+    at wrappedValidations.<computed> [as trustProxy] (/home/production-app/production-orders-app/node_modules/express-rate-limit/dist/index.cjs:397:22)
+    at Object.keyGenerator (/home/production-app/production-orders-app/node_modules/express-rate-limit/dist/index.cjs:657:20)
+    at /home/production-app/production-orders-app/node_modules/express-rate-limit/dist/index.cjs:710:32
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async /home/production-app/production-orders-app/node_modules/express-rate-limit/dist/index.cjs:691:5 {
+  code: 'ERR_ERL_PERMISSIVE_TRUST_PROXY',
+  help: 'https://express-rate-limit.github.io/ERR_ERL_PERMISSIVE_TRUST_PROXY/'
+}
+2025-08-04T18:16:17: 🔗 Client acquired from pool
+2025-08-04T18:16:17: 🔓 Client released back to pool
+2025-08-04T18:16:17: 🔗 Client acquired from pool
+2025-08-04T18:16:17: 🔓 Client released back to pool
+2025-08-04T18:16:27: 🔗 Client acquired from pool
+2025-08-04T18:16:27: 🔓 Client released back to pool
+2025-08-04T18:16:27: 🔗 Client acquired from pool
+2025-08-04T18:16:27: 🔓 Client released back to pool
+2025-08-04T18:17:06: 🔗 Client acquired from pool
+2025-08-04T18:17:06: 🔓 Client released back to pool
+2025-08-04T18:17:06: Error creating machine type: error: duplicate key value violates unique constraint "machine_types_name_key"
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async /home/production-app/production-orders-app/server.js:1875:24 {
+  length: 221,
+  severity: 'ERROR',
+  code: '23505',
+  detail: 'Key (name)=(Blending) already exists.',
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: 'public',
+  table: 'machine_types',
+  column: undefined,
+  dataType: undefined,
+  constraint: 'machine_types_name_key',
+  file: 'nbtinsert.c',
+  line: '666',
+  routine: '_bt_check_unique'
+}
+2025-08-04T18:17:25: 🔗 Client acquired from pool
+2025-08-04T18:17:25: 🔓 Client released back to pool
+2025-08-04T18:17:25: Error creating machine type: error: duplicate key value violates unique constraint "machine_types_name_key"
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async /home/production-app/production-orders-app/server.js:1875:24 {
+  length: 221,
+  severity: 'ERROR',
+  code: '23505',
+  detail: 'Key (name)=(Blending) already exists.',
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: 'public',
+  table: 'machine_types',
+  column: undefined,
+  dataType: undefined,
+  constraint: 'machine_types_name_key',
+  file: 'nbtinsert.c',
+  line: '666',
+  routine: '_bt_check_unique'
+}
+2025-08-04T18:17:44: 🔗 Client acquired from pool
+2025-08-04T18:17:44: 🔓 Client released back to pool
+2025-08-04T18:17:44: Error creating machine type: error: duplicate key value violates unique constraint "machine_types_name_key"
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async /home/production-app/production-orders-app/server.js:1875:24 {
+  length: 221,
+  severity: 'ERROR',
+  code: '23505',
+  detail: 'Key (name)=(Blending) already exists.',
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: 'public',
+  table: 'machine_types',
+  column: undefined,
+  dataType: undefined,
+  constraint: 'machine_types_name_key',
+  file: 'nbtinsert.c',
+  line: '666',
+  routine: '_bt_check_unique'
+}
+2025-08-04T18:17:44: ✅ New PostgreSQL client connected
+2025-08-04T18:17:44: 🔗 Client acquired from pool
+2025-08-04T18:17:44: 🔓 Client released back to pool
+2025-08-04T18:17:44: 🔗 Client acquired from pool
+2025-08-04T18:17:44: 🔓 Client released back to pool
+2025-08-04T18:17:49: 📺 admin subscribed to: [ 'machines', 'production' ]
+2025-08-04T18:17:49: 🔗 Client acquired from pool
+2025-08-04T18:17:49: 🔗 Client acquired from pool
+2025-08-04T18:17:49: 🔓 Client released back to pool
+2025-08-04T18:17:49: 🔗 Client acquired from pool
+2025-08-04T18:17:49: 🔓 Client released back to pool
+2025-08-04T18:17:49: 🔗 Client acquired from pool
+2025-08-04T18:17:49: 🔓 Client released back to pool
+2025-08-04T18:17:49: 🔓 Client released back to pool
+2025-08-04T18:18:05: 🔗 Client acquired from pool
+2025-08-04T18:18:05: 🔗 Client acquired from pool
+2025-08-04T18:18:05: 🔓 Client released back to pool
+2025-08-04T18:18:05: 🔓 Client released back to pool
+2025-08-04T18:18:05: ✅ New PostgreSQL client connected
+2025-08-04T18:18:05: 🔗 Client acquired from pool
+2025-08-04T18:18:05: 🔓 Client released back to pool
+2025-08-04T18:18:06: 🔗 Client acquired from pool
+2025-08-04T18:18:06: 🔗 Client acquired from pool
+2025-08-04T18:18:06: 🔓 Client released back to pool
+2025-08-04T18:18:06: 🔓 Client released back to pool
+2025-08-04T18:18:06: 🔗 Client acquired from pool
+2025-08-04T18:18:06: 🔓 Client released back to pool
+2025-08-04T18:18:06: 🔗 Client acquired from pool
+2025-08-04T18:18:06: 🔓 Client released back to pool
+2025-08-04T18:18:06: 🔗 Client acquired from pool
+2025-08-04T18:18:06: 🔓 Client released back to pool
+2025-08-04T18:18:06: 🔗 Client acquired from pool
+2025-08-04T18:18:06: 🔓 Client released back to pool
+2025-08-04T18:18:09: 🔌 WebSocket disconnected: admin
+2025-08-04T18:18:10: New WebSocket connection attempt
+2025-08-04T18:18:10: ✅ WebSocket authenticated: admin (admin)
+2025-08-04T18:18:13: 🔗 Client acquired from pool
+2025-08-04T18:18:13: 🔓 Client released back to pool
+2025-08-04T18:18:13: 🔗 Client acquired from pool
+2025-08-04T18:18:13: 🔓 Client released back to pool
+2025-08-04T18:18:13: 🔗 Client acquired from pool
+2025-08-04T18:18:13: 🔗 Client acquired from pool
+2025-08-04T18:18:13: 🔓 Client released back to pool
+2025-08-04T18:18:13: 🔗 Client acquired from pool
+2025-08-04T18:18:13: 🔓 Client released back to pool
+2025-08-04T18:18:13: 🔓 Client released back to pool
+2025-08-04T18:19:06: 📺 admin subscribed to: [ 'dashboard', 'orders', 'machines', 'production', 'alerts' ]
+2025-08-04T18:19:07: ✅ New PostgreSQL client connected
+2025-08-04T18:19:07: 🔗 Client acquired from pool
+2025-08-04T18:19:07: ✅ New PostgreSQL client connected
+2025-08-04T18:19:07: 🔗 Client acquired from pool
+2025-08-04T18:19:07: ✅ New PostgreSQL client connected
+2025-08-04T18:19:07: 🔗 Client acquired from pool
+2025-08-04T18:19:07: 🔓 Client released back to pool
+2025-08-04T18:19:07: 🔓 Client released back to pool
+2025-08-04T18:19:07: 🔓 Client released back to pool
+2025-08-04T18:19:10: 📺 admin subscribed to: [ 'production', 'orders', 'machines' ]
+2025-08-04T18:19:10: 🔗 Client acquired from pool
+2025-08-04T18:19:10: 🔗 Client acquired from pool
+2025-08-04T18:19:10: 🔗 Client acquired from pool
+2025-08-04T18:19:10: 🔓 Client released back to pool
+2025-08-04T18:19:10: 🔓 Client released back to pool
+2025-08-04T18:19:10: 🔓 Client released back to pool
+2025-08-04T18:19:10: ✅ New PostgreSQL client connected
+2025-08-04T18:19:10: 🔗 Client acquired from pool
+2025-08-04T18:19:10: 🔓 Client released back to pool
+2025-08-04T18:19:15: 🔗 Client acquired from pool
+2025-08-04T18:19:15: 🔗 Client acquired from pool
+2025-08-04T18:19:15: 🔗 Client acquired from pool
+2025-08-04T18:19:15: 🔗 Client acquired from pool
+2025-08-04T18:19:15: 🔓 Client released back to pool
+2025-08-04T18:19:15: 🔓 Client released back to pool
+2025-08-04T18:19:15: 🔓 Client released back to pool
+2025-08-04T18:19:15: 🔓 Client released back to pool
+2025-08-04T18:19:20: 🔗 Client acquired from pool
+2025-08-04T18:19:20: 🔗 Client acquired from pool
+2025-08-04T18:19:20: 🔗 Client acquired from pool
+2025-08-04T18:19:20: 🔗 Client acquired from pool
+2025-08-04T18:19:20: 🔓 Client released back to pool
+2025-08-04T18:19:20: 🔓 Client released back to pool
+2025-08-04T18:19:20: 🔓 Client released back to pool
+2025-08-04T18:19:20: 🔓 Client released back to pool
+2025-08-04T18:19:25: 🔗 Client acquired from pool
+2025-08-04T18:19:25: 🔗 Client acquired from pool
+2025-08-04T18:19:25: 🔗 Client acquired from pool
+2025-08-04T18:19:25: 🔗 Client acquired from pool
+2025-08-04T18:19:25: 🔓 Client released back to pool
+2025-08-04T18:19:25: 🔓 Client released back to pool
+2025-08-04T18:19:25: 🔓 Client released back to pool
+2025-08-04T18:19:25: 🔓 Client released back to pool
+2025-08-04T18:19:30: 🔗 Client acquired from pool
+2025-08-04T18:19:30: 🔗 Client acquired from pool
+2025-08-04T18:19:30: 🔗 Client acquired from pool
+2025-08-04T18:19:30: 🔗 Client acquired from pool
+2025-08-04T18:19:30: 🔓 Client released back to pool
+2025-08-04T18:19:30: 🔓 Client released back to pool
+2025-08-04T18:19:30: 🔓 Client released back to pool
+2025-08-04T18:19:30: 🔓 Client released back to pool
+2025-08-04T18:19:35: 🔗 Client acquired from pool
+2025-08-04T18:19:35: 🔗 Client acquired from pool
+2025-08-04T18:19:35: 🔗 Client acquired from pool
+2025-08-04T18:19:35: 🔗 Client acquired from pool
+2025-08-04T18:19:35: 🔓 Client released back to pool
+2025-08-04T18:19:35: 🔓 Client released back to pool
+2025-08-04T18:19:35: 🔓 Client released back to pool
+2025-08-04T18:19:35: 🔓 Client released back to pool
+2025-08-04T18:19:40: 🔗 Client acquired from pool
+2025-08-04T18:19:40: 🔗 Client acquired from pool
+2025-08-04T18:19:40: 🔗 Client acquired from pool
+2025-08-04T18:19:40: 🔗 Client acquired from pool
+2025-08-04T18:19:40: 🔓 Client released back to pool
+2025-08-04T18:19:40: 🔓 Client released back to pool
+2025-08-04T18:19:40: 🔓 Client released back to pool
+2025-08-04T18:19:40: 🔓 Client released back to pool
+2025-08-04T18:19:45: 🔗 Client acquired from pool
+2025-08-04T18:19:45: 🔗 Client acquired from pool
+2025-08-04T18:19:45: 🔗 Client acquired from pool
+2025-08-04T18:19:45: 🔗 Client acquired from pool
+2025-08-04T18:19:45: 🔓 Client released back to pool
+2025-08-04T18:19:45: 🔓 Client released back to pool
+2025-08-04T18:19:45: 🔓 Client released back to pool
+2025-08-04T18:19:45: 🔓 Client released back to pool
+2025-08-04T18:19:50: 🔗 Client acquired from pool
+2025-08-04T18:19:50: 🔗 Client acquired from pool
+2025-08-04T18:19:50: 🔗 Client acquired from pool
+2025-08-04T18:19:50: 🔗 Client acquired from pool
+2025-08-04T18:19:50: 🔓 Client released back to pool
+2025-08-04T18:19:50: 🔓 Client released back to pool
+2025-08-04T18:19:50: 🔓 Client released back to pool
+2025-08-04T18:19:50: 🔓 Client released back to pool
+2025-08-04T18:19:55: 🔗 Client acquired from pool
+2025-08-04T18:19:55: 🔗 Client acquired from pool
+2025-08-04T18:19:55: 🔗 Client acquired from pool
+2025-08-04T18:19:55: 🔗 Client acquired from pool
+2025-08-04T18:19:55: 🔓 Client released back to pool
+2025-08-04T18:19:55: 🔓 Client released back to pool
+2025-08-04T18:19:55: 🔓 Client released back to pool
+2025-08-04T18:19:55: 🔓 Client released back to pool
+2025-08-04T18:20:00: 🔗 Client acquired from pool
+2025-08-04T18:20:00: 🔗 Client acquired from pool
+2025-08-04T18:20:00: 🔗 Client acquired from pool
+2025-08-04T18:20:00: 🔗 Client acquired from pool
+2025-08-04T18:20:00: 🔓 Client released back to pool
+2025-08-04T18:20:00: 🔓 Client released back to pool
+2025-08-04T18:20:00: 🔓 Client released back to pool
+2025-08-04T18:20:00: 🔓 Client released back to pool
