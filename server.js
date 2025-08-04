@@ -1827,22 +1827,25 @@ app.delete('/api/environments/:id',
   }
 );
 
-// Get machine types for environments configuration
+// ================================
+// MACHINE TYPES MANAGEMENT API
+// ================================
+
+// Get all machine types
 app.get('/api/machine-types', authenticateToken, async (req, res) => {
   try {
     const client = await pool.connect();
     try {
-      // Get distinct machine types with machine counts
       const result = await client.query(`
         SELECT 
-          type,
-          COUNT(*) as machine_count,
-          array_agg(name ORDER BY name) as machines,
-          array_agg(DISTINCT environment) as environments
-        FROM machines 
-        WHERE type IS NOT NULL AND type <> ''
-        GROUP BY type 
-        ORDER BY type
+          mt.*,
+          COUNT(m.id) as machine_count,
+          array_agg(m.name ORDER BY m.name) FILTER (WHERE m.name IS NOT NULL) as machines
+        FROM machine_types mt
+        LEFT JOIN machines m ON m.type = mt.name
+        WHERE mt.is_active = true
+        GROUP BY mt.id, mt.name, mt.description, mt.category, mt.specifications, mt.is_active, mt.created_at, mt.updated_at
+        ORDER BY mt.name
       `);
       
       res.json(result.rows);
@@ -1854,6 +1857,128 @@ app.get('/api/machine-types', authenticateToken, async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch machine types' });
   }
 });
+
+// Create new machine type
+app.post('/api/machine-types', 
+  authenticateToken,
+  requireRole(['admin']),
+  async (req, res) => {
+    const { name, description, category, specifications } = req.body;
+    
+    if (!name) {
+      return res.status(400).json({ error: 'Machine type name is required' });
+    }
+    
+    try {
+      const client = await pool.connect();
+      try {
+        const result = await client.query(`
+          INSERT INTO machine_types (name, description, category, specifications)
+          VALUES ($1, $2, $3, $4)
+          RETURNING *
+        `, [name.trim(), description || '', category || 'Production', specifications || {}]);
+        
+        res.status(201).json(result.rows[0]);
+      } finally {
+        client.release();
+      }
+    } catch (error) {
+      console.error('Error creating machine type:', error);
+      if (error.code === '23505') { // Unique violation
+        res.status(400).json({ error: 'Machine type name already exists' });
+      } else {
+        res.status(500).json({ error: 'Database error' });
+      }
+    }
+  }
+);
+
+// Update machine type
+app.put('/api/machine-types/:id', 
+  authenticateToken,
+  requireRole(['admin']),
+  async (req, res) => {
+    const { id } = req.params;
+    const { name, description, category, specifications } = req.body;
+    
+    if (!name) {
+      return res.status(400).json({ error: 'Machine type name is required' });
+    }
+    
+    try {
+      const client = await pool.connect();
+      try {
+        const result = await client.query(`
+          UPDATE machine_types 
+          SET name = $1, description = $2, category = $3, specifications = $4, updated_at = NOW()
+          WHERE id = $5 AND is_active = true
+          RETURNING *
+        `, [name.trim(), description || '', category || 'Production', specifications || {}, parseInt(id)]);
+        
+        if (result.rows.length === 0) {
+          return res.status(404).json({ error: 'Machine type not found' });
+        }
+        
+        res.json(result.rows[0]);
+      } finally {
+        client.release();
+      }
+    } catch (error) {
+      console.error('Error updating machine type:', error);
+      if (error.code === '23505') { // Unique violation
+        res.status(400).json({ error: 'Machine type name already exists' });
+      } else {
+        res.status(500).json({ error: 'Database error' });
+      }
+    }
+  }
+);
+
+// Delete machine type (soft delete)
+app.delete('/api/machine-types/:id', 
+  authenticateToken,
+  requireRole(['admin']),
+  async (req, res) => {
+    const { id } = req.params;
+    
+    try {
+      const client = await pool.connect();
+      try {
+        // Check if any machines are using this type
+        const machineCheck = await client.query(`
+          SELECT COUNT(*) as count FROM machines WHERE type = (
+            SELECT name FROM machine_types WHERE id = $1 AND is_active = true
+          )
+        `, [parseInt(id)]);
+        
+        if (parseInt(machineCheck.rows[0].count) > 0) {
+          return res.status(400).json({ 
+            error: `Cannot delete machine type. ${machineCheck.rows[0].count} machine(s) are using this type.` 
+          });
+        }
+        
+        // Soft delete
+        const result = await client.query(`
+          UPDATE machine_types 
+          SET is_active = false, updated_at = NOW()
+          WHERE id = $1 AND is_active = true
+          RETURNING *
+        `, [parseInt(id)]);
+        
+        if (result.rows.length === 0) {
+          return res.status(404).json({ error: 'Machine type not found' });
+        }
+        
+        res.json({ message: 'Machine type deleted successfully' });
+      } finally {
+        client.release();
+      }
+    } catch (error) {
+      console.error('Error deleting machine type:', error);
+      res.status(500).json({ error: 'Database error' });
+    }
+  }
+);
 
 // File upload for bulk orders
 app.post('/api/upload-orders',

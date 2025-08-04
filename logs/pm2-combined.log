@@ -7089,3 +7089,604 @@ Error: bind EADDRINUSE null:3000
 2025-08-04T13:19:59: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
 2025-08-04T13:19:59: ✨ Enhanced endpoints loaded successfully
 2025-08-04T13:19:59: 🔧 Configuration management system enabled
+2025-08-04T13:20:04: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T13:20:04: ✅ PostgreSQL database interface ready
+2025-08-04T13:20:04: 🔍 About to run health check...
+2025-08-04T13:20:04: 📋 Labor roster will use existing users table
+2025-08-04T13:20:04: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T13:20:04: JWT_SECRET exists: true
+2025-08-04T13:20:04: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T13:20:04: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T13:20:04: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T13:20:04: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T13:20:04: ✨ Enhanced endpoints loaded successfully
+2025-08-04T13:20:04: 🔧 Configuration management system enabled
+2025-08-04T13:20:09: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T13:20:09: ✅ PostgreSQL database interface ready
+2025-08-04T13:20:09: 🔍 About to run health check...
+2025-08-04T13:20:09: 📋 Labor roster will use existing users table
+2025-08-04T13:20:09: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T13:20:09: JWT_SECRET exists: true
+2025-08-04T13:20:09: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T13:20:09: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T13:20:09: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T13:20:09: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T13:20:09: ✨ Enhanced endpoints loaded successfully
+2025-08-04T13:20:09: 🔧 Configuration management system enabled
+2025-08-04T13:20:13: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T13:20:13: ✅ PostgreSQL database interface ready
+2025-08-04T13:20:13: 🔍 About to run health check...
+2025-08-04T13:20:13: 📋 Labor roster will use existing users table
+2025-08-04T13:20:13: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T13:20:13: JWT_SECRET exists: true
+2025-08-04T13:20:13: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T13:20:13: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T13:20:13: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T13:20:13: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T13:20:13: ✨ Enhanced endpoints loaded successfully
+2025-08-04T13:20:13: 🔧 Configuration management system enabled
+2025-08-04T13:20:18: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T13:20:18: ✅ PostgreSQL database interface ready
+2025-08-04T13:20:18: 🔍 About to run health check...
+2025-08-04T13:20:18: 📋 Labor roster will use existing users table
+2025-08-04T13:20:18: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T13:20:18: JWT_SECRET exists: true
+2025-08-04T13:20:18: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T13:20:18: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T13:20:18: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T13:20:18: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T13:20:18: ✨ Enhanced endpoints loaded successfully
+2025-08-04T13:20:18: 🔧 Configuration management system enabled
+2025-08-04T13:20:23: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T13:20:23: ✅ PostgreSQL database interface ready
+2025-08-04T13:20:23: 🔍 About to run health check...
+2025-08-04T13:20:23: 📋 Labor roster will use existing users table
+2025-08-04T13:20:23: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T13:20:23: JWT_SECRET exists: true
+2025-08-04T13:20:23: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T13:20:23: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T13:20:23: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T13:20:23: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T13:20:23: ✨ Enhanced endpoints loaded successfully
+2025-08-04T13:20:23: 🔧 Configuration management system enabled
+2025-08-04T13:20:28: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T13:20:28: ✅ PostgreSQL database interface ready
+2025-08-04T13:20:28: 🔍 About to run health check...
+2025-08-04T13:20:28: 📋 Labor roster will use existing users table
+2025-08-04T13:20:28: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T13:20:28: JWT_SECRET exists: true
+2025-08-04T13:20:28: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T13:20:28: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T13:20:28: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T13:20:28: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T13:20:28: ✨ Enhanced endpoints loaded successfully
+2025-08-04T13:20:28: 🔧 Configuration management system enabled
+2025-08-04T13:20:32: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T13:20:32: ✅ PostgreSQL database interface ready
+2025-08-04T13:20:32: 🔍 About to run health check...
+2025-08-04T13:20:32: 📋 Labor roster will use existing users table
+2025-08-04T13:20:32: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T13:20:32: JWT_SECRET exists: true
+2025-08-04T13:20:32: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T13:20:32: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T13:20:32: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T13:20:32: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T13:20:32: ✨ Enhanced endpoints loaded successfully
+2025-08-04T13:20:32: 🔧 Configuration management system enabled
+2025-08-04T13:20:37: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T13:20:37: ✅ PostgreSQL database interface ready
+2025-08-04T13:20:37: 🔍 About to run health check...
+2025-08-04T13:20:37: 📋 Labor roster will use existing users table
+2025-08-04T13:20:37: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T13:20:37: JWT_SECRET exists: true
+2025-08-04T13:20:37: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T13:20:37: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T13:20:37: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T13:20:37: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T13:20:37: ✨ Enhanced endpoints loaded successfully
+2025-08-04T13:20:37: 🔧 Configuration management system enabled
+2025-08-04T13:20:42: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T13:20:42: ✅ PostgreSQL database interface ready
+2025-08-04T13:20:42: 🔍 About to run health check...
+2025-08-04T13:20:42: 📋 Labor roster will use existing users table
+2025-08-04T13:20:42: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T13:20:42: JWT_SECRET exists: true
+2025-08-04T13:20:42: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T13:20:42: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T13:20:42: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T13:20:42: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T13:20:42: ✨ Enhanced endpoints loaded successfully
+2025-08-04T13:20:42: 🔧 Configuration management system enabled
+2025-08-04T13:20:47: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T13:20:47: ✅ PostgreSQL database interface ready
+2025-08-04T13:20:47: 🔍 About to run health check...
+2025-08-04T13:20:47: 📋 Labor roster will use existing users table
+2025-08-04T13:20:47: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T13:20:47: JWT_SECRET exists: true
+2025-08-04T13:20:47: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T13:20:47: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T13:20:47: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T13:20:47: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T13:20:47: ✨ Enhanced endpoints loaded successfully
+2025-08-04T13:20:47: 🔧 Configuration management system enabled
+2025-08-04T13:20:52: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T13:20:52: ✅ PostgreSQL database interface ready
+2025-08-04T13:20:52: 🔍 About to run health check...
+2025-08-04T13:20:52: 📋 Labor roster will use existing users table
+2025-08-04T13:20:52: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T13:20:52: JWT_SECRET exists: true
+2025-08-04T13:20:52: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T13:20:52: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T13:20:52: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T13:20:52: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T13:20:52: ✨ Enhanced endpoints loaded successfully
+2025-08-04T13:20:52: 🔧 Configuration management system enabled
+2025-08-04T13:20:56: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T13:20:56: ✅ PostgreSQL database interface ready
+2025-08-04T13:20:56: 🔍 About to run health check...
+2025-08-04T13:20:56: 📋 Labor roster will use existing users table
+2025-08-04T13:20:56: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T13:20:56: JWT_SECRET exists: true
+2025-08-04T13:20:56: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T13:20:56: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T13:20:56: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T13:20:56: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T13:20:56: ✨ Enhanced endpoints loaded successfully
+2025-08-04T13:20:56: 🔧 Configuration management system enabled
+2025-08-04T13:21:01: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T13:21:01: ✅ PostgreSQL database interface ready
+2025-08-04T13:21:01: 🔍 About to run health check...
+2025-08-04T13:21:01: 📋 Labor roster will use existing users table
+2025-08-04T13:21:01: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T13:21:01: JWT_SECRET exists: true
+2025-08-04T13:21:01: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T13:21:01: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T13:21:01: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T13:21:01: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T13:21:01: ✨ Enhanced endpoints loaded successfully
+2025-08-04T13:21:01: 🔧 Configuration management system enabled
+2025-08-04T13:21:06: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T13:21:06: ✅ PostgreSQL database interface ready
+2025-08-04T13:21:06: 🔍 About to run health check...
+2025-08-04T13:21:06: 📋 Labor roster will use existing users table
+2025-08-04T13:21:06: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T13:21:06: JWT_SECRET exists: true
+2025-08-04T13:21:06: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T13:21:06: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T13:21:06: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T13:21:06: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T13:21:06: ✨ Enhanced endpoints loaded successfully
+2025-08-04T13:21:06: 🔧 Configuration management system enabled
+2025-08-04T13:21:06: 🚀 Server running on http://localhost:3000
+2025-08-04T13:21:06: 📊 Environment: production
+2025-08-04T13:21:06: 🔐 JWT Secret: Gmqbm...
+2025-08-04T13:21:06: ✅ New PostgreSQL client connected
+2025-08-04T13:21:06: 🔗 Client acquired from pool
+2025-08-04T13:21:06: 🔓 Client released back to pool
+2025-08-04T13:21:06: 🏥 Database health check: {
+  status: 'healthy',
+  timestamp: 2025-08-04T11:21:06.736Z,
+  version: 'PostgreSQL 16.9 (Ubuntu 16.9-0ubuntu0.24.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 13.3.0-6ubuntu2~24.04) 13.3.0, 64-bit',
+  pool_total: 1,
+  pool_idle: 1,
+  pool_waiting: 0
+}
+2025-08-04T13:21:15: JWT verification failed: jwt malformed
+2025-08-04T13:21:48: New WebSocket connection attempt
+2025-08-04T13:21:48: ✅ WebSocket authenticated: admin (admin)
+2025-08-04T13:21:53: ValidationError: The Express 'trust proxy' setting is true, which allows anyone to trivially bypass IP-based rate limiting. See https://express-rate-limit.github.io/ERR_ERL_PERMISSIVE_TRUST_PROXY/ for more information.
+    at Object.trustProxy (/home/production-app/production-orders-app/node_modules/express-rate-limit/dist/index.cjs:167:13)
+    at wrappedValidations.<computed> [as trustProxy] (/home/production-app/production-orders-app/node_modules/express-rate-limit/dist/index.cjs:397:22)
+    at Object.keyGenerator (/home/production-app/production-orders-app/node_modules/express-rate-limit/dist/index.cjs:657:20)
+    at /home/production-app/production-orders-app/node_modules/express-rate-limit/dist/index.cjs:710:32
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async /home/production-app/production-orders-app/node_modules/express-rate-limit/dist/index.cjs:691:5 {
+  code: 'ERR_ERL_PERMISSIVE_TRUST_PROXY',
+  help: 'https://express-rate-limit.github.io/ERR_ERL_PERMISSIVE_TRUST_PROXY/'
+}
+2025-08-04T13:21:53: 🔗 Client acquired from pool
+2025-08-04T13:21:53: 🔓 Client released back to pool
+2025-08-04T13:21:53: 🔗 Client acquired from pool
+2025-08-04T13:21:53: 🔓 Client released back to pool
+2025-08-04T13:21:53: 🔗 Client acquired from pool
+2025-08-04T13:21:53: 🔓 Client released back to pool
+2025-08-04T13:21:53: 🔗 Client acquired from pool
+2025-08-04T13:21:53: 🔓 Client released back to pool
+2025-08-04T13:21:53: ✅ New PostgreSQL client connected
+2025-08-04T13:21:53: 🔗 Client acquired from pool
+2025-08-04T13:21:53: 🔓 Client released back to pool
+2025-08-04T13:23:09: 🔗 Client acquired from pool
+2025-08-04T13:23:09: 🔗 Client acquired from pool
+2025-08-04T13:23:09: 🔓 Client released back to pool
+2025-08-04T13:23:09: 🔓 Client released back to pool
+2025-08-04T13:23:09: ✅ New PostgreSQL client connected
+2025-08-04T13:23:09: 🔗 Client acquired from pool
+2025-08-04T13:23:09: 🔓 Client released back to pool
+2025-08-04T13:23:11: 📺 admin subscribed to: [ 'machines', 'production' ]
+2025-08-04T13:23:11: 🔗 Client acquired from pool
+2025-08-04T13:23:11: 🔓 Client released back to pool
+2025-08-04T13:23:11: 🔗 Client acquired from pool
+2025-08-04T13:23:11: 🔗 Client acquired from pool
+2025-08-04T13:23:11: 🔓 Client released back to pool
+2025-08-04T13:23:11: 🔓 Client released back to pool
+2025-08-04T13:23:33: 🔗 Client acquired from pool
+2025-08-04T13:23:33: 🔓 Client released back to pool
+2025-08-04T13:23:33: 🔗 Client acquired from pool
+2025-08-04T13:23:33: 🔓 Client released back to pool
+2025-08-04T13:23:33: 🔗 Client acquired from pool
+2025-08-04T13:23:33: 🔓 Client released back to pool
+2025-08-04T13:23:41: 🔗 Client acquired from pool
+2025-08-04T13:23:41: 🔓 Client released back to pool
+2025-08-04T13:24:11: 🔗 Client acquired from pool
+2025-08-04T13:24:11: 🔓 Client released back to pool
+2025-08-04T13:24:41: 🔗 Client acquired from pool
+2025-08-04T13:24:41: 🔓 Client released back to pool
+2025-08-04T13:25:11: 🔗 Client acquired from pool
+2025-08-04T13:25:11: 🔓 Client released back to pool
+2025-08-04T13:25:41: 🔗 Client acquired from pool
+2025-08-04T13:25:41: 🔓 Client released back to pool
+2025-08-04T13:25:56: 🔗 Client acquired from pool
+2025-08-04T13:25:56: 🔓 Client released back to pool
+2025-08-04T13:25:56: 🔗 Client acquired from pool
+2025-08-04T13:25:56: 🔓 Client released back to pool
+2025-08-04T13:25:58: 🔗 Client acquired from pool
+2025-08-04T13:25:58: 🔓 Client released back to pool
+2025-08-04T13:25:58: 🔗 Client acquired from pool
+2025-08-04T13:25:58: 🔓 Client released back to pool
+2025-08-04T13:26:02: 🔌 WebSocket disconnected: admin
+2025-08-04T13:26:03: New WebSocket connection attempt
+2025-08-04T13:26:03: ✅ WebSocket authenticated: admin (admin)
+2025-08-04T13:26:07: 🔗 Client acquired from pool
+2025-08-04T13:26:07: 🔓 Client released back to pool
+2025-08-04T13:26:07: 🔗 Client acquired from pool
+2025-08-04T13:26:07: 🔓 Client released back to pool
+2025-08-04T13:26:07: 🔗 Client acquired from pool
+2025-08-04T13:26:07: 🔓 Client released back to pool
+2025-08-04T13:26:07: ✅ New PostgreSQL client connected
+2025-08-04T13:26:07: 🔗 Client acquired from pool
+2025-08-04T13:26:07: 🔓 Client released back to pool
+2025-08-04T13:26:10: 🔌 WebSocket disconnected: admin
+2025-08-04T13:26:11: New WebSocket connection attempt
+2025-08-04T13:26:11: ✅ WebSocket authenticated: admin (admin)
+2025-08-04T13:26:14: 🔗 Client acquired from pool
+2025-08-04T13:26:14: 🔓 Client released back to pool
+2025-08-04T13:26:14: 🔗 Client acquired from pool
+2025-08-04T13:26:14: 🔓 Client released back to pool
+2025-08-04T13:26:14: 🔗 Client acquired from pool
+2025-08-04T13:26:14: 🔗 Client acquired from pool
+2025-08-04T13:26:14: 🔓 Client released back to pool
+2025-08-04T13:26:14: 🔓 Client released back to pool
+2025-08-04T13:26:15: 🔗 Client acquired from pool
+2025-08-04T13:26:15: 🔓 Client released back to pool
+2025-08-04T13:26:18: 📺 admin subscribed to: [ 'production', 'orders', 'machines' ]
+2025-08-04T13:26:18: 🔗 Client acquired from pool
+2025-08-04T13:26:18: 🔗 Client acquired from pool
+2025-08-04T13:26:18: 🔓 Client released back to pool
+2025-08-04T13:26:18: 🔓 Client released back to pool
+2025-08-04T13:26:18: ✅ New PostgreSQL client connected
+2025-08-04T13:26:18: 🔗 Client acquired from pool
+2025-08-04T13:26:18: 🔓 Client released back to pool
+2025-08-04T13:26:18: ✅ New PostgreSQL client connected
+2025-08-04T13:26:18: 🔗 Client acquired from pool
+2025-08-04T13:26:18: 🔓 Client released back to pool
+2025-08-04T13:26:23: 🔗 Client acquired from pool
+2025-08-04T13:26:23: 🔗 Client acquired from pool
+2025-08-04T13:26:23: 🔗 Client acquired from pool
+2025-08-04T13:26:23: 🔗 Client acquired from pool
+2025-08-04T13:26:23: 🔓 Client released back to pool
+2025-08-04T13:26:23: 🔓 Client released back to pool
+2025-08-04T13:26:23: 🔓 Client released back to pool
+2025-08-04T13:26:23: 🔓 Client released back to pool
+2025-08-04T13:26:28: 🔗 Client acquired from pool
+2025-08-04T13:26:28: 🔗 Client acquired from pool
+2025-08-04T13:26:28: 🔗 Client acquired from pool
+2025-08-04T13:26:28: 🔗 Client acquired from pool
+2025-08-04T13:26:28: 🔓 Client released back to pool
+2025-08-04T13:26:28: 🔓 Client released back to pool
+2025-08-04T13:26:28: 🔓 Client released back to pool
+2025-08-04T13:26:28: 🔓 Client released back to pool
+2025-08-04T13:26:33: 🔗 Client acquired from pool
+2025-08-04T13:26:33: 🔗 Client acquired from pool
+2025-08-04T13:26:33: 🔗 Client acquired from pool
+2025-08-04T13:26:33: 🔗 Client acquired from pool
+2025-08-04T13:26:33: 🔓 Client released back to pool
+2025-08-04T13:26:33: 🔓 Client released back to pool
+2025-08-04T13:26:33: 🔓 Client released back to pool
+2025-08-04T13:26:33: 🔓 Client released back to pool
+2025-08-04T13:26:38: 🔗 Client acquired from pool
+2025-08-04T13:26:38: 🔗 Client acquired from pool
+2025-08-04T13:26:38: 🔗 Client acquired from pool
+2025-08-04T13:26:38: 🔗 Client acquired from pool
+2025-08-04T13:26:38: 🔓 Client released back to pool
+2025-08-04T13:26:38: 🔓 Client released back to pool
+2025-08-04T13:26:38: 🔓 Client released back to pool
+2025-08-04T13:26:38: 🔓 Client released back to pool
+2025-08-04T13:26:43: 🔗 Client acquired from pool
+2025-08-04T13:26:43: 🔗 Client acquired from pool
+2025-08-04T13:26:43: 🔗 Client acquired from pool
+2025-08-04T13:26:43: 🔗 Client acquired from pool
+2025-08-04T13:26:43: 🔓 Client released back to pool
+2025-08-04T13:26:43: 🔓 Client released back to pool
+2025-08-04T13:26:43: 🔓 Client released back to pool
+2025-08-04T13:26:43: 🔓 Client released back to pool
+2025-08-04T13:26:48: 🔗 Client acquired from pool
+2025-08-04T13:26:48: 🔗 Client acquired from pool
+2025-08-04T13:26:48: 🔗 Client acquired from pool
+2025-08-04T13:26:48: 🔗 Client acquired from pool
+2025-08-04T13:26:48: 🔓 Client released back to pool
+2025-08-04T13:26:48: 🔓 Client released back to pool
+2025-08-04T13:26:48: 🔓 Client released back to pool
+2025-08-04T13:26:48: 🔓 Client released back to pool
+2025-08-04T13:26:53: 🔗 Client acquired from pool
+2025-08-04T13:26:53: 🔗 Client acquired from pool
+2025-08-04T13:26:53: 🔗 Client acquired from pool
+2025-08-04T13:26:53: 🔗 Client acquired from pool
+2025-08-04T13:26:53: 🔓 Client released back to pool
+2025-08-04T13:26:53: 🔓 Client released back to pool
+2025-08-04T13:26:53: 🔓 Client released back to pool
+2025-08-04T13:26:53: 🔓 Client released back to pool
+2025-08-04T13:26:58: 🔗 Client acquired from pool
+2025-08-04T13:26:58: 🔗 Client acquired from pool
+2025-08-04T13:26:58: 🔗 Client acquired from pool
+2025-08-04T13:26:58: 🔗 Client acquired from pool
+2025-08-04T13:26:58: 🔓 Client released back to pool
+2025-08-04T13:26:58: 🔓 Client released back to pool
+2025-08-04T13:26:58: 🔓 Client released back to pool
+2025-08-04T13:26:58: 🔓 Client released back to pool
+2025-08-04T13:27:03: 🔗 Client acquired from pool
+2025-08-04T13:27:03: 🔗 Client acquired from pool
+2025-08-04T13:27:03: 🔗 Client acquired from pool
+2025-08-04T13:27:03: 🔗 Client acquired from pool
+2025-08-04T13:27:03: 🔓 Client released back to pool
+2025-08-04T13:27:03: 🔓 Client released back to pool
+2025-08-04T13:27:03: 🔓 Client released back to pool
+2025-08-04T13:27:03: 🔓 Client released back to pool
+2025-08-04T13:27:08: 🔗 Client acquired from pool
+2025-08-04T13:27:08: 🔗 Client acquired from pool
+2025-08-04T13:27:08: 🔗 Client acquired from pool
+2025-08-04T13:27:08: 🔗 Client acquired from pool
+2025-08-04T13:27:08: 🔓 Client released back to pool
+2025-08-04T13:27:08: 🔓 Client released back to pool
+2025-08-04T13:27:08: 🔓 Client released back to pool
+2025-08-04T13:27:08: 🔓 Client released back to pool
+2025-08-04T13:27:13: 📺 admin subscribed to: [ 'machines', 'production' ]
+2025-08-04T13:27:13: 🔗 Client acquired from pool
+2025-08-04T13:27:13: 🔗 Client acquired from pool
+2025-08-04T13:27:13: 🔓 Client released back to pool
+2025-08-04T13:27:13: 🔗 Client acquired from pool
+2025-08-04T13:27:13: 🔓 Client released back to pool
+2025-08-04T13:27:13: 🔓 Client released back to pool
+2025-08-04T13:27:13: 🔗 Client acquired from pool
+2025-08-04T13:27:13: 🔓 Client released back to pool
+2025-08-04T13:27:13: 🔗 Client acquired from pool
+2025-08-04T13:27:13: 🔗 Client acquired from pool
+2025-08-04T13:27:13: 🔓 Client released back to pool
+2025-08-04T13:27:13: 🔓 Client released back to pool
+2025-08-04T13:27:19: 📺 admin subscribed to: [ 'machines', 'production' ]
+2025-08-04T13:27:19: 🔗 Client acquired from pool
+2025-08-04T13:27:19: 🔗 Client acquired from pool
+2025-08-04T13:27:19: 🔓 Client released back to pool
+2025-08-04T13:27:19: 🔗 Client acquired from pool
+2025-08-04T13:27:19: 🔓 Client released back to pool
+2025-08-04T13:27:19: 🔓 Client released back to pool
+2025-08-04T13:27:20: 📺 admin subscribed to: [ 'production', 'orders', 'machines' ]
+2025-08-04T13:27:20: 🔗 Client acquired from pool
+2025-08-04T13:27:20: 🔗 Client acquired from pool
+2025-08-04T13:27:20: 🔗 Client acquired from pool
+2025-08-04T13:27:20: 🔗 Client acquired from pool
+2025-08-04T13:27:20: 🔓 Client released back to pool
+2025-08-04T13:27:20: 🔓 Client released back to pool
+2025-08-04T13:27:20: 🔓 Client released back to pool
+2025-08-04T13:27:20: 🔓 Client released back to pool
+2025-08-04T13:27:25: 🔗 Client acquired from pool
+2025-08-04T13:27:25: 🔗 Client acquired from pool
+2025-08-04T13:27:25: 🔗 Client acquired from pool
+2025-08-04T13:27:25: 🔗 Client acquired from pool
+2025-08-04T13:27:25: 🔓 Client released back to pool
+2025-08-04T13:27:25: 🔓 Client released back to pool
+2025-08-04T13:27:25: 🔓 Client released back to pool
+2025-08-04T13:27:25: 🔓 Client released back to pool
+2025-08-04T13:27:30: 🔗 Client acquired from pool
+2025-08-04T13:27:30: 🔗 Client acquired from pool
+2025-08-04T13:27:30: 🔗 Client acquired from pool
+2025-08-04T13:27:30: 🔗 Client acquired from pool
+2025-08-04T13:27:30: 🔓 Client released back to pool
+2025-08-04T13:27:30: 🔓 Client released back to pool
+2025-08-04T13:27:30: 🔓 Client released back to pool
+2025-08-04T13:27:30: 🔓 Client released back to pool
+2025-08-04T13:27:35: 🔗 Client acquired from pool
+2025-08-04T13:27:35: 🔗 Client acquired from pool
+2025-08-04T13:27:35: 🔗 Client acquired from pool
+2025-08-04T13:27:35: 🔗 Client acquired from pool
+2025-08-04T13:27:35: 🔓 Client released back to pool
+2025-08-04T13:27:35: 🔓 Client released back to pool
+2025-08-04T13:27:35: 🔓 Client released back to pool
+2025-08-04T13:27:35: 🔓 Client released back to pool
+2025-08-04T13:27:40: 🔗 Client acquired from pool
+2025-08-04T13:27:40: 🔗 Client acquired from pool
+2025-08-04T13:27:40: 🔗 Client acquired from pool
+2025-08-04T13:27:40: 🔗 Client acquired from pool
+2025-08-04T13:27:40: 🔓 Client released back to pool
+2025-08-04T13:27:40: 🔓 Client released back to pool
+2025-08-04T13:27:40: 🔓 Client released back to pool
+2025-08-04T13:27:40: 🔓 Client released back to pool
+2025-08-04T13:27:45: 🔗 Client acquired from pool
+2025-08-04T13:27:45: 🔗 Client acquired from pool
+2025-08-04T13:27:45: 🔗 Client acquired from pool
+2025-08-04T13:27:45: 🔗 Client acquired from pool
+2025-08-04T13:27:45: 🔓 Client released back to pool
+2025-08-04T13:27:45: 🔓 Client released back to pool
+2025-08-04T13:27:45: 🔓 Client released back to pool
+2025-08-04T13:27:45: 🔓 Client released back to pool
+2025-08-04T13:27:50: 🔗 Client acquired from pool
+2025-08-04T13:27:50: 🔗 Client acquired from pool
+2025-08-04T13:27:50: 🔗 Client acquired from pool
+2025-08-04T13:27:50: 🔗 Client acquired from pool
+2025-08-04T13:27:50: 🔓 Client released back to pool
+2025-08-04T13:27:50: 🔓 Client released back to pool
+2025-08-04T13:27:50: 🔓 Client released back to pool
+2025-08-04T13:27:50: 🔓 Client released back to pool
+2025-08-04T13:27:55: 🔗 Client acquired from pool
+2025-08-04T13:27:55: 🔗 Client acquired from pool
+2025-08-04T13:27:55: 🔗 Client acquired from pool
+2025-08-04T13:27:55: 🔗 Client acquired from pool
+2025-08-04T13:27:55: 🔓 Client released back to pool
+2025-08-04T13:27:55: 🔓 Client released back to pool
+2025-08-04T13:27:55: 🔓 Client released back to pool
+2025-08-04T13:27:55: 🔓 Client released back to pool
+2025-08-04T13:28:00: 🔗 Client acquired from pool
+2025-08-04T13:28:00: 🔗 Client acquired from pool
+2025-08-04T13:28:00: 🔗 Client acquired from pool
+2025-08-04T13:28:00: 🔗 Client acquired from pool
+2025-08-04T13:28:00: 🔓 Client released back to pool
+2025-08-04T13:28:00: 🔓 Client released back to pool
+2025-08-04T13:28:00: 🔓 Client released back to pool
+2025-08-04T13:28:00: 🔓 Client released back to pool
+2025-08-04T13:28:05: 🔗 Client acquired from pool
+2025-08-04T13:28:05: 🔗 Client acquired from pool
+2025-08-04T13:28:05: 🔗 Client acquired from pool
+2025-08-04T13:28:05: 🔗 Client acquired from pool
+2025-08-04T13:28:05: 🔓 Client released back to pool
+2025-08-04T13:28:05: 🔓 Client released back to pool
+2025-08-04T13:28:05: 🔓 Client released back to pool
+2025-08-04T13:28:05: 🔓 Client released back to pool
+2025-08-04T13:28:10: 🔗 Client acquired from pool
+2025-08-04T13:28:10: 🔗 Client acquired from pool
+2025-08-04T13:28:10: 🔗 Client acquired from pool
+2025-08-04T13:28:10: 🔗 Client acquired from pool
+2025-08-04T13:28:10: 🔓 Client released back to pool
+2025-08-04T13:28:10: 🔓 Client released back to pool
+2025-08-04T13:28:10: 🔓 Client released back to pool
+2025-08-04T13:28:10: 🔓 Client released back to pool
+2025-08-04T13:28:15: 🔗 Client acquired from pool
+2025-08-04T13:28:15: 🔗 Client acquired from pool
+2025-08-04T13:28:15: 🔗 Client acquired from pool
+2025-08-04T13:28:15: 🔗 Client acquired from pool
+2025-08-04T13:28:15: 🔓 Client released back to pool
+2025-08-04T13:28:15: 🔓 Client released back to pool
+2025-08-04T13:28:15: 🔓 Client released back to pool
+2025-08-04T13:28:15: 🔓 Client released back to pool
+2025-08-04T13:28:20: 🔗 Client acquired from pool
+2025-08-04T13:28:20: 🔗 Client acquired from pool
+2025-08-04T13:28:20: 🔗 Client acquired from pool
+2025-08-04T13:28:20: 🔗 Client acquired from pool
+2025-08-04T13:28:20: 🔓 Client released back to pool
+2025-08-04T13:28:20: 🔓 Client released back to pool
+2025-08-04T13:28:20: 🔓 Client released back to pool
+2025-08-04T13:28:20: 🔓 Client released back to pool
+2025-08-04T13:28:27: 🔗 Client acquired from pool
+2025-08-04T13:28:27: 🔗 Client acquired from pool
+2025-08-04T13:28:27: 🔗 Client acquired from pool
+2025-08-04T13:28:27: 🔗 Client acquired from pool
+2025-08-04T13:28:27: 🔓 Client released back to pool
+2025-08-04T13:28:27: 🔓 Client released back to pool
+2025-08-04T13:28:27: 🔓 Client released back to pool
+2025-08-04T13:28:27: 🔓 Client released back to pool
+2025-08-04T13:28:30: 🔗 Client acquired from pool
+2025-08-04T13:28:30: 🔗 Client acquired from pool
+2025-08-04T13:28:30: 🔗 Client acquired from pool
+2025-08-04T13:28:30: 🔗 Client acquired from pool
+2025-08-04T13:28:30: 🔓 Client released back to pool
+2025-08-04T13:28:30: 🔓 Client released back to pool
+2025-08-04T13:28:30: 🔓 Client released back to pool
+2025-08-04T13:28:30: 🔓 Client released back to pool
+2025-08-04T13:28:35: 🔗 Client acquired from pool
+2025-08-04T13:28:35: 🔗 Client acquired from pool
+2025-08-04T13:28:35: 🔗 Client acquired from pool
+2025-08-04T13:28:35: 🔗 Client acquired from pool
+2025-08-04T13:28:35: 🔓 Client released back to pool
+2025-08-04T13:28:35: 🔓 Client released back to pool
+2025-08-04T13:28:35: 🔓 Client released back to pool
+2025-08-04T13:28:35: 🔓 Client released back to pool
+2025-08-04T13:28:41: 🔗 Client acquired from pool
+2025-08-04T13:28:41: 🔗 Client acquired from pool
+2025-08-04T13:28:41: 🔗 Client acquired from pool
+2025-08-04T13:28:41: 🔗 Client acquired from pool
+2025-08-04T13:28:41: 🔓 Client released back to pool
+2025-08-04T13:28:41: 🔓 Client released back to pool
+2025-08-04T13:28:41: 🔓 Client released back to pool
+2025-08-04T13:28:41: 🔓 Client released back to pool
+2025-08-04T13:28:45: 🔗 Client acquired from pool
+2025-08-04T13:28:45: 🔗 Client acquired from pool
+2025-08-04T13:28:45: 🔗 Client acquired from pool
+2025-08-04T13:28:45: 🔗 Client acquired from pool
+2025-08-04T13:28:45: 🔓 Client released back to pool
+2025-08-04T13:28:45: 🔓 Client released back to pool
+2025-08-04T13:28:45: 🔓 Client released back to pool
+2025-08-04T13:28:45: 🔓 Client released back to pool
+2025-08-04T13:28:50: 🔗 Client acquired from pool
+2025-08-04T13:28:50: 🔗 Client acquired from pool
+2025-08-04T13:28:50: 🔗 Client acquired from pool
+2025-08-04T13:28:50: 🔗 Client acquired from pool
+2025-08-04T13:28:50: 🔓 Client released back to pool
+2025-08-04T13:28:50: 🔓 Client released back to pool
+2025-08-04T13:28:50: 🔓 Client released back to pool
+2025-08-04T13:28:50: 🔓 Client released back to pool
+2025-08-04T13:28:55: 🔗 Client acquired from pool
+2025-08-04T13:28:55: 🔗 Client acquired from pool
+2025-08-04T13:28:55: 🔗 Client acquired from pool
+2025-08-04T13:28:55: 🔗 Client acquired from pool
+2025-08-04T13:28:55: 🔓 Client released back to pool
+2025-08-04T13:28:55: 🔓 Client released back to pool
+2025-08-04T13:28:55: 🔓 Client released back to pool
+2025-08-04T13:28:55: 🔓 Client released back to pool
+2025-08-04T13:29:00: 🔗 Client acquired from pool
+2025-08-04T13:29:00: 🔗 Client acquired from pool
+2025-08-04T13:29:00: 🔗 Client acquired from pool
+2025-08-04T13:29:00: 🔗 Client acquired from pool
+2025-08-04T13:29:00: 🔓 Client released back to pool
+2025-08-04T13:29:00: 🔓 Client released back to pool
+2025-08-04T13:29:00: 🔓 Client released back to pool
+2025-08-04T13:29:00: 🔓 Client released back to pool
+2025-08-04T13:29:05: 🔗 Client acquired from pool
+2025-08-04T13:29:05: 🔗 Client acquired from pool
+2025-08-04T13:29:05: 🔗 Client acquired from pool
+2025-08-04T13:29:05: 🔗 Client acquired from pool
+2025-08-04T13:29:05: 🔓 Client released back to pool
+2025-08-04T13:29:05: 🔓 Client released back to pool
+2025-08-04T13:29:05: 🔓 Client released back to pool
+2025-08-04T13:29:05: 🔓 Client released back to pool
+2025-08-04T13:29:10: 🔗 Client acquired from pool
+2025-08-04T13:29:10: 🔗 Client acquired from pool
+2025-08-04T13:29:10: 🔗 Client acquired from pool
+2025-08-04T13:29:10: 🔗 Client acquired from pool
+2025-08-04T13:29:10: 🔓 Client released back to pool
+2025-08-04T13:29:10: 🔓 Client released back to pool
+2025-08-04T13:29:10: 🔓 Client released back to pool
+2025-08-04T13:29:10: 🔓 Client released back to pool
+2025-08-04T13:29:15: 🔗 Client acquired from pool
+2025-08-04T13:29:15: 🔗 Client acquired from pool
+2025-08-04T13:29:15: 🔗 Client acquired from pool
+2025-08-04T13:29:15: 🔗 Client acquired from pool
+2025-08-04T13:29:15: 🔓 Client released back to pool
+2025-08-04T13:29:15: 🔓 Client released back to pool
+2025-08-04T13:29:15: 🔓 Client released back to pool
+2025-08-04T13:29:15: 🔓 Client released back to pool
+2025-08-04T13:29:20: 🔗 Client acquired from pool
+2025-08-04T13:29:20: 🔗 Client acquired from pool
+2025-08-04T13:29:20: 🔗 Client acquired from pool
+2025-08-04T13:29:20: 🔗 Client acquired from pool
+2025-08-04T13:29:20: 🔓 Client released back to pool
+2025-08-04T13:29:20: 🔓 Client released back to pool
+2025-08-04T13:29:20: 🔓 Client released back to pool
+2025-08-04T13:29:20: 🔓 Client released back to pool
+2025-08-04T13:29:25: 🔗 Client acquired from pool
+2025-08-04T13:29:25: 🔗 Client acquired from pool
+2025-08-04T13:29:25: 🔗 Client acquired from pool
+2025-08-04T13:29:25: 🔗 Client acquired from pool
+2025-08-04T13:29:25: 🔓 Client released back to pool
+2025-08-04T13:29:25: 🔓 Client released back to pool
+2025-08-04T13:29:25: 🔓 Client released back to pool
+2025-08-04T13:29:25: 🔓 Client released back to pool
+2025-08-04T13:29:55: ✅ New PostgreSQL client connected
+2025-08-04T13:29:55: 🔗 Client acquired from pool
+2025-08-04T13:29:55: ✅ New PostgreSQL client connected
+2025-08-04T13:29:55: 🔗 Client acquired from pool
+2025-08-04T13:29:56: ✅ New PostgreSQL client connected
+2025-08-04T13:29:56: 🔗 Client acquired from pool
+2025-08-04T13:29:56: ✅ New PostgreSQL client connected
+2025-08-04T13:29:56: 🔗 Client acquired from pool
+2025-08-04T13:29:56: 🔓 Client released back to pool
+2025-08-04T13:29:56: 🔓 Client released back to pool
+2025-08-04T13:29:56: 🔓 Client released back to pool
+2025-08-04T13:29:56: 🔓 Client released back to pool

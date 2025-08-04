@@ -31,6 +31,16 @@ export default function AdminPanel() {
   
   // Machine types state
   const [availableMachineTypes, setAvailableMachineTypes] = useState([]);
+  
+  // Machine types management state
+  const [showMachineTypeModal, setShowMachineTypeModal] = useState(false);
+  const [editingMachineType, setEditingMachineType] = useState(null);
+  const [machineTypeFormData, setMachineTypeFormData] = useState({
+    name: '',
+    description: '',
+    category: 'Production',
+    specifications: {}
+  });
 
   // Modal states
   const [showUserModal, setShowUserModal] = useState(false);
@@ -695,9 +705,26 @@ export default function AdminPanel() {
                     <div className="space-y-2 mb-4">
                       <p className="text-sm font-medium text-gray-700">Machine Types:</p>
                       <div className="flex flex-wrap gap-1">
-                        {machineTypes.slice(0, 3).map((type, index) => (
-                          <Badge key={index} variant="default" size="sm">{type}</Badge>
-                        ))}
+                        {machineTypes.slice(0, 3).map((type) => {
+                          const machineTypeInfo = availableMachineTypes.find(mt => mt.type === type);
+                          return (
+                            <div key={type} className="relative group">
+                              <Badge variant="default" size="sm" className="cursor-help">
+                                {type}
+                                {machineTypeInfo && (
+                                  <span className="ml-1 px-1 py-0.5 text-xs bg-blue-200 text-blue-800 rounded-full">
+                                    {machineTypeInfo.machine_count}
+                                  </span>
+                                )}
+                              </Badge>
+                              {machineTypeInfo && (
+                                <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-black text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity z-10 whitespace-nowrap">
+                                  {machineTypeInfo.machines.join(', ')}
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })}
                         {machineTypes.length > 3 && (
                           <Badge variant="default" size="sm">+{machineTypes.length - 3} more</Badge>
                         )}
@@ -932,17 +959,50 @@ export default function AdminPanel() {
             
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Machine Types</label>
-              <textarea 
-                placeholder="Enter machine types, one per line (e.g., Bulk Line, Canning line, etc.)" 
-                value={environmentFormData.machine_types.join('\n')}
-                onChange={(e) => setEnvironmentFormData({
-                  ...environmentFormData, 
-                  machine_types: e.target.value.split('\n').filter(type => type.trim())
-                })} 
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
-                rows="4"
-              />
-              <p className="text-xs text-gray-500 mt-1">One machine type per line</p>
+              <div className="space-y-3">
+                {availableMachineTypes.length > 0 ? (
+                  availableMachineTypes.map((machineType) => (
+                    <div key={machineType.type} className="flex items-start space-x-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50">
+                      <input
+                        type="checkbox"
+                        id={`machine-type-${machineType.type}`}
+                        checked={environmentFormData.machine_types.includes(machineType.type)}
+                        onChange={(e) => {
+                          const isChecked = e.target.checked;
+                          const updatedTypes = isChecked 
+                            ? [...environmentFormData.machine_types, machineType.type]
+                            : environmentFormData.machine_types.filter(type => type !== machineType.type);
+                          setEnvironmentFormData({
+                            ...environmentFormData,
+                            machine_types: updatedTypes
+                          });
+                        }}
+                        className="mt-1 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                      />
+                      <div className="flex-1">
+                        <label htmlFor={`machine-type-${machineType.type}`} className="block text-sm font-medium text-gray-900 cursor-pointer">
+                          {machineType.type}
+                        </label>
+                        <div className="mt-1 text-xs text-gray-500">
+                          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 mr-2">
+                            {machineType.machine_count} machine{machineType.machine_count !== 1 ? 's' : ''}
+                          </span>
+                          <span className="text-gray-400">
+                            {machineType.machines.slice(0, 2).join(', ')}
+                            {machineType.machines.length > 2 && ` +${machineType.machines.length - 2} more`}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div className="text-center py-4 text-gray-500">
+                    <Settings className="w-8 h-8 mx-auto mb-2 text-gray-400" />
+                    <p className="text-sm">Loading machine types...</p>
+                  </div>
+                )}
+              </div>
+              <p className="text-xs text-gray-500 mt-2">Select the machine types that can operate in this environment</p>
             </div>
             
             <div className="flex justify-end gap-3 pt-4">
