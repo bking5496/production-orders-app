@@ -730,13 +730,24 @@ app.post('/api/users',
 // Machine management routes
 app.get('/api/machines', authenticateToken, (req, res) => {
   const { environment } = req.query;
-  let query = 'SELECT * FROM machines';
+  let query = `
+    SELECT 
+      m.*,
+      po.id as current_order_id,
+      po.order_number,
+      po.product_name,
+      po.start_time
+    FROM machines m
+    LEFT JOIN production_orders po ON m.id = po.machine_id AND po.status IN ('in_progress', 'stopped')
+  `;
   const params = [];
 
   if (environment) {
-    query += ' WHERE environment = $1';
+    query += ' WHERE m.environment = $1';
     params.push(environment);
   }
+
+  query += ' ORDER BY m.name';
 
   db.all(query, params, (err, machines) => {
     if (err) {
@@ -1619,19 +1630,19 @@ app.post('/api/orders/:id/resume',
 
     try {
       await dbTransaction(async (client) => {
-        // Update order status back to in_progress
+        // Update order status back to in_progress from stopped or paused
         const updateResult = await client.query(
           `UPDATE production_orders 
            SET status = 'in_progress',
                stop_time = NULL,
                stop_reason = NULL,
                updated_at = NOW()
-           WHERE id = $1 AND status = 'paused'`,
+           WHERE id = $1 AND status IN ('stopped', 'paused')`,
           [id]
         );
         
         if (updateResult.rowCount === 0) {
-          throw new Error('Order not found or not paused');
+          throw new Error('Order not found or not stopped/paused');
         }
         
         // Update the latest stop record
@@ -1641,6 +1652,14 @@ app.post('/api/orders/:id/resume',
                status = 'resolved',
                duration = EXTRACT(EPOCH FROM (NOW() - created_at)) / 60
            WHERE order_id = $1 AND status = 'active'`,
+          [id]
+        );
+        
+        // Update machine status back to in_use
+        await client.query(
+          `UPDATE machines 
+           SET status = 'in_use'
+           WHERE id = (SELECT machine_id FROM production_orders WHERE id = $1)`,
           [id]
         );
       });

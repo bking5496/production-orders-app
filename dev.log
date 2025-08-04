@@ -188,3 +188,6 @@ Instead of /public/uploads/s3-keys.json, use /uploads/s3-keys.json.
 8:09:45 PM [vite] (client) hmr update /src/js/components/orders.jsx
 Files in the public directory are served at the root path.
 Instead of /public/js/main.js, use /js/main.js.
+10:03:08 PM [vite] (client) page reload server.js
+10:03:22 PM [vite] (client) page reload server.js
+10:03:36 PM [vite] (client) page reload server.js
