@@ -40,10 +40,14 @@ const JWT_SECRET = getSecret('JWT_SECRET') || process.env.JWT_SECRET || (() => {
 const DATABASE_URL = process.env.DATABASE_URL;
 const UPLOAD_DIR = process.env.UPLOAD_DIR || 'uploads';
 
-// Rate limiting configuration
+// Rate limiting configuration - exclude API calls from general rate limiting
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 1000, // TEMPORARILY INCREASED: limit each IP to 1000 requests per windowMs
+  max: 5000, // Increased limit for non-API requests
+  skip: (req) => {
+    // Skip rate limiting for API calls - they have their own business logic protection
+    return req.path.startsWith('/api/');
+  },
   message: {
     success: false,
     error: 'Too many requests from this IP, please try again later.',
@@ -53,10 +57,10 @@ const limiter = rateLimit({
   legacyHeaders: false,
 });
 
-// Login rate limiting (more permissive for development/production usage)
+// Login rate limiting (generous for development/production usage)
 const loginLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 50, // limit each IP to 50 login attempts per 15 minutes
+  max: 200, // limit each IP to 200 login attempts per 15 minutes (very generous)
   skipSuccessfulRequests: true,
   message: {
     success: false,
