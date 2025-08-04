@@ -2980,3 +2980,68 @@ Error: SQLITE_ERROR: table waste_records has no column named waste_type
 2025-08-04T10:53:12: 🔗 Client acquired from pool
 2025-08-04T10:53:12: 🔓 Client released back to pool
 2025-08-04T11:59:55: 🔌 WebSocket disconnected: admin
+2025-08-04T12:19:22: New WebSocket connection attempt
+2025-08-04T12:19:22: ✅ WebSocket authenticated: admin (admin)
+2025-08-04T12:19:22: 📺 admin subscribed to: [ 'dashboard', 'orders', 'machines', 'production', 'alerts' ]
+2025-08-04T12:19:23: 🔌 WebSocket disconnected: admin
+2025-08-04T12:19:23: ✅ New PostgreSQL client connected
+2025-08-04T12:19:23: 🔗 Client acquired from pool
+2025-08-04T12:19:23: 🔓 Client released back to pool
+2025-08-04T12:19:23: ✅ New PostgreSQL client connected
+2025-08-04T12:19:23: 🔗 Client acquired from pool
+2025-08-04T12:19:23: ✅ New PostgreSQL client connected
+2025-08-04T12:19:23: 🔗 Client acquired from pool
+2025-08-04T12:19:23: 🔓 Client released back to pool
+2025-08-04T12:19:23: 🔓 Client released back to pool
+2025-08-04T12:19:23: New WebSocket connection attempt
+2025-08-04T12:19:23: ✅ WebSocket authenticated: admin (admin)
+2025-08-04T12:19:41: 🔗 Client acquired from pool
+2025-08-04T12:19:41: 🔓 Client released back to pool
+2025-08-04T12:19:41: 📡 Broadcast sent: order_created to channel: all (1 clients)
+2025-08-04T12:19:41: 🔗 Client acquired from pool
+2025-08-04T12:19:41: 🔓 Client released back to pool
+2025-08-04T12:19:43: 📺 admin subscribed to: [ 'machines', 'production' ]
+2025-08-04T12:19:43: 🔗 Client acquired from pool
+2025-08-04T12:19:43: 🔗 Client acquired from pool
+2025-08-04T12:19:43: 🔓 Client released back to pool
+2025-08-04T12:19:43: 🔓 Client released back to pool
+2025-08-04T12:19:43: 🔗 Client acquired from pool
+2025-08-04T12:19:43: 🔓 Client released back to pool
+2025-08-04T12:19:45: 🔗 Client acquired from pool
+2025-08-04T12:19:45: 🔗 Client acquired from pool
+2025-08-04T12:19:45: 🔗 Client acquired from pool
+2025-08-04T12:19:45: 🔓 Client released back to pool
+2025-08-04T12:19:45: 🔓 Client released back to pool
+2025-08-04T12:19:45: 🔓 Client released back to pool
+2025-08-04T12:19:47: 🔗 Client acquired from pool
+2025-08-04T12:19:47: 🔗 Client acquired from pool
+2025-08-04T12:19:47: 🔓 Client released back to pool
+2025-08-04T12:19:47: 🔓 Client released back to pool
+2025-08-04T12:19:47: 🔗 Client acquired from pool
+2025-08-04T12:19:47: 🔓 Client released back to pool
+2025-08-04T12:19:50: 🔗 Client acquired from pool
+2025-08-04T12:19:50: 🔗 Client acquired from pool
+2025-08-04T12:19:50: 🔓 Client released back to pool
+2025-08-04T12:19:50: 🔓 Client released back to pool
+2025-08-04T12:19:50: 🔗 Client acquired from pool
+2025-08-04T12:19:50: 🔓 Client released back to pool
+2025-08-04T12:19:50: 🔗 Client acquired from pool
+2025-08-04T12:19:50: 🔓 Client released back to pool
+2025-08-04T12:19:50: 🔗 Client acquired from pool
+2025-08-04T12:19:50: 🔓 Client released back to pool
+2025-08-04T12:19:50: 🔗 Client acquired from pool
+2025-08-04T12:19:50: 🔓 Client released back to pool
+2025-08-04T12:19:51: 🔗 Client acquired from pool
+2025-08-04T12:19:51: 🔓 Client released back to pool
+2025-08-04T12:19:51: 🔗 Client acquired from pool
+2025-08-04T12:19:51: 🔓 Client released back to pool
+2025-08-04T12:19:51: 🔗 Client acquired from pool
+2025-08-04T12:19:51: 🔓 Client released back to pool
+2025-08-04T12:19:51: 🔗 Client acquired from pool
+2025-08-04T12:19:51: 🔓 Client released back to pool
+2025-08-04T12:19:51: 🔗 Client acquired from pool
+2025-08-04T12:19:51: 🔓 Client released back to pool
+2025-08-04T12:19:51: 🔗 Client acquired from pool
+2025-08-04T12:19:51: 🔓 Client released back to pool
+2025-08-04T12:19:51: 🔗 Client acquired from pool
+2025-08-04T12:19:51: 🔓 Client released back to pool
