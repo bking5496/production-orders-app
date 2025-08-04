@@ -521,8 +521,8 @@ app.get('/api/health', async (req, res) => {
   try {
     await dbGet('SELECT 1 as health_check');
     const tables = await dbAll("SELECT tablename FROM pg_catalog.pg_tables WHERE schemaname != 'pg_catalog' AND schemaname != 'information_schema';");
-    const productionStopsSchema = await dbAll("SELECT column_name, data_type FROM information_schema.columns WHERE table_name = 'production_stops';");
-    const productionStopsEnhancedSchema = await dbAll("SELECT column_name, data_type FROM information_schema.columns WHERE table_name = 'production_stops_enhanced';");
+    const downtimeAlertsSchema = await dbAll("SELECT column_name, data_type FROM information_schema.columns WHERE table_name = 'downtime_alerts';");
+    const downtimeAlertConfigsSchema = await dbAll("SELECT column_name, data_type FROM information_schema.columns WHERE table_name = 'downtime_alert_configs';");
     return apiResponse(res, {
       status: 'healthy',
       database: { 
@@ -530,8 +530,8 @@ app.get('/api/health', async (req, res) => {
         type: 'PostgreSQL', 
         tables: tables.map(t => t.tablename),
         schemas: {
-          production_stops: productionStopsSchema,
-          production_stops_enhanced: productionStopsEnhancedSchema
+          downtime_alerts: downtimeAlertsSchema,
+          downtime_alert_configs: downtimeAlertConfigsSchema
         }
       },
       uptime: process.uptime(),

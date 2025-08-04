@@ -2563,3 +2563,287 @@ Error: SQLITE_ERROR: table waste_records has no column named waste_type
 2025-08-04T10:09:30: 🔓 Client released back to pool
 2025-08-04T10:09:55: 🔗 Client acquired from pool
 2025-08-04T10:09:55: 🔓 Client released back to pool
+2025-08-04T10:10:09: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T10:10:09: ✅ PostgreSQL database interface ready
+2025-08-04T10:10:09: 🔍 About to run health check...
+2025-08-04T10:10:09: 📋 Labor roster will use existing users table
+2025-08-04T10:10:09: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T10:10:09: JWT_SECRET exists: true
+2025-08-04T10:10:09: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T10:10:09: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T10:10:09: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T10:10:09: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T10:10:09: ✨ Enhanced endpoints loaded successfully
+2025-08-04T10:10:09: 🔧 Configuration management system enabled
+2025-08-04T10:10:09: 🚀 Server running on http://localhost:3000
+2025-08-04T10:10:09: 📊 Environment: production
+2025-08-04T10:10:09: 🔐 JWT Secret: Gmqbm...
+2025-08-04T10:10:09: ✅ New PostgreSQL client connected
+2025-08-04T10:10:09: 🔗 Client acquired from pool
+2025-08-04T10:10:09: 🔓 Client released back to pool
+2025-08-04T10:10:09: 🏥 Database health check: {
+  status: 'healthy',
+  timestamp: 2025-08-04T08:10:09.823Z,
+  version: 'PostgreSQL 16.9 (Ubuntu 16.9-0ubuntu0.24.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 13.3.0-6ubuntu2~24.04) 13.3.0, 64-bit',
+  pool_total: 1,
+  pool_idle: 1,
+  pool_waiting: 0
+}
+2025-08-04T10:10:55: 🔗 Client acquired from pool
+2025-08-04T10:10:55: 🔓 Client released back to pool
+2025-08-04T10:11:55: 🔗 Client acquired from pool
+2025-08-04T10:11:55: 🔓 Client released back to pool
+2025-08-04T10:12:53: 🔗 Client acquired from pool
+2025-08-04T10:12:53: 🔓 Client released back to pool
+2025-08-04T10:12:53: 🔗 Client acquired from pool
+2025-08-04T10:12:53: 🔓 Client released back to pool
+2025-08-04T10:12:53: 🔗 Client acquired from pool
+2025-08-04T10:12:53: 🔓 Client released back to pool
+2025-08-04T10:12:53: 🔗 Client acquired from pool
+2025-08-04T10:12:53: 🔓 Client released back to pool
+2025-08-04T10:12:55: 🔗 Client acquired from pool
+2025-08-04T10:12:55: 🔓 Client released back to pool
+2025-08-04T10:13:50: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T10:13:50: ✅ PostgreSQL database interface ready
+2025-08-04T10:13:50: 🔍 About to run health check...
+2025-08-04T10:13:50: 📋 Labor roster will use existing users table
+2025-08-04T10:13:50: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T10:13:50: JWT_SECRET exists: true
+2025-08-04T10:13:50: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T10:13:50: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T10:13:50: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T10:13:50: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T10:13:50: ✨ Enhanced endpoints loaded successfully
+2025-08-04T10:13:50: 🔧 Configuration management system enabled
+2025-08-04T10:13:50: 🚀 Server running on http://localhost:3000
+2025-08-04T10:13:50: 📊 Environment: production
+2025-08-04T10:13:50: 🔐 JWT Secret: Gmqbm...
+2025-08-04T10:13:50: ✅ New PostgreSQL client connected
+2025-08-04T10:13:50: 🔗 Client acquired from pool
+2025-08-04T10:13:50: 🔓 Client released back to pool
+2025-08-04T10:13:50: 🏥 Database health check: {
+  status: 'healthy',
+  timestamp: 2025-08-04T08:13:50.455Z,
+  version: 'PostgreSQL 16.9 (Ubuntu 16.9-0ubuntu0.24.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 13.3.0-6ubuntu2~24.04) 13.3.0, 64-bit',
+  pool_total: 1,
+  pool_idle: 1,
+  pool_waiting: 0
+}
+2025-08-04T10:13:55: 🔗 Client acquired from pool
+2025-08-04T10:13:55: 🔓 Client released back to pool
+2025-08-04T10:14:11: 🔗 Client acquired from pool
+2025-08-04T10:14:11: 🔓 Client released back to pool
+2025-08-04T10:14:11: 🔗 Client acquired from pool
+2025-08-04T10:14:11: 🔓 Client released back to pool
+2025-08-04T10:14:11: 🔗 Client acquired from pool
+2025-08-04T10:14:11: 🔓 Client released back to pool
+2025-08-04T10:14:11: 🔗 Client acquired from pool
+2025-08-04T10:14:11: 🔓 Client released back to pool
+2025-08-04T10:14:55: 🔗 Client acquired from pool
+2025-08-04T10:14:55: 🔓 Client released back to pool
+2025-08-04T10:15:24: 🐘 Initializing PostgreSQL database connection...
+2025-08-04T10:15:24: ✅ PostgreSQL database interface ready
+2025-08-04T10:15:24: 🔍 About to run health check...
+2025-08-04T10:15:24: 📋 Labor roster will use existing users table
+2025-08-04T10:15:24: ✅ PostgreSQL schemas already exist, skipping table creation
+2025-08-04T10:15:24: JWT_SECRET exists: true
+2025-08-04T10:15:24: ✨ Enhanced Production Workflow Endpoints Loaded
+2025-08-04T10:15:24: ✨ Enhanced Downtime Tracking Endpoints Loaded
+2025-08-04T10:15:24: 📊 Downtime Analytics and Reporting Endpoints Loaded
+2025-08-04T10:15:24: 🚨 Real-Time Downtime Alerts and Notifications System Loaded
+2025-08-04T10:15:24: ✨ Enhanced endpoints loaded successfully
+2025-08-04T10:15:24: 🔧 Configuration management system enabled
+2025-08-04T10:15:24: 🚀 Server running on http://localhost:3000
+2025-08-04T10:15:24: 📊 Environment: production
+2025-08-04T10:15:24: 🔐 JWT Secret: Gmqbm...
+2025-08-04T10:15:24: ✅ New PostgreSQL client connected
+2025-08-04T10:15:24: 🔗 Client acquired from pool
+2025-08-04T10:15:24: 🔓 Client released back to pool
+2025-08-04T10:15:24: 🏥 Database health check: {
+  status: 'healthy',
+  timestamp: 2025-08-04T08:15:24.606Z,
+  version: 'PostgreSQL 16.9 (Ubuntu 16.9-0ubuntu0.24.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 13.3.0-6ubuntu2~24.04) 13.3.0, 64-bit',
+  pool_total: 1,
+  pool_idle: 1,
+  pool_waiting: 0
+}
+2025-08-04T10:15:37: 🔗 Client acquired from pool
+2025-08-04T10:15:37: 🔓 Client released back to pool
+2025-08-04T10:15:37: 🔗 Client acquired from pool
+2025-08-04T10:15:37: 🔓 Client released back to pool
+2025-08-04T10:15:37: 🔗 Client acquired from pool
+2025-08-04T10:15:37: 🔓 Client released back to pool
+2025-08-04T10:15:37: 🔗 Client acquired from pool
+2025-08-04T10:15:37: 🔓 Client released back to pool
+2025-08-04T10:15:55: 🔗 Client acquired from pool
+2025-08-04T10:15:55: 🔓 Client released back to pool
+2025-08-04T10:16:55: 🔗 Client acquired from pool
+2025-08-04T10:16:55: 🔓 Client released back to pool
+2025-08-04T10:17:55: 🔗 Client acquired from pool
+2025-08-04T10:17:55: 🔓 Client released back to pool
+2025-08-04T10:18:12: 🔗 Client acquired from pool
+2025-08-04T10:18:12: 🔓 Client released back to pool
+2025-08-04T10:18:17: 🔗 Client acquired from pool
+2025-08-04T10:18:17: 🔓 Client released back to pool
+2025-08-04T10:18:17: 🔗 Client acquired from pool
+2025-08-04T10:18:17: 🔓 Client released back to pool
+2025-08-04T10:18:17: ✅ New PostgreSQL client connected
+2025-08-04T10:18:17: 🔗 Client acquired from pool
+2025-08-04T10:18:17: 🔓 Client released back to pool
+2025-08-04T10:18:17: New WebSocket connection attempt
+2025-08-04T10:18:17: ✅ WebSocket authenticated: admin (admin)
+2025-08-04T10:18:17: 📺 admin subscribed to: [ 'machines', 'production', 'orders', 'dashboard', 'alerts' ]
+2025-08-04T10:18:19: 🔗 Client acquired from pool
+2025-08-04T10:18:19: 🔓 Client released back to pool
+2025-08-04T10:18:19: 🔗 Client acquired from pool
+2025-08-04T10:18:19: 🔓 Client released back to pool
+2025-08-04T10:18:19: 🔗 Client acquired from pool
+2025-08-04T10:18:19: 🔓 Client released back to pool
+2025-08-04T10:18:19: 🔗 Client acquired from pool
+2025-08-04T10:18:19: 🔓 Client released back to pool
+2025-08-04T10:18:19: 🔗 Client acquired from pool
+2025-08-04T10:18:19: 🔓 Client released back to pool
+2025-08-04T10:18:19: 🔗 Client acquired from pool
+2025-08-04T10:18:19: 🔓 Client released back to pool
+2025-08-04T10:18:22: 🔗 Client acquired from pool
+2025-08-04T10:18:22: ❌ Database run error: error: syntax error at or near ","
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24)
+    at async /home/production-app/production-orders-app/server.js:2291:7 {
+  length: 90,
+  severity: 'ERROR',
+  code: '42601',
+  detail: undefined,
+  hint: undefined,
+  position: '58',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'scan.l',
+  line: '1244',
+  routine: 'scanner_yyerror'
+}
+2025-08-04T10:18:22: 🔓 Client released back to pool
+2025-08-04T10:18:22: Error completing setup: error: syntax error at or near ","
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24)
+    at async /home/production-app/production-orders-app/server.js:2291:7 {
+  length: 90,
+  severity: 'ERROR',
+  code: '42601',
+  detail: undefined,
+  hint: undefined,
+  position: '58',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'scan.l',
+  line: '1244',
+  routine: 'scanner_yyerror'
+}
+2025-08-04T10:18:31: 🔗 Client acquired from pool
+2025-08-04T10:18:32: 🔓 Client released back to pool
+2025-08-04T10:18:33: 🔗 Client acquired from pool
+2025-08-04T10:18:33: 🔓 Client released back to pool
+2025-08-04T10:18:38: 📺 admin subscribed to: [ 'machines', 'production' ]
+2025-08-04T10:18:38: 🔗 Client acquired from pool
+2025-08-04T10:18:38: 🔓 Client released back to pool
+2025-08-04T10:18:38: 🔗 Client acquired from pool
+2025-08-04T10:18:38: 🔗 Client acquired from pool
+2025-08-04T10:18:38: 🔓 Client released back to pool
+2025-08-04T10:18:38: 🔓 Client released back to pool
+2025-08-04T10:18:45: 🔗 Client acquired from pool
+2025-08-04T10:18:45: 🔓 Client released back to pool
+2025-08-04T10:18:45: 🔗 Client acquired from pool
+2025-08-04T10:18:45: 🔓 Client released back to pool
+2025-08-04T10:18:53: 📺 admin subscribed to: [ 'dashboard', 'orders', 'machines', 'production', 'alerts' ]
+2025-08-04T10:18:53: 🔗 Client acquired from pool
+2025-08-04T10:18:53: 🔗 Client acquired from pool
+2025-08-04T10:18:53: 🔓 Client released back to pool
+2025-08-04T10:18:53: 🔓 Client released back to pool
+2025-08-04T10:18:53: ✅ New PostgreSQL client connected
+2025-08-04T10:18:53: 🔗 Client acquired from pool
+2025-08-04T10:18:53: 🔓 Client released back to pool
+2025-08-04T10:18:55: 📺 admin subscribed to: [ 'production', 'orders', 'machines' ]
+2025-08-04T10:18:55: 🔗 Client acquired from pool
+2025-08-04T10:18:55: 🔗 Client acquired from pool
+2025-08-04T10:18:55: 🔗 Client acquired from pool
+2025-08-04T10:18:55: 🔓 Client released back to pool
+2025-08-04T10:18:55: 🔓 Client released back to pool
+2025-08-04T10:18:55: 🔓 Client released back to pool
+2025-08-04T10:18:55: ✅ New PostgreSQL client connected
+2025-08-04T10:18:55: 🔗 Client acquired from pool
+2025-08-04T10:18:55: 🔓 Client released back to pool
+2025-08-04T10:19:00: 🔗 Client acquired from pool
+2025-08-04T10:19:00: 🔗 Client acquired from pool
+2025-08-04T10:19:00: 🔗 Client acquired from pool
+2025-08-04T10:19:00: 🔗 Client acquired from pool
+2025-08-04T10:19:00: 🔓 Client released back to pool
+2025-08-04T10:19:00: 🔓 Client released back to pool
+2025-08-04T10:19:00: 🔓 Client released back to pool
+2025-08-04T10:19:00: 🔓 Client released back to pool
+2025-08-04T10:19:01: 🔗 Client acquired from pool
+2025-08-04T10:19:01: 🔗 Client acquired from pool
+2025-08-04T10:19:01: 🔗 Client acquired from pool
+2025-08-04T10:19:01: 🔓 Client released back to pool
+2025-08-04T10:19:01: 🔓 Client released back to pool
+2025-08-04T10:19:01: 🔓 Client released back to pool
+2025-08-04T10:19:04: 🔗 Client acquired from pool
+2025-08-04T10:19:04: 🔓 Client released back to pool
+2025-08-04T10:19:06: 🔗 Client acquired from pool
+2025-08-04T10:19:06: 🔗 Client acquired from pool
+2025-08-04T10:19:06: 🔓 Client released back to pool
+2025-08-04T10:19:06: 🔓 Client released back to pool
+2025-08-04T10:19:06: 🔗 Client acquired from pool
+2025-08-04T10:19:06: 🔓 Client released back to pool
+2025-08-04T10:19:06: 🔗 Client acquired from pool
+2025-08-04T10:19:06: 🔓 Client released back to pool
+2025-08-04T10:19:06: 🔗 Client acquired from pool
+2025-08-04T10:19:06: 🔓 Client released back to pool
+2025-08-04T10:19:06: 🔗 Client acquired from pool
+2025-08-04T10:19:06: 🔓 Client released back to pool
+2025-08-04T10:19:07: 🔗 Client acquired from pool
+2025-08-04T10:19:07: 🔓 Client released back to pool
+2025-08-04T10:19:08: 📺 admin subscribed to: [ 'machines', 'production' ]
+2025-08-04T10:19:08: 🔗 Client acquired from pool
+2025-08-04T10:19:08: 🔓 Client released back to pool
+2025-08-04T10:19:08: 🔗 Client acquired from pool
+2025-08-04T10:19:08: 🔓 Client released back to pool
+2025-08-04T10:19:08: 🔗 Client acquired from pool
+2025-08-04T10:19:08: 🔓 Client released back to pool
+2025-08-04T10:19:09: 🔗 Client acquired from pool
+2025-08-04T10:19:09: 🔓 Client released back to pool
+2025-08-04T10:19:09: 🔗 Client acquired from pool
+2025-08-04T10:19:09: 🔓 Client released back to pool
+2025-08-04T10:19:10: 🔗 Client acquired from pool
+2025-08-04T10:19:10: 🔓 Client released back to pool
+2025-08-04T10:19:10: 🔗 Client acquired from pool
+2025-08-04T10:19:10: 🔓 Client released back to pool
+2025-08-04T10:19:12: 🔗 Client acquired from pool
+2025-08-04T10:19:12: 🔗 Client acquired from pool
+2025-08-04T10:19:12: 🔓 Client released back to pool
+2025-08-04T10:19:12: 🔓 Client released back to pool
+2025-08-04T10:19:36: 🔗 Client acquired from pool
+2025-08-04T10:19:36: 🔓 Client released back to pool
+2025-08-04T10:19:36: 🔗 Client acquired from pool
+2025-08-04T10:19:36: 🔓 Client released back to pool
+2025-08-04T10:19:38: 📺 admin subscribed to: [ 'machines', 'production' ]
+2025-08-04T10:19:38: 🔗 Client acquired from pool
+2025-08-04T10:19:38: 🔗 Client acquired from pool
+2025-08-04T10:19:38: 🔓 Client released back to pool
+2025-08-04T10:19:38: 🔓 Client released back to pool
+2025-08-04T10:19:38: ✅ New PostgreSQL client connected
+2025-08-04T10:19:38: 🔗 Client acquired from pool
+2025-08-04T10:19:38: 🔓 Client released back to pool
