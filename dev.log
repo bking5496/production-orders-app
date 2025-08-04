@@ -222,3 +222,36 @@ Instead of /public/js/main.js, use /js/main.js.
 11:03:13 PM [vite] (client) page reload server.js
 11:03:19 PM [vite] (client) page reload server.js
 11:09:42 PM [vite] (client) hmr update /src/js/components/orders.jsx
+11:10:04 PM [vite] (client) hmr update /src/js/components/orders.jsx
+11:10:19 PM [vite] (client) hmr update /src/js/components/orders.jsx
+11:10:39 PM [vite] (client) hmr update /src/js/components/orders.jsx
+11:11:10 PM [vite] (client) hmr update /src/js/components/orders.jsx
+11:12:26 PM [vite] (client) hmr update /src/js/components/orders.jsx
+11:12:45 PM [vite] (client) hmr update /src/js/components/orders.jsx
+11:12:51 PM [vite] (client) hmr update /src/js/components/orders.jsx
+11:12:57 PM [vite] (client) hmr update /src/js/components/orders.jsx
+11:13:09 PM [vite] (client) Pre-transform error: /home/production-app/production-orders-app/src/js/components/orders.jsx: Expected corresponding JSX closing tag for <div>. (1541:8)
+
+  1539 |             </div>
+  1540 |           </div>
+> 1541 |         </Modal>
+       |         ^
+  1542 |       )}
+  1543 |     </div>
+  1544 |   );
+  Plugin: vite:react-babel
+  File: /home/production-app/production-orders-app/src/js/components/orders.jsx:1541:8
+  1539|              </div>
+  1540|            </div>
+  1541|          </Modal>
+     |          ^
+  1542|        )}
+  1543|      </div>
+11:13:37 PM [vite] (client) hmr update /src/js/components/orders.jsx
+11:16:03 PM [vite] (client) hmr update /src/js/components/orders.jsx
+11:18:10 PM [vite] (client) hmr update /src/js/components/orders.jsx
+11:18:24 PM [vite] (client) hmr update /src/js/components/orders.jsx
+11:18:34 PM [vite] (client) hmr update /src/js/components/orders.jsx
+11:19:05 PM [vite] (client) hmr update /src/js/components/orders.jsx
+11:19:28 PM [vite] (client) hmr update /src/js/components/orders.jsx
+11:19:46 PM [vite] (client) hmr update /src/js/components/orders.jsx
