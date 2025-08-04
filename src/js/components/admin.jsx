@@ -1136,16 +1136,20 @@ export default function AdminPanel() {
                         className="mt-1 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                       />
                       <div className="flex-1">
-                        <label htmlFor={`machine-type-${machineType.type}`} className="block text-sm font-medium text-gray-900 cursor-pointer">
-                          {machineType.type}
+                        <label htmlFor={`machine-type-${machineType.name || machineType.type}`} className="block text-sm font-medium text-gray-900 cursor-pointer">
+                          {machineType.name || machineType.type}
                         </label>
                         <div className="mt-1 text-xs text-gray-500">
                           <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 mr-2">
-                            {machineType.machine_count} machine{machineType.machine_count !== 1 ? 's' : ''}
+                            {machineType.machine_count || 0} machine{(machineType.machine_count || 0) !== 1 ? 's' : ''}
                           </span>
                           <span className="text-gray-400">
-                            {machineType.machines.slice(0, 2).join(', ')}
-                            {machineType.machines.length > 2 && ` +${machineType.machines.length - 2} more`}
+                            {machineType.machines && Array.isArray(machineType.machines) && machineType.machines.length > 0 ? (
+                              <>
+                                {machineType.machines.filter(m => m && m !== null).slice(0, 2).join(', ')}
+                                {machineType.machines.length > 2 && ` +${machineType.machines.length - 2} more`}
+                              </>
+                            ) : 'No machines using this type'}
                           </span>
                         </div>
                       </div>
