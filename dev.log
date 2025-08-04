@@ -168,3 +168,5 @@ Instead of /public/uploads/s3-keys.json, use /uploads/s3-keys.json.
   1134|                <BarChart
 6:15:35 PM [vite] (client) hmr update /src/js/components/analytics.jsx
 6:18:01 PM [vite] (client) hmr update /src/js/components/analytics.jsx
+6:20:07 PM [vite] (client) page reload server.js
+6:20:26 PM [vite] (client) page reload server.js

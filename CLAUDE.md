@@ -49,6 +49,54 @@ const dbPassword = getSecret('DB_PASSWORD');
 - Host: localhost, Port: 5432, User: postgres
 - Password: **Retrieved from secrets manager only**
 
+**Direct PostgreSQL Access:**
+```bash
+# Connect to PostgreSQL using secrets manager password
+PGPASSWORD=$(node -e "console.log(require('./security/secrets-manager').getSecret('DB_PASSWORD'))") psql -h localhost -U postgres -d production_orders
+```
+
+## 🔄 Server Management & Rebuilding
+
+### **After Code Updates - CRITICAL PROCESS**
+When making changes to server-side code (server.js, endpoints, database functions), follow these steps:
+
+1. **Stop PM2 Server:**
+```bash
+npx pm2 stop production-management
+npx pm2 delete production-management
+```
+
+2. **Rebuild Application:**
+```bash
+npm run build
+```
+
+3. **Restart with PM2:**
+```bash
+npx pm2 start server.js --name "production-management"
+npx pm2 save
+```
+
+4. **Verify Restart:**
+```bash
+npx pm2 status
+npx pm2 logs production-management --lines 20
+```
+
+### **Development vs Production**
+- **Development:** Use `npm run dev` for hot reload
+- **Production:** Always use PM2 for process management
+- **After updates:** Always rebuild before restarting PM2
+
+### **Database Connection Verification**
+```bash
+# Check database health
+curl http://localhost:3000/api/health
+
+# Direct database test
+PGPASSWORD=$(node -e "console.log(require('./security/secrets-manager').getSecret('DB_PASSWORD'))") psql -h localhost -U postgres -d production_orders -c "SELECT NOW();"
+```
+
 ## 🔧 Dynamic Configuration System
 
 ### **Core Principle**

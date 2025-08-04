@@ -1572,51 +1572,41 @@ app.post('/api/orders/:id/pause',
   authenticateToken,
   requireRole(['admin', 'supervisor', 'operator']),
   body('reason').notEmpty(),
-  (req, res) => {
+  async (req, res) => {
     const { id } = req.params;
-    const { reason } = req.body;
+    const { reason, notes } = req.body;
 
-    db.serialize(() => {
-      db.run('BEGIN TRANSACTION');
-      
-      // Update order status
-      db.run(
-        `UPDATE production_orders 
-         SET status = 'stopped', 
-             stop_time = CURRENT_TIMESTAMP,
-             stop_reason = $1
-         WHERE id = $2 AND status = 'in_progress'`,
-        [reason, id],
-        function(err) {
-          if (err) {
-            db.run('ROLLBACK');
-            return res.status(500).json({ error: 'Database error' });
-          }
-          
-          if (this.changes === 0) {
-            db.run('ROLLBACK');
-            return res.status(400).json({ error: 'Order not found or not in progress' });
-          }
-          
-          // Create stop record
-          db.run(
-            `INSERT INTO production_stops (order_id, reason, created_by) 
-             VALUES ($1, $2, $3)`,
-            [id, reason, req.user.id],
-            function(err) {
-              if (err) {
-                db.run('ROLLBACK');
-                return res.status(500).json({ error: 'Failed to create stop record' });
-              }
-              
-              db.run('COMMIT');
-              broadcast('order_paused', { id, reason });
-              res.json({ message: 'Production paused successfully' });
-            }
-          );
+    try {
+      await dbTransaction(async (client) => {
+        // Update order status to paused
+        const updateResult = await client.query(
+          `UPDATE production_orders 
+           SET status = 'paused', 
+               stop_time = NOW(),
+               stop_reason = $1,
+               updated_at = NOW()
+           WHERE id = $2 AND status = 'in_progress'`,
+          [reason, id]
+        );
+        
+        if (updateResult.rowCount === 0) {
+          throw new Error('Order not found or not in progress');
         }
-      );
-    });
+        
+        // Create stop record
+        await client.query(
+          `INSERT INTO production_stops (order_id, reason, notes, created_by, created_at, status) 
+           VALUES ($1, $2, $3, $4, NOW(), 'active')`,
+          [id, reason, notes || null, req.user.id]
+        );
+      });
+      
+      broadcast('order_paused', { id, reason });
+      res.json({ message: 'Production paused successfully' });
+    } catch (error) {
+      console.error('Pause production error:', error);
+      res.status(500).json({ error: error.message || 'Database error' });
+    }
   }
 );
 
@@ -1624,52 +1614,43 @@ app.post('/api/orders/:id/pause',
 app.post('/api/orders/:id/resume',
   authenticateToken,
   requireRole(['admin', 'supervisor', 'operator']),
-  (req, res) => {
+  async (req, res) => {
     const { id } = req.params;
 
-    db.serialize(() => {
-      db.run('BEGIN TRANSACTION');
-      
-      // Update order status back to in_progress
-      db.run(
-        `UPDATE production_orders 
-         SET status = 'in_progress',
-             stop_time = NULL::TIMESTAMP,
-             stop_reason = NULL::TEXT
-         WHERE id = $1 AND status = 'stopped'`,
-        [id],
-        function(err, result) {
-          if (err) {
-            db.run('ROLLBACK');
-            return res.status(500).json({ error: 'Database error' });
-          }
-          
-          if (!result || result.changes === 0) {
-            db.run('ROLLBACK');
-            return res.status(400).json({ error: 'Order not found or not stopped' });
-          }
-          
-          // Update the latest stop record
-          db.run(
-            `UPDATE production_stops 
-             SET resolved_at = CURRENT_TIMESTAMP,
-                 duration = CAST(EXTRACT(EPOCH FROM (CURRENT_TIMESTAMP - created_at)) / 60 AS INTEGER)
-             WHERE order_id = $1 AND resolved_at IS NULL`,
-            [id],
-            function(err) {
-              if (err) {
-                db.run('ROLLBACK');
-                return res.status(500).json({ error: 'Failed to update stop record' });
-              }
-              
-              db.run('COMMIT');
-              broadcast('order_resumed', { id });
-              res.json({ message: 'Production resumed successfully' });
-            }
-          );
+    try {
+      await dbTransaction(async (client) => {
+        // Update order status back to in_progress
+        const updateResult = await client.query(
+          `UPDATE production_orders 
+           SET status = 'in_progress',
+               stop_time = NULL,
+               stop_reason = NULL,
+               updated_at = NOW()
+           WHERE id = $1 AND status = 'paused'`,
+          [id]
+        );
+        
+        if (updateResult.rowCount === 0) {
+          throw new Error('Order not found or not paused');
         }
-      );
-    });
+        
+        // Update the latest stop record
+        await client.query(
+          `UPDATE production_stops 
+           SET resolved_at = NOW(),
+               status = 'resolved',
+               duration = EXTRACT(EPOCH FROM (NOW() - created_at)) / 60
+           WHERE order_id = $1 AND status = 'active'`,
+          [id]
+        );
+      });
+      
+      broadcast('order_resumed', { id });
+      res.json({ message: 'Production resumed successfully' });
+    } catch (error) {
+      console.error('Resume production error:', error);
+      res.status(500).json({ error: error.message || 'Database error' });
+    }
   }
 );
 
