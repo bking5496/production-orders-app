@@ -4045,3 +4045,1341 @@ Error: SQLITE_ERROR: table waste_records has no column named waste_type
 2025-08-04T12:49:44: 🔗 Client acquired from pool
 2025-08-04T12:49:44: 🔓 Client released back to pool
 2025-08-04T12:49:44: 🔓 Client released back to pool
+2025-08-04T12:50:14: 🔗 Client acquired from pool
+2025-08-04T12:50:14: 🔗 Client acquired from pool
+2025-08-04T12:50:14: 🔓 Client released back to pool
+2025-08-04T12:50:14: 🔓 Client released back to pool
+2025-08-04T12:50:14: ✅ New PostgreSQL client connected
+2025-08-04T12:50:14: 🔗 Client acquired from pool
+2025-08-04T12:50:14: 🔓 Client released back to pool
+2025-08-04T12:50:28: 🔗 Client acquired from pool
+2025-08-04T12:50:28: 🔗 Client acquired from pool
+2025-08-04T12:50:28: 🔓 Client released back to pool
+2025-08-04T12:50:28: 🔗 Client acquired from pool
+2025-08-04T12:50:28: 🔓 Client released back to pool
+2025-08-04T12:50:28: 🔓 Client released back to pool
+2025-08-04T12:50:47: 🔌 WebSocket disconnected: admin
+2025-08-04T12:50:48: New WebSocket connection attempt
+2025-08-04T12:50:48: ✅ WebSocket authenticated: admin (admin)
+2025-08-04T12:50:52: 🔗 Client acquired from pool
+2025-08-04T12:50:52: 🔓 Client released back to pool
+2025-08-04T12:50:52: 🔗 Client acquired from pool
+2025-08-04T12:50:52: 🔓 Client released back to pool
+2025-08-04T12:50:52: 🔗 Client acquired from pool
+2025-08-04T12:50:52: 🔗 Client acquired from pool
+2025-08-04T12:50:52: 🔓 Client released back to pool
+2025-08-04T12:50:52: 🔓 Client released back to pool
+2025-08-04T12:50:52: ✅ New PostgreSQL client connected
+2025-08-04T12:50:52: 🔗 Client acquired from pool
+2025-08-04T12:50:52: 🔓 Client released back to pool
+2025-08-04T12:50:53: 🔗 Client acquired from pool
+2025-08-04T12:50:53: 🔗 Client acquired from pool
+2025-08-04T12:50:53: 🔓 Client released back to pool
+2025-08-04T12:50:53: 🔓 Client released back to pool
+2025-08-04T12:50:53: 🔗 Client acquired from pool
+2025-08-04T12:50:53: 🔓 Client released back to pool
+2025-08-04T12:50:53: 🔗 Client acquired from pool
+2025-08-04T12:50:53: 🔓 Client released back to pool
+2025-08-04T12:50:53: 🔗 Client acquired from pool
+2025-08-04T12:50:53: 🔓 Client released back to pool
+2025-08-04T12:50:53: 🔗 Client acquired from pool
+2025-08-04T12:50:53: 🔓 Client released back to pool
+2025-08-04T12:51:34: 🔌 WebSocket disconnected: admin
+2025-08-04T12:51:35: New WebSocket connection attempt
+2025-08-04T12:51:35: ✅ WebSocket authenticated: admin (admin)
+2025-08-04T12:51:38: ✅ New PostgreSQL client connected
+2025-08-04T12:51:38: 🔗 Client acquired from pool
+2025-08-04T12:51:38: 🔓 Client released back to pool
+2025-08-04T12:51:38: 🔗 Client acquired from pool
+2025-08-04T12:51:38: 🔓 Client released back to pool
+2025-08-04T12:51:38: 🔗 Client acquired from pool
+2025-08-04T12:51:38: 🔓 Client released back to pool
+2025-08-04T12:51:38: ✅ New PostgreSQL client connected
+2025-08-04T12:51:38: 🔗 Client acquired from pool
+2025-08-04T12:51:38: 🔓 Client released back to pool
+2025-08-04T12:51:38: ✅ New PostgreSQL client connected
+2025-08-04T12:51:38: 🔗 Client acquired from pool
+2025-08-04T12:51:38: 🔓 Client released back to pool
+2025-08-04T12:51:40: 🔗 Client acquired from pool
+2025-08-04T12:51:40: 🔗 Client acquired from pool
+2025-08-04T12:51:40: 🔓 Client released back to pool
+2025-08-04T12:51:40: 🔓 Client released back to pool
+2025-08-04T12:51:40: 🔗 Client acquired from pool
+2025-08-04T12:51:40: 🔓 Client released back to pool
+2025-08-04T12:51:40: 🔗 Client acquired from pool
+2025-08-04T12:51:40: 🔓 Client released back to pool
+2025-08-04T12:51:40: 🔗 Client acquired from pool
+2025-08-04T12:51:40: 🔓 Client released back to pool
+2025-08-04T12:51:40: 🔗 Client acquired from pool
+2025-08-04T12:51:40: 🔓 Client released back to pool
+2025-08-04T12:51:44: 🔗 Client acquired from pool
+2025-08-04T12:51:44: ❌ Database run error: error: syntax error at or near ","
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24)
+    at async /home/production-app/production-orders-app/server.js:2291:7 {
+  length: 90,
+  severity: 'ERROR',
+  code: '42601',
+  detail: undefined,
+  hint: undefined,
+  position: '58',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'scan.l',
+  line: '1244',
+  routine: 'scanner_yyerror'
+}
+2025-08-04T12:51:44: 🔓 Client released back to pool
+2025-08-04T12:51:44: Error completing setup: error: syntax error at or near ","
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24)
+    at async /home/production-app/production-orders-app/server.js:2291:7 {
+  length: 90,
+  severity: 'ERROR',
+  code: '42601',
+  detail: undefined,
+  hint: undefined,
+  position: '58',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'scan.l',
+  line: '1244',
+  routine: 'scanner_yyerror'
+}
+2025-08-04T12:51:45: 🔗 Client acquired from pool
+2025-08-04T12:51:45: ❌ Database run error: error: syntax error at or near ","
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24)
+    at async /home/production-app/production-orders-app/server.js:2291:7 {
+  length: 90,
+  severity: 'ERROR',
+  code: '42601',
+  detail: undefined,
+  hint: undefined,
+  position: '58',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'scan.l',
+  line: '1244',
+  routine: 'scanner_yyerror'
+}
+2025-08-04T12:51:45: 🔓 Client released back to pool
+2025-08-04T12:51:45: Error completing setup: error: syntax error at or near ","
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24)
+    at async /home/production-app/production-orders-app/server.js:2291:7 {
+  length: 90,
+  severity: 'ERROR',
+  code: '42601',
+  detail: undefined,
+  hint: undefined,
+  position: '58',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'scan.l',
+  line: '1244',
+  routine: 'scanner_yyerror'
+}
+2025-08-04T12:51:47: 🔗 Client acquired from pool
+2025-08-04T12:51:47: ❌ Database run error: error: syntax error at or near ","
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24)
+    at async /home/production-app/production-orders-app/server.js:2291:7 {
+  length: 90,
+  severity: 'ERROR',
+  code: '42601',
+  detail: undefined,
+  hint: undefined,
+  position: '58',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'scan.l',
+  line: '1244',
+  routine: 'scanner_yyerror'
+}
+2025-08-04T12:51:47: 🔓 Client released back to pool
+2025-08-04T12:51:47: Error completing setup: error: syntax error at or near ","
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24)
+    at async /home/production-app/production-orders-app/server.js:2291:7 {
+  length: 90,
+  severity: 'ERROR',
+  code: '42601',
+  detail: undefined,
+  hint: undefined,
+  position: '58',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'scan.l',
+  line: '1244',
+  routine: 'scanner_yyerror'
+}
+2025-08-04T12:52:56: ✅ New PostgreSQL client connected
+2025-08-04T12:52:56: 🔗 Client acquired from pool
+2025-08-04T12:52:56: ❌ Database run error: error: syntax error at or near ","
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24)
+    at async /home/production-app/production-orders-app/server.js:2291:7 {
+  length: 90,
+  severity: 'ERROR',
+  code: '42601',
+  detail: undefined,
+  hint: undefined,
+  position: '58',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'scan.l',
+  line: '1244',
+  routine: 'scanner_yyerror'
+}
+2025-08-04T12:52:56: 🔓 Client released back to pool
+2025-08-04T12:52:56: Error completing setup: error: syntax error at or near ","
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24)
+    at async /home/production-app/production-orders-app/server.js:2291:7 {
+  length: 90,
+  severity: 'ERROR',
+  code: '42601',
+  detail: undefined,
+  hint: undefined,
+  position: '58',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'scan.l',
+  line: '1244',
+  routine: 'scanner_yyerror'
+}
+2025-08-04T12:52:57: 🔗 Client acquired from pool
+2025-08-04T12:52:57: ❌ Database run error: error: syntax error at or near ","
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24)
+    at async /home/production-app/production-orders-app/server.js:2291:7 {
+  length: 90,
+  severity: 'ERROR',
+  code: '42601',
+  detail: undefined,
+  hint: undefined,
+  position: '58',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'scan.l',
+  line: '1244',
+  routine: 'scanner_yyerror'
+}
+2025-08-04T12:52:57: 🔓 Client released back to pool
+2025-08-04T12:52:57: Error completing setup: error: syntax error at or near ","
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24)
+    at async /home/production-app/production-orders-app/server.js:2291:7 {
+  length: 90,
+  severity: 'ERROR',
+  code: '42601',
+  detail: undefined,
+  hint: undefined,
+  position: '58',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'scan.l',
+  line: '1244',
+  routine: 'scanner_yyerror'
+}
+2025-08-04T12:52:59: 🔗 Client acquired from pool
+2025-08-04T12:52:59: ❌ Database run error: error: syntax error at or near ","
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24)
+    at async /home/production-app/production-orders-app/server.js:2291:7 {
+  length: 90,
+  severity: 'ERROR',
+  code: '42601',
+  detail: undefined,
+  hint: undefined,
+  position: '58',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'scan.l',
+  line: '1244',
+  routine: 'scanner_yyerror'
+}
+2025-08-04T12:52:59: 🔓 Client released back to pool
+2025-08-04T12:52:59: Error completing setup: error: syntax error at or near ","
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24)
+    at async /home/production-app/production-orders-app/server.js:2291:7 {
+  length: 90,
+  severity: 'ERROR',
+  code: '42601',
+  detail: undefined,
+  hint: undefined,
+  position: '58',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'scan.l',
+  line: '1244',
+  routine: 'scanner_yyerror'
+}
+2025-08-04T12:52:59: 🔗 Client acquired from pool
+2025-08-04T12:52:59: ❌ Database run error: error: syntax error at or near ","
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24)
+    at async /home/production-app/production-orders-app/server.js:2291:7 {
+  length: 90,
+  severity: 'ERROR',
+  code: '42601',
+  detail: undefined,
+  hint: undefined,
+  position: '58',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'scan.l',
+  line: '1244',
+  routine: 'scanner_yyerror'
+}
+2025-08-04T12:52:59: 🔓 Client released back to pool
+2025-08-04T12:52:59: Error completing setup: error: syntax error at or near ","
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24)
+    at async /home/production-app/production-orders-app/server.js:2291:7 {
+  length: 90,
+  severity: 'ERROR',
+  code: '42601',
+  detail: undefined,
+  hint: undefined,
+  position: '58',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'scan.l',
+  line: '1244',
+  routine: 'scanner_yyerror'
+}
+2025-08-04T12:53:00: 🔗 Client acquired from pool
+2025-08-04T12:53:00: ❌ Database run error: error: syntax error at or near ","
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24)
+    at async /home/production-app/production-orders-app/server.js:2291:7 {
+  length: 90,
+  severity: 'ERROR',
+  code: '42601',
+  detail: undefined,
+  hint: undefined,
+  position: '58',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'scan.l',
+  line: '1244',
+  routine: 'scanner_yyerror'
+}
+2025-08-04T12:53:00: 🔓 Client released back to pool
+2025-08-04T12:53:00: Error completing setup: error: syntax error at or near ","
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24)
+    at async /home/production-app/production-orders-app/server.js:2291:7 {
+  length: 90,
+  severity: 'ERROR',
+  code: '42601',
+  detail: undefined,
+  hint: undefined,
+  position: '58',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'scan.l',
+  line: '1244',
+  routine: 'scanner_yyerror'
+}
+2025-08-04T12:53:02: 🔗 Client acquired from pool
+2025-08-04T12:53:02: ❌ Database run error: error: syntax error at or near ","
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24)
+    at async /home/production-app/production-orders-app/server.js:2291:7 {
+  length: 90,
+  severity: 'ERROR',
+  code: '42601',
+  detail: undefined,
+  hint: undefined,
+  position: '58',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'scan.l',
+  line: '1244',
+  routine: 'scanner_yyerror'
+}
+2025-08-04T12:53:02: 🔓 Client released back to pool
+2025-08-04T12:53:02: Error completing setup: error: syntax error at or near ","
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24)
+    at async /home/production-app/production-orders-app/server.js:2291:7 {
+  length: 90,
+  severity: 'ERROR',
+  code: '42601',
+  detail: undefined,
+  hint: undefined,
+  position: '58',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'scan.l',
+  line: '1244',
+  routine: 'scanner_yyerror'
+}
+2025-08-04T12:53:03: 🔗 Client acquired from pool
+2025-08-04T12:53:03: 🔓 Client released back to pool
+2025-08-04T12:53:06: 🔗 Client acquired from pool
+2025-08-04T12:53:06: 🔓 Client released back to pool
+2025-08-04T12:53:06: 🔗 Client acquired from pool
+2025-08-04T12:53:06: 🔓 Client released back to pool
+2025-08-04T12:53:06: 🔗 Client acquired from pool
+2025-08-04T12:53:06: 🔓 Client released back to pool
+2025-08-04T12:53:06: 🔗 Client acquired from pool
+2025-08-04T12:53:06: 🔓 Client released back to pool
+2025-08-04T12:53:06: 🔗 Client acquired from pool
+2025-08-04T12:53:06: 🔓 Client released back to pool
+2025-08-04T12:53:06: ✅ New PostgreSQL client connected
+2025-08-04T12:53:06: 🔗 Client acquired from pool
+2025-08-04T12:53:06: 🔓 Client released back to pool
+2025-08-04T12:53:13: 🔗 Client acquired from pool
+2025-08-04T12:53:13: ❌ Database run error: error: syntax error at or near ","
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24)
+    at async /home/production-app/production-orders-app/server.js:2291:7 {
+  length: 90,
+  severity: 'ERROR',
+  code: '42601',
+  detail: undefined,
+  hint: undefined,
+  position: '58',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'scan.l',
+  line: '1244',
+  routine: 'scanner_yyerror'
+}
+2025-08-04T12:53:13: 🔓 Client released back to pool
+2025-08-04T12:53:13: Error completing setup: error: syntax error at or near ","
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24)
+    at async /home/production-app/production-orders-app/server.js:2291:7 {
+  length: 90,
+  severity: 'ERROR',
+  code: '42601',
+  detail: undefined,
+  hint: undefined,
+  position: '58',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'scan.l',
+  line: '1244',
+  routine: 'scanner_yyerror'
+}
+2025-08-04T12:53:14: 🔗 Client acquired from pool
+2025-08-04T12:53:14: ❌ Database run error: error: syntax error at or near ","
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24)
+    at async /home/production-app/production-orders-app/server.js:2291:7 {
+  length: 90,
+  severity: 'ERROR',
+  code: '42601',
+  detail: undefined,
+  hint: undefined,
+  position: '58',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'scan.l',
+  line: '1244',
+  routine: 'scanner_yyerror'
+}
+2025-08-04T12:53:14: 🔓 Client released back to pool
+2025-08-04T12:53:14: Error completing setup: error: syntax error at or near ","
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24)
+    at async /home/production-app/production-orders-app/server.js:2291:7 {
+  length: 90,
+  severity: 'ERROR',
+  code: '42601',
+  detail: undefined,
+  hint: undefined,
+  position: '58',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'scan.l',
+  line: '1244',
+  routine: 'scanner_yyerror'
+}
+2025-08-04T12:53:16: 🔗 Client acquired from pool
+2025-08-04T12:53:16: ❌ Database run error: error: syntax error at or near ","
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24)
+    at async /home/production-app/production-orders-app/server.js:2291:7 {
+  length: 90,
+  severity: 'ERROR',
+  code: '42601',
+  detail: undefined,
+  hint: undefined,
+  position: '58',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'scan.l',
+  line: '1244',
+  routine: 'scanner_yyerror'
+}
+2025-08-04T12:53:16: 🔓 Client released back to pool
+2025-08-04T12:53:16: Error completing setup: error: syntax error at or near ","
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24)
+    at async /home/production-app/production-orders-app/server.js:2291:7 {
+  length: 90,
+  severity: 'ERROR',
+  code: '42601',
+  detail: undefined,
+  hint: undefined,
+  position: '58',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'scan.l',
+  line: '1244',
+  routine: 'scanner_yyerror'
+}
+2025-08-04T12:53:17: 🔗 Client acquired from pool
+2025-08-04T12:53:17: ❌ Database run error: error: syntax error at or near ","
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24)
+    at async /home/production-app/production-orders-app/server.js:2291:7 {
+  length: 90,
+  severity: 'ERROR',
+  code: '42601',
+  detail: undefined,
+  hint: undefined,
+  position: '58',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'scan.l',
+  line: '1244',
+  routine: 'scanner_yyerror'
+}
+2025-08-04T12:53:17: 🔓 Client released back to pool
+2025-08-04T12:53:17: Error completing setup: error: syntax error at or near ","
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24)
+    at async /home/production-app/production-orders-app/server.js:2291:7 {
+  length: 90,
+  severity: 'ERROR',
+  code: '42601',
+  detail: undefined,
+  hint: undefined,
+  position: '58',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'scan.l',
+  line: '1244',
+  routine: 'scanner_yyerror'
+}
+2025-08-04T12:53:18: 🔗 Client acquired from pool
+2025-08-04T12:53:18: ❌ Database run error: error: syntax error at or near ","
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24)
+    at async /home/production-app/production-orders-app/server.js:2291:7 {
+  length: 90,
+  severity: 'ERROR',
+  code: '42601',
+  detail: undefined,
+  hint: undefined,
+  position: '58',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'scan.l',
+  line: '1244',
+  routine: 'scanner_yyerror'
+}
+2025-08-04T12:53:18: 🔓 Client released back to pool
+2025-08-04T12:53:18: Error completing setup: error: syntax error at or near ","
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24)
+    at async /home/production-app/production-orders-app/server.js:2291:7 {
+  length: 90,
+  severity: 'ERROR',
+  code: '42601',
+  detail: undefined,
+  hint: undefined,
+  position: '58',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'scan.l',
+  line: '1244',
+  routine: 'scanner_yyerror'
+}
+2025-08-04T12:53:20: 🔗 Client acquired from pool
+2025-08-04T12:53:20: ❌ Database run error: error: syntax error at or near ","
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24)
+    at async /home/production-app/production-orders-app/server.js:2291:7 {
+  length: 90,
+  severity: 'ERROR',
+  code: '42601',
+  detail: undefined,
+  hint: undefined,
+  position: '58',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'scan.l',
+  line: '1244',
+  routine: 'scanner_yyerror'
+}
+2025-08-04T12:53:20: 🔓 Client released back to pool
+2025-08-04T12:53:20: Error completing setup: error: syntax error at or near ","
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24)
+    at async /home/production-app/production-orders-app/server.js:2291:7 {
+  length: 90,
+  severity: 'ERROR',
+  code: '42601',
+  detail: undefined,
+  hint: undefined,
+  position: '58',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'scan.l',
+  line: '1244',
+  routine: 'scanner_yyerror'
+}
+2025-08-04T12:53:22: 🔗 Client acquired from pool
+2025-08-04T12:53:22: ❌ Database run error: error: syntax error at or near ","
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24)
+    at async /home/production-app/production-orders-app/server.js:2291:7 {
+  length: 90,
+  severity: 'ERROR',
+  code: '42601',
+  detail: undefined,
+  hint: undefined,
+  position: '58',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'scan.l',
+  line: '1244',
+  routine: 'scanner_yyerror'
+}
+2025-08-04T12:53:22: 🔓 Client released back to pool
+2025-08-04T12:53:22: Error completing setup: error: syntax error at or near ","
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24)
+    at async /home/production-app/production-orders-app/server.js:2291:7 {
+  length: 90,
+  severity: 'ERROR',
+  code: '42601',
+  detail: undefined,
+  hint: undefined,
+  position: '58',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'scan.l',
+  line: '1244',
+  routine: 'scanner_yyerror'
+}
+2025-08-04T12:53:23: 🔗 Client acquired from pool
+2025-08-04T12:53:23: ❌ Database run error: error: syntax error at or near ","
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24)
+    at async /home/production-app/production-orders-app/server.js:2291:7 {
+  length: 90,
+  severity: 'ERROR',
+  code: '42601',
+  detail: undefined,
+  hint: undefined,
+  position: '58',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'scan.l',
+  line: '1244',
+  routine: 'scanner_yyerror'
+}
+2025-08-04T12:53:23: 🔓 Client released back to pool
+2025-08-04T12:53:23: Error completing setup: error: syntax error at or near ","
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24)
+    at async /home/production-app/production-orders-app/server.js:2291:7 {
+  length: 90,
+  severity: 'ERROR',
+  code: '42601',
+  detail: undefined,
+  hint: undefined,
+  position: '58',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'scan.l',
+  line: '1244',
+  routine: 'scanner_yyerror'
+}
+2025-08-04T12:53:25: 🔗 Client acquired from pool
+2025-08-04T12:53:25: ❌ Database run error: error: syntax error at or near ","
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24)
+    at async /home/production-app/production-orders-app/server.js:2291:7 {
+  length: 90,
+  severity: 'ERROR',
+  code: '42601',
+  detail: undefined,
+  hint: undefined,
+  position: '58',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'scan.l',
+  line: '1244',
+  routine: 'scanner_yyerror'
+}
+2025-08-04T12:53:25: 🔓 Client released back to pool
+2025-08-04T12:53:25: Error completing setup: error: syntax error at or near ","
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24)
+    at async /home/production-app/production-orders-app/server.js:2291:7 {
+  length: 90,
+  severity: 'ERROR',
+  code: '42601',
+  detail: undefined,
+  hint: undefined,
+  position: '58',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'scan.l',
+  line: '1244',
+  routine: 'scanner_yyerror'
+}
+2025-08-04T12:53:26: 🔗 Client acquired from pool
+2025-08-04T12:53:26: 🔓 Client released back to pool
+2025-08-04T12:53:32: 📺 admin subscribed to: [ 'machines', 'production' ]
+2025-08-04T12:53:32: 🔗 Client acquired from pool
+2025-08-04T12:53:32: 🔗 Client acquired from pool
+2025-08-04T12:53:32: 🔓 Client released back to pool
+2025-08-04T12:53:32: 🔗 Client acquired from pool
+2025-08-04T12:53:32: 🔓 Client released back to pool
+2025-08-04T12:53:32: 🔓 Client released back to pool
+2025-08-04T12:54:02: 🔗 Client acquired from pool
+2025-08-04T12:54:02: 🔓 Client released back to pool
+2025-08-04T12:54:32: 🔗 Client acquired from pool
+2025-08-04T12:54:32: 🔓 Client released back to pool
+2025-08-04T12:55:02: 🔗 Client acquired from pool
+2025-08-04T12:55:02: 🔓 Client released back to pool
+2025-08-04T12:55:06: 🔗 Client acquired from pool
+2025-08-04T12:55:06: 🔓 Client released back to pool
+2025-08-04T12:55:07: 🔗 Client acquired from pool
+2025-08-04T12:55:07: 🔓 Client released back to pool
+2025-08-04T12:55:07: 🔗 Client acquired from pool
+2025-08-04T12:55:07: 🔓 Client released back to pool
+2025-08-04T12:55:08: 🔗 Client acquired from pool
+2025-08-04T12:55:08: 🔓 Client released back to pool
+2025-08-04T12:55:08: 🔗 Client acquired from pool
+2025-08-04T12:55:08: 🔗 Client acquired from pool
+2025-08-04T12:55:08: 🔓 Client released back to pool
+2025-08-04T12:55:08: 🔓 Client released back to pool
+2025-08-04T12:56:30: 📺 admin subscribed to: [ 'machines', 'production' ]
+2025-08-04T12:56:30: 🔗 Client acquired from pool
+2025-08-04T12:56:30: 🔗 Client acquired from pool
+2025-08-04T12:56:30: 🔓 Client released back to pool
+2025-08-04T12:56:30: 🔓 Client released back to pool
+2025-08-04T12:56:30: ✅ New PostgreSQL client connected
+2025-08-04T12:56:30: 🔗 Client acquired from pool
+2025-08-04T12:56:30: 🔓 Client released back to pool
+2025-08-04T12:56:52: 🔌 WebSocket disconnected: admin
+2025-08-04T12:56:53: New WebSocket connection attempt
+2025-08-04T12:56:53: ✅ WebSocket authenticated: admin (admin)
+2025-08-04T12:56:57: 🔗 Client acquired from pool
+2025-08-04T12:56:57: 🔓 Client released back to pool
+2025-08-04T12:56:57: 🔗 Client acquired from pool
+2025-08-04T12:56:57: 🔓 Client released back to pool
+2025-08-04T12:56:57: 📺 admin subscribed to: [ 'machines', 'production' ]
+2025-08-04T12:56:57: 🔗 Client acquired from pool
+2025-08-04T12:56:57: 🔓 Client released back to pool
+2025-08-04T12:56:57: 🔗 Client acquired from pool
+2025-08-04T12:56:57: 🔗 Client acquired from pool
+2025-08-04T12:56:57: 🔓 Client released back to pool
+2025-08-04T12:56:57: 🔓 Client released back to pool
+2025-08-04T12:56:59: 🔗 Client acquired from pool
+2025-08-04T12:56:59: 🔗 Client acquired from pool
+2025-08-04T12:56:59: 🔗 Client acquired from pool
+2025-08-04T12:56:59: 🔓 Client released back to pool
+2025-08-04T12:56:59: 🔓 Client released back to pool
+2025-08-04T12:56:59: 🔓 Client released back to pool
+2025-08-04T12:57:00: 🔗 Client acquired from pool
+2025-08-04T12:57:00: 🔗 Client acquired from pool
+2025-08-04T12:57:00: 🔓 Client released back to pool
+2025-08-04T12:57:00: 🔗 Client acquired from pool
+2025-08-04T12:57:00: 🔓 Client released back to pool
+2025-08-04T12:57:00: 🔓 Client released back to pool
+2025-08-04T12:57:00: 🔗 Client acquired from pool
+2025-08-04T12:57:00: 🔓 Client released back to pool
+2025-08-04T12:57:00: 🔗 Client acquired from pool
+2025-08-04T12:57:00: 🔓 Client released back to pool
+2025-08-04T12:57:00: 🔗 Client acquired from pool
+2025-08-04T12:57:00: 🔓 Client released back to pool
+2025-08-04T12:57:15: 🔗 Client acquired from pool
+2025-08-04T12:57:15: ❌ Database run error: error: syntax error at or near ","
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24)
+    at async /home/production-app/production-orders-app/server.js:2291:7 {
+  length: 90,
+  severity: 'ERROR',
+  code: '42601',
+  detail: undefined,
+  hint: undefined,
+  position: '58',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'scan.l',
+  line: '1244',
+  routine: 'scanner_yyerror'
+}
+2025-08-04T12:57:15: 🔓 Client released back to pool
+2025-08-04T12:57:15: Error completing setup: error: syntax error at or near ","
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24)
+    at async /home/production-app/production-orders-app/server.js:2291:7 {
+  length: 90,
+  severity: 'ERROR',
+  code: '42601',
+  detail: undefined,
+  hint: undefined,
+  position: '58',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'scan.l',
+  line: '1244',
+  routine: 'scanner_yyerror'
+}
+2025-08-04T12:57:16: 🔗 Client acquired from pool
+2025-08-04T12:57:16: ❌ Database run error: error: syntax error at or near ","
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24)
+    at async /home/production-app/production-orders-app/server.js:2291:7 {
+  length: 90,
+  severity: 'ERROR',
+  code: '42601',
+  detail: undefined,
+  hint: undefined,
+  position: '58',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'scan.l',
+  line: '1244',
+  routine: 'scanner_yyerror'
+}
+2025-08-04T12:57:16: 🔓 Client released back to pool
+2025-08-04T12:57:16: Error completing setup: error: syntax error at or near ","
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24)
+    at async /home/production-app/production-orders-app/server.js:2291:7 {
+  length: 90,
+  severity: 'ERROR',
+  code: '42601',
+  detail: undefined,
+  hint: undefined,
+  position: '58',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'scan.l',
+  line: '1244',
+  routine: 'scanner_yyerror'
+}
+2025-08-04T12:57:18: 🔗 Client acquired from pool
+2025-08-04T12:57:18: ❌ Database run error: error: syntax error at or near ","
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24)
+    at async /home/production-app/production-orders-app/server.js:2291:7 {
+  length: 90,
+  severity: 'ERROR',
+  code: '42601',
+  detail: undefined,
+  hint: undefined,
+  position: '58',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'scan.l',
+  line: '1244',
+  routine: 'scanner_yyerror'
+}
+2025-08-04T12:57:18: 🔓 Client released back to pool
+2025-08-04T12:57:18: Error completing setup: error: syntax error at or near ","
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24)
+    at async /home/production-app/production-orders-app/server.js:2291:7 {
+  length: 90,
+  severity: 'ERROR',
+  code: '42601',
+  detail: undefined,
+  hint: undefined,
+  position: '58',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'scan.l',
+  line: '1244',
+  routine: 'scanner_yyerror'
+}
+2025-08-04T12:57:22: 🔗 Client acquired from pool
+2025-08-04T12:57:22: ❌ Database run error: error: syntax error at or near ","
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24)
+    at async /home/production-app/production-orders-app/server.js:2291:7 {
+  length: 90,
+  severity: 'ERROR',
+  code: '42601',
+  detail: undefined,
+  hint: undefined,
+  position: '58',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'scan.l',
+  line: '1244',
+  routine: 'scanner_yyerror'
+}
+2025-08-04T12:57:22: 🔓 Client released back to pool
+2025-08-04T12:57:22: Error completing setup: error: syntax error at or near ","
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24)
+    at async /home/production-app/production-orders-app/server.js:2291:7 {
+  length: 90,
+  severity: 'ERROR',
+  code: '42601',
+  detail: undefined,
+  hint: undefined,
+  position: '58',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'scan.l',
+  line: '1244',
+  routine: 'scanner_yyerror'
+}
+2025-08-04T12:57:23: 🔗 Client acquired from pool
+2025-08-04T12:57:23: ❌ Database run error: error: syntax error at or near ","
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24)
+    at async /home/production-app/production-orders-app/server.js:2291:7 {
+  length: 90,
+  severity: 'ERROR',
+  code: '42601',
+  detail: undefined,
+  hint: undefined,
+  position: '58',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'scan.l',
+  line: '1244',
+  routine: 'scanner_yyerror'
+}
+2025-08-04T12:57:23: 🔓 Client released back to pool
+2025-08-04T12:57:23: Error completing setup: error: syntax error at or near ","
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24)
+    at async /home/production-app/production-orders-app/server.js:2291:7 {
+  length: 90,
+  severity: 'ERROR',
+  code: '42601',
+  detail: undefined,
+  hint: undefined,
+  position: '58',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'scan.l',
+  line: '1244',
+  routine: 'scanner_yyerror'
+}
+2025-08-04T12:57:25: 🔗 Client acquired from pool
+2025-08-04T12:57:25: ❌ Database run error: error: syntax error at or near ","
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24)
+    at async /home/production-app/production-orders-app/server.js:2291:7 {
+  length: 90,
+  severity: 'ERROR',
+  code: '42601',
+  detail: undefined,
+  hint: undefined,
+  position: '58',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'scan.l',
+  line: '1244',
+  routine: 'scanner_yyerror'
+}
+2025-08-04T12:57:25: 🔓 Client released back to pool
+2025-08-04T12:57:25: Error completing setup: error: syntax error at or near ","
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24)
+    at async /home/production-app/production-orders-app/server.js:2291:7 {
+  length: 90,
+  severity: 'ERROR',
+  code: '42601',
+  detail: undefined,
+  hint: undefined,
+  position: '58',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'scan.l',
+  line: '1244',
+  routine: 'scanner_yyerror'
+}
+2025-08-04T12:57:48: 🔗 Client acquired from pool
+2025-08-04T12:57:48: 🔓 Client released back to pool
+2025-08-04T12:57:49: 📺 admin subscribed to: [ 'machines', 'production' ]
+2025-08-04T12:57:49: 🔗 Client acquired from pool
+2025-08-04T12:57:49: 🔓 Client released back to pool
+2025-08-04T12:57:49: 🔗 Client acquired from pool
+2025-08-04T12:57:49: 🔓 Client released back to pool
+2025-08-04T12:57:49: 🔗 Client acquired from pool
+2025-08-04T12:57:49: 🔓 Client released back to pool
+2025-08-04T12:58:19: 🔗 Client acquired from pool
+2025-08-04T12:58:19: 🔓 Client released back to pool
+2025-08-04T12:58:36: 🔗 Client acquired from pool
+2025-08-04T12:58:36: 🔓 Client released back to pool
+2025-08-04T12:58:36: 🔗 Client acquired from pool
+2025-08-04T12:58:36: 🔓 Client released back to pool
+2025-08-04T12:59:51: 🔗 Client acquired from pool
+2025-08-04T12:59:51: 🔓 Client released back to pool
+2025-08-04T12:59:51: 🔗 Client acquired from pool
+2025-08-04T12:59:51: 🔓 Client released back to pool
+2025-08-04T12:59:51: 🔗 Client acquired from pool
+2025-08-04T12:59:51: 🔓 Client released back to pool
+2025-08-04T12:59:53: 🔗 Client acquired from pool
+2025-08-04T12:59:53: 🔓 Client released back to pool
+2025-08-04T12:59:53: 🔗 Client acquired from pool
+2025-08-04T12:59:53: 🔓 Client released back to pool
+2025-08-04T12:59:53: 🔗 Client acquired from pool
+2025-08-04T12:59:53: 🔓 Client released back to pool
+2025-08-04T12:59:53: 🔗 Client acquired from pool
+2025-08-04T12:59:53: 🔓 Client released back to pool
+2025-08-04T12:59:53: 🔗 Client acquired from pool
+2025-08-04T12:59:53: 🔓 Client released back to pool
+2025-08-04T12:59:53: ✅ New PostgreSQL client connected
+2025-08-04T12:59:53: 🔗 Client acquired from pool
+2025-08-04T12:59:53: 🔓 Client released back to pool
+2025-08-04T12:59:55: 🔗 Client acquired from pool
+2025-08-04T12:59:55: 🔓 Client released back to pool
