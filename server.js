@@ -2540,7 +2540,7 @@ app.post('/api/orders/:id/complete-setup',
       await client.end();
       
       // Broadcast status update via WebSocket
-      broadcastToClients('order_assigned', {
+      broadcast('order_assigned', {
         orderId: parseInt(orderId),
         machineId: machine_id ? parseInt(machine_id) : null,
         status: 'in_progress',
