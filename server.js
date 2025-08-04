@@ -2235,7 +2235,7 @@ app.post('/api/orders/:id/complete-setup',
       // Update workflow progress
       await dbRun(`
         UPDATE workflow_progress 
-        SET status = 'completed', completed_at = NOW(), notes = $3, data = $4
+        SET status = 'completed', completed_at = NOW(), operator_id = $2, notes = $3, data = $4
         WHERE order_id = $1 AND stage = 'setup'
       `, [orderId, req.user.id, notes, JSON.stringify({ checklist, setup_time })]);
       

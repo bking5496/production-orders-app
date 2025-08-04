@@ -1188,3 +1188,302 @@ Error: SQLITE_ERROR: table waste_records has no column named waste_type
 2025-08-04T08:49:18: 🔓 Client released back to pool
 2025-08-04T08:49:19: 🔗 Client acquired from pool
 2025-08-04T08:49:19: 🔓 Client released back to pool
+2025-08-04T08:52:39: 🔌 WebSocket disconnected: admin
+2025-08-04T08:52:40: 🔗 Client acquired from pool
+2025-08-04T08:52:40: 🔗 Client acquired from pool
+2025-08-04T08:52:40: 🔓 Client released back to pool
+2025-08-04T08:52:40: 🔓 Client released back to pool
+2025-08-04T08:52:40: ✅ New PostgreSQL client connected
+2025-08-04T08:52:40: 🔗 Client acquired from pool
+2025-08-04T08:52:40: 🔓 Client released back to pool
+2025-08-04T08:52:40: New WebSocket connection attempt
+2025-08-04T08:52:40: ✅ WebSocket authenticated: admin (admin)
+2025-08-04T08:52:41: 🔗 Client acquired from pool
+2025-08-04T08:52:41: 🔗 Client acquired from pool
+2025-08-04T08:52:41: 🔓 Client released back to pool
+2025-08-04T08:52:41: 🔓 Client released back to pool
+2025-08-04T08:52:41: 🔗 Client acquired from pool
+2025-08-04T08:52:41: 🔓 Client released back to pool
+2025-08-04T08:52:41: 🔗 Client acquired from pool
+2025-08-04T08:52:41: 🔓 Client released back to pool
+2025-08-04T08:52:41: 🔗 Client acquired from pool
+2025-08-04T08:52:41: 🔓 Client released back to pool
+2025-08-04T08:52:41: 🔗 Client acquired from pool
+2025-08-04T08:52:41: 🔓 Client released back to pool
+2025-08-04T08:53:06: 🔗 Client acquired from pool
+2025-08-04T08:53:06: ❌ Database run error: error: could not determine data type of parameter $2
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24)
+    at async /home/production-app/production-orders-app/server.js:2236:7 {
+  length: 124,
+  severity: 'ERROR',
+  code: '42P18',
+  detail: undefined,
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'postgres.c',
+  line: '740',
+  routine: 'pg_analyze_and_rewrite_varparams'
+}
+2025-08-04T08:53:06: 🔓 Client released back to pool
+2025-08-04T08:53:06: Error completing setup: error: could not determine data type of parameter $2
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24)
+    at async /home/production-app/production-orders-app/server.js:2236:7 {
+  length: 124,
+  severity: 'ERROR',
+  code: '42P18',
+  detail: undefined,
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'postgres.c',
+  line: '740',
+  routine: 'pg_analyze_and_rewrite_varparams'
+}
+2025-08-04T08:53:10: 🔗 Client acquired from pool
+2025-08-04T08:53:10: ❌ Database run error: error: could not determine data type of parameter $2
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24)
+    at async /home/production-app/production-orders-app/server.js:2236:7 {
+  length: 124,
+  severity: 'ERROR',
+  code: '42P18',
+  detail: undefined,
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'postgres.c',
+  line: '740',
+  routine: 'pg_analyze_and_rewrite_varparams'
+}
+2025-08-04T08:53:10: 🔓 Client released back to pool
+2025-08-04T08:53:10: Error completing setup: error: could not determine data type of parameter $2
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24)
+    at async /home/production-app/production-orders-app/server.js:2236:7 {
+  length: 124,
+  severity: 'ERROR',
+  code: '42P18',
+  detail: undefined,
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'postgres.c',
+  line: '740',
+  routine: 'pg_analyze_and_rewrite_varparams'
+}
+2025-08-04T08:53:13: 🔗 Client acquired from pool
+2025-08-04T08:53:13: ❌ Database run error: error: could not determine data type of parameter $2
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24)
+    at async /home/production-app/production-orders-app/server.js:2236:7 {
+  length: 124,
+  severity: 'ERROR',
+  code: '42P18',
+  detail: undefined,
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'postgres.c',
+  line: '740',
+  routine: 'pg_analyze_and_rewrite_varparams'
+}
+2025-08-04T08:53:13: 🔓 Client released back to pool
+2025-08-04T08:53:13: Error completing setup: error: could not determine data type of parameter $2
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24)
+    at async /home/production-app/production-orders-app/server.js:2236:7 {
+  length: 124,
+  severity: 'ERROR',
+  code: '42P18',
+  detail: undefined,
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'postgres.c',
+  line: '740',
+  routine: 'pg_analyze_and_rewrite_varparams'
+}
+2025-08-04T08:58:28: 🔌 WebSocket disconnected: admin
+2025-08-04T08:58:29: 🔗 Client acquired from pool
+2025-08-04T08:58:29: 🔓 Client released back to pool
+2025-08-04T08:58:29: ✅ New PostgreSQL client connected
+2025-08-04T08:58:29: 🔗 Client acquired from pool
+2025-08-04T08:58:29: ✅ New PostgreSQL client connected
+2025-08-04T08:58:29: 🔗 Client acquired from pool
+2025-08-04T08:58:29: 🔓 Client released back to pool
+2025-08-04T08:58:29: 🔓 Client released back to pool
+2025-08-04T08:58:29: New WebSocket connection attempt
+2025-08-04T08:58:29: ✅ WebSocket authenticated: admin (admin)
+2025-08-04T08:58:30: 🔗 Client acquired from pool
+2025-08-04T08:58:30: 🔗 Client acquired from pool
+2025-08-04T08:58:30: 🔓 Client released back to pool
+2025-08-04T08:58:30: 🔓 Client released back to pool
+2025-08-04T08:58:30: 🔗 Client acquired from pool
+2025-08-04T08:58:30: 🔓 Client released back to pool
+2025-08-04T08:58:30: 🔗 Client acquired from pool
+2025-08-04T08:58:30: 🔓 Client released back to pool
+2025-08-04T08:58:30: 🔗 Client acquired from pool
+2025-08-04T08:58:30: 🔓 Client released back to pool
+2025-08-04T08:58:30: 🔗 Client acquired from pool
+2025-08-04T08:58:30: 🔓 Client released back to pool
+2025-08-04T08:58:41: 🔗 Client acquired from pool
+2025-08-04T08:58:41: ❌ Database run error: error: could not determine data type of parameter $2
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24)
+    at async /home/production-app/production-orders-app/server.js:2236:7 {
+  length: 124,
+  severity: 'ERROR',
+  code: '42P18',
+  detail: undefined,
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'postgres.c',
+  line: '740',
+  routine: 'pg_analyze_and_rewrite_varparams'
+}
+2025-08-04T08:58:41: 🔓 Client released back to pool
+2025-08-04T08:58:41: Error completing setup: error: could not determine data type of parameter $2
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24)
+    at async /home/production-app/production-orders-app/server.js:2236:7 {
+  length: 124,
+  severity: 'ERROR',
+  code: '42P18',
+  detail: undefined,
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'postgres.c',
+  line: '740',
+  routine: 'pg_analyze_and_rewrite_varparams'
+}
+2025-08-04T08:58:45: 🔗 Client acquired from pool
+2025-08-04T08:58:45: 🔓 Client released back to pool
+2025-08-04T08:58:47: 🔗 Client acquired from pool
+2025-08-04T08:58:47: 🔗 Client acquired from pool
+2025-08-04T08:58:47: 🔓 Client released back to pool
+2025-08-04T08:58:47: 🔗 Client acquired from pool
+2025-08-04T08:58:47: 🔓 Client released back to pool
+2025-08-04T08:58:47: 🔗 Client acquired from pool
+2025-08-04T08:58:47: 🔓 Client released back to pool
+2025-08-04T08:58:47: 🔓 Client released back to pool
+2025-08-04T08:58:47: 🔗 Client acquired from pool
+2025-08-04T08:58:47: 🔓 Client released back to pool
+2025-08-04T08:58:47: 🔗 Client acquired from pool
+2025-08-04T08:58:47: 🔓 Client released back to pool
+2025-08-04T08:58:59: 🔗 Client acquired from pool
+2025-08-04T08:58:59: ❌ Database run error: error: could not determine data type of parameter $2
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24)
+    at async /home/production-app/production-orders-app/server.js:2236:7 {
+  length: 124,
+  severity: 'ERROR',
+  code: '42P18',
+  detail: undefined,
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'postgres.c',
+  line: '740',
+  routine: 'pg_analyze_and_rewrite_varparams'
+}
+2025-08-04T08:58:59: 🔓 Client released back to pool
+2025-08-04T08:58:59: Error completing setup: error: could not determine data type of parameter $2
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24)
+    at async /home/production-app/production-orders-app/server.js:2236:7 {
+  length: 124,
+  severity: 'ERROR',
+  code: '42P18',
+  detail: undefined,
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'postgres.c',
+  line: '740',
+  routine: 'pg_analyze_and_rewrite_varparams'
+}
