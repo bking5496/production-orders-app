@@ -329,6 +329,26 @@ class EnhancedApiService {
   async getDowntimeReports(filters = {}) {
     return this.get('/reports/downtime', filters);
   }
+
+  async getArchivedOrders() {
+    return this.get('/orders/archived');
+  }
+
+  async getOrder(id) {
+    return this.get(`/orders/${id}`);
+  }
+
+  async getAnalyticsStops() {
+    return this.get('/analytics/stops');
+  }
+
+  async getGeneralSettings() {
+    return this.get('/settings/general');
+  }
+
+  async updateGeneralSettings(settings) {
+    return this.put('/settings/general', settings);
+  }
   
   // Labor Management
   async getLaborAssignments(date = null) {

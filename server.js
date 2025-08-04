@@ -792,7 +792,7 @@ app.put('/api/machines/:id',
     
     // Check if machine is in use
     db.get(
-      'SELECT status FROM machines WHERE id = ?',
+      'SELECT status FROM machines WHERE id = $1',
       [id],
       (err, machine) => {
         if (err) {
@@ -808,13 +808,13 @@ app.put('/api/machines/:id',
         }
         
         // Build update query
-        const fields = Object.keys(updates).map(key => `${key} = ?`);
+        const fields = Object.keys(updates).map((key, i) => `${key} = ${i + 1}`);
         fields.push('updated_at = NOW()');
         const values = Object.values(updates);
         values.push(id);
         
         db.run(
-          `UPDATE machines SET ${fields.join(', ')} WHERE id = ?`,
+          `UPDATE machines SET ${fields.join(', ')} WHERE id = ${values.length}`,
           values,
           function(err) {
             if (err) {
@@ -850,7 +850,7 @@ app.patch('/api/machines/:id/status',
 
     // Check current status
     db.get(
-      'SELECT status FROM machines WHERE id = ?',
+      'SELECT status FROM machines WHERE id = $1',
       [id],
       (err, machine) => {
         if (err) {
@@ -897,7 +897,7 @@ app.delete('/api/machines/:id',
       `SELECT m.status, 
               (SELECT COUNT(*) FROM production_orders WHERE machine_id = m.id) as order_count
        FROM machines m 
-       WHERE m.id = ?`,
+       WHERE m.id = $1`,
       [id],
       (err, result) => {
         if (err) {
@@ -918,7 +918,7 @@ app.delete('/api/machines/:id',
           });
         }
         
-        db.run('DELETE FROM machines WHERE id = ?', [id], function(err) {
+        db.run('DELETE FROM machines WHERE id = $1', [id], function(err) {
           if (err) {
             return res.status(500).json({ error: 'Failed to delete machine' });
           }
@@ -974,6 +974,7 @@ app.get('/api/orders',
     `;
     
     const params = [];
+    let paramIndex = 1;
     
     // By default, exclude archived orders unless specifically requested
     if (include_archived !== 'true') {
@@ -981,12 +982,12 @@ app.get('/api/orders',
     }
     
     if (environment) {
-      query += ' AND o.environment = ?';
+      query += ` AND o.environment = ${paramIndex++}`;
       params.push(environment);
     }
     
     if (status) {
-      query += ' AND o.status = ?';
+      query += ` AND o.status = ${paramIndex++}`;
       params.push(status);
     }
     
@@ -1040,7 +1041,7 @@ app.get('/api/orders/:id',
       FROM production_orders o
       LEFT JOIN machines m ON o.machine_id = m.id
       LEFT JOIN users u ON o.operator_id = u.id
-      WHERE o.id = ?
+      WHERE o.id = $1
     `;
     
     db.get(query, [orderId], (err, order) => {
@@ -1068,7 +1069,7 @@ app.post('/api/orders',
     body('environment').isIn(['blending', 'packaging', 'production', 'beverage', 'processing']),
     body('priority').isIn(['low', 'normal', 'high', 'urgent']).optional(),
   ],
-  async (req, res) => {
+  (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
@@ -1076,32 +1077,30 @@ app.post('/api/orders',
 
     const { order_number, product_name, quantity, environment, priority, due_date, notes } = req.body;
 
-    // Use direct PostgreSQL connection to bypass conversion layer issues
-    try {
-      const result = await dbRun(
-        `INSERT INTO production_orders (
-          order_number, product_name, quantity, environment, priority, 
-          due_date, notes, created_by, created_at, status
-        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, NOW(), 'pending')
-        RETURNING id`,
-        [order_number, product_name, quantity, environment, priority || 'normal', due_date, notes, req.user.id]
-      );
-      
-      broadcast('order_created', {
-        id: result.lastID,
-        order_number,
-        product_name,
-        environment
-      });
-      
-      res.json({ id: result.lastID, message: 'Order created successfully' });
-    } catch (err) {
-      console.error('Order creation error:', err);
-      if (err.message.includes('unique') || err.message.includes('UNIQUE')) {
-        return res.status(400).json({ error: 'Order number already exists' });
+    db.run(
+      `INSERT INTO production_orders (
+        order_number, product_name, quantity, environment, priority, 
+        due_date, notes, created_by, created_at
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, NOW())`,
+      [order_number, product_name, quantity, environment, priority || 'normal', due_date, notes, req.user.id],
+      function(err) {
+        if (err) {
+          if (err.message.includes('UNIQUE')) {
+            return res.status(400).json({ error: 'Order number already exists' });
+          }
+          return res.status(500).json({ error: 'Database error' });
+        }
+        
+        broadcast('order_created', {
+          id: this.lastID,
+          order_number,
+          product_name,
+          environment
+        });
+        
+        res.json({ id: this.lastID, message: 'Order created successfully' });
       }
-      return res.status(500).json({ error: 'Database error: ' + err.message });
-    }
+    );
   }
 );
 
@@ -1489,7 +1488,7 @@ app.post('/api/orders/:id/complete',
                  notes = CASE WHEN $3::TEXT IS NOT NULL THEN COALESCE(notes, '') || ' | Completion: ' || $3::TEXT ELSE COALESCE(notes, '') END,
                  archived = true,
                  updated_at = NOW()
-             WHERE id = $5`,
+             WHERE id = $4`,
             [finalQuantity, efficiency, finalNotes, id],
             function(err) {
               if (err) {
@@ -1674,6 +1673,7 @@ app.get('/api/export/:type',
     let query;
     let params = [];
     let filename;
+    let paramIndex = 1;
 
     switch (type) {
       case 'orders':
@@ -1700,11 +1700,11 @@ app.get('/api/export/:type',
     }
 
     if (start_date && end_date) {
-      query += ' AND DATE(o.created_at) BETWEEN ? AND ?';
+      query += ` AND DATE(o.created_at) BETWEEN ${paramIndex++} AND ${paramIndex++}`;
       params.push(start_date, end_date);
     }
     if (environment) {
-      query += ' AND o.environment = ?';
+      query += ` AND o.environment = ${paramIndex++}`;
       params.push(environment);
     }
 
@@ -1829,7 +1829,7 @@ app.get('/api/machines/test', (req, res) => {
 
 // Test endpoint
 app.get('/api/test-login', (req, res) => {
-  db.get('SELECT * FROM users WHERE username = ?', ['admin'], (err, user) => {
+  db.get('SELECT * FROM users WHERE username = $1', ['admin'], (err, user) => {
     if (err) {
       return res.json({ error: err.message, stack: err.stack });
     }
