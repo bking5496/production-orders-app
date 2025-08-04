@@ -9,3 +9,7 @@ NODE_ENV=production is not supported in the .env file. Only NODE_ENV=development
 
   ➜  Local:   http://localhost:5173/
   ➜  Network: http://197.85.7.242:5173/
+7:54:09 AM [vite] (client) hmr update /src/js/components/enhanced-production-workflow.jsx
+7:54:23 AM [vite] (client) hmr update /src/js/components/enhanced-production-workflow.jsx
+7:56:22 AM [vite] (client) hmr update /src/js/components/enhanced-production-workflow.jsx
+7:56:53 AM [vite] (client) hmr update /src/js/components/enhanced-production-workflow.jsx

@@ -22,23 +22,15 @@ const EnhancedProductionWorkflow = ({ orderId, onClose }) => {
   const [error, setError] = useState('');
   const [showDowntimeModal, setShowDowntimeModal] = useState(false);
 
-  // Material preparation state
-  const [materials, setMaterials] = useState([
-    { code: 'RAW001', name: 'Primary Ingredient A', required_qty: 100, unit: 'kg', allocated_qty: 100, lot_number: 'LOT2025001', supplier: 'Supplier A' },
-    { code: 'RAW002', name: 'Secondary Ingredient B', required_qty: 20, unit: 'kg', allocated_qty: 20, lot_number: 'LOT2025002', supplier: 'Supplier B' }
-  ]);
+  // Material preparation state (will be loaded from API)
+  const [materials, setMaterials] = useState([]);
 
-  // Setup state
+  // Setup state (will be loaded from API)
   const [setupData, setSetupData] = useState({
     machine_id: null,
     setup_type: 'initial_setup',
     previous_product: '',
-    setup_checklist: [
-      { task: 'Machine cleaned and sanitized', completed: false },
-      { task: 'Tools and fixtures installed', completed: false },
-      { task: 'Parameters configured', completed: false },
-      { task: 'Safety systems verified', completed: false }
-    ]
+    setup_checklist: []
   });
 
   // Production state
@@ -51,27 +43,8 @@ const EnhancedProductionWorkflow = ({ orderId, onClose }) => {
     }
   });
 
-  // Quality checks state
-  const [qualityChecks, setQualityChecks] = useState([
-    {
-      checkpoint_name: 'Weight Check',
-      checkpoint_stage: 'final_inspection',
-      target_value: 100,
-      tolerance_min: 95,
-      tolerance_max: 105,
-      unit_of_measure: 'units',
-      measured_value: null
-    },
-    {
-      checkpoint_name: 'Temperature Control',
-      checkpoint_stage: 'in_process',
-      target_value: 75.0,
-      tolerance_min: 70.0,
-      tolerance_max: 80.0,
-      unit_of_measure: '°C',
-      measured_value: null
-    }
-  ]);
+  // Quality checks state (will be loaded from API)
+  const [qualityChecks, setQualityChecks] = useState([]);
 
   const workflowSteps = [
     { 
@@ -146,12 +119,58 @@ const EnhancedProductionWorkflow = ({ orderId, onClose }) => {
       // Update workflow status based on order
       updateWorkflowStatus(response.order);
       
+      // Set materials data from API response
       if (response.materials?.length > 0) {
-        setMaterials(response.materials);
+        const formattedMaterials = response.materials.map(m => ({
+          id: m.id,
+          code: m.code,
+          name: m.name,
+          required_qty: m.required_quantity,
+          unit: m.unit_of_measure,
+          allocated_qty: m.allocated_quantity || 0,
+          lot_number: m.lot_number || '',
+          supplier: m.supplier || '',
+          is_critical: m.is_critical,
+          allocation_status: m.allocation_status || 'pending'
+        }));
+        setMaterials(formattedMaterials);
       }
       
-      if (response.setup) {
-        setSetupData(prev => ({ ...prev, ...response.setup }));
+      // Set setup checklist data from API response
+      if (response.setup?.length > 0) {
+        const formattedSetup = {
+          machine_id: response.order.machine_id,
+          setup_type: 'initial_setup',
+          previous_product: '',
+          setup_checklist: response.setup.map(s => ({
+            id: s.id,
+            task: s.task_description,
+            completed: s.completed || false,
+            estimated_time_minutes: s.estimated_time_minutes,
+            instructions: s.instructions,
+            completed_at: s.completed_at,
+            notes: s.progress_notes
+          }))
+        };
+        setSetupData(formattedSetup);
+      }
+      
+      // Set quality checks data from API response  
+      if (response.quality_checks?.length > 0) {
+        const formattedQuality = response.quality_checks.map(qc => ({
+          id: qc.id,
+          checkpoint_name: qc.checkpoint_name,
+          checkpoint_stage: qc.checkpoint_stage,
+          target_value: qc.target_value,
+          tolerance_min: qc.tolerance_min,
+          tolerance_max: qc.tolerance_max,
+          unit_of_measure: qc.unit_of_measure,
+          measured_value: qc.measured_value,
+          pass_fail: qc.pass_fail,
+          test_method: qc.test_method,
+          frequency: qc.frequency
+        }));
+        setQualityChecks(formattedQuality);
       }
       
     } catch (error) {

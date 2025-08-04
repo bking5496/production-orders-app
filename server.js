@@ -1982,6 +1982,391 @@ app.get('/api/reports/downtime', authenticateToken, async (req, res) => {
 });
 
 // ================================
+// ENHANCED WORKFLOW API ENDPOINTS
+// ================================
+
+// Get enhanced workflow data for a specific order
+app.get('/api/orders/:id/enhanced',
+  authenticateToken,
+  async (req, res) => {
+    const orderId = req.params.id;
+    
+    try {
+      // Get order details
+      const orderQuery = `
+        SELECT 
+          o.*,
+          m.name as machine_name,
+          u.username as operator_name
+        FROM production_orders o
+        LEFT JOIN machines m ON o.machine_id = m.id
+        LEFT JOIN users u ON o.operator_id = u.id
+        WHERE o.id = $1
+      `;
+      
+      const order = await dbGet(orderQuery, [orderId]);
+      if (!order) {
+        return res.status(404).json({ error: 'Order not found' });
+      }
+      
+      // Get materials required for this product
+      const materialsQuery = `
+        SELECT 
+          m.*,
+          pr.required_quantity,
+          pr.is_critical,
+          pr.notes as recipe_notes,
+          COALESCE(ma.allocated_quantity, 0) as allocated_quantity,
+          ma.lot_number,
+          ma.status as allocation_status
+        FROM product_recipes pr
+        JOIN materials m ON pr.material_id = m.id
+        LEFT JOIN material_allocations ma ON ma.order_id = $1 AND ma.material_id = m.id
+        WHERE pr.product_name = $2
+        ORDER BY pr.sequence_order
+      `;
+      
+      const materials = await dbAll(materialsQuery, [orderId, order.product_name]);
+      
+      // Get setup checklist for this order
+      const setupQuery = `
+        SELECT 
+          sc.*,
+          COALESCE(sp.completed, false) as completed,
+          sp.completed_at,
+          sp.notes as progress_notes,
+          sp.time_taken_minutes
+        FROM setup_checklists sc
+        LEFT JOIN setup_progress sp ON sp.checklist_id = sc.id AND sp.order_id = $1
+        WHERE sc.is_active = true
+        AND (sc.machine_type IS NULL OR sc.machine_type = $2)
+        ORDER BY sc.sequence_order
+      `;
+      
+      const setup = await dbAll(setupQuery, [orderId, order.machine_name]);
+      
+      // Get quality checkpoints for this product
+      const qualityQuery = `
+        SELECT 
+          qc.*,
+          qr.measured_value,
+          qr.pass_fail,
+          qr.measured_at,
+          qr.notes as result_notes
+        FROM quality_checkpoints qc
+        LEFT JOIN quality_results qr ON qr.checkpoint_id = qc.id AND qr.order_id = $1
+        WHERE qc.is_active = true
+        AND (qc.product_name IS NULL OR qc.product_name = $2)
+        ORDER BY qc.sequence_order
+      `;
+      
+      const qualityChecks = await dbAll(qualityQuery, [orderId, order.product_name]);
+      
+      // Get workflow progress
+      const progressQuery = `
+        SELECT * FROM workflow_progress 
+        WHERE order_id = $1 
+        ORDER BY created_at DESC
+      `;
+      
+      const workflowProgress = await dbAll(progressQuery, [orderId]);
+      
+      res.json({
+        order,
+        materials,
+        setup,
+        quality_checks: qualityChecks,
+        workflow_progress: workflowProgress
+      });
+      
+    } catch (error) {
+      console.error('Error fetching enhanced workflow data:', error);
+      res.status(500).json({ error: 'Failed to fetch enhanced workflow data' });
+    }
+  }
+);
+
+// Get all materials
+app.get('/api/materials',
+  authenticateToken,
+  async (req, res) => {
+    try {
+      const materials = await dbAll(`
+        SELECT * FROM materials 
+        WHERE is_active = true 
+        ORDER BY name
+      `);
+      res.json(materials);
+    } catch (error) {
+      console.error('Error fetching materials:', error);
+      res.status(500).json({ error: 'Failed to fetch materials' });
+    }
+  }
+);
+
+// Get product recipes
+app.get('/api/recipes/:productName',
+  authenticateToken,
+  async (req, res) => {
+    try {
+      const recipes = await dbAll(`
+        SELECT 
+          pr.*,
+          m.name as material_name,
+          m.unit_of_measure,
+          m.supplier
+        FROM product_recipes pr
+        JOIN materials m ON pr.material_id = m.id
+        WHERE pr.product_name = $1
+        ORDER BY pr.sequence_order
+      `, [req.params.productName]);
+      res.json(recipes);
+    } catch (error) {
+      console.error('Error fetching recipes:', error);
+      res.status(500).json({ error: 'Failed to fetch recipes' });
+    }
+  }
+);
+
+// Update workflow progress
+app.post('/api/orders/:id/workflow/:stage',
+  authenticateToken,
+  async (req, res) => {
+    const { id: orderId, stage } = req.params;
+    const { status, notes, data } = req.body;
+    
+    try {
+      await dbRun(`
+        INSERT INTO workflow_progress (order_id, stage, status, started_at, operator_id, notes, data)
+        VALUES ($1, $2, $3, NOW(), $4, $5, $6)
+        ON CONFLICT (order_id, stage) 
+        DO UPDATE SET 
+          status = $3,
+          updated_at = NOW(),
+          operator_id = $4,
+          notes = $5,
+          data = $6
+      `, [orderId, stage, status, req.user.id, notes, JSON.stringify(data)]);
+      
+      res.json({ success: true });
+    } catch (error) {
+      console.error('Error updating workflow progress:', error);
+      res.status(500).json({ error: 'Failed to update workflow progress' });
+    }
+  }
+);
+
+// Enhanced Workflow Action Endpoints
+
+// Prepare materials for an order
+app.post('/api/orders/:id/prepare-materials',
+  authenticateToken,
+  async (req, res) => {
+    const orderId = req.params.id;
+    const { materials, checked_by, notes } = req.body;
+    
+    try {
+      // Update workflow progress
+      await dbRun(`
+        INSERT INTO workflow_progress (order_id, stage, status, started_at, operator_id, notes, data)
+        VALUES ($1, 'materials', 'completed', NOW(), $2, $3, $4)
+        ON CONFLICT (order_id, stage) DO UPDATE SET
+          status = 'completed',
+          completed_at = NOW(),
+          operator_id = $2,
+          notes = $3,
+          data = $4
+      `, [orderId, req.user.id, notes, JSON.stringify({ materials, checked_by })]);
+      
+      // Update order status
+      await dbRun(`
+        UPDATE production_orders 
+        SET material_check_completed = true, updated_at = NOW()
+        WHERE id = $1
+      `, [orderId]);
+      
+      res.json({ success: true, message: 'Materials prepared successfully' });
+    } catch (error) {
+      console.error('Error preparing materials:', error);
+      res.status(500).json({ error: 'Failed to prepare materials' });
+    }
+  }
+);
+
+// Start setup for an order
+app.post('/api/orders/:id/start-setup',
+  authenticateToken,
+  async (req, res) => {
+    const orderId = req.params.id;
+    const { machine_id, setup_type, previous_product } = req.body;
+    
+    try {
+      // Update workflow progress
+      await dbRun(`
+        INSERT INTO workflow_progress (order_id, stage, status, started_at, operator_id, data)
+        VALUES ($1, 'setup', 'in_progress', NOW(), $2, $3)
+        ON CONFLICT (order_id, stage) DO UPDATE SET
+          status = 'in_progress',
+          started_at = NOW(),
+          operator_id = $2,
+          data = $3
+      `, [orderId, req.user.id, JSON.stringify({ machine_id, setup_type, previous_product })]);
+      
+      res.json({ success: true, message: 'Setup started successfully' });
+    } catch (error) {
+      console.error('Error starting setup:', error);
+      res.status(500).json({ error: 'Failed to start setup' });
+    }
+  }
+);
+
+// Complete setup for an order
+app.post('/api/orders/:id/complete-setup',
+  authenticateToken,
+  async (req, res) => {
+    const orderId = req.params.id;
+    const { checklist, setup_time, notes } = req.body;
+    
+    try {
+      // Update workflow progress
+      await dbRun(`
+        UPDATE workflow_progress 
+        SET status = 'completed', completed_at = NOW(), notes = $3, data = $4
+        WHERE order_id = $1 AND stage = 'setup'
+      `, [orderId, req.user.id, notes, JSON.stringify({ checklist, setup_time })]);
+      
+      // Update order status
+      await dbRun(`
+        UPDATE production_orders 
+        SET setup_complete_time = NOW(), updated_at = NOW()
+        WHERE id = $1
+      `, [orderId]);
+      
+      res.json({ success: true, message: 'Setup completed successfully' });
+    } catch (error) {
+      console.error('Error completing setup:', error);
+      res.status(500).json({ error: 'Failed to complete setup' });
+    }
+  }
+);
+
+// Start enhanced production for an order
+app.post('/api/orders/:id/start-enhanced',
+  authenticateToken,
+  async (req, res) => {
+    const orderId = req.params.id;
+    const { batch_number, environmental_conditions, production_parameters } = req.body;
+    
+    try {
+      // Update workflow progress
+      await dbRun(`
+        INSERT INTO workflow_progress (order_id, stage, status, started_at, operator_id, data)
+        VALUES ($1, 'production', 'in_progress', NOW(), $2, $3)
+        ON CONFLICT (order_id, stage) DO UPDATE SET
+          status = 'in_progress',
+          started_at = NOW(),
+          operator_id = $2,
+          data = $3
+      `, [orderId, req.user.id, JSON.stringify({ batch_number, environmental_conditions, production_parameters })]);
+      
+      // Update order status
+      await dbRun(`
+        UPDATE production_orders 
+        SET status = 'in_progress', start_time = NOW(), workflow_stage = 'in_progress', updated_at = NOW()
+        WHERE id = $1
+      `, [orderId]);
+      
+      res.json({ success: true, message: 'Enhanced production started successfully' });
+    } catch (error) {
+      console.error('Error starting enhanced production:', error);
+      res.status(500).json({ error: 'Failed to start enhanced production' });
+    }
+  }
+);
+
+// Record quality check for an order
+app.post('/api/orders/:id/quality-check',
+  authenticateToken,
+  async (req, res) => {
+    const orderId = req.params.id;
+    const { quality_checks } = req.body;
+    
+    try {
+      // Save quality results
+      for (const check of quality_checks) {
+        await dbRun(`
+          INSERT INTO quality_results (order_id, checkpoint_id, measured_value, pass_fail, measured_at, measured_by, notes)
+          VALUES ($1, $2, $3, $4, NOW(), $5, $6)
+          ON CONFLICT (order_id, checkpoint_id) DO UPDATE SET
+            measured_value = $3,
+            pass_fail = $4,
+            measured_at = NOW(),
+            measured_by = $5,
+            notes = $6
+        `, [orderId, check.checkpoint_id, check.measured_value, check.pass_fail, req.user.id, check.notes]);
+      }
+      
+      // Update workflow progress
+      await dbRun(`
+        INSERT INTO workflow_progress (order_id, stage, status, started_at, operator_id, data)
+        VALUES ($1, 'quality', 'completed', NOW(), $2, $3)
+        ON CONFLICT (order_id, stage) DO UPDATE SET
+          status = 'completed',
+          completed_at = NOW(),
+          operator_id = $2,
+          data = $3
+      `, [orderId, req.user.id, JSON.stringify({ quality_checks })]);
+      
+      res.json({ success: true, message: 'Quality checks recorded successfully' });
+    } catch (error) {
+      console.error('Error recording quality checks:', error);
+      res.status(500).json({ error: 'Failed to record quality checks' });
+    }
+  }
+);
+
+// Complete enhanced production for an order
+app.post('/api/orders/:id/complete-enhanced',
+  authenticateToken,
+  async (req, res) => {
+    const orderId = req.params.id;
+    const { actual_quantity, quality_approved, completion_notes, final_checks } = req.body;
+    
+    try {
+      // Update workflow progress
+      await dbRun(`
+        INSERT INTO workflow_progress (order_id, stage, status, completed_at, operator_id, notes, data)
+        VALUES ($1, 'completion', 'completed', NOW(), $2, $3, $4)
+        ON CONFLICT (order_id, stage) DO UPDATE SET
+          status = 'completed',
+          completed_at = NOW(),
+          operator_id = $2,
+          notes = $3,
+          data = $4
+      `, [orderId, req.user.id, completion_notes, JSON.stringify({ actual_quantity, quality_approved, final_checks })]);
+      
+      // Complete the order
+      await dbRun(`
+        UPDATE production_orders 
+        SET 
+          status = 'completed',
+          actual_quantity = $2,
+          quality_approved = $3,
+          complete_time = NOW(),
+          workflow_stage = 'completed',
+          updated_at = NOW()
+        WHERE id = $1
+      `, [orderId, actual_quantity, quality_approved]);
+      
+      res.json({ success: true, message: 'Order completed successfully' });
+    } catch (error) {
+      console.error('Error completing enhanced production:', error);
+      res.status(500).json({ error: 'Failed to complete enhanced production' });
+    }
+  }
+);
+
+// ================================
 // PRODUCTION DATA API ENDPOINTS
 // ================================
 

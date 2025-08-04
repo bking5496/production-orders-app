@@ -722,3 +722,169 @@ New WebSocket connection attempt
 🔓 Client released back to pool
 New WebSocket connection attempt
 ✅ WebSocket authenticated: admin (admin)
+📺 admin subscribed to: [ 'dashboard', 'orders', 'machines', 'production', 'alerts' ]
+✅ New PostgreSQL client connected
+🔗 Client acquired from pool
+✅ New PostgreSQL client connected
+🔗 Client acquired from pool
+🔓 Client released back to pool
+✅ New PostgreSQL client connected
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+✅ New PostgreSQL client connected
+🔗 Client acquired from pool
+🔓 Client released back to pool
+✅ New PostgreSQL client connected
+🔗 Client acquired from pool
+✅ New PostgreSQL client connected
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+📺 admin subscribed to: [ 'machines', 'production' ]
+✅ New PostgreSQL client connected
+🔗 Client acquired from pool
+✅ New PostgreSQL client connected
+🔗 Client acquired from pool
+✅ New PostgreSQL client connected
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔗 Client acquired from pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔗 Client acquired from pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+🔌 WebSocket disconnected: admin
+🔗 Client acquired from pool
+🔗 Client acquired from pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+New WebSocket connection attempt
+✅ WebSocket authenticated: admin (admin)
+🔗 Client acquired from pool
+❌ Transaction error: Error: Order not found or not in correct stage
+    at /home/production-app/production-orders-app/enhanced-workflow-endpoints.js:36:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async Object.dbTransaction [as transaction] (/home/production-app/production-orders-app/postgresql/db-postgresql.js:135:24)
+    at async /home/production-app/production-orders-app/enhanced-workflow-endpoints.js:22:7
+🔓 Client released back to pool
+Materials preparation error: Error: Order not found or not in correct stage
+    at /home/production-app/production-orders-app/enhanced-workflow-endpoints.js:36:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async Object.dbTransaction [as transaction] (/home/production-app/production-orders-app/postgresql/db-postgresql.js:135:24)
+    at async /home/production-app/production-orders-app/enhanced-workflow-endpoints.js:22:7
+🔗 Client acquired from pool
+❌ Transaction error: Error: Order not found or not in correct stage
+    at /home/production-app/production-orders-app/enhanced-workflow-endpoints.js:36:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async Object.dbTransaction [as transaction] (/home/production-app/production-orders-app/postgresql/db-postgresql.js:135:24)
+    at async /home/production-app/production-orders-app/enhanced-workflow-endpoints.js:22:7
+🔓 Client released back to pool
+Materials preparation error: Error: Order not found or not in correct stage
+    at /home/production-app/production-orders-app/enhanced-workflow-endpoints.js:36:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async Object.dbTransaction [as transaction] (/home/production-app/production-orders-app/postgresql/db-postgresql.js:135:24)
+    at async /home/production-app/production-orders-app/enhanced-workflow-endpoints.js:22:7
+✅ New PostgreSQL client connected
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+✅ New PostgreSQL client connected
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+❌ Database run error: error: could not determine data type of parameter $4
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async dbRun (/home/production-app/production-orders-app/postgresql/db-postgresql.js:91:24) {
+  length: 124,
+  severity: 'ERROR',
+  code: '42P18',
+  detail: undefined,
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'postgres.c',
+  line: '740',
+  routine: 'pg_analyze_and_rewrite_varparams'
+}
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔌 WebSocket disconnected: admin
+🔗 Client acquired from pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+✅ New PostgreSQL client connected
+🔗 Client acquired from pool
+🔓 Client released back to pool
+New WebSocket connection attempt
+✅ WebSocket authenticated: admin (admin)
