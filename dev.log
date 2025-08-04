@@ -90,3 +90,29 @@ Malformed URI sequence in request URL
       at Server.emit (node:events:524:28)
       at parserOnIncoming (node:_http_server:1141:12)
       at HTTPParser.parserOnHeadersComplete (node:_http_common:118:17)
+The request url "/home/production-app/production-orders-app/package.json" is outside of Vite serving allow list.
+
+- /home/production-app/production-orders-app
+
+Refer to docs https://vite.dev/config/server-options.html#server-fs-allow for configurations and more details.
+
+Files in the public directory are served at the root path.
+Instead of /public/aws_keys.json, use /aws_keys.json.
+Files in the public directory are served at the root path.
+Instead of /public/aws_secrets.json, use /aws_secrets.json.
+Files in the public directory are served at the root path.
+Instead of /public/backup.zip, use /backup.zip.
+Files in the public directory are served at the root path.
+Instead of /public/bucket.json, use /bucket.json.
+Files in the public directory are served at the root path.
+Instead of /public/client/planinfo, use /client/planinfo.
+Files in the public directory are served at the root path.
+Instead of /public/config.js, use /config.js.
+Files in the public directory are served at the root path.
+Instead of /public/db.sql, use /db.sql.
+Files in the public directory are served at the root path.
+Instead of /public/db_dump.sql, use /db_dump.sql.
+Files in the public directory are served at the root path.
+Instead of /public/env.js, use /env.js.
+Files in the public directory are served at the root path.
+Instead of /public/js/main.js, use /js/main.js.
