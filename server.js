@@ -1156,7 +1156,7 @@ app.post('/api/orders/:id/start',
           machine_id, 
           operator_id || req.user.id, 
           batch_number || null, 
-          start_notes ? String(start_notes) : null, 
+          start_notes || null, 
           parseInt(id)
         ]
       );
