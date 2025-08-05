@@ -1581,16 +1581,16 @@ export default function ProductionOrdersSystem() {
                     <div className="space-y-2 text-sm">
                       <div className="flex justify-between">
                         <span className="font-medium text-gray-700">Type:</span>
-                        <span className="font-bold text-orange-700">{selectedOrder.waste_type || 'Material'}</span>
+                        <span className="font-bold text-orange-700">{typeof selectedOrder.waste_type === 'string' ? selectedOrder.waste_type : 'Material'}</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="font-medium text-gray-700">Quantity:</span>
-                        <span className="font-bold text-red-600">{selectedOrder.waste_quantity}</span>
+                        <span className="font-bold text-red-600">{typeof selectedOrder.waste_quantity === 'number' || typeof selectedOrder.waste_quantity === 'string' ? selectedOrder.waste_quantity : '0'}</span>
                       </div>
                       {selectedOrder.waste_notes && (
                         <div>
                           <span className="font-medium text-gray-700">Notes:</span>
-                          <p className="text-gray-900 mt-1">{selectedOrder.waste_notes}</p>
+                          <p className="text-gray-900 mt-1">{typeof selectedOrder.waste_notes === 'string' ? selectedOrder.waste_notes : 'No waste notes available'}</p>
                         </div>
                       )}
                     </div>
@@ -1607,7 +1607,7 @@ export default function ProductionOrdersSystem() {
                 <h3 className="text-lg font-bold text-green-600 mb-4 border-b border-green-200 pb-2">Production Notes</h3>
                 {selectedOrder.notes ? (
                   <div className="bg-green-50 border border-green-200 rounded-lg p-3 mb-6">
-                    <p className="text-gray-900 text-sm whitespace-pre-wrap leading-relaxed">{selectedOrder.notes}</p>
+                    <p className="text-gray-900 text-sm whitespace-pre-wrap leading-relaxed">{typeof selectedOrder.notes === 'string' ? selectedOrder.notes : 'No notes available'}</p>
                   </div>
                 ) : (
                   <div className="text-center text-gray-500 italic py-4 mb-6">
@@ -1620,7 +1620,7 @@ export default function ProductionOrdersSystem() {
                   <div className="mb-6">
                     <h4 className="text-md font-bold text-purple-600 mb-2 border-b border-purple-200 pb-1">Specifications</h4>
                     <div className="bg-purple-50 border border-purple-200 rounded-lg p-3">
-                      <p className="text-gray-900 text-sm whitespace-pre-wrap">{selectedOrder.specifications}</p>
+                      <p className="text-gray-900 text-sm whitespace-pre-wrap">{typeof selectedOrder.specifications === 'string' ? selectedOrder.specifications : 'No specifications available'}</p>
                     </div>
                   </div>
                 )}
@@ -1630,7 +1630,7 @@ export default function ProductionOrdersSystem() {
                   <div className="mb-6">
                     <h4 className="text-md font-bold text-indigo-600 mb-2 border-b border-indigo-200 pb-1">Customer Info</h4>
                     <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-3">
-                      <p className="text-gray-900 text-sm whitespace-pre-wrap">{selectedOrder.customer_info}</p>
+                      <p className="text-gray-900 text-sm whitespace-pre-wrap">{typeof selectedOrder.customer_info === 'string' ? selectedOrder.customer_info : 'No customer info available'}</p>
                     </div>
                   </div>
                 )}
