@@ -3,7 +3,7 @@ import {
   BarChart3, TrendingUp, TrendingDown, Download, RefreshCw, Calendar, 
   Clock, Target, Activity, AlertTriangle, CheckCircle, Package, Users,
   Factory, PieChart, LineChart, Filter, Search, Settings, Play, Pause,
-  FileText, Eye, Edit3, Save
+  FileText, Eye, Edit3, Save, X
 } from 'lucide-react';
 import API from '../core/api';
 import Time from '../core/time';
@@ -630,10 +630,25 @@ export default function AnalyticsPage() {
 
   if (loading && Object.keys(analytics).length === 0) {
     return (
-      <div className="p-6 text-center">
-        <div className="flex items-center justify-center gap-2 text-gray-500">
-          <RefreshCw className="w-5 h-5 animate-spin" />
-          Loading analytics...
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center space-y-4">
+          <div className="relative">
+            <RefreshCw className="w-12 h-12 text-blue-600 animate-spin mx-auto" />
+            <div className="absolute inset-0 w-12 h-12 border-4 border-blue-200 rounded-full animate-ping mx-auto"></div>
+          </div>
+          <div className="space-y-2">
+            <h3 className="text-lg font-semibold text-gray-800">Loading Analytics Dashboard</h3>
+            <p className="text-gray-600 max-w-md">
+              Gathering insights from your production data...
+            </p>
+            <div className="flex items-center justify-center gap-2 text-sm text-gray-500">
+              <div className="flex space-x-1">
+                <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce"></div>
+                <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
+                <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -641,111 +656,184 @@ export default function AnalyticsPage() {
 
   return (
     <div className="p-6 space-y-6 bg-gray-50 min-h-screen">
-      {/* Notification */}
+      {/* Enhanced Notification */}
       {notification && (
-        <div className={`fixed top-4 right-4 p-4 rounded-lg shadow-lg z-50 ${
+        <div className={`fixed top-4 right-4 p-4 rounded-lg shadow-xl z-50 transform transition-all duration-300 ease-in-out ${
           notification.type === 'success' ? 'bg-green-100 text-green-800 border border-green-200' :
           notification.type === 'danger' ? 'bg-red-100 text-red-800 border border-red-200' :
           notification.type === 'warning' ? 'bg-yellow-100 text-yellow-800 border border-yellow-200' :
           'bg-blue-100 text-blue-800 border border-blue-200'
         }`}>
-          {notification.message}
+          <div className="flex items-center gap-3">
+            <div className={`p-1 rounded-full ${
+              notification.type === 'success' ? 'bg-green-200' :
+              notification.type === 'danger' ? 'bg-red-200' :
+              notification.type === 'warning' ? 'bg-yellow-200' :
+              'bg-blue-200'
+            }`}>
+              {notification.type === 'success' && <CheckCircle className="w-4 h-4 text-green-600" />}
+              {notification.type === 'danger' && <AlertTriangle className="w-4 h-4 text-red-600" />}
+              {notification.type === 'warning' && <AlertTriangle className="w-4 h-4 text-yellow-600" />}
+              {(!notification.type || notification.type === 'info') && <RefreshCw className="w-4 h-4 text-blue-600" />}
+            </div>
+            <span className="font-medium">{notification.message}</span>
+            <button 
+              onClick={() => setNotification(null)}
+              className="ml-2 text-gray-400 hover:text-gray-600 transition-colors"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
         </div>
       )}
 
-      {/* Header */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div>
-          <div className="flex items-center gap-3">
-            <h1 className="text-3xl font-bold text-gray-800">Analytics & Reports</h1>
-            <WebSocketStatusCompact />
+      {/* Enhanced Header */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+          <div className="flex-1">
+            <div className="flex items-center gap-4 mb-2">
+              <div className="p-2 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg shadow-md">
+                <BarChart3 className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <h1 className="text-3xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">
+                  Analytics & Reports
+                </h1>
+                <p className="text-gray-600 text-sm">Production insights and real-time performance metrics</p>
+              </div>
+              <WebSocketStatusCompact />
+            </div>
+            
+            {/* Quick Stats Preview */}
+            <div className="flex gap-4 mt-3">
+              <div className="flex items-center gap-2 text-sm">
+                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                <span className="text-gray-600">{metrics.totalOrders} Total Orders</span>
+              </div>
+              <div className="flex items-center gap-2 text-sm">
+                <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                <span className="text-gray-600">{metrics.activeMachines} Active Machines</span>
+              </div>
+              <div className="flex items-center gap-2 text-sm">
+                <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+                <span className="text-gray-600">{metrics.completionRate}% Completion Rate</span>
+              </div>
+            </div>
           </div>
-          <p className="text-gray-600 mt-1">Production insights and real-time performance metrics</p>
-        </div>
-        
-        <div className="flex items-center gap-4">
-          <Button 
-            onClick={handleRefresh}
-            disabled={refreshing}
-            variant="outline"
-          >
-            <RefreshCw className={`w-4 h-4 mr-2 ${refreshing ? 'animate-spin' : ''}`} />
-            Refresh
-          </Button>
           
-          <div className="flex gap-2">
-            <Button onClick={() => exportData('csv')} variant="outline" size="sm">
-              <Download className="w-4 h-4 mr-2" />
-              CSV
+          <div className="flex items-center gap-3">
+            <Button 
+              onClick={handleRefresh}
+              disabled={refreshing}
+              variant="outline"
+              className="shadow-sm hover:shadow-md transition-shadow"
+            >
+              <RefreshCw className={`w-4 h-4 mr-2 ${refreshing ? 'animate-spin' : ''}`} />
+              {refreshing ? 'Updating...' : 'Refresh'}
             </Button>
-            <Button onClick={() => exportData('json')} variant="outline" size="sm">
-              <Download className="w-4 h-4 mr-2" />
-              JSON
-            </Button>
+            
+            <div className="flex gap-2">
+              <Button 
+                onClick={() => exportData('csv')} 
+                variant="outline" 
+                size="sm"
+                className="shadow-sm hover:shadow-md transition-shadow"
+              >
+                <Download className="w-4 h-4 mr-2" />
+                CSV
+              </Button>
+              <Button 
+                onClick={() => exportData('json')} 
+                variant="outline" 
+                size="sm"
+                className="shadow-sm hover:shadow-md transition-shadow"
+              >
+                <Download className="w-4 h-4 mr-2" />
+                JSON
+              </Button>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Date Range Filter */}
-      <Card className="p-6">
-        <div className="flex flex-col md:flex-row items-start md:items-end gap-4">
-          <div className="flex items-center gap-2">
-            <Calendar className="w-5 h-5 text-gray-500" />
-            <span className="font-medium text-gray-700">Date Range:</span>
+      {/* Enhanced Date Range Filter */}
+      <Card className="p-6 shadow-sm">
+        <div className="flex flex-col lg:flex-row items-start lg:items-center gap-6">
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-blue-50 rounded-lg">
+              <Calendar className="w-5 h-5 text-blue-600" />
+            </div>
+            <div>
+              <span className="font-semibold text-gray-800">Date Range Filter</span>
+              <p className="text-xs text-gray-500">Select reporting period</p>
+            </div>
           </div>
           
-          <div className="flex gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Start Date</label>
+          <div className="flex flex-col sm:flex-row gap-4">
+            <div className="space-y-1">
+              <label className="block text-sm font-medium text-gray-700">Start Date</label>
               <input 
                 type="date" 
                 value={dateRange.start_date}
                 onChange={(e) => setDateRange({...dateRange, start_date: e.target.value})}
-                className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors shadow-sm"
               />
             </div>
             
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">End Date</label>
+            <div className="space-y-1">
+              <label className="block text-sm font-medium text-gray-700">End Date</label>
               <input 
                 type="date" 
                 value={dateRange.end_date}
                 onChange={(e) => setDateRange({...dateRange, end_date: e.target.value})}
-                className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors shadow-sm"
               />
             </div>
           </div>
           
-          <div className="text-sm text-gray-500">
-            Period: {Math.ceil((new Date(dateRange.end_date) - new Date(dateRange.start_date)) / (1000 * 60 * 60 * 24))} days
+          <div className="flex flex-col items-start lg:items-end gap-2">
+            <div className="px-3 py-2 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200">
+              <div className="text-sm font-medium text-blue-800">
+                {Math.ceil((new Date(dateRange.end_date) - new Date(dateRange.start_date)) / (1000 * 60 * 60 * 24))} days
+              </div>
+              <div className="text-xs text-blue-600">Analysis Period</div>
+            </div>
+            
+            {refreshing && (
+              <div className="flex items-center gap-2 text-xs text-blue-600">
+                <RefreshCw className="w-3 h-3 animate-spin" />
+                <span>Updating data...</span>
+              </div>
+            )}
           </div>
         </div>
       </Card>
 
-      {/* Navigation Tabs */}
-      <Card className="p-1">
-        <div className="flex gap-1">
+      {/* Enhanced Navigation Tabs with Better UX */}
+      <Card className="p-1 shadow-sm">
+        <div className="flex gap-1 overflow-x-auto scrollbar-hide">
           {[
-            { id: 'overview', label: 'Overview', icon: BarChart3 },
-            { id: 'orders', label: 'Order Analytics', icon: Package },
-            { id: 'machines', label: 'Machine Analytics', icon: Factory },
-            { id: 'labor', label: 'Labor Analytics', icon: Users },
-            { id: 'performance', label: 'Performance', icon: TrendingUp },
-            { id: 'downtime', label: 'Downtime Report', icon: AlertTriangle },
-            { id: 'waste-reports', label: 'Waste Reports', icon: FileText }
+            { id: 'overview', label: 'Overview', icon: BarChart3, color: 'blue' },
+            { id: 'orders', label: 'Order Analytics', icon: Package, color: 'green' },
+            { id: 'machines', label: 'Machine Analytics', icon: Factory, color: 'purple' },
+            { id: 'labor', label: 'Labor Analytics', icon: Users, color: 'indigo' },
+            { id: 'performance', label: 'Performance', icon: TrendingUp, color: 'emerald' },
+            { id: 'downtime', label: 'Downtime Report', icon: AlertTriangle, color: 'red' },
+            { id: 'waste-reports', label: 'Waste Reports', icon: FileText, color: 'orange' }
           ].map(tab => {
             const Icon = tab.icon;
+            const isActive = activeTab === tab.id;
             return (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  activeTab === tab.id
-                    ? 'bg-blue-600 text-white'
-                    : 'text-gray-600 hover:bg-gray-100'
+                className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 whitespace-nowrap ${
+                  isActive
+                    ? `bg-${tab.color}-600 text-white shadow-md scale-105`
+                    : `text-gray-600 hover:bg-${tab.color}-50 hover:text-${tab.color}-700 hover:shadow-sm`
                 }`}
               >
-                <Icon className="w-4 h-4" />
+                <Icon className={`w-4 h-4 ${isActive ? 'animate-pulse' : ''}`} />
                 {tab.label}
               </button>
             );
