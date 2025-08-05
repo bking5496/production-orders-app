@@ -74,6 +74,99 @@ const PRIORITY_LEVELS = {
   urgent: { label: 'Urgent', color: 'bg-red-100 text-red-800 border-red-200' }
 };
 
+// Downtime History Component
+const DowntimeHistory = ({ orderId }) => {
+  const [downtimeData, setDowntimeData] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (orderId) {
+      loadDowntimeHistory();
+    }
+  }, [orderId]);
+
+  const loadDowntimeHistory = async () => {
+    try {
+      setLoading(true);
+      const response = await API.get(`/orders/${orderId}/downtime`);
+      setDowntimeData(response);
+    } catch (error) {
+      console.error('Failed to load downtime history:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="text-center py-4">
+        <div className="text-gray-500">Loading downtime history...</div>
+      </div>
+    );
+  }
+
+  if (!downtimeData?.history || downtimeData.history.length === 0) {
+    return (
+      <div className="text-center text-gray-500 italic py-8">
+        <CheckCircle className="w-12 h-12 mx-auto mb-2 text-green-400" />
+        <p>No downtime events recorded</p>
+        <p className="text-xs mt-1">Production has been running smoothly</p>
+      </div>
+    );
+  }
+
+  const { history, summary } = downtimeData;
+
+  return (
+    <div className="space-y-4">
+      {/* Summary Stats */}
+      <div className="grid grid-cols-2 gap-4 text-center">
+        <div className="bg-red-50 p-3 rounded-lg">
+          <div className="text-2xl font-bold text-red-600">{summary.total_stops}</div>
+          <div className="text-xs text-red-700">Total Stops</div>
+        </div>
+        <div className="bg-orange-50 p-3 rounded-lg">
+          <div className="text-2xl font-bold text-orange-600">{Math.round(summary.total_downtime_minutes)}m</div>
+          <div className="text-xs text-orange-700">Total Downtime</div>
+        </div>
+      </div>
+
+      {/* Downtime Events */}
+      <div className="space-y-3 max-h-96 overflow-y-auto">
+        {history.map((event, index) => (
+          <div key={event.id || index} className="bg-gray-50 border rounded-lg p-3">
+            <div className="flex justify-between items-start mb-2">
+              <div className="flex items-center gap-2">
+                <Badge variant={event.end_time ? 'success' : 'warning'} size="sm">
+                  {event.end_time ? 'Resolved' : 'Active'}
+                </Badge>
+                <span className="text-sm font-medium text-gray-700">{event.category}</span>
+              </div>
+              <div className="text-xs text-gray-500">
+                {event.duration ? `${Math.round(event.duration)}m` : 'Active'}
+              </div>
+            </div>
+            
+            <div className="text-sm space-y-1">
+              <div><strong>Started:</strong> {new Date(event.start_time).toLocaleString()}</div>
+              {event.end_time && (
+                <div><strong>Ended:</strong> {new Date(event.end_time).toLocaleString()}</div>
+              )}
+              <div><strong>Reason:</strong> {typeof event.reason === 'string' ? event.reason : 'No reason provided'}</div>
+              {event.notes && (
+                <div><strong>Notes:</strong> {typeof event.notes === 'string' ? event.notes : 'No additional notes'}</div>
+              )}
+              {event.resolved_by_name && (
+                <div><strong>Resolved By:</strong> {event.resolved_by_name}</div>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
 // Modern Production Orders Component
 export default function ProductionOrdersSystem() {
   // State Management - Using React 19 patterns
@@ -1541,39 +1634,9 @@ export default function ProductionOrdersSystem() {
 
               {/* Middle Column - Downtime & Issues */}
               <div className="bg-white rounded-lg border border-gray-200 p-4">
-                <h3 className="text-lg font-bold text-red-600 mb-4 border-b border-red-200 pb-2">Downtime & Issues</h3>
-                <div className="space-y-4">
-                  {selectedOrder.stop_time ? (
-                    <div className="bg-red-50 border border-red-200 rounded-lg p-3">
-                      <div className="flex justify-between items-center mb-2">
-                        <span className="font-bold text-red-700">Production Stopped</span>
-                        <span className="text-xs text-red-600">{selectedOrder.stop_time ? new Date(selectedOrder.stop_time).toLocaleDateString() : 'Unknown'}</span>
-                      </div>
-                      <div className="text-sm">
-                        <div className="mb-1"><strong>Time:</strong> {selectedOrder.stop_time ? new Date(selectedOrder.stop_time).toLocaleTimeString() : 'Unknown'}</div>
-                        <div><strong>Reason:</strong> {selectedOrder.stop_reason || 'No reason provided'}</div>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="text-center text-gray-500 italic py-8">
-                      No downtime events recorded
-                    </div>
-                  )}
-                  
-                  {selectedOrder.pause_time && (
-                    <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
-                      <div className="flex justify-between items-center mb-2">
-                        <span className="font-bold text-yellow-700">Production Paused</span>
-                        <span className="text-xs text-yellow-600">{selectedOrder.pause_time ? new Date(selectedOrder.pause_time).toLocaleDateString() : 'Unknown'}</span>
-                      </div>
-                      <div className="text-sm">
-                        <div className="mb-1"><strong>Time:</strong> {selectedOrder.pause_time ? new Date(selectedOrder.pause_time).toLocaleTimeString() : 'Unknown'}</div>
-                        <div><strong>Reason:</strong> {selectedOrder.pause_reason || 'No reason provided'}</div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-
+                <h3 className="text-lg font-bold text-red-600 mb-4 border-b border-red-200 pb-2">Downtime History & Issues</h3>
+                <DowntimeHistory orderId={selectedOrder.id} />
+                
                 {/* Waste Information */}
                 <h4 className="text-lg font-bold text-orange-600 mt-6 mb-4 border-b border-orange-200 pb-2">Waste Management</h4>
                 {selectedOrder.waste_quantity ? (

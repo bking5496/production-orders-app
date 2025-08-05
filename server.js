@@ -1369,6 +1369,21 @@ app.post('/api/orders/:id/stop',
         return res.status(400).json({ error: 'Order not found or cannot be stopped' });
       }
       
+      // Create comprehensive downtime record
+      await client.query(
+        `INSERT INTO production_stops (
+          order_id, reason, category, notes, start_time, 
+          operator_id, supervisor_notified, created_at
+        ) VALUES ($1, $2, $3, $4, NOW(), $5, true, NOW())`,
+        [
+          parseInt(id),
+          reason,
+          'Equipment', // Default category - can be enhanced with dropdown
+          stop_notes || notes || '',
+          req.user.id
+        ]
+      );
+      
       // Machine remains in_use during stop - only freed on completion
       // This allows the order to be resumed on the same machine
       
@@ -1612,14 +1627,23 @@ app.post('/api/orders/:id/resume',
           throw new Error('Order not found or not stopped/paused');
         }
         
-        // Update the latest stop record
-        await client.query(
+        // Update the latest stop record with detailed resolution info
+        const stopUpdateResult = await client.query(
           `UPDATE production_stops 
-           SET resolved_at = NOW(),
-               duration = EXTRACT(EPOCH FROM (NOW() - start_time)) / 60
-           WHERE order_id = $1 AND resolved_at IS NULL`,
-          [id]
+           SET end_time = NOW(),
+               resolved_at = NOW(),
+               duration = EXTRACT(EPOCH FROM (NOW() - start_time)) / 60,
+               resolved_by = $2
+           WHERE order_id = $1 AND end_time IS NULL
+           RETURNING id, duration, start_time`,
+          [id, req.user.id]
         );
+        
+        // Log downtime resolution details
+        if (stopUpdateResult.rows.length > 0) {
+          const downtimeRecord = stopUpdateResult.rows[0];
+          console.log(`Downtime resolved - Order: ${id}, Duration: ${Math.round(downtimeRecord.duration)} minutes, Stop ID: ${downtimeRecord.id}`);
+        }
         
         // Update machine status back to in_use
         await client.query(
@@ -1635,6 +1659,180 @@ app.post('/api/orders/:id/resume',
     } catch (error) {
       console.error('Resume production error:', error);
       res.status(500).json({ error: error.message || 'Database error' });
+    }
+  }
+);
+
+// Get downtime history for a specific order
+app.get('/api/orders/:id/downtime',
+  authenticateToken,
+  async (req, res) => {
+    const { id } = req.params;
+
+    try {
+      const downtimeHistory = await pool.query(
+        `SELECT 
+          ps.id,
+          ps.start_time,
+          ps.end_time,
+          ps.duration,
+          ps.reason,
+          ps.category,
+          ps.subcategory,
+          ps.notes,
+          ps.cost_impact,
+          ps.production_loss,
+          ps.supervisor_notified,
+          ps.created_at,
+          ps.resolved_at,
+          u1.username as operator_name,
+          u2.username as resolved_by_name,
+          po.order_number,
+          m.name as machine_name
+        FROM production_stops ps
+        LEFT JOIN users u1 ON ps.operator_id = u1.id
+        LEFT JOIN users u2 ON ps.resolved_by = u2.id
+        LEFT JOIN production_orders po ON ps.order_id = po.id
+        LEFT JOIN machines m ON po.machine_id = m.id
+        WHERE ps.order_id = $1
+        ORDER BY ps.start_time DESC`,
+        [id]
+      );
+
+      const summary = await pool.query(
+        `SELECT 
+          COUNT(*) as total_stops,
+          COUNT(CASE WHEN end_time IS NULL THEN 1 END) as active_stops,
+          COALESCE(SUM(duration), 0) as total_downtime_minutes,
+          COALESCE(AVG(duration), 0) as avg_downtime_minutes,
+          COALESCE(SUM(cost_impact), 0) as total_cost_impact,
+          COALESCE(SUM(production_loss), 0) as total_production_loss
+        FROM production_stops 
+        WHERE order_id = $1`,
+        [id]
+      );
+
+      res.json({
+        history: downtimeHistory.rows,
+        summary: summary.rows[0]
+      });
+    } catch (error) {
+      console.error('Get downtime history error:', error);
+      res.status(500).json({ error: 'Failed to get downtime history' });
+    }
+  }
+);
+
+// Get comprehensive downtime report with analytics
+app.get('/api/reports/downtime',
+  authenticateToken,
+  async (req, res) => {
+    const { 
+      start_date = '2024-01-01', 
+      end_date = new Date().toISOString().split('T')[0],
+      machine_id,
+      category 
+    } = req.query;
+
+    try {
+      let whereClause = 'WHERE ps.start_time >= $1 AND ps.start_time <= $2';
+      let params = [start_date + ' 00:00:00', end_date + ' 23:59:59'];
+      let paramIndex = 3;
+
+      if (machine_id) {
+        whereClause += ` AND m.id = $${paramIndex}`;
+        params.push(machine_id);
+        paramIndex++;
+      }
+
+      if (category) {
+        whereClause += ` AND ps.category = $${paramIndex}`;
+        params.push(category);
+        paramIndex++;
+      }
+
+      // Get detailed records
+      const records = await pool.query(
+        `SELECT 
+          ps.id,
+          ps.start_time,
+          ps.end_time,
+          ps.duration,
+          ps.reason,
+          ps.category,
+          ps.subcategory,
+          ps.notes,
+          ps.cost_impact,
+          ps.production_loss,
+          ps.supervisor_notified,
+          ps.created_at,
+          ps.resolved_at,
+          po.order_number,
+          m.name as machine_name,
+          u1.username as stopped_by,
+          u2.username as resolved_by,
+          CASE WHEN ps.end_time IS NULL THEN 'Active' ELSE 'Resolved' END as status
+        FROM production_stops ps
+        LEFT JOIN production_orders po ON ps.order_id = po.id
+        LEFT JOIN machines m ON po.machine_id = m.id
+        LEFT JOIN users u1 ON ps.operator_id = u1.id
+        LEFT JOIN users u2 ON ps.resolved_by = u2.id
+        ${whereClause}
+        ORDER BY ps.start_time DESC`,
+        params
+      );
+
+      // Get summary statistics
+      const summary = await pool.query(
+        `SELECT 
+          COUNT(*) as total_stops,
+          COUNT(CASE WHEN ps.end_time IS NULL THEN 1 END) as active_stops,
+          COUNT(CASE WHEN ps.end_time IS NOT NULL THEN 1 END) as resolved_stops,
+          COALESCE(SUM(ps.duration), 0) as total_downtime_minutes,
+          COALESCE(ROUND(SUM(ps.duration) / 60.0, 2), 0) as total_downtime_hours,
+          COALESCE(ROUND(AVG(ps.duration), 2), 0) as average_downtime_minutes,
+          COALESCE(SUM(ps.cost_impact), 0) as total_cost_impact,
+          COALESCE(SUM(ps.production_loss), 0) as total_production_loss
+        FROM production_stops ps
+        LEFT JOIN production_orders po ON ps.order_id = po.id
+        LEFT JOIN machines m ON po.machine_id = m.id
+        ${whereClause}`,
+        params
+      );
+
+      // Get category breakdown
+      const categoryBreakdown = await pool.query(
+        `SELECT 
+          ps.category,
+          COUNT(*) as count,
+          COALESCE(SUM(ps.duration), 0) as total_minutes,
+          COALESCE(ROUND(AVG(ps.duration), 2), 0) as avg_minutes
+        FROM production_stops ps
+        LEFT JOIN production_orders po ON ps.order_id = po.id
+        LEFT JOIN machines m ON po.machine_id = m.id
+        ${whereClause}
+        GROUP BY ps.category
+        ORDER BY total_minutes DESC`,
+        params
+      );
+
+      const categoryData = {};
+      categoryBreakdown.rows.forEach(row => {
+        categoryData[row.category] = {
+          count: parseInt(row.count),
+          total_minutes: parseFloat(row.total_minutes),
+          avg_minutes: parseFloat(row.avg_minutes)
+        };
+      });
+
+      res.json({
+        records: records.rows,
+        summary: summary.rows[0],
+        category_breakdown: categoryData
+      });
+    } catch (error) {
+      console.error('Get downtime report error:', error);
+      res.status(500).json({ error: 'Failed to get downtime report' });
     }
   }
 );
