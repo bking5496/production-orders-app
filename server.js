@@ -1319,19 +1319,28 @@ app.post('/api/orders/:id/stop',
     try {
       await client.query('BEGIN');
       
+      // Get current order to access existing notes
+      const currentOrder = await client.query(
+        'SELECT notes FROM production_orders WHERE id = $1',
+        [parseInt(id)]
+      );
+      
+      const existingNotes = currentOrder.rows[0]?.notes || '';
+      const newNotes = notes ? `${existingNotes} | Stopped: ${notes}` : existingNotes;
+      
       // Update order status to stopped (so it can be resumed)
       const orderResult = await client.query(
         `UPDATE production_orders 
          SET status = 'stopped',
              stop_time = NOW(),
              stop_reason = $1,
-             notes = COALESCE(production_orders.notes, '') || CASE WHEN $2 IS NOT NULL THEN ' | Stopped: ' || $2 ELSE '' END,
+             notes = $2,
              updated_at = NOW()
          WHERE id = $3 AND status IN ('pending', 'in_progress')
          RETURNING *`,
         [
           reason || null,
-          notes || null, 
+          newNotes, 
           parseInt(id)
         ]
       );
