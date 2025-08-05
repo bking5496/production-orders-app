@@ -1321,8 +1321,8 @@ app.post('/api/orders/:id/stop',
          WHERE id = $3 AND status IN ('pending', 'in_progress')
          RETURNING *`,
         [
-          String(reason), 
-          notes ? String(notes) : null, 
+          reason || null,
+          notes || null, 
           parseInt(id)
         ]
       );
