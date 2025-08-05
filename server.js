@@ -2306,92 +2306,45 @@ app.get('/api/analytics/summary', authenticateToken, async (req, res) => {
   }
 });
 
-// Analytics downtime endpoint
+// Analytics downtime endpoint - Fixed for PostgreSQL
 app.get('/api/analytics/downtime', authenticateToken, async (req, res) => {
   try {
     const { start_date, end_date } = req.query;
     
-    // Get downtime data from production_stops
+    let whereClause = '';
+    let params = [];
+    
+    if (start_date && end_date) {
+      whereClause = 'WHERE start_time >= $1 AND start_time <= $2';
+      params = [start_date, end_date];
+    }
+    
+    // Get downtime data from production_stops using PostgreSQL
     const downtimeQuery = `
       SELECT 
         category,
         COUNT(*) as count,
-        SUM(duration) as total_duration
+        COALESCE(SUM(duration), 0) as total_duration
       FROM production_stops 
+      ${whereClause}
       GROUP BY category
+      ORDER BY total_duration DESC
     `;
     
-    const downtime = await new Promise((resolve, reject) => {
-      db.all(downtimeQuery, [], (err, results) => {
-        if (err) reject(err);
-        else resolve(results || []);
-      });
-    });
+    const result = await pool.query(downtimeQuery, params);
     
-    res.json({
-      downtime: downtime.reduce((acc, item) => {
-        acc[item.category] = {
-          count: item.count,
-          duration: item.total_duration || 0
-        };
-        return acc;
-      }, {})
-    });
-  } catch (error) {
-    console.error('Analytics downtime error:', error);
-    res.status(500).json({ error: 'Failed to fetch downtime analytics' });
-  }
-});
-
-// Reports downtime endpoint
-app.get('/api/reports/downtime', authenticateToken, async (req, res) => {
-  try {
-    const { start_date, end_date } = req.query;
-    
-    // Get detailed downtime records
-    const recordsQuery = `
-      SELECT 
-        ps.*,
-        po.order_number,
-        po.product_name
-      FROM production_stops ps
-      LEFT JOIN production_orders po ON ps.order_id = po.id
-      ORDER BY ps.start_time DESC
-      LIMIT 50
-    `;
-    
-    const records = await new Promise((resolve, reject) => {
-      db.all(recordsQuery, [], (err, results) => {
-        if (err) reject(err);
-        else resolve(results || []);
-      });
-    });
-    
-    // Generate summary
-    const summary = {
-      totalStops: records.length,
-      totalDuration: records.reduce((sum, record) => sum + (record.duration || 0), 0),
-      averageDuration: records.length > 0 ? Math.round(records.reduce((sum, record) => sum + (record.duration || 0), 0) / records.length) : 0
-    };
-    
-    const categoryBreakdown = records.reduce((acc, record) => {
-      const category = record.category || 'Other';
-      if (!acc[category]) {
-        acc[category] = { count: 0, duration: 0 };
-      }
-      acc[category].count++;
-      acc[category].duration += (record.duration || 0);
+    const downtimeData = result.rows.reduce((acc, item) => {
+      acc[item.category] = {
+        count: parseInt(item.count),
+        duration: parseFloat(item.total_duration) || 0
+      };
       return acc;
     }, {});
     
-    res.json({
-      records,
-      summary,
-      category_breakdown: categoryBreakdown
-    });
+    res.json(downtimeData);
   } catch (error) {
-    console.error('Downtime reports error:', error);
-    res.status(500).json({ error: 'Failed to fetch downtime reports' });
+    console.error('Analytics downtime error:', error);
+    res.status(500).json({ error: 'Failed to fetch downtime analytics' });
   }
 });
 
