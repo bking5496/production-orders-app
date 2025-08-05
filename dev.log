@@ -306,3 +306,7 @@ Instead of /public/js/main.js, use /js/main.js.
 1:18:22 PM [vite] (client) hmr update /src/js/components/orders.jsx
 1:18:35 PM [vite] (client) hmr update /src/js/components/orders.jsx
 1:19:00 PM [vite] (client) hmr update /src/js/components/orders.jsx
+1:23:57 PM [vite] (client) hmr update /src/js/components/error-boundary.jsx
+1:26:28 PM [vite] (client) hmr update /src/js/components/orders.jsx
+1:27:37 PM [vite] (client) hmr update /src/js/components/orders.jsx
+1:27:54 PM [vite] (client) hmr update /src/js/components/orders.jsx

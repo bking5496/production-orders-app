@@ -1175,8 +1175,8 @@ export default function ProductionOrdersSystem() {
                 </div>
                 <div>
                   <span className="text-blue-700">Priority:</span>
-                  <Badge className={getPriorityInfo(selectedOrder.priority).color}>
-                    {getPriorityInfo(selectedOrder.priority).label}
+                  <Badge className={getPriorityInfo(selectedOrder.priority)?.color || 'bg-gray-100 text-gray-800 border-gray-200'}>
+                    {getPriorityInfo(selectedOrder.priority)?.label || 'Normal'}
                   </Badge>
                 </div>
               </div>
@@ -1456,10 +1456,10 @@ export default function ProductionOrdersSystem() {
                   <p className="text-lg text-gray-700">Order #{selectedOrder.order_number || 'Unknown'}</p>
                 </div>
                 <div className="flex items-center gap-3">
-                  <Badge className={getOrderStatusInfo(selectedOrder.status)?.color + " px-3 py-1 text-sm font-semibold"}>
+                  <Badge className={(getOrderStatusInfo(selectedOrder.status)?.color || 'bg-gray-100 text-gray-800 border-gray-200') + " px-3 py-1 text-sm font-semibold"}>
                     {getOrderStatusInfo(selectedOrder.status)?.label || 'Unknown'}
                   </Badge>
-                  <Badge className={getPriorityInfo(selectedOrder.priority)?.color + " px-3 py-1 text-sm font-semibold"}>
+                  <Badge className={(getPriorityInfo(selectedOrder.priority)?.color || 'bg-gray-100 text-gray-800 border-gray-200') + " px-3 py-1 text-sm font-semibold"}>
                     {getPriorityInfo(selectedOrder.priority)?.label || 'Normal'}
                   </Badge>
                   <div className="text-right text-sm">
@@ -1479,7 +1479,7 @@ export default function ProductionOrdersSystem() {
                 <div className="space-y-3">
                   <div className="flex justify-between">
                     <span className="font-medium text-gray-700">Status:</span>
-                    <Badge className={getOrderStatusInfo(selectedOrder.status)?.color + " px-2 py-1 text-xs"}>
+                    <Badge className={(getOrderStatusInfo(selectedOrder.status)?.color || 'bg-gray-100 text-gray-800 border-gray-200') + " px-2 py-1 text-xs"}>
                       {getOrderStatusInfo(selectedOrder.status)?.label || 'Unknown'}
                     </Badge>
                   </div>

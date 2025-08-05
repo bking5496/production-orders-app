@@ -156,7 +156,7 @@ class ManufacturingErrorBoundary extends Component {
                     <div className="mt-2 p-3 bg-gray-100 rounded text-xs font-mono text-gray-700 overflow-auto max-h-32">
                       {this.state.error && this.state.error.toString()}
                       <br />
-                      {this.state.errorInfo.componentStack}
+                      {this.state.errorInfo?.componentStack || 'No component stack available'}
                     </div>
                   </details>
                 </div>
