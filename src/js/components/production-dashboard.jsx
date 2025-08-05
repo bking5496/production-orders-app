@@ -736,9 +736,21 @@ const OrderDetailsModal = ({ isOpen, onClose, orderId, orderNumber }) => {
                                         <div className="text-center">
                                             <Clock className="w-6 h-6 text-blue-500 mx-auto mb-2" />
                                             <div className="text-lg font-bold text-gray-900">
-                                                {orderDetails.order.start_time ? Time.formatSASTTime(orderDetails.order.start_time) : '--:--'}
+                                                {orderDetails.order.start_time ? 
+                                                    new Date(orderDetails.order.start_time).toLocaleString('en-ZA', {
+                                                        hour: '2-digit',
+                                                        minute: '2-digit',
+                                                        hour12: false
+                                                    }) : '--:--'}
                                             </div>
-                                            <div className="text-sm text-gray-600">Started</div>
+                                            <div className="text-sm text-gray-600">
+                                                {orderDetails.order.start_time ? 
+                                                    new Date(orderDetails.order.start_time).toLocaleDateString('en-ZA', {
+                                                        year: 'numeric',
+                                                        month: 'short',
+                                                        day: 'numeric'
+                                                    }) : 'Started'}
+                                            </div>
                                         </div>
                                     </div>
                                     <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-4 border border-green-100">
@@ -846,11 +858,25 @@ const OrderDetailsModal = ({ isOpen, onClose, orderId, orderNumber }) => {
                                                                 </span>
                                                             </div>
                                                             <div className="flex items-center gap-2 text-xs text-gray-500">
-                                                                <span className="font-mono">{Time.formatSASTTime(stop.start_time)}</span>
+                                                                <span className="font-mono">
+                                                                    {new Date(stop.start_time).toLocaleString('en-ZA', {
+                                                                        month: 'short',
+                                                                        day: 'numeric',
+                                                                        hour: '2-digit',
+                                                                        minute: '2-digit',
+                                                                        hour12: false
+                                                                    })}
+                                                                </span>
                                                                 {stop.end_time && (
                                                                     <>
                                                                         <span>→</span>
-                                                                        <span className="font-mono">{Time.formatSASTTime(stop.end_time)}</span>
+                                                                        <span className="font-mono">
+                                                                            {new Date(stop.end_time).toLocaleString('en-ZA', {
+                                                                                hour: '2-digit',
+                                                                                minute: '2-digit',
+                                                                                hour12: false
+                                                                            })}
+                                                                        </span>
                                                                     </>
                                                                 )}
                                                             </div>
