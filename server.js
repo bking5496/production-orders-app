@@ -1172,6 +1172,9 @@ app.post('/api/orders/:id/start',
         ['in_use', machine_id]
       );
       
+      // Sync all machine statuses to ensure consistency
+      await client.query('SELECT sync_machine_statuses()');
+      
       await client.query('COMMIT');
       
       const order = orderResult.rows[0];
@@ -2890,6 +2893,32 @@ app.get('/api/labour/today', authenticateToken, async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch today\'s labour data' });
   }
 });
+
+// Machine status synchronization endpoint
+app.post('/api/sync-machine-statuses',
+  authenticateToken,
+  requireRole(['admin', 'supervisor']),
+  async (req, res) => {
+    try {
+      const client = await pool.connect();
+      try {
+        await client.query('SELECT sync_machine_statuses()');
+        res.json({ 
+          success: true, 
+          message: 'Machine statuses synchronized successfully' 
+        });
+      } finally {
+        client.release();
+      }
+    } catch (error) {
+      console.error('Error syncing machine statuses:', error);
+      res.status(500).json({ 
+        error: 'Failed to sync machine statuses',
+        details: error.message 
+      });
+    }
+  }
+);
 
 // Serve React app for all other routes
 
