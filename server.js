@@ -1378,7 +1378,7 @@ app.post('/api/orders/:id/stop',
         [
           parseInt(id),
           reason,
-          category || 'Unplanned', // Use provided category or default to 'Unplanned'
+          category || 'Other', // Use provided category or default to 'Other'
           stop_notes || notes || '',
           req.user.id
         ]

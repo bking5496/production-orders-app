@@ -232,6 +232,7 @@ export default function ProductionOrdersSystem() {
   // Stop Production Data
   const [stopData, setStopData] = useState({
     reason: 'technical',
+    category: 'Equipment',
     notes: ''
   });
 
@@ -449,6 +450,7 @@ export default function ProductionOrdersSystem() {
       setLoading(true);
       await API.post(`/orders/${selectedOrder.id}/stop`, { 
         reason: stopData.reason,
+        category: stopData.category,
         notes: stopData.notes
       });
       setShowStopModal(false);
@@ -513,6 +515,7 @@ export default function ProductionOrdersSystem() {
   const resetStopData = () => {
     setStopData({
       reason: 'technical',
+      category: 'Equipment',
       notes: ''
     });
   };
@@ -1760,6 +1763,30 @@ export default function ProductionOrdersSystem() {
                 <option value="planned">📅 Planned Stop</option>
                 <option value="power">⚡ Power Issue</option>
                 <option value="other">❓ Other</option>
+              </select>
+            </div>
+
+            {/* Stop Category Selection */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-3">
+                Stop Category <span className="text-red-500">*</span>
+              </label>
+              <select
+                value={stopData.category}
+                onChange={(e) => setStopData({...stopData, category: e.target.value})}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 text-lg"
+                required
+              >
+                <option value="Equipment">🔧 Equipment</option>
+                <option value="Material">📦 Material</option>
+                <option value="Quality">🎯 Quality</option>
+                <option value="Planned">📅 Planned</option>
+                <option value="Changeover">🔄 Changeover</option>
+                <option value="Break">☕ Break</option>
+                <option value="Safety">⚠️ Safety</option>
+                <option value="Utilities">⚡ Utilities</option>
+                <option value="Maintenance">🔧 Maintenance</option>
+                <option value="Other">❓ Other</option>
               </select>
             </div>
 
