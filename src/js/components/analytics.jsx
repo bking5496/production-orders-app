@@ -433,7 +433,7 @@ export default function AnalyticsPage() {
     }
   };
 
-  // Chart components
+  // Enhanced Chart components with better styling
   const BarChart = ({ data, title, color = '#3b82f6' }) => {
     const canvasRef = useRef(null);
     
@@ -450,10 +450,12 @@ export default function AnalyticsPage() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       
       if (labels.length === 0) {
-        ctx.font = '14px sans-serif';
-        ctx.fillStyle = '#6b7280';
+        ctx.font = '16px sans-serif';
+        ctx.fillStyle = '#9ca3af';
         ctx.textAlign = 'center';
         ctx.fillText('No data available', canvas.width / 2, canvas.height / 2);
+        ctx.font = '12px sans-serif';
+        ctx.fillText('Adjust date range to view data', canvas.width / 2, canvas.height / 2 + 25);
         return;
       }
       
@@ -461,8 +463,8 @@ export default function AnalyticsPage() {
       const chartWidth = canvas.width - 80;
       const barWidth = Math.min(60, chartWidth / (labels.length * 1.5));
       
-      // Draw grid lines
-      ctx.strokeStyle = '#e5e7eb';
+      // Draw enhanced grid lines
+      ctx.strokeStyle = '#f3f4f6';
       ctx.lineWidth = 1;
       for (let i = 0; i <= 5; i++) {
         const y = 40 + (i / 5) * chartHeight;
@@ -471,50 +473,76 @@ export default function AnalyticsPage() {
         ctx.lineTo(canvas.width - 20, y);
         ctx.stroke();
         
-        // Y-axis labels
-        ctx.font = '11px sans-serif';
+        // Enhanced Y-axis labels
+        ctx.font = 'bold 11px sans-serif';
         ctx.fillStyle = '#6b7280';
         ctx.textAlign = 'right';
         ctx.fillText(Math.round((5 - i) / 5 * maxValue), 45, y + 4);
       }
       
-      // Draw bars
+      // Draw enhanced bars with gradients
       labels.forEach((label, i) => {
         const value = values[i];
         const barHeight = (value / maxValue) * chartHeight;
         const x = 60 + i * (chartWidth / labels.length);
         const y = 40 + chartHeight - barHeight;
         
-        // Bar
-        ctx.fillStyle = color;
+        // Create gradient for bar
+        const gradient = ctx.createLinearGradient(0, y, 0, y + barHeight);
+        gradient.addColorStop(0, color);
+        gradient.addColorStop(1, color + '80');
+        
+        // Bar with gradient and rounded corners
+        ctx.fillStyle = gradient;
         ctx.fillRect(x, y, barWidth, barHeight);
         
-        // Value on top of bar
-        ctx.font = '11px sans-serif';
-        ctx.fillStyle = '#374151';
-        ctx.textAlign = 'center';
-        ctx.fillText(value, x + barWidth / 2, y - 5);
+        // Bar border for better definition
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 1;
+        ctx.strokeRect(x, y, barWidth, barHeight);
         
-        // Label
+        // Enhanced value display on bars
+        if (barHeight > 20) {
+          ctx.font = 'bold 11px sans-serif';
+          ctx.fillStyle = '#ffffff';
+          ctx.textAlign = 'center';
+          ctx.fillText(value, x + barWidth / 2, y + barHeight / 2 + 4);
+        } else {
+          // Value above bar if bar is too small
+          ctx.font = 'bold 11px sans-serif';
+          ctx.fillStyle = '#374151';
+          ctx.textAlign = 'center';
+          ctx.fillText(value, x + barWidth / 2, y - 8);
+        }
+        
+        // Enhanced labels with better rotation
         ctx.save();
-        ctx.translate(x + barWidth / 2, canvas.height - 20);
-        ctx.rotate(-Math.PI / 6);
+        ctx.translate(x + barWidth / 2, canvas.height - 15);
+        ctx.rotate(-Math.PI / 8);
+        ctx.font = '12px sans-serif';
+        ctx.fillStyle = '#4b5563';
+        ctx.textAlign = 'center';
         ctx.fillText(label.charAt(0).toUpperCase() + label.slice(1), 0, 0);
         ctx.restore();
       });
     }, [data, color]);
     
     return (
-      <Card className="p-6">
-        <h3 className="text-lg font-semibold mb-4 text-gray-800">{title}</h3>
-        <canvas ref={canvasRef} width="400" height="300" className="w-full h-auto max-w-full"></canvas>
+      <Card className="p-6 hover:shadow-lg transition-shadow duration-300">
+        <div className="flex items-center gap-3 mb-4">
+          <div className="w-4 h-4 rounded" style={{ backgroundColor: color }}></div>
+          <h3 className="text-lg font-semibold text-gray-800">{title}</h3>
+        </div>
+        <div className="bg-gray-50 rounded-lg p-4">
+          <canvas ref={canvasRef} width="400" height="300" className="w-full h-auto max-w-full"></canvas>
+        </div>
       </Card>
     );
   };
 
   const PieChart = ({ data, title }) => {
     const canvasRef = useRef(null);
-    const colors = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4'];
+    const colors = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4', '#f97316', '#84cc16'];
     
     useEffect(() => {
       if (!canvasRef.current || !data) return;
@@ -522,8 +550,8 @@ export default function AnalyticsPage() {
       const canvas = canvasRef.current;
       const ctx = canvas.getContext('2d');
       const centerX = canvas.width / 2;
-      const centerY = canvas.height / 2;
-      const radius = Math.min(centerX, centerY) - 40;
+      const centerY = canvas.height / 2 - 10;
+      const radius = Math.min(centerX, centerY) - 50;
       
       // Clear canvas
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -533,82 +561,142 @@ export default function AnalyticsPage() {
       const total = values.reduce((sum, val) => sum + val, 0);
       
       if (total === 0) {
-        ctx.font = '14px sans-serif';
-        ctx.fillStyle = '#6b7280';
+        ctx.font = '16px sans-serif';
+        ctx.fillStyle = '#9ca3af';
         ctx.textAlign = 'center';
         ctx.fillText('No data available', centerX, centerY);
+        ctx.font = '12px sans-serif';
+        ctx.fillText('Adjust date range to view data', centerX, centerY + 25);
         return;
       }
       
       let currentAngle = -Math.PI / 2;
       
+      // Draw shadow for depth
       values.forEach((value, i) => {
         const sliceAngle = (value / total) * 2 * Math.PI;
+        
+        ctx.beginPath();
+        ctx.moveTo(centerX + 3, centerY + 3);
+        ctx.arc(centerX + 3, centerY + 3, radius, currentAngle, currentAngle + sliceAngle);
+        ctx.closePath();
+        ctx.fillStyle = 'rgba(0,0,0,0.1)';
+        ctx.fill();
+        
+        currentAngle += sliceAngle;
+      });
+      
+      // Reset angle for main chart
+      currentAngle = -Math.PI / 2;
+      
+      // Draw enhanced slices with gradients
+      values.forEach((value, i) => {
+        const sliceAngle = (value / total) * 2 * Math.PI;
+        const color = colors[i % colors.length];
+        
+        // Create radial gradient for each slice
+        const gradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, radius);
+        gradient.addColorStop(0, color + 'cc');
+        gradient.addColorStop(1, color);
         
         // Draw slice
         ctx.beginPath();
         ctx.moveTo(centerX, centerY);
         ctx.arc(centerX, centerY, radius, currentAngle, currentAngle + sliceAngle);
         ctx.closePath();
-        ctx.fillStyle = colors[i % colors.length];
+        ctx.fillStyle = gradient;
         ctx.fill();
         ctx.strokeStyle = '#ffffff';
-        ctx.lineWidth = 2;
+        ctx.lineWidth = 3;
         ctx.stroke();
         
-        // Draw percentage
+        // Draw enhanced percentage labels
         const labelAngle = currentAngle + sliceAngle / 2;
-        const labelX = centerX + Math.cos(labelAngle) * (radius * 0.7);
-        const labelY = centerY + Math.sin(labelAngle) * (radius * 0.7);
+        const labelX = centerX + Math.cos(labelAngle) * (radius * 0.75);
+        const labelY = centerY + Math.sin(labelAngle) * (radius * 0.75);
         
         const percentage = Math.round((value / total) * 100);
-        if (percentage > 5) {
-          ctx.font = '12px sans-serif';
-          ctx.fillStyle = '#ffffff';
+        if (percentage > 8) {
+          // Add background circle for percentage
+          ctx.beginPath();
+          ctx.arc(labelX, labelY, 18, 0, 2 * Math.PI);
+          ctx.fillStyle = 'rgba(255,255,255,0.9)';
+          ctx.fill();
+          ctx.strokeStyle = color;
+          ctx.lineWidth = 2;
+          ctx.stroke();
+          
+          ctx.font = 'bold 11px sans-serif';
+          ctx.fillStyle = color;
           ctx.textAlign = 'center';
-          ctx.fillText(`${percentage}%`, labelX, labelY);
+          ctx.fillText(`${percentage}%`, labelX, labelY + 4);
         }
         
         currentAngle += sliceAngle;
       });
       
-      // Draw legend
-      labels.forEach((label, i) => {
-        const legendY = 20 + i * 20;
-        ctx.fillStyle = colors[i % colors.length];
-        ctx.fillRect(10, legendY, 15, 15);
-        ctx.fillStyle = '#374151';
-        ctx.font = '12px sans-serif';
-        ctx.textAlign = 'left';
-        ctx.fillText(`${label}: ${values[i]}`, 30, legendY + 12);
-      });
-      
     }, [data]);
     
+    const values = Object.values(data || {});
+    const labels = Object.keys(data || {});
+    const total = values.reduce((sum, val) => sum + val, 0);
+    
     return (
-      <Card className="p-6">
+      <Card className="p-6 hover:shadow-lg transition-shadow duration-300">
         <h3 className="text-lg font-semibold mb-4 text-gray-800">{title}</h3>
-        <canvas ref={canvasRef} width="400" height="300" className="w-full h-auto max-w-full"></canvas>
+        <div className="flex flex-col lg:flex-row items-center gap-6">
+          <div className="bg-gray-50 rounded-lg p-4 flex-shrink-0">
+            <canvas ref={canvasRef} width="300" height="250" className="max-w-full h-auto"></canvas>
+          </div>
+          
+          {/* Enhanced Legend */}
+          {total > 0 && (
+            <div className="flex-1 space-y-3">
+              <h4 className="font-medium text-gray-700 text-sm uppercase tracking-wide">Distribution</h4>
+              {labels.map((label, i) => {
+                const value = values[i];
+                const percentage = Math.round((value / total) * 100);
+                const color = colors[i % colors.length];
+                
+                return (
+                  <div key={label} className="flex items-center justify-between p-2 rounded-lg hover:bg-gray-50 transition-colors">
+                    <div className="flex items-center gap-3">
+                      <div className="w-4 h-4 rounded-full shadow-sm" style={{ backgroundColor: color }}></div>
+                      <span className="font-medium text-gray-700 capitalize">{label}</span>
+                    </div>
+                    <div className="text-right">
+                      <div className="font-bold text-gray-800">{value}</div>
+                      <div className="text-xs text-gray-500">{percentage}%</div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
       </Card>
     );
   };
 
   const StatsCard = ({ title, value, change, icon: Icon, color = "gray" }) => {
     const colorConfig = {
-      blue: "bg-blue-50 text-blue-600 border-blue-200",
-      green: "bg-green-50 text-green-600 border-green-200",
-      yellow: "bg-yellow-50 text-yellow-600 border-yellow-200",
-      red: "bg-red-50 text-red-600 border-red-200",
-      purple: "bg-purple-50 text-purple-600 border-purple-200",
-      gray: "bg-gray-50 text-gray-600 border-gray-200"
+      blue: { bg: "bg-blue-50", text: "text-blue-600", border: "border-blue-200", icon: "text-blue-500", gradient: "from-blue-500 to-blue-600" },
+      green: { bg: "bg-green-50", text: "text-green-600", border: "border-green-200", icon: "text-green-500", gradient: "from-green-500 to-green-600" },
+      yellow: { bg: "bg-yellow-50", text: "text-yellow-600", border: "border-yellow-200", icon: "text-yellow-500", gradient: "from-yellow-500 to-yellow-600" },
+      red: { bg: "bg-red-50", text: "text-red-600", border: "border-red-200", icon: "text-red-500", gradient: "from-red-500 to-red-600" },
+      purple: { bg: "bg-purple-50", text: "text-purple-600", border: "border-purple-200", icon: "text-purple-500", gradient: "from-purple-500 to-purple-600" },
+      orange: { bg: "bg-orange-50", text: "text-orange-600", border: "border-orange-200", icon: "text-orange-500", gradient: "from-orange-500 to-orange-600" },
+      gray: { bg: "bg-gray-50", text: "text-gray-600", border: "border-gray-200", icon: "text-gray-500", gradient: "from-gray-500 to-gray-600" }
     };
     
+    const config = colorConfig[color];
+    
     return (
-      <Card className={`p-6 border-l-4 ${colorConfig[color]}`}>
+      <Card className={`p-6 border-l-4 ${config.bg} ${config.border} hover:shadow-lg transition-all duration-300 group`}>
         <div className="flex items-center justify-between">
-          <div>
-            <p className="text-sm text-gray-500 mb-1">{title}</p>
-            <p className="text-3xl font-bold text-gray-800">{value}</p>
+          <div className="flex-1">
+            <p className="text-sm text-gray-500 mb-2 font-medium">{title}</p>
+            <p className="text-3xl font-bold text-gray-800 mb-1 group-hover:scale-105 transition-transform duration-200">{value}</p>
             {change !== undefined && (
               <div className="flex items-center mt-2">
                 {change >= 0 ? (
@@ -616,13 +704,15 @@ export default function AnalyticsPage() {
                 ) : (
                   <TrendingDown className="w-4 h-4 text-red-500 mr-1" />
                 )}
-                <span className={`text-sm ${change >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                <span className={`text-sm font-medium ${change >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                   {Math.abs(change)}% from last period
                 </span>
               </div>
             )}
           </div>
-          <Icon className="w-8 h-8" />
+          <div className={`p-3 rounded-xl bg-gradient-to-br ${config.gradient} shadow-md group-hover:shadow-lg transition-shadow duration-300`}>
+            <Icon className="w-8 h-8 text-white" />
+          </div>
         </div>
       </Card>
     );
@@ -1035,53 +1125,101 @@ export default function AnalyticsPage() {
             />
           </div>
           
-          {/* Performance Table */}
-          <Card className="p-6">
-            <h3 className="text-lg font-semibold mb-4 text-gray-800">Recent Performance Summary</h3>
+          {/* Enhanced Performance Table */}
+          <Card className="p-6 hover:shadow-lg transition-shadow duration-300">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="p-2 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg">
+                <TrendingUp className="w-5 h-5 text-white" />
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-gray-800">Performance Summary</h3>
+                <p className="text-sm text-gray-600">Key metrics for current reporting period</p>
+              </div>
+            </div>
+            
             <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
+                <thead className="bg-gradient-to-r from-gray-50 to-gray-100">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Metric</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Current Period</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Target</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                    <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Performance Metric</th>
+                    <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Current Value</th>
+                    <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Target</th>
+                    <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Performance Status</th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  <tr>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Order Completion Rate</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{metrics.completionRate}%</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">85%</td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                <tbody className="bg-white divide-y divide-gray-100">
+                  <tr className="hover:bg-gray-50 transition-colors duration-200">
+                    <td className="px-6 py-5 whitespace-nowrap">
+                      <div className="flex items-center gap-3">
+                        <div className="p-2 bg-green-50 rounded-lg">
+                          <CheckCircle className="w-4 h-4 text-green-600" />
+                        </div>
+                        <div>
+                          <div className="text-sm font-semibold text-gray-900">Order Completion Rate</div>
+                          <div className="text-xs text-gray-500">Completed vs Total Orders</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-6 py-5 whitespace-nowrap">
+                      <div className="text-lg font-bold text-gray-800">{metrics.completionRate}%</div>
+                      <div className="text-xs text-gray-500">{metrics.completedOrders} of {metrics.totalOrders} orders</div>
+                    </td>
+                    <td className="px-6 py-5 whitespace-nowrap text-sm font-medium text-gray-600">85%</td>
+                    <td className="px-6 py-5 whitespace-nowrap">
                       <Badge variant={metrics.completionRate >= 85 ? 'success' : metrics.completionRate >= 70 ? 'warning' : 'danger'}>
-                        {metrics.completionRate >= 85 ? 'Excellent' : metrics.completionRate >= 70 ? 'Good' : 'Needs Improvement'}
+                        {metrics.completionRate >= 85 ? '🎯 Excellent' : metrics.completionRate >= 70 ? '📈 Good' : '⚠️ Needs Improvement'}
                       </Badge>
                     </td>
                   </tr>
-                  <tr>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Machine Utilization</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{metrics.utilizationRate}%</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">80%</td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                  <tr className="hover:bg-gray-50 transition-colors duration-200">
+                    <td className="px-6 py-5 whitespace-nowrap">
+                      <div className="flex items-center gap-3">
+                        <div className="p-2 bg-blue-50 rounded-lg">
+                          <Factory className="w-4 h-4 text-blue-600" />
+                        </div>
+                        <div>
+                          <div className="text-sm font-semibold text-gray-900">Machine Utilization</div>
+                          <div className="text-xs text-gray-500">Active vs Total Machines</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-6 py-5 whitespace-nowrap">
+                      <div className="text-lg font-bold text-gray-800">{metrics.utilizationRate}%</div>
+                      <div className="text-xs text-gray-500">{metrics.activeMachines} of {metrics.totalMachines} active</div>
+                    </td>
+                    <td className="px-6 py-5 whitespace-nowrap text-sm font-medium text-gray-600">80%</td>
+                    <td className="px-6 py-5 whitespace-nowrap">
                       <Badge variant={metrics.utilizationRate >= 80 ? 'success' : metrics.utilizationRate >= 60 ? 'warning' : 'danger'}>
-                        {metrics.utilizationRate >= 80 ? 'Excellent' : metrics.utilizationRate >= 60 ? 'Good' : 'Needs Improvement'}
+                        {metrics.utilizationRate >= 80 ? '🎯 Excellent' : metrics.utilizationRate >= 60 ? '📈 Good' : '⚠️ Needs Improvement'}
                       </Badge>
                     </td>
                   </tr>
-                  <tr>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Production Efficiency</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                      {Math.round((metrics.totalQuantityProduced / (metrics.totalQuantityOrdered || 1)) * 100)}%
+                  <tr className="hover:bg-gray-50 transition-colors duration-200">
+                    <td className="px-6 py-5 whitespace-nowrap">
+                      <div className="flex items-center gap-3">
+                        <div className="p-2 bg-purple-50 rounded-lg">
+                          <Target className="w-4 h-4 text-purple-600" />
+                        </div>
+                        <div>
+                          <div className="text-sm font-semibold text-gray-900">Production Efficiency</div>
+                          <div className="text-xs text-gray-500">Produced vs Ordered Quantity</div>
+                        </div>
+                      </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">90%</td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-6 py-5 whitespace-nowrap">
+                      <div className="text-lg font-bold text-gray-800">
+                        {Math.round((metrics.totalQuantityProduced / (metrics.totalQuantityOrdered || 1)) * 100)}%
+                      </div>
+                      <div className="text-xs text-gray-500">{metrics.totalQuantityProduced.toLocaleString()} / {metrics.totalQuantityOrdered.toLocaleString()} units</div>
+                    </td>
+                    <td className="px-6 py-5 whitespace-nowrap text-sm font-medium text-gray-600">90%</td>
+                    <td className="px-6 py-5 whitespace-nowrap">
                       <Badge variant={
                         (metrics.totalQuantityProduced / (metrics.totalQuantityOrdered || 1)) * 100 >= 90 ? 'success' : 
                         (metrics.totalQuantityProduced / (metrics.totalQuantityOrdered || 1)) * 100 >= 75 ? 'warning' : 'danger'
                       }>
-                        {(metrics.totalQuantityProduced / (metrics.totalQuantityOrdered || 1)) * 100 >= 90 ? 'Excellent' : 
-                         (metrics.totalQuantityProduced / (metrics.totalQuantityOrdered || 1)) * 100 >= 75 ? 'Good' : 'Needs Improvement'}
+                        {(metrics.totalQuantityProduced / (metrics.totalQuantityOrdered || 1)) * 100 >= 90 ? '🎯 Excellent' : 
+                         (metrics.totalQuantityProduced / (metrics.totalQuantityOrdered || 1)) * 100 >= 75 ? '📈 Good' : '⚠️ Needs Improvement'}
                       </Badge>
                     </td>
                   </tr>
@@ -1124,90 +1262,243 @@ export default function AnalyticsPage() {
 
           {/* Labor Distribution */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <Card className="p-6">
-              <h3 className="text-lg font-semibold mb-4 text-gray-800">Employee Roles</h3>
-              <div className="space-y-3">
+            <Card className="p-6 hover:shadow-lg transition-shadow duration-300">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="p-2 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg">
+                  <Users className="w-5 h-5 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-800">Employee Roles Distribution</h3>
+                  <p className="text-sm text-gray-600">Workforce composition by role</p>
+                </div>
+              </div>
+              
+              <div className="space-y-4">
                 {['operator', 'supervisor', 'packer'].map(role => {
                   const count = analytics.employees.filter(e => e.role === role).length;
-                  const percentage = Math.round((count / Math.max(analytics.employees.filter(e => e.role !== 'admin').length, 1)) * 100);
+                  const totalNonAdmin = analytics.employees.filter(e => e.role !== 'admin').length;
+                  const percentage = Math.round((count / Math.max(totalNonAdmin, 1)) * 100);
+                  
+                  const roleConfig = {
+                    operator: { color: 'bg-blue-500', icon: '🔧', label: 'Operators' },
+                    supervisor: { color: 'bg-purple-500', icon: '👨‍💼', label: 'Supervisors' },
+                    packer: { color: 'bg-green-500', icon: '📦', label: 'Packers' }
+                  };
+                  
+                  const config = roleConfig[role];
+                  
                   return (
-                    <div key={role} className="flex justify-between items-center">
-                      <span className="text-sm font-medium text-gray-600 capitalize">{role}</span>
-                      <div className="flex items-center gap-2">
-                        <div className="w-24 bg-gray-200 rounded-full h-2">
-                          <div className={`h-2 rounded-full bg-blue-500`} style={{ width: `${percentage}%` }}></div>
+                    <div key={role} className="p-4 rounded-lg border border-gray-200 hover:border-gray-300 transition-colors">
+                      <div className="flex justify-between items-center mb-2">
+                        <div className="flex items-center gap-2">
+                          <span className="text-lg">{config.icon}</span>
+                          <span className="text-sm font-semibold text-gray-700">{config.label}</span>
                         </div>
-                        <span className="text-sm text-gray-500 w-12">{count}</span>
+                        <div className="text-right">
+                          <div className="text-lg font-bold text-gray-800">{count}</div>
+                          <div className="text-xs text-gray-500">{percentage}%</div>
+                        </div>
+                      </div>
+                      <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+                        <div 
+                          className={`h-3 rounded-full ${config.color} transition-all duration-500 ease-out`} 
+                          style={{ width: `${percentage}%` }}
+                        ></div>
                       </div>
                     </div>
                   );
                 })}
               </div>
+              
+              <div className="mt-4 pt-4 border-t border-gray-200">
+                <div className="flex justify-between text-sm">
+                  <span className="text-gray-600">Total Workforce:</span>
+                  <span className="font-semibold text-gray-800">{analytics.employees.filter(e => e.role !== 'admin').length} employees</span>
+                </div>
+              </div>
             </Card>
 
-            <Card className="p-6">
-              <h3 className="text-lg font-semibold mb-4 text-gray-800">Shift Distribution</h3>
-              <div className="space-y-3">
+            <Card className="p-6 hover:shadow-lg transition-shadow duration-300">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="p-2 bg-gradient-to-br from-orange-500 to-yellow-600 rounded-lg">
+                  <Clock className="w-5 h-5 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-800">Shift Distribution</h3>
+                  <p className="text-sm text-gray-600">Current assignment coverage</p>
+                </div>
+              </div>
+              
+              <div className="space-y-4">
                 {['day', 'night'].map(shift => {
                   const count = analytics.assignments.filter(a => a.shift === shift).length;
                   const percentage = Math.round((count / Math.max(analytics.assignments.length, 1)) * 100);
+                  
+                  const shiftConfig = {
+                    day: { 
+                      color: 'bg-gradient-to-r from-yellow-400 to-orange-500', 
+                      icon: '☀️', 
+                      label: 'Day Shift',
+                      time: '06:00 - 18:00',
+                      bgColor: 'bg-yellow-50',
+                      textColor: 'text-yellow-700'
+                    },
+                    night: { 
+                      color: 'bg-gradient-to-r from-blue-500 to-indigo-600', 
+                      icon: '🌙', 
+                      label: 'Night Shift',
+                      time: '18:00 - 06:00',
+                      bgColor: 'bg-blue-50',
+                      textColor: 'text-blue-700'
+                    }
+                  };
+                  
+                  const config = shiftConfig[shift];
+                  
                   return (
-                    <div key={shift} className="flex justify-between items-center">
-                      <span className="text-sm font-medium text-gray-600 capitalize">{shift} Shift</span>
-                      <div className="flex items-center gap-2">
-                        <div className="w-24 bg-gray-200 rounded-full h-2">
-                          <div className={`h-2 rounded-full ${shift === 'day' ? 'bg-yellow-500' : 'bg-blue-500'}`} style={{ width: `${percentage}%` }}></div>
+                    <div key={shift} className={`p-4 rounded-lg border border-gray-200 hover:border-gray-300 transition-colors ${config.bgColor}`}>
+                      <div className="flex justify-between items-center mb-3">
+                        <div className="flex items-center gap-3">
+                          <span className="text-lg">{config.icon}</span>
+                          <div>
+                            <div className={`text-sm font-semibold ${config.textColor}`}>{config.label}</div>
+                            <div className="text-xs text-gray-500">{config.time}</div>
+                          </div>
                         </div>
-                        <span className="text-sm text-gray-500 w-12">{count}</span>
+                        <div className="text-right">
+                          <div className={`text-lg font-bold ${config.textColor}`}>{count}</div>
+                          <div className="text-xs text-gray-500">{percentage}% coverage</div>
+                        </div>
+                      </div>
+                      <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+                        <div 
+                          className={`h-3 rounded-full ${config.color} transition-all duration-500 ease-out`} 
+                          style={{ width: `${percentage}%` }}
+                        ></div>
                       </div>
                     </div>
                   );
                 })}
+              </div>
+              
+              <div className="mt-4 pt-4 border-t border-gray-200">
+                <div className="flex justify-between text-sm">
+                  <span className="text-gray-600">Total Assignments:</span>
+                  <span className="font-semibold text-gray-800">{analytics.assignments.length} active</span>
+                </div>
               </div>
             </Card>
           </div>
 
-          {/* Recent Assignments Table */}
-          <Card className="p-6">
-            <h3 className="text-lg font-semibold mb-4 text-gray-800">Recent Labor Assignments</h3>
-            <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Employee</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Machine</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Shift</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {analytics.assignments.slice(0, 10).map((assignment, index) => {
-                    const employee = analytics.employees.find(e => e.id === assignment.employee_id);
-                    const machine = analytics.machines.find(m => m.id == assignment.machine_id);
-                    return (
-                      <tr key={index}>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                          {employee?.fullName || employee?.username || 'Unknown'}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 capitalize">
-                          {employee?.role || 'N/A'}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                          {machine?.name || `Machine ${assignment.machine_id}`}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 capitalize">
-                          {assignment.shift}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <Badge variant="success">Active</Badge>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
+          {/* Enhanced Recent Assignments Table */}
+          <Card className="p-6 hover:shadow-lg transition-shadow duration-300">
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-gradient-to-br from-indigo-500 to-blue-600 rounded-lg">
+                  <Users className="w-5 h-5 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-800">Current Labor Assignments</h3>
+                  <p className="text-sm text-gray-600">Active assignments for {new Date().toLocaleDateString()}</p>
+                </div>
+              </div>
+              <Badge variant="info" className="px-3 py-1">
+                {analytics.assignments.length} Active
+              </Badge>
             </div>
+            
+            {analytics.assignments.length === 0 ? (
+              <div className="text-center py-12">
+                <Users className="w-16 h-16 mx-auto mb-4 text-gray-300" />
+                <h3 className="text-lg font-medium text-gray-900 mb-2">No Active Assignments</h3>
+                <p className="text-gray-600">No labor assignments found for the selected date.</p>
+              </div>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-gradient-to-r from-gray-50 to-gray-100">
+                    <tr>
+                      <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Employee Details</th>
+                      <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Assignment</th>
+                      <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Shift Schedule</th>
+                      <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-100">
+                    {analytics.assignments.slice(0, 10).map((assignment, index) => {
+                      const employee = analytics.employees.find(e => e.id === assignment.employee_id);
+                      const machine = analytics.machines.find(m => m.id == assignment.machine_id);
+                      
+                      const roleColors = {
+                        operator: 'bg-blue-50 text-blue-700',
+                        supervisor: 'bg-purple-50 text-purple-700',
+                        packer: 'bg-green-50 text-green-700'
+                      };
+                      
+                      return (
+                        <tr key={index} className="hover:bg-gray-50 transition-colors duration-200">
+                          <td className="px-6 py-5 whitespace-nowrap">
+                            <div className="flex items-center gap-3">
+                              <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">
+                                {(employee?.fullName || employee?.username || 'U').charAt(0).toUpperCase()}
+                              </div>
+                              <div>
+                                <div className="text-sm font-semibold text-gray-900">
+                                  {employee?.fullName || employee?.username || 'Unknown Employee'}
+                                </div>
+                                <div className="text-xs text-gray-500">ID: {assignment.employee_id}</div>
+                              </div>
+                            </div>
+                          </td>
+                          <td className="px-6 py-5 whitespace-nowrap">
+                            <div>
+                              <div className="flex items-center gap-2 mb-1">
+                                <Badge size="sm" className={roleColors[employee?.role] || 'bg-gray-50 text-gray-700'}>
+                                  {(employee?.role || 'N/A').charAt(0).toUpperCase() + (employee?.role || 'N/A').slice(1)}
+                                </Badge>
+                              </div>
+                              <div className="text-sm font-medium text-gray-800">
+                                {machine?.name || `Machine ${assignment.machine_id}`}
+                              </div>
+                              <div className="text-xs text-gray-500">
+                                {machine?.environment || 'Unknown'} Environment
+                              </div>
+                            </div>
+                          </td>
+                          <td className="px-6 py-5 whitespace-nowrap">
+                            <div className="flex items-center gap-2">
+                              <div className={`w-3 h-3 rounded-full ${
+                                assignment.shift === 'day' ? 'bg-yellow-400' : 'bg-blue-500'
+                              }`}></div>
+                              <div className="text-sm font-medium text-gray-800 capitalize">
+                                {assignment.shift} Shift
+                              </div>
+                            </div>
+                            <div className="text-xs text-gray-500">
+                              {assignment.shift === 'day' ? '06:00 - 18:00' : '18:00 - 06:00'}
+                            </div>
+                          </td>
+                          <td className="px-6 py-5 whitespace-nowrap">
+                            <Badge variant="success" className="flex items-center gap-1">
+                              <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                              Active
+                            </Badge>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            )}
+            
+            {analytics.assignments.length > 10 && (
+              <div className="mt-4 text-center">
+                <p className="text-sm text-gray-600">
+                  Showing 10 of {analytics.assignments.length} assignments
+                </p>
+              </div>
+            )}
           </Card>
         </div>
       )}
@@ -1274,16 +1565,26 @@ export default function AnalyticsPage() {
             />
           </div>
 
-          {/* Completed Orders with Waste Data Table */}
-          <Card>
-            <div className="p-6 border-b">
-              <h3 className="text-lg font-semibold">Completed Orders - Waste Tracking</h3>
-              <p className="text-sm text-gray-600 mt-1">
-                Showing {(analytics.archivedOrders || []).length + analytics.orders.filter(o => o.status === 'completed').length} completed orders for selected period
-              </p>
-              <p className="text-xs text-gray-500 mt-1">
-                Debug: Active orders: {analytics.orders.length}, Archived orders: {(analytics.archivedOrders || []).length}
-              </p>
+          {/* Enhanced Completed Orders with Waste Data Table */}
+          <Card className="hover:shadow-lg transition-shadow duration-300">
+            <div className="p-6 border-b border-gray-200 bg-gradient-to-r from-gray-50 to-white">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-gradient-to-br from-green-500 to-emerald-600 rounded-lg">
+                    <CheckCircle className="w-5 h-5 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-800">Completed Orders - Waste Tracking</h3>
+                    <p className="text-sm text-gray-600 mt-1">
+                      Comprehensive waste analysis for {(analytics.archivedOrders || []).length + analytics.orders.filter(o => o.status === 'completed').length} completed orders
+                    </p>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <div className="text-2xl font-bold text-gray-800">{analytics.orders.filter(o => o.status === 'completed').length}</div>
+                  <div className="text-xs text-gray-500">Orders in period</div>
+                </div>
+              </div>
             </div>
             
             <div className="overflow-x-auto">
@@ -1297,13 +1598,21 @@ export default function AnalyticsPage() {
                     ))}
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody className="bg-white divide-y divide-gray-100">
                   {analytics.orders.filter(o => o.status === 'completed').length === 0 ? (
                     <tr>
-                      <td colSpan="7" className="text-center py-10 text-gray-500">
-                        <CheckCircle className="w-12 h-12 mx-auto mb-4 text-gray-300" />
-                        <p>No completed orders found for the selected period</p>
-                        <p className="text-sm mt-2">Adjust the date range to view completed orders</p>
+                      <td colSpan="7" className="text-center py-16">
+                        <div className="flex flex-col items-center">
+                          <div className="p-4 bg-gray-100 rounded-full mb-4">
+                            <CheckCircle className="w-16 h-16 text-gray-300" />
+                          </div>
+                          <h3 className="text-lg font-medium text-gray-900 mb-2">No Completed Orders Found</h3>
+                          <p className="text-gray-600 mb-4">No completed orders found for the selected period</p>
+                          <div className="flex items-center gap-2 text-sm text-gray-500">
+                            <Calendar className="w-4 h-4" />
+                            <span>Try adjusting the date range to view completed orders</span>
+                          </div>
+                        </div>
                       </td>
                     </tr>
                   ) : (
@@ -1315,56 +1624,87 @@ export default function AnalyticsPage() {
                         const hasWaste = wasteData.length > 0;
                         
                         return (
-                          <tr key={order.id || index} className="hover:bg-gray-50">
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="text-sm font-medium text-gray-900">
-                                {order.order_number}
+                          <tr key={order.id || index} className="hover:bg-gray-50 transition-colors duration-200">
+                            <td className="px-6 py-5 whitespace-nowrap">
+                              <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-emerald-600 rounded-lg flex items-center justify-center text-white font-bold text-sm">
+                                  {(order.order_number || 'O').charAt(0)}
+                                </div>
+                                <div>
+                                  <div className="text-sm font-semibold text-gray-900">
+                                    {order.order_number}
+                                  </div>
+                                  <div className="text-xs text-gray-500">
+                                    Order ID: {order.id}
+                                  </div>
+                                </div>
                               </div>
-                              <div className="text-sm text-gray-500">
-                                ID: {order.id}
+                            </td>
+                            <td className="px-6 py-5 whitespace-nowrap">
+                              <div className="text-sm font-medium text-gray-800">{order.product_name || 'N/A'}</div>
+                              <div className="text-xs text-gray-500">Product Information</div>
+                            </td>
+                            <td className="px-6 py-5 whitespace-nowrap">
+                              <div className="text-sm font-medium text-gray-800">
+                                {order.complete_time ? Time.formatSASTDateTime(order.complete_time) : 'N/A'}
                               </div>
+                              <div className="text-xs text-gray-500">Completion Time</div>
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                              {order.product_name || 'N/A'}
+                            <td className="px-6 py-5 whitespace-nowrap">
+                              <div className="text-sm font-bold text-gray-800">{order.actual_quantity || order.quantity || 0} units</div>
+                              <div className="text-xs text-gray-500">Target: {order.quantity || 0} units</div>
+                              {order.actual_quantity && order.quantity && (
+                                <div className={`text-xs font-medium ${
+                                  order.actual_quantity >= order.quantity ? 'text-green-600' : 'text-red-600'
+                                }`}>
+                                  {order.actual_quantity >= order.quantity ? '✓ Target Met' : '⚠ Under Target'}
+                                </div>
+                              )}
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                              {order.complete_time ? Time.formatSASTDateTime(order.complete_time) : 'N/A'}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                              <div>{order.actual_quantity || order.quantity || 0} units</div>
-                              <div className="text-xs text-gray-500">Target: {order.quantity || 0}</div>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                            <td className="px-6 py-5 whitespace-nowrap">
                               <div className="flex items-center gap-2">
-                                <span>{wasteData.length}</span>
+                                <span className="text-sm font-semibold text-gray-800">{wasteData.length}</span>
                                 {hasWaste ? (
-                                  <Badge variant="warning" size="sm">Has Waste</Badge>
+                                  <Badge variant="warning" size="sm" className="flex items-center gap-1">
+                                    <AlertTriangle className="w-3 h-3" />
+                                    Has Waste
+                                  </Badge>
                                 ) : (
-                                  <Badge variant="success" size="sm">No Waste</Badge>
+                                  <Badge variant="success" size="sm" className="flex items-center gap-1">
+                                    <CheckCircle className="w-3 h-3" />
+                                    Clean
+                                  </Badge>
                                 )}
                               </div>
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                            <td className="px-6 py-5 whitespace-nowrap">
                               {hasWaste ? (
                                 <div>
-                                  <div className="font-medium">{totalWaste.toFixed(2)} kg</div>
-                                  <div className="text-xs text-gray-500">
+                                  <div className="text-sm font-bold text-red-600">{totalWaste.toFixed(2)} kg</div>
+                                  <div className="text-xs text-gray-500 truncate max-w-32">
                                     {[...new Set(wasteData.map(w => w.item_type))].join(', ')}
+                                  </div>
+                                  <div className="text-xs text-red-500 font-medium">
+                                    {wasteData.length} waste {wasteData.length === 1 ? 'item' : 'items'}
                                   </div>
                                 </div>
                               ) : (
-                                <span className="text-gray-400">No waste recorded</span>
+                                <div className="flex items-center gap-2 text-gray-400">
+                                  <CheckCircle className="w-4 h-4" />
+                                  <span className="text-sm">No waste recorded</span>
+                                </div>
                               )}
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                            <td className="px-6 py-5 whitespace-nowrap">
                               <Button 
                                 onClick={() => viewWasteReport(order)}
-                                variant="outline" 
+                                variant={hasWaste ? "default" : "outline"}
                                 size="sm"
                                 disabled={!hasWaste}
+                                className={hasWaste ? "bg-red-600 hover:bg-red-700 text-white" : ""}
                               >
                                 <Eye className="w-4 h-4 mr-1" />
-                                {hasWaste ? 'View Waste' : 'No Data'}
+                                {hasWaste ? 'View Details' : 'No Data'}
                               </Button>
                             </td>
                           </tr>
@@ -1414,8 +1754,17 @@ export default function AnalyticsPage() {
                 </div>
               </Card>
               
-              <Card className="p-6">
-                <h3 className="text-lg font-semibold mb-4">Recent High-Waste Orders</h3>
+              <Card className="p-6 hover:shadow-lg transition-shadow duration-300">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="p-2 bg-gradient-to-br from-red-500 to-orange-600 rounded-lg">
+                    <AlertTriangle className="w-5 h-5 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-800">High-Waste Orders</h3>
+                    <p className="text-sm text-gray-600">Orders with highest waste generation</p>
+                  </div>
+                </div>
+                
                 <div className="space-y-3">
                   {analytics.orders
                     .filter(o => o.status === 'completed' && o.waste_data && o.waste_data.length > 0)
@@ -1425,22 +1774,59 @@ export default function AnalyticsPage() {
                       return bWaste - aWaste;
                     })
                     .slice(0, 5)
-                    .map(order => {
-                      const totalWaste = order.waste_data.reduce((sum, w) => sum + (w.weight || 0), 0);
-                      return (
-                        <div key={order.id} className="flex justify-between items-center p-3 border rounded-lg">
-                          <div>
-                            <p className="font-medium text-gray-900">{order.order_number}</p>
-                            <p className="text-sm text-gray-600">{order.product_name}</p>
+                    .length > 0 ? (
+                    analytics.orders
+                      .filter(o => o.status === 'completed' && o.waste_data && o.waste_data.length > 0)
+                      .sort((a, b) => {
+                        const aWaste = a.waste_data.reduce((sum, w) => sum + (w.weight || 0), 0);
+                        const bWaste = b.waste_data.reduce((sum, w) => sum + (w.weight || 0), 0);
+                        return bWaste - aWaste;
+                      })
+                      .slice(0, 5)
+                      .map((order, index) => {
+                        const totalWaste = order.waste_data.reduce((sum, w) => sum + (w.weight || 0), 0);
+                        const wasteTypes = [...new Set(order.waste_data.map(w => w.item_type))];
+                        
+                        return (
+                          <div key={order.id} className="group p-4 border border-gray-200 rounded-lg hover:border-red-300 hover:bg-red-50 transition-all duration-200 cursor-pointer"
+                               onClick={() => viewWasteReport(order)}>
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center gap-3">
+                                <div className="flex items-center justify-center w-8 h-8 bg-gradient-to-br from-red-500 to-orange-600 rounded-full text-white font-bold text-sm">
+                                  #{index + 1}
+                                </div>
+                                <div>
+                                  <p className="font-semibold text-gray-900 group-hover:text-red-800">{order.order_number}</p>
+                                  <p className="text-sm text-gray-600">{order.product_name}</p>
+                                  <div className="flex flex-wrap gap-1 mt-1">
+                                    {wasteTypes.slice(0, 2).map(type => (
+                                      <Badge key={type} variant="warning" size="xs">{type}</Badge>
+                                    ))}
+                                    {wasteTypes.length > 2 && (
+                                      <Badge variant="warning" size="xs">+{wasteTypes.length - 2} more</Badge>
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="text-right">
+                                <div className="flex items-center gap-2">
+                                  <AlertTriangle className="w-4 h-4 text-red-500" />
+                                  <span className="text-lg font-bold text-red-600">{totalWaste.toFixed(2)} kg</span>
+                                </div>
+                                <div className="text-xs text-gray-500">{order.waste_data.length} waste items</div>
+                                <div className="text-xs text-red-600 font-medium">Click to view details</div>
+                              </div>
+                            </div>
                           </div>
-                          <div className="text-right">
-                            <p className="font-medium text-red-600">{totalWaste.toFixed(2)} kg</p>
-                            <p className="text-xs text-gray-500">{order.waste_data.length} items</p>
-                          </div>
-                        </div>
-                      );
-                    })
-                  }
+                        );
+                      })
+                  ) : (
+                    <div className="text-center py-8">
+                      <CheckCircle className="w-12 h-12 mx-auto mb-3 text-green-400" />
+                      <p className="text-gray-600">No high-waste orders found</p>
+                      <p className="text-sm text-gray-500">All completed orders have minimal waste generation</p>
+                    </div>
+                  )}
                 </div>
               </Card>
             </div>
