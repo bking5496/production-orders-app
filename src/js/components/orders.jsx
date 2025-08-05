@@ -80,6 +80,7 @@ export default function ProductionOrdersSystem() {
   const [orders, setOrders] = useState([]);
   const [machines, setMachines] = useState([]);
   const [environments, setEnvironments] = useState([]);
+  const [operators, setOperators] = useState([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [notification, setNotification] = useState(null);
@@ -211,7 +212,8 @@ export default function ProductionOrdersSystem() {
       await Promise.all([
         loadOrders(),
         loadMachines(),
-        loadEnvironments()
+        loadEnvironments(),
+        loadOperators()
       ]);
     } catch (error) {
       console.error('Error loading initial data:', error);
@@ -250,6 +252,15 @@ export default function ProductionOrdersSystem() {
       setEnvironments(response?.data || response || []);
     } catch (error) {
       console.error('Error loading environments:', error);
+    }
+  };
+
+  const loadOperators = async () => {
+    try {
+      const response = await API.get('/users?roles=operator,supervisor,admin');
+      setOperators(response?.data || response || []);
+    } catch (error) {
+      console.error('Error loading operators:', error);
     }
   };
 
@@ -1192,6 +1203,26 @@ export default function ProductionOrdersSystem() {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Assign Operator
+                </label>
+                <select
+                  value={productionData.operator_id || ''}
+                  onChange={(e) => setProductionData(prev => ({ ...prev, operator_id: e.target.value ? parseInt(e.target.value) : null }))}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                >
+                  <option value="">Select Operator (Optional)</option>
+                  {operators.map(operator => (
+                    <option key={operator.id} value={operator.id}>
+                      {operator.username} ({operator.role})
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
                   Batch Number
                 </label>
                 <input
@@ -1202,8 +1233,8 @@ export default function ProductionOrdersSystem() {
                   placeholder={`BAT-${Date.now()}`}
                 />
               </div>
+              <div></div>
             </div>
-
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">

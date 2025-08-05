@@ -679,13 +679,32 @@ app.get('/api/auth/websocket-token', authenticateToken, (req, res) => {
 console.log('JWT_SECRET exists:', !!JWT_SECRET);
 
 // User management routes
-app.get('/api/users', authenticateToken, requireRole(['admin', 'supervisor']), (req, res) => {
-  db.all('SELECT id, username, email, role, is_active as active, created_at, last_login FROM users', (err, users) => {
-    if (err) {
-      return res.status(500).json({ error: 'Database error' });
+app.get('/api/users', authenticateToken, requireRole(['admin', 'supervisor']), async (req, res) => {
+  try {
+    const { roles } = req.query;
+    let query = 'SELECT id, username, email, role, is_active as active, created_at, last_login FROM users WHERE 1=1';
+    const params = [];
+    
+    if (roles) {
+      const roleList = roles.split(',').map(r => r.trim());
+      const placeholders = roleList.map((_, i) => `$${i + 1}`).join(',');
+      query += ` AND role IN (${placeholders})`;
+      params.push(...roleList);
     }
-    res.json(users);
-  });
+    
+    query += ' ORDER BY username';
+    
+    const client = await pool.connect();
+    try {
+      const result = await client.query(query, params);
+      res.json(result.rows);
+    } finally {
+      client.release();
+    }
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    res.status(500).json({ error: 'Database error' });
+  }
 });
 
 app.post('/api/users',
