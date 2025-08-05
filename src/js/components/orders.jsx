@@ -298,7 +298,7 @@ export default function ProductionOrdersSystem() {
       setLoading(true);
       await API.post(`/orders/${order.id}/start`, {
         machine_id: productionData.machine_id,
-        operator_id: productionData.operator_id || 1,
+        operator_id: productionData.operator_id || null,
         batch_number: productionData.batch_number || `BAT-${Date.now()}`,
         start_notes: productionData.start_notes
       });
