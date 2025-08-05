@@ -104,6 +104,7 @@ export default function ProductionOrdersSystem() {
   const [showProductionModal, setShowProductionModal] = useState(false);
   const [showWasteModal, setShowWasteModal] = useState(false);
   const [showDowntimeModal, setShowDowntimeModal] = useState(false);
+  const [showStopModal, setShowStopModal] = useState(false);
 
   // Mobile and Performance
   const { isMobile, isTablet } = useDeviceDetection();
@@ -132,6 +133,12 @@ export default function ProductionOrdersSystem() {
     operator_id: null,
     batch_number: '',
     start_notes: ''
+  });
+
+  // Stop Production Data
+  const [stopData, setStopData] = useState({
+    reason: 'technical',
+    notes: ''
   });
 
   // Waste Capture Data
@@ -324,17 +331,24 @@ export default function ProductionOrdersSystem() {
     }
   };
 
-  const handleStopProduction = async (order) => {
-    const reason = prompt('Please provide reason for stopping production:');
-    if (!reason) return;
+  const handleStopProduction = (order) => {
+    setSelectedOrder(order);
+    setShowStopModal(true);
+  };
+
+  const handleStopSubmit = async (e) => {
+    e.preventDefault();
+    if (!selectedOrder) return;
 
     try {
       setLoading(true);
-      await API.post(`/orders/${order.id}/stop`, { 
-        reason,
-        stop_notes: `Production stopped: ${reason}`
+      await API.post(`/orders/${selectedOrder.id}/stop`, { 
+        reason: stopData.reason,
+        notes: stopData.notes
       });
-      showNotification(`Order ${order.order_number} stopped`, 'error');
+      setShowStopModal(false);
+      resetStopData();
+      showNotification(`Order ${selectedOrder.order_number} stopped`, 'error');
       loadOrders();
       loadMachines(); // Refresh machine status
     } catch (error) {
@@ -388,6 +402,13 @@ export default function ProductionOrdersSystem() {
       operator_id: null,
       batch_number: '',
       start_notes: ''
+    });
+  };
+
+  const resetStopData = () => {
+    setStopData({
+      reason: 'technical',
+      notes: ''
     });
   };
 
