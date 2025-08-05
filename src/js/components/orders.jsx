@@ -231,7 +231,7 @@ export default function ProductionOrdersSystem() {
 
   // Stop Production Data
   const [stopData, setStopData] = useState({
-    reason: 'technical',
+    reason: 'Unplanned Stop',
     category: 'Equipment',
     notes: ''
   });
@@ -514,7 +514,7 @@ export default function ProductionOrdersSystem() {
 
   const resetStopData = () => {
     setStopData({
-      reason: 'technical',
+      reason: 'Unplanned Stop',
       category: 'Equipment',
       notes: ''
     });
@@ -1757,12 +1757,8 @@ export default function ProductionOrdersSystem() {
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 text-lg"
                 required
               >
-                <option value="technical">🔧 Technical Issue</option>
-                <option value="quality">🎯 Quality Issue</option>
-                <option value="material">📦 Material Issue</option>
-                <option value="planned">📅 Planned Stop</option>
-                <option value="power">⚡ Power Issue</option>
-                <option value="other">❓ Other</option>
+                <option value="Planned Stop">📅 Planned Stop</option>
+                <option value="Unplanned Stop">⚠️ Unplanned Stop</option>
               </select>
             </div>
 
@@ -1780,12 +1776,11 @@ export default function ProductionOrdersSystem() {
                 <option value="Equipment">🔧 Equipment</option>
                 <option value="Material">📦 Material</option>
                 <option value="Quality">🎯 Quality</option>
-                <option value="Planned">📅 Planned</option>
                 <option value="Changeover">🔄 Changeover</option>
                 <option value="Break">☕ Break</option>
                 <option value="Safety">⚠️ Safety</option>
                 <option value="Utilities">⚡ Utilities</option>
-                <option value="Maintenance">🔧 Maintenance</option>
+                <option value="Maintenance">⚙️ Maintenance</option>
                 <option value="Other">❓ Other</option>
               </select>
             </div>
