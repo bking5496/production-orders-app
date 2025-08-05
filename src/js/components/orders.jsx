@@ -728,9 +728,9 @@ export default function ProductionOrdersSystem() {
                       )}
                     </div>
                     <div className="flex items-center gap-2">
-                      <Badge className={statusInfo.color}>
+                      <Badge className={statusInfo?.color || 'bg-gray-100 text-gray-800 border-gray-200'}>
                         <StatusIcon className="w-3 h-3 mr-1" />
-                        {statusInfo.label}
+                        {statusInfo?.label || 'Unknown'}
                       </Badge>
                     </div>
                   </div>
@@ -764,8 +764,8 @@ export default function ProductionOrdersSystem() {
                   )}
                   
                   <div className="flex justify-between items-center pt-2 border-t border-gray-100">
-                    <Badge className={priorityInfo.color}>
-                      {priorityInfo.label}
+                    <Badge className={priorityInfo?.color || 'bg-gray-100 text-gray-800 border-gray-200'}>
+                      {priorityInfo?.label || 'Normal'}
                     </Badge>
                     
                     <div className="flex gap-2">
@@ -867,8 +867,8 @@ export default function ProductionOrdersSystem() {
                           <div className="text-sm text-gray-500">
                             Qty: {order.quantity} | {getEnvironmentName(order.environment)}
                           </div>
-                          <Badge className={`mt-1 ${priorityInfo.color}`}>
-                            {priorityInfo.label}
+                          <Badge className={`mt-1 ${priorityInfo?.color || 'bg-gray-100 text-gray-800 border-gray-200'}`}>
+                            {priorityInfo?.label || 'Normal'}
                           </Badge>
                         </div>
                       </td>
@@ -879,11 +879,11 @@ export default function ProductionOrdersSystem() {
                         )}
                       </td>
                       <td className="px-6 py-4">
-                        <Badge className={statusInfo.color}>
+                        <Badge className={statusInfo?.color || 'bg-gray-100 text-gray-800 border-gray-200'}>
                           <StatusIcon className="w-4 h-4 mr-1" />
-                          {statusInfo.label}
+                          {statusInfo?.label || 'Unknown'}
                         </Badge>
-                        <div className="text-xs text-gray-500 mt-1">{statusInfo.description}</div>
+                        <div className="text-xs text-gray-500 mt-1">{statusInfo?.description || 'Status information'}</div>
                       </td>
                       <td className="px-6 py-4">
                         {order.machine_id ? (
