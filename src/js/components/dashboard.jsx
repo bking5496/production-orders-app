@@ -266,14 +266,6 @@ export default function Dashboard() {
           target="80%"
         />
         <KPICard
-          title="Quality Score"
-          value={`${stats.production.quality_score}%`}
-          change={stats.production.quality_score >= 90 ? 2 : -1}
-          icon={Award}
-          color="green"
-          target="90%"
-        />
-        <KPICard
           title="On-Time Delivery"
           value={`${stats.production.on_time_delivery}%`}
           change={stats.production.on_time_delivery >= 85 ? 4 : -2}

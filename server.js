@@ -1332,7 +1332,7 @@ app.post('/api/orders/:id/stop',
     }
 
     const { id } = req.params;
-    const { reason, notes, stop_notes } = req.body;
+    const { reason, notes, stop_notes, category } = req.body;
 
     const client = await pool.connect();
     try {
@@ -1378,7 +1378,7 @@ app.post('/api/orders/:id/stop',
         [
           parseInt(id),
           reason,
-          'Equipment', // Default category - can be enhanced with dropdown
+          category || 'Unplanned', // Use provided category or default to 'Unplanned'
           stop_notes || notes || '',
           req.user.id
         ]

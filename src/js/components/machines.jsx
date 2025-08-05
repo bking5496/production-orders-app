@@ -854,7 +854,7 @@ export default function MachinesPage() {
           onClose={() => setShowEditModal(false)}
           size="large"
         >
-          <div className="p-6 bg-white">
+          <div className="p-6">
             {/* Enhanced Header */}
             <div className="mb-6 pb-4 border-b border-gray-200">
               <div className="flex items-center gap-3">
@@ -862,7 +862,7 @@ export default function MachinesPage() {
                   <Settings className="w-6 h-6 text-blue-600" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-gray-900">Machine Configuration</h3>
+                  <h3 className="text-lg font-semibold text-gray-900">Machine Configuration</h3>
                   <p className="text-gray-600">Update machine settings and assignments</p>
                 </div>
               </div>

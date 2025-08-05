@@ -10,29 +10,33 @@ import ReactDOM from 'react-dom';
  * @param {string} [props.title] - An optional title to display at the top of the modal.
  */
 export const Modal = ({ children, onClose, title, size = "medium", className = "" }) => {
-    // Define size classes
+    // Define size classes with better height handling
     const sizeClasses = {
-        small: "max-w-md",
-        medium: "max-w-md", 
-        large: "max-w-7xl",
+        small: "max-w-md w-full mx-4 max-h-[90vh]",
+        medium: "max-w-2xl w-full mx-4 max-h-[90vh]", 
+        large: "max-w-7xl w-full mx-4 max-h-[95vh]",
         fullscreen: "max-w-[98vw] w-[98vw] h-[95vh]"
     };
 
-    const baseClasses = "bg-white rounded-lg shadow-xl transform transition-all duration-300";
+    const baseClasses = "bg-white rounded-lg shadow-xl transform transition-all duration-300 flex flex-col";
     const modalClasses = `${baseClasses} ${sizeClasses[size]} ${className}`;
     
     // We render the modal into the 'portal-root' div in your index.html
     return ReactDOM.createPortal(
         <div 
-            className="fixed inset-0 bg-gray-600 bg-opacity-75 flex items-center justify-center z-50 transition-opacity duration-300" 
+            className="fixed inset-0 bg-gray-600 bg-opacity-75 flex items-center justify-center z-50 transition-opacity duration-300 p-4" 
             onClick={onClose}
         >
             <div 
                 className={modalClasses}
                 onClick={(e) => e.stopPropagation()} // Prevents closing when clicking inside the modal
             >
-                {title && <h2 className="text-xl font-bold mb-4 px-6 pt-6">{title}</h2>}
-                <div className="overflow-y-auto max-h-full">
+                {title && (
+                    <div className="flex-shrink-0 px-6 pt-6 pb-4 border-b border-gray-200">
+                        <h2 className="text-xl font-bold text-gray-900">{title}</h2>
+                    </div>
+                )}
+                <div className="flex-1 overflow-y-auto">
                     {children}  
                 </div>
             </div>
