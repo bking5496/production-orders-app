@@ -360,3 +360,8 @@ Instead of /public/js/main.js, use /js/main.js.
 11:36:45 PM [vite] (client) hmr update /src/js/components/dashboard.jsx
 11:46:43 PM [vite] (client) hmr update /src/js/components/production-dashboard.jsx
 11:49:59 PM [vite] (client) hmr update /src/js/components/dashboard.jsx
+11:50:17 PM [vite] (client) hmr update /src/js/components/production-dashboard.jsx
+11:50:23 PM [vite] (client) hmr update /src/js/components/dashboard.jsx
+11:50:36 PM [vite] (client) hmr update /src/js/components/production-dashboard.jsx
+11:50:48 PM [vite] (client) hmr update /src/js/components/production-dashboard.jsx
+11:50:55 PM [vite] (client) hmr update /src/js/components/production-dashboard.jsx

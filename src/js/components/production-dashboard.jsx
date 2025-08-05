@@ -1043,7 +1043,7 @@ export default function UltraProductionFloorMonitor() {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 flex items-center justify-center">
+            <div className="min-h-96 bg-gradient-to-br from-gray-50 to-blue-50 flex items-center justify-center">
                 <div className="text-center">
                     <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-2xl flex items-center justify-center mb-4 mx-auto animate-pulse">
                         <Factory className="w-8 h-8 text-white" />
@@ -1059,7 +1059,7 @@ export default function UltraProductionFloorMonitor() {
 
     if (error) {
         return (
-            <div className="min-h-screen bg-gradient-to-br from-gray-50 to-red-50 flex items-center justify-center p-6">
+            <div className="min-h-96 bg-gradient-to-br from-gray-50 to-red-50 flex items-center justify-center p-6">
                 <div className="bg-white/80 backdrop-blur-xl border border-red-200 rounded-2xl p-8 max-w-md mx-auto text-center shadow-2xl">
                     <div className="w-16 h-16 bg-gradient-to-r from-red-500 to-pink-500 rounded-2xl flex items-center justify-center mb-4 mx-auto">
                         <AlertTriangle className="w-8 h-8 text-white" />
@@ -1079,9 +1079,9 @@ export default function UltraProductionFloorMonitor() {
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50">
+        <div className="min-h-full bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50">
             {/* Ultra-Modern Header */}
-            <div className="bg-white/80 backdrop-blur-xl border-b border-white/20 sticky top-0 z-40">
+            <div className="bg-white/80 backdrop-blur-xl border-b border-white/20 mb-8">
                 <div className="p-6">
                     <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
                         <div className="flex items-center gap-4">
