@@ -144,8 +144,9 @@ export default function ProductionOrdersSystem() {
 
   // Waste Capture Data
   const [wasteData, setWasteData] = useState({
-    material_waste: 0,
     waste_type: 'BLND',
+    weight: 0,
+    units: 0,
     waste_reason: '',
     waste_category: 'material',
     recovery_possible: false,
@@ -376,7 +377,7 @@ export default function ProductionOrdersSystem() {
       const completionData = {
         actual_quantity: order.quantity, // This could be modified in the waste modal
         completion_notes: 'Production completed successfully',
-        waste_data: wasteData.material_waste > 0 || wasteData.time_waste > 0 ? wasteData : null
+        waste_data: wasteData.weight > 0 || (wasteData.units > 0 && (wasteData.waste_type === 'PM' || wasteData.waste_type === 'FP')) ? wasteData : null
       };
 
       await API.post(`/orders/${order.id}/complete`, completionData);
@@ -425,8 +426,9 @@ export default function ProductionOrdersSystem() {
 
   const resetWasteData = () => {
     setWasteData({
-      material_waste: 0,
       waste_type: 'BLND',
+      weight: 0,
+      units: 0,
       waste_reason: '',
       waste_category: 'material',
       recovery_possible: false,
@@ -1312,36 +1314,57 @@ export default function ProductionOrdersSystem() {
                 Material Waste Tracking
               </h4>
               
-              <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Material Waste Type
+                    Waste Type
                   </label>
                   <select
                     value={wasteData.waste_type || 'BLND'}
                     onChange={(e) => setWasteData(prev => ({ ...prev, waste_type: e.target.value, waste_category: 'material' }))}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                   >
-                    <option value="BLND">BLND - Blending Material</option>
-                    <option value="FP">FP - Finished Product</option>
-                    <option value="RM">RM - Raw Material</option>
-                    <option value="PM">PM - Packaging Material</option>
+                    <option value="BLND">BLND</option>
+                    <option value="RM">RM</option>
+                    <option value="PM">PM</option>
+                    <option value="FP">FP</option>
                   </select>
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Waste Quantity (units)
-                  </label>
-                  <input
-                    type="number"
-                    min="0"
-                    step="0.1"
-                    value={wasteData.material_waste || 0}
-                    onChange={(e) => setWasteData(prev => ({ ...prev, material_waste: parseFloat(e.target.value) || 0 }))}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                    placeholder="Enter waste quantity"
-                  />
+                <div className="grid grid-cols-2 gap-4">
+                  {/* Weight field - always shown */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Weight (kg)
+                    </label>
+                    <input
+                      type="number"
+                      min="0"
+                      step="0.1"
+                      value={wasteData.weight || 0}
+                      onChange={(e) => setWasteData(prev => ({ ...prev, weight: parseFloat(e.target.value) || 0 }))}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                      placeholder="Enter weight"
+                    />
+                  </div>
+
+                  {/* Units field - only for PM and FP */}
+                  {(wasteData.waste_type === 'PM' || wasteData.waste_type === 'FP') && (
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Units
+                      </label>
+                      <input
+                        type="number"
+                        min="0"
+                        step="1"
+                        value={wasteData.units || 0}
+                        onChange={(e) => setWasteData(prev => ({ ...prev, units: parseInt(e.target.value) || 0 }))}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                        placeholder="Enter units"
+                      />
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -1379,8 +1402,8 @@ export default function ProductionOrdersSystem() {
                 <textarea
                   value={wasteData.waste_notes || ''}
                   onChange={(e) => setWasteData(prev => ({ ...prev, waste_notes: e.target.value }))}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                  rows="3"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                  rows="2"
                   placeholder="Additional details about material waste..."
                 />
               </div>
@@ -1419,9 +1442,9 @@ export default function ProductionOrdersSystem() {
             setSelectedOrder(null);
           }}
           size="large"
-          className="max-w-7xl mx-auto my-8 w-[95vw]"
+          className="max-w-[98vw] mx-auto my-4 w-[98vw]"
         >
-          <div className="p-12 bg-white min-h-[600px] max-h-[80vh] overflow-y-auto">
+          <div className="p-8 bg-white min-h-[600px] max-h-[85vh] overflow-y-auto">
             {/* Enhanced Header */}
             <div className="mb-8 pb-6 border-b-2 border-blue-200 bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-lg">
               <div className="flex items-center justify-between">
