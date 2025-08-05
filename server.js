@@ -1140,6 +1140,15 @@ app.post('/api/orders/:id/start',
     try {
       await client.query('BEGIN');
       
+      // Get current order to access existing notes
+      const currentOrder = await client.query(
+        'SELECT notes FROM production_orders WHERE id = $1',
+        [parseInt(id)]
+      );
+      
+      const existingNotes = currentOrder.rows[0]?.notes || '';
+      const newNotes = start_notes ? `${existingNotes} | Start Notes: ${start_notes}` : existingNotes;
+      
       // Update order with SAST time
       const orderResult = await client.query(
         `UPDATE production_orders 
@@ -1148,7 +1157,7 @@ app.post('/api/orders/:id/start',
              operator_id = $2, 
              start_time = NOW(),
              batch_number = $3,
-             notes = COALESCE(production_orders.notes, '') || CASE WHEN $4 IS NOT NULL THEN ' | Start Notes: ' || $4 ELSE '' END,
+             notes = $4,
              updated_at = NOW()
          WHERE id = $5 AND status IN ('pending', 'stopped')
          RETURNING *`,
@@ -1156,7 +1165,7 @@ app.post('/api/orders/:id/start',
           machine_id, 
           operator_id || req.user.id, 
           batch_number || null, 
-          start_notes || null, 
+          newNotes, 
           parseInt(id)
         ]
       );
