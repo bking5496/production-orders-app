@@ -1735,8 +1735,12 @@ app.get('/api/reports/downtime',
     } = req.query;
 
     try {
+      // Format dates properly for PostgreSQL - handle both ISO and date-only formats
+      const formatStartDate = start_date.includes('T') ? start_date : start_date + 'T00:00:00';
+      const formatEndDate = end_date.includes('T') ? end_date : end_date + 'T23:59:59';
+      
       let whereClause = 'WHERE ps.start_time >= $1 AND ps.start_time <= $2';
-      let params = [start_date + ' 00:00:00', end_date + ' 23:59:59'];
+      let params = [formatStartDate, formatEndDate];
       let paramIndex = 3;
 
       if (machine_id) {
@@ -1832,7 +1836,11 @@ app.get('/api/reports/downtime',
       });
     } catch (error) {
       console.error('Get downtime report error:', error);
-      res.status(500).json({ error: 'Failed to get downtime report' });
+      console.error('Query params:', { start_date, end_date, machine_id, category });
+      res.status(500).json({ 
+        error: 'Failed to get downtime report',
+        details: process.env.NODE_ENV === 'development' ? error.message : undefined
+      });
     }
   }
 );
