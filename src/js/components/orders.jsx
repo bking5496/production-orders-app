@@ -474,13 +474,15 @@ export default function ProductionOrdersSystem() {
     });
   }, [orders, filters, viewMode]);
 
-  // Get order status info
+  // Get order status info with null safety
   const getOrderStatusInfo = (status) => {
+    if (!status) return ORDER_STATUSES.pending;
     return ORDER_STATUSES[status] || ORDER_STATUSES.pending;
   };
 
-  // Get priority info
+  // Get priority info with null safety
   const getPriorityInfo = (priority) => {
+    if (!priority) return PRIORITY_LEVELS.normal;
     return PRIORITY_LEVELS[priority] || PRIORITY_LEVELS.normal;
   };
 
@@ -497,16 +499,18 @@ export default function ProductionOrdersSystem() {
     return `${hours}h ${minutes}m`;
   };
 
-  // Get machine name
+  // Get machine name with null safety
   const getMachineName = (machineId) => {
-    const machine = machines.find(m => m.id === machineId);
-    return machine ? machine.name : 'Unknown';
+    if (!machineId || !machines || !Array.isArray(machines)) return 'Unknown';
+    const machine = machines.find(m => m && m.id === machineId);
+    return machine && machine.name ? machine.name : 'Unknown';
   };
 
-  // Get environment name
+  // Get environment name with null safety
   const getEnvironmentName = (environmentCode) => {
-    const env = environments.find(e => e.code === environmentCode);
-    return env ? env.name : environmentCode;
+    if (!environmentCode || !environments || !Array.isArray(environments)) return environmentCode || 'Unknown';
+    const env = environments.find(e => e && e.code === environmentCode);
+    return env && env.name ? env.name : environmentCode;
   };
 
   if (loading && !refreshing) {
@@ -1436,7 +1440,7 @@ export default function ProductionOrdersSystem() {
       {/* Desktop-Optimized Order Details Modal */}
       {showDetailsModal && selectedOrder && (
         <Modal 
-          title={`Order Details - ${selectedOrder.order_number}`} 
+          title={`Order Details - ${selectedOrder.order_number || 'Unknown'}`} 
           onClose={() => {
             setShowDetailsModal(false);
             setSelectedOrder(null);
@@ -1448,19 +1452,19 @@ export default function ProductionOrdersSystem() {
             <div className="mb-6 pb-4 border-b border-blue-200 bg-gradient-to-r from-blue-50 to-indigo-50 p-4 rounded-lg">
               <div className="flex items-center justify-between">
                 <div>
-                  <h2 className="text-2xl font-bold text-gray-900 mb-1">{selectedOrder.product_name}</h2>
-                  <p className="text-lg text-gray-700">Order #{selectedOrder.order_number}</p>
+                  <h2 className="text-2xl font-bold text-gray-900 mb-1">{selectedOrder.product_name || 'Unknown Product'}</h2>
+                  <p className="text-lg text-gray-700">Order #{selectedOrder.order_number || 'Unknown'}</p>
                 </div>
                 <div className="flex items-center gap-3">
-                  <Badge className={getOrderStatusInfo(selectedOrder.status).color + " px-3 py-1 text-sm font-semibold"}>
-                    {getOrderStatusInfo(selectedOrder.status).label}
+                  <Badge className={getOrderStatusInfo(selectedOrder.status)?.color + " px-3 py-1 text-sm font-semibold"}>
+                    {getOrderStatusInfo(selectedOrder.status)?.label || 'Unknown'}
                   </Badge>
-                  <Badge className={getPriorityInfo(selectedOrder.priority).color + " px-3 py-1 text-sm font-semibold"}>
-                    {getPriorityInfo(selectedOrder.priority).label}
+                  <Badge className={getPriorityInfo(selectedOrder.priority)?.color + " px-3 py-1 text-sm font-semibold"}>
+                    {getPriorityInfo(selectedOrder.priority)?.label || 'Normal'}
                   </Badge>
                   <div className="text-right text-sm">
                     <div className="text-gray-500">Created</div>
-                    <div className="font-semibold">{new Date(selectedOrder.created_at).toLocaleDateString()}</div>
+                    <div className="font-semibold">{selectedOrder.created_at ? new Date(selectedOrder.created_at).toLocaleDateString() : 'Unknown'}</div>
                   </div>
                 </div>
               </div>
@@ -1475,13 +1479,13 @@ export default function ProductionOrdersSystem() {
                 <div className="space-y-3">
                   <div className="flex justify-between">
                     <span className="font-medium text-gray-700">Status:</span>
-                    <Badge className={getOrderStatusInfo(selectedOrder.status).color + " px-2 py-1 text-xs"}>
-                      {getOrderStatusInfo(selectedOrder.status).label}
+                    <Badge className={getOrderStatusInfo(selectedOrder.status)?.color + " px-2 py-1 text-xs"}>
+                      {getOrderStatusInfo(selectedOrder.status)?.label || 'Unknown'}
                     </Badge>
                   </div>
                   <div className="flex justify-between">
                     <span className="font-medium text-gray-700">Target Qty:</span>
-                    <span className="font-bold text-green-600">{selectedOrder.quantity}</span>
+                    <span className="font-bold text-green-600">{selectedOrder.quantity || 0}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="font-medium text-gray-700">Actual Qty:</span>
@@ -1512,7 +1516,7 @@ export default function ProductionOrdersSystem() {
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
                     <span className="font-medium text-gray-700">Created:</span>
-                    <span className="text-gray-900">{new Date(selectedOrder.created_at).toLocaleString()}</span>
+                    <span className="text-gray-900">{selectedOrder.created_at ? new Date(selectedOrder.created_at).toLocaleString() : 'Unknown'}</span>
                   </div>
                   {selectedOrder.start_time && (
                     <div className="flex justify-between">
@@ -1543,10 +1547,10 @@ export default function ProductionOrdersSystem() {
                     <div className="bg-red-50 border border-red-200 rounded-lg p-3">
                       <div className="flex justify-between items-center mb-2">
                         <span className="font-bold text-red-700">Production Stopped</span>
-                        <span className="text-xs text-red-600">{new Date(selectedOrder.stop_time).toLocaleDateString()}</span>
+                        <span className="text-xs text-red-600">{selectedOrder.stop_time ? new Date(selectedOrder.stop_time).toLocaleDateString() : 'Unknown'}</span>
                       </div>
                       <div className="text-sm">
-                        <div className="mb-1"><strong>Time:</strong> {new Date(selectedOrder.stop_time).toLocaleTimeString()}</div>
+                        <div className="mb-1"><strong>Time:</strong> {selectedOrder.stop_time ? new Date(selectedOrder.stop_time).toLocaleTimeString() : 'Unknown'}</div>
                         <div><strong>Reason:</strong> {selectedOrder.stop_reason || 'No reason provided'}</div>
                       </div>
                     </div>
@@ -1560,10 +1564,10 @@ export default function ProductionOrdersSystem() {
                     <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
                       <div className="flex justify-between items-center mb-2">
                         <span className="font-bold text-yellow-700">Production Paused</span>
-                        <span className="text-xs text-yellow-600">{new Date(selectedOrder.pause_time).toLocaleDateString()}</span>
+                        <span className="text-xs text-yellow-600">{selectedOrder.pause_time ? new Date(selectedOrder.pause_time).toLocaleDateString() : 'Unknown'}</span>
                       </div>
                       <div className="text-sm">
-                        <div className="mb-1"><strong>Time:</strong> {new Date(selectedOrder.pause_time).toLocaleTimeString()}</div>
+                        <div className="mb-1"><strong>Time:</strong> {selectedOrder.pause_time ? new Date(selectedOrder.pause_time).toLocaleTimeString() : 'Unknown'}</div>
                         <div><strong>Reason:</strong> {selectedOrder.pause_reason || 'No reason provided'}</div>
                       </div>
                     </div>
