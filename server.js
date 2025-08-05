@@ -1616,9 +1616,8 @@ app.post('/api/orders/:id/resume',
         await client.query(
           `UPDATE production_stops 
            SET resolved_at = NOW(),
-               status = 'resolved',
-               duration = EXTRACT(EPOCH FROM (NOW() - created_at)) / 60
-           WHERE order_id = $1 AND status = 'active'`,
+               duration = EXTRACT(EPOCH FROM (NOW() - start_time)) / 60
+           WHERE order_id = $1 AND resolved_at IS NULL`,
           [id]
         );
         
