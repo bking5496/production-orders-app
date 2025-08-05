@@ -1163,7 +1163,7 @@ app.post('/api/orders/:id/start',
          RETURNING *`,
         [
           machine_id, 
-          operator_id || req.user.id, 
+          operator_id || null, 
           batch_number || null, 
           newNotes, 
           parseInt(id)
