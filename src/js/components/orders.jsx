@@ -1592,6 +1592,93 @@ export default function ProductionOrdersSystem() {
         </Modal>
       )}
 
+      {/* Enhanced Stop Production Modal */}
+      {showStopModal && selectedOrder && (
+        <Modal 
+          title={`Stop Production - Order ${selectedOrder.order_number}`} 
+          onClose={() => {
+            setShowStopModal(false);
+            setSelectedOrder(null);
+            resetStopData();
+          }}
+          size="medium"
+        >
+          <form onSubmit={handleStopSubmit} className="space-y-6 p-6">
+            {/* Header */}
+            <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+              <div className="flex items-center">
+                <div className="flex-shrink-0">
+                  <Square className="h-8 w-8 text-red-600" />
+                </div>
+                <div className="ml-3">
+                  <h3 className="text-lg font-semibold text-red-900">Stop Production</h3>
+                  <p className="text-sm text-red-700">
+                    You are about to stop production for <strong>{selectedOrder.product_name}</strong>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Stop Reason Selection */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-3">
+                Stop Reason <span className="text-red-500">*</span>
+              </label>
+              <select
+                value={stopData.reason}
+                onChange={(e) => setStopData({...stopData, reason: e.target.value})}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 text-lg"
+                required
+              >
+                <option value="technical">🔧 Technical Issue</option>
+                <option value="quality">🎯 Quality Issue</option>
+                <option value="material">📦 Material Issue</option>
+                <option value="planned">📅 Planned Stop</option>
+                <option value="power">⚡ Power Issue</option>
+                <option value="other">❓ Other</option>
+              </select>
+            </div>
+
+            {/* Notes */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-3">
+                Additional Notes
+              </label>
+              <textarea
+                value={stopData.notes}
+                onChange={(e) => setStopData({...stopData, notes: e.target.value})}
+                placeholder="Provide additional details about the stop reason..."
+                rows={4}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 resize-none"
+              />
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex justify-end space-x-4 pt-4 border-t border-gray-200">
+              <Button
+                type="button"
+                onClick={() => {
+                  setShowStopModal(false);
+                  setSelectedOrder(null);
+                  resetStopData();
+                }}
+                className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-semibold"
+              >
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                disabled={loading}
+                className="px-8 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 font-semibold flex items-center gap-2 disabled:opacity-50"
+              >
+                <Square className="w-5 h-5" />
+                {loading ? 'Stopping...' : 'Stop Production'}
+              </Button>
+            </div>
+          </form>
+        </Modal>
+      )}
+
     </div>
   );
 }

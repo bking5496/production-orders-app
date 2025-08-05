@@ -670,21 +670,9 @@ export default function MachinesPage() {
                 )}
               </div>
               
-              {/* Action Buttons */}
-              <div className="flex gap-2 mt-4">
-                <Button 
-                  onClick={() => {
-                    setSelectedMachine(machine);
-                    setShowStatusModal(true);
-                  }}
-                  variant="outline"
-                  size="sm"
-                  className="flex-1"
-                >
-                  <StatusIcon className="w-4 h-4 mr-1" />
-                  Status
-                </Button>
-                
+              {/* Enhanced Action Buttons */}
+              <div className="space-y-3 mt-4">
+                {/* Primary Edit Button */}
                 <Button 
                   onClick={async () => {
                     setSelectedMachine(machine);
@@ -700,11 +688,26 @@ export default function MachinesPage() {
                     await loadCrewsForMachine(machine.id);
                     setShowEditModal(true);
                   }}
-                  variant="outline"
-                  size="sm"
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2"
                 >
-                  <Edit3 className="w-4 h-4" />
+                  <Edit3 className="w-5 h-5" />
+                  Edit Machine
                 </Button>
+                
+                {/* Secondary Actions */}
+                <div className="flex gap-2">
+                  <Button 
+                    onClick={() => {
+                      setSelectedMachine(machine);
+                      setShowStatusModal(true);
+                    }}
+                    variant="outline"
+                    size="sm"
+                    className="flex-1"
+                  >
+                    <StatusIcon className="w-4 h-4 mr-1" />
+                    Status
+                  </Button>
                 
                 {machine.status !== 'in_use' && (
                   <Button 
@@ -716,6 +719,7 @@ export default function MachinesPage() {
                     <Trash2 className="w-4 h-4" />
                   </Button>
                 )}
+                </div>
               </div>
             </Card>
           );
@@ -845,19 +849,41 @@ export default function MachinesPage() {
 
       {/* Edit Machine Modal */}
       {showEditModal && selectedMachine && (
-        <Modal title="Edit Machine" onClose={() => setShowEditModal(false)}>
-          <form onSubmit={handleEditMachine} className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Machine Name</label>
-              <input 
-                type="text" 
-                placeholder="Machine Name" 
-                value={formData.name} 
-                onChange={(e) => setFormData({...formData, name: e.target.value})} 
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
-                required 
-              />
+        <Modal 
+          title={`Edit Machine - ${selectedMachine.name}`} 
+          onClose={() => setShowEditModal(false)}
+          size="large"
+        >
+          <div className="p-6 bg-white">
+            {/* Enhanced Header */}
+            <div className="mb-6 pb-4 border-b border-gray-200">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                  <Settings className="w-6 h-6 text-blue-600" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-gray-900">Machine Configuration</h3>
+                  <p className="text-gray-600">Update machine settings and assignments</p>
+                </div>
+              </div>
             </div>
+
+            <form onSubmit={handleEditMachine} className="space-y-6">
+              {/* Machine Name Section */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-bold text-gray-700 mb-3">
+                    Machine Name <span className="text-red-500">*</span>
+                  </label>
+                  <input 
+                    type="text" 
+                    placeholder="Enter machine name" 
+                    value={formData.name} 
+                    onChange={(e) => setFormData({...formData, name: e.target.value})} 
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-lg font-semibold" 
+                    required 
+                  />
+                </div>
             
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Environment</label>
