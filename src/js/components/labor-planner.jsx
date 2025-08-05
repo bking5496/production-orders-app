@@ -24,7 +24,13 @@ import {
   Shield,
   Eye,
   ChevronDown,
-  Filter
+  Filter,
+  Play,
+  Pause,
+  Moon,
+  Sun,
+  Zap,
+  Users as UsersIcon
 } from 'lucide-react';
 import API from '../core/api';
 import Time from '../core/time';
@@ -37,29 +43,17 @@ const getCurrentSASTDateString = () => {
   return now.toISOString().split('T')[0];
 };
 
-const getWeekStart = (date) => {
-  const d = new Date(date);
-  const day = d.getDay();
-  const diff = d.getDate() - day + (day === 0 ? -6 : 1); // Adjust when day is Sunday
-  d.setDate(diff);
-  return d.toISOString().split('T')[0];
+const formatTodaysDate = (date) => {
+  return new Date(date).toLocaleDateString('en-ZA', { 
+    weekday: 'long', 
+    year: 'numeric', 
+    month: 'long', 
+    day: 'numeric' 
+  });
 };
 
-const getWeekEnd = (date) => {
-  const d = new Date(getWeekStart(date));
-  d.setDate(d.getDate() + 6);
-  return d.toISOString().split('T')[0];
-};
-
-const formatWeekRange = (startDate) => {
-  const start = new Date(startDate);
-  const end = new Date(start);
-  end.setDate(start.getDate() + 6);
-  return `${start.toLocaleDateString('en-ZA', { month: 'short', day: 'numeric' })} - ${end.toLocaleDateString('en-ZA', { month: 'short', day: 'numeric', year: 'numeric' })}`;
-};
-
-// Enhanced Worker Selection Component with Availability Status
-const WorkerSelect = ({ 
+// Enhanced Worker Selection Component for Daily Operations
+const DailyWorkerSelect = ({ 
   value, 
   onChange, 
   role, 
@@ -67,8 +61,10 @@ const WorkerSelect = ({
   shift, 
   date, 
   machineId, 
+  orderId,
   workers, 
   assignments, 
+  yesterdayAssignments = [],
   className = "" 
 }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -80,44 +76,90 @@ const WorkerSelect = ({
     return worker.role === 'operator' || worker.role === 'packer';
   });
 
-  // Check worker availability
+  // Check worker status with priority system
   const getWorkerStatus = (workerId) => {
-    const workerAssignments = assignments.filter(a => 
+    // Check if assigned to this exact slot today
+    const currentAssignment = assignments.find(a => 
       a.employee_id === workerId && 
+      a.machine_id === machineId && 
+      a.shift_type === shift && 
+      a.role === role &&
       a.assignment_date === date
-    );
-
-    // Check if already assigned to this exact slot
-    const currentAssignment = workerAssignments.find(a => 
-      a.machine_id === machineId && a.shift_type === shift && a.role === role
     );
     if (currentAssignment) return 'current';
 
-    // Check if assigned elsewhere
-    if (workerAssignments.length > 0) {
-      return 'assigned'; // Already assigned elsewhere
-    }
+    // Check if assigned elsewhere today
+    const todayAssignments = assignments.filter(a => 
+      a.employee_id === workerId && 
+      a.assignment_date === date
+    );
+    if (todayAssignments.length > 0) return 'assigned';
+
+    // Check if worked same machine/order yesterday (continuity priority)
+    const yesterdayMatch = yesterdayAssignments.find(a => 
+      a.employee_id === workerId && 
+      a.machine_id === machineId &&
+      a.role === role
+    );
+    if (yesterdayMatch) return 'continuity';
+
+    // Check if worked any machine yesterday (experience priority)
+    const yesterdayExperience = yesterdayAssignments.find(a => 
+      a.employee_id === workerId
+    );
+    if (yesterdayExperience) return 'experienced';
 
     return 'available';
   };
 
   const getStatusColor = (status) => {
     switch (status) {
-      case 'available': return 'text-green-600 bg-green-50';
-      case 'assigned': return 'text-yellow-600 bg-yellow-50';
       case 'current': return 'text-blue-600 bg-blue-50';
+      case 'continuity': return 'text-green-600 bg-green-50';
+      case 'experienced': return 'text-emerald-600 bg-emerald-50';
+      case 'available': return 'text-gray-600 bg-gray-50';
+      case 'assigned': return 'text-yellow-600 bg-yellow-50';
       default: return 'text-gray-600 bg-gray-50';
     }
   };
 
   const getStatusIcon = (status) => {
     switch (status) {
-      case 'available': return <CheckCircle className="w-3 h-3" />;
-      case 'assigned': return <Clock className="w-3 h-3" />;
       case 'current': return <User className="w-3 h-3" />;
+      case 'continuity': return <CheckCircle className="w-3 h-3" />;
+      case 'experienced': return <Zap className="w-3 h-3" />;
+      case 'available': return <UsersIcon className="w-3 h-3" />;
+      case 'assigned': return <Clock className="w-3 h-3" />;
       default: return null;
     }
   };
+
+  const getStatusLabel = (status) => {
+    switch (status) {
+      case 'current': return 'Current';
+      case 'continuity': return 'Same role yesterday';
+      case 'experienced': return 'Worked yesterday';
+      case 'available': return 'Available';
+      case 'assigned': return 'Already assigned today';
+      default: return '';
+    }
+  };
+
+  // Sort workers by priority: continuity > experienced > available > assigned
+  const sortedWorkers = availableWorkers.sort((a, b) => {
+    const statusA = getWorkerStatus(a.id);
+    const statusB = getWorkerStatus(b.id);
+    
+    const priority = {
+      'current': 0,
+      'continuity': 1,
+      'experienced': 2,
+      'available': 3,
+      'assigned': 4
+    };
+    
+    return (priority[statusA] || 5) - (priority[statusB] || 5);
+  });
 
   const selectedWorker = value ? availableWorkers.find(w => w.id === value) : null;
 
@@ -166,7 +208,7 @@ const WorkerSelect = ({
             >
               No assignment
             </button>
-            {availableWorkers.map(worker => {
+            {sortedWorkers.map(worker => {
               const status = getWorkerStatus(worker.id);
               return (
                 <button
@@ -189,8 +231,7 @@ const WorkerSelect = ({
                       {worker.full_name || worker.username}
                     </div>
                     <div className="text-xs text-gray-500">
-                      {worker.employee_code} • {worker.role}
-                      {status === 'assigned' && ' • Already assigned'}
+                      {worker.employee_code} • {getStatusLabel(status)}
                     </div>
                   </div>
                 </button>
@@ -203,16 +244,17 @@ const WorkerSelect = ({
   );
 };
 
-// Machine Row Component for Planning Grid
-const MachineRow = ({ 
+// Daily Machine Row Component
+const DailyMachineRow = ({ 
   machine, 
   workers, 
   assignments, 
+  yesterdayAssignments,
   onAssignmentChange, 
   selectedDate,
   isLocked = false
 }) => {
-  const getMachineAssignments = (shift) => {
+  const getDailyAssignments = (shift) => {
     return assignments.filter(a => 
       a.machine_id === machine.id && 
       a.assignment_date === selectedDate && 
@@ -234,7 +276,7 @@ const MachineRow = ({
     onAssignmentChange(machine.id, shift, role, workerId);
   };
 
-  // Determine required roles based on machine type and capacity
+  // Determine required roles based on machine type and specifications
   const getRequiredRoles = () => {
     const roles = ['operator']; // All machines need at least one operator
     
@@ -253,6 +295,10 @@ const MachineRow = ({
   };
 
   const requiredRoles = getRequiredRoles();
+
+  // Check which shifts this machine is running today
+  const isDayShiftActive = machine.day_shift_active !== false; // Default to true if not specified
+  const isNightShiftActive = machine.night_shift_active !== false; // Default to true if not specified
 
   return (
     <div className="grid grid-cols-12 gap-4 py-4 px-4 border-b border-gray-100 hover:bg-gray-50 transition-colors">
@@ -273,45 +319,76 @@ const MachineRow = ({
               Order: {machine.order_number}
             </div>
           )}
+          {machine.order_duration && (
+            <div className="text-xs text-purple-600 truncate">
+              {machine.order_duration} day order
+            </div>
+          )}
         </div>
       </div>
 
       {/* Day Shift Assignments */}
-      <div className="col-span-4 grid grid-cols-2 gap-2">
-        {requiredRoles.map(role => (
-          <WorkerSelect
-            key={`day-${role}`}
-            value={getAssignedWorker('day', role)}
-            onChange={(workerId) => handleAssignmentChange('day', role, workerId)}
-            role={role}
-            environment={machine.environment}
-            shift="day"
-            date={selectedDate}
-            machineId={machine.id}
-            workers={workers}
-            assignments={assignments}
-            className="text-sm"
-          />
-        ))}
+      <div className="col-span-4">
+        {isDayShiftActive ? (
+          <div className="grid grid-cols-2 gap-2">
+            {requiredRoles.map(role => (
+              <DailyWorkerSelect
+                key={`day-${role}`}
+                value={getAssignedWorker('day', role)}
+                onChange={(workerId) => handleAssignmentChange('day', role, workerId)}
+                role={role}
+                environment={machine.environment}
+                shift="day"
+                date={selectedDate}
+                machineId={machine.id}
+                orderId={machine.order_id}
+                workers={workers}
+                assignments={assignments}
+                yesterdayAssignments={yesterdayAssignments}
+                className="text-sm"
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="flex items-center justify-center h-full text-gray-400 bg-gray-50 rounded-lg">
+            <div className="text-center">
+              <Pause className="w-4 h-4 mx-auto mb-1" />
+              <span className="text-xs">Not Running</span>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Night Shift Assignments */}
-      <div className="col-span-4 grid grid-cols-2 gap-2">
-        {requiredRoles.map(role => (
-          <WorkerSelect
-            key={`night-${role}`}
-            value={getAssignedWorker('night', role)}
-            onChange={(workerId) => handleAssignmentChange('night', role, workerId)}
-            role={role}
-            environment={machine.environment}
-            shift="night"
-            date={selectedDate}
-            machineId={machine.id}
-            workers={workers}
-            assignments={assignments}
-            className="text-sm"
-          />
-        ))}
+      <div className="col-span-4">
+        {isNightShiftActive ? (
+          <div className="grid grid-cols-2 gap-2">
+            {requiredRoles.map(role => (
+              <DailyWorkerSelect
+                key={`night-${role}`}
+                value={getAssignedWorker('night', role)}
+                onChange={(workerId) => handleAssignmentChange('night', role, workerId)}
+                role={role}
+                environment={machine.environment}
+                shift="night"
+                date={selectedDate}
+                machineId={machine.id}
+                orderId={machine.order_id}
+                workers={workers}
+                assignments={assignments}
+                yesterdayAssignments={yesterdayAssignments}
+                className="text-sm"
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="flex items-center justify-center h-full text-gray-400 bg-gray-50 rounded-lg">
+            <div className="text-center">
+              <Moon className="w-4 h-4 mx-auto mb-1" />
+              <span className="text-xs">Not Running</span>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Status Indicator */}
@@ -319,12 +396,16 @@ const MachineRow = ({
         {isLocked ? (
           <Lock className="w-4 h-4 text-gray-400" />
         ) : (
-          <div className="flex items-center gap-1">
-            {getMachineAssignments('day').length > 0 && (
-              <div className="w-2 h-2 bg-green-400 rounded-full" title="Day shift assigned" />
+          <div className="flex flex-col items-center gap-1">
+            {isDayShiftActive && getDailyAssignments('day').length > 0 && (
+              <div className="w-2 h-2 bg-yellow-400 rounded-full" title="Day shift assigned">
+                <Sun className="w-2 h-2 text-yellow-600" />
+              </div>
             )}
-            {getMachineAssignments('night').length > 0 && (
-              <div className="w-2 h-2 bg-blue-400 rounded-full" title="Night shift assigned" />
+            {isNightShiftActive && getDailyAssignments('night').length > 0 && (
+              <div className="w-2 h-2 bg-blue-400 rounded-full" title="Night shift assigned">
+                <Moon className="w-2 h-2 text-blue-600" />
+              </div>
             )}
           </div>
         )}
@@ -333,11 +414,12 @@ const MachineRow = ({
   );
 };
 
-// Environment Support Roles Component
-const EnvironmentSupport = ({ 
+// Daily Environment Support Component
+const DailyEnvironmentSupport = ({ 
   environment, 
   workers, 
   assignments, 
+  yesterdayAssignments,
   onAssignmentChange, 
   selectedDate,
   isLocked = false 
@@ -365,7 +447,7 @@ const EnvironmentSupport = ({
     <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
       <h3 className="text-lg font-semibold text-blue-900 mb-3 flex items-center gap-2">
         <Factory className="w-5 h-5" />
-        {environment.toUpperCase()} ENVIRONMENT SUPPORT
+        {environment.toUpperCase()} ENVIRONMENT SUPPORT - TODAY
       </h3>
       
       <div className="grid grid-cols-12 gap-4">
@@ -373,10 +455,16 @@ const EnvironmentSupport = ({
           <div className="font-medium text-gray-700">Support Role</div>
         </div>
         <div className="col-span-4">
-          <div className="font-medium text-gray-700 text-center">Day Shift (06:00-18:00)</div>
+          <div className="font-medium text-gray-700 text-center flex items-center justify-center gap-2">
+            <Sun className="w-4 h-4 text-yellow-600" />
+            Day Shift (06:00-18:00)
+          </div>
         </div>
         <div className="col-span-4">
-          <div className="font-medium text-gray-700 text-center">Night Shift (18:00-06:00)</div>
+          <div className="font-medium text-gray-700 text-center flex items-center justify-center gap-2">
+            <Moon className="w-4 h-4 text-blue-600" />
+            Night Shift (18:00-06:00)
+          </div>
         </div>
         <div className="col-span-1"></div>
       </div>
@@ -390,7 +478,7 @@ const EnvironmentSupport = ({
             <span className="font-medium text-gray-700">{label}</span>
           </div>
           <div className="col-span-4">
-            <WorkerSelect
+            <DailyWorkerSelect
               value={getAssignedWorker('day', role)}
               onChange={(workerId) => handleAssignmentChange('day', role, workerId)}
               role={role}
@@ -400,10 +488,11 @@ const EnvironmentSupport = ({
               machineId={null}
               workers={workers}
               assignments={assignments}
+              yesterdayAssignments={yesterdayAssignments}
             />
           </div>
           <div className="col-span-4">
-            <WorkerSelect
+            <DailyWorkerSelect
               value={getAssignedWorker('night', role)}
               onChange={(workerId) => handleAssignmentChange('night', role, workerId)}
               role={role}
@@ -413,6 +502,7 @@ const EnvironmentSupport = ({
               machineId={null}
               workers={workers}
               assignments={assignments}
+              yesterdayAssignments={yesterdayAssignments}
             />
           </div>
           <div className="col-span-1"></div>
@@ -422,17 +512,46 @@ const EnvironmentSupport = ({
   );
 };
 
-// Weekly Planning Interface
-const WeeklyPlanningInterface = ({ currentUser }) => {
-  const [currentWeek, setCurrentWeek] = useState(() => getWeekStart(getCurrentSASTDateString()));
+// Idle Machines Display
+const IdleMachinesDisplay = ({ idleMachines, environment }) => {
+  if (idleMachines.length === 0) return null;
+
+  return (
+    <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-4">
+      <h4 className="font-semibold text-gray-700 mb-2 flex items-center gap-2">
+        <Pause className="w-4 h-4" />
+        IDLE MACHINES TODAY ({idleMachines.length})
+      </h4>
+      <div className="flex flex-wrap gap-2">
+        {idleMachines.map(machine => (
+          <span 
+            key={machine.id}
+            className="px-3 py-1 bg-gray-200 text-gray-700 rounded-full text-sm"
+          >
+            {machine.name}
+          </span>
+        ))}
+      </div>
+      <p className="text-xs text-gray-500 mt-2">
+        These machines have no orders assigned for today
+      </p>
+    </div>
+  );
+};
+
+// Daily Planning Interface
+const DailyPlanningInterface = ({ currentUser }) => {
+  const [selectedDate, setSelectedDate] = useState(getCurrentSASTDateString());
   const [selectedEnvironment, setSelectedEnvironment] = useState('');
   const [environments, setEnvironments] = useState([]);
-  const [machines, setMachines] = useState([]);
+  const [activeMachines, setActiveMachines] = useState([]);
+  const [idleMachines, setIdleMachines] = useState([]);
   const [workers, setWorkers] = useState([]);
   const [assignments, setAssignments] = useState([]);
+  const [yesterdayAssignments, setYesterdayAssignments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [isWeekLocked, setIsWeekLocked] = useState(false);
+  const [isDayLocked, setIsDayLocked] = useState(false);
   const [validationErrors, setValidationErrors] = useState([]);
 
   // Initialize with user's environment if they're a supervisor
@@ -447,12 +566,12 @@ const WeeklyPlanningInterface = ({ currentUser }) => {
     fetchInitialData();
   }, []);
 
-  // Fetch assignments when week or environment changes
+  // Fetch daily assignments when date or environment changes
   useEffect(() => {
     if (selectedEnvironment) {
-      fetchWeeklyAssignments();
+      fetchDailyAssignments();
     }
-  }, [currentWeek, selectedEnvironment]);
+  }, [selectedDate, selectedEnvironment]);
 
   const fetchInitialData = async () => {
     try {
@@ -471,48 +590,61 @@ const WeeklyPlanningInterface = ({ currentUser }) => {
     }
   };
 
-  const fetchWeeklyAssignments = async () => {
+  const fetchDailyAssignments = async () => {
     try {
-      const weekEnd = getWeekEnd(currentWeek);
+      // Get yesterday's date for continuity suggestions
+      const yesterday = new Date(selectedDate);
+      yesterday.setDate(yesterday.getDate() - 1);
+      const yesterdayStr = yesterday.toISOString().split('T')[0];
       
-      // Fetch machines for the selected environment
-      const machinesResponse = await API.get(`/machines?environment=${selectedEnvironment}&status=in_use,available`);
+      // Fetch today's active machines (machines with orders for today)
+      const machinesResponse = await API.get(`/machines/daily-active?date=${selectedDate}&environment=${selectedEnvironment}`);
       
-      // Fetch assignments for the week
+      // Fetch today's assignments
       const assignmentsResponse = await API.get(
-        `/labor-assignments?start_date=${currentWeek}&end_date=${weekEnd}&environment=${selectedEnvironment}`
+        `/labor-assignments?start_date=${selectedDate}&end_date=${selectedDate}&environment=${selectedEnvironment}`
       );
 
-      setMachines(machinesResponse.data || []);
+      // Fetch yesterday's assignments for continuity suggestions
+      const yesterdayResponse = await API.get(
+        `/labor-assignments?start_date=${yesterdayStr}&end_date=${yesterdayStr}&environment=${selectedEnvironment}`
+      );
+
+      // Separate active and idle machines
+      const allMachines = machinesResponse.data || [];
+      const active = allMachines.filter(m => m.has_orders_today);
+      const idle = allMachines.filter(m => !m.has_orders_today);
+
+      setActiveMachines(active);
+      setIdleMachines(idle);
       setAssignments(assignmentsResponse.data || []);
+      setYesterdayAssignments(yesterdayResponse.data || []);
       
-      // Check if week is locked (assignments are finalized)
-      checkWeekLockStatus();
+      // Check if day is locked
+      checkDayLockStatus();
       
     } catch (error) {
-      console.error('Failed to fetch weekly assignments:', error);
+      console.error('Failed to fetch daily assignments:', error);
     }
   };
 
-  const checkWeekLockStatus = () => {
-    // Week is locked if it's the current week and it's past Monday
-    const today = new Date(getCurrentSASTDateString());
-    const weekStart = new Date(currentWeek);
-    const daysDiff = Math.floor((today - weekStart) / (1000 * 60 * 60 * 24));
+  const checkDayLockStatus = () => {
+    // Day is locked if it's past 06:00 on the selected day (unless admin)
+    const now = new Date();
+    const selectedDateTime = new Date(selectedDate);
+    selectedDateTime.setHours(6, 0, 0, 0); // 06:00 on selected date
     
-    // Lock after Monday (day 1) unless user is admin
-    setIsWeekLocked(daysDiff > 1 && currentUser?.role !== 'admin');
+    setIsDayLocked(now > selectedDateTime && currentUser?.role !== 'admin');
   };
 
   const handleAssignmentChange = async (machineId, shift, role, workerId) => {
-    if (isWeekLocked && currentUser?.role !== 'admin') return;
+    if (isDayLocked && currentUser?.role !== 'admin') return;
 
     try {
-      // Create or update assignment
       const assignmentData = {
         employee_id: workerId,
         machine_id: machineId,
-        assignment_date: currentWeek, // For weekly planning, we use Monday as reference
+        assignment_date: selectedDate,
         shift_type: shift,
         role: role,
         start_time: shift === 'day' ? '06:00' : '18:00',
@@ -526,7 +658,7 @@ const WeeklyPlanningInterface = ({ currentUser }) => {
         // Remove assignment
         const existingAssignment = assignments.find(a => 
           a.machine_id === machineId && 
-          a.assignment_date === currentWeek && 
+          a.assignment_date === selectedDate && 
           a.shift_type === shift && 
           a.role === role
         );
@@ -536,67 +668,68 @@ const WeeklyPlanningInterface = ({ currentUser }) => {
       }
 
       // Refresh assignments
-      await fetchWeeklyAssignments();
+      await fetchDailyAssignments();
       
     } catch (error) {
       console.error('Failed to update assignment:', error);
     }
   };
 
-  const handleCopyPreviousWeek = async () => {
+  const handleAutoPopulate = async () => {
     try {
       setSaving(true);
-      const previousWeek = new Date(currentWeek);
-      previousWeek.setDate(previousWeek.getDate() - 7);
-      const previousWeekStr = previousWeek.toISOString().split('T')[0];
-
-      await API.post('/labor-assignments/copy-week', {
-        source_week: previousWeekStr,
-        target_week: currentWeek,
+      
+      // Auto-populate based on yesterday's assignments and availability
+      await API.post('/labor-assignments/auto-populate-daily', {
+        date: selectedDate,
         environment: selectedEnvironment
       });
 
-      await fetchWeeklyAssignments();
+      await fetchDailyAssignments();
     } catch (error) {
-      console.error('Failed to copy previous week:', error);
+      console.error('Failed to auto-populate assignments:', error);
     } finally {
       setSaving(false);
     }
   };
 
-  const handleSaveWeek = async () => {
+  const handleLockDay = async () => {
     try {
       setSaving(true);
-      await API.post('/labor-assignments/finalize-week', {
-        week: currentWeek,
+      await API.post('/labor-assignments/lock-daily', {
+        date: selectedDate,
         environment: selectedEnvironment
       });
       
-      setIsWeekLocked(true);
+      setIsDayLocked(true);
     } catch (error) {
-      console.error('Failed to save week:', error);
+      console.error('Failed to lock day:', error);
     } finally {
       setSaving(false);
     }
   };
 
-  const validateAssignments = () => {
+  const validateDailyAssignments = () => {
     const errors = [];
     
-    // Check for required coverage
-    machines.forEach(machine => {
-      const dayAssignments = assignments.filter(a => 
-        a.machine_id === machine.id && a.shift_type === 'day'
-      );
-      const nightAssignments = assignments.filter(a => 
-        a.machine_id === machine.id && a.shift_type === 'night'
-      );
-
-      if (dayAssignments.length === 0) {
-        errors.push(`${machine.name}: Missing day shift coverage`);
+    // Check for required coverage on active machines
+    activeMachines.forEach(machine => {
+      if (machine.day_shift_active) {
+        const dayAssignments = assignments.filter(a => 
+          a.machine_id === machine.id && a.shift_type === 'day'
+        );
+        if (dayAssignments.length === 0) {
+          errors.push(`${machine.name}: Missing day shift operator`);
+        }
       }
-      if (nightAssignments.length === 0) {
-        errors.push(`${machine.name}: Missing night shift coverage`);
+      
+      if (machine.night_shift_active) {
+        const nightAssignments = assignments.filter(a => 
+          a.machine_id === machine.id && a.shift_type === 'night'
+        );
+        if (nightAssignments.length === 0) {
+          errors.push(`${machine.name}: Missing night shift operator`);
+        }
       }
     });
 
@@ -604,10 +737,10 @@ const WeeklyPlanningInterface = ({ currentUser }) => {
     return errors.length === 0;
   };
 
-  const navigateWeek = (direction) => {
-    const newWeek = new Date(currentWeek);
-    newWeek.setDate(newWeek.getDate() + (direction * 7));
-    setCurrentWeek(newWeek.toISOString().split('T')[0]);
+  const navigateDate = (direction) => {
+    const newDate = new Date(selectedDate);
+    newDate.setDate(newDate.getDate() + direction);
+    setSelectedDate(newDate.toISOString().split('T')[0]);
   };
 
   if (loading) {
@@ -615,7 +748,7 @@ const WeeklyPlanningInterface = ({ currentUser }) => {
       <div className="flex items-center justify-center h-64">
         <div className="flex items-center gap-3">
           <RefreshCw className="w-5 h-5 animate-spin text-blue-500" />
-          <span className="text-gray-600">Loading labor planning system...</span>
+          <span className="text-gray-600">Loading daily planning system...</span>
         </div>
       </div>
     );
@@ -633,8 +766,8 @@ const WeeklyPlanningInterface = ({ currentUser }) => {
       {/* Header Controls */}
       <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Weekly Labor Planning</h1>
-          <p className="text-gray-600 mt-1">Plan and assign workers to machines for production shifts</p>
+          <h1 className="text-3xl font-bold text-gray-900">Daily Labor Planning</h1>
+          <p className="text-gray-600 mt-1">Assign workers to today's active machines and orders</p>
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
@@ -653,19 +786,19 @@ const WeeklyPlanningInterface = ({ currentUser }) => {
             ))}
           </select>
 
-          {/* Week Navigation */}
+          {/* Date Navigation */}
           <div className="flex items-center gap-2">
             <button
-              onClick={() => navigateWeek(-1)}
+              onClick={() => navigateDate(-1)}
               className="p-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg"
             >
               <ArrowLeft className="w-4 h-4" />
             </button>
             <span className="font-medium text-gray-900 min-w-48 text-center">
-              Week of {formatWeekRange(currentWeek)}
+              {formatTodaysDate(selectedDate)}
             </span>
             <button
-              onClick={() => navigateWeek(1)}
+              onClick={() => navigateDate(1)}
               className="p-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg"
             >
               <ArrowRight className="w-4 h-4" />
@@ -678,96 +811,118 @@ const WeeklyPlanningInterface = ({ currentUser }) => {
         <div className="text-center py-12">
           <Factory className="w-16 h-16 text-gray-300 mx-auto mb-4" />
           <h3 className="text-lg font-medium text-gray-900 mb-2">Select an Environment</h3>
-          <p className="text-gray-500">Choose an environment to start planning worker assignments</p>
+          <p className="text-gray-500">Choose an environment to start planning today's worker assignments</p>
         </div>
       ) : (
         <div className="space-y-6">
-          {/* Action Buttons */}
+          {/* Quick Actions */}
           <div className="flex flex-wrap items-center gap-3 p-4 bg-white border border-gray-200 rounded-lg">
             <button
-              onClick={handleCopyPreviousWeek}
-              disabled={saving || isWeekLocked}
-              className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              onClick={handleAutoPopulate}
+              disabled={saving || isDayLocked}
+              className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <Copy className="w-4 h-4" />
-              Copy Previous Week
+              <Zap className="w-4 h-4" />
+              Auto-Populate
             </button>
 
             <button
-              onClick={handleSaveWeek}
-              disabled={saving || isWeekLocked}
-              className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              onClick={handleLockDay}
+              disabled={saving || isDayLocked}
+              className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <Save className="w-4 h-4" />
-              {isWeekLocked ? 'Week Locked' : 'Save & Lock Week'}
+              <Lock className="w-4 h-4" />
+              {isDayLocked ? 'Day Locked' : 'Validate & Lock'}
             </button>
 
-            {isWeekLocked && (
+            {isDayLocked && (
               <div className="flex items-center gap-2 text-amber-600 bg-amber-50 px-3 py-2 rounded-lg">
                 <Lock className="w-4 h-4" />
-                <span className="text-sm font-medium">Week is finalized</span>
+                <span className="text-sm font-medium">Today's schedule is locked</span>
               </div>
             )}
 
             {validationErrors.length > 0 && (
               <div className="flex items-center gap-2 text-red-600 bg-red-50 px-3 py-2 rounded-lg">
                 <AlertTriangle className="w-4 h-4" />
-                <span className="text-sm font-medium">{validationErrors.length} issues found</span>
+                <span className="text-sm font-medium">{validationErrors.length} gaps found</span>
               </div>
             )}
           </div>
 
           {/* Environment Support Roles */}
           {selectedEnvData && (
-            <EnvironmentSupport
+            <DailyEnvironmentSupport
               environment={selectedEnvironment}
               workers={workers}
               assignments={assignments}
+              yesterdayAssignments={yesterdayAssignments}
               onAssignmentChange={handleAssignmentChange}
-              selectedDate={currentWeek}
-              isLocked={isWeekLocked}
+              selectedDate={selectedDate}
+              isLocked={isDayLocked}
             />
           )}
 
-          {/* Planning Grid */}
+          {/* Active Machines Today */}
           <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
+            <div className="bg-green-50 border-b border-green-200 px-4 py-3">
+              <h3 className="text-lg font-semibold text-green-900 flex items-center gap-2">
+                <Play className="w-5 h-5" />
+                ACTIVE MACHINES TODAY ({activeMachines.length})
+              </h3>
+            </div>
+
             {/* Grid Header */}
             <div className="grid grid-cols-12 gap-4 py-4 px-4 bg-gray-50 border-b border-gray-200 font-semibold text-gray-700">
-              <div className="col-span-3">Machine</div>
-              <div className="col-span-4 text-center">Day Shift (06:00-18:00)</div>
-              <div className="col-span-4 text-center">Night Shift (18:00-06:00)</div>
+              <div className="col-span-3">Machine & Order</div>
+              <div className="col-span-4 text-center flex items-center justify-center gap-2">
+                <Sun className="w-4 h-4 text-yellow-600" />
+                Day Shift (06:00-18:00)
+              </div>
+              <div className="col-span-4 text-center flex items-center justify-center gap-2">
+                <Moon className="w-4 h-4 text-blue-600" />
+                Night Shift (18:00-06:00)
+              </div>
               <div className="col-span-1 text-center">Status</div>
             </div>
 
             {/* Machine Rows */}
             <div className="divide-y divide-gray-100">
-              {machines.length === 0 ? (
+              {activeMachines.length === 0 ? (
                 <div className="text-center py-12">
-                  <Factory className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-                  <p className="text-gray-500">No machines found for {selectedEnvironment}</p>
+                  <Pause className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+                  <p className="text-gray-500">No active machines for {selectedEnvironment} today</p>
+                  <p className="text-gray-400 text-sm">Production Manager needs to confirm today's orders</p>
                 </div>
               ) : (
-                machines.map(machine => (
-                  <MachineRow
+                activeMachines.map(machine => (
+                  <DailyMachineRow
                     key={machine.id}
                     machine={machine}
                     workers={workers}
                     assignments={assignments}
+                    yesterdayAssignments={yesterdayAssignments}
                     onAssignmentChange={handleAssignmentChange}
-                    selectedDate={currentWeek}
-                    isLocked={isWeekLocked}
+                    selectedDate={selectedDate}
+                    isLocked={isDayLocked}
                   />
                 ))
               )}
             </div>
           </div>
 
+          {/* Idle Machines */}
+          <IdleMachinesDisplay 
+            idleMachines={idleMachines} 
+            environment={selectedEnvironment}
+          />
+
           {/* Validation Errors */}
           {validationErrors.length > 0 && (
             <div className="bg-red-50 border border-red-200 rounded-lg p-4">
               <h4 className="font-semibold text-red-900 mb-2 flex items-center gap-2">
                 <AlertTriangle className="w-4 h-4" />
-                Assignment Issues
+                Assignment Gaps - Need Attention
               </h4>
               <ul className="space-y-1">
                 {validationErrors.map((error, index) => (
@@ -777,28 +932,28 @@ const WeeklyPlanningInterface = ({ currentUser }) => {
             </div>
           )}
 
-          {/* Summary Stats */}
+          {/* Daily Summary */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="bg-white p-4 rounded-lg border border-gray-200">
               <div className="flex items-center gap-3">
-                <div className="p-2 bg-blue-100 rounded-lg">
-                  <Factory className="w-5 h-5 text-blue-600" />
+                <div className="p-2 bg-green-100 rounded-lg">
+                  <Play className="w-5 h-5 text-green-600" />
                 </div>
                 <div>
-                  <div className="text-2xl font-bold text-gray-900">{machines.length}</div>
-                  <div className="text-sm text-gray-500">Total Machines</div>
+                  <div className="text-2xl font-bold text-gray-900">{activeMachines.length}</div>
+                  <div className="text-sm text-gray-500">Active Machines</div>
                 </div>
               </div>
             </div>
 
             <div className="bg-white p-4 rounded-lg border border-gray-200">
               <div className="flex items-center gap-3">
-                <div className="p-2 bg-green-100 rounded-lg">
-                  <Users className="w-5 h-5 text-green-600" />
+                <div className="p-2 bg-blue-100 rounded-lg">
+                  <Users className="w-5 h-5 text-blue-600" />
                 </div>
                 <div>
                   <div className="text-2xl font-bold text-gray-900">{assignments.length}</div>
-                  <div className="text-sm text-gray-500">Total Assignments</div>
+                  <div className="text-sm text-gray-500">Worker Assignments</div>
                 </div>
               </div>
             </div>
@@ -806,7 +961,7 @@ const WeeklyPlanningInterface = ({ currentUser }) => {
             <div className="bg-white p-4 rounded-lg border border-gray-200">
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-yellow-100 rounded-lg">
-                  <Clock className="w-5 h-5 text-yellow-600" />
+                  <Sun className="w-5 h-5 text-yellow-600" />
                 </div>
                 <div>
                   <div className="text-2xl font-bold text-gray-900">
@@ -820,7 +975,7 @@ const WeeklyPlanningInterface = ({ currentUser }) => {
             <div className="bg-white p-4 rounded-lg border border-gray-200">
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-purple-100 rounded-lg">
-                  <Clock className="w-5 h-5 text-purple-600" />
+                  <Moon className="w-5 h-5 text-purple-600" />
                 </div>
                 <div>
                   <div className="text-2xl font-bold text-gray-900">
@@ -886,9 +1041,9 @@ export const LaborManagementSystem = () => {
   const tabs = [
     {
       id: 'planning',
-      label: 'Weekly Planning',
+      label: 'Daily Planning',
       icon: Calendar,
-      component: WeeklyPlanningInterface
+      component: DailyPlanningInterface
     },
     {
       id: 'attendance',
