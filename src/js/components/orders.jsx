@@ -1441,206 +1441,209 @@ export default function ProductionOrdersSystem() {
             setShowDetailsModal(false);
             setSelectedOrder(null);
           }}
-          size="large"
-          className="max-w-[98vw] mx-auto my-4 w-[98vw]"
+          size="fullscreen"
         >
-          <div className="p-8 bg-white min-h-[600px] max-h-[85vh] overflow-y-auto">
-            {/* Enhanced Header */}
-            <div className="mb-8 pb-6 border-b-2 border-blue-200 bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-lg">
+          <div className="p-6 bg-white h-full">
+            {/* Compact Header */}
+            <div className="mb-6 pb-4 border-b border-blue-200 bg-gradient-to-r from-blue-50 to-indigo-50 p-4 rounded-lg">
               <div className="flex items-center justify-between">
                 <div>
-                  <h2 className="text-3xl font-bold text-gray-900 mb-2">{selectedOrder.product_name}</h2>
-                  <p className="text-xl text-gray-700 mb-3">Order #{selectedOrder.order_number}</p>
-                  <div className="flex items-center gap-4">
-                    <Badge className={getOrderStatusInfo(selectedOrder.status).color + " px-4 py-2 text-lg font-semibold"}>
+                  <h2 className="text-2xl font-bold text-gray-900 mb-1">{selectedOrder.product_name}</h2>
+                  <p className="text-lg text-gray-700">Order #{selectedOrder.order_number}</p>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Badge className={getOrderStatusInfo(selectedOrder.status).color + " px-3 py-1 text-sm font-semibold"}>
+                    {getOrderStatusInfo(selectedOrder.status).label}
+                  </Badge>
+                  <Badge className={getPriorityInfo(selectedOrder.priority).color + " px-3 py-1 text-sm font-semibold"}>
+                    {getPriorityInfo(selectedOrder.priority).label}
+                  </Badge>
+                  <div className="text-right text-sm">
+                    <div className="text-gray-500">Created</div>
+                    <div className="font-semibold">{new Date(selectedOrder.created_at).toLocaleDateString()}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Multi-Column Layout - No Scrolling */}
+            <div className="grid grid-cols-3 gap-6 h-full">
+              
+              {/* Left Column - Order Information */}
+              <div className="bg-white rounded-lg border border-gray-200 p-4">
+                <h3 className="text-lg font-bold text-blue-600 mb-4 border-b border-blue-200 pb-2">Order Information</h3>
+                <div className="space-y-3">
+                  <div className="flex justify-between">
+                    <span className="font-medium text-gray-700">Status:</span>
+                    <Badge className={getOrderStatusInfo(selectedOrder.status).color + " px-2 py-1 text-xs"}>
                       {getOrderStatusInfo(selectedOrder.status).label}
                     </Badge>
-                    <Badge className={getPriorityInfo(selectedOrder.priority).color + " px-4 py-2 text-lg font-semibold"}>
-                      {getPriorityInfo(selectedOrder.priority).label}
-                    </Badge>
                   </div>
-                </div>
-                <div className="text-right">
-                  <div className="text-sm text-gray-500 uppercase tracking-wide">Created</div>
-                  <div className="text-lg font-semibold text-gray-900">
-                    {new Date(selectedOrder.created_at).toLocaleDateString()}
+                  <div className="flex justify-between">
+                    <span className="font-medium text-gray-700">Target Qty:</span>
+                    <span className="font-bold text-green-600">{selectedOrder.quantity}</span>
                   </div>
+                  <div className="flex justify-between">
+                    <span className="font-medium text-gray-700">Actual Qty:</span>
+                    <span className="font-bold text-blue-600">{selectedOrder.actual_quantity || 0}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="font-medium text-gray-700">Machine:</span>
+                    <span className="text-gray-900">{selectedOrder.machine_id ? getMachineName(selectedOrder.machine_id) : 'Not Assigned'}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="font-medium text-gray-700">Operator:</span>
+                    <span className="text-gray-900">{selectedOrder.operator_id ? `#${selectedOrder.operator_id}` : 'Not Assigned'}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="font-medium text-gray-700">Environment:</span>
+                    <span className="text-gray-900">{getEnvironmentName(selectedOrder.environment)}</span>
+                  </div>
+                  {selectedOrder.batch_number && (
+                    <div className="flex justify-between">
+                      <span className="font-medium text-gray-700">Batch:</span>
+                      <span className="text-gray-900">{selectedOrder.batch_number}</span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Timeline */}
+                <h4 className="text-lg font-bold text-blue-600 mt-6 mb-4 border-b border-blue-200 pb-2">Timeline</h4>
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span className="font-medium text-gray-700">Created:</span>
+                    <span className="text-gray-900">{new Date(selectedOrder.created_at).toLocaleString()}</span>
+                  </div>
+                  {selectedOrder.start_time && (
+                    <div className="flex justify-between">
+                      <span className="font-medium text-gray-700">Started:</span>
+                      <span className="text-gray-900">{new Date(selectedOrder.start_time).toLocaleString()}</span>
+                    </div>
+                  )}
+                  {selectedOrder.complete_time && (
+                    <div className="flex justify-between">
+                      <span className="font-medium text-gray-700">Completed:</span>
+                      <span className="text-gray-900">{new Date(selectedOrder.complete_time).toLocaleString()}</span>
+                    </div>
+                  )}
+                  {selectedOrder.stop_time && (
+                    <div className="flex justify-between">
+                      <span className="font-medium text-red-700">Stopped:</span>
+                      <span className="text-red-900">{new Date(selectedOrder.stop_time).toLocaleString()}</span>
+                    </div>
+                  )}
                 </div>
               </div>
-            </div>
 
-            {/* Order Tracking Table */}
-            <div className="mb-10">
-              <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
-                <div className="w-1 h-8 bg-blue-600 mr-4 rounded"></div>
-                Order Tracking
-              </h3>
-              <div className="bg-white rounded-lg shadow-lg border border-gray-200 overflow-hidden">
-                <table className="w-full">
-                  <thead>
-                    <tr className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white">
-                      <th className="px-6 py-4 text-left font-bold text-lg">Field</th>
-                      <th className="px-6 py-4 text-left font-bold text-lg">Value</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr className="hover:bg-gray-50 transition-colors">
-                      <td className="px-6 py-4 font-semibold text-gray-700 border-b border-gray-200">Status</td>
-                      <td className="px-6 py-4 text-gray-900 border-b border-gray-200">{getOrderStatusInfo(selectedOrder.status).label}</td>
-                    </tr>
-                    <tr className="hover:bg-gray-50 transition-colors">
-                      <td className="px-6 py-4 font-semibold text-gray-700 border-b border-gray-200">Target Quantity</td>
-                      <td className="px-6 py-4 text-gray-900 border-b border-gray-200 font-bold text-green-600">{selectedOrder.quantity}</td>
-                    </tr>
-                    <tr className="hover:bg-gray-50 transition-colors">
-                      <td className="px-6 py-4 font-semibold text-gray-700 border-b border-gray-200">Actual Quantity</td>
-                      <td className="px-6 py-4 text-gray-900 border-b border-gray-200 font-bold text-blue-600">{selectedOrder.actual_quantity || 0}</td>
-                    </tr>
-                    <tr className="hover:bg-gray-50 transition-colors">
-                      <td className="px-6 py-4 font-semibold text-gray-700 border-b border-gray-200">Machine</td>
-                      <td className="px-6 py-4 text-gray-900 border-b border-gray-200">
-                        {selectedOrder.machine_id ? getMachineName(selectedOrder.machine_id) : 'Not Assigned'}
-                      </td>
-                    </tr>
-                    <tr className="hover:bg-gray-50 transition-colors">
-                      <td className="px-6 py-4 font-semibold text-gray-700 border-b border-gray-200">Operator</td>
-                      <td className="px-6 py-4 text-gray-900 border-b border-gray-200">
-                        {selectedOrder.operator_id ? `Operator #${selectedOrder.operator_id}` : 'Not Assigned'}
-                      </td>
-                    </tr>
-                    <tr className="hover:bg-gray-50 transition-colors">
-                      <td className="px-6 py-4 font-semibold text-gray-700 border-b border-gray-200">Environment</td>
-                      <td className="px-6 py-4 text-gray-900 border-b border-gray-200">{getEnvironmentName(selectedOrder.environment)}</td>
-                    </tr>
-                    {selectedOrder.batch_number && (
-                      <tr className="hover:bg-gray-50 transition-colors">
-                        <td className="px-6 py-4 font-semibold text-gray-700 border-b border-gray-200">Batch Number</td>
-                        <td className="px-6 py-4 text-gray-900 border-b border-gray-200">{selectedOrder.batch_number}</td>
-                      </tr>
-                    )}
-                    <tr className="hover:bg-gray-50 transition-colors">
-                      <td className="px-6 py-4 font-semibold text-gray-700 border-b border-gray-200">Created</td>
-                      <td className="px-6 py-4 text-gray-900 border-b border-gray-200">{new Date(selectedOrder.created_at).toLocaleString()}</td>
-                    </tr>
-                    {selectedOrder.start_time && (
-                      <tr className="hover:bg-gray-50 transition-colors">
-                        <td className="px-6 py-4 font-semibold text-gray-700 border-b border-gray-200">Started</td>
-                        <td className="px-6 py-4 text-gray-900 border-b border-gray-200">{new Date(selectedOrder.start_time).toLocaleString()}</td>
-                      </tr>
-                    )}
-                    {selectedOrder.complete_time && (
-                      <tr className="hover:bg-gray-50 transition-colors">
-                        <td className="px-6 py-4 font-semibold text-gray-700">Completed</td>
-                        <td className="px-6 py-4 text-gray-900">{new Date(selectedOrder.complete_time).toLocaleString()}</td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
+              {/* Middle Column - Downtime & Issues */}
+              <div className="bg-white rounded-lg border border-gray-200 p-4">
+                <h3 className="text-lg font-bold text-red-600 mb-4 border-b border-red-200 pb-2">Downtime & Issues</h3>
+                <div className="space-y-4">
+                  {selectedOrder.stop_time ? (
+                    <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="font-bold text-red-700">Production Stopped</span>
+                        <span className="text-xs text-red-600">{new Date(selectedOrder.stop_time).toLocaleDateString()}</span>
+                      </div>
+                      <div className="text-sm">
+                        <div className="mb-1"><strong>Time:</strong> {new Date(selectedOrder.stop_time).toLocaleTimeString()}</div>
+                        <div><strong>Reason:</strong> {selectedOrder.stop_reason || 'No reason provided'}</div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="text-center text-gray-500 italic py-8">
+                      No downtime events recorded
+                    </div>
+                  )}
+                  
+                  {selectedOrder.pause_time && (
+                    <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="font-bold text-yellow-700">Production Paused</span>
+                        <span className="text-xs text-yellow-600">{new Date(selectedOrder.pause_time).toLocaleDateString()}</span>
+                      </div>
+                      <div className="text-sm">
+                        <div className="mb-1"><strong>Time:</strong> {new Date(selectedOrder.pause_time).toLocaleTimeString()}</div>
+                        <div><strong>Reason:</strong> {selectedOrder.pause_reason || 'No reason provided'}</div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Waste Information */}
+                <h4 className="text-lg font-bold text-orange-600 mt-6 mb-4 border-b border-orange-200 pb-2">Waste Management</h4>
+                {selectedOrder.waste_quantity ? (
+                  <div className="bg-orange-50 border border-orange-200 rounded-lg p-3">
+                    <div className="space-y-2 text-sm">
+                      <div className="flex justify-between">
+                        <span className="font-medium text-gray-700">Type:</span>
+                        <span className="font-bold text-orange-700">{selectedOrder.waste_type || 'Material'}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="font-medium text-gray-700">Quantity:</span>
+                        <span className="font-bold text-red-600">{selectedOrder.waste_quantity}</span>
+                      </div>
+                      {selectedOrder.waste_notes && (
+                        <div>
+                          <span className="font-medium text-gray-700">Notes:</span>
+                          <p className="text-gray-900 mt-1">{selectedOrder.waste_notes}</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ) : (
+                  <div className="text-center text-gray-500 italic py-4">
+                    No waste recorded
+                  </div>
+                )}
               </div>
-            </div>
 
-            {/* Downtime Reporting Table */}
-            <div className="mb-10">
-              <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
-                <div className="w-1 h-8 bg-red-600 mr-4 rounded"></div>
-                Downtime Reporting
-              </h3>
-              <div className="bg-white rounded-lg shadow-lg border border-gray-200 overflow-hidden">
-                <table className="w-full">
-                  <thead>
-                    <tr className="bg-gradient-to-r from-red-500 to-pink-600 text-white">
-                      <th className="px-6 py-4 text-left font-bold text-lg">Event</th>
-                      <th className="px-6 py-4 text-left font-bold text-lg">Time</th>
-                      <th className="px-6 py-4 text-left font-bold text-lg">Reason</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {selectedOrder.stop_time && (
-                      <tr className="hover:bg-gray-50 transition-colors">
-                        <td className="px-6 py-4 font-semibold text-red-700 border-b border-gray-200">Stopped</td>
-                        <td className="px-6 py-4 text-gray-900 border-b border-gray-200">{new Date(selectedOrder.stop_time).toLocaleString()}</td>
-                        <td className="px-6 py-4 text-gray-900 border-b border-gray-200">{selectedOrder.stop_reason || 'No reason provided'}</td>
-                      </tr>
-                    )}
-                    {selectedOrder.pause_time && (
-                      <tr className="hover:bg-gray-50 transition-colors">
-                        <td className="px-6 py-4 font-semibold text-yellow-700">Paused</td>
-                        <td className="px-6 py-4 text-gray-900">{new Date(selectedOrder.pause_time).toLocaleString()}</td>
-                        <td className="px-6 py-4 text-gray-900">{selectedOrder.pause_reason || 'No reason provided'}</td>
-                      </tr>
-                    )}
-                    {!selectedOrder.stop_time && !selectedOrder.pause_time && (
-                      <tr>
-                        <td className="px-6 py-4 text-gray-500 italic text-center" colSpan="3">
-                          No downtime events recorded
-                        </td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
-              </div>
-            </div>
+              {/* Right Column - Production Notes & Actions */}
+              <div className="bg-white rounded-lg border border-gray-200 p-4">
+                <h3 className="text-lg font-bold text-green-600 mb-4 border-b border-green-200 pb-2">Production Notes</h3>
+                {selectedOrder.notes ? (
+                  <div className="bg-green-50 border border-green-200 rounded-lg p-3 mb-6">
+                    <p className="text-gray-900 text-sm whitespace-pre-wrap leading-relaxed">{selectedOrder.notes}</p>
+                  </div>
+                ) : (
+                  <div className="text-center text-gray-500 italic py-4 mb-6">
+                    No production notes available
+                  </div>
+                )}
 
-            {/* Waste Management Table */}
-            <div className="mb-10">
-              <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
-                <div className="w-1 h-8 bg-orange-600 mr-4 rounded"></div>
-                Waste Management
-              </h3>
-              <div className="bg-white rounded-lg shadow-lg border border-gray-200 overflow-hidden">
-                <table className="w-full">
-                  <thead>
-                    <tr className="bg-gradient-to-r from-orange-500 to-red-600 text-white">
-                      <th className="px-6 py-4 text-left font-bold text-lg">Type</th>
-                      <th className="px-6 py-4 text-left font-bold text-lg">Quantity</th>
-                      <th className="px-6 py-4 text-left font-bold text-lg">Reason</th>
-                      <th className="px-6 py-4 text-left font-bold text-lg">Notes</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {selectedOrder.waste_quantity ? (
-                      <tr className="hover:bg-gray-50 transition-colors">
-                        <td className="px-6 py-4 font-semibold text-orange-700">Material Waste</td>
-                        <td className="px-6 py-4 text-red-600 font-bold text-lg">{selectedOrder.waste_quantity}</td>
-                        <td className="px-6 py-4 text-gray-900">{selectedOrder.waste_type || 'N/A'}</td>
-                        <td className="px-6 py-4 text-gray-900">{selectedOrder.waste_notes || 'No notes'}</td>
-                      </tr>
-                    ) : (
-                      <tr>
-                        <td className="px-6 py-4 text-gray-500 italic text-center" colSpan="4">
-                          No waste recorded for this order
-                        </td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
-              </div>
-            </div>
+                {/* Specifications */}
+                {selectedOrder.specifications && (
+                  <div className="mb-6">
+                    <h4 className="text-md font-bold text-purple-600 mb-2 border-b border-purple-200 pb-1">Specifications</h4>
+                    <div className="bg-purple-50 border border-purple-200 rounded-lg p-3">
+                      <p className="text-gray-900 text-sm whitespace-pre-wrap">{selectedOrder.specifications}</p>
+                    </div>
+                  </div>
+                )}
 
-            {/* Production Notes */}
-            {selectedOrder.notes && (
-              <div className="mb-10">
-                <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
-                  <div className="w-1 h-8 bg-green-600 mr-4 rounded"></div>
-                  Production Notes
-                </h3>
-                <div className="bg-gradient-to-r from-green-50 to-blue-50 border-2 border-green-200 p-6 rounded-lg shadow-lg">
-                  <p className="text-gray-900 whitespace-pre-wrap text-lg leading-relaxed">{selectedOrder.notes}</p>
+                {/* Customer Info */}
+                {selectedOrder.customer_info && (
+                  <div className="mb-6">
+                    <h4 className="text-md font-bold text-indigo-600 mb-2 border-b border-indigo-200 pb-1">Customer Info</h4>
+                    <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-3">
+                      <p className="text-gray-900 text-sm whitespace-pre-wrap">{selectedOrder.customer_info}</p>
+                    </div>
+                  </div>
+                )}
+
+                {/* Close Button */}
+                <div className="mt-auto pt-4">
+                  <Button 
+                    onClick={() => {
+                      setShowDetailsModal(false);
+                      setSelectedOrder(null);
+                    }}
+                    className="w-full bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white py-3 font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200"
+                  >
+                    Close Details
+                  </Button>
                 </div>
               </div>
-            )}
-
-            {/* Enhanced Close Button */}
-            <div className="flex justify-center pt-8 border-t-2 border-gray-300">
-              <Button 
-                onClick={() => {
-                  setShowDetailsModal(false);
-                  setSelectedOrder(null);
-                }}
-                className="bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white px-12 py-4 text-lg font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
-              >
-                Close Details
-              </Button>
             </div>
           </div>
         </Modal>

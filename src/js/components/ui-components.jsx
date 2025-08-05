@@ -9,7 +9,18 @@ import ReactDOM from 'react-dom';
  * @param {Function} props.onClose - Function to call when the modal should be closed.
  * @param {string} [props.title] - An optional title to display at the top of the modal.
  */
-export const Modal = ({ children, onClose, title }) => {
+export const Modal = ({ children, onClose, title, size = "medium", className = "" }) => {
+    // Define size classes
+    const sizeClasses = {
+        small: "max-w-md",
+        medium: "max-w-md", 
+        large: "max-w-7xl",
+        fullscreen: "max-w-[98vw] w-[98vw] h-[95vh]"
+    };
+
+    const baseClasses = "bg-white rounded-lg shadow-xl transform transition-all duration-300";
+    const modalClasses = `${baseClasses} ${sizeClasses[size]} ${className}`;
+    
     // We render the modal into the 'portal-root' div in your index.html
     return ReactDOM.createPortal(
         <div 
@@ -17,11 +28,13 @@ export const Modal = ({ children, onClose, title }) => {
             onClick={onClose}
         >
             <div 
-                className="bg-white rounded-lg shadow-xl p-6 w-full max-w-md transform transition-all duration-300" 
+                className={modalClasses}
                 onClick={(e) => e.stopPropagation()} // Prevents closing when clicking inside the modal
             >
-                {title && <h2 className="text-xl font-bold mb-4">{title}</h2>}
-                {children}
+                {title && <h2 className="text-xl font-bold mb-4 px-6 pt-6">{title}</h2>}
+                <div className="overflow-y-auto max-h-full">
+                    {children}  
+                </div>
             </div>
         </div>,
         document.getElementById('portal-root')
