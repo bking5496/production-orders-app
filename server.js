@@ -1148,7 +1148,7 @@ app.post('/api/orders/:id/start',
              operator_id = $2, 
              start_time = NOW(),
              batch_number = $3,
-             notes = COALESCE(notes, '') || CASE WHEN $4 IS NOT NULL THEN ' | Start Notes: ' || $4 ELSE '' END,
+             notes = COALESCE(production_orders.notes, '') || CASE WHEN $4 IS NOT NULL THEN ' | Start Notes: ' || $4 ELSE '' END,
              updated_at = NOW()
          WHERE id = $5 AND status IN ('pending', 'stopped')
          RETURNING *`,
@@ -1316,7 +1316,7 @@ app.post('/api/orders/:id/stop',
          SET status = 'stopped',
              stop_time = NOW(),
              stop_reason = $1,
-             notes = COALESCE(notes, '') || CASE WHEN $2 IS NOT NULL THEN ' | Stopped: ' || $2 ELSE '' END,
+             notes = COALESCE(production_orders.notes, '') || CASE WHEN $2 IS NOT NULL THEN ' | Stopped: ' || $2 ELSE '' END,
              updated_at = NOW()
          WHERE id = $3 AND status IN ('pending', 'in_progress')
          RETURNING *`,
