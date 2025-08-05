@@ -3115,6 +3115,335 @@ app.post('/api/sync-machine-statuses',
   }
 );
 
+// =============================================================================
+// LABOR PLANNING ENDPOINTS
+// =============================================================================
+
+// Get labor assignments with filtering
+app.get('/api/labor-assignments', authenticateToken, async (req, res) => {
+  try {
+    const client = await pool.connect();
+    try {
+      const { start_date, end_date, environment, machine_id, employee_id, shift_type } = req.query;
+      
+      let query = `
+        SELECT 
+          la.*,
+          u.full_name,
+          u.username,
+          u.employee_code,
+          u.role as employee_role,
+          m.name as machine_name,
+          m.environment as machine_environment
+        FROM labor_assignments la
+        JOIN users u ON la.employee_id = u.id
+        LEFT JOIN machines m ON la.machine_id = m.id
+        WHERE 1=1
+      `;
+      
+      const params = [];
+      let paramIndex = 1;
+      
+      if (start_date) {
+        query += ` AND la.assignment_date >= $${paramIndex}`;
+        params.push(start_date);
+        paramIndex++;
+      }
+      
+      if (end_date) {
+        query += ` AND la.assignment_date <= $${paramIndex}`;
+        params.push(end_date);
+        paramIndex++;
+      }
+      
+      if (environment) {
+        query += ` AND (m.environment = $${paramIndex} OR la.machine_id IS NULL)`;
+        params.push(environment);
+        paramIndex++;
+      }
+      
+      if (machine_id) {
+        query += ` AND la.machine_id = $${paramIndex}`;
+        params.push(machine_id);
+        paramIndex++;
+      }
+      
+      if (employee_id) {
+        query += ` AND la.employee_id = $${paramIndex}`;
+        params.push(employee_id);
+        paramIndex++;
+      }
+      
+      if (shift_type) {
+        query += ` AND la.shift_type = $${paramIndex}`;
+        params.push(shift_type);
+        paramIndex++;
+      }
+      
+      query += ` ORDER BY la.assignment_date, la.shift_type, la.machine_id, la.role`;
+      
+      const result = await client.query(query, params);
+      res.json({ success: true, data: result.rows });
+      
+    } finally {
+      client.release();
+    }
+  } catch (error) {
+    console.error('Error fetching labor assignments:', error);
+    res.status(500).json({ error: 'Failed to fetch labor assignments', details: error.message });
+  }
+});
+
+// Create or update labor assignment
+app.post('/api/labor-assignments', authenticateToken, async (req, res) => {
+  try {
+    const client = await pool.connect();
+    try {
+      const { employee_id, machine_id, assignment_date, shift_type, role, start_time, end_time, hourly_rate } = req.body;
+      
+      // Check for existing assignment
+      const existingQuery = `
+        SELECT id FROM labor_assignments 
+        WHERE employee_id = $1 AND machine_id = $2 AND assignment_date = $3 AND shift_type = $4 AND role = $5
+      `;
+      const existingResult = await client.query(existingQuery, [employee_id, machine_id, assignment_date, shift_type, role]);
+      
+      if (existingResult.rows.length > 0) {
+        // Update existing assignment
+        const updateQuery = `
+          UPDATE labor_assignments 
+          SET start_time = $1, end_time = $2, hourly_rate = $3
+          WHERE id = $4
+          RETURNING *
+        `;
+        const result = await client.query(updateQuery, [start_time, end_time, hourly_rate, existingResult.rows[0].id]);
+        res.json({ success: true, data: result.rows[0], action: 'updated' });
+      } else {
+        // Create new assignment
+        const insertQuery = `
+          INSERT INTO labor_assignments 
+          (employee_id, machine_id, assignment_date, shift_type, role, start_time, end_time, hourly_rate, created_by)
+          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+          RETURNING *
+        `;
+        const result = await client.query(insertQuery, [
+          employee_id, machine_id, assignment_date, shift_type, role, start_time, end_time, hourly_rate, req.user.id
+        ]);
+        res.json({ success: true, data: result.rows[0], action: 'created' });
+      }
+      
+    } finally {
+      client.release();
+    }
+  } catch (error) {
+    console.error('Error creating/updating labor assignment:', error);
+    res.status(500).json({ error: 'Failed to create/update labor assignment', details: error.message });
+  }
+});
+
+// Delete labor assignment
+app.delete('/api/labor-assignments/:id', authenticateToken, async (req, res) => {
+  try {
+    const client = await pool.connect();
+    try {
+      const { id } = req.params;
+      
+      const result = await client.query('DELETE FROM labor_assignments WHERE id = $1 RETURNING *', [id]);
+      
+      if (result.rows.length === 0) {
+        return res.status(404).json({ error: 'Labor assignment not found' });
+      }
+      
+      res.json({ success: true, message: 'Labor assignment deleted successfully' });
+      
+    } finally {
+      client.release();
+    }
+  } catch (error) {
+    console.error('Error deleting labor assignment:', error);
+    res.status(500).json({ error: 'Failed to delete labor assignment', details: error.message });
+  }
+});
+
+// Copy previous week's assignments
+app.post('/api/labor-assignments/copy-week', authenticateToken, async (req, res) => {
+  try {
+    const client = await pool.connect();
+    try {
+      const { source_week, target_week, environment } = req.body;
+      
+      // First, delete any existing assignments for the target week
+      await client.query(`
+        DELETE FROM labor_assignments la
+        USING machines m
+        WHERE la.machine_id = m.id 
+        AND la.assignment_date = $1 
+        AND m.environment = $2
+      `, [target_week, environment]);
+      
+      // Copy assignments from source week to target week
+      const copyQuery = `
+        INSERT INTO labor_assignments 
+        (employee_id, machine_id, assignment_date, shift_type, role, start_time, end_time, hourly_rate, created_by)
+        SELECT 
+          la.employee_id,
+          la.machine_id,
+          $2 as assignment_date,
+          la.shift_type,
+          la.role,
+          la.start_time,
+          la.end_time,
+          la.hourly_rate,
+          $3 as created_by
+        FROM labor_assignments la
+        LEFT JOIN machines m ON la.machine_id = m.id
+        WHERE la.assignment_date = $1 
+        AND (m.environment = $4 OR la.machine_id IS NULL)
+      `;
+      
+      const result = await client.query(copyQuery, [source_week, target_week, req.user.id, environment]);
+      
+      res.json({ 
+        success: true, 
+        message: `Copied ${result.rowCount} assignments from ${source_week} to ${target_week}`,
+        copied_count: result.rowCount 
+      });
+      
+    } finally {
+      client.release();
+    }
+  } catch (error) {
+    console.error('Error copying week assignments:', error);
+    res.status(500).json({ error: 'Failed to copy week assignments', details: error.message });
+  }
+});
+
+// Finalize week assignments (lock them)
+app.post('/api/labor-assignments/finalize-week', authenticateToken, async (req, res) => {
+  try {
+    const { week, environment } = req.body;
+    
+    // For now, this is just a placeholder for validation
+    // In the future, you could add a finalization flag to the database
+    
+    res.json({ 
+      success: true, 
+      message: `Week ${week} assignments for ${environment} environment have been finalized`,
+      finalized_week: week,
+      environment: environment
+    });
+    
+  } catch (error) {
+    console.error('Error finalizing week assignments:', error);
+    res.status(500).json({ error: 'Failed to finalize week assignments', details: error.message });
+  }
+});
+
+// Get environments for labor planning
+app.get('/api/environments', authenticateToken, async (req, res) => {
+  try {
+    const client = await pool.connect();
+    try {
+      const result = await client.query(`
+        SELECT id, code, name, description, color, machine_types, is_active 
+        FROM environments 
+        WHERE is_active = true
+        ORDER BY name
+      `);
+      
+      res.json({ success: true, data: result.rows });
+      
+    } finally {
+      client.release();
+    }
+  } catch (error) {
+    console.error('Error fetching environments:', error);
+    res.status(500).json({ error: 'Failed to fetch environments', details: error.message });
+  }
+});
+
+// Get users for labor planning (operators, supervisors, packers)
+app.get('/api/users', authenticateToken, async (req, res) => {
+  try {
+    const client = await pool.connect();
+    try {
+      const { role } = req.query;
+      
+      let query = `
+        SELECT id, username, full_name, employee_code, role, phone, profile_data, is_active
+        FROM users 
+        WHERE is_active = true
+      `;
+      
+      const params = [];
+      
+      if (role) {
+        const roles = role.split(',').map(r => r.trim());
+        query += ` AND role = ANY($1)`;
+        params.push(roles);
+      }
+      
+      query += ` ORDER BY full_name, username`;
+      
+      const result = await client.query(query, params);
+      res.json({ success: true, data: result.rows });
+      
+    } finally {
+      client.release();
+    }
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    res.status(500).json({ error: 'Failed to fetch users', details: error.message });
+  }
+});
+
+// Get machines for environment
+app.get('/api/machines', authenticateToken, async (req, res) => {
+  try {
+    const client = await pool.connect();
+    try {
+      const { environment, status } = req.query;
+      
+      let query = `
+        SELECT 
+          id, name, code, type, environment, status, capacity, production_rate,
+          crew_size, operators_per_shift, hopper_loaders_per_shift, packers_per_shift,
+          po.order_number
+        FROM machines m
+        LEFT JOIN production_orders po ON m.id = po.machine_id AND po.status IN ('in_progress', 'stopped')
+        WHERE 1=1
+      `;
+      
+      const params = [];
+      let paramIndex = 1;
+      
+      if (environment) {
+        query += ` AND m.environment = $${paramIndex}`;
+        params.push(environment);
+        paramIndex++;
+      }
+      
+      if (status) {
+        const statuses = status.split(',').map(s => s.trim());
+        query += ` AND m.status = ANY($${paramIndex})`;
+        params.push(statuses);
+        paramIndex++;
+      }
+      
+      query += ` ORDER BY m.name`;
+      
+      const result = await client.query(query, params);
+      res.json({ success: true, data: result.rows });
+      
+    } finally {
+      client.release();
+    }
+  } catch (error) {
+    console.error('Error fetching machines:', error);
+    res.status(500).json({ error: 'Failed to fetch machines', details: error.message });
+  }
+});
+
 // Serve React app for all other routes
 
 app.get('*', (req, res) => {

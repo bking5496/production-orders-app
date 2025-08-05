@@ -367,3 +367,5 @@ Instead of /public/js/main.js, use /js/main.js.
 11:50:55 PM [vite] (client) hmr update /src/js/components/production-dashboard.jsx
 12:05:18 AM [vite] (client) hmr update /src/js/components/production-dashboard.jsx
 12:05:42 AM [vite] (client) hmr update /src/js/components/production-dashboard.jsx
+12:32:37 AM [vite] (client) hmr update /src/js/components/labor-planner.jsx
+12:33:52 AM [vite] (client) page reload server.js

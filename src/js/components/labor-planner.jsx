@@ -9,15 +9,832 @@ import {
   Settings,
   ArrowLeft,
   ArrowRight,
-  X
+  X,
+  Copy,
+  Save,
+  Lock,
+  Unlock,
+  AlertTriangle,
+  CheckCircle,
+  Clock,
+  User,
+  Wrench,
+  Truck,
+  Factory,
+  Shield,
+  Eye,
+  ChevronDown,
+  Filter
 } from 'lucide-react';
 import API from '../core/api';
+import Time from '../core/time';
 import AttendanceModule from '../modules/attendance-module-simple.jsx';
 
+// Utility Functions
 const getCurrentSASTDateString = () => {
   const now = new Date();
   now.setHours(now.getHours() + 2); // Convert to SAST (UTC+2)
   return now.toISOString().split('T')[0];
+};
+
+const getWeekStart = (date) => {
+  const d = new Date(date);
+  const day = d.getDay();
+  const diff = d.getDate() - day + (day === 0 ? -6 : 1); // Adjust when day is Sunday
+  d.setDate(diff);
+  return d.toISOString().split('T')[0];
+};
+
+const getWeekEnd = (date) => {
+  const d = new Date(getWeekStart(date));
+  d.setDate(d.getDate() + 6);
+  return d.toISOString().split('T')[0];
+};
+
+const formatWeekRange = (startDate) => {
+  const start = new Date(startDate);
+  const end = new Date(start);
+  end.setDate(start.getDate() + 6);
+  return `${start.toLocaleDateString('en-ZA', { month: 'short', day: 'numeric' })} - ${end.toLocaleDateString('en-ZA', { month: 'short', day: 'numeric', year: 'numeric' })}`;
+};
+
+// Enhanced Worker Selection Component with Availability Status
+const WorkerSelect = ({ 
+  value, 
+  onChange, 
+  role, 
+  environment, 
+  shift, 
+  date, 
+  machineId, 
+  workers, 
+  assignments, 
+  className = "" 
+}) => {
+  const [isOpen, setIsOpen] = useState(false);
+  
+  // Filter workers by role
+  const availableWorkers = workers.filter(worker => {
+    if (role === 'supervisor') return worker.role === 'supervisor';
+    if (role === 'forklift') return worker.role === 'operator'; // Forklift drivers are operators with special skills
+    return worker.role === 'operator' || worker.role === 'packer';
+  });
+
+  // Check worker availability
+  const getWorkerStatus = (workerId) => {
+    const workerAssignments = assignments.filter(a => 
+      a.employee_id === workerId && 
+      a.assignment_date === date
+    );
+
+    // Check if already assigned to this exact slot
+    const currentAssignment = workerAssignments.find(a => 
+      a.machine_id === machineId && a.shift_type === shift && a.role === role
+    );
+    if (currentAssignment) return 'current';
+
+    // Check if assigned elsewhere
+    if (workerAssignments.length > 0) {
+      return 'assigned'; // Already assigned elsewhere
+    }
+
+    return 'available';
+  };
+
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'available': return 'text-green-600 bg-green-50';
+      case 'assigned': return 'text-yellow-600 bg-yellow-50';
+      case 'current': return 'text-blue-600 bg-blue-50';
+      default: return 'text-gray-600 bg-gray-50';
+    }
+  };
+
+  const getStatusIcon = (status) => {
+    switch (status) {
+      case 'available': return <CheckCircle className="w-3 h-3" />;
+      case 'assigned': return <Clock className="w-3 h-3" />;
+      case 'current': return <User className="w-3 h-3" />;
+      default: return null;
+    }
+  };
+
+  const selectedWorker = value ? availableWorkers.find(w => w.id === value) : null;
+
+  return (
+    <div className={`relative ${className}`}>
+      <button
+        type="button"
+        onClick={() => setIsOpen(!isOpen)}
+        className={`w-full px-3 py-2 text-left bg-white border rounded-lg shadow-sm hover:border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+          selectedWorker ? 'border-blue-200' : 'border-gray-200'
+        }`}
+      >
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2 min-w-0 flex-1">
+            {selectedWorker ? (
+              <>
+                <div className={`flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${
+                  getStatusColor(getWorkerStatus(selectedWorker.id))
+                }`}>
+                  {getStatusIcon(getWorkerStatus(selectedWorker.id))}
+                </div>
+                <span className="font-medium text-gray-900 truncate">
+                  {selectedWorker.full_name || selectedWorker.username}
+                </span>
+                <span className="text-xs text-gray-500 truncate">
+                  ({selectedWorker.employee_code})
+                </span>
+              </>
+            ) : (
+              <span className="text-gray-400">Select {role}...</span>
+            )}
+          </div>
+          <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+        </div>
+      </button>
+
+      {isOpen && (
+        <div className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-48 overflow-y-auto">
+          <div className="py-1">
+            <button
+              onClick={() => {
+                onChange(null);
+                setIsOpen(false);
+              }}
+              className="w-full px-3 py-2 text-left text-gray-400 hover:bg-gray-50"
+            >
+              No assignment
+            </button>
+            {availableWorkers.map(worker => {
+              const status = getWorkerStatus(worker.id);
+              return (
+                <button
+                  key={worker.id}
+                  onClick={() => {
+                    onChange(worker.id);
+                    setIsOpen(false);
+                  }}
+                  className={`w-full px-3 py-2 text-left hover:bg-gray-50 flex items-center gap-2 ${
+                    status === 'assigned' ? 'opacity-60' : ''
+                  }`}
+                >
+                  <div className={`flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${
+                    getStatusColor(status)
+                  }`}>
+                    {getStatusIcon(status)}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="font-medium text-gray-900 truncate">
+                      {worker.full_name || worker.username}
+                    </div>
+                    <div className="text-xs text-gray-500">
+                      {worker.employee_code} • {worker.role}
+                      {status === 'assigned' && ' • Already assigned'}
+                    </div>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+// Machine Row Component for Planning Grid
+const MachineRow = ({ 
+  machine, 
+  workers, 
+  assignments, 
+  onAssignmentChange, 
+  selectedDate,
+  isLocked = false
+}) => {
+  const getMachineAssignments = (shift) => {
+    return assignments.filter(a => 
+      a.machine_id === machine.id && 
+      a.assignment_date === selectedDate && 
+      a.shift_type === shift
+    );
+  };
+
+  const getAssignedWorker = (shift, role) => {
+    const assignment = assignments.find(a => 
+      a.machine_id === machine.id && 
+      a.assignment_date === selectedDate && 
+      a.shift_type === shift && 
+      a.role === role
+    );
+    return assignment ? assignment.employee_id : null;
+  };
+
+  const handleAssignmentChange = (shift, role, workerId) => {
+    onAssignmentChange(machine.id, shift, role, workerId);
+  };
+
+  // Determine required roles based on machine type and capacity
+  const getRequiredRoles = () => {
+    const roles = ['operator']; // All machines need at least one operator
+    
+    // Add additional roles based on machine specifications
+    if (machine.operators_per_shift > 1) {
+      roles.push('helper');
+    }
+    if (machine.hopper_loaders_per_shift > 0) {
+      roles.push('loader');
+    }
+    if (machine.packers_per_shift > 0) {
+      roles.push('packer');
+    }
+    
+    return roles;
+  };
+
+  const requiredRoles = getRequiredRoles();
+
+  return (
+    <div className="grid grid-cols-12 gap-4 py-4 px-4 border-b border-gray-100 hover:bg-gray-50 transition-colors">
+      {/* Machine Info */}
+      <div className="col-span-3 flex items-center gap-3">
+        <div className={`p-2 rounded-lg ${
+          machine.status === 'in_use' ? 'bg-green-100 text-green-600' : 
+          machine.status === 'maintenance' ? 'bg-yellow-100 text-yellow-600' :
+          'bg-gray-100 text-gray-600'
+        }`}>
+          <Factory className="w-4 h-4" />
+        </div>
+        <div className="min-w-0">
+          <div className="font-medium text-gray-900 truncate">{machine.name}</div>
+          <div className="text-xs text-gray-500 truncate">{machine.type}</div>
+          {machine.order_number && (
+            <div className="text-xs text-blue-600 font-medium truncate">
+              Order: {machine.order_number}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Day Shift Assignments */}
+      <div className="col-span-4 grid grid-cols-2 gap-2">
+        {requiredRoles.map(role => (
+          <WorkerSelect
+            key={`day-${role}`}
+            value={getAssignedWorker('day', role)}
+            onChange={(workerId) => handleAssignmentChange('day', role, workerId)}
+            role={role}
+            environment={machine.environment}
+            shift="day"
+            date={selectedDate}
+            machineId={machine.id}
+            workers={workers}
+            assignments={assignments}
+            className="text-sm"
+          />
+        ))}
+      </div>
+
+      {/* Night Shift Assignments */}
+      <div className="col-span-4 grid grid-cols-2 gap-2">
+        {requiredRoles.map(role => (
+          <WorkerSelect
+            key={`night-${role}`}
+            value={getAssignedWorker('night', role)}
+            onChange={(workerId) => handleAssignmentChange('night', role, workerId)}
+            role={role}
+            environment={machine.environment}
+            shift="night"
+            date={selectedDate}
+            machineId={machine.id}
+            workers={workers}
+            assignments={assignments}
+            className="text-sm"
+          />
+        ))}
+      </div>
+
+      {/* Status Indicator */}
+      <div className="col-span-1 flex items-center justify-center">
+        {isLocked ? (
+          <Lock className="w-4 h-4 text-gray-400" />
+        ) : (
+          <div className="flex items-center gap-1">
+            {getMachineAssignments('day').length > 0 && (
+              <div className="w-2 h-2 bg-green-400 rounded-full" title="Day shift assigned" />
+            )}
+            {getMachineAssignments('night').length > 0 && (
+              <div className="w-2 h-2 bg-blue-400 rounded-full" title="Night shift assigned" />
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+// Environment Support Roles Component
+const EnvironmentSupport = ({ 
+  environment, 
+  workers, 
+  assignments, 
+  onAssignmentChange, 
+  selectedDate,
+  isLocked = false 
+}) => {
+  const supportRoles = [
+    { role: 'supervisor', label: 'Supervisor', icon: Shield },
+    { role: 'forklift', label: 'Forklift Driver', icon: Truck }
+  ];
+
+  const getAssignedWorker = (shift, role) => {
+    const assignment = assignments.find(a => 
+      a.machine_id === null && // Environment-level assignments have null machine_id
+      a.assignment_date === selectedDate && 
+      a.shift_type === shift && 
+      a.role === role
+    );
+    return assignment ? assignment.employee_id : null;
+  };
+
+  const handleAssignmentChange = (shift, role, workerId) => {
+    onAssignmentChange(null, shift, role, workerId); // null machine_id for environment-level
+  };
+
+  return (
+    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+      <h3 className="text-lg font-semibold text-blue-900 mb-3 flex items-center gap-2">
+        <Factory className="w-5 h-5" />
+        {environment.toUpperCase()} ENVIRONMENT SUPPORT
+      </h3>
+      
+      <div className="grid grid-cols-12 gap-4">
+        <div className="col-span-3">
+          <div className="font-medium text-gray-700">Support Role</div>
+        </div>
+        <div className="col-span-4">
+          <div className="font-medium text-gray-700 text-center">Day Shift (06:00-18:00)</div>
+        </div>
+        <div className="col-span-4">
+          <div className="font-medium text-gray-700 text-center">Night Shift (18:00-06:00)</div>
+        </div>
+        <div className="col-span-1"></div>
+      </div>
+
+      {supportRoles.map(({ role, label, icon: Icon }) => (
+        <div key={role} className="grid grid-cols-12 gap-4 py-3 border-t border-blue-200 mt-2">
+          <div className="col-span-3 flex items-center gap-2">
+            <div className="p-2 bg-blue-100 rounded-lg">
+              <Icon className="w-4 h-4 text-blue-600" />
+            </div>
+            <span className="font-medium text-gray-700">{label}</span>
+          </div>
+          <div className="col-span-4">
+            <WorkerSelect
+              value={getAssignedWorker('day', role)}
+              onChange={(workerId) => handleAssignmentChange('day', role, workerId)}
+              role={role}
+              environment={environment}
+              shift="day"
+              date={selectedDate}
+              machineId={null}
+              workers={workers}
+              assignments={assignments}
+            />
+          </div>
+          <div className="col-span-4">
+            <WorkerSelect
+              value={getAssignedWorker('night', role)}
+              onChange={(workerId) => handleAssignmentChange('night', role, workerId)}
+              role={role}
+              environment={environment}
+              shift="night"
+              date={selectedDate}
+              machineId={null}
+              workers={workers}
+              assignments={assignments}
+            />
+          </div>
+          <div className="col-span-1"></div>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+// Weekly Planning Interface
+const WeeklyPlanningInterface = ({ currentUser }) => {
+  const [currentWeek, setCurrentWeek] = useState(() => getWeekStart(getCurrentSASTDateString()));
+  const [selectedEnvironment, setSelectedEnvironment] = useState('');
+  const [environments, setEnvironments] = useState([]);
+  const [machines, setMachines] = useState([]);
+  const [workers, setWorkers] = useState([]);
+  const [assignments, setAssignments] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [isWeekLocked, setIsWeekLocked] = useState(false);
+  const [validationErrors, setValidationErrors] = useState([]);
+
+  // Initialize with user's environment if they're a supervisor
+  useEffect(() => {
+    if (currentUser?.role === 'supervisor' && currentUser?.profile_data?.environment) {
+      setSelectedEnvironment(currentUser.profile_data.environment);
+    }
+  }, [currentUser]);
+
+  // Fetch initial data
+  useEffect(() => {
+    fetchInitialData();
+  }, []);
+
+  // Fetch assignments when week or environment changes
+  useEffect(() => {
+    if (selectedEnvironment) {
+      fetchWeeklyAssignments();
+    }
+  }, [currentWeek, selectedEnvironment]);
+
+  const fetchInitialData = async () => {
+    try {
+      setLoading(true);
+      const [envResponse, workersResponse] = await Promise.all([
+        API.get('/environments'),
+        API.get('/users?role=operator,supervisor,packer')
+      ]);
+
+      setEnvironments(envResponse.data || []);
+      setWorkers(workersResponse.data || []);
+    } catch (error) {
+      console.error('Failed to fetch initial data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchWeeklyAssignments = async () => {
+    try {
+      const weekEnd = getWeekEnd(currentWeek);
+      
+      // Fetch machines for the selected environment
+      const machinesResponse = await API.get(`/machines?environment=${selectedEnvironment}&status=in_use,available`);
+      
+      // Fetch assignments for the week
+      const assignmentsResponse = await API.get(
+        `/labor-assignments?start_date=${currentWeek}&end_date=${weekEnd}&environment=${selectedEnvironment}`
+      );
+
+      setMachines(machinesResponse.data || []);
+      setAssignments(assignmentsResponse.data || []);
+      
+      // Check if week is locked (assignments are finalized)
+      checkWeekLockStatus();
+      
+    } catch (error) {
+      console.error('Failed to fetch weekly assignments:', error);
+    }
+  };
+
+  const checkWeekLockStatus = () => {
+    // Week is locked if it's the current week and it's past Monday
+    const today = new Date(getCurrentSASTDateString());
+    const weekStart = new Date(currentWeek);
+    const daysDiff = Math.floor((today - weekStart) / (1000 * 60 * 60 * 24));
+    
+    // Lock after Monday (day 1) unless user is admin
+    setIsWeekLocked(daysDiff > 1 && currentUser?.role !== 'admin');
+  };
+
+  const handleAssignmentChange = async (machineId, shift, role, workerId) => {
+    if (isWeekLocked && currentUser?.role !== 'admin') return;
+
+    try {
+      // Create or update assignment
+      const assignmentData = {
+        employee_id: workerId,
+        machine_id: machineId,
+        assignment_date: currentWeek, // For weekly planning, we use Monday as reference
+        shift_type: shift,
+        role: role,
+        start_time: shift === 'day' ? '06:00' : '18:00',
+        end_time: shift === 'day' ? '18:00' : '06:00'
+      };
+
+      if (workerId) {
+        // Create or update assignment
+        await API.post('/labor-assignments', assignmentData);
+      } else {
+        // Remove assignment
+        const existingAssignment = assignments.find(a => 
+          a.machine_id === machineId && 
+          a.assignment_date === currentWeek && 
+          a.shift_type === shift && 
+          a.role === role
+        );
+        if (existingAssignment) {
+          await API.delete(`/labor-assignments/${existingAssignment.id}`);
+        }
+      }
+
+      // Refresh assignments
+      await fetchWeeklyAssignments();
+      
+    } catch (error) {
+      console.error('Failed to update assignment:', error);
+    }
+  };
+
+  const handleCopyPreviousWeek = async () => {
+    try {
+      setSaving(true);
+      const previousWeek = new Date(currentWeek);
+      previousWeek.setDate(previousWeek.getDate() - 7);
+      const previousWeekStr = previousWeek.toISOString().split('T')[0];
+
+      await API.post('/labor-assignments/copy-week', {
+        source_week: previousWeekStr,
+        target_week: currentWeek,
+        environment: selectedEnvironment
+      });
+
+      await fetchWeeklyAssignments();
+    } catch (error) {
+      console.error('Failed to copy previous week:', error);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleSaveWeek = async () => {
+    try {
+      setSaving(true);
+      await API.post('/labor-assignments/finalize-week', {
+        week: currentWeek,
+        environment: selectedEnvironment
+      });
+      
+      setIsWeekLocked(true);
+    } catch (error) {
+      console.error('Failed to save week:', error);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const validateAssignments = () => {
+    const errors = [];
+    
+    // Check for required coverage
+    machines.forEach(machine => {
+      const dayAssignments = assignments.filter(a => 
+        a.machine_id === machine.id && a.shift_type === 'day'
+      );
+      const nightAssignments = assignments.filter(a => 
+        a.machine_id === machine.id && a.shift_type === 'night'
+      );
+
+      if (dayAssignments.length === 0) {
+        errors.push(`${machine.name}: Missing day shift coverage`);
+      }
+      if (nightAssignments.length === 0) {
+        errors.push(`${machine.name}: Missing night shift coverage`);
+      }
+    });
+
+    setValidationErrors(errors);
+    return errors.length === 0;
+  };
+
+  const navigateWeek = (direction) => {
+    const newWeek = new Date(currentWeek);
+    newWeek.setDate(newWeek.getDate() + (direction * 7));
+    setCurrentWeek(newWeek.toISOString().split('T')[0]);
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="flex items-center gap-3">
+          <RefreshCw className="w-5 h-5 animate-spin text-blue-500" />
+          <span className="text-gray-600">Loading labor planning system...</span>
+        </div>
+      </div>
+    );
+  }
+
+  // Filter environments for supervisors
+  const availableEnvironments = currentUser?.role === 'supervisor' 
+    ? environments.filter(env => env.code === currentUser.profile_data?.environment)
+    : environments;
+
+  const selectedEnvData = environments.find(env => env.code === selectedEnvironment);
+  
+  return (
+    <div className="space-y-6">
+      {/* Header Controls */}
+      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">Weekly Labor Planning</h1>
+          <p className="text-gray-600 mt-1">Plan and assign workers to machines for production shifts</p>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-3">
+          {/* Environment Selector */}
+          <select
+            value={selectedEnvironment}
+            onChange={(e) => setSelectedEnvironment(e.target.value)}
+            className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            disabled={currentUser?.role === 'supervisor'}
+          >
+            <option value="">Select Environment</option>
+            {availableEnvironments.map(env => (
+              <option key={env.id} value={env.code}>
+                {env.name}
+              </option>
+            ))}
+          </select>
+
+          {/* Week Navigation */}
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => navigateWeek(-1)}
+              className="p-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg"
+            >
+              <ArrowLeft className="w-4 h-4" />
+            </button>
+            <span className="font-medium text-gray-900 min-w-48 text-center">
+              Week of {formatWeekRange(currentWeek)}
+            </span>
+            <button
+              onClick={() => navigateWeek(1)}
+              className="p-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg"
+            >
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {!selectedEnvironment ? (
+        <div className="text-center py-12">
+          <Factory className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+          <h3 className="text-lg font-medium text-gray-900 mb-2">Select an Environment</h3>
+          <p className="text-gray-500">Choose an environment to start planning worker assignments</p>
+        </div>
+      ) : (
+        <div className="space-y-6">
+          {/* Action Buttons */}
+          <div className="flex flex-wrap items-center gap-3 p-4 bg-white border border-gray-200 rounded-lg">
+            <button
+              onClick={handleCopyPreviousWeek}
+              disabled={saving || isWeekLocked}
+              className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <Copy className="w-4 h-4" />
+              Copy Previous Week
+            </button>
+
+            <button
+              onClick={handleSaveWeek}
+              disabled={saving || isWeekLocked}
+              className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <Save className="w-4 h-4" />
+              {isWeekLocked ? 'Week Locked' : 'Save & Lock Week'}
+            </button>
+
+            {isWeekLocked && (
+              <div className="flex items-center gap-2 text-amber-600 bg-amber-50 px-3 py-2 rounded-lg">
+                <Lock className="w-4 h-4" />
+                <span className="text-sm font-medium">Week is finalized</span>
+              </div>
+            )}
+
+            {validationErrors.length > 0 && (
+              <div className="flex items-center gap-2 text-red-600 bg-red-50 px-3 py-2 rounded-lg">
+                <AlertTriangle className="w-4 h-4" />
+                <span className="text-sm font-medium">{validationErrors.length} issues found</span>
+              </div>
+            )}
+          </div>
+
+          {/* Environment Support Roles */}
+          {selectedEnvData && (
+            <EnvironmentSupport
+              environment={selectedEnvironment}
+              workers={workers}
+              assignments={assignments}
+              onAssignmentChange={handleAssignmentChange}
+              selectedDate={currentWeek}
+              isLocked={isWeekLocked}
+            />
+          )}
+
+          {/* Planning Grid */}
+          <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
+            {/* Grid Header */}
+            <div className="grid grid-cols-12 gap-4 py-4 px-4 bg-gray-50 border-b border-gray-200 font-semibold text-gray-700">
+              <div className="col-span-3">Machine</div>
+              <div className="col-span-4 text-center">Day Shift (06:00-18:00)</div>
+              <div className="col-span-4 text-center">Night Shift (18:00-06:00)</div>
+              <div className="col-span-1 text-center">Status</div>
+            </div>
+
+            {/* Machine Rows */}
+            <div className="divide-y divide-gray-100">
+              {machines.length === 0 ? (
+                <div className="text-center py-12">
+                  <Factory className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+                  <p className="text-gray-500">No machines found for {selectedEnvironment}</p>
+                </div>
+              ) : (
+                machines.map(machine => (
+                  <MachineRow
+                    key={machine.id}
+                    machine={machine}
+                    workers={workers}
+                    assignments={assignments}
+                    onAssignmentChange={handleAssignmentChange}
+                    selectedDate={currentWeek}
+                    isLocked={isWeekLocked}
+                  />
+                ))
+              )}
+            </div>
+          </div>
+
+          {/* Validation Errors */}
+          {validationErrors.length > 0 && (
+            <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+              <h4 className="font-semibold text-red-900 mb-2 flex items-center gap-2">
+                <AlertTriangle className="w-4 h-4" />
+                Assignment Issues
+              </h4>
+              <ul className="space-y-1">
+                {validationErrors.map((error, index) => (
+                  <li key={index} className="text-red-700 text-sm">• {error}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {/* Summary Stats */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="bg-white p-4 rounded-lg border border-gray-200">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-blue-100 rounded-lg">
+                  <Factory className="w-5 h-5 text-blue-600" />
+                </div>
+                <div>
+                  <div className="text-2xl font-bold text-gray-900">{machines.length}</div>
+                  <div className="text-sm text-gray-500">Total Machines</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white p-4 rounded-lg border border-gray-200">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-green-100 rounded-lg">
+                  <Users className="w-5 h-5 text-green-600" />
+                </div>
+                <div>
+                  <div className="text-2xl font-bold text-gray-900">{assignments.length}</div>
+                  <div className="text-sm text-gray-500">Total Assignments</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white p-4 rounded-lg border border-gray-200">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-yellow-100 rounded-lg">
+                  <Clock className="w-5 h-5 text-yellow-600" />
+                </div>
+                <div>
+                  <div className="text-2xl font-bold text-gray-900">
+                    {assignments.filter(a => a.shift_type === 'day').length}
+                  </div>
+                  <div className="text-sm text-gray-500">Day Shifts</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white p-4 rounded-lg border border-gray-200">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-purple-100 rounded-lg">
+                  <Clock className="w-5 h-5 text-purple-600" />
+                </div>
+                <div>
+                  <div className="text-2xl font-bold text-gray-900">
+                    {assignments.filter(a => a.shift_type === 'night').length}
+                  </div>
+                  <div className="text-sm text-gray-500">Night Shifts</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
 };
 
 // Simple Tab Navigation Component
@@ -47,1007 +864,64 @@ const TabNavigation = ({ activeTab, onTabChange, tabs = [] }) => {
   );
 };
 
-// Enhanced Workers Module with Shift Planning and 2-2-2 System
-const WorkersModule = ({ assignments = [], onShowNotification, selectedDate }) => {
-  const [employees, setEmployees] = useState([]);
-  const [workerSearch, setWorkerSearch] = useState('');
-  const [loading, setLoading] = useState(true);
-  const [activeView, setActiveView] = useState('planning'); // planning, attendance, shifts
-  const [selectedShift, setSelectedShift] = useState('all');
-  const [shiftAssignments, setShiftAssignments] = useState({
-    'A': { day: [], night: [] },
-    'B': { day: [], night: [] },
-    'C': { day: [], night: [] }
-  });
-  const [cycleStartDate, setCycleStartDate] = useState(() => {
-    // Default to current Monday
-    const today = new Date();
-    const monday = new Date(today);
-    monday.setDate(today.getDate() - today.getDay() + 1);
-    return monday.toISOString().split('T')[0];
-  });
-
-  // 2-2-2 Shift System Calculation
-  const calculate222Shift = (startDate, currentDate, crew) => {
-    if (!startDate) return 'rest';
-    
-    const start = new Date(startDate);
-    const current = new Date(currentDate);
-    const daysDiff = Math.floor((current - start) / (1000 * 60 * 60 * 24));
-    
-    const crewOffsets = { 'A': 0, 'B': 2, 'C': 4 };
-    const cycleDay = (daysDiff + crewOffsets[crew]) % 6;
-    
-    if (cycleDay < 2) return 'day';
-    if (cycleDay < 4) return 'night'; 
-    return 'rest';
-  };
-
-  // Get current shift status for display
-  const getShiftStatus = (crew, date = selectedDate) => {
-    const shift = calculate222Shift(cycleStartDate, date, crew);
-    const colors = {
-      'day': 'bg-yellow-100 text-yellow-800',
-      'night': 'bg-blue-100 text-blue-800', 
-      'rest': 'bg-gray-100 text-gray-600'
-    };
-    return { shift, color: colors[shift] };
-  };
-
-  const fetchEmployees = async () => {
-    // Check if user is authenticated before making any requests
-    const token = localStorage.getItem('token');
-    console.log('🔐 Token check:', token ? `Token exists (${token.substring(0, 20)}...)` : 'No token found');
-    
-    if (!token) {
-      console.log('ℹ️ No authentication token, waiting for user login');
-      setEmployees([]);
-      setLoading(false);
-      return;
-    }
-
-    try {
-      setLoading(true);
-      console.log('🔍 Fetching users from /api/users with token...');
-      
-      const response = await API.get('/users');
-      console.log('👥 Users loaded successfully:', response?.length || 0);
-      
-      // Add employee codes and shift assignments
-      const enhancedEmployees = (response || []).map(emp => ({
-        ...emp,
-        employee_code: emp.employee_code || `EMP${emp.id.toString().padStart(4, '0')}`,
-        fullName: emp.fullName || emp.username?.replace(/\./g, ' ').replace(/\b\w/g, l => l.toUpperCase()) || 'N/A',
-        assignedCrew: null, // Will be set when assigned to crew
-        currentShift: 'unassigned'
-      }));
-      
-      setEmployees(enhancedEmployees);
-    } catch (error) {
-      console.error('❌ Error fetching employees:', error);
-      
-      // Handle specific authentication errors
-      if (error.message.includes('Session expired') || error.message.includes('unauthorized')) {
-        onShowNotification?.('Session expired. Please log in again.', 'warning');
-      } else if (error.message.includes('<!DOCTYPE')) {
-        onShowNotification?.('Authentication required. Please log in.', 'warning');
-      } else {
-        onShowNotification?.('Failed to load employee data: ' + error.message, 'danger');
-      }
-      
-      setEmployees([]);
-    } finally {
-      setLoading(false);
-    }
-  };
+// Main Labor Management System Component
+export const LaborManagementSystem = () => {
+  const [activeTab, setActiveTab] = useState('planning');
+  const [currentUser, setCurrentUser] = useState(null);
+  const [selectedDate] = useState(getCurrentSASTDateString());
 
   useEffect(() => {
-    fetchEmployees();
+    fetchCurrentUser();
   }, []);
 
-  const filteredWorkers = useMemo(() => {
-    let filtered = employees;
-    
-    // Apply search filter
-    if (workerSearch) {
-      filtered = filtered.filter(employee => {
-        const searchTerm = workerSearch.toLowerCase();
-        const fullName = employee.fullName?.toLowerCase() || '';
-        const username = employee.username?.toLowerCase() || '';
-        const employeeCode = employee.employee_code?.toLowerCase() || '';
-        const role = employee.role?.toLowerCase() || '';
-        
-        return fullName.includes(searchTerm) ||
-               username.includes(searchTerm) ||
-               employeeCode.includes(searchTerm) ||
-               role.includes(searchTerm);
-      });
+  const fetchCurrentUser = async () => {
+    try {
+      const response = await API.get('/auth/me');
+      setCurrentUser(response.user || response.data);
+    } catch (error) {
+      console.error('Failed to fetch current user:', error);
     }
-    
-    // Apply shift filter
-    if (selectedShift !== 'all') {
-      filtered = filtered.filter(employee => {
-        if (selectedShift === 'unassigned') {
-          return !employee.assignedCrew;
-        }
-        return employee.assignedCrew === selectedShift;
-      });
-    }
-    
-    return filtered;
-  }, [employees, workerSearch, selectedShift]);
-
-  // Assign worker to crew
-  const assignToCrew = (employeeId, crew) => {
-    setEmployees(prev => prev.map(emp => 
-      emp.id === employeeId 
-        ? { ...emp, assignedCrew: crew, currentShift: getShiftStatus(crew, selectedDate).shift }
-        : emp
-    ));
-    onShowNotification?.(`Employee assigned to Crew ${crew}`, 'success');
   };
 
-  // Remove worker from crew
-  const removeFromCrew = (employeeId) => {
-    setEmployees(prev => prev.map(emp => 
-      emp.id === employeeId 
-        ? { ...emp, assignedCrew: null, currentShift: 'unassigned' }
-        : emp
-    ));
-    onShowNotification?.('Employee removed from crew', 'info');
-  };
-
-  const token = localStorage.getItem('token');
-  
-  if (!token) {
-    return (
-      <div className="flex-1 p-4 md:p-6">
-        <div className="bg-white rounded-xl shadow-sm border p-6">
-          <div className="flex items-center justify-center py-16">
-            <div className="text-center">
-              <Users className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-700 mb-2">Authentication Required</h3>
-              <p className="text-gray-500 mb-4">Please log in to view workforce data</p>
-              <button 
-                onClick={() => window.location.href = '/login'}
-                className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
-              >
-                Go to Login
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (loading) {
-    return (
-      <div className="flex-1 p-4 md:p-6">
-        <div className="bg-white rounded-xl shadow-sm border p-6">
-          <div className="flex items-center justify-center py-16">
-            <RefreshCw className="w-8 h-8 animate-spin text-blue-500" />
-            <span className="ml-3 text-gray-600">Loading workforce data...</span>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="flex-1 p-4 md:p-6">
-      <div className="bg-white rounded-xl shadow-sm border p-4 md:p-6">
-        {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
-          <div className="flex items-center gap-4">
-            <div className="p-3 bg-gradient-to-r from-purple-500 to-violet-600 rounded-xl">
-              <Users className="w-6 h-6 text-white" />
-            </div>
-            <div>
-              <h2 className="text-xl font-bold text-gray-800">Workforce Management</h2>
-              <p className="text-gray-600">2-2-2 Shift System | {employees.length} Total Employees</p>
-            </div>
-          </div>
-          
-          {/* Controls */}
-          <div className="flex flex-wrap items-center gap-3">
-            <div className="flex items-center gap-2">
-              <label className="text-sm font-medium text-gray-700">Cycle Start:</label>
-              <input
-                type="date"
-                value={cycleStartDate}
-                onChange={(e) => setCycleStartDate(e.target.value)}
-                className="px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-            
-            <select
-              value={selectedShift}
-              onChange={(e) => setSelectedShift(e.target.value)}
-              className="px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="all">All Crews</option>
-              <option value="A">Crew A</option>
-              <option value="B">Crew B</option>
-              <option value="C">Crew C</option>
-              <option value="unassigned">Unassigned</option>
-            </select>
-            
-            <div className="relative">
-              <input
-                type="text"
-                placeholder="Search employees..."
-                value={workerSearch}
-                onChange={e => setWorkerSearch(e.target.value)}
-                className="pl-4 pr-4 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-blue-500 w-48"
-              />
-            </div>
-            
-            <button
-              onClick={() => fetchEmployees()}
-              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-            >
-              <RefreshCw className="w-4 h-4" />
-            </button>
-          </div>
-        </div>
-
-        {/* 2-2-2 Shift System Overview */}
-        <div className="p-6 bg-gradient-to-r from-gray-50 to-blue-50 border-b">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">Current Shift Status - {selectedDate}</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {['A', 'B', 'C'].map(crew => {
-              const status = getShiftStatus(crew, selectedDate);
-              const crewMembers = employees.filter(emp => emp.assignedCrew === crew);
-              
-              return (
-                <div key={crew} className="bg-white rounded-lg p-4 border">
-                  <div className="flex items-center justify-between mb-3">
-                    <h4 className="text-lg font-bold text-gray-800">Crew {crew}</h4>
-                    <span className={`px-3 py-1 rounded-full text-sm font-medium capitalize ${status.color}`}>
-                      {status.shift}
-                    </span>
-                  </div>
-                  <div className="text-sm text-gray-600">
-                    <p>{crewMembers.length} members assigned</p>
-                    <p className="text-xs mt-1">
-                      {status.shift === 'day' && '06:00 - 18:00'}
-                      {status.shift === 'night' && '18:00 - 06:00'}
-                      {status.shift === 'rest' && 'Rest Day'}
-                    </p>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Workers Grid */}
-        {filteredWorkers.length > 0 ? (
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <h3 className="font-semibold text-slate-900">
-                Team Members ({filteredWorkers.length})
-              </h3>
-              {workerSearch && (
-                <button
-                  onClick={() => setWorkerSearch('')}
-                  className="px-3 py-1 text-sm bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
-                >
-                  Clear Search
-                </button>
-              )}
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {filteredWorkers.map(employee => {
-                const isAssigned = assignments.some(a => a.employee_id === employee.id);
-                
-                return (
-                  <div key={employee.id} className={`bg-white rounded-xl border-2 p-4 transition-all duration-300 hover:shadow-lg ${
-                    isAssigned 
-                      ? 'border-green-200 bg-green-50' 
-                      : 'border-slate-200 hover:border-slate-300'
-                  }`}>
-                    
-                    <div className="flex items-center justify-between mb-3">
-                      <div className="flex items-center gap-3 flex-1 min-w-0">
-                        <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full flex items-center justify-center shrink-0">
-                          <span className="text-white font-medium text-sm">
-                            {employee.employee_code?.slice(0, 2) || employee.username?.slice(0, 2).toUpperCase()}
-                          </span>
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="font-semibold text-slate-900 text-base truncate">
-                            {employee.fullName || 
-                             (employee.username ? 
-                               employee.username.replace(/\./g, ' ').replace(/\b\w/g, l => l.toUpperCase()) : 
-                               'N/A')}
-                          </p>
-                          <p className="text-sm text-slate-600 truncate">
-                            {employee.employee_code}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm text-slate-600">Role:</span>
-                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                          employee.role === 'supervisor' ? 'bg-purple-100 text-purple-700' :
-                          employee.role === 'operator' ? 'bg-green-100 text-green-700' :
-                          employee.role === 'packer' ? 'bg-blue-100 text-blue-700' :
-                          employee.role === 'technician' ? 'bg-amber-100 text-amber-700' :
-                          'bg-slate-100 text-slate-700'
-                        }`}>
-                          {employee.role?.charAt(0).toUpperCase() + employee.role?.slice(1)}
-                        </span>
-                      </div>
-                      
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm text-slate-600">Company:</span>
-                        <span className="text-sm font-medium text-slate-900 truncate ml-2">
-                          {employee.company || 'N/A'}
-                        </span>
-                      </div>
-                      
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm text-slate-600">Status:</span>
-                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                          isAssigned 
-                            ? 'bg-green-100 text-green-700' 
-                            : 'bg-slate-100 text-slate-700'
-                        }`}>
-                          {isAssigned ? 'Assigned' : 'Available'}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        ) : (
-          <div className="text-center py-16">
-            <div className="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-6">
-              <Users className="w-10 h-10 text-slate-400" />
-            </div>
-            <h3 className="text-lg font-medium text-slate-700 mb-2">
-              {workerSearch ? 'No employees found' : 'No employees available'}
-            </h3>
-            <p className="text-slate-500 mb-4">
-              {workerSearch 
-                ? 'No employees match your search criteria' 
-                : 'No employee data available'}
-            </p>
-            {workerSearch ? (
-              <button 
-                onClick={() => setWorkerSearch('')}
-                className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
-              >
-                Clear Search
-              </button>
-            ) : (
-              <p className="text-sm text-slate-400">
-                Contact your administrator to add employees
-              </p>
-            )}
-          </div>
-        )}
-      </div>
-    </div>
-  );
-};
-
-const LaborPlannerContainer = () => {
-  const [currentView, setCurrentView] = useState('planning');
-  const [assignments, setAssignments] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [notification, setNotification] = useState({ show: false, message: '', type: 'success' });
-  const [selectedDate, setSelectedDate] = useState(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const dateParam = urlParams.get('date');
-    return dateParam || getCurrentSASTDateString();
-  });
-
-  // Show notification function
-  const showNotification = useCallback((message, type = 'success') => {
-    setNotification({ show: true, message, type });
-    setTimeout(() => {
-      setNotification({ show: false, message: '', type: 'success' });
-    }, 4000);
-  }, []);
-
-  // Get current assignments for selected date
-  const currentAssignments = useMemo(() => {
-    return assignments.filter(a => a.assignment_date === selectedDate);
-  }, [assignments, selectedDate]);
-
-  // Tab configuration
   const tabs = [
-    { id: 'planning', label: 'Planning', icon: ClipboardList },
-    { id: 'roster', label: 'Roster', icon: Calendar },
-    { id: 'attendance', label: 'Attendance', icon: UserCheck },
-    { id: 'workers', label: 'Workers', icon: Users }
+    {
+      id: 'planning',
+      label: 'Weekly Planning',
+      icon: Calendar,
+      component: WeeklyPlanningInterface
+    },
+    {
+      id: 'attendance',
+      label: 'Daily Attendance',
+      icon: UserCheck,
+      component: AttendanceModule
+    }
   ];
 
-  // Labour Roster View
-  const RosterView = () => {
-    const [rosterData, setRosterData] = useState({
-      supervisors: [],
-      assignments: [],
-      attendance: [],
-      machinesInUse: [],
-      summary: { total_supervisors: 0, total_assignments: 0, total_attendance: 0, total_machines_in_use: 0 }
-    });
-    const [rosterLoading, setRosterLoading] = useState(true);
-    const [selectedShift, setSelectedShift] = useState('all');
-
-    const fetchRosterData = async () => {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        console.log('ℹ️ No authentication token, waiting for user login');
-        setRosterData({
-          supervisors: [],
-          assignments: [],
-          attendance: [],
-          machinesInUse: [],
-          summary: { total_supervisors: 0, total_assignments: 0, total_attendance: 0, total_machines_in_use: 0 }
-        });
-        setRosterLoading(false);
-        return;
-      }
-
-      try {
-        setRosterLoading(true);
-        console.log('🔍 Fetching roster data for:', selectedDate);
-        const data = await API.get(`/labour/roster?date=${selectedDate}`);
-        console.log('📋 Roster data loaded:', data);
-        setRosterData(data);
-      } catch (error) {
-        console.error('❌ Failed to fetch roster data:', error);
-        if (error.message.includes('<!DOCTYPE')) {
-          showNotification('Authentication required. Please log in.', 'warning');
-        } else {
-          showNotification('Failed to load roster data: ' + error.message, 'danger');
-        }
-        setRosterData({
-          supervisors: [],
-          assignments: [],
-          attendance: [],
-          machinesInUse: [],
-          summary: { total_supervisors: 0, total_assignments: 0, total_attendance: 0, total_machines_in_use: 0 }
-        });
-      } finally {
-        setRosterLoading(false);
-      }
-    };
-
-    useEffect(() => {
-      fetchRosterData();
-    }, [selectedDate]);
-
-    const filteredData = useMemo(() => {
-      if (selectedShift === 'all') return rosterData;
-      
-      return {
-        ...rosterData,
-        supervisors: rosterData.supervisors.filter(s => s.shift === selectedShift),
-        assignments: rosterData.assignments.filter(a => a.shift === selectedShift),
-        attendance: rosterData.attendance.filter(a => a.shift === selectedShift)
-      };
-    }, [rosterData, selectedShift]);
-
-    const token = localStorage.getItem('token');
-    
-    if (!token) {
-      return (
-        <div className="flex-1 p-4 md:p-6">
-          <div className="bg-white rounded-xl shadow-sm border p-6">
-            <div className="flex items-center justify-center py-16">
-              <div className="text-center">
-                <Calendar className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-gray-700 mb-2">Authentication Required</h3>
-                <p className="text-gray-500 mb-4">Please log in to view roster data</p>
-                <button 
-                  onClick={() => window.location.href = '/login'}
-                  className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
-                >
-                  Go to Login
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      );
-    }
-
-    if (rosterLoading) {
-      return (
-        <div className="flex-1 p-4 md:p-6">
-          <div className="bg-white rounded-xl shadow-sm border p-6">
-            <div className="flex items-center justify-center py-16">
-              <RefreshCw className="w-8 h-8 animate-spin text-blue-500" />
-              <span className="ml-3 text-gray-600">Loading roster data...</span>
-            </div>
-          </div>
-        </div>
-      );
-    }
-
-    return (
-      <div className="flex-1 p-4 md:p-6">
-        <div className="bg-white rounded-xl shadow-sm border">
-          {/* Header */}
-          <div className="p-6 border-b">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-              <div>
-                <h2 className="text-xl font-bold text-gray-800 mb-1">Labour Roster</h2>
-                <p className="text-gray-600">Date: {selectedDate}</p>
-              </div>
-              <div className="flex items-center gap-3">
-                <select
-                  value={selectedShift}
-                  onChange={(e) => setSelectedShift(e.target.value)}
-                  className="px-4 py-2 border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="all">All Shifts</option>
-                  <option value="morning">Morning</option>
-                  <option value="afternoon">Afternoon</option>
-                  <option value="night">Night</option>
-                </select>
-                <button
-                  onClick={fetchRosterData}
-                  className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center gap-2"
-                >
-                  <RefreshCw className="w-4 h-4" />
-                  Refresh
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Summary Cards */}
-          <div className="p-6 border-b">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="bg-blue-50 p-4 rounded-lg">
-                <h3 className="text-lg font-bold text-blue-700">{filteredData.summary.total_supervisors}</h3>
-                <p className="text-blue-600 text-sm">Supervisors</p>
-              </div>
-              <div className="bg-green-50 p-4 rounded-lg">
-                <h3 className="text-lg font-bold text-green-700">{filteredData.summary.total_assignments}</h3>
-                <p className="text-green-600 text-sm">Assignments</p>
-              </div>
-              <div className="bg-yellow-50 p-4 rounded-lg">
-                <h3 className="text-lg font-bold text-yellow-700">{filteredData.summary.total_attendance}</h3>
-                <p className="text-yellow-600 text-sm">Attendance</p>
-              </div>
-              <div className="bg-purple-50 p-4 rounded-lg">
-                <h3 className="text-lg font-bold text-purple-700">{filteredData.summary.total_machines_in_use}</h3>
-                <p className="text-purple-600 text-sm">Machines</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Roster Tables */}
-          <div className="p-6 space-y-6">
-            {/* Supervisors */}
-            {filteredData.supervisors.length > 0 && (
-              <div>
-                <h3 className="text-lg font-semibold text-gray-800 mb-3">Supervisors on Duty</h3>
-                <div className="overflow-x-auto">
-                  <table className="w-full table-auto">
-                    <thead>
-                      <tr className="bg-gray-50">
-                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Employee Code</th>
-                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Name</th>
-                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Shift</th>
-                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Status</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-200">
-                      {filteredData.supervisors.map((supervisor, index) => (
-                        <tr key={supervisor.id || index} className="hover:bg-gray-50">
-                          <td className="px-4 py-3 text-sm font-medium text-gray-900">{supervisor.employee_code}</td>
-                          <td className="px-4 py-3 text-sm text-gray-700">{supervisor.fullName}</td>
-                          <td className="px-4 py-3 text-sm text-gray-700 capitalize">{supervisor.shift}</td>
-                          <td className="px-4 py-3">
-                            <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
-                              supervisor.status === 'active' 
-                                ? 'bg-green-100 text-green-700' 
-                                : 'bg-red-100 text-red-700'
-                            }`}>
-                              {supervisor.status}
-                            </span>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            )}
-
-            {/* Machine Assignments */}
-            {filteredData.assignments.length > 0 && (
-              <div>
-                <h3 className="text-lg font-semibold text-gray-800 mb-3">Machine Assignments</h3>
-                <div className="overflow-x-auto">
-                  <table className="w-full table-auto">
-                    <thead>
-                      <tr className="bg-gray-50">
-                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Employee Code</th>
-                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Name</th>
-                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Machine</th>
-                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Position</th>
-                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Shift</th>
-                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Status</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-200">
-                      {filteredData.assignments.map((assignment, index) => (
-                        <tr key={assignment.id || index} className="hover:bg-gray-50">
-                          <td className="px-4 py-3 text-sm font-medium text-gray-900">{assignment.employee_code}</td>
-                          <td className="px-4 py-3 text-sm text-gray-700">{assignment.fullName}</td>
-                          <td className="px-4 py-3 text-sm text-gray-700">{assignment.machine}</td>
-                          <td className="px-4 py-3 text-sm text-gray-700 capitalize">{assignment.position}</td>
-                          <td className="px-4 py-3 text-sm text-gray-700 capitalize">{assignment.shift}</td>
-                          <td className="px-4 py-3">
-                            <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
-                              assignment.status === 'verified' 
-                                ? 'bg-green-100 text-green-700' 
-                                : assignment.status === 'scheduled'
-                                ? 'bg-blue-100 text-blue-700'
-                                : 'bg-yellow-100 text-yellow-700'
-                            }`}>
-                              {assignment.status}
-                            </span>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            )}
-
-            {/* No data message */}
-            {filteredData.supervisors.length === 0 && filteredData.assignments.length === 0 && (
-              <div className="text-center py-12">
-                <Calendar className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-gray-700 mb-2">No Roster Data</h3>
-                <p className="text-gray-500">No roster information available for {selectedDate}</p>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  // Simple Planning View
-  const PlanningView = () => {
-    const [machines, setMachines] = useState([]);
-    const [employees, setEmployees] = useState([]);
-    const [selectedMachine, setSelectedMachine] = useState('');
-    const [selectedShift, setSelectedShift] = useState('day');
-    const [showAssignModal, setShowAssignModal] = useState(false);
-
-    useEffect(() => {
-      // Load basic data for planning
-      const loadPlanningData = async () => {
-        // Check if user is authenticated before making any requests
-        const token = localStorage.getItem('token');
-        if (!token) {
-          console.log('ℹ️ No authentication token, waiting for user login');
-          setMachines([]);
-          setEmployees([]);
-          return;
-        }
-
-        try {
-          console.log('🔍 Loading planning data...');
-          const [machinesRes, employeesRes] = await Promise.all([
-            API.get('/machines').catch((err) => {
-              console.error('Failed to load machines:', err);
-              console.error('Machines error type:', typeof err);
-              console.error('Machines error message:', err.message);
-              return [];
-            }),
-            API.get('/users').catch((err) => {
-              console.error('Failed to load users:', err);
-              console.error('Users error type:', typeof err);
-              console.error('Users error message:', err.message);
-              return [];
-            })
-          ]);
-          console.log('🏭 Machines loaded:', machinesRes?.length || 0);
-          console.log('👥 Employees loaded:', employeesRes?.length || 0);
-          setMachines(machinesRes || []);
-          setEmployees(employeesRes || []);
-        } catch (error) {
-          console.error('Error loading planning data:', error);
-          if (error.message.includes('<!DOCTYPE')) {
-            showNotification('Authentication required. Please log in.', 'warning');
-          } else {
-            showNotification('Failed to load planning data', 'danger');
-          }
-        }
-      };
-      loadPlanningData();
-    }, []);
-
-    const assignEmployee = async (employeeId, machineId, shift) => {
-      try {
-        await API.post('/planner/assignments', {
-          employee_id: employeeId,
-          machine_id: machineId,
-          shift: shift,
-          assignment_date: selectedDate
-        });
-        showNotification('Employee assigned successfully', 'success');
-        setShowAssignModal(false);
-      } catch (error) {
-        showNotification('Failed to assign employee', 'danger');
-      }
-    };
-
-    return (
-      <div className="flex-1 p-4 md:p-6">
-        <div className="bg-white rounded-xl shadow-sm border p-4 md:p-6">
-          {/* Header */}
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-4">
-              <div className="p-3 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl">
-                <ClipboardList className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <h2 className="text-xl md:text-2xl font-bold text-slate-900">Workforce Planning</h2>
-                <p className="text-slate-600 text-sm">Assign employees to machines and shifts</p>
-              </div>
-            </div>
-            
-            <div className="flex items-center gap-2">
-              <input 
-                type="date" 
-                value={selectedDate} 
-                onChange={e => setSelectedDate(e.target.value)} 
-                className="px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-          </div>
-
-          {/* Quick Assignment */}
-          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6 mb-6">
-            <h3 className="text-lg font-semibold text-slate-900 mb-4">Quick Assignment</h3>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">Machine</label>
-                <select 
-                  value={selectedMachine}
-                  onChange={e => setSelectedMachine(e.target.value)}
-                  className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="">Select Machine</option>
-                  {machines.map(machine => (
-                    <option key={machine.id} value={machine.id}>
-                      {machine.name} ({machine.type})
-                    </option>
-                  ))}
-                </select>
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">Shift</label>
-                <select 
-                  value={selectedShift}
-                  onChange={e => setSelectedShift(e.target.value)}
-                  className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="day">Day Shift</option>
-                  <option value="night">Night Shift</option>
-                </select>
-              </div>
-              
-              <div className="flex items-end">
-                <button
-                  onClick={() => setShowAssignModal(true)}
-                  disabled={!selectedMachine}
-                  className="w-full px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                >
-                  Assign Employee
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Available Machines */}
-          <div className="mb-6">
-            <h3 className="text-lg font-semibold text-slate-900 mb-4">Available Machines</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {machines.map(machine => (
-                <div key={machine.id} className="bg-white border rounded-lg p-4 hover:shadow-md transition-shadow">
-                  <div className="flex items-center justify-between mb-2">
-                    <h4 className="font-semibold text-gray-900">{machine.name}</h4>
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                      machine.status === 'active' 
-                        ? 'bg-green-100 text-green-700' 
-                        : machine.status === 'maintenance'
-                        ? 'bg-yellow-100 text-yellow-700'
-                        : 'bg-red-100 text-red-700'
-                    }`}>
-                      {machine.status}
-                    </span>
-                  </div>
-                  <p className="text-sm text-gray-600 mb-1">Type: {machine.type}</p>
-                  <p className="text-sm text-gray-600">Environment: {machine.environment}</p>
-                  {machine.capacity && (
-                    <p className="text-sm text-gray-600">Capacity: {machine.capacity}</p>
-                  )}
-                </div>
-              ))}
-            </div>
-            {machines.length === 0 && (
-              <div className="text-center py-8 text-gray-500">
-                <p>No machines available</p>
-              </div>
-            )}
-          </div>
-
-          {/* Current Assignments */}
-          <div>
-            <h3 className="text-lg font-semibold text-slate-900 mb-4">
-              Current Assignments for {new Date(selectedDate).toLocaleDateString()}
-            </h3>
-            
-            {currentAssignments.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {currentAssignments.map(assignment => (
-                  <div key={assignment.id} className="bg-slate-50 rounded-lg p-4 border">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="font-semibold text-slate-900">
-                          {assignment.fullName || assignment.username}
-                        </p>
-                        <p className="text-sm text-slate-600">
-                          {assignment.machine_name} • {assignment.shift} shift
-                        </p>
-                        {assignment.job_role && (
-                          <span className="inline-block px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded-full mt-1">
-                            {assignment.job_role}
-                          </span>
-                        )}
-                      </div>
-                      <button
-                        onClick={() => {
-                          if (confirm('Remove this assignment?')) {
-                            // Remove assignment logic would go here
-                            showNotification('Assignment removed', 'success');
-                          }
-                        }}
-                        className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
-                      >
-                        <X className="w-4 h-4" />
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-8">
-                <p className="text-slate-500">No assignments for this date</p>
-                <p className="text-sm text-slate-400 mt-1">Use the quick assignment tool above to assign employees</p>
-              </div>
-            )}
-          </div>
-
-          {/* Assignment Modal */}
-          {showAssignModal && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-              <div className="bg-white rounded-xl shadow-xl w-full max-w-md mx-4">
-                <div className="p-6">
-                  <h3 className="text-lg font-semibold text-slate-900 mb-4">Select Employee</h3>
-                  
-                  <div className="max-h-60 overflow-y-auto space-y-2">
-                    {employees.map(employee => (
-                      <button
-                        key={employee.id}
-                        onClick={() => assignEmployee(employee.id, selectedMachine, selectedShift)}
-                        className="w-full p-3 text-left hover:bg-slate-50 rounded-lg border transition-colors"
-                      >
-                        <p className="font-medium text-slate-900">
-                          {employee.fullName || employee.username}
-                        </p>
-                        <p className="text-sm text-slate-600">
-                          {employee.employee_code} • {employee.role}
-                        </p>
-                      </button>
-                    ))}
-                  </div>
-                  
-                  <div className="flex gap-3 mt-6">
-                    <button
-                      onClick={() => setShowAssignModal(false)}
-                      className="flex-1 px-4 py-2 border border-slate-200 text-slate-600 rounded-lg hover:bg-slate-50 transition-colors"
-                    >
-                      Cancel
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-    );
-  };
+  const ActiveComponent = tabs.find(tab => tab.id === activeTab)?.component;
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-white border-b border-gray-200 px-6 py-4">
-        <div className="flex items-center justify-between mb-4">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">Labor Management System</h1>
-            <p className="text-gray-600">Mobile-optimized workforce management</p>
-          </div>
-          
-          <div className="flex items-center gap-3">
-            <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
-              <Download className="w-4 h-4" />
-            </button>
-            <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
-              <RefreshCw className="w-4 h-4" />
-            </button>
-          </div>
-        </div>
-        
-        {/* Tab Navigation */}
+    <div className="min-h-full space-y-6">
+      {/* Tab Navigation */}
+      <div className="sticky top-0 z-30 bg-white/80 backdrop-blur-sm border-b border-gray-200 pb-4">
         <TabNavigation
-          activeTab={currentView}
-          onTabChange={setCurrentView}
+          activeTab={activeTab}
+          onTabChange={setActiveTab}
           tabs={tabs}
         />
       </div>
-      
-      {/* Main Content */}
-      <div className="flex flex-col min-h-screen">
-        {currentView === 'planning' && <PlanningView />}
-        {currentView === 'roster' && <RosterView />}
-        {currentView === 'attendance' && (
-          <AttendanceModule 
-            onShowNotification={showNotification}
-          />
-        )}
-        {currentView === 'workers' && (
-          <WorkersModule 
-            assignments={currentAssignments}
-            onShowNotification={showNotification}
+
+      {/* Active Tab Content */}
+      <div className="space-y-6">
+        {ActiveComponent && (
+          <ActiveComponent 
+            currentUser={currentUser}
             selectedDate={selectedDate}
           />
         )}
       </div>
-
-      {/* Notification */}  
-      {notification.show && (
-        <div className={`fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg max-w-sm ${
-          notification.type === 'success' ? 'bg-green-500 text-white' :
-          notification.type === 'danger' ? 'bg-red-500 text-white' :
-          notification.type === 'info' ? 'bg-blue-500 text-white' :
-          'bg-gray-500 text-white'
-        }`}>
-          <p className="text-sm font-medium">{notification.message}</p>
-        </div>
-      )}
     </div>
   );
 };
 
-// Export the main component
-export function LaborManagementSystem() {
-  return <LaborPlannerContainer />;
-}
-
-export default LaborPlannerContainer;
+export default LaborManagementSystem;
