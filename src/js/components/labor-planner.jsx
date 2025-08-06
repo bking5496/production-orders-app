@@ -307,19 +307,17 @@ const DailyWorkerSelect = ({
   const getAvailableWorkers = () => {
     let roleFilteredWorkers;
     
-    // Filter by role type
+    // Filter by role type - all non-supervisor workers can work as operator, hopper loader, or packer
     if (role === 'supervisor') {
       roleFilteredWorkers = workers.filter(w => w.role === 'supervisor');
     } else if (role === 'forklift') {
-      roleFilteredWorkers = workers.filter(w => w.role === 'operator'); // Forklift drivers are operators
-    } else if (role === 'operator') {
-      roleFilteredWorkers = workers.filter(w => w.role === 'operator');
-    } else if (role === 'hopper_loader') {
-      roleFilteredWorkers = workers.filter(w => w.role === 'operator'); // Hopper loaders are operators
-    } else if (role === 'packer') {
-      roleFilteredWorkers = workers.filter(w => w.role === 'packer');
+      // Forklift drivers can be any non-supervisor worker
+      roleFilteredWorkers = workers.filter(w => w.role !== 'supervisor');
+    } else if (role === 'operator' || role === 'hopper_loader' || role === 'packer') {
+      // All non-supervisor workers can work as operators, hopper loaders, or packers
+      roleFilteredWorkers = workers.filter(w => w.role !== 'supervisor');
     } else {
-      roleFilteredWorkers = workers.filter(w => w.role === 'operator' || w.role === 'packer');
+      roleFilteredWorkers = workers.filter(w => w.role !== 'supervisor');
     }
     
     // Get currently selected worker to keep in list
