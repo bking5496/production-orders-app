@@ -191,8 +191,8 @@ const MachineCard = ({ machine, workers, assignments, yesterdayAssignments, onAs
   );
 };
 
-// Shift Assignment Card
-const ShiftAssignmentCard = ({ shift, machine, workers, assignments, onAssignmentChange, selectedDate, isLocked, status }) => {
+// Shift Assignment Section - Shows assigned workers clearly
+const ShiftAssignmentSection = ({ shift, machine, workers, assignments, onAssignmentChange, selectedDate, isLocked }) => {
   // Get role requirements based on machine specifications
   const getRoleRequirements = () => {
     const requirements = [];
@@ -235,52 +235,96 @@ const ShiftAssignmentCard = ({ shift, machine, workers, assignments, onAssignmen
       a.shift_type === shift && 
       a.role === roleWithPosition
     );
-    return assignment ? assignment.employee_id : null;
+    if (!assignment) return null;
+    return workers.find(w => w.id === assignment.employee_id);
   };
 
   const shiftLabel = shift === 'day' ? 'Day Shift' : 'Night Shift';
   const shiftIcon = shift === 'day' ? Sun : Moon;
   const ShiftIcon = shiftIcon;
   const roleRequirements = getRoleRequirements();
+  
+  const assignedCount = roleRequirements.filter(({ role, position }) => getAssignedWorker(role, position)).length;
+  const totalRequired = roleRequirements.length;
 
   return (
-    <div className={`border-2 rounded-lg p-3 ${status.color}`}>
-      <div className="flex items-center gap-2 mb-3">
-        <ShiftIcon className="w-4 h-4" />
-        <span className="font-medium text-sm">{shiftLabel}</span>
-        <div className="ml-auto">
-          <div className={`w-2 h-2 rounded-full ${
-            status.status === 'complete' ? 'bg-green-500' :
-            status.status === 'partial' ? 'bg-yellow-500' : 'bg-red-500'
-          }`}></div>
+    <div className="border border-gray-200 rounded-lg p-4">
+      {/* Shift Header */}
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-3">
+          <ShiftIcon className="w-5 h-5 text-gray-600" />
+          <h4 className="font-semibold text-gray-900">{shiftLabel}</h4>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+            assignedCount === totalRequired ? 'bg-green-100 text-green-800' :
+            assignedCount > 0 ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800'
+          }`}>
+            {assignedCount}/{totalRequired} Assigned
+          </span>
         </div>
       </div>
       
-      <div className="space-y-2">
-        {roleRequirements.map(({ role, position, displayName }) => (
-          <div key={`${role}-${position}`} className="space-y-1">
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-medium text-gray-700 w-20 capitalize">{displayName}</span>
+      {/* Role Assignments */}
+      <div className="space-y-3">
+        {roleRequirements.map(({ role, position, displayName }) => {
+          const assignedWorker = getAssignedWorker(role, position);
+          return (
+            <div key={`${role}-${position}`} className="flex items-center justify-between p-3 border border-gray-100 rounded-lg">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center">
+                  <User className="w-4 h-4 text-gray-600" />
+                </div>
+                <div>
+                  <div className="font-medium text-gray-900">{displayName}</div>
+                  {assignedWorker ? (
+                    <div className="text-sm text-gray-600">
+                      {assignedWorker.full_name || assignedWorker.username}
+                      {assignedWorker.employee_code && (
+                        <span className="ml-2 text-xs text-gray-500">({assignedWorker.employee_code})</span>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="text-sm text-gray-400">No worker assigned</div>
+                  )}
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-2">
+                {assignedWorker ? (
+                  <button
+                    onClick={() => {
+                      const roleWithPosition = position > 1 ? `${role}_${position}` : role;
+                      onAssignmentChange(machine.id, shift, roleWithPosition, null);
+                    }}
+                    className="px-2 py-1 text-xs text-red-600 hover:bg-red-50 rounded"
+                    disabled={isLocked}
+                  >
+                    Remove
+                  </button>
+                ) : null}
+                
+                <DailyWorkerSelect
+                  value={assignedWorker?.id || null}
+                  onChange={(workerId) => {
+                    const roleWithPosition = position > 1 ? `${role}_${position}` : role;
+                    onAssignmentChange(machine.id, shift, roleWithPosition, workerId);
+                  }}
+                  role={role}
+                  position={position}
+                  environment={machine.environment}
+                  shift={shift}
+                  date={selectedDate}
+                  machineId={machine.id}
+                  orderId={machine.order_id}
+                  workers={workers}
+                  assignments={assignments}
+                  className="w-48"
+                />
+              </div>
             </div>
-            <DailyWorkerSelect
-              value={getAssignedWorker(role, position)}
-              onChange={(workerId) => {
-                const roleWithPosition = position > 1 ? `${role}_${position}` : role;
-                onAssignmentChange(machine.id, shift, roleWithPosition, workerId);
-              }}
-              role={role}
-              position={position}
-              environment={machine.environment}
-              shift={shift}
-              date={selectedDate}
-              machineId={machine.id}
-              orderId={machine.order_id}
-              workers={workers}
-              assignments={assignments}
-              className="w-full text-xs"
-            />
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
@@ -1238,54 +1282,8 @@ const DailyPlanningInterface = ({ currentUser }) => {
         </div>
       ) : (
         <div className="max-w-full mx-auto px-4 py-6">
-          <div className="grid grid-cols-1 xl:grid-cols-5 gap-6">
-            
-            {/* Worker Pool Sidebar */}
-            <div className="xl:col-span-1 space-y-4">
-              <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
-                <div className="flex items-center gap-2 mb-4">
-                  <Users className="w-5 h-5 text-gray-700" />
-                  <h3 className="font-semibold text-gray-900">Available Workers</h3>
-                </div>
-                
-                {/* Support Staff */}
-                <div className="space-y-3 mb-6">
-                  <h4 className="text-sm font-medium text-gray-700 uppercase tracking-wider">Support Staff</h4>
-                  <div className="space-y-2">
-                    <WorkerCard 
-                      role="supervisor" 
-                      workers={workers.filter(w => w.role === 'supervisor')}
-                      assignments={assignments}
-                      selectedDate={selectedDate}
-                    />
-                    <WorkerCard 
-                      role="forklift" 
-                      workers={workers.filter(w => w.role !== 'supervisor')} // All non-supervisors for forklift
-                      assignments={assignments}
-                      selectedDate={selectedDate}
-                    />
-                  </div>
-                </div>
-
-                {/* Machine Operators */}
-                <div className="space-y-3">
-                  <h4 className="text-sm font-medium text-gray-700 uppercase tracking-wider">Machine Workers</h4>
-                  <div className="space-y-2 max-h-80 overflow-y-auto">
-                    {workers.filter(w => w.role !== 'supervisor').map(worker => (
-                      <WorkerChip 
-                        key={worker.id} 
-                        worker={worker} 
-                        assignments={assignments}
-                        selectedDate={selectedDate}
-                      />
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Main Assignment Area - Now takes more space */}
-            <div className="xl:col-span-4 space-y-6">
+          {/* Main Assignment Area - Full Width */}
+          <div className="space-y-6">
               
               {/* Environment Support Staff */}
               {selectedEnvData && (

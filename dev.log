@@ -435,3 +435,39 @@ Instead of /public/js/main.js, use /js/main.js.
 1:52:28 PM [vite] (client) hmr update /src/js/components/labor-planner.jsx
 1:55:49 PM [vite] (client) hmr update /src/js/components/labor-planner.jsx
 1:57:38 PM [vite] (client) hmr update /src/js/components/labor-planner.jsx
+2:36:33 PM [vite] (client) hmr update /src/js/components/labor-planner.jsx
+2:37:06 PM [vite] (client) Pre-transform error: /home/production-app/production-orders-app/src/js/components/labor-planner.jsx: Adjacent JSX elements must be wrapped in an enclosing tag. Did you want a JSX fragment <>...</>? (1409:8)
+
+  1407 |             </div>
+  1408 |           </div>
+> 1409 |         </div>
+       |         ^
+  1410 |       )}
+  1411 |     </div>
+  1412 |   );
+  Plugin: vite:react-babel
+  File: /home/production-app/production-orders-app/src/js/components/labor-planner.jsx:1409:8
+  1407|              </div>
+  1408|            </div>
+  1409|          </div>
+     |          ^
+  1410|        )}
+  1411|      </div>
+2:39:32 PM [vite] (client) hmr update /src/js/components/labor-planner.jsx
+2:39:40 PM [vite] (client) Pre-transform error: /home/production-app/production-orders-app/src/js/components/labor-planner.jsx: Adjacent JSX elements must be wrapped in an enclosing tag. Did you want a JSX fragment <>...</>? (1453:8)
+
+  1451 |             </div>
+  1452 |           </div>
+> 1453 |         </div>
+       |         ^
+  1454 |       )}
+  1455 |     </div>
+  1456 |   );
+  Plugin: vite:react-babel
+  File: /home/production-app/production-orders-app/src/js/components/labor-planner.jsx:1453:8
+  1451|              </div>
+  1452|            </div>
+  1453|          </div>
+     |          ^
+  1454|        )}
+  1455|      </div>
