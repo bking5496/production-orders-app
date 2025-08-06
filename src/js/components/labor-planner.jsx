@@ -161,7 +161,7 @@ const DailyWorkerSelect = ({
     return (priority[statusA] || 5) - (priority[statusB] || 5);
   });
 
-  const selectedWorker = value ? availableWorkers.find(w => w.id === value) : null;
+  const selectedWorker = value ? availableWorkers.find(w => w.id === parseInt(value)) : null;
 
   return (
     <div className={`relative ${className}`}>
@@ -817,36 +817,50 @@ const DailyPlanningInterface = ({ currentUser }) => {
   const selectedEnvData = environments.find(env => env.code === selectedEnvironment);
   
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4 sm:p-6">
-      <div className="max-w-7xl mx-auto space-y-6">
-        {/* Modern Header */}
-        <div className="bg-white/70 backdrop-blur-sm border border-white/20 rounded-2xl p-6 shadow-xl">
-          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
-            <div className="space-y-2">
-              <div className="flex items-center gap-3">
-                <div className="p-3 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl shadow-lg">
-                  <Users className="w-6 h-6 text-white" />
+    <div className="min-h-screen bg-gray-100 p-4">
+      <div className="max-w-7xl mx-auto space-y-4">
+        {/* Industrial Header */}
+        <div className="bg-white border-l-4 border-blue-600 shadow-sm p-4">
+          <div className="flex justify-between items-center">
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 bg-blue-600 rounded flex items-center justify-center">
+                  <Users className="w-5 h-5 text-white" />
                 </div>
                 <div>
-                  <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
-                    Daily Labor Planning
-                  </h1>
-                  <p className="text-gray-600">Assign workers to active machines and production orders</p>
+                  <h1 className="text-xl font-bold text-gray-900">Labor Planning Dashboard</h1>
+                  <p className="text-sm text-gray-600">Workforce Assignment & Scheduling</p>
+                </div>
+              </div>
+              
+              {/* Status Indicators */}
+              <div className="flex items-center gap-4 ml-8">
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                  <span className="text-sm font-medium text-gray-700">{activeMachines.length} Active</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
+                  <span className="text-sm font-medium text-gray-700">{assignments.length} Assigned</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className={`w-3 h-3 rounded-full ${validationErrors.length > 0 ? 'bg-red-500' : 'bg-gray-300'}`}></div>
+                  <span className="text-sm font-medium text-gray-700">{validationErrors.length} Gaps</span>
                 </div>
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+            <div className="flex items-center gap-3">
               {/* Environment Selector */}
-              <div className="space-y-1">
-                <label className="text-sm font-medium text-gray-700">Environment</label>
+              <div className="flex items-center gap-2">
+                <label className="text-sm font-medium text-gray-700">Environment:</label>
                 <select
                   value={selectedEnvironment}
                   onChange={(e) => setSelectedEnvironment(e.target.value)}
-                  className="px-4 py-3 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 shadow-sm hover:shadow-md min-w-48"
+                  className="px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white text-sm font-medium min-w-32"
                   disabled={currentUser?.role === 'supervisor'}
                 >
-                  <option value="">Select Environment</option>
+                  <option value="">Select</option>
                   {availableEnvironments.map(env => (
                     <option key={env.id} value={env.code}>
                       {env.name}
@@ -856,27 +870,24 @@ const DailyPlanningInterface = ({ currentUser }) => {
               </div>
 
               {/* Date Navigation */}
-              <div className="space-y-1">
-                <label className="text-sm font-medium text-gray-700">Planning Date</label>
-                <div className="flex items-center gap-1 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-xl shadow-sm p-1">
-                  <button
-                    onClick={() => navigateDate(-1)}
-                    className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-all duration-200"
-                  >
-                    <ArrowLeft className="w-4 h-4" />
-                  </button>
-                  <div className="px-4 py-2 text-center min-w-44">
-                    <div className="font-semibold text-gray-900 text-sm">
-                      {formatTodaysDate(selectedDate)}
-                    </div>
+              <div className="flex items-center gap-1 border border-gray-300 rounded bg-white">
+                <button
+                  onClick={() => navigateDate(-1)}
+                  className="p-2 hover:bg-gray-50 text-gray-600"
+                >
+                  <ArrowLeft className="w-4 h-4" />
+                </button>
+                <div className="px-4 py-2 border-l border-r border-gray-300 bg-gray-50">
+                  <div className="text-sm font-bold text-gray-900 min-w-32 text-center">
+                    {formatTodaysDate(selectedDate)}
                   </div>
-                  <button
-                    onClick={() => navigateDate(1)}
-                    className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-all duration-200"
-                  >
-                    <ArrowRight className="w-4 h-4" />
-                  </button>
                 </div>
+                <button
+                  onClick={() => navigateDate(1)}
+                  className="p-2 hover:bg-gray-50 text-gray-600"
+                >
+                  <ArrowRight className="w-4 h-4" />
+                </button>
               </div>
             </div>
           </div>
