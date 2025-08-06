@@ -519,3 +519,6 @@ Instead of /public/js/main.js, use /js/main.js.
 9:53:56 PM [vite] (client) hmr update /src/js/components/labor-planner.jsx
 9:54:30 PM [vite] (client) hmr update /src/js/components/labor-planner.jsx
 9:58:33 PM [vite] (client) hmr update /src/js/components/labor-planner.jsx
+10:00:34 PM [vite] (client) hmr update /src/js/components/labor-planner.jsx
+10:00:50 PM [vite] (client) hmr update /src/js/components/labor-planner.jsx
+10:09:04 PM [vite] (client) page reload server.js

@@ -1035,7 +1035,7 @@ app.get('/api/machines/stats',
 app.get('/api/orders',
   authenticateToken,
   (req, res) => {
-    const { environment, status, include_archived } = req.query;
+    const { environment, status, include_archived, date } = req.query;
     
     let query = `
       SELECT 
@@ -1057,19 +1057,26 @@ app.get('/api/orders',
     }
     
     if (environment) {
-      query += ` AND o.environment = ${paramIndex++}`;
+      query += ` AND o.environment = $${paramIndex++}`;
       params.push(environment);
     }
     
     if (status) {
-      query += ` AND o.status = ${paramIndex++}`;
+      query += ` AND o.status = $${paramIndex++}`;
       params.push(status);
+    }
+    
+    // Date filtering for labor planning
+    if (date) {
+      query += ` AND DATE(o.due_date) = $${paramIndex++}`;
+      params.push(date);
     }
     
     query += ' ORDER BY o.created_at DESC';
     
     db.all(query, params, (err, orders) => {
       if (err) {
+        console.error('Orders API error:', err);
         return res.status(500).json({ error: 'Database error' });
       }
       res.json(orders);
