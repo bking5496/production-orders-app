@@ -898,22 +898,64 @@ const DailyPlanningInterface = ({ currentUser }) => {
             )}
           </div>
 
-          {/* Simplified Labor Planner - Data stored but UI simplified per requirements */}
-          <div className="bg-white border border-gray-200 rounded-lg p-6">
-            <div className="text-center py-12">
-              <Calendar className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">
-                Labor Planning for {selectedEnvironment.toUpperCase()}
+          {/* Environment Support Roles */}
+          {selectedEnvData && (
+            <DailyEnvironmentSupport
+              environment={selectedEnvironment}
+              workers={workers}
+              assignments={assignments}
+              yesterdayAssignments={yesterdayAssignments}
+              onAssignmentChange={handleAssignmentChange}
+              selectedDate={selectedDate}
+              isLocked={isDayLocked}
+            />
+          )}
+
+          {/* Active Machines Today */}
+          <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
+            <div className="bg-green-50 border-b border-green-200 px-4 py-3">
+              <h3 className="text-lg font-semibold text-green-900 flex items-center gap-2">
+                <Play className="w-5 h-5" />
+                ACTIVE MACHINES TODAY ({activeMachines.length})
               </h3>
-              <p className="text-gray-500 mb-4">
-                {formatTodaysDate(selectedDate)}
-              </p>
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 max-w-md mx-auto">
-                <p className="text-blue-800 text-sm">
-                  Machine assignments and worker scheduling data is being stored in the background 
-                  for use in other parts of the system.
-                </p>
+            </div>
+
+            {/* Grid Header */}
+            <div className="grid grid-cols-12 gap-4 py-4 px-4 bg-gray-50 border-b border-gray-200 font-semibold text-gray-700">
+              <div className="col-span-3">Machine & Order</div>
+              <div className="col-span-4 text-center flex items-center justify-center gap-2">
+                <Sun className="w-4 h-4 text-yellow-600" />
+                Day Shift (06:00-18:00)
               </div>
+              <div className="col-span-4 text-center flex items-center justify-center gap-2">
+                <Moon className="w-4 h-4 text-blue-600" />
+                Night Shift (18:00-06:00)
+              </div>
+              <div className="col-span-1 text-center">Status</div>
+            </div>
+
+            {/* Machine Rows */}
+            <div className="divide-y divide-gray-100">
+              {activeMachines.length === 0 ? (
+                <div className="text-center py-12">
+                  <Pause className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+                  <p className="text-gray-500">No active machines for {selectedEnvironment} today</p>
+                  <p className="text-gray-400 text-sm">Production Manager needs to confirm today's orders</p>
+                </div>
+              ) : (
+                activeMachines.map(machine => (
+                  <DailyMachineRow
+                    key={machine.id}
+                    machine={machine}
+                    workers={workers}
+                    assignments={assignments}
+                    yesterdayAssignments={yesterdayAssignments}
+                    onAssignmentChange={handleAssignmentChange}
+                    selectedDate={selectedDate}
+                    isLocked={isDayLocked}
+                  />
+                ))
+              )}
             </div>
           </div>
 
@@ -932,60 +974,6 @@ const DailyPlanningInterface = ({ currentUser }) => {
             </div>
           )}
 
-          {/* Daily Summary */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div className="bg-white p-4 rounded-lg border border-gray-200">
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-green-100 rounded-lg">
-                  <Play className="w-5 h-5 text-green-600" />
-                </div>
-                <div>
-                  <div className="text-2xl font-bold text-gray-900">{activeMachines.length}</div>
-                  <div className="text-sm text-gray-500">Active Machines</div>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white p-4 rounded-lg border border-gray-200">
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-blue-100 rounded-lg">
-                  <Users className="w-5 h-5 text-blue-600" />
-                </div>
-                <div>
-                  <div className="text-2xl font-bold text-gray-900">{assignments.length}</div>
-                  <div className="text-sm text-gray-500">Worker Assignments</div>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white p-4 rounded-lg border border-gray-200">
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-yellow-100 rounded-lg">
-                  <Sun className="w-5 h-5 text-yellow-600" />
-                </div>
-                <div>
-                  <div className="text-2xl font-bold text-gray-900">
-                    {assignments.filter(a => a.shift_type === 'day').length}
-                  </div>
-                  <div className="text-sm text-gray-500">Day Shifts</div>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white p-4 rounded-lg border border-gray-200">
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-purple-100 rounded-lg">
-                  <Moon className="w-5 h-5 text-purple-600" />
-                </div>
-                <div>
-                  <div className="text-2xl font-bold text-gray-900">
-                    {assignments.filter(a => a.shift_type === 'night').length}
-                  </div>
-                  <div className="text-sm text-gray-500">Night Shifts</div>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       )}
     </div>
