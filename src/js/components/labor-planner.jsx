@@ -31,6 +31,7 @@ import {
   Moon,
   Sun,
   Zap,
+  Search,
   Users as UsersIcon
 } from 'lucide-react';
 import API from '../core/api';
@@ -425,7 +426,15 @@ const DailyWorkerSelect = ({
     return (priority[statusA] || 5) - (priority[statusB] || 5);
   });
 
-  const selectedWorker = value ? availableWorkers.find(w => w.id === parseInt(value)) : null;
+  // Search functionality
+  const [searchTerm, setSearchTerm] = useState('');
+  const filteredWorkers = sortedWorkers.filter(worker => 
+    (worker.full_name || worker.username).toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (worker.employee_code || '').toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  // Find selected worker - check all workers, not just available ones (to show selection even if not in current list)
+  const selectedWorker = value ? workers.find(w => w.id === parseInt(value)) : null;
 
   return (
     <div className={`relative ${className}`}>
@@ -433,7 +442,7 @@ const DailyWorkerSelect = ({
         type="button"
         onClick={() => setIsOpen(!isOpen)}
         className={`w-full px-3 py-2 text-left bg-white border rounded-lg shadow-sm hover:border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
-          selectedWorker ? 'border-blue-200' : 'border-gray-200'
+          selectedWorker ? 'border-blue-200 bg-blue-50' : 'border-gray-200'
         }`}
       >
         <div className="flex items-center justify-between">
@@ -453,7 +462,7 @@ const DailyWorkerSelect = ({
                 </span>
               </>
             ) : (
-              <span className="text-gray-400">Select {role}...</span>
+              <span className="text-gray-400">Select {role.replace('_', ' ')}...</span>
             )}
           </div>
           <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
@@ -461,46 +470,74 @@ const DailyWorkerSelect = ({
       </button>
 
       {isOpen && (
-        <div className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-48 overflow-y-auto">
-          <div className="py-1">
-            <button
-              onClick={() => {
-                onChange(null);
-                setIsOpen(false);
-              }}
-              className="w-full px-3 py-2 text-left text-gray-400 hover:bg-gray-50"
-            >
-              No assignment
-            </button>
-            {sortedWorkers.map(worker => {
-              const status = getWorkerStatus(worker.id);
-              return (
-                <button
-                  key={worker.id}
-                  onClick={() => {
-                    onChange(worker.id);
-                    setIsOpen(false);
-                  }}
-                  className={`w-full px-3 py-2 text-left hover:bg-gray-50 flex items-center gap-2 ${
-                    status === 'assigned' ? 'opacity-60' : ''
-                  }`}
-                >
-                  <div className={`flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${
-                    getStatusColor(status)
-                  }`}>
-                    {getStatusIcon(status)}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="font-medium text-gray-900 truncate">
-                      {worker.full_name || worker.username}
-                    </div>
-                    <div className="text-xs text-gray-500">
-                      {worker.employee_code} • {getStatusLabel(status)}
-                    </div>
-                  </div>
-                </button>
-              );
-            })}
+        <div className="absolute z-20 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg">
+          {/* Search Input */}
+          <div className="p-2 border-b border-gray-100">
+            <div className="relative">
+              <Search className="absolute left-2 top-2 w-4 h-4 text-gray-400" />
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder={`Search ${role.replace('_', ' ')}s...`}
+                className="w-full pl-8 pr-3 py-1.5 text-sm border border-gray-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
+                autoFocus
+              />
+            </div>
+          </div>
+          
+          {/* Worker List */}
+          <div className="max-h-48 overflow-y-auto">
+            <div className="py-1">
+              <button
+                onClick={() => {
+                  onChange(null);
+                  setIsOpen(false);
+                  setSearchTerm('');
+                }}
+                className="w-full px-3 py-2 text-left text-gray-400 hover:bg-gray-50 border-b border-gray-100"
+              >
+                <span className="text-sm">✕ No assignment</span>
+              </button>
+              {filteredWorkers.length === 0 ? (
+                <div className="px-3 py-2 text-center text-gray-500 text-sm">
+                  No workers found matching "{searchTerm}"
+                </div>
+              ) : (
+                filteredWorkers.map(worker => {
+                  const status = getWorkerStatus(worker.id);
+                  const isCurrentSelection = selectedWorker && selectedWorker.id === worker.id;
+                  return (
+                    <button
+                      key={worker.id}
+                      onClick={() => {
+                        onChange(worker.id);
+                        setIsOpen(false);
+                        setSearchTerm('');
+                      }}
+                      className={`w-full px-3 py-2 text-left hover:bg-gray-50 flex items-center gap-2 transition-colors ${
+                        isCurrentSelection ? 'bg-blue-50 border-l-4 border-blue-500' : ''
+                      } ${status === 'assigned' && !isCurrentSelection ? 'opacity-60' : ''}`}
+                    >
+                      <div className={`flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${
+                        getStatusColor(status)
+                      }`}>
+                        {getStatusIcon(status)}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="font-medium text-gray-900 truncate">
+                          {worker.full_name || worker.username}
+                          {isCurrentSelection && <span className="ml-2 text-blue-600">✓</span>}
+                        </div>
+                        <div className="text-xs text-gray-500">
+                          {worker.employee_code} • {getStatusLabel(status)}
+                        </div>
+                      </div>
+                    </button>
+                  );
+                })
+              )}
+            </div>
           </div>
         </div>
       )}
@@ -1200,11 +1237,11 @@ const DailyPlanningInterface = ({ currentUser }) => {
           </div>
         </div>
       ) : (
-        <div className="max-w-7xl mx-auto px-4 py-6">
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        <div className="max-w-full mx-auto px-4 py-6">
+          <div className="grid grid-cols-1 xl:grid-cols-5 gap-6">
             
             {/* Worker Pool Sidebar */}
-            <div className="lg:col-span-1 space-y-4">
+            <div className="xl:col-span-1 space-y-4">
               <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
                 <div className="flex items-center gap-2 mb-4">
                   <Users className="w-5 h-5 text-gray-700" />
@@ -1223,7 +1260,7 @@ const DailyPlanningInterface = ({ currentUser }) => {
                     />
                     <WorkerCard 
                       role="forklift" 
-                      workers={workers.filter(w => w.role === 'operator')} // Forklift drivers are operators
+                      workers={workers.filter(w => w.role !== 'supervisor')} // All non-supervisors for forklift
                       assignments={assignments}
                       selectedDate={selectedDate}
                     />
@@ -1232,9 +1269,9 @@ const DailyPlanningInterface = ({ currentUser }) => {
 
                 {/* Machine Operators */}
                 <div className="space-y-3">
-                  <h4 className="text-sm font-medium text-gray-700 uppercase tracking-wider">Machine Operators</h4>
-                  <div className="space-y-2">
-                    {workers.filter(w => w.role === 'operator' || w.role === 'packer').map(worker => (
+                  <h4 className="text-sm font-medium text-gray-700 uppercase tracking-wider">Machine Workers</h4>
+                  <div className="space-y-2 max-h-80 overflow-y-auto">
+                    {workers.filter(w => w.role !== 'supervisor').map(worker => (
                       <WorkerChip 
                         key={worker.id} 
                         worker={worker} 
@@ -1247,8 +1284,8 @@ const DailyPlanningInterface = ({ currentUser }) => {
               </div>
             </div>
 
-            {/* Main Assignment Area */}
-            <div className="lg:col-span-3 space-y-6">
+            {/* Main Assignment Area - Now takes more space */}
+            <div className="xl:col-span-4 space-y-6">
               
               {/* Environment Support Staff */}
               {selectedEnvData && (
@@ -1379,7 +1416,7 @@ const DailyPlanningInterface = ({ currentUser }) => {
                     <p className="text-gray-500 text-sm">Orders need to be assigned to machines first</p>
                   </div>
                 ) : (
-                  <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-6">
                     {activeMachines.map(machine => (
                       <MachineCard
                         key={machine.id}
