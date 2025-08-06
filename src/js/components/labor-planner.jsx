@@ -631,9 +631,15 @@ const DailyPlanningInterface = ({ currentUser }) => {
 
       // Separate active and idle machines
       const allMachines = machinesResponse.data || [];
+      console.log('🔧 All machines received:', allMachines);
+      console.log('🔧 Machines with orders:', allMachines.filter(m => m.has_orders_today));
+      
       const active = allMachines.filter(m => m.has_orders_today);
       const idle = allMachines.filter(m => !m.has_orders_today);
 
+      console.log('🔧 Active machines set:', active);
+      console.log('🔧 Idle machines set:', idle);
+      
       setActiveMachines(active);
       setIdleMachines(idle);
       setAssignments(assignmentsResponse.data || []);
