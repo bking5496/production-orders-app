@@ -411,6 +411,35 @@ export default function ProductionOrdersSystem() {
       return;
     }
 
+    // Check if machine is already running another order
+    const machineInUse = orders.find(o => 
+      o.machine_id === order.machine_id && 
+      o.id !== order.id && 
+      o.status === 'in_progress'
+    );
+
+    if (machineInUse) {
+      showNotification(`Cannot start production. Machine is already running Order ${machineInUse.order_number}. Please stop that order first.`, 'error');
+      return;
+    }
+
+    // Check if we're within the scheduled time window
+    if (order.start_time && order.stop_time) {
+      const now = new Date();
+      const startTime = new Date(order.start_time);
+      const stopTime = new Date(order.stop_time);
+      
+      if (now < startTime) {
+        showNotification(`Cannot start production yet. Order is scheduled to start at ${startTime.toLocaleString()}`, 'error');
+        return;
+      }
+      
+      if (now > stopTime) {
+        showNotification(`Cannot start production. Order scheduled time has ended at ${stopTime.toLocaleString()}`, 'error');
+        return;
+      }
+    }
+
     try {
       setLoading(true);
       await API.post(`/orders/${order.id}/start`, {
@@ -514,10 +543,34 @@ export default function ProductionOrdersSystem() {
         notes: machineAssignData.notes
       };
       
+      let endDate;
       if (machineAssignData.duration_hours) {
         const startDate = new Date(startDateTime);
-        const endDate = new Date(startDate.getTime() + (parseFloat(machineAssignData.duration_hours) * 60 * 60 * 1000));
+        endDate = new Date(startDate.getTime() + (parseFloat(machineAssignData.duration_hours) * 60 * 60 * 1000));
         updateData.stop_time = endDate.toISOString();
+      }
+
+      // Check for scheduling conflicts on the same machine
+      const schedulingConflict = orders.find(order => {
+        if (order.id === selectedOrder.id) return false; // Skip current order
+        if (order.machine_id !== parseInt(machineAssignData.machine_id)) return false; // Different machine
+        if (!order.start_time || !order.stop_time) return false; // No schedule set
+
+        const existingStart = new Date(order.start_time);
+        const existingEnd = new Date(order.stop_time);
+        const newStart = new Date(startDateTime);
+        const newEnd = endDate || new Date(newStart.getTime() + (8 * 60 * 60 * 1000)); // Default 8 hours
+
+        // Check for overlap
+        return (newStart < existingEnd && newEnd > existingStart);
+      });
+
+      if (schedulingConflict) {
+        const conflictStart = new Date(schedulingConflict.start_time).toLocaleString();
+        const conflictEnd = new Date(schedulingConflict.stop_time).toLocaleString();
+        showNotification(`Scheduling conflict! Order ${schedulingConflict.order_number} is already scheduled on this machine from ${conflictStart} to ${conflictEnd}`, 'error');
+        setLoading(false);
+        return;
       }
       
       await API.put(`/orders/${selectedOrder.id}`, updateData);
