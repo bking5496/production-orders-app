@@ -381,3 +381,5 @@ Instead of /public/js/main.js, use /js/main.js.
 7:53:05 AM [vite] (client) hmr update /src/js/components/machines.jsx
 7:53:16 AM [vite] (client) hmr update /src/js/components/machines.jsx
 7:59:17 AM [vite] (client) page reload server.js
+8:02:00 AM [vite] (client) page reload server.js
+8:05:55 AM [vite] (client) hmr update /src/js/components/machines.jsx

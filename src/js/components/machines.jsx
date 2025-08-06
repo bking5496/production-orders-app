@@ -178,9 +178,13 @@ export default function MachinesPage() {
   const loadEmployees = async () => {
     setLoadingEmployees(true);
     try {
-      const data = await API.get('/users');
+      const response = await API.get('/users');
+      // Handle the response format - users API returns { success: true, data: [...] }
+      const usersData = response?.data?.data || response?.data || [];
+      console.log('🧑‍💼 Users loaded in machines.jsx:', usersData);
+      
       // Transform users to match expected employee format with proper capitalization
-      const employees = data.map(user => ({
+      const employees = usersData.map(user => ({
         id: user.id,
         name: formatUserDisplayName(user),
         employee_code: formatEmployeeCode(user.employee_code) || `EMP${user.id.toString().padStart(3, '0')}`,
