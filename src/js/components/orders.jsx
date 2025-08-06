@@ -404,18 +404,18 @@ export default function ProductionOrdersSystem() {
   };
 
   const handleStartProduction = async (order) => {
-    if (!productionData.machine_id) {
-      showNotification('Please select a machine before starting production', 'error');
+    if (!order.machine_id) {
+      showNotification('No machine assigned to this order. Please assign a machine first.', 'error');
       return;
     }
 
     try {
       setLoading(true);
       await API.post(`/orders/${order.id}/start`, {
-        machine_id: productionData.machine_id,
-        operator_id: productionData.operator_id || null,
-        batch_number: productionData.batch_number || `BAT-${Date.now()}`,
-        start_notes: productionData.start_notes
+        machine_id: order.machine_id, // Use the order's assigned machine
+        operator_id: null, // Operator will be assigned in labor planner
+        batch_number: order.batch_number || productionData.batch_number || `BAT-${Date.now()}`,
+        start_notes: productionData.start_notes || ''
       });
       
       setShowProductionModal(false);
@@ -1351,8 +1351,10 @@ export default function ProductionOrdersSystem() {
                   <span className="ml-2 font-medium">{selectedOrder.quantity}</span>
                 </div>
                 <div>
-                  <span className="text-blue-700">Environment:</span>
-                  <span className="ml-2 font-medium">{getEnvironmentName(selectedOrder.environment)}</span>
+                  <span className="text-blue-700">Assigned Machine:</span>
+                  <span className="ml-2 font-medium">
+                    {selectedOrder.machine_id ? getMachineName(selectedOrder.machine_id) : 'Not Assigned'}
+                  </span>
                 </div>
                 <div>
                   <span className="text-blue-700">Priority:</span>
@@ -1363,49 +1365,23 @@ export default function ProductionOrdersSystem() {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-6">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Select Machine *
-                </label>
-                <select
-                  value={productionData.machine_id || ''}
-                  onChange={(e) => setProductionData(prev => ({ ...prev, machine_id: parseInt(e.target.value) }))}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                  required
-                >
-                  <option value="">Select Machine</option>
-                  {getAvailableMachines(selectedOrder.environment).map(machine => (
-                    <option key={machine.id} value={machine.id}>
-                      {machine.name} ({machine.type}) - {machine.status}
-                    </option>
-                  ))}
-                </select>
-                {getAvailableMachines(selectedOrder.environment).length === 0 && (
-                  <p className="text-red-600 text-sm mt-1">
-                    No available machines in {getEnvironmentName(selectedOrder.environment)} environment
-                  </p>
-                )}
+            {!selectedOrder.machine_id && (
+              <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+                <p className="text-yellow-800 text-sm">
+                  <AlertTriangle className="w-4 h-4 inline mr-2" />
+                  No machine assigned to this order. Please assign a machine before starting production.
+                </p>
               </div>
+            )}
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Assign Operator
-                </label>
-                <select
-                  value={productionData.operator_id || ''}
-                  onChange={(e) => setProductionData(prev => ({ ...prev, operator_id: e.target.value ? parseInt(e.target.value) : null }))}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                >
-                  <option value="">Select Operator (Optional)</option>
-                  {operators.map(operator => (
-                    <option key={operator.id} value={operator.id}>
-                      {operator.username} ({operator.role})
-                    </option>
-                  ))}
-                </select>
+            {selectedOrder.machine_id && (
+              <div className="bg-green-50 p-4 rounded-lg border border-green-200">
+                <p className="text-green-800 text-sm">
+                  <CheckCircle className="w-4 h-4 inline mr-2" />
+                  Machine assigned! Operators will be assigned through the Labor Planner.
+                </p>
               </div>
-            </div>
+            )}
 
             <div className="grid grid-cols-2 gap-6">
               <div>
@@ -1439,7 +1415,7 @@ export default function ProductionOrdersSystem() {
             <div className="flex gap-3 pt-4 border-t border-gray-200">
               <Button
                 onClick={() => handleStartProduction(selectedOrder)}
-                disabled={!productionData.machine_id || loading}
+                disabled={!selectedOrder.machine_id || loading}
                 className="flex-1 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700"
               >
                 <Play className="w-4 h-4 mr-2" />
