@@ -472,3 +472,20 @@ Instead of /public/js/main.js, use /js/main.js.
   1454|        )}
   1455|      </div>
 2:40:14 PM [vite] (client) hmr update /src/js/components/labor-planner.jsx
+3:06:03 PM [vite] (client) Pre-transform error: /home/production-app/production-orders-app/src/js/components/labor-planner.jsx: Adjacent JSX elements must be wrapped in an enclosing tag. Did you want a JSX fragment <>...</>? (1489:8)
+
+  1487 |             </div>
+  1488 |           </div>
+> 1489 |         </div>
+       |         ^
+  1490 |       )}
+  1491 |     </div>
+  1492 |   );
+  Plugin: vite:react-babel
+  File: /home/production-app/production-orders-app/src/js/components/labor-planner.jsx:1489:8
+  1487|              </div>
+  1488|            </div>
+  1489|          </div>
+     |          ^
+  1490|        )}
+  1491|      </div>
