@@ -114,8 +114,8 @@ const WorkerChip = ({ worker, assignments, selectedDate }) => {
   );
 };
 
-// Machine Assignment Card Component  
-const MachineCard = ({ machine, workers, assignments, yesterdayAssignments, onAssignmentChange, selectedDate, isLocked }) => {
+// Machine Assignment Section - Full width with clear worker lists
+const MachineAssignmentSection = ({ machine, workers, assignments, yesterdayAssignments, onAssignmentChange, selectedDate, isLocked }) => {
   const getTotalRequiredPositions = () => {
     return (machine.operators_per_shift || 1) + 
            (machine.hopper_loaders_per_shift || 0) + 
@@ -134,37 +134,75 @@ const MachineCard = ({ machine, workers, assignments, yesterdayAssignments, onAs
     const assignedCount = getAssignedPositions(shift);
     const totalRequired = getTotalRequiredPositions();
     
-    if (assignedCount === 0) return { status: 'empty', color: 'border-red-300 bg-red-50' };
-    if (assignedCount === totalRequired) return { status: 'complete', color: 'border-green-300 bg-green-50' };
-    return { status: 'partial', color: 'border-yellow-300 bg-yellow-50' };
+    if (assignedCount === 0) return 'empty';
+    if (assignedCount === totalRequired) return 'complete';
+    return 'partial';
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
+    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
       {/* Machine Header */}
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between mb-6 pb-4 border-b border-gray-200">
         <div>
-          <h4 className="font-semibold text-gray-900">{machine.name}</h4>
-          <p className="text-sm text-gray-600">{machine.type}</p>
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
+              <Factory className="w-6 h-6 text-blue-600" />
+            </div>
+            <div>
+              <h3 className="text-xl font-bold text-gray-900">{machine.name}</h3>
+              <p className="text-sm text-gray-600">{machine.type}</p>
+            </div>
+          </div>
           {machine.order_number && (
-            <div className="flex items-center gap-2 mt-1">
-              <span className="text-xs px-2 py-1 bg-blue-100 text-blue-800 rounded">
+            <div className="flex items-center gap-2 mt-3">
+              <span className="text-sm px-3 py-1 bg-blue-100 text-blue-800 rounded-full font-medium">
                 Order: {machine.order_number}
               </span>
-              <span className="text-xs text-gray-500">{machine.product_name}</span>
+              <span className="text-sm text-gray-600">{machine.product_name}</span>
             </div>
           )}
         </div>
+        
         <div className="text-right">
-          <div className="text-lg font-bold text-gray-900">{machine.id}</div>
-          <div className="text-xs text-gray-500">Machine ID</div>
+          <div className="text-2xl font-bold text-gray-900">#{machine.id}</div>
+          <div className="text-sm text-gray-500">Machine ID</div>
+          <div className="mt-2 flex items-center gap-2">
+            <div className={`w-3 h-3 rounded-full ${
+              getShiftStatus('day') === 'complete' ? 'bg-green-500' :
+              getShiftStatus('day') === 'partial' ? 'bg-yellow-500' : 'bg-red-500'
+            }`}></div>
+            <span className="text-xs text-gray-600">Day</span>
+            <div className={`w-3 h-3 rounded-full ${
+              getShiftStatus('night') === 'complete' ? 'bg-green-500' :
+              getShiftStatus('night') === 'partial' ? 'bg-yellow-500' : 'bg-red-500'
+            }`}></div>
+            <span className="text-xs text-gray-600">Night</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Machine Requirements */}
+      <div className="mb-6">
+        <div className="grid grid-cols-3 gap-4 text-center">
+          <div className="bg-gray-50 rounded-lg p-3">
+            <div className="text-lg font-bold text-gray-900">{machine.operators_per_shift || 1}</div>
+            <div className="text-xs text-gray-600">Operators</div>
+          </div>
+          <div className="bg-gray-50 rounded-lg p-3">
+            <div className="text-lg font-bold text-gray-900">{machine.hopper_loaders_per_shift || 0}</div>
+            <div className="text-xs text-gray-600">Hopper Loaders</div>
+          </div>
+          <div className="bg-gray-50 rounded-lg p-3">
+            <div className="text-lg font-bold text-gray-900">{machine.packers_per_shift || 0}</div>
+            <div className="text-xs text-gray-600">Packers</div>
+          </div>
         </div>
       </div>
 
       {/* Shift Assignments */}
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Day Shift */}
-        <ShiftAssignmentCard 
+        <ShiftAssignmentSection 
           shift="day"
           machine={machine}
           workers={workers}
@@ -172,11 +210,10 @@ const MachineCard = ({ machine, workers, assignments, yesterdayAssignments, onAs
           onAssignmentChange={onAssignmentChange}
           selectedDate={selectedDate}
           isLocked={isLocked}
-          status={getShiftStatus('day')}
         />
 
         {/* Night Shift */}
-        <ShiftAssignmentCard 
+        <ShiftAssignmentSection 
           shift="night" 
           machine={machine}
           workers={workers}
@@ -184,7 +221,6 @@ const MachineCard = ({ machine, workers, assignments, yesterdayAssignments, onAs
           onAssignmentChange={onAssignmentChange}
           selectedDate={selectedDate}
           isLocked={isLocked}
-          status={getShiftStatus('night')}
         />
       </div>
     </div>

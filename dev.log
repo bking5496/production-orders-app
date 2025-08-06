@@ -471,3 +471,4 @@ Instead of /public/js/main.js, use /js/main.js.
      |          ^
   1454|        )}
   1455|      </div>
+2:40:14 PM [vite] (client) hmr update /src/js/components/labor-planner.jsx
