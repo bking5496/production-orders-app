@@ -252,6 +252,7 @@ export default function ProductionOrdersSystem() {
   const [machineAssignData, setMachineAssignData] = useState({
     machine_id: '',
     scheduled_date: '',
+    shift: '',
     notes: ''
   });
 
@@ -476,16 +477,26 @@ export default function ProductionOrdersSystem() {
 
   const handleMachineAssignment = async (e) => {
     e.preventDefault();
-    if (!selectedOrder || !machineAssignData.machine_id || !machineAssignData.scheduled_date) {
-      showNotification('Please select a machine and scheduled date', 'error');
+    if (!selectedOrder || !machineAssignData.machine_id || !machineAssignData.scheduled_date || !machineAssignData.shift) {
+      showNotification('Please select a machine, date, and shift', 'error');
       return;
     }
 
     try {
       setLoading(true);
+      // Convert shift to start time
+      const shiftTimes = {
+        'day': '06:00:00',
+        'night': '18:00:00',
+        '24hr': '06:00:00' // 24hr shifts start with day shift
+      };
+      
+      const startDateTime = `${machineAssignData.scheduled_date}T${shiftTimes[machineAssignData.shift]}`;
+      
       await API.put(`/orders/${selectedOrder.id}`, {
         machine_id: machineAssignData.machine_id,
-        start_time: machineAssignData.scheduled_date,
+        start_time: startDateTime,
+        shift_type: machineAssignData.shift,
         notes: machineAssignData.notes
       });
       
@@ -572,6 +583,7 @@ export default function ProductionOrdersSystem() {
     setMachineAssignData({
       machine_id: '',
       scheduled_date: '',
+      shift: '',
       notes: ''
     });
   };
@@ -1959,17 +1971,36 @@ export default function ProductionOrdersSystem() {
                 )}
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Scheduled Start Date & Time *
-                </label>
-                <input
-                  type="datetime-local"
-                  value={machineAssignData.scheduled_date}
-                  onChange={(e) => setMachineAssignData({...machineAssignData, scheduled_date: e.target.value})}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                  required
-                />
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Scheduled Date *
+                  </label>
+                  <input
+                    type="date"
+                    value={machineAssignData.scheduled_date}
+                    onChange={(e) => setMachineAssignData({...machineAssignData, scheduled_date: e.target.value})}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                    required
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Shift *
+                  </label>
+                  <select
+                    value={machineAssignData.shift}
+                    onChange={(e) => setMachineAssignData({...machineAssignData, shift: e.target.value})}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                    required
+                  >
+                    <option value="">Select Shift</option>
+                    <option value="day">Day Shift (06:00 - 18:00)</option>
+                    <option value="night">Night Shift (18:00 - 06:00)</option>
+                    <option value="24hr">24Hr Shift (Full Day)</option>
+                  </select>
+                </div>
               </div>
             </div>
 
@@ -2001,7 +2032,7 @@ export default function ProductionOrdersSystem() {
               </Button>
               <Button
                 type="submit"
-                disabled={!machineAssignData.machine_id || !machineAssignData.scheduled_date || loading}
+                disabled={!machineAssignData.machine_id || !machineAssignData.scheduled_date || !machineAssignData.shift || loading}
                 className="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
               >
                 {loading ? 'Assigning...' : 'Assign Machine'}
