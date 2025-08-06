@@ -15,6 +15,7 @@ import {
   Lock,
   Unlock,
   AlertTriangle,
+  AlertCircle,
   CheckCircle,
   Clock,
   User,
@@ -444,76 +445,94 @@ const DailyEnvironmentSupport = ({
   };
 
   return (
-    <div className="bg-white/70 backdrop-blur-sm border border-white/20 rounded-2xl shadow-xl overflow-hidden">
-      <div className="bg-gradient-to-r from-blue-500 to-indigo-600 p-6">
-        <h3 className="text-xl font-semibold text-white flex items-center gap-3">
-          <div className="p-2 bg-white/20 rounded-lg backdrop-blur-sm">
-            <Factory className="w-5 h-5 text-white" />
-          </div>
-          <span>{environment.toUpperCase()} Support Staff</span>
-        </h3>
-        <p className="text-blue-100 mt-1">Environment-level support roles and assignments</p>
+    <div className="bg-white border border-gray-300 shadow-sm">
+      <div className="bg-gray-50 border-b border-gray-300 px-4 py-3">
+        <div className="flex items-center gap-2">
+          <Factory className="w-5 h-5 text-gray-700" />
+          <h3 className="text-lg font-semibold text-gray-900">{environment.toUpperCase()} - Support Staff</h3>
+        </div>
       </div>
       
-      <div className="p-6">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          <div className="lg:col-span-3">
-            <div className="text-sm font-medium text-gray-500 uppercase tracking-wider">Support Roles</div>
-          </div>
-          <div className="lg:col-span-4">
-            <div className="text-center font-medium text-gray-700 flex items-center justify-center gap-2 p-3 bg-yellow-50/80 backdrop-blur-sm rounded-xl border border-yellow-200">
-              <Sun className="w-4 h-4 text-yellow-600" />
-              <span>Day Shift (06:00-18:00)</span>
+      <div className="p-4">
+        <div className="grid grid-cols-5 gap-4 mb-4">
+          <div className="font-medium text-gray-900">Role</div>
+          <div className="text-center">
+            <div className="inline-flex items-center gap-2 px-3 py-1 bg-yellow-100 border border-yellow-300 rounded text-yellow-800">
+              <Sun className="w-4 h-4" />
+              <span className="font-medium">Day Shift</span>
             </div>
           </div>
-          <div className="lg:col-span-4">
-            <div className="text-center font-medium text-gray-700 flex items-center justify-center gap-2 p-3 bg-purple-50/80 backdrop-blur-sm rounded-xl border border-purple-200">
-              <Moon className="w-4 h-4 text-purple-600" />
-              <span>Night Shift (18:00-06:00)</span>
+          <div className="text-center">
+            <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-100 border border-blue-300 rounded text-blue-800">
+              <Moon className="w-4 h-4" />
+              <span className="font-medium">Night Shift</span>
             </div>
           </div>
-          <div className="lg:col-span-1"></div>
+          <div className="text-center font-medium text-gray-900">Status</div>
+          <div className="text-center font-medium text-gray-900">Actions</div>
         </div>
 
-        {supportRoles.map(({ role, label, icon: Icon }) => (
-          <div key={role} className="grid grid-cols-1 lg:grid-cols-12 gap-6 py-6 border-t border-gray-200 first:border-t-0">
-            <div className="lg:col-span-3 flex items-center gap-3">
-              <div className="p-3 bg-gradient-to-r from-gray-100 to-gray-200 rounded-xl shadow-sm">
-                <Icon className="w-5 h-5 text-gray-700" />
+        <div className="space-y-3">
+          {supportRoles.map(({ role, label, icon: Icon }) => (
+            <div key={role} className="grid grid-cols-5 gap-4 items-center py-3 border-t border-gray-200">
+              <div className="flex items-center gap-2">
+                <Icon className="w-5 h-5 text-gray-600" />
+                <span className="font-medium text-gray-900">{label}</span>
               </div>
-              <span className="font-semibold text-gray-900">{label}</span>
+              <div>
+                <DailyWorkerSelect
+                  value={getAssignedWorker('day', role)}
+                  onChange={(workerId) => handleAssignmentChange('day', role, workerId)}
+                  role={role}
+                  environment={environment}
+                  shift="day"
+                  date={selectedDate}
+                  machineId={null}
+                  workers={workers}
+                  assignments={assignments}
+                  yesterdayAssignments={yesterdayAssignments}
+                />
+              </div>
+              <div>
+                <DailyWorkerSelect
+                  value={getAssignedWorker('night', role)}
+                  onChange={(workerId) => handleAssignmentChange('night', role, workerId)}
+                  role={role}
+                  environment={environment}
+                  shift="night"
+                  date={selectedDate}
+                  machineId={null}
+                  workers={workers}
+                  assignments={assignments}
+                  yesterdayAssignments={yesterdayAssignments}
+                />
+              </div>
+              <div className="text-center">
+                {getAssignedWorker('day', role) && getAssignedWorker('night', role) ? (
+                  <span className="inline-flex items-center gap-1 px-2 py-1 bg-green-100 border border-green-300 rounded text-green-800 text-xs font-medium">
+                    <CheckCircle className="w-3 h-3" />
+                    Complete
+                  </span>
+                ) : (getAssignedWorker('day', role) || getAssignedWorker('night', role)) ? (
+                  <span className="inline-flex items-center gap-1 px-2 py-1 bg-yellow-100 border border-yellow-300 rounded text-yellow-800 text-xs font-medium">
+                    <Clock className="w-3 h-3" />
+                    Partial
+                  </span>
+                ) : (
+                  <span className="inline-flex items-center gap-1 px-2 py-1 bg-red-100 border border-red-300 rounded text-red-800 text-xs font-medium">
+                    <AlertCircle className="w-3 h-3" />
+                    Missing
+                  </span>
+                )}
+              </div>
+              <div className="text-center">
+                <button className="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                  Manage
+                </button>
+              </div>
             </div>
-            <div className="lg:col-span-4">
-              <DailyWorkerSelect
-                value={getAssignedWorker('day', role)}
-                onChange={(workerId) => handleAssignmentChange('day', role, workerId)}
-                role={role}
-                environment={environment}
-                shift="day"
-                date={selectedDate}
-                machineId={null}
-                workers={workers}
-                assignments={assignments}
-                yesterdayAssignments={yesterdayAssignments}
-              />
-            </div>
-            <div className="lg:col-span-4">
-              <DailyWorkerSelect
-                value={getAssignedWorker('night', role)}
-                onChange={(workerId) => handleAssignmentChange('night', role, workerId)}
-                role={role}
-                environment={environment}
-                shift="night"
-                date={selectedDate}
-                machineId={null}
-                workers={workers}
-                assignments={assignments}
-                yesterdayAssignments={yesterdayAssignments}
-              />
-            </div>
-            <div className="lg:col-span-1"></div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   );
@@ -894,60 +913,54 @@ const DailyPlanningInterface = ({ currentUser }) => {
         </div>
 
         {!selectedEnvironment ? (
-          <div className="bg-white/70 backdrop-blur-sm border border-white/20 rounded-2xl p-12 shadow-xl text-center">
-            <div className="p-4 bg-gradient-to-r from-gray-100 to-gray-200 rounded-full w-20 h-20 mx-auto mb-6 flex items-center justify-center">
-              <Factory className="w-10 h-10 text-gray-600" />
+          <div className="bg-white border border-gray-300 shadow-sm p-8 text-center">
+            <div className="w-16 h-16 bg-gray-200 rounded mx-auto mb-4 flex items-center justify-center">
+              <Factory className="w-8 h-8 text-gray-600" />
             </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">Select an Environment</h3>
-            <p className="text-gray-600 max-w-md mx-auto">Choose an environment from the dropdown above to start planning worker assignments for active machines and production orders</p>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">Environment Required</h3>
+            <p className="text-gray-600">Select an environment to view production schedule and assign workers</p>
           </div>
         ) : (
-          <div className="space-y-6">
-          {/* Modern Quick Actions */}
-          <div className="bg-white/70 backdrop-blur-sm border border-white/20 rounded-2xl p-6 shadow-xl">
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-              <div>
-                <h2 className="text-lg font-semibold text-gray-900 mb-1">Planning Tools</h2>
-                <p className="text-gray-600 text-sm">Manage worker assignments and finalize schedule</p>
-              </div>
-              
-              <div className="flex flex-wrap items-center gap-3">
-                <button
-                  onClick={handleAutoPopulate}
-                  disabled={saving || isDayLocked}
-                  className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl hover:from-green-600 hover:to-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
-                >
-                  <Zap className="w-4 h-4" />
-                  <span className="font-medium">Auto-Populate</span>
-                </button>
-
-                <button
-                  onClick={handleLockDay}
-                  disabled={saving || isDayLocked}
-                  className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-xl hover:from-blue-600 hover:to-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
-                >
-                  <Lock className="w-4 h-4" />
-                  <span className="font-medium">{isDayLocked ? 'Day Locked' : 'Validate & Lock'}</span>
-                </button>
-
+          <div className="space-y-4">
+          {/* Quick Actions Bar */}
+          <div className="bg-white border border-gray-300 shadow-sm p-4">
+            <div className="flex justify-between items-center">
+              <div className="flex items-center gap-4">
+                <h2 className="text-lg font-semibold text-gray-900">Shift Planning Tools</h2>
+                {validationErrors.length > 0 && (
+                  <div className="flex items-center gap-2 px-3 py-1 bg-red-100 border border-red-300 rounded text-red-700">
+                    <AlertTriangle className="w-4 h-4" />
+                    <span className="text-sm font-medium">{validationErrors.length} Gaps Need Assignment</span>
+                  </div>
+                )}
                 {isDayLocked && (
-                  <div className="flex items-center gap-2 text-amber-700 bg-amber-100/80 backdrop-blur-sm px-4 py-2.5 rounded-xl border border-amber-200">
+                  <div className="flex items-center gap-2 px-3 py-1 bg-yellow-100 border border-yellow-300 rounded text-yellow-700">
                     <Lock className="w-4 h-4" />
                     <span className="text-sm font-medium">Schedule Locked</span>
                   </div>
                 )}
               </div>
-            </div>
+              
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={handleAutoPopulate}
+                  disabled={saving || isDayLocked}
+                  className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium"
+                >
+                  <Zap className="w-4 h-4" />
+                  Auto-Populate
+                </button>
 
-            {validationErrors.length > 0 && (
-              <div className="mt-4 p-4 bg-red-50/80 backdrop-blur-sm border border-red-200 rounded-xl">
-                <div className="flex items-center gap-2 text-red-700 mb-2">
-                  <AlertTriangle className="w-4 h-4" />
-                  <span className="font-medium">{validationErrors.length} Assignment Gaps Found</span>
-                </div>
-                <p className="text-red-600 text-sm">Please assign workers to all required positions before locking the schedule.</p>
+                <button
+                  onClick={handleLockDay}
+                  disabled={saving || isDayLocked}
+                  className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium"
+                >
+                  <Lock className="w-4 h-4" />
+                  {isDayLocked ? 'Locked' : 'Lock Schedule'}
+                </button>
               </div>
-            )}
+            </div>
           </div>
 
           {/* Environment Support Roles */}
