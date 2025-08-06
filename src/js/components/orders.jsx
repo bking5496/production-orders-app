@@ -1083,7 +1083,21 @@ export default function ProductionOrdersSystem() {
                           </Button>
                           
                           {/* Production Controls */}
-                          {order.status === 'pending' && (
+                          {order.status === 'pending' && !order.machine_id && (
+                            <Button 
+                              onClick={() => {
+                                setSelectedOrder(order);
+                                setShowMachineAssignModal(true);
+                              }} 
+                              size="sm"
+                              className="bg-blue-600 hover:bg-blue-700"
+                            >
+                              <Settings className="w-4 h-4 mr-1" />
+                              Assign Machine
+                            </Button>
+                          )}
+                          
+                          {order.status === 'pending' && order.machine_id && (
                             <Button 
                               onClick={() => {
                                 setSelectedOrder(order);
@@ -1879,6 +1893,119 @@ export default function ProductionOrdersSystem() {
               >
                 <Square className="w-5 h-5" />
                 {loading ? 'Stopping...' : 'Stop Production'}
+              </Button>
+            </div>
+          </form>
+        </Modal>
+      )}
+
+      {/* Machine Assignment Modal */}
+      {showMachineAssignModal && selectedOrder && (
+        <Modal 
+          title={`Assign Machine - Order ${selectedOrder.order_number}`} 
+          onClose={() => {
+            setShowMachineAssignModal(false);
+            setSelectedOrder(null);
+            resetMachineAssignData();
+          }}
+          size="large"
+        >
+          <form onSubmit={handleMachineAssignment} className="space-y-6">
+            <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+              <h3 className="text-lg font-medium text-blue-900 mb-2">Order Details</h3>
+              <div className="grid grid-cols-2 gap-4 text-sm">
+                <div>
+                  <span className="font-medium text-gray-700">Product:</span>
+                  <span className="ml-2 text-gray-900">{selectedOrder.product_name}</span>
+                </div>
+                <div>
+                  <span className="font-medium text-gray-700">Quantity:</span>
+                  <span className="ml-2 text-gray-900">{selectedOrder.quantity}</span>
+                </div>
+                <div>
+                  <span className="font-medium text-gray-700">Environment:</span>
+                  <span className="ml-2 text-gray-900">{getEnvironmentName(selectedOrder.environment)}</span>
+                </div>
+                <div>
+                  <span className="font-medium text-gray-700">Priority:</span>
+                  <Badge className={`ml-2 ${getPriorityInfo(selectedOrder.priority)?.color || 'bg-gray-100 text-gray-800 border-gray-200'}`}>
+                    {getPriorityInfo(selectedOrder.priority)?.label || 'Normal'}
+                  </Badge>
+                </div>
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Select Machine *
+                </label>
+                <select
+                  value={machineAssignData.machine_id}
+                  onChange={(e) => setMachineAssignData({...machineAssignData, machine_id: e.target.value})}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                  required
+                >
+                  <option value="">Select Machine</option>
+                  {getAvailableMachines(selectedOrder.environment).map(machine => (
+                    <option key={machine.id} value={machine.id}>
+                      {machine.name} ({machine.type}) - {machine.status}
+                    </option>
+                  ))}
+                </select>
+                {getAvailableMachines(selectedOrder.environment).length === 0 && (
+                  <p className="text-red-600 text-sm mt-1">
+                    No available machines in {getEnvironmentName(selectedOrder.environment)} environment
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Scheduled Start Date & Time *
+                </label>
+                <input
+                  type="datetime-local"
+                  value={machineAssignData.scheduled_date}
+                  onChange={(e) => setMachineAssignData({...machineAssignData, scheduled_date: e.target.value})}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                  required
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Assignment Notes
+              </label>
+              <textarea
+                value={machineAssignData.notes}
+                onChange={(e) => setMachineAssignData({...machineAssignData, notes: e.target.value})}
+                placeholder="Optional notes about this machine assignment..."
+                rows={3}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 resize-none"
+              />
+            </div>
+            
+            <div className="flex gap-3 pt-6">
+              <Button
+                type="button"
+                onClick={() => {
+                  setShowMachineAssignModal(false);
+                  setSelectedOrder(null);
+                  resetMachineAssignData();
+                }}
+                variant="outline"
+                className="px-8"
+              >
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                disabled={!machineAssignData.machine_id || !machineAssignData.scheduled_date || loading}
+                className="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
+              >
+                {loading ? 'Assigning...' : 'Assign Machine'}
               </Button>
             </div>
           </form>
