@@ -459,24 +459,70 @@ const handleError = (res, error, context = 'Operation') => {
 app.put('/api/orders/:id', 
   authenticateToken, 
   requireRole(['admin', 'supervisor']),
-  (req, res) => {
+  async (req, res) => {
     const { id } = req.params;
     const updates = req.body;
     
-    const fields = Object.keys(updates).map((key, i) => `${key} = ${i + 1}`).join(', ');
-    const values = Object.values(updates);
-    values.push(id);
-    
-    db.run(
-      `UPDATE production_orders SET ${fields} WHERE id = ${values.length}`,
-      values,
-      function(err) {
-        if (err) {
-          return res.status(500).json({ error: 'Database error' });
+    try {
+      const client = await pool.connect();
+      try {
+        await client.query('BEGIN');
+        
+        // Build the SET clause with proper PostgreSQL syntax
+        const allowedFields = ['machine_id', 'start_time', 'status', 'assignment_notes', 'due_date', 'quantity', 'priority', 'product_name', 'environment', 'customer_info', 'specifications'];
+        const updateFields = [];
+        const values = [];
+        let paramCounter = 1;
+        
+        for (const [key, value] of Object.entries(updates)) {
+          if (allowedFields.includes(key)) {
+            updateFields.push(`${key} = $${paramCounter}`);
+            values.push(value);
+            paramCounter++;
+          }
         }
-        res.json({ message: 'Order updated successfully' });
+        
+        if (updateFields.length === 0) {
+          await client.query('ROLLBACK');
+          return res.status(400).json({ error: 'No valid fields to update' });
+        }
+        
+        // Add updated_at timestamp
+        updateFields.push(`updated_at = NOW()`);
+        values.push(id); // WHERE clause parameter
+        
+        const query = `
+          UPDATE production_orders 
+          SET ${updateFields.join(', ')} 
+          WHERE id = $${paramCounter}
+          RETURNING *
+        `;
+        
+        const result = await client.query(query, values);
+        
+        if (result.rows.length === 0) {
+          await client.query('ROLLBACK');
+          return res.status(404).json({ error: 'Order not found' });
+        }
+        
+        await client.query('COMMIT');
+        
+        res.json({ 
+          success: true, 
+          message: 'Order updated successfully',
+          order: result.rows[0]
+        });
+        
+      } catch (error) {
+        await client.query('ROLLBACK');
+        throw error;
+      } finally {
+        client.release();
       }
-    );
+    } catch (error) {
+      console.error('Error updating order:', error);
+      res.status(500).json({ error: 'Database error', details: error.message });
+    }
   }
 );
 
@@ -484,15 +530,30 @@ app.put('/api/orders/:id',
 app.delete('/api/orders/:id',
   authenticateToken,
   requireRole(['admin', 'supervisor']),
-  (req, res) => {
+  async (req, res) => {
     const { id } = req.params;
     
-    db.run('DELETE FROM production_orders WHERE id = $1', [id], function(err) {
-      if (err) {
-        return res.status(500).json({ error: 'Database error' });
+    try {
+      const client = await pool.connect();
+      try {
+        const result = await client.query('DELETE FROM production_orders WHERE id = $1 RETURNING id', [id]);
+        
+        if (result.rows.length === 0) {
+          return res.status(404).json({ error: 'Order not found' });
+        }
+        
+        res.json({ 
+          success: true, 
+          message: 'Order deleted successfully' 
+        });
+        
+      } finally {
+        client.release();
       }
-      res.json({ message: 'Order deleted successfully' });
-    });
+    } catch (error) {
+      console.error('Error deleting order:', error);
+      res.status(500).json({ error: 'Database error', details: error.message });
+    }
   }
 );
 
