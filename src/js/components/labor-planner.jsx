@@ -115,34 +115,23 @@ const WorkerChip = ({ worker, assignments, selectedDate }) => {
 
 // Machine Assignment Card Component  
 const MachineCard = ({ machine, workers, assignments, yesterdayAssignments, onAssignmentChange, selectedDate, isLocked }) => {
-  const getRequiredRoles = () => {
-    const roles = ['operator']; // All machines need at least one operator
-    if (machine.operators_per_shift > 1) {
-      roles.push('helper');
-    }
-    if (machine.hopper_loaders_per_shift > 0) {
-      roles.push('loader');  
-    }
-    if (machine.packers_per_shift > 0) {
-      roles.push('packer');
-    }
-    return roles;
+  const getTotalRequiredPositions = () => {
+    return (machine.operators_per_shift || 1) + 
+           (machine.hopper_loaders_per_shift || 0) + 
+           (machine.packers_per_shift || 0);
   };
 
-  const getAssignedWorker = (shift, role) => {
-    const assignment = assignments.find(a => 
+  const getAssignedPositions = (shift) => {
+    return assignments.filter(a => 
       a.machine_id === machine.id && 
       a.assignment_date === selectedDate && 
-      a.shift_type === shift && 
-      a.role === role
-    );
-    return assignment ? assignment.employee_id : null;
+      a.shift_type === shift
+    ).length;
   };
 
   const getShiftStatus = (shift) => {
-    const requiredRoles = getRequiredRoles();
-    const assignedCount = requiredRoles.filter(role => getAssignedWorker(shift, role)).length;
-    const totalRequired = requiredRoles.length;
+    const assignedCount = getAssignedPositions(shift);
+    const totalRequired = getTotalRequiredPositions();
     
     if (assignedCount === 0) return { status: 'empty', color: 'border-red-300 bg-red-50' };
     if (assignedCount === totalRequired) return { status: 'complete', color: 'border-green-300 bg-green-50' };
@@ -203,20 +192,47 @@ const MachineCard = ({ machine, workers, assignments, yesterdayAssignments, onAs
 
 // Shift Assignment Card
 const ShiftAssignmentCard = ({ shift, machine, workers, assignments, onAssignmentChange, selectedDate, isLocked, status }) => {
-  const getRequiredRoles = () => {
-    const roles = ['operator'];
-    if (machine.operators_per_shift > 1) roles.push('helper');
-    if (machine.hopper_loaders_per_shift > 0) roles.push('loader');
-    if (machine.packers_per_shift > 0) roles.push('packer');
-    return roles;
+  // Get role requirements based on machine specifications
+  const getRoleRequirements = () => {
+    const requirements = [];
+    
+    // Operators (always required, can be multiple)
+    for (let i = 1; i <= (machine.operators_per_shift || 1); i++) {
+      requirements.push({
+        role: 'operator',
+        position: i,
+        displayName: machine.operators_per_shift > 1 ? `Operator ${i}` : 'Operator'
+      });
+    }
+    
+    // Hopper Loaders
+    for (let i = 1; i <= (machine.hopper_loaders_per_shift || 0); i++) {
+      requirements.push({
+        role: 'hopper_loader',
+        position: i,
+        displayName: machine.hopper_loaders_per_shift > 1 ? `Hopper Loader ${i}` : 'Hopper Loader'
+      });
+    }
+    
+    // Packers
+    for (let i = 1; i <= (machine.packers_per_shift || 0); i++) {
+      requirements.push({
+        role: 'packer',
+        position: i,
+        displayName: machine.packers_per_shift > 1 ? `Packer ${i}` : 'Packer'
+      });
+    }
+    
+    return requirements;
   };
 
-  const getAssignedWorker = (role) => {
+  const getAssignedWorker = (role, position = 1) => {
+    const roleWithPosition = position > 1 ? `${role}_${position}` : role;
     const assignment = assignments.find(a => 
       a.machine_id === machine.id && 
       a.assignment_date === selectedDate && 
       a.shift_type === shift && 
-      a.role === role
+      a.role === roleWithPosition
     );
     return assignment ? assignment.employee_id : null;
   };
@@ -224,6 +240,7 @@ const ShiftAssignmentCard = ({ shift, machine, workers, assignments, onAssignmen
   const shiftLabel = shift === 'day' ? 'Day Shift' : 'Night Shift';
   const shiftIcon = shift === 'day' ? Sun : Moon;
   const ShiftIcon = shiftIcon;
+  const roleRequirements = getRoleRequirements();
 
   return (
     <div className={`border-2 rounded-lg p-3 ${status.color}`}>
@@ -239,13 +256,19 @@ const ShiftAssignmentCard = ({ shift, machine, workers, assignments, onAssignmen
       </div>
       
       <div className="space-y-2">
-        {getRequiredRoles().map(role => (
-          <div key={role} className="flex items-center gap-2">
-            <span className="text-xs font-medium text-gray-700 w-16">{role}</span>
+        {roleRequirements.map(({ role, position, displayName }) => (
+          <div key={`${role}-${position}`} className="space-y-1">
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-medium text-gray-700 w-20 capitalize">{displayName}</span>
+            </div>
             <DailyWorkerSelect
-              value={getAssignedWorker(role)}
-              onChange={(workerId) => onAssignmentChange(machine.id, shift, role, workerId)}
+              value={getAssignedWorker(role, position)}
+              onChange={(workerId) => {
+                const roleWithPosition = position > 1 ? `${role}_${position}` : role;
+                onAssignmentChange(machine.id, shift, roleWithPosition, workerId);
+              }}
               role={role}
+              position={position}
               environment={machine.environment}
               shift={shift}
               date={selectedDate}
@@ -253,7 +276,7 @@ const ShiftAssignmentCard = ({ shift, machine, workers, assignments, onAssignmen
               orderId={machine.order_id}
               workers={workers}
               assignments={assignments}
-              className="flex-1 text-xs"
+              className="w-full text-xs"
             />
           </div>
         ))}
@@ -267,6 +290,7 @@ const DailyWorkerSelect = ({
   value, 
   onChange, 
   role, 
+  position = 1,
   environment, 
   shift, 
   date, 
@@ -279,12 +303,44 @@ const DailyWorkerSelect = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   
-  // Filter workers by role
-  const availableWorkers = workers.filter(worker => {
-    if (role === 'supervisor') return worker.role === 'supervisor';
-    if (role === 'forklift') return worker.role === 'operator'; // Forklift drivers are operators with special skills
-    return worker.role === 'operator' || worker.role === 'packer';
-  });
+  // Filter workers by role and exclude already assigned workers
+  const getAvailableWorkers = () => {
+    let roleFilteredWorkers;
+    
+    // Filter by role type
+    if (role === 'supervisor') {
+      roleFilteredWorkers = workers.filter(w => w.role === 'supervisor');
+    } else if (role === 'forklift') {
+      roleFilteredWorkers = workers.filter(w => w.role === 'operator'); // Forklift drivers are operators
+    } else if (role === 'operator') {
+      roleFilteredWorkers = workers.filter(w => w.role === 'operator');
+    } else if (role === 'hopper_loader') {
+      roleFilteredWorkers = workers.filter(w => w.role === 'operator'); // Hopper loaders are operators
+    } else if (role === 'packer') {
+      roleFilteredWorkers = workers.filter(w => w.role === 'packer');
+    } else {
+      roleFilteredWorkers = workers.filter(w => w.role === 'operator' || w.role === 'packer');
+    }
+    
+    // Get currently selected worker to keep in list
+    const currentSelection = value ? parseInt(value) : null;
+    
+    // Get all workers assigned on this date/shift (excluding current selection)
+    const assignedWorkerIds = assignments
+      .filter(a => 
+        a.assignment_date === date && 
+        a.shift_type === shift &&
+        a.employee_id !== currentSelection // Keep current selection available
+      )
+      .map(a => a.employee_id);
+    
+    // Return workers not already assigned
+    return roleFilteredWorkers.filter(w => 
+      !assignedWorkerIds.includes(w.id) || w.id === currentSelection
+    );
+  };
+  
+  const availableWorkers = getAvailableWorkers();
 
   // Check worker status with priority system
   const getWorkerStatus = (workerId) => {
