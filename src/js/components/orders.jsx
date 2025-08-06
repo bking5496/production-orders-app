@@ -474,6 +474,35 @@ export default function ProductionOrdersSystem() {
     }
   };
 
+  const handleMachineAssignment = async (e) => {
+    e.preventDefault();
+    if (!selectedOrder || !machineAssignData.machine_id || !machineAssignData.scheduled_date) {
+      showNotification('Please select a machine and scheduled date', 'error');
+      return;
+    }
+
+    try {
+      setLoading(true);
+      await API.put(`/orders/${selectedOrder.id}`, {
+        machine_id: machineAssignData.machine_id,
+        start_time: machineAssignData.scheduled_date,
+        assignment_notes: machineAssignData.notes,
+        status: 'assigned'
+      });
+      
+      setShowMachineAssignModal(false);
+      resetMachineAssignData();
+      showNotification(`Machine assigned to Order ${selectedOrder.order_number}`, 'success');
+      loadOrders();
+      loadMachines(); // Refresh machine status
+    } catch (error) {
+      console.error('Error assigning machine:', error);
+      showNotification(error.message || 'Failed to assign machine', 'error');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleCompleteProduction = async (order) => {
     try {
       setLoading(true);
@@ -537,6 +566,14 @@ export default function ProductionOrdersSystem() {
       waste_category: 'material',
       recovery_possible: false,
       waste_notes: ''
+    });
+  };
+
+  const resetMachineAssignData = () => {
+    setMachineAssignData({
+      machine_id: '',
+      scheduled_date: '',
+      notes: ''
     });
   };
 
@@ -988,6 +1025,22 @@ export default function ProductionOrdersSystem() {
                           {statusInfo?.label || 'Unknown'}
                         </Badge>
                         <div className="text-xs text-gray-500 mt-1">{statusInfo?.description || 'Status information'}</div>
+                        
+                        {/* Duration and Due Date moved from Progress column */}
+                        <div className="space-y-1 mt-2">
+                          {order.start_time && (
+                            <div className="flex items-center text-xs text-gray-600">
+                              <Timer className="w-3 h-3 mr-1" />
+                              {getProductionTime(order)}
+                            </div>
+                          )}
+                          {order.due_date && (
+                            <div className="flex items-center text-xs text-gray-600">
+                              <Calendar className="w-3 h-3 mr-1" />
+                              Due: {new Date(order.due_date).toLocaleDateString()}
+                            </div>
+                          )}
+                        </div>
                       </td>
                       <td className="px-6 py-4">
                         {order.machine_id ? (
@@ -1003,17 +1056,16 @@ export default function ProductionOrdersSystem() {
                       </td>
                       <td className="px-6 py-4">
                         <div className="space-y-1">
-                          {order.start_time && (
-                            <div className="flex items-center text-xs text-gray-600">
-                              <Timer className="w-3 h-3 mr-1" />
-                              {getProductionTime(order)}
+                          {order.status === 'in_progress' && order.quantity && (
+                            <div className="w-full bg-gray-200 rounded-full h-2">
+                              <div className="bg-blue-600 h-2 rounded-full" style={{width: '60%'}}></div>
                             </div>
                           )}
-                          {order.due_date && (
-                            <div className="flex items-center text-xs text-gray-600">
-                              <Calendar className="w-3 h-3 mr-1" />
-                              Due: {new Date(order.due_date).toLocaleDateString()}
-                            </div>
+                          {order.status === 'pending' && !order.machine_id && (
+                            <span className="text-amber-600 text-xs">Awaiting machine assignment</span>
+                          )}
+                          {order.status === 'assigned' && (
+                            <span className="text-blue-600 text-xs">Ready to start</span>
                           )}
                         </div>
                       </td>
