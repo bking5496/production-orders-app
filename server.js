@@ -3226,6 +3226,55 @@ app.get('/api/labor-assignments', authenticateToken, async (req, res) => {
   }
 });
 
+// Get machines scheduled for labor planning by date
+app.get('/api/labor-planner/machines', authenticateToken, async (req, res) => {
+  try {
+    const client = await pool.connect();
+    try {
+      const { date } = req.query;
+      
+      if (!date) {
+        return res.status(400).json({ error: 'Date parameter is required' });
+      }
+      
+      // Get machines that have labor assignments for the specified date
+      const query = `
+        SELECT DISTINCT
+          m.id as machine_id,
+          m.name as machine_name,
+          m.environment,
+          m.capacity,
+          m.operators_per_shift,
+          m.hopper_loaders_per_shift,
+          m.packers_per_shift,
+          po.order_number,
+          po.product_name,
+          po.status as order_status,
+          po.id as order_id,
+          array_agg(DISTINCT la.shift_type) as scheduled_shifts
+        FROM machines m
+        LEFT JOIN labor_assignments la ON m.id = la.machine_id AND la.assignment_date = $1
+        LEFT JOIN production_orders po ON m.id = po.machine_id 
+          AND (po.status IN ('pending', 'in_progress', 'stopped') OR DATE(po.due_date) = $1)
+        WHERE la.machine_id IS NOT NULL
+        GROUP BY m.id, m.name, m.environment, m.capacity, m.operators_per_shift, 
+                 m.hopper_loaders_per_shift, m.packers_per_shift, po.order_number, 
+                 po.product_name, po.status, po.id
+        ORDER BY m.name
+      `;
+      
+      const result = await client.query(query, [date]);
+      res.json({ success: true, data: result.rows });
+      
+    } finally {
+      client.release();
+    }
+  } catch (error) {
+    console.error('Error fetching machines for labor planning:', error);
+    res.status(500).json({ error: 'Failed to fetch machines for labor planning', details: error.message });
+  }
+});
+
 // Create or update labor assignment
 app.post('/api/labor-assignments', authenticateToken, async (req, res) => {
   try {

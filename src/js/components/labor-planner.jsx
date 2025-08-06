@@ -22,38 +22,40 @@ const LaborPlanner = ({ currentUser }) => {
       console.log(`Fetching machines for date: ${selectedDate}`);
       console.log('Current auth token:', localStorage.getItem('token') ? 'Present' : 'MISSING');
       
-      // Fetch machines that have orders scheduled for the selected date
-      const response = await API.get(`/orders`, { date: selectedDate });
+      // Fetch machines that have labor assignments for the selected date
+      const response = await API.get(`/labor-planner/machines`, { date: selectedDate });
       console.log('API Response:', response);
       
       // Handle different response formats
-      let orders = [];
+      let machines = [];
       if (Array.isArray(response)) {
-        orders = response;
+        machines = response;
       } else if (response.data && Array.isArray(response.data)) {
-        orders = response.data;
+        machines = response.data;
       } else if (response.success && Array.isArray(response.data)) {
-        orders = response.data;
+        machines = response.data;
       }
       
-      console.log(`Found ${orders.length} orders for ${selectedDate}:`, orders);
+      console.log(`Found ${machines.length} machines for ${selectedDate}:`, machines);
       
-      // Extract machines from orders
-      const machines = orders.filter(order => order.machine_id).map(order => ({
-        id: order.machine_id,
-        name: order.machine_name || `Machine ${order.machine_id}`,
-        order_number: order.order_number,
-        product_name: order.product_name,
-        order_status: order.status,
-        due_date: order.due_date,
-        // Will get machine config from machines table
-        operators_per_shift: order.operators_per_shift || 1,
-        hopper_loaders_per_shift: order.hopper_loaders_per_shift || 0,
-        packers_per_shift: order.packers_per_shift || 0
+      // Process machines data
+      const processedMachines = machines.map(machine => ({
+        id: machine.machine_id,
+        name: machine.machine_name || `Machine ${machine.machine_id}`,
+        order_number: machine.order_number || 'No active order',
+        product_name: machine.product_name || 'N/A',
+        order_status: machine.order_status || 'N/A',
+        environment: machine.environment,
+        scheduled_shifts: Array.isArray(machine.scheduled_shifts) ? 
+          machine.scheduled_shifts.filter(s => s !== null) : [],
+        // Get machine config from database
+        operators_per_shift: machine.operators_per_shift || 1,
+        hopper_loaders_per_shift: machine.hopper_loaders_per_shift || 0,
+        packers_per_shift: machine.packers_per_shift || 0
       }));
       
-      console.log(`Extracted ${machines.length} machines:`, machines);
-      setScheduledMachines(machines);
+      console.log(`Processed ${processedMachines.length} machines:`, processedMachines);
+      setScheduledMachines(processedMachines);
     } catch (error) {
       console.error('Failed to fetch scheduled machines:', error);
       console.error('Error details:', {
@@ -107,22 +109,16 @@ const LaborPlanner = ({ currentUser }) => {
               <p>Try these dates with scheduled machines:</p>
               <div className="mt-2 space-x-2">
                 <button 
-                  onClick={() => setSelectedDate('2025-08-06')}
-                  className="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs hover:bg-blue-200"
-                >
-                  Aug 6 (NPS 5 Lane)
-                </button>
-                <button 
                   onClick={() => setSelectedDate('2025-08-07')}
                   className="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs hover:bg-blue-200"
                 >
-                  Aug 7 (3 machines)
+                  Aug 7 (assignments)
                 </button>
                 <button 
                   onClick={() => setSelectedDate('2025-08-08')}
                   className="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs hover:bg-blue-200"
                 >
-                  Aug 8 (3 machines)
+                  Aug 8 (assignments)
                 </button>
               </div>
             </div>
@@ -135,11 +131,28 @@ const LaborPlanner = ({ currentUser }) => {
                   <div>
                     <h3 className="text-lg font-semibold text-gray-900">{machine.name}</h3>
                     <p className="text-sm text-blue-600">Order: {machine.order_number}</p>
-                    {machine.product_name && (
+                    {machine.product_name && machine.product_name !== 'N/A' && (
                       <p className="text-sm text-gray-600">Product: {machine.product_name}</p>
                     )}
                     <p className="text-xs text-gray-500">Status: {machine.order_status}</p>
-                    <p className="text-xs text-gray-500">Due: {new Date(machine.due_date).toLocaleString()}</p>
+                    <div className="flex items-center gap-2 mt-1">
+                      <span className="text-xs text-gray-500">Shifts:</span>
+                      {machine.scheduled_shifts.map(shift => (
+                        <span 
+                          key={shift}
+                          className={`px-2 py-1 rounded text-xs font-medium ${
+                            shift === 'day' ? 'bg-yellow-100 text-yellow-800' :
+                            shift === 'night' ? 'bg-purple-100 text-purple-800' :
+                            'bg-green-100 text-green-800'
+                          }`}
+                        >
+                          {shift}
+                        </span>
+                      ))}
+                      {machine.scheduled_shifts.length === 0 && (
+                        <span className="text-xs text-red-500">No shifts assigned</span>
+                      )}
+                    </div>
                   </div>
                   <div className="text-right">
                     <p className="text-sm font-medium text-gray-700">Required per shift:</p>
