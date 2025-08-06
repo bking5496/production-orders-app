@@ -27,7 +27,7 @@ const ORDER_STATUSES = {
     label: 'Pending', 
     color: 'bg-yellow-100 text-yellow-800 border-yellow-200', 
     icon: Clock,
-    description: 'Order created, awaiting machine assignment'
+    description: 'Order ready to start production'
   },
   assigned: { 
     label: 'Assigned', 
@@ -219,7 +219,8 @@ export default function ProductionOrdersSystem() {
     environment: '',
     due_date: '',
     specifications: '',
-    customer_info: ''
+    customer_info: '',
+    batch_number: ''
   });
 
   // Production Control Data
@@ -253,6 +254,7 @@ export default function ProductionOrdersSystem() {
     machine_id: '',
     scheduled_date: '',
     shift: '',
+    duration_hours: '',
     notes: ''
   });
 
@@ -414,12 +416,10 @@ export default function ProductionOrdersSystem() {
       await API.post(`/orders/${order.id}/start`, {
         machine_id: order.machine_id, // Use the order's assigned machine
         operator_id: null, // Operator will be assigned in labor planner
-        batch_number: order.batch_number || productionData.batch_number || `BAT-${Date.now()}`,
-        start_notes: productionData.start_notes || ''
+        batch_number: order.batch_number || `BAT-${Date.now()}`,
+        start_notes: ''
       });
       
-      setShowProductionModal(false);
-      resetProductionData();
       showNotification(`Production started for Order ${order.order_number}`, 'success');
       loadOrders();
       loadMachines(); // Refresh machine status
@@ -546,7 +546,8 @@ export default function ProductionOrdersSystem() {
       environment: '',
       due_date: '',
       specifications: '',
-      customer_info: ''
+      customer_info: '',
+      batch_number: ''
     });
   };
 
@@ -936,10 +937,7 @@ export default function ProductionOrdersSystem() {
                       {/* Production Controls */}
                       {order.status === 'pending' && (
                         <TouchButton 
-                          onClick={() => {
-                            setSelectedOrder(order);
-                            setShowProductionModal(true);
-                          }} 
+                          onClick={() => handleStartProduction(order)} 
                           size="xs" 
                           className="bg-green-600 hover:bg-green-700"
                           icon={Play}
@@ -1110,10 +1108,7 @@ export default function ProductionOrdersSystem() {
                           
                           {order.status === 'pending' && order.machine_id && (
                             <Button 
-                              onClick={() => {
-                                setSelectedOrder(order);
-                                setShowProductionModal(true);
-                              }} 
+                              onClick={() => handleStartProduction(order)} 
                               size="sm"
                               className="bg-green-600 hover:bg-green-700"
                             >
@@ -1288,6 +1283,19 @@ export default function ProductionOrdersSystem() {
                 onChange={(e) => setFormData({...formData, customer_info: e.target.value})}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                 placeholder="Customer name or reference"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Batch Number
+              </label>
+              <input
+                type="text"
+                value={formData.batch_number}
+                onChange={(e) => setFormData({...formData, batch_number: e.target.value})}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                placeholder={`BAT-${Date.now()}`}
               />
             </div>
             
