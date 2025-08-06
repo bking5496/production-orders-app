@@ -630,19 +630,9 @@ const DailyPlanningInterface = ({ currentUser }) => {
       );
 
       // Separate active and idle machines
-      console.log('🔧 Raw machinesResponse:', machinesResponse);
-      console.log('🔧 machinesResponse.data:', machinesResponse.data);
-      console.log('🔧 machinesResponse type:', typeof machinesResponse);
-      
       const allMachines = machinesResponse.data || machinesResponse || [];
-      console.log('🔧 All machines received:', allMachines);
-      console.log('🔧 Machines with orders:', allMachines.filter(m => m.has_orders_today));
-      
       const active = allMachines.filter(m => m.has_orders_today);
       const idle = allMachines.filter(m => !m.has_orders_today);
-
-      console.log('🔧 Active machines set:', active);
-      console.log('🔧 Idle machines set:', idle);
       
       setActiveMachines(active);
       setIdleMachines(idle);
@@ -670,6 +660,35 @@ const DailyPlanningInterface = ({ currentUser }) => {
     if (isDayLocked && currentUser?.role !== 'admin') return;
 
     try {
+      // Check for duplicate assignments if assigning a worker
+      if (workerId) {
+        // Check if worker is already assigned on this date/shift
+        const existingAssignment = assignments.find(a => 
+          a.employee_id === parseInt(workerId) && 
+          a.assignment_date === selectedDate &&
+          a.shift_type === shift &&
+          !(a.machine_id === machineId && a.role === role) // Allow updating same assignment
+        );
+
+        if (existingAssignment) {
+          alert(`This worker is already assigned as ${existingAssignment.role} on ${shift} shift for ${selectedDate}`);
+          return;
+        }
+
+        // Check if worker is assigned to opposite shift on same date
+        const oppositeShift = shift === 'day' ? 'night' : 'day';
+        const oppositeShiftAssignment = assignments.find(a => 
+          a.employee_id === parseInt(workerId) && 
+          a.assignment_date === selectedDate &&
+          a.shift_type === oppositeShift
+        );
+
+        if (oppositeShiftAssignment) {
+          alert(`This worker is already assigned to ${oppositeShift} shift on ${selectedDate}. Workers cannot work both shifts on the same day.`);
+          return;
+        }
+      }
+
       const assignmentData = {
         employee_id: workerId,
         machine_id: machineId,
@@ -879,72 +898,24 @@ const DailyPlanningInterface = ({ currentUser }) => {
             )}
           </div>
 
-          {/* Environment Support Roles */}
-          {selectedEnvData && (
-            <DailyEnvironmentSupport
-              environment={selectedEnvironment}
-              workers={workers}
-              assignments={assignments}
-              yesterdayAssignments={yesterdayAssignments}
-              onAssignmentChange={handleAssignmentChange}
-              selectedDate={selectedDate}
-              isLocked={isDayLocked}
-            />
-          )}
-
-          {/* Active Machines Today */}
-          <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
-            <div className="bg-green-50 border-b border-green-200 px-4 py-3">
-              <h3 className="text-lg font-semibold text-green-900 flex items-center gap-2">
-                <Play className="w-5 h-5" />
-                ACTIVE MACHINES TODAY ({activeMachines.length})
+          {/* Simplified Labor Planner - Data stored but UI simplified per requirements */}
+          <div className="bg-white border border-gray-200 rounded-lg p-6">
+            <div className="text-center py-12">
+              <Calendar className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+              <h3 className="text-lg font-medium text-gray-900 mb-2">
+                Labor Planning for {selectedEnvironment.toUpperCase()}
               </h3>
-            </div>
-
-            {/* Grid Header */}
-            <div className="grid grid-cols-12 gap-4 py-4 px-4 bg-gray-50 border-b border-gray-200 font-semibold text-gray-700">
-              <div className="col-span-3">Machine & Order</div>
-              <div className="col-span-4 text-center flex items-center justify-center gap-2">
-                <Sun className="w-4 h-4 text-yellow-600" />
-                Day Shift (06:00-18:00)
+              <p className="text-gray-500 mb-4">
+                {formatTodaysDate(selectedDate)}
+              </p>
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 max-w-md mx-auto">
+                <p className="text-blue-800 text-sm">
+                  Machine assignments and worker scheduling data is being stored in the background 
+                  for use in other parts of the system.
+                </p>
               </div>
-              <div className="col-span-4 text-center flex items-center justify-center gap-2">
-                <Moon className="w-4 h-4 text-blue-600" />
-                Night Shift (18:00-06:00)
-              </div>
-              <div className="col-span-1 text-center">Status</div>
-            </div>
-
-            {/* Machine Rows */}
-            <div className="divide-y divide-gray-100">
-              {activeMachines.length === 0 ? (
-                <div className="text-center py-12">
-                  <Pause className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-                  <p className="text-gray-500">No active machines for {selectedEnvironment} today</p>
-                  <p className="text-gray-400 text-sm">Production Manager needs to confirm today's orders</p>
-                </div>
-              ) : (
-                activeMachines.map(machine => (
-                  <DailyMachineRow
-                    key={machine.id}
-                    machine={machine}
-                    workers={workers}
-                    assignments={assignments}
-                    yesterdayAssignments={yesterdayAssignments}
-                    onAssignmentChange={handleAssignmentChange}
-                    selectedDate={selectedDate}
-                    isLocked={isDayLocked}
-                  />
-                ))
-              )}
             </div>
           </div>
-
-          {/* Idle Machines */}
-          <IdleMachinesDisplay 
-            idleMachines={idleMachines} 
-            environment={selectedEnvironment}
-          />
 
           {/* Validation Errors */}
           {validationErrors.length > 0 && (
