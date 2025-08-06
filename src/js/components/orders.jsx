@@ -493,12 +493,21 @@ export default function ProductionOrdersSystem() {
       
       const startDateTime = `${machineAssignData.scheduled_date}T${shiftTimes[machineAssignData.shift]}`;
       
-      await API.put(`/orders/${selectedOrder.id}`, {
+      // Calculate end time based on duration
+      let updateData = {
         machine_id: machineAssignData.machine_id,
         start_time: startDateTime,
         shift_type: machineAssignData.shift,
         notes: machineAssignData.notes
-      });
+      };
+      
+      if (machineAssignData.duration_hours) {
+        const startDate = new Date(startDateTime);
+        const endDate = new Date(startDate.getTime() + (parseFloat(machineAssignData.duration_hours) * 60 * 60 * 1000));
+        updateData.stop_time = endDate.toISOString();
+      }
+      
+      await API.put(`/orders/${selectedOrder.id}`, updateData);
       
       setShowMachineAssignModal(false);
       resetMachineAssignData();
@@ -585,6 +594,7 @@ export default function ProductionOrdersSystem() {
       machine_id: '',
       scheduled_date: '',
       shift: '',
+      duration_hours: '',
       notes: ''
     });
   };
@@ -1955,7 +1965,7 @@ export default function ProductionOrdersSystem() {
                 )}
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-3 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Scheduled Date *
@@ -1984,6 +1994,22 @@ export default function ProductionOrdersSystem() {
                     <option value="night">Night Shift (18:00 - 06:00)</option>
                     <option value="24hr">24Hr Shift (Full Day)</option>
                   </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Duration (Hours)
+                  </label>
+                  <input
+                    type="number"
+                    step="0.5"
+                    min="0.5"
+                    max="24"
+                    value={machineAssignData.duration_hours}
+                    onChange={(e) => setMachineAssignData({...machineAssignData, duration_hours: e.target.value})}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                    placeholder="8.0"
+                  />
                 </div>
               </div>
             </div>
