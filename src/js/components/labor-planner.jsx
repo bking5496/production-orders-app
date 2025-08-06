@@ -444,70 +444,77 @@ const DailyEnvironmentSupport = ({
   };
 
   return (
-    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
-      <h3 className="text-lg font-semibold text-blue-900 mb-3 flex items-center gap-2">
-        <Factory className="w-5 h-5" />
-        {environment.toUpperCase()} ENVIRONMENT SUPPORT - TODAY
-      </h3>
-      
-      <div className="grid grid-cols-12 gap-4">
-        <div className="col-span-3">
-          <div className="font-medium text-gray-700">Support Role</div>
-        </div>
-        <div className="col-span-4">
-          <div className="font-medium text-gray-700 text-center flex items-center justify-center gap-2">
-            <Sun className="w-4 h-4 text-yellow-600" />
-            Day Shift (06:00-18:00)
+    <div className="bg-white/70 backdrop-blur-sm border border-white/20 rounded-2xl shadow-xl overflow-hidden">
+      <div className="bg-gradient-to-r from-blue-500 to-indigo-600 p-6">
+        <h3 className="text-xl font-semibold text-white flex items-center gap-3">
+          <div className="p-2 bg-white/20 rounded-lg backdrop-blur-sm">
+            <Factory className="w-5 h-5 text-white" />
           </div>
-        </div>
-        <div className="col-span-4">
-          <div className="font-medium text-gray-700 text-center flex items-center justify-center gap-2">
-            <Moon className="w-4 h-4 text-blue-600" />
-            Night Shift (18:00-06:00)
-          </div>
-        </div>
-        <div className="col-span-1"></div>
+          <span>{environment.toUpperCase()} Support Staff</span>
+        </h3>
+        <p className="text-blue-100 mt-1">Environment-level support roles and assignments</p>
       </div>
-
-      {supportRoles.map(({ role, label, icon: Icon }) => (
-        <div key={role} className="grid grid-cols-12 gap-4 py-3 border-t border-blue-200 mt-2">
-          <div className="col-span-3 flex items-center gap-2">
-            <div className="p-2 bg-blue-100 rounded-lg">
-              <Icon className="w-4 h-4 text-blue-600" />
+      
+      <div className="p-6">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <div className="lg:col-span-3">
+            <div className="text-sm font-medium text-gray-500 uppercase tracking-wider">Support Roles</div>
+          </div>
+          <div className="lg:col-span-4">
+            <div className="text-center font-medium text-gray-700 flex items-center justify-center gap-2 p-3 bg-yellow-50/80 backdrop-blur-sm rounded-xl border border-yellow-200">
+              <Sun className="w-4 h-4 text-yellow-600" />
+              <span>Day Shift (06:00-18:00)</span>
             </div>
-            <span className="font-medium text-gray-700">{label}</span>
           </div>
-          <div className="col-span-4">
-            <DailyWorkerSelect
-              value={getAssignedWorker('day', role)}
-              onChange={(workerId) => handleAssignmentChange('day', role, workerId)}
-              role={role}
-              environment={environment}
-              shift="day"
-              date={selectedDate}
-              machineId={null}
-              workers={workers}
-              assignments={assignments}
-              yesterdayAssignments={yesterdayAssignments}
-            />
+          <div className="lg:col-span-4">
+            <div className="text-center font-medium text-gray-700 flex items-center justify-center gap-2 p-3 bg-purple-50/80 backdrop-blur-sm rounded-xl border border-purple-200">
+              <Moon className="w-4 h-4 text-purple-600" />
+              <span>Night Shift (18:00-06:00)</span>
+            </div>
           </div>
-          <div className="col-span-4">
-            <DailyWorkerSelect
-              value={getAssignedWorker('night', role)}
-              onChange={(workerId) => handleAssignmentChange('night', role, workerId)}
-              role={role}
-              environment={environment}
-              shift="night"
-              date={selectedDate}
-              machineId={null}
-              workers={workers}
-              assignments={assignments}
-              yesterdayAssignments={yesterdayAssignments}
-            />
-          </div>
-          <div className="col-span-1"></div>
+          <div className="lg:col-span-1"></div>
         </div>
-      ))}
+
+        {supportRoles.map(({ role, label, icon: Icon }) => (
+          <div key={role} className="grid grid-cols-1 lg:grid-cols-12 gap-6 py-6 border-t border-gray-200 first:border-t-0">
+            <div className="lg:col-span-3 flex items-center gap-3">
+              <div className="p-3 bg-gradient-to-r from-gray-100 to-gray-200 rounded-xl shadow-sm">
+                <Icon className="w-5 h-5 text-gray-700" />
+              </div>
+              <span className="font-semibold text-gray-900">{label}</span>
+            </div>
+            <div className="lg:col-span-4">
+              <DailyWorkerSelect
+                value={getAssignedWorker('day', role)}
+                onChange={(workerId) => handleAssignmentChange('day', role, workerId)}
+                role={role}
+                environment={environment}
+                shift="day"
+                date={selectedDate}
+                machineId={null}
+                workers={workers}
+                assignments={assignments}
+                yesterdayAssignments={yesterdayAssignments}
+              />
+            </div>
+            <div className="lg:col-span-4">
+              <DailyWorkerSelect
+                value={getAssignedWorker('night', role)}
+                onChange={(workerId) => handleAssignmentChange('night', role, workerId)}
+                role={role}
+                environment={environment}
+                shift="night"
+                date={selectedDate}
+                machineId={null}
+                workers={workers}
+                assignments={assignments}
+                yesterdayAssignments={yesterdayAssignments}
+              />
+            </div>
+            <div className="lg:col-span-1"></div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
@@ -946,70 +953,100 @@ const DailyPlanningInterface = ({ currentUser }) => {
           )}
 
           {/* Active Machines Today */}
-          <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
-            <div className="bg-green-50 border-b border-green-200 px-4 py-3">
-              <h3 className="text-lg font-semibold text-green-900 flex items-center gap-2">
-                <Play className="w-5 h-5" />
-                ACTIVE MACHINES TODAY ({activeMachines.length})
+          <div className="bg-white/70 backdrop-blur-sm border border-white/20 rounded-2xl shadow-xl overflow-hidden">
+            <div className="bg-gradient-to-r from-green-500 to-emerald-600 p-6">
+              <h3 className="text-xl font-semibold text-white flex items-center gap-3">
+                <div className="p-2 bg-white/20 rounded-lg backdrop-blur-sm">
+                  <Play className="w-5 h-5 text-white" />
+                </div>
+                <span>Active Machines ({activeMachines.length})</span>
               </h3>
+              <p className="text-green-100 mt-1">Production lines scheduled for today</p>
             </div>
 
-            {/* Grid Header */}
-            <div className="grid grid-cols-12 gap-4 py-4 px-4 bg-gray-50 border-b border-gray-200 font-semibold text-gray-700">
-              <div className="col-span-3">Machine & Order</div>
-              <div className="col-span-4 text-center flex items-center justify-center gap-2">
-                <Sun className="w-4 h-4 text-yellow-600" />
-                Day Shift (06:00-18:00)
+            {/* Modern Grid Header */}
+            <div className="p-6 pb-4">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <div className="lg:col-span-3">
+                  <div className="text-sm font-medium text-gray-500 uppercase tracking-wider">Machine & Order</div>
+                </div>
+                <div className="lg:col-span-4">
+                  <div className="text-center font-medium text-gray-700 flex items-center justify-center gap-2 p-3 bg-yellow-50/80 backdrop-blur-sm rounded-xl border border-yellow-200">
+                    <Sun className="w-4 h-4 text-yellow-600" />
+                    <span>Day Shift (06:00-18:00)</span>
+                  </div>
+                </div>
+                <div className="lg:col-span-4">
+                  <div className="text-center font-medium text-gray-700 flex items-center justify-center gap-2 p-3 bg-purple-50/80 backdrop-blur-sm rounded-xl border border-purple-200">
+                    <Moon className="w-4 h-4 text-purple-600" />
+                    <span>Night Shift (18:00-06:00)</span>
+                  </div>
+                </div>
+                <div className="lg:col-span-1 text-center">
+                  <div className="text-sm font-medium text-gray-500 uppercase tracking-wider">Status</div>
+                </div>
               </div>
-              <div className="col-span-4 text-center flex items-center justify-center gap-2">
-                <Moon className="w-4 h-4 text-blue-600" />
-                Night Shift (18:00-06:00)
-              </div>
-              <div className="col-span-1 text-center">Status</div>
             </div>
 
             {/* Machine Rows */}
-            <div className="divide-y divide-gray-100">
+            <div className="px-6 pb-6">
               {activeMachines.length === 0 ? (
-                <div className="text-center py-12">
-                  <Pause className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-                  <p className="text-gray-500">No active machines for {selectedEnvironment} today</p>
-                  <p className="text-gray-400 text-sm">Production Manager needs to confirm today's orders</p>
+                <div className="text-center py-16 bg-gray-50/50 backdrop-blur-sm rounded-2xl border-2 border-dashed border-gray-200">
+                  <div className="p-4 bg-gray-100 rounded-full w-20 h-20 mx-auto mb-6 flex items-center justify-center">
+                    <Pause className="w-10 h-10 text-gray-400" />
+                  </div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">No Active Machines</h3>
+                  <p className="text-gray-600 mb-1">No machines scheduled for {selectedEnvironment} on this date</p>
+                  <p className="text-gray-500 text-sm">Production Manager needs to assign orders to machines</p>
                 </div>
               ) : (
-                activeMachines.map(machine => (
-                  <DailyMachineRow
-                    key={machine.id}
-                    machine={machine}
-                    workers={workers}
-                    assignments={assignments}
-                    yesterdayAssignments={yesterdayAssignments}
-                    onAssignmentChange={handleAssignmentChange}
-                    selectedDate={selectedDate}
-                    isLocked={isDayLocked}
-                  />
-                ))
+                <div className="space-y-4">
+                  {activeMachines.map(machine => (
+                    <div key={machine.id} className="bg-white/80 backdrop-blur-sm border border-gray-200 rounded-2xl shadow-sm hover:shadow-md transition-all duration-200">
+                      <DailyMachineRow
+                        machine={machine}
+                        workers={workers}
+                        assignments={assignments}
+                        yesterdayAssignments={yesterdayAssignments}
+                        onAssignmentChange={handleAssignmentChange}
+                        selectedDate={selectedDate}
+                        isLocked={isDayLocked}
+                      />
+                    </div>
+                  ))}
+                </div>
               )}
             </div>
           </div>
 
           {/* Validation Errors */}
           {validationErrors.length > 0 && (
-            <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-              <h4 className="font-semibold text-red-900 mb-2 flex items-center gap-2">
-                <AlertTriangle className="w-4 h-4" />
-                Assignment Gaps - Need Attention
-              </h4>
-              <ul className="space-y-1">
-                {validationErrors.map((error, index) => (
-                  <li key={index} className="text-red-700 text-sm">• {error}</li>
-                ))}
-              </ul>
+            <div className="bg-red-50/80 backdrop-blur-sm border border-red-200 rounded-2xl p-6 shadow-xl">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="p-2 bg-red-100 rounded-lg">
+                  <AlertTriangle className="w-5 h-5 text-red-600" />
+                </div>
+                <div>
+                  <h4 className="font-semibold text-red-900">Assignment Gaps Detected</h4>
+                  <p className="text-red-700 text-sm">{validationErrors.length} positions need immediate attention</p>
+                </div>
+              </div>
+              <div className="bg-white/70 backdrop-blur-sm rounded-xl p-4 border border-red-100">
+                <ul className="space-y-2">
+                  {validationErrors.map((error, index) => (
+                    <li key={index} className="text-red-800 text-sm flex items-start gap-2">
+                      <span className="w-1.5 h-1.5 bg-red-500 rounded-full mt-2 flex-shrink-0"></span>
+                      <span>{error}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           )}
 
         </div>
       )}
+      </div>
     </div>
   );
 };
