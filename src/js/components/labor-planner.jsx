@@ -19,9 +19,13 @@ const LaborPlanner = ({ currentUser }) => {
   const fetchScheduledMachines = async () => {
     try {
       setLoading(true);
+      console.log(`Fetching machines for date: ${selectedDate}`);
+      
       // Fetch machines that have orders scheduled for the selected date
       const response = await API.get(`/orders?date=${selectedDate}`);
       const orders = response.data || [];
+      
+      console.log(`Found ${orders.length} orders for ${selectedDate}:`, orders);
       
       // Extract machines from orders
       const machines = orders.filter(order => order.machine_id).map(order => ({
@@ -29,12 +33,15 @@ const LaborPlanner = ({ currentUser }) => {
         name: order.machine_name || `Machine ${order.machine_id}`,
         order_number: order.order_number,
         product_name: order.product_name,
+        order_status: order.status,
+        due_date: order.due_date,
         // Will get machine config from machines table
         operators_per_shift: order.operators_per_shift || 1,
         hopper_loaders_per_shift: order.hopper_loaders_per_shift || 0,
         packers_per_shift: order.packers_per_shift || 0
       }));
       
+      console.log(`Extracted ${machines.length} machines:`, machines);
       setScheduledMachines(machines);
     } catch (error) {
       console.error('Failed to fetch scheduled machines:', error);
@@ -79,8 +86,30 @@ const LaborPlanner = ({ currentUser }) => {
         ) : scheduledMachines.length === 0 ? (
           <div className="text-center py-8 bg-gray-50 rounded-lg">
             <Factory className="w-12 h-12 text-gray-400 mx-auto mb-3" />
-            <p className="text-gray-600">No machines scheduled for this date</p>
-            <p className="text-sm text-gray-500">Check orders.jsx to schedule machines</p>
+            <p className="text-gray-600">No machines scheduled for {selectedDate}</p>
+            <div className="text-sm text-gray-500 mt-2">
+              <p>Try these dates with scheduled machines:</p>
+              <div className="mt-2 space-x-2">
+                <button 
+                  onClick={() => setSelectedDate('2025-08-06')}
+                  className="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs hover:bg-blue-200"
+                >
+                  Aug 6 (NPS 5 Lane)
+                </button>
+                <button 
+                  onClick={() => setSelectedDate('2025-08-07')}
+                  className="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs hover:bg-blue-200"
+                >
+                  Aug 7 (3 machines)
+                </button>
+                <button 
+                  onClick={() => setSelectedDate('2025-08-08')}
+                  className="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs hover:bg-blue-200"
+                >
+                  Aug 8 (3 machines)
+                </button>
+              </div>
+            </div>
           </div>
         ) : (
           <div className="space-y-4">
@@ -93,6 +122,8 @@ const LaborPlanner = ({ currentUser }) => {
                     {machine.product_name && (
                       <p className="text-sm text-gray-600">Product: {machine.product_name}</p>
                     )}
+                    <p className="text-xs text-gray-500">Status: {machine.order_status}</p>
+                    <p className="text-xs text-gray-500">Due: {new Date(machine.due_date).toLocaleString()}</p>
                   </div>
                   <div className="text-right">
                     <p className="text-sm font-medium text-gray-700">Required per shift:</p>
