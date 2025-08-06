@@ -112,13 +112,13 @@ const LaborPlanner = ({ currentUser }) => {
                   onClick={() => setSelectedDate('2025-08-07')}
                   className="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs hover:bg-blue-200"
                 >
-                  Aug 7 (assignments)
+                  Aug 7 (14 machines)
                 </button>
                 <button 
                   onClick={() => setSelectedDate('2025-08-08')}
                   className="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs hover:bg-blue-200"
                 >
-                  Aug 8 (assignments)
+                  Aug 8 (1 machine)
                 </button>
               </div>
             </div>
