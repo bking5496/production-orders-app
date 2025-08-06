@@ -810,90 +810,124 @@ const DailyPlanningInterface = ({ currentUser }) => {
   const selectedEnvData = environments.find(env => env.code === selectedEnvironment);
   
   return (
-    <div className="space-y-6">
-      {/* Header Controls */}
-      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">Daily Labor Planning</h1>
-          <p className="text-gray-600 mt-1">Assign workers to today's active machines and orders</p>
-        </div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4 sm:p-6">
+      <div className="max-w-7xl mx-auto space-y-6">
+        {/* Modern Header */}
+        <div className="bg-white/70 backdrop-blur-sm border border-white/20 rounded-2xl p-6 shadow-xl">
+          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
+            <div className="space-y-2">
+              <div className="flex items-center gap-3">
+                <div className="p-3 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl shadow-lg">
+                  <Users className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
+                    Daily Labor Planning
+                  </h1>
+                  <p className="text-gray-600">Assign workers to active machines and production orders</p>
+                </div>
+              </div>
+            </div>
 
-        <div className="flex flex-wrap items-center gap-3">
-          {/* Environment Selector */}
-          <select
-            value={selectedEnvironment}
-            onChange={(e) => setSelectedEnvironment(e.target.value)}
-            className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            disabled={currentUser?.role === 'supervisor'}
-          >
-            <option value="">Select Environment</option>
-            {availableEnvironments.map(env => (
-              <option key={env.id} value={env.code}>
-                {env.name}
-              </option>
-            ))}
-          </select>
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+              {/* Environment Selector */}
+              <div className="space-y-1">
+                <label className="text-sm font-medium text-gray-700">Environment</label>
+                <select
+                  value={selectedEnvironment}
+                  onChange={(e) => setSelectedEnvironment(e.target.value)}
+                  className="px-4 py-3 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 shadow-sm hover:shadow-md min-w-48"
+                  disabled={currentUser?.role === 'supervisor'}
+                >
+                  <option value="">Select Environment</option>
+                  {availableEnvironments.map(env => (
+                    <option key={env.id} value={env.code}>
+                      {env.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-          {/* Date Navigation */}
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => navigateDate(-1)}
-              className="p-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg"
-            >
-              <ArrowLeft className="w-4 h-4" />
-            </button>
-            <span className="font-medium text-gray-900 min-w-48 text-center">
-              {formatTodaysDate(selectedDate)}
-            </span>
-            <button
-              onClick={() => navigateDate(1)}
-              className="p-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg"
-            >
-              <ArrowRight className="w-4 h-4" />
-            </button>
+              {/* Date Navigation */}
+              <div className="space-y-1">
+                <label className="text-sm font-medium text-gray-700">Planning Date</label>
+                <div className="flex items-center gap-1 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-xl shadow-sm p-1">
+                  <button
+                    onClick={() => navigateDate(-1)}
+                    className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-all duration-200"
+                  >
+                    <ArrowLeft className="w-4 h-4" />
+                  </button>
+                  <div className="px-4 py-2 text-center min-w-44">
+                    <div className="font-semibold text-gray-900 text-sm">
+                      {formatTodaysDate(selectedDate)}
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => navigateDate(1)}
+                    className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-all duration-200"
+                  >
+                    <ArrowRight className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
 
-      {!selectedEnvironment ? (
-        <div className="text-center py-12">
-          <Factory className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 mb-2">Select an Environment</h3>
-          <p className="text-gray-500">Choose an environment to start planning today's worker assignments</p>
-        </div>
-      ) : (
-        <div className="space-y-6">
-          {/* Quick Actions */}
-          <div className="flex flex-wrap items-center gap-3 p-4 bg-white border border-gray-200 rounded-lg">
-            <button
-              onClick={handleAutoPopulate}
-              disabled={saving || isDayLocked}
-              className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              <Zap className="w-4 h-4" />
-              Auto-Populate
-            </button>
-
-            <button
-              onClick={handleLockDay}
-              disabled={saving || isDayLocked}
-              className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              <Lock className="w-4 h-4" />
-              {isDayLocked ? 'Day Locked' : 'Validate & Lock'}
-            </button>
-
-            {isDayLocked && (
-              <div className="flex items-center gap-2 text-amber-600 bg-amber-50 px-3 py-2 rounded-lg">
-                <Lock className="w-4 h-4" />
-                <span className="text-sm font-medium">Today's schedule is locked</span>
+        {!selectedEnvironment ? (
+          <div className="bg-white/70 backdrop-blur-sm border border-white/20 rounded-2xl p-12 shadow-xl text-center">
+            <div className="p-4 bg-gradient-to-r from-gray-100 to-gray-200 rounded-full w-20 h-20 mx-auto mb-6 flex items-center justify-center">
+              <Factory className="w-10 h-10 text-gray-600" />
+            </div>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">Select an Environment</h3>
+            <p className="text-gray-600 max-w-md mx-auto">Choose an environment from the dropdown above to start planning worker assignments for active machines and production orders</p>
+          </div>
+        ) : (
+          <div className="space-y-6">
+          {/* Modern Quick Actions */}
+          <div className="bg-white/70 backdrop-blur-sm border border-white/20 rounded-2xl p-6 shadow-xl">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+              <div>
+                <h2 className="text-lg font-semibold text-gray-900 mb-1">Planning Tools</h2>
+                <p className="text-gray-600 text-sm">Manage worker assignments and finalize schedule</p>
               </div>
-            )}
+              
+              <div className="flex flex-wrap items-center gap-3">
+                <button
+                  onClick={handleAutoPopulate}
+                  disabled={saving || isDayLocked}
+                  className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl hover:from-green-600 hover:to-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                >
+                  <Zap className="w-4 h-4" />
+                  <span className="font-medium">Auto-Populate</span>
+                </button>
+
+                <button
+                  onClick={handleLockDay}
+                  disabled={saving || isDayLocked}
+                  className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-xl hover:from-blue-600 hover:to-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                >
+                  <Lock className="w-4 h-4" />
+                  <span className="font-medium">{isDayLocked ? 'Day Locked' : 'Validate & Lock'}</span>
+                </button>
+
+                {isDayLocked && (
+                  <div className="flex items-center gap-2 text-amber-700 bg-amber-100/80 backdrop-blur-sm px-4 py-2.5 rounded-xl border border-amber-200">
+                    <Lock className="w-4 h-4" />
+                    <span className="text-sm font-medium">Schedule Locked</span>
+                  </div>
+                )}
+              </div>
+            </div>
 
             {validationErrors.length > 0 && (
-              <div className="flex items-center gap-2 text-red-600 bg-red-50 px-3 py-2 rounded-lg">
-                <AlertTriangle className="w-4 h-4" />
-                <span className="text-sm font-medium">{validationErrors.length} gaps found</span>
+              <div className="mt-4 p-4 bg-red-50/80 backdrop-blur-sm border border-red-200 rounded-xl">
+                <div className="flex items-center gap-2 text-red-700 mb-2">
+                  <AlertTriangle className="w-4 h-4" />
+                  <span className="font-medium">{validationErrors.length} Assignment Gaps Found</span>
+                </div>
+                <p className="text-red-600 text-sm">Please assign workers to all required positions before locking the schedule.</p>
               </div>
             )}
           </div>
