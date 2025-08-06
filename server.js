@@ -3339,6 +3339,220 @@ app.post('/api/labor-assignments/finalize-week', authenticateToken, async (req, 
   }
 });
 
+// Get machines with active orders for a specific date and environment
+app.get('/api/machines/daily-active', authenticateToken, async (req, res) => {
+  try {
+    const { date, environment } = req.query;
+    
+    if (!date || !environment) {
+      return res.status(400).json({ error: 'Date and environment are required' });
+    }
+    
+    const client = await pool.connect();
+    try {
+      const result = await client.query(`
+        SELECT DISTINCT 
+          m.id,
+          m.name,
+          m.type,
+          m.environment_id,
+          e.code as environment_code,
+          e.name as environment_name,
+          po.id as order_id,
+          po.order_number,
+          po.product_name,
+          po.start_time,
+          po.status as order_status
+        FROM machines m
+        JOIN environments e ON m.environment_id = e.id
+        LEFT JOIN production_orders po ON po.machine_id = m.id 
+          AND DATE(po.start_time AT TIME ZONE 'UTC' AT TIME ZONE '+02:00') = $1
+          AND po.status IN ('in_progress', 'paused', 'pending')
+        WHERE e.code = $2 AND m.is_active = true
+        ORDER BY m.name
+      `, [date, environment]);
+      
+      res.json(result.rows);
+    } finally {
+      client.release();
+    }
+  } catch (error) {
+    console.error('Error fetching daily active machines:', error);
+    res.status(500).json({ error: 'Failed to fetch daily active machines', details: error.message });
+  }
+});
+
+// Auto-populate daily assignments based on yesterday's assignments and priority logic
+app.post('/api/labor-assignments/auto-populate-daily', authenticateToken, async (req, res) => {
+  try {
+    const { date, environment } = req.body;
+    
+    if (!date || !environment) {
+      return res.status(400).json({ error: 'Date and environment are required' });
+    }
+    
+    const client = await pool.connect();
+    try {
+      await client.query('BEGIN');
+      
+      // Get yesterday's date
+      const yesterday = new Date(date);
+      yesterday.setDate(yesterday.getDate() - 1);
+      const yesterdayStr = yesterday.toISOString().split('T')[0];
+      
+      // Get yesterday's assignments for this environment
+      const yesterdayAssignments = await client.query(`
+        SELECT DISTINCT
+          la.machine_id,
+          la.employee_id,
+          la.shift_type,
+          la.role,
+          e.id as emp_id,
+          e.name as emp_name,
+          e.employee_number,
+          m.name as machine_name
+        FROM labor_assignments la
+        JOIN employees e ON la.employee_id = e.id
+        JOIN machines m ON la.machine_id = m.id
+        JOIN environments env ON m.environment_id = env.id
+        WHERE la.assignment_date = $1 
+          AND env.code = $2
+          AND e.is_active = true
+        ORDER BY la.machine_id, la.shift_type, la.role
+      `, [yesterdayStr, environment]);
+      
+      // Get today's active machines for this environment
+      const activeMachines = await client.query(`
+        SELECT DISTINCT 
+          m.id,
+          m.name,
+          po.id as order_id
+        FROM machines m
+        JOIN environments e ON m.environment_id = e.id
+        LEFT JOIN production_orders po ON po.machine_id = m.id 
+          AND DATE(po.start_time AT TIME ZONE 'UTC' AT TIME ZONE '+02:00') = $1
+          AND po.status IN ('in_progress', 'paused', 'pending')
+        WHERE e.code = $2 AND m.is_active = true
+      `, [date, environment]);
+      
+      const suggestions = [];
+      
+      // For each active machine today, find matching assignments from yesterday
+      for (const machine of activeMachines.rows) {
+        const machineYesterdayAssignments = yesterdayAssignments.rows.filter(
+          ya => ya.machine_id === machine.id
+        );
+        
+        for (const assignment of machineYesterdayAssignments) {
+          // Check if this employee is already assigned today
+          const existingAssignment = await client.query(`
+            SELECT id FROM labor_assignments 
+            WHERE assignment_date = $1 
+              AND employee_id = $2
+          `, [date, assignment.employee_id]);
+          
+          if (existingAssignment.rows.length === 0) {
+            suggestions.push({
+              machine_id: machine.id,
+              machine_name: machine.name,
+              employee_id: assignment.employee_id,
+              employee_name: assignment.emp_name,
+              employee_number: assignment.employee_number,
+              shift_type: assignment.shift_type,
+              role: assignment.role,
+              priority: 'continuity' // High priority for continuity
+            });
+          }
+        }
+      }
+      
+      await client.query('COMMIT');
+      
+      res.json({ 
+        success: true, 
+        suggestions,
+        message: `Found ${suggestions.length} assignment suggestions for ${date}`
+      });
+      
+    } catch (error) {
+      await client.query('ROLLBACK');
+      throw error;
+    } finally {
+      client.release();
+    }
+  } catch (error) {
+    console.error('Error auto-populating daily assignments:', error);
+    res.status(500).json({ error: 'Failed to auto-populate daily assignments', details: error.message });
+  }
+});
+
+// Lock daily assignments (finalize the daily schedule)
+app.post('/api/labor-assignments/lock-daily', authenticateToken, async (req, res) => {
+  try {
+    const { date, environment } = req.body;
+    
+    if (!date || !environment) {
+      return res.status(400).json({ error: 'Date and environment are required' });
+    }
+    
+    const client = await pool.connect();
+    try {
+      await client.query('BEGIN');
+      
+      // Check if there are any assignments for this date and environment
+      const assignmentCount = await client.query(`
+        SELECT COUNT(*) as count
+        FROM labor_assignments la
+        JOIN machines m ON la.machine_id = m.id
+        JOIN environments e ON m.environment_id = e.id
+        WHERE la.assignment_date = $1 AND e.code = $2
+      `, [date, environment]);
+      
+      if (assignmentCount.rows[0].count === '0') {
+        await client.query('ROLLBACK');
+        return res.status(400).json({ error: 'No assignments found for this date and environment' });
+      }
+      
+      // Add a locked flag to assignments (we'll add this column if needed)
+      await client.query(`
+        ALTER TABLE labor_assignments 
+        ADD COLUMN IF NOT EXISTS is_locked BOOLEAN DEFAULT FALSE
+      `);
+      
+      // Lock all assignments for this date and environment
+      const lockResult = await client.query(`
+        UPDATE labor_assignments 
+        SET is_locked = true, updated_at = NOW()
+        FROM machines m, environments e
+        WHERE labor_assignments.machine_id = m.id 
+          AND m.environment_id = e.id
+          AND labor_assignments.assignment_date = $1 
+          AND e.code = $2
+          AND labor_assignments.is_locked = false
+      `, [date, environment]);
+      
+      await client.query('COMMIT');
+      
+      res.json({ 
+        success: true, 
+        message: `Daily schedule for ${environment} on ${date} has been locked`,
+        locked_assignments: lockResult.rowCount,
+        date: date,
+        environment: environment
+      });
+      
+    } catch (error) {
+      await client.query('ROLLBACK');
+      throw error;
+    } finally {
+      client.release();
+    }
+  } catch (error) {
+    console.error('Error locking daily assignments:', error);
+    res.status(500).json({ error: 'Failed to lock daily assignments', details: error.message });
+  }
+});
+
 // Get environments for labor planning
 app.get('/api/environments', authenticateToken, async (req, res) => {
   try {
