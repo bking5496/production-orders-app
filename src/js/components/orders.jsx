@@ -199,6 +199,7 @@ export default function ProductionOrdersSystem() {
   const [showWasteModal, setShowWasteModal] = useState(false);
   const [showDowntimeModal, setShowDowntimeModal] = useState(false);
   const [showStopModal, setShowStopModal] = useState(false);
+  const [showMachineAssignModal, setShowMachineAssignModal] = useState(false);
 
   // Mobile and Performance
   const { isMobile, isTablet } = useDeviceDetection();
@@ -245,6 +246,13 @@ export default function ProductionOrdersSystem() {
     waste_category: 'material',
     recovery_possible: false,
     waste_notes: ''
+  });
+
+  // Machine Assignment Data
+  const [machineAssignData, setMachineAssignData] = useState({
+    machine_id: '',
+    scheduled_date: '',
+    notes: ''
   });
 
   // Real-time updates and data loading
