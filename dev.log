@@ -509,3 +509,6 @@ Instead of /public/js/main.js, use /js/main.js.
   1611|        )}
   1612|      </div>
 9:26:12 PM [vite] (client) hmr update /src/js/components/labor-planner.jsx
+9:32:11 PM [vite] (client) hmr update /src/js/components/labor-planner.jsx
+9:35:35 PM [vite] (client) hmr update /src/js/components/labor-planner.jsx
+9:37:54 PM [vite] (client) hmr update /src/js/components/labor-planner.jsx
