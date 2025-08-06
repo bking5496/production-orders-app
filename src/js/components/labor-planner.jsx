@@ -576,15 +576,34 @@ const DailyPlanningInterface = ({ currentUser }) => {
   const fetchInitialData = async () => {
     try {
       setLoading(true);
+      console.log('🔄 Fetching initial data for labor planner...');
+      
       const [envResponse, workersResponse] = await Promise.all([
         API.get('/environments'),
         API.get('/users?role=operator,supervisor,packer')
       ]);
 
-      setEnvironments(envResponse.data || []);
-      setWorkers(workersResponse.data || []);
+      console.log('🌍 Full environments response:', envResponse);
+      console.log('👥 Full workers response:', workersResponse);
+      
+      // Handle the response format - environments API returns { success: true, data: [...] }
+      const envData = (envResponse?.data?.data || envResponse?.data || []);
+      const workersData = (workersResponse?.data?.data || workersResponse?.data || []);
+      
+      console.log('🌍 Processed environments data:', envData);
+      console.log('👥 Processed workers data:', workersData);
+      
+      setEnvironments(envData);
+      setWorkers(workersData);
+      
+      if (envData.length === 0) {
+        console.warn('⚠️ No environments found! Check API authentication or database.');
+      }
+      
     } catch (error) {
-      console.error('Failed to fetch initial data:', error);
+      console.error('❌ Failed to fetch initial data:', error);
+      console.error('Error response:', error.response?.data);
+      console.error('Error status:', error.response?.status);
     } finally {
       setLoading(false);
     }

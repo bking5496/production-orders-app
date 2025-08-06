@@ -1909,16 +1909,7 @@ app.get('/api/export/:type',
   }
 );
 
-// Environment management - Full CRUD operations
-app.get('/api/environments', authenticateToken, async (req, res) => {
-  try {
-    const environments = await dbAll('SELECT * FROM environments WHERE is_active = true ORDER BY name');
-    res.json(environments);
-  } catch (error) {
-    console.error('Error fetching environments:', error);
-    res.status(500).json({ error: 'Database error' });
-  }
-});
+// Environment management - Full CRUD operations (OLD SQLITE VERSION - REMOVED)
 
 app.post('/api/environments', 
   authenticateToken,
