@@ -475,6 +475,19 @@ export default function ProductionOrdersSystem() {
     }
   };
 
+  const handleEditSchedule = (order) => {
+    setSelectedOrder(order);
+    // Pre-fill the modal with current order data
+    setMachineAssignData({
+      machine_id: order.machine_id || '',
+      scheduled_date: order.start_time ? order.start_time.split('T')[0] : '',
+      shift: order.shift_type || '',
+      duration_hours: '',
+      notes: order.notes || ''
+    });
+    setShowMachineAssignModal(true);
+  };
+
   const handleMachineAssignment = async (e) => {
     e.preventDefault();
     if (!selectedOrder || !machineAssignData.machine_id || !machineAssignData.scheduled_date || !machineAssignData.shift) {
@@ -604,6 +617,14 @@ export default function ProductionOrdersSystem() {
     return machines.filter(machine => 
       machine.environment === environmentCode && 
       (machine.status === 'available' || machine.status === 'idle')
+    );
+  };
+
+  // Get machines for editing (includes currently assigned machine)
+  const getMachinesForEditing = (environmentCode, currentMachineId) => {
+    return machines.filter(machine => 
+      machine.environment === environmentCode && 
+      (machine.status === 'available' || machine.status === 'idle' || machine.id === currentMachineId)
     );
   };
 
@@ -884,7 +905,12 @@ export default function ProductionOrdersSystem() {
                 <div key={order.id} className="bg-white border border-gray-200 rounded-lg p-4 space-y-3 shadow-sm hover:shadow-md transition-shadow duration-200">
                   <div className="flex justify-between items-start">
                     <div>
-                      <h4 className="font-semibold text-gray-900">{order.order_number}</h4>
+                      <button 
+                        onClick={() => handleEditSchedule(order)}
+                        className="font-semibold text-blue-600 hover:text-blue-800 hover:underline transition-colors duration-200 text-left"
+                      >
+                        {order.order_number}
+                      </button>
                       <p className="text-sm text-gray-600">{order.product_name}</p>
                       {order.customer_info && (
                         <p className="text-xs text-gray-500 mt-1">Customer: {order.customer_info}</p>
@@ -1023,7 +1049,12 @@ export default function ProductionOrdersSystem() {
                     <tr key={order.id} className="hover:bg-gray-50 transition-colors duration-150">
                       <td className="px-6 py-4">
                         <div>
-                          <div className="font-medium text-gray-900">{order.order_number}</div>
+                          <button 
+                            onClick={() => handleEditSchedule(order)}
+                            className="font-medium text-blue-600 hover:text-blue-800 hover:underline transition-colors duration-200"
+                          >
+                            {order.order_number}
+                          </button>
                           <div className="text-sm text-gray-500">
                             Qty: {order.quantity} | {getEnvironmentName(order.environment)}
                           </div>
@@ -1907,7 +1938,7 @@ export default function ProductionOrdersSystem() {
       {/* Machine Assignment Modal */}
       {showMachineAssignModal && selectedOrder && (
         <Modal 
-          title={`Assign Machine - Order ${selectedOrder.order_number}`} 
+          title={`${machineAssignData.machine_id ? 'Edit Schedule' : 'Assign Machine'} - Order ${selectedOrder.order_number}`} 
           onClose={() => {
             setShowMachineAssignModal(false);
             setSelectedOrder(null);
@@ -1952,15 +1983,16 @@ export default function ProductionOrdersSystem() {
                   required
                 >
                   <option value="">Select Machine</option>
-                  {getAvailableMachines(selectedOrder.environment).map(machine => (
+                  {getMachinesForEditing(selectedOrder.environment, parseInt(machineAssignData.machine_id)).map(machine => (
                     <option key={machine.id} value={machine.id}>
                       {machine.name} ({machine.type}) - {machine.status}
+                      {machine.id === parseInt(machineAssignData.machine_id) ? ' (Currently Assigned)' : ''}
                     </option>
                   ))}
                 </select>
-                {getAvailableMachines(selectedOrder.environment).length === 0 && (
+                {getMachinesForEditing(selectedOrder.environment, parseInt(machineAssignData.machine_id)).length === 0 && (
                   <p className="text-red-600 text-sm mt-1">
-                    No available machines in {getEnvironmentName(selectedOrder.environment)} environment
+                    No machines available in {getEnvironmentName(selectedOrder.environment)} environment
                   </p>
                 )}
               </div>
@@ -2045,7 +2077,7 @@ export default function ProductionOrdersSystem() {
                 disabled={!machineAssignData.machine_id || !machineAssignData.scheduled_date || !machineAssignData.shift || loading}
                 className="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
               >
-                {loading ? 'Assigning...' : 'Assign Machine'}
+                {loading ? (machineAssignData.machine_id ? 'Updating...' : 'Assigning...') : (machineAssignData.machine_id ? 'Update Schedule' : 'Assign Machine')}
               </Button>
             </div>
           </form>
