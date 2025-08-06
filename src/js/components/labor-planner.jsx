@@ -20,10 +20,21 @@ const LaborPlanner = ({ currentUser }) => {
     try {
       setLoading(true);
       console.log(`Fetching machines for date: ${selectedDate}`);
+      console.log('Current auth token:', localStorage.getItem('token') ? 'Present' : 'MISSING');
       
       // Fetch machines that have orders scheduled for the selected date
-      const response = await API.get(`/orders?date=${selectedDate}`);
-      const orders = response.data || [];
+      const response = await API.get(`/orders`, { date: selectedDate });
+      console.log('API Response:', response);
+      
+      // Handle different response formats
+      let orders = [];
+      if (Array.isArray(response)) {
+        orders = response;
+      } else if (response.data && Array.isArray(response.data)) {
+        orders = response.data;
+      } else if (response.success && Array.isArray(response.data)) {
+        orders = response.data;
+      }
       
       console.log(`Found ${orders.length} orders for ${selectedDate}:`, orders);
       
@@ -45,6 +56,11 @@ const LaborPlanner = ({ currentUser }) => {
       setScheduledMachines(machines);
     } catch (error) {
       console.error('Failed to fetch scheduled machines:', error);
+      console.error('Error details:', {
+        message: error.message,
+        response: error.response,
+        status: error.response?.status
+      });
       setScheduledMachines([]);
     } finally {
       setLoading(false);
