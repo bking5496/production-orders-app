@@ -486,8 +486,7 @@ export default function ProductionOrdersSystem() {
       await API.put(`/orders/${selectedOrder.id}`, {
         machine_id: machineAssignData.machine_id,
         start_time: machineAssignData.scheduled_date,
-        assignment_notes: machineAssignData.notes,
-        status: 'assigned'
+        notes: machineAssignData.notes
       });
       
       setShowMachineAssignModal(false);
