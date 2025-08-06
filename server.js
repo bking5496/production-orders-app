@@ -3346,20 +3346,18 @@ app.get('/api/machines/daily-active', authenticateToken, async (req, res) => {
           m.id,
           m.name,
           m.type,
-          m.environment_id,
-          e.code as environment_code,
-          e.name as environment_name,
+          m.environment,
           po.id as order_id,
           po.order_number,
           po.product_name,
           po.start_time,
-          po.status as order_status
+          po.status as order_status,
+          CASE WHEN po.id IS NOT NULL THEN true ELSE false END as has_orders_today
         FROM machines m
-        JOIN environments e ON m.environment_id = e.id
         LEFT JOIN production_orders po ON po.machine_id = m.id 
           AND DATE(po.start_time AT TIME ZONE 'UTC' AT TIME ZONE '+02:00') = $1
           AND po.status IN ('in_progress', 'paused', 'pending')
-        WHERE e.code = $2 AND m.is_active = true
+        WHERE m.environment = $2 AND m.status != 'offline'
         ORDER BY m.name
       `, [date, environment]);
       

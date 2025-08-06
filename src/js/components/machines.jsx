@@ -63,7 +63,9 @@ export default function MachinesPage() {
   // Machine types are now managed separately and filtered by environment
   const MACHINE_TYPES = useMemo(() => {
     const types = {};
-    environments.forEach(env => {
+    // Ensure environments is an array before using forEach
+    if (Array.isArray(environments)) {
+      environments.forEach(env => {
       // Get machine types allowed for this environment
       let allowedTypes = [];
       try {
@@ -79,7 +81,8 @@ export default function MachinesPage() {
       types[env.code] = machineTypes
         .filter(mt => allowedTypes.includes(mt.name))
         .map(mt => ({ id: mt.id, name: mt.name, description: mt.description }));
-    });
+      });
+    }
     return types;
   }, [environments, machineTypes]);
 
@@ -99,8 +102,11 @@ export default function MachinesPage() {
   // Function to fetch environments from the backend API
   const loadEnvironments = async () => {
     try {
-      const data = await API.get('/environments');
-      setEnvironments(data);
+      const response = await API.get('/environments');
+      // Handle the response format - environments API returns { success: true, data: [...] }
+      const environmentsData = response?.data?.data || response?.data || [];
+      console.log('🌍 Environments loaded in machines.jsx:', environmentsData);
+      setEnvironments(environmentsData);
     } catch (error) {
       console.error('Failed to load environments:', error);
       showNotification('Failed to load environments', 'danger');
@@ -355,12 +361,14 @@ export default function MachinesPage() {
 
   // Show WebSocket notifications
   useEffect(() => {
-    wsNotifications.forEach(notification => {
-      if (notification.type === 'alert' && notification.message.includes('machine')) {
-        showNotification(notification.message, 'danger');
-        clearNotification(notification.id);
-      }
-    });
+    if (Array.isArray(wsNotifications)) {
+      wsNotifications.forEach(notification => {
+        if (notification.type === 'alert' && notification.message.includes('machine')) {
+          showNotification(notification.message, 'danger');
+          clearNotification(notification.id);
+        }
+      });
+    }
   }, [wsNotifications]);
 
   // Handler for submitting the "Add Machine" form
@@ -423,7 +431,8 @@ export default function MachinesPage() {
 
   // Filter and search machines
   const filteredMachines = useMemo(() => {
-    let filtered = machines;
+    // Ensure machines is an array before filtering
+    let filtered = Array.isArray(machines) ? machines : [];
     
     if (selectedEnvironment !== 'all') {
       filtered = filtered.filter(machine => machine.environment === selectedEnvironment);
@@ -445,11 +454,13 @@ export default function MachinesPage() {
 
   // Calculate statistics
   const stats = useMemo(() => {
-    const total = machines.length;
-    const available = machines.filter(m => m.status === 'available').length;
-    const inUse = machines.filter(m => m.status === 'in_use').length;
-    const maintenance = machines.filter(m => m.status === 'maintenance').length;
-    const offline = machines.filter(m => m.status === 'offline').length;
+    // Ensure machines is an array before calculating stats
+    const machinesArray = Array.isArray(machines) ? machines : [];
+    const total = machinesArray.length;
+    const available = machinesArray.filter(m => m.status === 'available').length;
+    const inUse = machinesArray.filter(m => m.status === 'in_use').length;
+    const maintenance = machinesArray.filter(m => m.status === 'maintenance').length;
+    const offline = machinesArray.filter(m => m.status === 'offline').length;
     const utilizationRate = total > 0 ? Math.round((inUse / total) * 100) : 0;
     
     return { total, available, inUse, maintenance, offline, utilizationRate };
