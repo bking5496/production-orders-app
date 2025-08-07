@@ -546,22 +546,34 @@ export default function ProductionOrdersSystem() {
 
       setSelectedMachine(machine);
       
-      // Get orders scheduled for this machine (next 30 days)
-      const endDate = new Date();
-      endDate.setDate(endDate.getDate() + 30);
-      
+      // Get all orders and filter for this machine
       const response = await API.get('/orders', {
-        machine_id: machineId,
-        include_scheduled: true,
-        start_date: new Date().toISOString().split('T')[0],
-        end_date: endDate.toISOString().split('T')[0]
+        include_archived: 'true' // Include all orders to get complete schedule
       });
       
       // Handle response structure - API might return data directly or wrapped in .data
       const ordersData = response?.data || response || [];
       
+      // Filter for this machine and orders with scheduling
       const schedule = ordersData
-        .filter(order => order.machine_id === machineId && (order.scheduled_start_date || order.start_time))
+        .filter(order => {
+          // Must be assigned to this machine
+          if (order.machine_id !== machineId) return false;
+          
+          // Must have either scheduled dates or start time
+          if (!order.scheduled_start_date && !order.start_time) return false;
+          
+          // Filter for future dates (next 30 days)
+          const orderDate = order.scheduled_start_date || (order.start_time ? order.start_time.split('T')[0] : null);
+          if (!orderDate) return false;
+          
+          const today = new Date().toISOString().split('T')[0];
+          const endDate = new Date();
+          endDate.setDate(endDate.getDate() + 30);
+          const endDateStr = endDate.toISOString().split('T')[0];
+          
+          return orderDate >= today && orderDate <= endDateStr;
+        })
         .map(order => ({
           ...order,
           display_start_date: order.scheduled_start_date || (order.start_time ? order.start_time.split('T')[0] : 'N/A'),
@@ -2298,8 +2310,8 @@ export default function ProductionOrdersSystem() {
                           >
                             {order.order_number}
                           </button>
-                          <Badge className={getStatusInfo(order.status)?.color || 'bg-gray-100 text-gray-800 border-gray-200'}>
-                            {getStatusInfo(order.status)?.label || order.status}
+                          <Badge className={getOrderStatusInfo(order.status)?.color || 'bg-gray-100 text-gray-800 border-gray-200'}>
+                            {getOrderStatusInfo(order.status)?.label || order.status}
                           </Badge>
                         </div>
                         <span className="text-sm text-gray-500">{order.product_name}</span>
