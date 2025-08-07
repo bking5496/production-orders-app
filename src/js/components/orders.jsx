@@ -535,22 +535,30 @@ export default function ProductionOrdersSystem() {
         '24hr': '06:00:00' // 24hr shifts start with day shift
       };
       
-      const startDateTime = `${machineAssignData.scheduled_date}T${shiftTimes[machineAssignData.shift]}`;
+      const startDateTime = `${machineAssignData.scheduled_start_date}T${shiftTimes[machineAssignData.scheduled_start_shift]}`;
       
-      // Calculate end time based on duration
+      // Calculate end time based on end date/shift or default duration
+      let endDateTime;
+      if (machineAssignData.scheduled_end_date && machineAssignData.scheduled_end_shift) {
+        endDateTime = `${machineAssignData.scheduled_end_date}T${shiftTimes[machineAssignData.scheduled_end_shift]}`;
+      } else {
+        // Default to 8 hours if no end specified
+        const startDate = new Date(startDateTime);
+        const endDate = new Date(startDate.getTime() + (8 * 60 * 60 * 1000));
+        endDateTime = endDate.toISOString();
+      }
+      
       let updateData = {
         machine_id: machineAssignData.machine_id,
         start_time: startDateTime,
-        shift_type: machineAssignData.shift,
+        stop_time: endDateTime,
+        shift_type: machineAssignData.scheduled_start_shift,
+        scheduled_start_date: machineAssignData.scheduled_start_date,
+        scheduled_start_shift: machineAssignData.scheduled_start_shift,
+        scheduled_end_date: machineAssignData.scheduled_end_date,
+        scheduled_end_shift: machineAssignData.scheduled_end_shift,
         notes: machineAssignData.notes
       };
-      
-      let endDate;
-      if (machineAssignData.duration_hours) {
-        const startDate = new Date(startDateTime);
-        endDate = new Date(startDate.getTime() + (parseFloat(machineAssignData.duration_hours) * 60 * 60 * 1000));
-        updateData.stop_time = endDate.toISOString();
-      }
 
       // Check for scheduling conflicts on the same machine
       const schedulingConflict = orders.find(order => {
@@ -561,7 +569,7 @@ export default function ProductionOrdersSystem() {
         const existingStart = new Date(order.start_time);
         const existingEnd = new Date(order.stop_time);
         const newStart = new Date(startDateTime);
-        const newEnd = endDate || new Date(newStart.getTime() + (8 * 60 * 60 * 1000)); // Default 8 hours
+        const newEnd = new Date(endDateTime);
 
         // Check for overlap
         return (newStart < existingEnd && newEnd > existingStart);
@@ -660,9 +668,10 @@ export default function ProductionOrdersSystem() {
   const resetMachineAssignData = () => {
     setMachineAssignData({
       machine_id: '',
-      scheduled_date: '',
-      shift: '',
-      duration_hours: '',
+      scheduled_start_date: '',
+      scheduled_start_shift: '',
+      scheduled_end_date: '',
+      scheduled_end_shift: '',
       notes: ''
     });
   };
@@ -2052,51 +2061,76 @@ export default function ProductionOrdersSystem() {
                 )}
               </div>
 
-              <div className="grid grid-cols-3 gap-4">
+              <div className="space-y-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Scheduled Date *
-                  </label>
-                  <input
-                    type="date"
-                    value={machineAssignData.scheduled_date}
-                    onChange={(e) => setMachineAssignData({...machineAssignData, scheduled_date: e.target.value})}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                    required
-                  />
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Shift *
-                  </label>
-                  <select
-                    value={machineAssignData.shift}
-                    onChange={(e) => setMachineAssignData({...machineAssignData, shift: e.target.value})}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                    required
-                  >
-                    <option value="">Select Shift</option>
-                    <option value="day">Day Shift (06:00 - 18:00)</option>
-                    <option value="night">Night Shift (18:00 - 06:00)</option>
-                    <option value="24hr">24Hr Shift (Full Day)</option>
-                  </select>
+                  <h4 className="text-sm font-medium text-gray-900 mb-3">Start Schedule</h4>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Start Date *
+                      </label>
+                      <input
+                        type="date"
+                        value={machineAssignData.scheduled_start_date}
+                        onChange={(e) => setMachineAssignData({...machineAssignData, scheduled_start_date: e.target.value})}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                        required
+                      />
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Start Shift *
+                      </label>
+                      <select
+                        value={machineAssignData.scheduled_start_shift}
+                        onChange={(e) => setMachineAssignData({...machineAssignData, scheduled_start_shift: e.target.value})}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                        required
+                      >
+                        <option value="">Select Shift</option>
+                        <option value="day">Day Shift (06:00 - 18:00)</option>
+                        <option value="night">Night Shift (18:00 - 06:00)</option>
+                        <option value="24hr">24Hr Shift (Full Day)</option>
+                      </select>
+                    </div>
+                  </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Duration (Hours)
-                  </label>
-                  <input
-                    type="number"
-                    step="0.5"
-                    min="0.5"
-                    max="24"
-                    value={machineAssignData.duration_hours}
-                    onChange={(e) => setMachineAssignData({...machineAssignData, duration_hours: e.target.value})}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                    placeholder="8.0"
-                  />
+                  <h4 className="text-sm font-medium text-gray-900 mb-3">End Schedule (Optional)</h4>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        End Date
+                      </label>
+                      <input
+                        type="date"
+                        value={machineAssignData.scheduled_end_date}
+                        onChange={(e) => setMachineAssignData({...machineAssignData, scheduled_end_date: e.target.value})}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                      />
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        End Shift
+                      </label>
+                      <select
+                        value={machineAssignData.scheduled_end_shift}
+                        onChange={(e) => setMachineAssignData({...machineAssignData, scheduled_end_shift: e.target.value})}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                      >
+                        <option value="">Select Shift</option>
+                        <option value="day">Day Shift (06:00 - 18:00)</option>
+                        <option value="night">Night Shift (18:00 - 06:00)</option>
+                        <option value="24hr">24Hr Shift (Full Day)</option>
+                      </select>
+                    </div>
+                  </div>
+                  <p className="text-xs text-gray-500 mt-2">
+                    If not specified, defaults to 8 hours from start time
+                  </p>
                 </div>
               </div>
             </div>
@@ -2129,7 +2163,7 @@ export default function ProductionOrdersSystem() {
               </Button>
               <Button
                 type="submit"
-                disabled={!machineAssignData.machine_id || !machineAssignData.scheduled_date || !machineAssignData.shift || loading}
+                disabled={!machineAssignData.machine_id || !machineAssignData.scheduled_start_date || !machineAssignData.scheduled_start_shift || loading}
                 className="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
               >
                 {loading ? (machineAssignData.machine_id ? 'Updating...' : 'Assigning...') : (machineAssignData.machine_id ? 'Update Schedule' : 'Assign Machine')}
