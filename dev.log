@@ -677,3 +677,4 @@ Instead of /public/js/main.js, use /js/main.js.
      |            ^
   586|  
   587|    const allNavigation = [
+1:36:31 PM [vite] (client) hmr update /src/js/components/layout-components.jsx
