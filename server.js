@@ -469,7 +469,7 @@ app.put('/api/orders/:id',
         await client.query('BEGIN');
         
         // Build the SET clause with proper PostgreSQL syntax
-        const allowedFields = ['machine_id', 'start_time', 'stop_time', 'status', 'assignment_notes', 'due_date', 'quantity', 'priority', 'product_name', 'environment', 'customer_info', 'specifications', 'scheduled_start_date', 'scheduled_start_shift', 'scheduled_end_date', 'scheduled_end_shift', 'notes', 'shift_type'];
+        const allowedFields = ['machine_id', 'start_time', 'stop_time', 'status', 'due_date', 'quantity', 'priority', 'product_name', 'environment', 'customer_info', 'specifications', 'scheduled_start_date', 'scheduled_start_shift', 'scheduled_end_date', 'scheduled_end_shift', 'notes', 'shift_type'];
         const updateFields = [];
         const values = [];
         let paramCounter = 1;
