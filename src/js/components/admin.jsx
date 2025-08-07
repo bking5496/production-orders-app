@@ -76,10 +76,12 @@ export default function AdminPanel() {
     else setLoading(true);
     
     try {
-      const usersData = await API.get('/users');
-      setUsers(usersData);
+      const response = await API.get('/users');
+      const usersData = response?.data || response;
+      setUsers(Array.isArray(usersData) ? usersData : []);
     } catch (error) {
       console.error('Failed to load users:', error);
+      setUsers([]);
       showNotification('Failed to load users', 'danger');
     } finally {
       setLoading(false);

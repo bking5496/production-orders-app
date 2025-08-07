@@ -23,10 +23,13 @@ export default function UsersPage() {
   const loadUsers = async () => {
     setLoading(true);
     try {
-      const data = await API.get('/users');
-      setUsers(data);
+      const response = await API.get('/users');
+      // Handle both direct array response and wrapped response
+      const userData = response?.data || response;
+      setUsers(Array.isArray(userData) ? userData : []);
     } catch (error) {
       console.error('Failed to load users:', error);
+      setUsers([]); // Ensure users is always an array
     } finally {
       setLoading(false);
     }
