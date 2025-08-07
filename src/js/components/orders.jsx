@@ -557,8 +557,11 @@ export default function ProductionOrdersSystem() {
         end_date: endDate.toISOString().split('T')[0]
       });
       
-      const schedule = response.data
-        .filter(order => order.scheduled_start_date || order.start_time)
+      // Handle response structure - API might return data directly or wrapped in .data
+      const ordersData = response?.data || response || [];
+      
+      const schedule = ordersData
+        .filter(order => order.machine_id === machineId && (order.scheduled_start_date || order.start_time))
         .map(order => ({
           ...order,
           display_start_date: order.scheduled_start_date || (order.start_time ? order.start_time.split('T')[0] : 'N/A'),
