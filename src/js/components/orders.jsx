@@ -365,7 +365,8 @@ export default function ProductionOrdersSystem() {
   const loadOrders = async () => {
     try {
       if (!refreshing) setLoading(true);
-      const response = await API.get('/orders');
+      // Always include archived orders so the frontend can filter properly
+      const response = await API.get('/orders?include_archived=true');
       setOrders(response?.data || response || []);
     } catch (error) {
       console.error('Error loading orders:', error);
@@ -819,8 +820,8 @@ export default function ProductionOrdersSystem() {
       // Machine filter
       const matchesMachine = filters.machine === 'all' || order.machine_id?.toString() === filters.machine;
       
-      // Archive filtering based on view mode - keep stopped orders in active view
-      const isArchived = order.status === 'completed' || order.status === 'cancelled';
+      // Archive filtering based on view mode - use actual archived field from database
+      const isArchived = order.archived === true;
       const matchesViewMode = viewMode === 'archive' ? isArchived : !isArchived;
       
       return matchesSearch && matchesEnvironment && matchesStatus && 
