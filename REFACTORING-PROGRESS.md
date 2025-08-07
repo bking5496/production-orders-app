@@ -37,27 +37,30 @@
 
 ### **Refactored:**
 - **Authentication system** (6 endpoints) ✅
+- **Orders management** (~24 endpoints) ✅
+- **Machines management** (~12 endpoints) ✅
+- **User management** (~10 endpoints) ✅
 - **Database utilities** ✅
 - **Response standardization** ✅
 - **Error handling** ✅
 - **Existing modular files** (4 route files) ✅
 
 ### **Remaining in server.js:**
-- **Orders management** (~15 endpoints)
-- **Machines management** (~12 endpoints)  
 - **Labor planning** (~10 endpoints)
-- **User management** (~8 endpoints)
 - **Analytics** (~10 endpoints)
 - **WebSocket handling**
 - **File uploads**
 - **Reporting endpoints**
 
-## 🚀 **Next Steps (Phase 2)**
+## 🚀 **Phase 2: Business Logic Extraction (In Progress)**
 
-### **Priority 1: Core Business Logic**
-1. Extract orders management routes
-2. Extract machines management routes
-3. Extract labor planning routes
+### **✅ Completed:**
+1. ✅ **Orders management** (~24 endpoints) - `src/services/orders.service.js` & `src/routes/orders.routes.js`
+2. ✅ **Machines management** (~12 endpoints) - `src/services/machines.service.js` & `src/routes/machines.routes.js`
+3. ✅ **User management** (~10 endpoints) - `src/services/users.service.js` & `src/routes/users.routes.js`
+
+### **🔄 Currently Working On:**
+4. Extract labor planning routes (~10 endpoints)
 
 ### **Priority 2: User Management**
 1. Extract user CRUD operations

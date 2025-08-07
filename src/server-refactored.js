@@ -9,6 +9,9 @@ const { errorHandler, notFoundHandler } = require('./middleware/error-handler');
 
 // Import routes
 const authRoutes = require('./routes/auth.routes');
+const ordersRoutes = require('./routes/orders.routes');
+const machinesRoutes = require('./routes/machines.routes');
+const usersRoutes = require('./routes/users.routes');
 
 // Create Express app
 const app = express();
@@ -51,6 +54,9 @@ app.get('/api/health', (req, res) => {
 
 // API Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/orders', ordersRoutes);
+app.use('/api/machines', machinesRoutes);
+app.use('/api/users', usersRoutes);
 
 // Catch-all for frontend routes (SPA)
 app.get('*', (req, res) => {
