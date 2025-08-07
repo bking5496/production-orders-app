@@ -690,3 +690,10 @@ The request url "/etc/passwd" is outside of Vite serving allow list.
 5:34:18 PM [vite] (client) page reload server.js
 5:39:57 PM [vite] (client) page reload server.js
 5:42:48 PM [vite] (client) page reload server.js
+5:50:25 PM [vite] (client) page reload server.js
+5:56:12 PM [vite] (client) hmr update /src/js/components/labor-planner.jsx
+5:56:45 PM [vite] (client) hmr update /src/js/components/labor-planner.jsx
+5:56:55 PM [vite] (client) hmr update /src/js/components/labor-planner.jsx
+5:57:11 PM [vite] (client) hmr update /src/js/components/labor-planner.jsx
+5:57:36 PM [vite] (client) hmr update /src/js/components/labor-planner.jsx
+5:59:22 PM [vite] (client) hmr update /src/js/components/labor-planner.jsx

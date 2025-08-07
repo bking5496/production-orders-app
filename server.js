@@ -3300,10 +3300,14 @@ app.get('/api/labor-planner/machines', authenticateToken, async (req, res) => {
         FROM machines m
         LEFT JOIN labor_assignments la ON m.id = la.machine_id AND la.assignment_date = $1
         LEFT JOIN production_orders po ON m.id = po.machine_id 
-          AND (po.status IN ('pending', 'in_progress', 'stopped') 
-               OR DATE(po.scheduled_start_date) = $1 
-               OR DATE(po.due_date) = $1
-               OR ($1 BETWEEN DATE(po.scheduled_start_date) AND DATE(po.scheduled_end_date)))
+          AND (
+            -- Orders scheduled for this specific date
+            DATE(po.scheduled_start_date) = $1 
+            OR DATE(po.due_date) = $1
+            OR ($1 BETWEEN DATE(po.scheduled_start_date) AND DATE(po.scheduled_end_date))
+            -- Or active orders that are currently running (only if they have scheduling that includes this date)
+            OR (po.status IN ('in_progress') AND $1 BETWEEN DATE(po.scheduled_start_date) AND DATE(po.scheduled_end_date))
+          )
         WHERE la.id IS NOT NULL OR po.id IS NOT NULL
         GROUP BY m.id, m.name, m.environment, m.capacity, m.operators_per_shift, 
                  m.hopper_loaders_per_shift, m.packers_per_shift, po.order_number, 
