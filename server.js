@@ -3772,12 +3772,58 @@ process.on('SIGTERM', () => {
   });
 });
 
+// Machine Availability Background Scheduler
+async function ensureMachineAvailability() {
+  try {
+    const client = await pool.connect();
+    try {
+      // Get all active machines
+      const machinesResult = await client.query('SELECT id FROM machines WHERE status != $1', ['decommissioned']);
+      const machines = machinesResult.rows;
+      
+      // Generate availability for next 30 days
+      const today = new Date();
+      const endDate = new Date();
+      endDate.setDate(today.getDate() + 30);
+      
+      for (let d = new Date(today); d <= endDate; d.setDate(d.getDate() + 1)) {
+        const dateStr = d.toISOString().split('T')[0];
+        
+        for (const machine of machines) {
+          const shifts = ['day', 'night', '24hr'];
+          
+          for (const shift of shifts) {
+            // Insert default availability if it doesn't exist
+            await client.query(`
+              INSERT INTO machine_availability (machine_id, date, shift_type, is_available, reason)
+              VALUES ($1, $2, $3, true, 'Default availability')
+              ON CONFLICT (machine_id, date, shift_type) DO NOTHING
+            `, [machine.id, dateStr, shift]);
+          }
+        }
+      }
+      
+      console.log('✅ Machine availability scheduler completed');
+    } finally {
+      client.release();
+    }
+  } catch (error) {
+    console.error('❌ Machine availability scheduler error:', error);
+  }
+}
+
 // Start server
 if (require.main === module) {
   server.listen(PORT, () => {
     console.log(`🚀 Server running on http://localhost:${PORT}`);
     console.log(`📊 Environment: ${process.env.NODE_ENV || 'development'}`);
     console.log(`🔐 JWT Secret: ${JWT_SECRET.substring(0, 5)}...`);
+    
+    // Initialize machine availability
+    ensureMachineAvailability();
+    
+    // Run machine availability scheduler every 4 hours
+    setInterval(ensureMachineAvailability, 4 * 60 * 60 * 1000);
   });
 }
 
