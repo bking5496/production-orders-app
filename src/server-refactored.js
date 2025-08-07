@@ -12,6 +12,9 @@ const authRoutes = require('./routes/auth.routes');
 const ordersRoutes = require('./routes/orders.routes');
 const machinesRoutes = require('./routes/machines.routes');
 const usersRoutes = require('./routes/users.routes');
+const laborRoutes = require('./routes/labor.routes');
+const analyticsRoutes = require('./routes/analytics.routes');
+const reportsRoutes = require('./routes/reports.routes');
 
 // Create Express app
 const app = express();
@@ -57,6 +60,15 @@ app.use('/api/auth', authRoutes);
 app.use('/api/orders', ordersRoutes);
 app.use('/api/machines', machinesRoutes);
 app.use('/api/users', usersRoutes);
+app.use('/api/labor', laborRoutes);
+app.use('/api/analytics', analyticsRoutes);
+app.use('/api/reports', reportsRoutes);
+
+// Legacy route compatibility
+app.use('/api/labour', laborRoutes); // British spelling compatibility
+
+// Dashboard route compatibility
+app.use('/api/production', analyticsRoutes); // Production endpoints under analytics
 
 // Catch-all for frontend routes (SPA)
 app.get('*', (req, res) => {
