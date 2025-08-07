@@ -659,7 +659,6 @@ export default function ProductionOrdersSystem() {
         machine_id: machineAssignData.machine_id,
         start_time: startDateTime,
         stop_time: endDateTime,
-        shift_type: machineAssignData.scheduled_start_shift,
         scheduled_start_date: machineAssignData.scheduled_start_date,
         scheduled_start_shift: machineAssignData.scheduled_start_shift,
         scheduled_end_date: machineAssignData.scheduled_end_date,
