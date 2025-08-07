@@ -18,11 +18,9 @@ const LaborPlanner = ({ currentUser }) => {
   const [assignments, setAssignments] = useState({});
   const [assignmentForm, setAssignmentForm] = useState({
     employee_id: '',
-    role: 'operator',
-    start_time: '',
-    end_time: '',
-    hourly_rate: ''
+    role: 'operator'
   });
+  const [employeeSearch, setEmployeeSearch] = useState('');
 
   // Fetch scheduled machines when date changes
   useEffect(() => {
@@ -108,30 +106,34 @@ const LaborPlanner = ({ currentUser }) => {
     }
   };
 
-  const handleAssignWorker = (machine, shift) => {
+  const handleAssignWorker = (machine, shift, role = 'operator') => {
     setSelectedMachine(machine);
     setSelectedShift(shift);
     setAssignmentForm({
       employee_id: '',
-      role: 'operator',
-      start_time: shift === 'day' ? '06:00' : '18:00',
-      end_time: shift === 'day' ? '18:00' : '06:00',
-      hourly_rate: '150.00'
+      role: role
     });
+    setEmployeeSearch('');
     setShowAssignmentModal(true);
   };
 
   const handleSaveAssignment = async () => {
     try {
+      // Set default times based on shift
+      const defaultTimes = {
+        day: { start_time: '06:00', end_time: '18:00' },
+        night: { start_time: '18:00', end_time: '06:00' }
+      };
+
       const assignmentData = {
         employee_id: parseInt(assignmentForm.employee_id),
         machine_id: selectedMachine.id,
         assignment_date: selectedDate,
         shift_type: selectedShift,
         role: assignmentForm.role,
-        start_time: assignmentForm.start_time,
-        end_time: assignmentForm.end_time,
-        hourly_rate: parseFloat(assignmentForm.hourly_rate)
+        start_time: defaultTimes[selectedShift]?.start_time || '08:00',
+        end_time: defaultTimes[selectedShift]?.end_time || '17:00',
+        hourly_rate: 150.00
       };
 
       await API.post('/labor-assignments', assignmentData);
@@ -140,7 +142,6 @@ const LaborPlanner = ({ currentUser }) => {
       fetchExistingAssignments();
       setShowAssignmentModal(false);
       
-      alert('Worker assigned successfully!');
     } catch (error) {
       console.error('Failed to create assignment:', error);
       alert('Failed to assign worker: ' + (error.response?.data?.error || error.message));
@@ -148,16 +149,47 @@ const LaborPlanner = ({ currentUser }) => {
   };
 
   const handleRemoveAssignment = async (assignmentId) => {
-    if (!confirm('Are you sure you want to remove this assignment?')) return;
-    
     try {
       await API.delete(`/labor-assignments/${assignmentId}`);
       fetchExistingAssignments();
-      alert('Assignment removed successfully!');
     } catch (error) {
       console.error('Failed to remove assignment:', error);
       alert('Failed to remove assignment: ' + (error.response?.data?.error || error.message));
     }
+  };
+
+  // Helper function to get filtered employees based on search
+  const getFilteredEmployees = () => {
+    if (!employeeSearch.trim()) return availableUsers;
+    const searchLower = employeeSearch.toLowerCase();
+    return availableUsers.filter(user => 
+      user.username?.toLowerCase().includes(searchLower) ||
+      user.first_name?.toLowerCase().includes(searchLower) ||
+      user.last_name?.toLowerCase().includes(searchLower) ||
+      `${user.first_name} ${user.last_name}`.toLowerCase().includes(searchLower)
+    );
+  };
+
+  // Helper function to get role requirements for a machine
+  const getRoleRequirements = (machine) => {
+    return [
+      { role: 'operator', required: machine.operators_per_shift || 2, label: 'Operators' },
+      { role: 'hopper_loader', required: machine.hopper_loaders_per_shift || 1, label: 'Hopper Loaders' },
+      { role: 'packer', required: machine.packers_per_shift || 3, label: 'Packers' }
+    ].filter(req => req.required > 0);
+  };
+
+  // Helper function to count assignments by role for a machine-shift combination
+  const getAssignmentCounts = (machineId, shift) => {
+    const assignmentKey = `${machineId}-${shift}`;
+    const shiftAssignments = assignments[assignmentKey] || [];
+    
+    const counts = {};
+    shiftAssignments.forEach(assignment => {
+      counts[assignment.role] = (counts[assignment.role] || 0) + 1;
+    });
+    
+    return counts;
   };
 
   return (
@@ -247,10 +279,13 @@ const LaborPlanner = ({ currentUser }) => {
                   </div>
                   <div className="text-right">
                     <p className="text-sm font-medium text-gray-700">Required per shift:</p>
-                    <div className="text-xs text-gray-600">
-                      {machine.operators_per_shift} operators
-                      {machine.hopper_loaders_per_shift > 0 && `, ${machine.hopper_loaders_per_shift} hopper loaders`}
-                      {machine.packers_per_shift > 0 && `, ${machine.packers_per_shift} packers`}
+                    <div className="text-xs text-gray-600 space-y-1">
+                      {getRoleRequirements(machine).map(req => (
+                        <div key={req.role} className="flex items-center justify-end gap-2">
+                          <span className="text-gray-500">{req.required}</span>
+                          <span className="font-medium">{req.label}</span>
+                        </div>
+                      ))}
                     </div>
                   </div>
                 </div>
@@ -261,62 +296,103 @@ const LaborPlanner = ({ currentUser }) => {
                     {machine.scheduled_shifts.map(shift => {
                       const assignmentKey = `${machine.id}-${shift}`;
                       const shiftAssignments = assignments[assignmentKey] || [];
+                      const roleRequirements = getRoleRequirements(machine);
+                      const assignmentCounts = getAssignmentCounts(machine.id, shift);
                       
                       return (
-                        <div key={shift} className="bg-gray-50 rounded-lg p-4">
-                          <div className="flex items-center justify-between mb-3">
-                            <div className="flex items-center gap-2">
-                              <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-                                shift === 'day' ? 'bg-yellow-100 text-yellow-800' :
-                                shift === 'night' ? 'bg-purple-100 text-purple-800' :
-                                'bg-green-100 text-green-800'
+                        <div key={shift} className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-5 border border-gray-200 shadow-sm">
+                          <div className="flex items-center justify-between mb-4">
+                            <div className="flex items-center gap-3">
+                              <span className={`px-4 py-2 rounded-full text-sm font-semibold shadow-sm ${
+                                shift === 'day' ? 'bg-gradient-to-r from-yellow-100 to-amber-100 text-yellow-800 border border-yellow-200' :
+                                shift === 'night' ? 'bg-gradient-to-r from-purple-100 to-indigo-100 text-purple-800 border border-purple-200' :
+                                'bg-gradient-to-r from-green-100 to-emerald-100 text-green-800 border border-green-200'
                               }`}>
                                 {shift.charAt(0).toUpperCase() + shift.slice(1)} Shift
                               </span>
-                              <span className="text-sm text-gray-600">
-                                ({shiftAssignments.length}/{machine.operators_per_shift} assigned)
-                              </span>
+                              <div className="flex items-center gap-2">
+                                {roleRequirements.map(req => {
+                                  const assigned = assignmentCounts[req.role] || 0;
+                                  const isComplete = assigned >= req.required;
+                                  return (
+                                    <span key={req.role} className={`px-2 py-1 rounded-md text-xs font-medium border ${
+                                      isComplete ? 'bg-green-50 text-green-700 border-green-200' : 'bg-red-50 text-red-700 border-red-200'
+                                    }`}>
+                                      {req.label}: {assigned}/{req.required}
+                                    </span>
+                                  );
+                                })}
+                              </div>
                             </div>
-                            <Button
-                              onClick={() => handleAssignWorker(machine, shift)}
-                              size="sm"
-                              variant="outline"
-                              leftIcon={<Plus className="w-4 h-4" />}
-                            >
-                              Assign Worker
-                            </Button>
                           </div>
-                          
-                          {shiftAssignments.length > 0 ? (
-                            <div className="space-y-2">
-                              {shiftAssignments.map(assignment => (
-                                <div key={assignment.id} className="flex items-center justify-between bg-white rounded p-3 border">
-                                  <div className="flex items-center gap-3">
-                                    <Users className="w-4 h-4 text-blue-500" />
-                                    <div>
-                                      <p className="font-medium text-gray-900">
-                                        {assignment.username || `Employee #${assignment.employee_id}`}
-                                      </p>
-                                      <p className="text-sm text-gray-600">
-                                        {assignment.role} • {assignment.start_time} - {assignment.end_time}
-                                        {assignment.hourly_rate && ` • R${assignment.hourly_rate}/hr`}
-                                      </p>
+
+                          {/* Role-based assignment sections */}
+                          <div className="space-y-3">
+                            {roleRequirements.map(req => {
+                              const roleAssignments = shiftAssignments.filter(a => a.role === req.role);
+                              const needed = Math.max(0, req.required - roleAssignments.length);
+                              
+                              return (
+                                <div key={req.role} className="bg-white rounded-lg p-3 border border-gray-100 shadow-sm">
+                                  <div className="flex items-center justify-between mb-2">
+                                    <div className="flex items-center gap-2">
+                                      <span className="font-medium text-gray-900">{req.label}</span>
+                                      <span className={`text-xs px-2 py-1 rounded-full ${
+                                        roleAssignments.length >= req.required ? 
+                                        'bg-green-100 text-green-800' : 
+                                        'bg-orange-100 text-orange-800'
+                                      }`}>
+                                        {roleAssignments.length}/{req.required}
+                                      </span>
                                     </div>
+                                    {needed > 0 && (
+                                      <Button
+                                        onClick={() => handleAssignWorker(machine, shift, req.role)}
+                                        size="sm"
+                                        variant="outline"
+                                        className="bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200 text-blue-700 hover:from-blue-100 hover:to-indigo-100 shadow-sm"
+                                        leftIcon={<Plus className="w-3 h-3" />}
+                                      >
+                                        Add {req.label.slice(0, -1)}
+                                      </Button>
+                                    )}
                                   </div>
-                                  <Button
-                                    onClick={() => handleRemoveAssignment(assignment.id)}
-                                    size="sm"
-                                    variant="outline"
-                                    className="text-red-600 hover:text-red-800 hover:bg-red-50"
-                                  >
-                                    <X className="w-4 h-4" />
-                                  </Button>
+
+                                  {roleAssignments.length > 0 ? (
+                                    <div className="space-y-2">
+                                      {roleAssignments.map(assignment => (
+                                        <div key={assignment.id} className="flex items-center justify-between bg-gray-50 rounded-lg p-2 border border-gray-100">
+                                          <div className="flex items-center gap-2">
+                                            <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                                              <Users className="w-4 h-4 text-blue-600" />
+                                            </div>
+                                            <div>
+                                              <p className="font-medium text-gray-900 text-sm">
+                                                {assignment.username || `Employee #${assignment.employee_id}`}
+                                              </p>
+                                              <p className="text-xs text-gray-500">
+                                                {assignment.start_time} - {assignment.end_time}
+                                              </p>
+                                            </div>
+                                          </div>
+                                          <Button
+                                            onClick={() => handleRemoveAssignment(assignment.id)}
+                                            size="sm"
+                                            variant="ghost"
+                                            className="w-6 h-6 p-0 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-full"
+                                          >
+                                            <X className="w-3 h-3" />
+                                          </Button>
+                                        </div>
+                                      ))}
+                                    </div>
+                                  ) : (
+                                    <p className="text-gray-400 text-xs italic text-center py-2">No {req.label.toLowerCase()} assigned</p>
+                                  )}
                                 </div>
-                              ))}
-                            </div>
-                          ) : (
-                            <p className="text-gray-500 text-sm italic">No workers assigned to this shift</p>
-                          )}
+                              );
+                            })}
+                          </div>
                         </div>
                       );
                     })}
