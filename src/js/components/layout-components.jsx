@@ -7,14 +7,21 @@ import {
     ChevronDown, LogOut, User, Home, Zap, TrendingUp, AlertTriangle, CheckCircle2
 } from 'lucide-react';
 
-// Create a map of icons to avoid a large switch statement
+// Enhanced icon map with additional icons and better organization
 const iconMap = {
+    // Navigation & UI
     calendar: Calendar,
-    users: Users,
+    users: Users, 
     search: Search,
     plus: Plus,
     check: CheckCircle,
+    checkCircle2: CheckCircle2,
     x: X,
+    menu: Menu,
+    home: Home,
+    chevronDown: ChevronDown,
+    
+    // Actions
     clipboard: ClipboardList,
     userCheck: UserCheck,
     settings: Settings,
@@ -23,26 +30,57 @@ const iconMap = {
     trash: Trash2,
     upload: Upload,
     download: Download,
+    logOut: LogOut,
+    
+    // Status & Monitoring
     activity: Activity,
+    wifi: Wifi,
+    wifiOff: WifiOff,
+    bell: Bell,
+    alertTriangle: AlertTriangle,
+    
+    // Business & Production
     package: Package,
     shield: Shield,
     dashboard: LayoutDashboard,
-    moreVertical: MoreVertical,
     clock: Clock,
     barChart3: BarChart3,
-    menu: Menu,
-    wifi: Wifi,
-    wifiOff: WifiOff,
+    zap: Zap,
+    trendingUp: TrendingUp,
+    
+    // User & Profile
+    user: User,
+    moreVertical: MoreVertical,
 };
 
-// EXPORT the Icon component so other files can use it
-export const Icon = ({ icon, size = 24, className = '' }) => {
+// Enhanced Icon component with better error handling and animation support
+export const Icon = ({ 
+    icon, 
+    size = 24, 
+    className = '', 
+    animate = false,
+    color = 'currentColor',
+    ...props 
+}) => {
     const LucideIcon = iconMap[icon];
+    
     if (!LucideIcon) {
-        // Return a default icon or null if the icon name is invalid
-        return <Users size={size} className={className} />; // Default fallback
+        console.warn(`Icon '${icon}' not found in iconMap. Available icons:`, Object.keys(iconMap));
+        // Return a more appropriate default icon
+        return <AlertTriangle size={size} className={`${className} text-yellow-500`} {...props} />;
     }
-    return <LucideIcon size={size} className={className} />;
+    
+    const animationClass = animate ? 'transition-all duration-200 hover:scale-110' : '';
+    const combinedClassName = `${className} ${animationClass}`.trim();
+    
+    return (
+        <LucideIcon 
+            size={size} 
+            className={combinedClassName}
+            color={color}
+            {...props} 
+        />
+    );
 };
 
 // Enhanced Connection Status with better UI and performance metrics
@@ -525,7 +563,25 @@ const Header = ({ onMenuClick, notifications = [] }) => {
 };
 
 
-const Sidebar = ({ isOpen, onClose }) => {
+// Enhanced Sidebar with collapsible sections, better navigation, and activity indicators
+const Sidebar = ({ isOpen, onClose, collapsed = false }) => {
+    const { user } = useAuth();
+    const [collapsedSections, setCollapsedSections] = useState(new Set());
+    const [activeItem, setActiveItem] = useState(window.location.pathname);
+
+    const allNavigation = [
+        { name: 'Dashboard', href: '/', icon: 'dashboard', priority: 'critical', roles: ['operator', 'supervisor', 'manager', 'admin'], badge: null, description: 'Overview of production metrics' },
+        { name: 'Production Monitor', href: '/production', icon: 'activity', priority: 'critical', roles: ['operator', 'supervisor', 'manager', 'admin'], badge: null, description: 'Real-time production monitoring' },
+        { name: 'Orders', href: '/orders', icon: 'package', priority: 'daily', roles: ['operator', 'supervisor', 'manager', 'admin'], badge: 'hot', description: 'Manage production orders' },
+        { name: 'Machines', href: '/machines', icon: 'settings', priority: 'daily', roles: ['operator', 'supervisor', 'manager', 'admin'], badge: null, description: 'Machine status and control' },
+        { name: 'Labor Layout', href: '/labour-layout', icon: 'users', priority: 'daily', roles: ['supervisor', 'manager', 'admin'], badge: null, description: 'Workforce organization' },
+        { name: 'Labor Planner', href: '/labor-planner', icon: 'calendar', priority: 'daily', roles: ['supervisor', 'manager', 'admin'], badge: null, description: 'Schedule labor assignments' },
+        { name: 'Analytics', href: '/analytics', icon: 'barChart3', priority: 'management', roles: ['manager', 'admin'], badge: 'pro', description: 'Performance analytics' },
+        { name: 'Shift Reports', href: '/shift-reports', icon: 'clock', priority: 'management', roles: ['supervisor', 'manager', 'admin'], badge: null, description: 'Daily shift summaries' },
+        { name: 'Users', href: '/users', icon: 'users', priority: 'management', roles: ['admin'], badge: null, description: 'User management' },
+        { name: 'Settings', href: '/settings', icon: 'settings', priority: 'management', roles: ['supervisor', 'manager', 'admin'], badge: null, description: 'System configuration' },
+        { name: 'Admin', href: '/admin', icon: 'shield', priority: 'management', roles: ['admin'], badge: null, description: 'Administrative tools' },
+    ];
   const { user } = useAuth();
 
   const allNavigation = [
