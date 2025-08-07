@@ -584,3 +584,6 @@ Instead of /public/js/main.js, use /js/main.js.
 10:02:43 AM [vite] (client) hmr update /src/js/components/orders.jsx
 10:34:21 AM [vite] (client) hmr update /src/js/components/orders.jsx
 10:34:34 AM [vite] (client) hmr update /src/js/components/orders.jsx
+10:41:14 AM [vite] (client) hmr update /src/js/components/orders.jsx
+10:41:26 AM [vite] (client) hmr update /src/js/components/orders.jsx
+10:42:09 AM [vite] (client) hmr update /src/js/components/orders.jsx

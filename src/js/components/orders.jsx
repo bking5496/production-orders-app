@@ -608,7 +608,11 @@ export default function ProductionOrdersSystem() {
           display_start_shift: order.scheduled_start_shift || order.shift_type || 'N/A',
           display_end_shift: order.scheduled_end_shift || 'N/A'
         }))
-        .sort((a, b) => new Date(a.display_start_date) - new Date(b.display_start_date));
+        .sort((a, b) => {
+          const dateA = a.scheduled_start_date || a.start_time;
+          const dateB = b.scheduled_start_date || b.start_time;
+          return new Date(dateA) - new Date(dateB);
+        });
 
       setMachineSchedule(schedule);
       setShowMachineScheduleModal(true);
@@ -1256,7 +1260,7 @@ export default function ProductionOrdersSystem() {
                           {order.due_date && (
                             <div className="flex items-center text-xs text-gray-600">
                               <Calendar className="w-3 h-3 mr-1" />
-                              Due: {new Date(order.due_date).toLocaleDateString()}
+                              Due: {formatDateToDDMMYYYY(order.due_date)}
                             </div>
                           )}
                         </div>
@@ -1842,7 +1846,7 @@ export default function ProductionOrdersSystem() {
                   </Badge>
                   <div className="text-right text-sm">
                     <div className="text-gray-500">Created</div>
-                    <div className="font-semibold">{selectedOrder.created_at ? new Date(selectedOrder.created_at).toLocaleDateString() : 'Unknown'}</div>
+                    <div className="font-semibold">{formatDateToDDMMYYYY(selectedOrder.created_at)}</div>
                   </div>
                 </div>
               </div>
