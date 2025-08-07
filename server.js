@@ -3291,7 +3291,7 @@ app.get('/api/labor-planner/machines', authenticateToken, async (req, res) => {
           -- Get shifts from order scheduling, with labor assignments as additional info
           CASE 
             WHEN po.scheduled_start_shift IS NOT NULL AND po.scheduled_end_shift IS NOT NULL 
-              AND po.scheduled_start_shift != po.scheduled_end_shift
+              AND po.scheduled_start_shift <> po.scheduled_end_shift
             THEN ARRAY[po.scheduled_start_shift, po.scheduled_end_shift]
             WHEN po.scheduled_start_shift IS NOT NULL 
             THEN ARRAY[po.scheduled_start_shift]
