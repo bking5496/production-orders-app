@@ -259,6 +259,11 @@ export default function ProductionOrdersSystem() {
     notes: ''
   });
 
+  // Machine Schedule Modal
+  const [showMachineScheduleModal, setShowMachineScheduleModal] = useState(false);
+  const [selectedMachine, setSelectedMachine] = useState(null);
+  const [machineSchedule, setMachineSchedule] = useState([]);
+
   // Real-time updates and data loading
   useEffect(() => {
     loadInitialData();
@@ -528,6 +533,50 @@ export default function ProductionOrdersSystem() {
       notes: order.notes || ''
     });
     setShowMachineAssignModal(true);
+  };
+
+  const handleViewMachineSchedule = async (machineId) => {
+    try {
+      setLoading(true);
+      const machine = machines.find(m => m.id === machineId);
+      if (!machine) {
+        showNotification('Machine not found', 'error');
+        return;
+      }
+
+      setSelectedMachine(machine);
+      
+      // Get orders scheduled for this machine (next 30 days)
+      const endDate = new Date();
+      endDate.setDate(endDate.getDate() + 30);
+      
+      const response = await API.get('/orders', {
+        machine_id: machineId,
+        include_scheduled: true,
+        start_date: new Date().toISOString().split('T')[0],
+        end_date: endDate.toISOString().split('T')[0]
+      });
+      
+      const schedule = response.data
+        .filter(order => order.scheduled_start_date || order.start_time)
+        .map(order => ({
+          ...order,
+          display_start_date: order.scheduled_start_date || (order.start_time ? order.start_time.split('T')[0] : 'N/A'),
+          display_end_date: order.scheduled_end_date || (order.stop_time ? order.stop_time.split('T')[0] : 'N/A'),
+          display_start_shift: order.scheduled_start_shift || order.shift_type || 'N/A',
+          display_end_shift: order.scheduled_end_shift || 'N/A'
+        }))
+        .sort((a, b) => new Date(a.display_start_date) - new Date(b.display_start_date));
+
+      setMachineSchedule(schedule);
+      setShowMachineScheduleModal(true);
+      
+    } catch (error) {
+      console.error('Error loading machine schedule:', error);
+      showNotification('Failed to load machine schedule', 'error');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleMachineAssignment = async (e) => {
@@ -1011,10 +1060,13 @@ export default function ProductionOrdersSystem() {
                     {order.machine_id && (
                       <div className="col-span-2">
                         <span className="text-gray-500">Machine:</span>
-                        <span className="ml-1 font-medium text-blue-600">
+                        <button 
+                          onClick={() => handleViewMachineSchedule(order.machine_id)}
+                          className="ml-1 font-medium text-blue-600 hover:text-blue-800 hover:underline transition-colors duration-200"
+                        >
                           <MapPin className="w-3 h-3 inline mr-1" />
                           {getMachineName(order.machine_id)}
-                        </span>
+                        </button>
                       </div>
                     )}
                   </div>
@@ -1171,9 +1223,12 @@ export default function ProductionOrdersSystem() {
                         {order.machine_id ? (
                           <div className="flex items-center text-sm">
                             <Cpu className="w-4 h-4 mr-2 text-blue-600" />
-                            <span className="font-medium text-blue-600">
+                            <button 
+                              onClick={() => handleViewMachineSchedule(order.machine_id)}
+                              className="font-medium text-blue-600 hover:text-blue-800 hover:underline transition-colors duration-200"
+                            >
                               {getMachineName(order.machine_id)}
-                            </span>
+                            </button>
                           </div>
                         ) : (
                           <span className="text-gray-400 text-sm">Not assigned</span>
@@ -2181,6 +2236,113 @@ export default function ProductionOrdersSystem() {
               </Button>
             </div>
           </form>
+        </Modal>
+      )}
+
+      {/* Machine Schedule Modal */}
+      {showMachineScheduleModal && selectedMachine && (
+        <Modal 
+          title={`Schedule - ${selectedMachine.name} (${selectedMachine.type})`} 
+          onClose={() => {
+            setShowMachineScheduleModal(false);
+            setSelectedMachine(null);
+            setMachineSchedule([]);
+          }}
+          size="large"
+        >
+          <div className="space-y-6">
+            <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+              <h3 className="text-lg font-medium text-blue-900 mb-2">Machine Information</h3>
+              <div className="grid grid-cols-2 gap-4 text-sm">
+                <div>
+                  <span className="font-medium text-gray-700">Name:</span>
+                  <span className="ml-2 text-gray-900">{selectedMachine.name}</span>
+                </div>
+                <div>
+                  <span className="font-medium text-gray-700">Type:</span>
+                  <span className="ml-2 text-gray-900">{selectedMachine.type}</span>
+                </div>
+                <div>
+                  <span className="font-medium text-gray-700">Status:</span>
+                  <Badge className={`ml-2 ${selectedMachine.status === 'operational' ? 'bg-green-100 text-green-800 border-green-200' : 'bg-gray-100 text-gray-800 border-gray-200'}`}>
+                    {selectedMachine.status}
+                  </Badge>
+                </div>
+                <div>
+                  <span className="font-medium text-gray-700">Environment:</span>
+                  <span className="ml-2 text-gray-900">{getEnvironmentName(selectedMachine.environment_id)}</span>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <h4 className="text-lg font-medium text-gray-900 mb-4">Upcoming Schedule ({machineSchedule.length} orders)</h4>
+              
+              {machineSchedule.length === 0 ? (
+                <div className="text-center py-8">
+                  <Calendar className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                  <p className="text-gray-500">No scheduled orders found for the next 30 days</p>
+                </div>
+              ) : (
+                <div className="space-y-3 max-h-96 overflow-y-auto">
+                  {machineSchedule.map((order) => (
+                    <div key={order.id} className="bg-white border border-gray-200 rounded-lg p-4">
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="flex items-center space-x-3">
+                          <button 
+                            onClick={() => handleEditSchedule(order)}
+                            className="font-medium text-blue-600 hover:text-blue-800 hover:underline transition-colors duration-200"
+                          >
+                            {order.order_number}
+                          </button>
+                          <Badge className={getStatusInfo(order.status)?.color || 'bg-gray-100 text-gray-800 border-gray-200'}>
+                            {getStatusInfo(order.status)?.label || order.status}
+                          </Badge>
+                        </div>
+                        <span className="text-sm text-gray-500">{order.product_name}</span>
+                      </div>
+                      
+                      <div className="grid grid-cols-2 gap-4 text-sm">
+                        <div>
+                          <span className="text-gray-600">Start:</span>
+                          <span className="ml-1 font-medium">{order.display_start_date} ({order.display_start_shift})</span>
+                        </div>
+                        <div>
+                          <span className="text-gray-600">End:</span>
+                          <span className="ml-1 font-medium">{order.display_end_date} ({order.display_end_shift})</span>
+                        </div>
+                        <div>
+                          <span className="text-gray-600">Quantity:</span>
+                          <span className="ml-1 font-medium">{order.quantity}</span>
+                        </div>
+                        <div>
+                          <span className="text-gray-600">Priority:</span>
+                          <Badge className={`ml-1 ${getPriorityInfo(order.priority)?.color || 'bg-gray-100 text-gray-800 border-gray-200'}`}>
+                            {getPriorityInfo(order.priority)?.label || 'Normal'}
+                          </Badge>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+            
+            <div className="flex justify-end pt-4 border-t border-gray-200">
+              <Button
+                type="button"
+                onClick={() => {
+                  setShowMachineScheduleModal(false);
+                  setSelectedMachine(null);
+                  setMachineSchedule([]);
+                }}
+                variant="outline"
+                className="px-8"
+              >
+                Close
+              </Button>
+            </div>
+          </div>
         </Modal>
       )}
 
