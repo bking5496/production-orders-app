@@ -508,11 +508,22 @@ export default function ProductionOrdersSystem() {
   const handleEditSchedule = (order) => {
     setSelectedOrder(order);
     // Pre-fill the modal with current order data
+    // Helper function to extract date from timestamp or date string
+    const extractDate = (dateValue) => {
+      if (!dateValue) return '';
+      // If it's already in YYYY-MM-DD format, return as is
+      if (typeof dateValue === 'string' && dateValue.match(/^\d{4}-\d{2}-\d{2}$/)) {
+        return dateValue;
+      }
+      // If it's a timestamp, extract the date part
+      return dateValue.split('T')[0];
+    };
+
     setMachineAssignData({
       machine_id: order.machine_id || '',
-      scheduled_start_date: order.scheduled_start_date || (order.start_time ? order.start_time.split('T')[0] : ''),
+      scheduled_start_date: extractDate(order.scheduled_start_date) || (order.start_time ? extractDate(order.start_time) : ''),
       scheduled_start_shift: order.scheduled_start_shift || order.shift_type || '',
-      scheduled_end_date: order.scheduled_end_date || (order.stop_time ? order.stop_time.split('T')[0] : ''),
+      scheduled_end_date: extractDate(order.scheduled_end_date) || (order.stop_time ? extractDate(order.stop_time) : ''),
       scheduled_end_shift: order.scheduled_end_shift || order.shift_type || '',
       notes: order.notes || ''
     });
