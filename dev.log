@@ -592,3 +592,88 @@ Instead of /public/js/main.js, use /js/main.js.
 10:56:02 AM [vite] (client) hmr update /src/js/components/ui-components.jsx
 10:58:23 AM [vite] (client) hmr update /src/js/components/layout-components.jsx
 12:47:11 PM [vite] (client) hmr update /src/js/components/layout-components.jsx
+12:50:18 PM [vite] (client) Pre-transform error: /home/production-app/production-orders-app/src/js/components/layout-components.jsx: Identifier 'user' has already been declared. (585:10)
+
+  583 |         { name: 'Admin', href: '/admin', icon: 'shield', priority: 'management', roles: ['admin'], badge: null, description: 'Administrative tools' },
+  584 |     ];
+> 585 |   const { user } = useAuth();
+      |           ^
+  586 |
+  587 |   const allNavigation = [
+  588 |     { name: 'Dashboard', href: '/', icon: 'dashboard', priority: 'critical', roles: ['operator', 'supervisor', 'manager', 'admin'] },
+  Plugin: vite:react-babel
+  File: /home/production-app/production-orders-app/src/js/components/layout-components.jsx:585:10
+  583|          { name: 'Admin', href: '/admin', icon: 'shield', priority: 'management', roles: ['admin'], badge: null, description: 'Administrative tools' },
+  584|      ];
+  585|    const { user } = useAuth();
+     |            ^
+  586|  
+  587|    const allNavigation = [
+12:50:18 PM [vite] (client) Pre-transform error: /home/production-app/production-orders-app/src/js/components/layout-components.jsx: Identifier 'user' has already been declared. (585:10)
+
+  583 |         { name: 'Admin', href: '/admin', icon: 'shield', priority: 'management', roles: ['admin'], badge: null, description: 'Administrative tools' },
+  584 |     ];
+> 585 |   const { user } = useAuth();
+      |           ^
+  586 |
+  587 |   const allNavigation = [
+  588 |     { name: 'Dashboard', href: '/', icon: 'dashboard', priority: 'critical', roles: ['operator', 'supervisor', 'manager', 'admin'] },
+  Plugin: vite:react-babel
+  File: /home/production-app/production-orders-app/src/js/components/layout-components.jsx:585:10
+  583|          { name: 'Admin', href: '/admin', icon: 'shield', priority: 'management', roles: ['admin'], badge: null, description: 'Administrative tools' },
+  584|      ];
+  585|    const { user } = useAuth();
+     |            ^
+  586|  
+  587|    const allNavigation = [
+12:50:18 PM [vite] (client) Pre-transform error: /home/production-app/production-orders-app/src/js/components/layout-components.jsx: Identifier 'user' has already been declared. (585:10)
+
+  583 |         { name: 'Admin', href: '/admin', icon: 'shield', priority: 'management', roles: ['admin'], badge: null, description: 'Administrative tools' },
+  584 |     ];
+> 585 |   const { user } = useAuth();
+      |           ^
+  586 |
+  587 |   const allNavigation = [
+  588 |     { name: 'Dashboard', href: '/', icon: 'dashboard', priority: 'critical', roles: ['operator', 'supervisor', 'manager', 'admin'] },
+  Plugin: vite:react-babel
+  File: /home/production-app/production-orders-app/src/js/components/layout-components.jsx:585:10
+  583|          { name: 'Admin', href: '/admin', icon: 'shield', priority: 'management', roles: ['admin'], badge: null, description: 'Administrative tools' },
+  584|      ];
+  585|    const { user } = useAuth();
+     |            ^
+  586|  
+  587|    const allNavigation = [
+12:50:18 PM [vite] (client) Pre-transform error: /home/production-app/production-orders-app/src/js/components/layout-components.jsx: Identifier 'user' has already been declared. (585:10)
+
+  583 |         { name: 'Admin', href: '/admin', icon: 'shield', priority: 'management', roles: ['admin'], badge: null, description: 'Administrative tools' },
+  584 |     ];
+> 585 |   const { user } = useAuth();
+      |           ^
+  586 |
+  587 |   const allNavigation = [
+  588 |     { name: 'Dashboard', href: '/', icon: 'dashboard', priority: 'critical', roles: ['operator', 'supervisor', 'manager', 'admin'] },
+  Plugin: vite:react-babel
+  File: /home/production-app/production-orders-app/src/js/components/layout-components.jsx:585:10
+  583|          { name: 'Admin', href: '/admin', icon: 'shield', priority: 'management', roles: ['admin'], badge: null, description: 'Administrative tools' },
+  584|      ];
+  585|    const { user } = useAuth();
+     |            ^
+  586|  
+  587|    const allNavigation = [
+12:50:18 PM [vite] (client) Pre-transform error: /home/production-app/production-orders-app/src/js/components/layout-components.jsx: Identifier 'user' has already been declared. (585:10)
+
+  583 |         { name: 'Admin', href: '/admin', icon: 'shield', priority: 'management', roles: ['admin'], badge: null, description: 'Administrative tools' },
+  584 |     ];
+> 585 |   const { user } = useAuth();
+      |           ^
+  586 |
+  587 |   const allNavigation = [
+  588 |     { name: 'Dashboard', href: '/', icon: 'dashboard', priority: 'critical', roles: ['operator', 'supervisor', 'manager', 'admin'] },
+  Plugin: vite:react-babel
+  File: /home/production-app/production-orders-app/src/js/components/layout-components.jsx:585:10
+  583|          { name: 'Admin', href: '/admin', icon: 'shield', priority: 'management', roles: ['admin'], badge: null, description: 'Administrative tools' },
+  584|      ];
+  585|    const { user } = useAuth();
+     |            ^
+  586|  
+  587|    const allNavigation = [
