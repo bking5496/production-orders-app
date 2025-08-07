@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar, Factory, Plus, Users, X } from 'lucide-react';
+import { Calendar, Factory, Plus, Users, X, ChevronLeft, ChevronRight, UserCheck, Truck } from 'lucide-react';
 import API from '../core/api';
 import { Modal, Button } from './ui-components.jsx';
 
@@ -21,6 +21,27 @@ const LaborPlanner = ({ currentUser }) => {
     role: 'operator'
   });
   const [employeeSearch, setEmployeeSearch] = useState('');
+  const [showSupervisorModal, setShowSupervisorModal] = useState(false);
+  const [showForkliftModal, setShowForkliftModal] = useState(false);
+  const [supervisorShift, setSupervisorShift] = useState('day');
+  const [forkliftShift, setForkliftShift] = useState('day');
+
+  // Date navigation helpers
+  const navigateDate = (direction) => {
+    const currentDate = new Date(selectedDate);
+    currentDate.setDate(currentDate.getDate() + direction);
+    setSelectedDate(currentDate.toISOString().split('T')[0]);
+  };
+
+  const formatDisplayDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', { 
+      weekday: 'long', 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric' 
+    });
+  };
 
   // Fetch scheduled machines when date changes
   useEffect(() => {
@@ -160,10 +181,10 @@ const LaborPlanner = ({ currentUser }) => {
 
   // Helper function to get filtered employees based on search
   const getFilteredEmployees = () => {
-    // First filter out admin and supervisors, and workers already assigned
+    // First filter out admin and workers already assigned
     let filteredUsers = availableUsers.filter(user => {
-      // Exclude admin and supervisors
-      if (user.role === 'admin' || user.role === 'supervisor') return false;
+      // Exclude admin
+      if (user.role === 'admin') return false;
       
       // Check if worker is already assigned to any machine today
       const isAssignedToday = Object.values(assignments).some(shiftAssignments => 
@@ -183,6 +204,11 @@ const LaborPlanner = ({ currentUser }) => {
       user.last_name?.toLowerCase().includes(searchLower) ||
       `${user.first_name} ${user.last_name}`.toLowerCase().includes(searchLower)
     );
+  };
+
+  // Helper function for regular worker assignments (excludes supervisors)
+  const getFilteredWorkers = () => {
+    return getFilteredEmployees().filter(user => user.role !== 'supervisor');
   };
 
   // Helper function to get role requirements for a machine
@@ -209,22 +235,68 @@ const LaborPlanner = ({ currentUser }) => {
 
   return (
     <div className="p-6">
-      {/* Header with Date Picker */}
+      {/* Header with Title and Controls */}
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900 mb-4">Labor Planning</h1>
-        
-        <div className="flex items-center gap-2">
-          <Calendar className="w-5 h-5 text-gray-600" />
-          <label htmlFor="date-picker" className="text-sm font-medium text-gray-700">
-            Select Date:
-          </label>
-          <input
-            id="date-picker"
-            type="date"
-            value={selectedDate}
-            onChange={(e) => setSelectedDate(e.target.value)}
-            className="px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-          />
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900 mb-2">Labor Planning</h1>
+            <div className="flex items-center gap-3">
+              <Button
+                onClick={() => setShowSupervisorModal(true)}
+                size="sm"
+                variant="outline"
+                className="bg-gradient-to-r from-purple-50 to-indigo-50 border-purple-200 text-purple-700 hover:from-purple-100 hover:to-indigo-100"
+                leftIcon={<UserCheck className="w-4 h-4" />}
+              >
+                Assign Supervisors
+              </Button>
+              <Button
+                onClick={() => setShowForkliftModal(true)}
+                size="sm"
+                variant="outline"
+                className="bg-gradient-to-r from-orange-50 to-yellow-50 border-orange-200 text-orange-700 hover:from-orange-100 hover:to-yellow-100"
+                leftIcon={<Truck className="w-4 h-4" />}
+              >
+                Assign Forklift Driver
+              </Button>
+            </div>
+          </div>
+          
+          {/* Date Navigation */}
+          <div className="flex items-center gap-2">
+            <Button
+              onClick={() => navigateDate(-1)}
+              size="sm"
+              variant="outline"
+              className="p-2"
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </Button>
+            
+            <div className="flex items-center gap-2 bg-white border border-gray-300 rounded-lg px-4 py-2 shadow-sm">
+              <Calendar className="w-5 h-5 text-gray-600" />
+              <div className="flex flex-col">
+                <span className="text-sm font-medium text-gray-900">
+                  {formatDisplayDate(selectedDate)}
+                </span>
+                <input
+                  type="date"
+                  value={selectedDate}
+                  onChange={(e) => setSelectedDate(e.target.value)}
+                  className="text-xs text-gray-500 border-none p-0 bg-transparent focus:outline-none"
+                />
+              </div>
+            </div>
+            
+            <Button
+              onClick={() => navigateDate(1)}
+              size="sm"
+              variant="outline"
+              className="p-2"
+            >
+              <ChevronRight className="w-4 h-4" />
+            </Button>
+          </div>
         </div>
       </div>
 
@@ -357,10 +429,9 @@ const LaborPlanner = ({ currentUser }) => {
                                         onClick={() => handleAssignWorker(machine, shift, req.role)}
                                         size="sm"
                                         variant="outline"
-                                        className="bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200 text-blue-700 hover:from-blue-100 hover:to-indigo-100 shadow-sm"
-                                        leftIcon={<Plus className="w-3 h-3" />}
+                                        className="w-8 h-8 p-0 bg-gradient-to-r from-green-50 to-emerald-50 border-green-200 text-green-600 hover:from-green-100 hover:to-emerald-100 shadow-sm rounded-full"
                                       >
-                                        Add {req.label.slice(0, -1)}
+                                        <Plus className="w-4 h-4" />
                                       </Button>
                                     )}
                                   </div>
@@ -379,9 +450,9 @@ const LaborPlanner = ({ currentUser }) => {
                                               onClick={() => handleRemoveAssignment(assignment.id)}
                                               size="sm"
                                               variant="outline"
-                                              className="text-red-600 hover:text-red-800 hover:bg-red-50 border-red-200"
+                                              className="w-7 h-7 p-0 text-red-500 hover:text-red-700 hover:bg-red-50 border-red-200 rounded-full"
                                             >
-                                              Unassign
+                                              <X className="w-3 h-3" />
                                             </Button>
                                           )}
                                         </div>
@@ -453,7 +524,7 @@ const LaborPlanner = ({ currentUser }) => {
                 
                 {/* Employee List */}
                 <div className="mt-3 max-h-60 overflow-y-auto border-2 border-gray-100 rounded-xl bg-white shadow-sm">
-                  {getFilteredEmployees().map(user => (
+                  {getFilteredWorkers().map(user => (
                     <div
                       key={user.id}
                       onClick={() => {
@@ -472,8 +543,8 @@ const LaborPlanner = ({ currentUser }) => {
                       </div>
                     </div>
                   ))}
-                  {getFilteredEmployees().length === 0 && (
-                    <p className="p-4 text-gray-500 text-sm text-center">No available employees found</p>
+                  {getFilteredWorkers().length === 0 && (
+                    <p className="p-4 text-gray-500 text-sm text-center">No available workers found</p>
                   )}
                 </div>
               </div>
@@ -495,6 +566,150 @@ const LaborPlanner = ({ currentUser }) => {
             >
               Assign Worker
             </Button>
+          </div>
+        </Modal>
+      )}
+
+      {/* Supervisor Assignment Modal */}
+      {showSupervisorModal && (
+        <Modal
+          isOpen={showSupervisorModal}
+          onClose={() => setShowSupervisorModal(false)}
+          title="Assign Supervisors"
+          size="md"
+        >
+          <div className="space-y-6">
+            <div className="bg-gradient-to-r from-purple-50 to-indigo-50 border border-purple-200 rounded-xl p-4 shadow-sm">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h4 className="font-semibold text-purple-900">Supervisor Assignment</h4>
+                  <p className="text-sm text-purple-700 mt-1">
+                    Select supervisors for day and night shifts on {formatDisplayDate(selectedDate)}
+                  </p>
+                </div>
+                <div className="bg-purple-100 p-3 rounded-full">
+                  <UserCheck className="w-6 h-6 text-purple-600" />
+                </div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-3">
+                <h5 className="font-medium text-gray-900 flex items-center gap-2">
+                  <span className="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm font-semibold">
+                    Day Shift
+                  </span>
+                </h5>
+                <div className="space-y-2">
+                  {getFilteredEmployees().filter(user => user.role === 'supervisor').map(supervisor => (
+                    <div key={supervisor.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border">
+                      <span className="text-sm font-medium">{supervisor.username}</span>
+                      <Button
+                        onClick={() => handleAssignWorker({id: 'supervisor-station', name: 'Supervision'}, 'day', 'supervisor')}
+                        size="sm"
+                        className="w-7 h-7 p-0 bg-green-500 text-white rounded-full hover:bg-green-600"
+                      >
+                        <Plus className="w-3 h-3" />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                <h5 className="font-medium text-gray-900 flex items-center gap-2">
+                  <span className="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm font-semibold">
+                    Night Shift
+                  </span>
+                </h5>
+                <div className="space-y-2">
+                  {getFilteredEmployees().filter(user => user.role === 'supervisor').map(supervisor => (
+                    <div key={supervisor.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border">
+                      <span className="text-sm font-medium">{supervisor.username}</span>
+                      <Button
+                        onClick={() => handleAssignWorker({id: 'supervisor-station', name: 'Supervision'}, 'night', 'supervisor')}
+                        size="sm"
+                        className="w-7 h-7 p-0 bg-green-500 text-white rounded-full hover:bg-green-600"
+                      >
+                        <Plus className="w-3 h-3" />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </Modal>
+      )}
+
+      {/* Forklift Driver Assignment Modal */}
+      {showForkliftModal && (
+        <Modal
+          isOpen={showForkliftModal}
+          onClose={() => setShowForkliftModal(false)}
+          title="Assign Forklift Driver"
+          size="md"
+        >
+          <div className="space-y-6">
+            <div className="bg-gradient-to-r from-orange-50 to-yellow-50 border border-orange-200 rounded-xl p-4 shadow-sm">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h4 className="font-semibold text-orange-900">Forklift Driver Assignment</h4>
+                  <p className="text-sm text-orange-700 mt-1">
+                    Select forklift drivers for day and night shifts on {formatDisplayDate(selectedDate)}
+                  </p>
+                </div>
+                <div className="bg-orange-100 p-3 rounded-full">
+                  <Truck className="w-6 h-6 text-orange-600" />
+                </div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-3">
+                <h5 className="font-medium text-gray-900 flex items-center gap-2">
+                  <span className="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm font-semibold">
+                    Day Shift
+                  </span>
+                </h5>
+                <div className="space-y-2">
+                  {getFilteredEmployees().filter(user => user.role === 'operator').map(driver => (
+                    <div key={driver.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border">
+                      <span className="text-sm font-medium">{driver.username}</span>
+                      <Button
+                        onClick={() => handleAssignWorker({id: 'forklift-station', name: 'Forklift Operations'}, 'day', 'forklift_driver')}
+                        size="sm"
+                        className="w-7 h-7 p-0 bg-green-500 text-white rounded-full hover:bg-green-600"
+                      >
+                        <Plus className="w-3 h-3" />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                <h5 className="font-medium text-gray-900 flex items-center gap-2">
+                  <span className="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm font-semibold">
+                    Night Shift
+                  </span>
+                </h5>
+                <div className="space-y-2">
+                  {getFilteredEmployees().filter(user => user.role === 'operator').map(driver => (
+                    <div key={driver.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border">
+                      <span className="text-sm font-medium">{driver.username}</span>
+                      <Button
+                        onClick={() => handleAssignWorker({id: 'forklift-station', name: 'Forklift Operations'}, 'night', 'forklift_driver')}
+                        size="sm"
+                        className="w-7 h-7 p-0 bg-green-500 text-white rounded-full hover:bg-green-600"
+                      >
+                        <Plus className="w-3 h-3" />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
         </Modal>
       )}
