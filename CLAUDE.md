@@ -12,19 +12,16 @@
 - Everything with a list or step by step process needs to be configurable.
 
 ## Recent Major Changes
+- **2025-08-07:** **🏗️ MAJOR ARCHITECTURE REFACTORING:** Complete server.js modularization from 3,889 lines to maintainable service architecture
+- **2025-08-07:** **🌐 WEBSOCKET SERVICE EXTRACTION:** Advanced real-time communication with JWT auth, channels, and room management
+- **2025-08-07:** **⚙️ SYSTEM MANAGEMENT:** Complete system health monitoring, settings, and configuration endpoints
+- **2025-08-07:** **📊 ANALYTICS & REPORTING:** Comprehensive business intelligence and CSV export capabilities
 - **2025-08-02:** **DYNAMIC CONFIGURATION SYSTEM:** Implemented comprehensive configurable system for all lists and workflows
 - **2025-08-02:** **POSTGRESQL MIGRATION:** Complete migration from SQLite to PostgreSQL with enhanced performance
 - **2025-08-01:** **MAJOR UPGRADE:** Complete mobile responsiveness transformation with touch-optimized components
 - **2025-08-01:** **WEBSOCKET INTEGRATION:** Real-time WebSocket system with enhanced hooks and auto-reconnection
 - **2025-08-01:** **REACT 19 UPGRADE:** Upgraded to React 19.1.0 with modern concurrent features
 - **2025-08-01:** **MOBILE ARCHITECTURE:** Added comprehensive mobile components and adaptive refresh system
-- **2025-08-01:** **PERFORMANCE OPTIMIZATION:** Implemented adaptive refresh rates and mobile performance hooks
-- **2025-07-31:** **UI ENHANCEMENT:** Applied modern animations and glass morphism to orders.jsx with horizontal scroll fix
-- **2025-07-31:** **STANDARD FIX:** Established hover animation standards - removed scale transforms from table rows to prevent horizontal scrolling
-- **2025-07-30:** Fixed critical timezone conversion bug in labor-planner.jsx causing data synchronization issues
-- **2025-07-30:** Rebuilt labour-layout.jsx from ground up to resolve JSX syntax and build errors
-- **2025-07-30:** Resolved database schema issues - verified all required columns exist
-- **2025-07-30:** Fixed PM2 log errors and improved application stability
 
 ## Knowledge Management
 - Use byterover-mcp to store and retrieve knowledge and context
@@ -96,6 +93,156 @@ curl http://localhost:3000/api/health
 # Direct database test
 PGPASSWORD=$(node -e "console.log(require('./security/secrets-manager').getSecret('DB_PASSWORD'))") psql -h localhost -U postgres -d production_orders -c "SELECT NOW();"
 ```
+
+## 🏗️ **Refactored Architecture - Modular Design**
+
+### **🎯 Architecture Overview**
+**TRANSFORMATION COMPLETE:** Successfully refactored monolithic 3,889-line server.js into maintainable, scalable service architecture.
+
+### **📁 File Structure**
+```
+/home/production-app/production-orders-app/
+├── src/                           # 🏗️ NEW: Modular Backend Architecture
+│   ├── config/                    # Configuration management
+│   │   └── database.js           # PostgreSQL connection & pooling
+│   ├── middleware/               # Express middleware components
+│   │   ├── auth.js              # JWT authentication & role-based access
+│   │   ├── error-handler.js     # Global error handling & custom errors
+│   │   └── websocket.js         # WebSocket integration middleware
+│   ├── services/                # Business logic layer (NEW)
+│   │   ├── orders.service.js    # Production orders management
+│   │   ├── machines.service.js  # Machine lifecycle & performance
+│   │   ├── users.service.js     # User management & authentication
+│   │   ├── labor.service.js     # Labor planning & assignments
+│   │   ├── analytics.service.js # Dashboard metrics & analytics
+│   │   ├── reports.service.js   # Reporting & CSV exports
+│   │   ├── websocket.service.js # Real-time communication
+│   │   └── system.service.js    # System settings & health
+│   ├── routes/                  # HTTP endpoint definitions (NEW)
+│   │   ├── auth.routes.js       # Authentication endpoints
+│   │   ├── orders.routes.js     # Production orders API
+│   │   ├── machines.routes.js   # Machine management API
+│   │   ├── users.routes.js      # User management API
+│   │   ├── labor.routes.js      # Labor planning API
+│   │   ├── analytics.routes.js  # Dashboard & analytics API
+│   │   ├── reports.routes.js    # Reporting API
+│   │   └── system.routes.js     # System management API
+│   ├── utils/                   # Utility functions (NEW)
+│   │   ├── database.js          # Database CRUD utilities
+│   │   └── response.js          # Standardized API responses
+│   └── server-refactored.js     # 🧪 TEST: Modular server (port 3001)
+├── src/js/                      # Frontend React Components
+│   ├── components/              # React UI components
+│   ├── core/                    # Core frontend utilities
+│   └── utils/                   # Frontend utilities
+├── security/                    # Security & secrets management
+│   └── secrets-manager.js       # Environment secrets
+├── server.js                    # 📜 LEGACY: Original monolithic server
+├── REFACTORING-PROGRESS.md      # 📊 Detailed refactoring documentation
+└── CLAUDE.md                    # 📖 This file
+```
+
+### **🔧 Service Layer Architecture**
+
+**Business Logic Separation:**
+```javascript
+// Service handles pure business logic
+class OrdersService {
+  async createOrder(orderData, userId) {
+    // Validation, business rules, database operations
+    const order = await DatabaseUtils.insert('production_orders', {
+      ...orderData,
+      created_by: userId,
+      created_at: new Date()
+    });
+    return order;
+  }
+}
+
+// Route handles HTTP concerns & real-time notifications
+router.post('/orders', 
+  authenticateToken, 
+  requireRole(['admin', 'supervisor']),
+  [body('order_number').notEmpty()],
+  asyncHandler(async (req, res) => {
+    const order = await ordersService.createOrder(req.body, req.user.id);
+    req.broadcast('order_created', order, 'production'); // WebSocket
+    return res.success(order, 'Order created successfully', 201);
+  })
+);
+```
+
+### **🌐 WebSocket Real-Time System**
+
+**Advanced Features:**
+- **JWT Authentication:** Secure WebSocket connections with token validation
+- **Channel Subscriptions:** Role-based channel access (`admin`, `production`, `machines`)
+- **Room Management:** Targeted broadcasting for specific groups
+- **Auto-Cleanup:** Inactive connection management
+- **Heartbeat Monitoring:** Connection health verification
+
+**Usage Pattern:**
+```javascript
+// In any route - broadcast real-time updates
+req.broadcast('machine_status_changed', machineData, 'machines');
+req.websocket.sendToUser(userId, 'notification', alertData);
+req.websocket.getConnectedCount(); // Monitor connections
+```
+
+### **📊 System Health & Monitoring**
+
+**Comprehensive Health Checks:**
+```bash
+# System health endpoint
+curl http://localhost:3001/api/system/health
+
+# Response includes:
+{
+  "status": "healthy",
+  "database": { "status": "connected", "totalTables": 49 },
+  "system": { "uptime": 123.45, "memory": {...} },
+  "services": { "websocket": "running", "authentication": "running" }
+}
+```
+
+### **⚙️ Database Layer**
+
+**Connection Management:**
+- **PostgreSQL Pooling:** Efficient connection reuse
+- **Transaction Support:** ACID compliance for complex operations
+- **CRUD Utilities:** Standardized database operations
+- **Query Optimization:** Prepared statements and connection pooling
+
+**Usage:**
+```javascript
+const DatabaseUtils = require('./src/utils/database');
+
+// Standardized operations
+const orders = await DatabaseUtils.select('production_orders', { status: 'active' });
+const newOrder = await DatabaseUtils.insert('production_orders', orderData, '*');
+await DatabaseUtils.transaction([
+  { text: 'INSERT INTO orders...', params: [...] },
+  { text: 'UPDATE inventory...', params: [...] }
+]);
+```
+
+### **🔒 Security & Authentication**
+
+**Multi-Layer Security:**
+- **JWT Tokens:** Stateless authentication with role-based access
+- **Secrets Manager:** Environment-based secret management
+- **Role Validation:** Granular permission controls
+- **Request Validation:** Express-validator integration
+- **WebSocket Security:** Token-based WebSocket authentication
+
+### **📈 Benefits Achieved**
+1. **Modularity:** 8 focused service classes vs 1 monolithic file
+2. **Maintainability:** Clear separation of concerns
+3. **Scalability:** Independent service scaling
+4. **Testing:** Unit testable components
+5. **Team Development:** Multiple developers can work simultaneously
+6. **Real-Time:** Advanced WebSocket integration
+7. **Monitoring:** Comprehensive health and performance tracking
 
 ## 🔧 Dynamic Configuration System
 
