@@ -168,6 +168,33 @@ const DowntimeHistory = ({ orderId }) => {
 };
 
 // Modern Production Orders Component
+// Date formatting utility
+const formatDateToDDMMYYYY = (dateInput) => {
+  if (!dateInput) return 'N/A';
+  
+  let date;
+  if (typeof dateInput === 'string') {
+    // Handle ISO string dates (YYYY-MM-DD or YYYY-MM-DDTHH:mm:ss.sssZ)
+    if (dateInput.includes('T')) {
+      date = new Date(dateInput);
+    } else {
+      // For YYYY-MM-DD format, create date carefully to avoid timezone issues
+      const [year, month, day] = dateInput.split('-');
+      date = new Date(year, month - 1, day);
+    }
+  } else {
+    date = new Date(dateInput);
+  }
+  
+  if (isNaN(date.getTime())) return 'Invalid Date';
+  
+  const day = date.getDate().toString().padStart(2, '0');
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const year = date.getFullYear();
+  
+  return `${day}-${month}-${year}`;
+};
+
 export default function ProductionOrdersSystem() {
   // State Management - Using React 19 patterns
   const [orders, setOrders] = useState([]);
@@ -576,8 +603,8 @@ export default function ProductionOrdersSystem() {
         })
         .map(order => ({
           ...order,
-          display_start_date: order.scheduled_start_date || (order.start_time ? order.start_time.split('T')[0] : 'N/A'),
-          display_end_date: order.scheduled_end_date || (order.stop_time ? order.stop_time.split('T')[0] : 'N/A'),
+          display_start_date: formatDateToDDMMYYYY(order.scheduled_start_date || order.start_time),
+          display_end_date: formatDateToDDMMYYYY(order.scheduled_end_date || order.stop_time),
           display_start_shift: order.scheduled_start_shift || order.shift_type || 'N/A',
           display_end_shift: order.scheduled_end_shift || 'N/A'
         }))
