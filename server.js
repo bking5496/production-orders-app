@@ -855,7 +855,7 @@ app.put('/api/machines/:id',
     body('type').notEmpty().trim().optional(),
     body('capacity').isInt({ min: 1, max: 200 }).optional(),
   ],
-  (req, res) => {
+  async (req, res) => {
     console.log('Machine endpoint hit:', req.path, req.body);
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -865,46 +865,52 @@ app.put('/api/machines/:id',
     const { id } = req.params;
     const updates = req.body;
     
-    // Check if machine is in use
-    db.get(
-      'SELECT status FROM machines WHERE id = $1',
-      [id],
-      (err, machine) => {
-        if (err) {
-          return res.status(500).json({ error: 'Database error' });
-        }
+    try {
+      const client = await pool.connect();
+      try {
+        // Check if machine is in use
+        const machineResult = await client.query(
+          'SELECT status FROM machines WHERE id = $1',
+          [id]
+        );
         
-        if (!machine) {
+        if (machineResult.rows.length === 0) {
           return res.status(404).json({ error: 'Machine not found' });
         }
         
+        const machine = machineResult.rows[0];
         if (machine.status === 'in_use') {
           return res.status(400).json({ error: 'Cannot update machine while in use' });
         }
         
-        // Build update query
-        const fields = Object.keys(updates).map((key, i) => `${key} = ${i + 1}`);
+        // Build update query with proper PostgreSQL syntax
+        const fields = Object.keys(updates).map((key, i) => `${key} = $${i + 1}`);
         fields.push('updated_at = NOW()');
         const values = Object.values(updates);
         values.push(id);
         
-        db.run(
-          `UPDATE machines SET ${fields.join(', ')} WHERE id = ${values.length}`,
-          values,
-          function(err) {
-            if (err) {
-              return res.status(500).json({ error: 'Failed to update machine' });
-            }
-            
-            if (this.changes === 0) {
-              return res.status(404).json({ error: 'Machine not found' });
-            }
-            
-            res.json({ message: 'Machine updated successfully' });
-          }
+        const updateResult = await client.query(
+          `UPDATE machines SET ${fields.join(', ')} WHERE id = $${values.length} RETURNING *`,
+          values
         );
+        
+        if (updateResult.rowCount === 0) {
+          return res.status(404).json({ error: 'Machine not found' });
+        }
+        
+        broadcast('machine_updated', updateResult.rows[0]);
+        res.json({ 
+          message: 'Machine updated successfully',
+          data: updateResult.rows[0]
+        });
+        
+      } finally {
+        client.release();
       }
-    );
+    } catch (error) {
+      console.error('Failed to update machine:', error);
+      res.status(500).json({ error: 'Failed to update machine' });
+    }
   }
 );
 
