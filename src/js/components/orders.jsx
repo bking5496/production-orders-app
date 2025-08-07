@@ -252,9 +252,10 @@ export default function ProductionOrdersSystem() {
   // Machine Assignment Data
   const [machineAssignData, setMachineAssignData] = useState({
     machine_id: '',
-    scheduled_date: '',
-    shift: '',
-    duration_hours: '',
+    scheduled_start_date: '',
+    scheduled_start_shift: '',
+    scheduled_end_date: '',
+    scheduled_end_shift: '',
     notes: ''
   });
 
@@ -509,9 +510,10 @@ export default function ProductionOrdersSystem() {
     // Pre-fill the modal with current order data
     setMachineAssignData({
       machine_id: order.machine_id || '',
-      scheduled_date: order.start_time ? order.start_time.split('T')[0] : '',
-      shift: order.shift_type || '',
-      duration_hours: '',
+      scheduled_start_date: order.scheduled_start_date || (order.start_time ? order.start_time.split('T')[0] : ''),
+      scheduled_start_shift: order.scheduled_start_shift || order.shift_type || '',
+      scheduled_end_date: order.scheduled_end_date || (order.stop_time ? order.stop_time.split('T')[0] : ''),
+      scheduled_end_shift: order.scheduled_end_shift || order.shift_type || '',
       notes: order.notes || ''
     });
     setShowMachineAssignModal(true);
@@ -519,8 +521,8 @@ export default function ProductionOrdersSystem() {
 
   const handleMachineAssignment = async (e) => {
     e.preventDefault();
-    if (!selectedOrder || !machineAssignData.machine_id || !machineAssignData.scheduled_date || !machineAssignData.shift) {
-      showNotification('Please select a machine, date, and shift', 'error');
+    if (!selectedOrder || !machineAssignData.machine_id || !machineAssignData.scheduled_start_date || !machineAssignData.scheduled_start_shift) {
+      showNotification('Please select a machine, start date, and start shift', 'error');
       return;
     }
 
