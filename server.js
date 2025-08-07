@@ -3251,10 +3251,7 @@ app.get('/api/labor-planner/machines', authenticateToken, async (req, res) => {
           po.product_name,
           po.status as order_status,
           po.id as order_id,
-          CASE 
-            WHEN array_agg(DISTINCT la.shift_type) = ARRAY[NULL] THEN ARRAY[]::text[]
-            ELSE array_agg(DISTINCT la.shift_type)
-          END as scheduled_shifts
+          array_remove(array_agg(DISTINCT la.shift_type), NULL) as scheduled_shifts
         FROM machines m
         LEFT JOIN labor_assignments la ON m.id = la.machine_id AND la.assignment_date = $1
         LEFT JOIN production_orders po ON m.id = po.machine_id 
