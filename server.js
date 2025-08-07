@@ -3006,84 +3006,117 @@ app.get('/api/orders/active', authenticateToken, async (req, res) => {
 // Labour/Roster endpoints - using users table directly
 app.get('/api/labour/roster', authenticateToken, async (req, res) => {
   try {
-    const date = req.query.date || new Date().toISOString().split('T')[0];
-    
-    // Get all active users as potential roster members
-    const usersQuery = `
-      SELECT 
-        u.id,
-        u.username,
-        u.email,
-        u.role,
-        u.is_active,
-        u.created_at
-      FROM users u
-      WHERE u.is_active = true
-      ORDER BY u.role, u.username
-    `;
-    
-    const users = await dbAll(usersQuery);
-    
-    // Get available machines
-    const machinesQuery = `
-      SELECT name, environment 
-      FROM machines 
-      WHERE status = 'active' 
-      ORDER BY environment, name
-    `;
-    
-    const machines = await dbAll(machinesQuery);
-    const machineNames = machines.map(m => m.name);
-    
-    // Separate users by role
-    const supervisors = users.filter(u => u.role === 'supervisor' || u.role === 'admin');
-    const operators = users.filter(u => u.role === 'operator');
-    const allUsers = users;
-    
-    const response = {
-      supervisors: supervisors.map(s => ({
-        id: s.id,
-        fullName: s.username,
-        name: s.username,
-        employee_code: `EMP${s.id.toString().padStart(4, '0')}`,
-        shift: 'morning', // Default shift
-        status: s.is_active ? 'active' : 'inactive',
-        role: s.role
-      })),
-      assignments: operators.map((a, index) => ({
-        id: a.id,
-        fullName: a.username,
-        name: a.username,
-        employee_code: `EMP${a.id.toString().padStart(4, '0')}`,
-        machine: machineNames[index % machineNames.length] || 'Unassigned',
-        position: a.role,
-        shift: ['morning', 'afternoon', 'night'][index % 3],
-        company: 'Production Company',
-        status: 'scheduled',
-        role: a.role
-      })),
-      attendance: allUsers.map(a => ({
-        id: a.id,
-        name: a.username,
-        employee_code: `EMP${a.id.toString().padStart(4, '0')}`,
-        production_area: 'Production Floor',
-        position: a.role,
-        shift: 'morning', // Default shift
-        status: 'scheduled'
-      })),
-      machinesInUse: machineNames,
-      summary: {
-        total_supervisors: supervisors.length,
-        total_assignments: operators.length,
-        total_attendance: allUsers.length,
-        total_machines_in_use: machineNames.length
-      }
-    };
-    
-    res.json(response);
+    const client = await pool.connect();
+    try {
+      const date = req.query.date || new Date().toISOString().split('T')[0];
+      
+      // Get actual labor assignments for the specified date
+      const assignmentsQuery = `
+        SELECT 
+          la.id,
+          la.employee_id,
+          la.machine_id,
+          la.assignment_date,
+          la.shift_type,
+          la.role,
+          la.start_time,
+          la.end_time,
+          la.hourly_rate,
+          u.username,
+          u.email,
+          u.role as user_role,
+          m.name as machine_name,
+          m.environment
+        FROM labor_assignments la
+        JOIN users u ON la.employee_id = u.id
+        JOIN machines m ON la.machine_id = m.id
+        WHERE la.assignment_date = $1
+        ORDER BY m.name, la.shift_type, la.role
+      `;
+      
+      const assignments = await client.query(assignmentsQuery, [date]);
+      
+      // Get supervisors who have assignments for this date
+      const supervisorsQuery = `
+        SELECT DISTINCT
+          u.id,
+          u.username,
+          u.email,
+          u.role,
+          la.shift_type
+        FROM labor_assignments la
+        JOIN users u ON la.employee_id = u.id
+        WHERE la.assignment_date = $1 
+          AND (u.role = 'supervisor' OR u.role = 'admin')
+        ORDER BY u.username
+      `;
+      
+      const supervisors = await client.query(supervisorsQuery, [date]);
+      
+      // Get machines that have labor assignments for this date
+      const machinesInUseQuery = `
+        SELECT DISTINCT m.name
+        FROM labor_assignments la
+        JOIN machines m ON la.machine_id = m.id
+        WHERE la.assignment_date = $1
+        ORDER BY m.name
+      `;
+      
+      const machinesInUse = await client.query(machinesInUseQuery, [date]);
+      
+      const response = {
+        supervisors: supervisors.rows.map(s => ({
+          id: s.id,
+          fullName: s.username,
+          name: s.username,
+          employee_code: `EMP${s.id.toString().padStart(4, '0')}`,
+          shift: s.shift_type || 'day',
+          status: 'scheduled',
+          role: s.role,
+          position: 'Supervisor'
+        })),
+        assignments: assignments.rows.map(a => ({
+          id: a.id,
+          employee_id: a.employee_id,
+          fullName: a.username,
+          name: a.username,
+          employee_code: `EMP${a.employee_id.toString().padStart(4, '0')}`,
+          machine: a.machine_name,
+          machine_id: a.machine_id,
+          position: a.role,
+          shift: a.shift_type,
+          shift_type: a.shift_type,
+          company: 'Production Company',
+          status: 'scheduled',
+          role: a.user_role,
+          production_area: a.environment,
+          start_time: a.start_time,
+          end_time: a.end_time,
+          hourly_rate: a.hourly_rate,
+          assignment_date: a.assignment_date
+        })),
+        attendance: [], // Keep empty for now, can be populated from actual attendance data
+        machinesInUse: machinesInUse.rows.map(m => m.name),
+        summary: {
+          total_supervisors: supervisors.rows.length,
+          total_assignments: assignments.rows.length,
+          total_attendance: supervisors.rows.length + assignments.rows.length,
+          total_machines_in_use: machinesInUse.rows.length,
+          day_supervisors: supervisors.rows.filter(s => s.shift_type === 'day').length,
+          night_supervisors: supervisors.rows.filter(s => s.shift_type === 'night').length,
+          day_assignments: assignments.rows.filter(a => a.shift_type === 'day').length,
+          night_assignments: assignments.rows.filter(a => a.shift_type === 'night').length
+        }
+      };
+      
+      res.json(response);
+      
+    } finally {
+      client.release();
+    }
   } catch (error) {
     console.error('Labour roster error:', error);
-    res.status(500).json({ error: 'Failed to fetch labour roster' });
+    res.status(500).json({ error: 'Failed to fetch labour roster', details: error.message });
   }
 });
 
@@ -3251,7 +3284,19 @@ app.get('/api/labor-planner/machines', authenticateToken, async (req, res) => {
           po.product_name,
           po.status as order_status,
           po.id as order_id,
-          array_remove(array_agg(DISTINCT la.shift_type), NULL) as scheduled_shifts
+          po.scheduled_start_shift,
+          po.scheduled_end_shift,
+          po.scheduled_start_date,
+          po.scheduled_end_date,
+          -- Get shifts from order scheduling, with labor assignments as additional info
+          CASE 
+            WHEN po.scheduled_start_shift IS NOT NULL AND po.scheduled_end_shift IS NOT NULL 
+              AND po.scheduled_start_shift != po.scheduled_end_shift
+            THEN ARRAY[po.scheduled_start_shift, po.scheduled_end_shift]
+            WHEN po.scheduled_start_shift IS NOT NULL 
+            THEN ARRAY[po.scheduled_start_shift]
+            ELSE array_remove(array_agg(DISTINCT la.shift_type), NULL)
+          END as scheduled_shifts
         FROM machines m
         LEFT JOIN labor_assignments la ON m.id = la.machine_id AND la.assignment_date = $1
         LEFT JOIN production_orders po ON m.id = po.machine_id 
@@ -3262,7 +3307,8 @@ app.get('/api/labor-planner/machines', authenticateToken, async (req, res) => {
         WHERE la.id IS NOT NULL OR po.id IS NOT NULL
         GROUP BY m.id, m.name, m.environment, m.capacity, m.operators_per_shift, 
                  m.hopper_loaders_per_shift, m.packers_per_shift, po.order_number, 
-                 po.product_name, po.status, po.id
+                 po.product_name, po.status, po.id, po.scheduled_start_shift, po.scheduled_end_shift,
+                 po.scheduled_start_date, po.scheduled_end_date
         ORDER BY m.name
       `;
       
