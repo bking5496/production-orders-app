@@ -684,3 +684,4 @@ Instead of /public/js/main.js, use /js/main.js.
 3:05:10 PM [vite] (client) page reload server.js
 3:05:26 PM [vite] (client) page reload server.js
 The request url "/etc/passwd" is outside of Vite serving allow list.
+5:07:03 PM [vite] (client) page reload server.js
