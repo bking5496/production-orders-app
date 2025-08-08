@@ -1,0 +1,5 @@
+
+> production-management-system@2.0.0 dev
+> vite --host
+
+sh: 1: vite: not found
