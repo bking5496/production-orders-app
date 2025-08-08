@@ -10,3 +10,4 @@ Refer to docs https://vite.dev/config/server-options.html#server-fs-allow for co
 
 The request url "/home/production-app/production-orders-app/.env" is outside of Vite serving allow list.
 The request url "/home/production-app/production-orders-app/.env" is outside of Vite serving allow list.
+The request url "/home/production-app/production-orders-app/.env" is outside of Vite serving allow list.

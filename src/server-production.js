@@ -76,6 +76,7 @@ app.use('/api/system', systemRoutes);
 
 // Legacy route compatibility
 app.use('/api/labour', laborRoutes); // British spelling compatibility
+app.use('/api/planner', laborRoutes); // Legacy planner endpoint compatibility
 
 // Dashboard route compatibility
 app.use('/api/production', analyticsRoutes); // Production endpoints under analytics

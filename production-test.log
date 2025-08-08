@@ -1,0 +1,33 @@
+🧪 Testing refactored components...
+✅ New PostgreSQL client connected
+🔗 Client acquired from pool
+🔓 Client released back to pool
+✅ Database connection: OK
+✅ Authentication middleware: OK
+✅ Response utilities: OK
+✅ Database utilities: OK
+🎉 All components tested successfully!
+🌐 WebSocket server initialized
+🧹 WebSocket cleanup scheduler started
+node:events:502
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::3002
+    at Server.setupListenHandle [as _listen2] (node:net:1908:16)
+    at listenInCluster (node:net:1965:12)
+    at Server.listen (node:net:2067:7)
+    at /home/production-app/production-orders-app/src/server-production.js:149:12
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+Emitted 'error' event on WebSocketServer instance at:
+    at Server.emit (node:events:524:28)
+    at emitErrorNT (node:net:1944:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+  code: 'EADDRINUSE',
+  errno: -98,
+  syscall: 'listen',
+  address: '::',
+  port: 3002
+}
+
+Node.js v20.19.4
