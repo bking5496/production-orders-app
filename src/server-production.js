@@ -17,6 +17,7 @@ const analyticsRoutes = require('./routes/analytics.routes');
 const reportsRoutes = require('./routes/reports.routes');
 const systemRoutes = require('./routes/system.routes');
 const plannerRoutes = require('./routes/planner.routes');
+const configurationRoutes = require('./routes/configuration.routes');
 
 // WebSocket integration
 const { initializeWebSocket, addWebSocketToApp, startCleanupSchedule } = require('./middleware/websocket');
@@ -74,6 +75,7 @@ app.use('/api/labor', laborRoutes);
 app.use('/api/analytics', analyticsRoutes);
 app.use('/api/reports', reportsRoutes);
 app.use('/api/system', systemRoutes);
+app.use('/api/config', configurationRoutes);
 
 // Legacy route compatibility
 app.use('/api/labour', laborRoutes); // British spelling compatibility
@@ -95,13 +97,15 @@ app.use('/api/settings', systemRoutes); // Settings endpoints compatibility
 app.use('/api/environments', systemRoutes); // Direct environment access
 app.use('/api/machine-types', systemRoutes); // Direct machine types access
 
-// Catch-all for frontend routes (SPA)
-app.get('*', (req, res) => {
-  if (!req.path.startsWith('/api')) {
-    res.sendFile(path.join(__dirname, '../dist/index.html'));
-  } else {
-    notFoundHandler(req, res);
+// Catch-all for frontend routes (SPA) - exclude API routes
+app.get('*', (req, res, next) => {
+  // Let API routes go to 404 handler
+  if (req.path.startsWith('/api/')) {
+    return next();
   }
+  
+  // Serve frontend for non-API routes
+  res.sendFile(path.join(__dirname, '../dist/index.html'));
 });
 
 // Error handling
@@ -142,7 +146,7 @@ const testComponents = async () => {
 
 // Only start server if this file is run directly
 if (require.main === module) {
-  const PORT = process.env.PORT || 3000; // Production port
+  const PORT = process.env.PORT || 3002; // Test port before final migration
   const http = require('http');
   
   testComponents().then(() => {
