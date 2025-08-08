@@ -16,6 +16,7 @@ const laborRoutes = require('./routes/labor.routes');
 const analyticsRoutes = require('./routes/analytics.routes');
 const reportsRoutes = require('./routes/reports.routes');
 const systemRoutes = require('./routes/system.routes');
+const plannerRoutes = require('./routes/planner.routes');
 
 // WebSocket integration
 const { initializeWebSocket, addWebSocketToApp, startCleanupSchedule } = require('./middleware/websocket');
@@ -76,9 +77,17 @@ app.use('/api/system', systemRoutes);
 
 // Legacy route compatibility
 app.use('/api/labour', laborRoutes); // British spelling compatibility
-app.use('/api/planner', laborRoutes); // Legacy planner endpoint compatibility
+app.use('/api/planner', plannerRoutes); // Legacy planner endpoint compatibility
 
-// Dashboard route compatibility
+// Dashboard route compatibility - Production endpoints mapped to analytics
+app.get('/api/production/floor-overview', (req, res, next) => {
+  req.url = '/floor-overview';
+  analyticsRoutes(req, res, next);
+});
+app.get('/api/production/status', (req, res, next) => {
+  req.url = '/production-status';
+  analyticsRoutes(req, res, next);
+});
 app.use('/api/production', analyticsRoutes); // Production endpoints under analytics
 
 // System route compatibility

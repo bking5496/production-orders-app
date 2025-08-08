@@ -141,4 +141,34 @@ router.get('/production-status',
   })
 );
 
+/**
+ * GET /api/analytics/active-orders  
+ * Get active production orders
+ */
+router.get('/active-orders',
+  authenticateToken,
+  asyncHandler(async (req, res) => {
+    const activeOrders = await analyticsService.getActiveOrders();
+    return res.success(activeOrders, 'Active orders retrieved successfully');
+  })
+);
+
+/**
+ * GET /api/analytics/machines-overview
+ * Get machines overview data
+ */
+router.get('/machines-overview',
+  authenticateToken,
+  [query('environment').optional().isString()],
+  asyncHandler(async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.validationError(errors.array());
+    }
+
+    const machinesOverview = await analyticsService.getMachinesOverview(req.query.environment);
+    return res.success(machinesOverview, 'Machines overview retrieved successfully');
+  })
+);
+
 module.exports = router;

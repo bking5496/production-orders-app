@@ -226,4 +226,22 @@ router.post('/assignments/lock-daily',
   })
 );
 
+// British spelling aliases
+router.get('/roster', 
+  authenticateToken,
+  [query('date').optional().isISO8601()],
+  asyncHandler(async (req, res) => {
+    const roster = await laborService.getLabourRoster(req.query.date);
+    return res.success(roster, 'Labour roster retrieved successfully');
+  })
+);
+
+router.get('/today',
+  authenticateToken,
+  asyncHandler(async (req, res) => {
+    const todayData = await laborService.getTodayLabourData();
+    return res.success(todayData, 'Today\'s labour data retrieved successfully');
+  })
+);
+
 module.exports = router;
