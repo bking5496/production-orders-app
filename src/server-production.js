@@ -92,10 +92,41 @@ app.get('/api/production/status', (req, res, next) => {
 });
 app.use('/api/production', analyticsRoutes); // Production endpoints under analytics
 
-// System route compatibility
+// System route compatibility - Direct route mappings  
+app.get('/api/settings/general', (req, res, next) => {
+  req.url = '/settings/general';
+  systemRoutes(req, res, next);
+});
+app.put('/api/settings/general', (req, res, next) => {
+  req.url = '/settings/general';
+  systemRoutes(req, res, next);
+});
+app.get('/api/environments', (req, res, next) => {
+  req.url = '/environments';
+  systemRoutes(req, res, next);
+});
+app.post('/api/environments', (req, res, next) => {
+  req.url = '/environments';
+  systemRoutes(req, res, next);
+});
+app.get('/api/machine-types', (req, res, next) => {
+  req.url = '/machine-types';
+  systemRoutes(req, res, next);
+});
+app.post('/api/machine-types', (req, res, next) => {
+  req.url = '/machine-types';
+  systemRoutes(req, res, next);
+});
+app.put('/api/machine-types/:id', (req, res, next) => {
+  req.url = '/machine-types/' + req.params.id;
+  systemRoutes(req, res, next);
+});
+app.delete('/api/machine-types/:id', (req, res, next) => {
+  req.url = '/machine-types/' + req.params.id;
+  systemRoutes(req, res, next);
+});
 app.use('/api/settings', systemRoutes); // Settings endpoints compatibility
-app.use('/api/environments', systemRoutes); // Direct environment access
-app.use('/api/machine-types', systemRoutes); // Direct machine types access
+app.use('/api/system', systemRoutes); // System routes
 
 // Catch-all for frontend routes (SPA) - exclude API routes
 app.get('*', (req, res, next) => {
@@ -146,7 +177,7 @@ const testComponents = async () => {
 
 // Only start server if this file is run directly
 if (require.main === module) {
-  const PORT = process.env.PORT || 3002; // Test port before final migration
+  const PORT = process.env.PORT || 3000; // Production port
   const http = require('http');
   
   testComponents().then(() => {
