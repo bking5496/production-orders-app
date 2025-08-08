@@ -1,6 +1,4 @@
-NODE_ENV=production is not supported in the .env file. Only NODE_ENV=development is supported to create a development build of your project. If you need to set process.env.NODE_ENV, you can set it in the Vite config instead.
 
-  VITE v7.0.6  ready in 464 ms
+  VITE v7.0.6  ready in 434 ms
 
-  ➜  Local:   http://localhost:5173/
-  ➜  Network: http://197.85.7.242:5173/
+  ➜  Local:   http://127.0.0.1:5173/
