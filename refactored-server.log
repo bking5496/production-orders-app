@@ -24,11 +24,6 @@ ValidationError: The 'X-Forwarded-For' header is set but the Express 'trust prox
   code: 'ERR_ERL_UNEXPECTED_X_FORWARDED_FOR',
   help: 'https://express-rate-limit.github.io/ERR_ERL_UNEXPECTED_X_FORWARDED_FOR/'
 }
-✅ New PostgreSQL client connected
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔒 Auth failure: johnsmith from ::1 - Invalid credentials - curl/8.5.0
-✅ New PostgreSQL client connected
 🔗 Client acquired from pool
 🔓 Client released back to pool
 🔗 Client acquired from pool
@@ -39,112 +34,260 @@ ValidationError: The 'X-Forwarded-For' header is set but the Express 'trust prox
 🔓 Client released back to pool
 🔗 Client acquired from pool
 🔓 Client released back to pool
-✅ Auth success: admin from ::1 - curl/8.5.0
+✅ Auth success: admin from ::1 - Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Mobile Safari/537.36 Edg/138.0.0.0
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+✅ New PostgreSQL client connected
+🔗 Client acquired from pool
+✅ New PostgreSQL client connected
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔗 Client acquired from pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+✅ New PostgreSQL client connected
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔗 Client acquired from pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
 Error occurred: {
-  error: 'Not allowed by CORS',
-  stack: 'Error: Not allowed by CORS\n' +
-    '    at origin (/home/production-app/production-orders-app/src/server-refactored.js:37:16)\n' +
-    '    at /home/production-app/production-orders-app/node_modules/cors/lib/index.js:219:13\n' +
-    '    at optionsCallback (/home/production-app/production-orders-app/node_modules/cors/lib/index.js:199:9)\n' +
-    '    at corsMiddleware (/home/production-app/production-orders-app/node_modules/cors/lib/index.js:204:7)\n' +
-    '    at Layer.handle [as handle_request] (/home/production-app/production-orders-app/node_modules/express/lib/router/layer.js:95:5)\n' +
-    '    at trim_prefix (/home/production-app/production-orders-app/node_modules/express/lib/router/index.js:328:13)\n' +
-    '    at /home/production-app/production-orders-app/node_modules/express/lib/router/index.js:286:9\n' +
-    '    at Function.process_params (/home/production-app/production-orders-app/node_modules/express/lib/router/index.js:346:12)\n' +
-    '    at next (/home/production-app/production-orders-app/node_modules/express/lib/router/index.js:280:10)\n' +
-    '    at expressInit (/home/production-app/production-orders-app/node_modules/express/lib/middleware/init.js:40:5)',
-  url: '/api/auth/login',
+  error: 'column "created_by" of relation "users" does not exist',
+  stack: 'error: column "created_by" of relation "users" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.insert (/home/production-app/production-orders-app/src/utils/database.js:61:20)\n' +
+    '    at async UsersService.createUser (/home/production-app/production-orders-app/src/services/users.service.js:132:21)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/users.routes.js:127:21',
+  url: '/api/users',
   method: 'POST',
-  user: 'Anonymous',
-  timestamp: '2025-08-08T08:55:55.840Z'
+  user: 'admin',
+  timestamp: '2025-08-08T10:08:45.850Z'
 }
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
 Error occurred: {
-  error: 'Not allowed by CORS',
-  stack: 'Error: Not allowed by CORS\n' +
-    '    at origin (/home/production-app/production-orders-app/src/server-refactored.js:37:16)\n' +
-    '    at /home/production-app/production-orders-app/node_modules/cors/lib/index.js:219:13\n' +
-    '    at optionsCallback (/home/production-app/production-orders-app/node_modules/cors/lib/index.js:199:9)\n' +
-    '    at corsMiddleware (/home/production-app/production-orders-app/node_modules/cors/lib/index.js:204:7)\n' +
-    '    at Layer.handle [as handle_request] (/home/production-app/production-orders-app/node_modules/express/lib/router/layer.js:95:5)\n' +
-    '    at trim_prefix (/home/production-app/production-orders-app/node_modules/express/lib/router/index.js:328:13)\n' +
-    '    at /home/production-app/production-orders-app/node_modules/express/lib/router/index.js:286:9\n' +
-    '    at Function.process_params (/home/production-app/production-orders-app/node_modules/express/lib/router/index.js:346:12)\n' +
-    '    at next (/home/production-app/production-orders-app/node_modules/express/lib/router/index.js:280:10)\n' +
-    '    at expressInit (/home/production-app/production-orders-app/node_modules/express/lib/middleware/init.js:40:5)',
-  url: '/api/auth/login',
+  error: 'column "created_by" of relation "users" does not exist',
+  stack: 'error: column "created_by" of relation "users" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.insert (/home/production-app/production-orders-app/src/utils/database.js:61:20)\n' +
+    '    at async UsersService.createUser (/home/production-app/production-orders-app/src/services/users.service.js:132:21)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/users.routes.js:127:21',
+  url: '/api/users',
   method: 'POST',
-  user: 'Anonymous',
-  timestamp: '2025-08-08T08:55:56.910Z'
+  user: 'admin',
+  timestamp: '2025-08-08T10:08:51.944Z'
 }
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+✅ New PostgreSQL client connected
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
 Error occurred: {
-  error: 'Not allowed by CORS',
-  stack: 'Error: Not allowed by CORS\n' +
-    '    at origin (/home/production-app/production-orders-app/src/server-refactored.js:37:16)\n' +
-    '    at /home/production-app/production-orders-app/node_modules/cors/lib/index.js:219:13\n' +
-    '    at optionsCallback (/home/production-app/production-orders-app/node_modules/cors/lib/index.js:199:9)\n' +
-    '    at corsMiddleware (/home/production-app/production-orders-app/node_modules/cors/lib/index.js:204:7)\n' +
-    '    at Layer.handle [as handle_request] (/home/production-app/production-orders-app/node_modules/express/lib/router/layer.js:95:5)\n' +
-    '    at trim_prefix (/home/production-app/production-orders-app/node_modules/express/lib/router/index.js:328:13)\n' +
-    '    at /home/production-app/production-orders-app/node_modules/express/lib/router/index.js:286:9\n' +
-    '    at Function.process_params (/home/production-app/production-orders-app/node_modules/express/lib/router/index.js:346:12)\n' +
-    '    at next (/home/production-app/production-orders-app/node_modules/express/lib/router/index.js:280:10)\n' +
-    '    at expressInit (/home/production-app/production-orders-app/node_modules/express/lib/middleware/init.js:40:5)',
-  url: '/api/auth/login',
+  error: 'column "created_by" of relation "users" does not exist',
+  stack: 'error: column "created_by" of relation "users" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.insert (/home/production-app/production-orders-app/src/utils/database.js:61:20)\n' +
+    '    at async UsersService.createUser (/home/production-app/production-orders-app/src/services/users.service.js:132:21)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/users.routes.js:127:21',
+  url: '/api/users',
   method: 'POST',
-  user: 'Anonymous',
-  timestamp: '2025-08-08T08:55:58.955Z'
+  user: 'admin',
+  timestamp: '2025-08-08T10:08:56.453Z'
 }
+🔗 Client acquired from pool
+🔓 Client released back to pool
 Error occurred: {
-  error: 'Not allowed by CORS',
-  stack: 'Error: Not allowed by CORS\n' +
-    '    at origin (/home/production-app/production-orders-app/src/server-refactored.js:37:16)\n' +
-    '    at /home/production-app/production-orders-app/node_modules/cors/lib/index.js:219:13\n' +
-    '    at optionsCallback (/home/production-app/production-orders-app/node_modules/cors/lib/index.js:199:9)\n' +
-    '    at corsMiddleware (/home/production-app/production-orders-app/node_modules/cors/lib/index.js:204:7)\n' +
-    '    at Layer.handle [as handle_request] (/home/production-app/production-orders-app/node_modules/express/lib/router/layer.js:95:5)\n' +
-    '    at trim_prefix (/home/production-app/production-orders-app/node_modules/express/lib/router/index.js:328:13)\n' +
-    '    at /home/production-app/production-orders-app/node_modules/express/lib/router/index.js:286:9\n' +
-    '    at Function.process_params (/home/production-app/production-orders-app/node_modules/express/lib/router/index.js:346:12)\n' +
-    '    at next (/home/production-app/production-orders-app/node_modules/express/lib/router/index.js:280:10)\n' +
-    '    at expressInit (/home/production-app/production-orders-app/node_modules/express/lib/middleware/init.js:40:5)',
-  url: '/api/auth/login',
+  error: 'column "created_by" of relation "users" does not exist',
+  stack: 'error: column "created_by" of relation "users" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.insert (/home/production-app/production-orders-app/src/utils/database.js:61:20)\n' +
+    '    at async UsersService.createUser (/home/production-app/production-orders-app/src/services/users.service.js:132:21)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/users.routes.js:127:21',
+  url: '/api/users',
   method: 'POST',
-  user: 'Anonymous',
-  timestamp: '2025-08-08T08:56:06.136Z'
+  user: 'admin',
+  timestamp: '2025-08-08T10:08:56.461Z'
 }
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
 Error occurred: {
-  error: 'Not allowed by CORS',
-  stack: 'Error: Not allowed by CORS\n' +
-    '    at origin (/home/production-app/production-orders-app/src/server-refactored.js:37:16)\n' +
-    '    at /home/production-app/production-orders-app/node_modules/cors/lib/index.js:219:13\n' +
-    '    at optionsCallback (/home/production-app/production-orders-app/node_modules/cors/lib/index.js:199:9)\n' +
-    '    at corsMiddleware (/home/production-app/production-orders-app/node_modules/cors/lib/index.js:204:7)\n' +
-    '    at Layer.handle [as handle_request] (/home/production-app/production-orders-app/node_modules/express/lib/router/layer.js:95:5)\n' +
-    '    at trim_prefix (/home/production-app/production-orders-app/node_modules/express/lib/router/index.js:328:13)\n' +
-    '    at /home/production-app/production-orders-app/node_modules/express/lib/router/index.js:286:9\n' +
-    '    at Function.process_params (/home/production-app/production-orders-app/node_modules/express/lib/router/index.js:346:12)\n' +
-    '    at next (/home/production-app/production-orders-app/node_modules/express/lib/router/index.js:280:10)\n' +
-    '    at expressInit (/home/production-app/production-orders-app/node_modules/express/lib/middleware/init.js:40:5)',
-  url: '/api/auth/login',
+  error: 'column "created_by" of relation "users" does not exist',
+  stack: 'error: column "created_by" of relation "users" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.insert (/home/production-app/production-orders-app/src/utils/database.js:61:20)\n' +
+    '    at async UsersService.createUser (/home/production-app/production-orders-app/src/services/users.service.js:132:21)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/users.routes.js:127:21',
+  url: '/api/users',
   method: 'POST',
-  user: 'Anonymous',
-  timestamp: '2025-08-08T08:56:07.176Z'
+  user: 'admin',
+  timestamp: '2025-08-08T10:08:57.831Z'
 }
+🔗 Client acquired from pool
+🔓 Client released back to pool
 Error occurred: {
-  error: 'Not allowed by CORS',
-  stack: 'Error: Not allowed by CORS\n' +
-    '    at origin (/home/production-app/production-orders-app/src/server-refactored.js:37:16)\n' +
-    '    at /home/production-app/production-orders-app/node_modules/cors/lib/index.js:219:13\n' +
-    '    at optionsCallback (/home/production-app/production-orders-app/node_modules/cors/lib/index.js:199:9)\n' +
-    '    at corsMiddleware (/home/production-app/production-orders-app/node_modules/cors/lib/index.js:204:7)\n' +
-    '    at Layer.handle [as handle_request] (/home/production-app/production-orders-app/node_modules/express/lib/router/layer.js:95:5)\n' +
-    '    at trim_prefix (/home/production-app/production-orders-app/node_modules/express/lib/router/index.js:328:13)\n' +
-    '    at /home/production-app/production-orders-app/node_modules/express/lib/router/index.js:286:9\n' +
-    '    at Function.process_params (/home/production-app/production-orders-app/node_modules/express/lib/router/index.js:346:12)\n' +
-    '    at next (/home/production-app/production-orders-app/node_modules/express/lib/router/index.js:280:10)\n' +
-    '    at expressInit (/home/production-app/production-orders-app/node_modules/express/lib/middleware/init.js:40:5)',
-  url: '/api/auth/login',
+  error: 'column "created_by" of relation "users" does not exist',
+  stack: 'error: column "created_by" of relation "users" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.insert (/home/production-app/production-orders-app/src/utils/database.js:61:20)\n' +
+    '    at async UsersService.createUser (/home/production-app/production-orders-app/src/services/users.service.js:132:21)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/users.routes.js:127:21',
+  url: '/api/users',
   method: 'POST',
-  user: 'Anonymous',
-  timestamp: '2025-08-08T08:56:09.220Z'
+  user: 'admin',
+  timestamp: '2025-08-08T10:08:57.838Z'
+}
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+Error occurred: {
+  error: 'column "created_by" of relation "users" does not exist',
+  stack: 'error: column "created_by" of relation "users" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.insert (/home/production-app/production-orders-app/src/utils/database.js:61:20)\n' +
+    '    at async UsersService.createUser (/home/production-app/production-orders-app/src/services/users.service.js:132:21)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/users.routes.js:127:21',
+  url: '/api/users',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-08T10:09:00.345Z'
+}
+🔗 Client acquired from pool
+🔓 Client released back to pool
+Error occurred: {
+  error: 'column "created_by" of relation "users" does not exist',
+  stack: 'error: column "created_by" of relation "users" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.insert (/home/production-app/production-orders-app/src/utils/database.js:61:20)\n' +
+    '    at async UsersService.createUser (/home/production-app/production-orders-app/src/services/users.service.js:132:21)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/users.routes.js:127:21',
+  url: '/api/users',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-08T10:09:00.371Z'
 }
