@@ -291,3 +291,11 @@ Error occurred: {
   user: 'admin',
   timestamp: '2025-08-08T10:09:00.371Z'
 }
+✅ New PostgreSQL client connected
+🔗 Client acquired from pool
+✅ New PostgreSQL client connected
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
