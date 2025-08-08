@@ -30,3 +30,12 @@ ValidationError: The 'X-Forwarded-For' header is set but the Express 'trust prox
 🔓 Client released back to pool
 ✅ Auth success: admin from ::ffff:127.0.0.1 - curl/8.5.0
 JWT verification failed: invalid signature
+✅ New PostgreSQL client connected
+🔗 Client acquired from pool
+🔓 Client released back to pool
+🔗 Client acquired from pool
+🔓 Client released back to pool
+✅ Auth success: admin from ::1 - curl/8.5.0
+🔗 Client acquired from pool
+🔓 Client released back to pool
+JWT verification failed: jwt malformed
