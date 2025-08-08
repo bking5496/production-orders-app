@@ -5,6 +5,129 @@ const { ValidationError } = require('../middleware/error-handler');
 class AnalyticsService {
 
   /**
+   * Get active production orders
+   */
+  async getActiveOrders() {
+    const query = `
+      SELECT 
+        po.*,
+        m.name as machine_name,
+        u.full_name as operator_name
+      FROM production_orders po
+      LEFT JOIN machines m ON po.machine_id = m.id
+      LEFT JOIN users u ON po.operator_id = u.id
+      WHERE po.status = 'in_progress'
+      ORDER BY po.start_time DESC
+    `;
+    
+    return DatabaseUtils.query(query);
+  }
+
+  /**
+   * Get machines overview data
+   */
+  async getMachinesOverview(environment = null) {
+    let query = `
+      SELECT 
+        m.*,
+        COUNT(po.id) as active_orders,
+        AVG(CASE WHEN po.status = 'in_progress' 
+            THEN EXTRACT(EPOCH FROM (NOW() - po.start_time)) / 3600 
+            ELSE NULL END) as avg_running_time_hours
+      FROM machines m
+      LEFT JOIN production_orders po ON m.id = po.machine_id AND po.status = 'in_progress'
+    `;
+    
+    const params = [];
+    
+    if (environment) {
+      query += ' WHERE m.environment = $1';
+      params.push(environment);
+    }
+    
+    query += ` GROUP BY m.id ORDER BY m.name`;
+    
+    return DatabaseUtils.query(query, params);
+  }
+
+  /**
+   * Get production floor overview - main dashboard data
+   */
+  async getProductionFloorOverview() {
+    const queries = {
+      // Overall statistics
+      overall: `
+        SELECT 
+          COUNT(*) as total_orders,
+          COUNT(CASE WHEN status = 'in_progress' THEN 1 END) as active_orders,
+          COUNT(CASE WHEN status = 'completed' THEN 1 END) as completed_today,
+          COUNT(CASE WHEN status = 'pending' THEN 1 END) as pending_orders
+        FROM production_orders 
+        WHERE DATE(created_at) = CURRENT_DATE
+      `,
+      
+      // Machine status
+      machines: `
+        SELECT 
+          status,
+          COUNT(*) as count
+        FROM machines 
+        WHERE is_active = true
+        GROUP BY status
+      `,
+      
+      // Recent orders
+      recent_orders: `
+        SELECT 
+          po.id,
+          po.order_number,
+          po.product_name,
+          po.status,
+          po.quantity,
+          m.name as machine_name,
+          po.start_time
+        FROM production_orders po
+        LEFT JOIN machines m ON po.machine_id = m.id
+        ORDER BY po.created_at DESC
+        LIMIT 10
+      `,
+      
+      // Active stops
+      active_stops: `
+        SELECT COUNT(*) as count
+        FROM production_stops ps
+        WHERE ps.end_time IS NULL
+      `
+    };
+    
+    const results = {};
+    
+    for (const [key, query] of Object.entries(queries)) {
+      const result = await DatabaseUtils.query(query);
+      results[key] = result;
+    }
+    
+    return results;
+  }
+
+  /**
+   * Get production status summary
+   */
+  async getProductionStatus() {
+    const statusQuery = `
+      SELECT 
+        status,
+        COUNT(*) as count,
+        SUM(quantity) as total_quantity
+      FROM production_orders
+      WHERE DATE(created_at) = CURRENT_DATE
+      GROUP BY status
+    `;
+    
+    return DatabaseUtils.query(statusQuery);
+  }
+
+  /**
    * Get analytics summary with basic production metrics
    */
   async getAnalyticsSummary(filters = {}) {

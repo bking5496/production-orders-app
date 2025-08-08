@@ -5,6 +5,134 @@ const { NotFoundError, ValidationError } = require('../middleware/error-handler'
 class LaborService {
   
   /**
+   * Get employees for planning
+   */
+  async getEmployeesForPlanning() {
+    const query = `
+      SELECT 
+        id, 
+        username, 
+        full_name, 
+        employee_code,
+        role,
+        department,
+        shift_preference,
+        is_active
+      FROM users 
+      WHERE is_active = true 
+        AND role IN ('operator', 'supervisor', 'admin')
+      ORDER BY full_name, role
+    `;
+    
+    return DatabaseUtils.query(query);
+  }
+
+  /**
+   * Get supervisors for planning
+   */
+  async getSupervisors(filters = {}) {
+    const { date, shift } = filters;
+    
+    let query = `
+      SELECT 
+        ls.*,
+        u.full_name,
+        u.username,
+        u.employee_code
+      FROM labor_supervisors ls
+      JOIN users u ON ls.user_id = u.id
+      WHERE u.is_active = true
+    `;
+    
+    const params = [];
+    let paramIndex = 1;
+    
+    if (date) {
+      query += ` AND ls.assignment_date = $${paramIndex}`;
+      params.push(date);
+      paramIndex++;
+    }
+    
+    if (shift) {
+      query += ` AND ls.shift = $${paramIndex}`;
+      params.push(shift);
+      paramIndex++;
+    }
+    
+    query += ` ORDER BY ls.assignment_date DESC, ls.shift`;
+    
+    return DatabaseUtils.query(query, params);
+  }
+
+  /**
+   * Add supervisor assignment
+   */
+  async addSupervisor(supervisorData, userId) {
+    const { user_id, date, shift, environment } = supervisorData;
+    
+    // Check if supervisor already assigned for this date/shift
+    const existing = await DatabaseUtils.findOne(
+      'labor_supervisors',
+      { user_id, assignment_date: date, shift }
+    );
+    
+    if (existing) {
+      throw new ValidationError('Supervisor already assigned for this date and shift');
+    }
+    
+    const supervisor = await DatabaseUtils.insert(
+      'labor_supervisors',
+      {
+        user_id,
+        assignment_date: date,
+        shift,
+        environment,
+        assigned_by: userId,
+        created_at: new Date(),
+        updated_at: new Date()
+      },
+      '*'
+    );
+    
+    return supervisor;
+  }
+
+  /**
+   * Delete supervisor assignment
+   */
+  async deleteSupervisor(supervisorId) {
+    const result = await DatabaseUtils.delete('labor_supervisors', { id: supervisorId });
+    
+    if (!result) {
+      throw new NotFoundError('Supervisor assignment not found');
+    }
+    
+    return true;
+  }
+
+  /**
+   * Update assignment status
+   */
+  async updateAssignmentStatus(assignmentId, status, userId) {
+    const assignment = await DatabaseUtils.update(
+      'labor_assignments',
+      { id: assignmentId },
+      { 
+        status, 
+        updated_by: userId,
+        updated_at: new Date()
+      },
+      '*'
+    );
+    
+    if (!assignment) {
+      throw new NotFoundError('Assignment not found');
+    }
+    
+    return assignment;
+  }
+
+  /**
    * Get labor assignments with filtering
    */
   async getLaborAssignments(filters = {}) {
