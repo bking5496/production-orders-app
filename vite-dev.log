@@ -2,3 +2,9 @@
   VITE v7.0.6  ready in 601 ms
 
   ➜  Local:   http://127.0.0.1:5173/
+The request url "/home/production-app/production-orders-app/.env" is outside of Vite serving allow list.
+
+- /home/production-app/production-orders-app
+
+Refer to docs https://vite.dev/config/server-options.html#server-fs-allow for configurations and more details.
+
