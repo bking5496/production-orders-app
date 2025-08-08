@@ -20,7 +20,8 @@ class AnalyticsService {
       ORDER BY po.start_time DESC
     `;
     
-    return DatabaseUtils.query(query);
+    const result = await DatabaseUtils.raw(query);
+    return result.rows;
   }
 
   /**
@@ -47,7 +48,8 @@ class AnalyticsService {
     
     query += ` GROUP BY m.id ORDER BY m.name`;
     
-    return DatabaseUtils.query(query, params);
+    const result = await DatabaseUtils.raw(query, params);
+    return result.rows;
   }
 
   /**
@@ -103,8 +105,8 @@ class AnalyticsService {
     const results = {};
     
     for (const [key, query] of Object.entries(queries)) {
-      const result = await DatabaseUtils.query(query);
-      results[key] = result;
+      const result = await DatabaseUtils.raw(query);
+      results[key] = result.rows;
     }
     
     return results;
@@ -124,7 +126,8 @@ class AnalyticsService {
       GROUP BY status
     `;
     
-    return DatabaseUtils.query(statusQuery);
+    const result = await DatabaseUtils.raw(statusQuery);
+    return result.rows;
   }
 
   /**

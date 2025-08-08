@@ -14,21 +14,3 @@
 🔐 Auth test: http://localhost:3002/api/auth/login
 ⚙️ System routes: http://localhost:3002/api/system/health
 🌐 WebSocket server initialized
-Error occurred: {
-  error: 'DatabaseUtils.query is not a function',
-  stack: 'TypeError: DatabaseUtils.query is not a function\n' +
-    '    at LaborService.getEmployeesForPlanning (/home/production-app/production-orders-app/src/services/labor.service.js:27:26)\n' +
-    '    at /home/production-app/production-orders-app/src/routes/planner.routes.js:64:42\n' +
-    '    at /home/production-app/production-orders-app/src/middleware/error-handler.js:9:21\n' +
-    '    at Layer.handle [as handle_request] (/home/production-app/production-orders-app/node_modules/express/lib/router/layer.js:95:5)\n' +
-    '    at next (/home/production-app/production-orders-app/node_modules/express/lib/router/route.js:149:13)\n' +
-    '    at /home/production-app/production-orders-app/src/middleware/auth.js:33:5\n' +
-    '    at /home/production-app/production-orders-app/node_modules/jsonwebtoken/verify.js:261:12\n' +
-    '    at getSecret (/home/production-app/production-orders-app/node_modules/jsonwebtoken/verify.js:97:14)\n' +
-    '    at module.exports [as verify] (/home/production-app/production-orders-app/node_modules/jsonwebtoken/verify.js:101:10)\n' +
-    '    at authenticateToken (/home/production-app/production-orders-app/src/middleware/auth.js:22:7)',
-  url: '/api/planner/employees',
-  method: 'GET',
-  user: 'admin',
-  timestamp: '2025-08-08T18:38:57.096Z'
-}

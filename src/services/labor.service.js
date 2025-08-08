@@ -15,16 +15,17 @@ class LaborService {
         full_name, 
         employee_code,
         role,
-        department,
-        shift_preference,
-        is_active
+        is_active,
+        phone,
+        preferred_machine
       FROM users 
       WHERE is_active = true 
         AND role IN ('operator', 'supervisor', 'admin')
       ORDER BY full_name, role
     `;
     
-    return DatabaseUtils.query(query);
+    const result = await DatabaseUtils.raw(query);
+    return result.rows;
   }
 
   /**
@@ -61,7 +62,8 @@ class LaborService {
     
     query += ` ORDER BY ls.assignment_date DESC, ls.shift`;
     
-    return DatabaseUtils.query(query, params);
+    const result = await DatabaseUtils.raw(query, params);
+    return result.rows;
   }
 
   /**
