@@ -8,6 +8,9 @@ export default defineConfig(({ mode }) => {
   
   return {
   plugins: [react()],
+  define: {
+    global: 'globalThis',
+  },
   server: {
     host: '0.0.0.0', // Listen on all interfaces
     port: 5173,
