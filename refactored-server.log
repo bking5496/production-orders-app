@@ -40,3 +40,111 @@ ValidationError: The 'X-Forwarded-For' header is set but the Express 'trust prox
 🔗 Client acquired from pool
 🔓 Client released back to pool
 ✅ Auth success: admin from ::1 - curl/8.5.0
+Error occurred: {
+  error: 'Not allowed by CORS',
+  stack: 'Error: Not allowed by CORS\n' +
+    '    at origin (/home/production-app/production-orders-app/src/server-refactored.js:37:16)\n' +
+    '    at /home/production-app/production-orders-app/node_modules/cors/lib/index.js:219:13\n' +
+    '    at optionsCallback (/home/production-app/production-orders-app/node_modules/cors/lib/index.js:199:9)\n' +
+    '    at corsMiddleware (/home/production-app/production-orders-app/node_modules/cors/lib/index.js:204:7)\n' +
+    '    at Layer.handle [as handle_request] (/home/production-app/production-orders-app/node_modules/express/lib/router/layer.js:95:5)\n' +
+    '    at trim_prefix (/home/production-app/production-orders-app/node_modules/express/lib/router/index.js:328:13)\n' +
+    '    at /home/production-app/production-orders-app/node_modules/express/lib/router/index.js:286:9\n' +
+    '    at Function.process_params (/home/production-app/production-orders-app/node_modules/express/lib/router/index.js:346:12)\n' +
+    '    at next (/home/production-app/production-orders-app/node_modules/express/lib/router/index.js:280:10)\n' +
+    '    at expressInit (/home/production-app/production-orders-app/node_modules/express/lib/middleware/init.js:40:5)',
+  url: '/api/auth/login',
+  method: 'POST',
+  user: 'Anonymous',
+  timestamp: '2025-08-08T08:55:55.840Z'
+}
+Error occurred: {
+  error: 'Not allowed by CORS',
+  stack: 'Error: Not allowed by CORS\n' +
+    '    at origin (/home/production-app/production-orders-app/src/server-refactored.js:37:16)\n' +
+    '    at /home/production-app/production-orders-app/node_modules/cors/lib/index.js:219:13\n' +
+    '    at optionsCallback (/home/production-app/production-orders-app/node_modules/cors/lib/index.js:199:9)\n' +
+    '    at corsMiddleware (/home/production-app/production-orders-app/node_modules/cors/lib/index.js:204:7)\n' +
+    '    at Layer.handle [as handle_request] (/home/production-app/production-orders-app/node_modules/express/lib/router/layer.js:95:5)\n' +
+    '    at trim_prefix (/home/production-app/production-orders-app/node_modules/express/lib/router/index.js:328:13)\n' +
+    '    at /home/production-app/production-orders-app/node_modules/express/lib/router/index.js:286:9\n' +
+    '    at Function.process_params (/home/production-app/production-orders-app/node_modules/express/lib/router/index.js:346:12)\n' +
+    '    at next (/home/production-app/production-orders-app/node_modules/express/lib/router/index.js:280:10)\n' +
+    '    at expressInit (/home/production-app/production-orders-app/node_modules/express/lib/middleware/init.js:40:5)',
+  url: '/api/auth/login',
+  method: 'POST',
+  user: 'Anonymous',
+  timestamp: '2025-08-08T08:55:56.910Z'
+}
+Error occurred: {
+  error: 'Not allowed by CORS',
+  stack: 'Error: Not allowed by CORS\n' +
+    '    at origin (/home/production-app/production-orders-app/src/server-refactored.js:37:16)\n' +
+    '    at /home/production-app/production-orders-app/node_modules/cors/lib/index.js:219:13\n' +
+    '    at optionsCallback (/home/production-app/production-orders-app/node_modules/cors/lib/index.js:199:9)\n' +
+    '    at corsMiddleware (/home/production-app/production-orders-app/node_modules/cors/lib/index.js:204:7)\n' +
+    '    at Layer.handle [as handle_request] (/home/production-app/production-orders-app/node_modules/express/lib/router/layer.js:95:5)\n' +
+    '    at trim_prefix (/home/production-app/production-orders-app/node_modules/express/lib/router/index.js:328:13)\n' +
+    '    at /home/production-app/production-orders-app/node_modules/express/lib/router/index.js:286:9\n' +
+    '    at Function.process_params (/home/production-app/production-orders-app/node_modules/express/lib/router/index.js:346:12)\n' +
+    '    at next (/home/production-app/production-orders-app/node_modules/express/lib/router/index.js:280:10)\n' +
+    '    at expressInit (/home/production-app/production-orders-app/node_modules/express/lib/middleware/init.js:40:5)',
+  url: '/api/auth/login',
+  method: 'POST',
+  user: 'Anonymous',
+  timestamp: '2025-08-08T08:55:58.955Z'
+}
+Error occurred: {
+  error: 'Not allowed by CORS',
+  stack: 'Error: Not allowed by CORS\n' +
+    '    at origin (/home/production-app/production-orders-app/src/server-refactored.js:37:16)\n' +
+    '    at /home/production-app/production-orders-app/node_modules/cors/lib/index.js:219:13\n' +
+    '    at optionsCallback (/home/production-app/production-orders-app/node_modules/cors/lib/index.js:199:9)\n' +
+    '    at corsMiddleware (/home/production-app/production-orders-app/node_modules/cors/lib/index.js:204:7)\n' +
+    '    at Layer.handle [as handle_request] (/home/production-app/production-orders-app/node_modules/express/lib/router/layer.js:95:5)\n' +
+    '    at trim_prefix (/home/production-app/production-orders-app/node_modules/express/lib/router/index.js:328:13)\n' +
+    '    at /home/production-app/production-orders-app/node_modules/express/lib/router/index.js:286:9\n' +
+    '    at Function.process_params (/home/production-app/production-orders-app/node_modules/express/lib/router/index.js:346:12)\n' +
+    '    at next (/home/production-app/production-orders-app/node_modules/express/lib/router/index.js:280:10)\n' +
+    '    at expressInit (/home/production-app/production-orders-app/node_modules/express/lib/middleware/init.js:40:5)',
+  url: '/api/auth/login',
+  method: 'POST',
+  user: 'Anonymous',
+  timestamp: '2025-08-08T08:56:06.136Z'
+}
+Error occurred: {
+  error: 'Not allowed by CORS',
+  stack: 'Error: Not allowed by CORS\n' +
+    '    at origin (/home/production-app/production-orders-app/src/server-refactored.js:37:16)\n' +
+    '    at /home/production-app/production-orders-app/node_modules/cors/lib/index.js:219:13\n' +
+    '    at optionsCallback (/home/production-app/production-orders-app/node_modules/cors/lib/index.js:199:9)\n' +
+    '    at corsMiddleware (/home/production-app/production-orders-app/node_modules/cors/lib/index.js:204:7)\n' +
+    '    at Layer.handle [as handle_request] (/home/production-app/production-orders-app/node_modules/express/lib/router/layer.js:95:5)\n' +
+    '    at trim_prefix (/home/production-app/production-orders-app/node_modules/express/lib/router/index.js:328:13)\n' +
+    '    at /home/production-app/production-orders-app/node_modules/express/lib/router/index.js:286:9\n' +
+    '    at Function.process_params (/home/production-app/production-orders-app/node_modules/express/lib/router/index.js:346:12)\n' +
+    '    at next (/home/production-app/production-orders-app/node_modules/express/lib/router/index.js:280:10)\n' +
+    '    at expressInit (/home/production-app/production-orders-app/node_modules/express/lib/middleware/init.js:40:5)',
+  url: '/api/auth/login',
+  method: 'POST',
+  user: 'Anonymous',
+  timestamp: '2025-08-08T08:56:07.176Z'
+}
+Error occurred: {
+  error: 'Not allowed by CORS',
+  stack: 'Error: Not allowed by CORS\n' +
+    '    at origin (/home/production-app/production-orders-app/src/server-refactored.js:37:16)\n' +
+    '    at /home/production-app/production-orders-app/node_modules/cors/lib/index.js:219:13\n' +
+    '    at optionsCallback (/home/production-app/production-orders-app/node_modules/cors/lib/index.js:199:9)\n' +
+    '    at corsMiddleware (/home/production-app/production-orders-app/node_modules/cors/lib/index.js:204:7)\n' +
+    '    at Layer.handle [as handle_request] (/home/production-app/production-orders-app/node_modules/express/lib/router/layer.js:95:5)\n' +
+    '    at trim_prefix (/home/production-app/production-orders-app/node_modules/express/lib/router/index.js:328:13)\n' +
+    '    at /home/production-app/production-orders-app/node_modules/express/lib/router/index.js:286:9\n' +
+    '    at Function.process_params (/home/production-app/production-orders-app/node_modules/express/lib/router/index.js:346:12)\n' +
+    '    at next (/home/production-app/production-orders-app/node_modules/express/lib/router/index.js:280:10)\n' +
+    '    at expressInit (/home/production-app/production-orders-app/node_modules/express/lib/middleware/init.js:40:5)',
+  url: '/api/auth/login',
+  method: 'POST',
+  user: 'Anonymous',
+  timestamp: '2025-08-08T08:56:09.220Z'
+}
