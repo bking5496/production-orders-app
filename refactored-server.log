@@ -14,10 +14,3 @@
 🔐 Auth test: http://localhost:3001/api/auth/login
 ⚙️ System routes: http://localhost:3001/api/system/health
 🌐 WebSocket server initialized
-✅ New PostgreSQL client connected
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool
-🔗 Client acquired from pool
-🔓 Client released back to pool

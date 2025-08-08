@@ -252,4 +252,108 @@ router.post('/change-password',
   })
 );
 
+/**
+ * GET /api/auth/verify-session
+ * Verify session and return user data (alternative to POST verify)
+ */
+router.get('/verify-session',
+  authenticateToken,
+  asyncHandler(async (req, res) => {
+    // Fetch fresh user data
+    const user = await DatabaseUtils.findOne('users', { id: req.user.id, is_active: true });
+    
+    if (!user) {
+      return ResponseUtils.unauthorized(res, 'User not found or inactive');
+    }
+
+    return ResponseUtils.success(res, {
+      authenticated: true,
+      user: {
+        id: user.id,
+        username: user.username,
+        role: user.role,
+        full_name: user.full_name,
+        employee_code: user.employee_code
+      }
+    }, 'Session verified');
+  })
+);
+
+/**
+ * GET /api/auth/session-status
+ * Check session status and token expiration
+ */
+router.get('/session-status',
+  authenticateToken,
+  asyncHandler(async (req, res) => {
+    try {
+      // Extract token expiration from JWT payload
+      const token = req.headers.authorization?.split(' ')[1];
+      if (!token) {
+        return ResponseUtils.unauthorized(res, 'No token provided');
+      }
+      
+      const jwt = require('jsonwebtoken');
+      const decoded = jwt.decode(token);
+      if (!decoded || !decoded.exp) {
+        return ResponseUtils.unauthorized(res, 'Invalid token');
+      }
+      
+      const currentTime = Math.floor(Date.now() / 1000);
+      const timeRemaining = (decoded.exp - currentTime) * 1000; // Convert to milliseconds
+      
+      if (timeRemaining <= 0) {
+        return ResponseUtils.unauthorized(res, 'Token expired');
+      }
+      
+      return ResponseUtils.success(res, {
+        timeRemaining: timeRemaining,
+        expiresAt: decoded.exp * 1000,
+        user: req.user
+      }, 'Session status retrieved');
+    } catch (error) {
+      console.error('Session status error:', error);
+      return ResponseUtils.error(res, 'Failed to check session status', 500);
+    }
+  })
+);
+
+/**
+ * GET /api/auth/websocket-token
+ * Get WebSocket authentication token
+ */
+router.get('/websocket-token',
+  authenticateToken,
+  asyncHandler(async (req, res) => {
+    try {
+      // Return the current JWT token for WebSocket connection
+      const token = req.headers.authorization?.split(' ')[1];
+      if (!token) {
+        return ResponseUtils.unauthorized(res, 'No token provided');
+      }
+      
+      const jwt = require('jsonwebtoken');
+      const { getSecret } = require('../../security/secrets-manager');
+      const JWT_SECRET = getSecret('JWT_SECRET');
+      
+      // Verify token is still valid
+      const decoded = jwt.verify(token, JWT_SECRET);
+      const currentTime = Math.floor(Date.now() / 1000);
+      
+      if (decoded.exp && decoded.exp <= currentTime) {
+        return ResponseUtils.unauthorized(res, 'Token expired');
+      }
+      
+      return ResponseUtils.success(res, { 
+        token,
+        user: req.user,
+        expiresAt: decoded.exp * 1000
+      }, 'WebSocket token retrieved');
+    } catch (error) {
+      console.error('WebSocket token error:', error);
+      return ResponseUtils.unauthorized(res, 'Invalid or expired token');
+    }
+  })
+);
+
 module.exports = router;
