@@ -8,3 +8,5 @@ The request url "/home/production-app/production-orders-app/.env" is outside of 
 
 Refer to docs https://vite.dev/config/server-options.html#server-fs-allow for configurations and more details.
 
+The request url "/home/production-app/production-orders-app/.env" is outside of Vite serving allow list.
+The request url "/home/production-app/production-orders-app/.env" is outside of Vite serving allow list.
