@@ -3060,6 +3060,7 @@ app.get('/api/labour/roster', authenticateToken, async (req, res) => {
           u.username,
           u.email,
           u.role as user_role,
+          u.company,
           COALESCE(u.employee_code, u.profile_data->>'employee_code') as employee_code,
           m.name as machine_name,
           m.environment
@@ -3079,6 +3080,7 @@ app.get('/api/labour/roster', authenticateToken, async (req, res) => {
           u.username,
           u.email,
           u.role,
+          u.company,
           COALESCE(u.employee_code, u.profile_data->>'employee_code') as employee_code,
           la.shift_type
         FROM labor_assignments la
@@ -3233,6 +3235,7 @@ app.get('/api/labor-assignments', authenticateToken, async (req, res) => {
           la.*,
           u.full_name,
           u.username,
+          u.company,
           COALESCE(u.employee_code, u.profile_data->>'employee_code') as employee_code,
           u.role as employee_role,
           m.name as machine_name,
