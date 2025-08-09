@@ -419,7 +419,7 @@ export default function LabourLayoutPage() {
                                                                 <tr key={`supervisor-${supervisor.id}`} className="hover:bg-blue-50 transition-colors">
                                                                     <td className="px-6 py-4 whitespace-nowrap">
                                                                         <span className="text-sm text-gray-600 font-mono font-semibold">
-                                                                            {supervisor.employee_code || 'N/A'}
+                                                                            {formatEmployeeCode(supervisor.employee_code)}
                                                                         </span>
                                                                     </td>
                                                                     <td className="px-6 py-4 whitespace-nowrap">
@@ -428,7 +428,7 @@ export default function LabourLayoutPage() {
                                                                                 <Users className="w-4 h-4 text-blue-600" />
                                                                             </div>
                                                                             <div className="text-sm font-semibold text-gray-900">
-                                                                                {supervisor.fullName || supervisor.name}
+                                                                                {formatUserDisplayName(supervisor)}
                                                                             </div>
                                                                         </div>
                                                                     </td>
@@ -492,7 +492,7 @@ export default function LabourLayoutPage() {
                                                                 <tr key={`assignment-${assignment.id}`} className="hover:bg-green-50 transition-colors">
                                                                     <td className="px-6 py-4 whitespace-nowrap">
                                                                         <span className="text-sm text-gray-600 font-mono font-semibold">
-                                                                            {assignment.employee_code || 'N/A'}
+                                                                            {formatEmployeeCode(assignment.employee_code)}
                                                                         </span>
                                                                     </td>
                                                                     <td className="px-6 py-4 whitespace-nowrap">
@@ -501,7 +501,7 @@ export default function LabourLayoutPage() {
                                                                                 <Users className="w-4 h-4 text-green-600" />
                                                                             </div>
                                                                             <div className="text-sm font-semibold text-gray-900">
-                                                                                {assignment.fullName || assignment.name}
+                                                                                {formatUserDisplayName(assignment)}
                                                                             </div>
                                                                         </div>
                                                                     </td>

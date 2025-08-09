@@ -3085,7 +3085,11 @@ app.get('/api/labour/roster', authenticateToken, async (req, res) => {
           u.email,
           u.role,
           u.company,
-          COALESCE(u.employee_code, u.profile_data->>'employee_code') as employee_code,
+          CASE 
+            WHEN u.employee_code IS NOT NULL AND u.employee_code != '' THEN u.employee_code
+            WHEN u.profile_data->>'employee_code' IS NOT NULL AND u.profile_data->>'employee_code' != '' THEN u.profile_data->>'employee_code'
+            ELSE LPAD(u.id::text, 4, '0')
+          END as employee_code,
           la.shift_type
         FROM labor_assignments la
         JOIN users u ON la.employee_id = u.id
@@ -3112,7 +3116,7 @@ app.get('/api/labour/roster', authenticateToken, async (req, res) => {
           id: s.id,
           fullName: s.username,
           name: s.username,
-          employee_code: `EMP${s.id.toString().padStart(4, '0')}`,
+          employee_code: s.employee_code,
           shift: s.shift_type || 'day',
           status: 'scheduled',
           role: s.role,
@@ -3123,13 +3127,13 @@ app.get('/api/labour/roster', authenticateToken, async (req, res) => {
           employee_id: a.employee_id,
           fullName: a.username,
           name: a.username,
-          employee_code: `EMP${a.employee_id.toString().padStart(4, '0')}`,
+          employee_code: a.employee_code,
           machine: a.machine_name,
           machine_id: a.machine_id,
           position: a.role,
           shift: a.shift_type,
           shift_type: a.shift_type,
-          company: 'Production Company',
+          company: a.company || 'Production Company',
           status: 'scheduled',
           role: a.user_role,
           production_area: a.environment,
@@ -3172,7 +3176,13 @@ app.get('/api/labour/today', authenticateToken, async (req, res) => {
         u.username,
         u.email,
         u.role,
-        u.is_active
+        u.is_active,
+        u.company,
+        CASE 
+          WHEN u.employee_code IS NOT NULL AND u.employee_code != '' THEN u.employee_code
+          WHEN u.profile_data->>'employee_code' IS NOT NULL AND u.profile_data->>'employee_code' != '' THEN u.profile_data->>'employee_code'
+          ELSE LPAD(u.id::text, 4, '0')
+        END as employee_code
       FROM users u
       WHERE u.is_active = true
       ORDER BY u.role, u.username
@@ -3183,11 +3193,13 @@ app.get('/api/labour/today', authenticateToken, async (req, res) => {
     const response = users.map(a => ({
       id: a.id,
       name: a.username,
-      employee_code: `EMP${a.id.toString().padStart(4, '0')}`,
+      fullName: a.username,
+      employee_code: a.employee_code,
       production_area: 'Production Floor',
       position: a.role,
       shift: 'morning', // Default shift
-      status: 'scheduled'
+      status: 'scheduled',
+      company: a.company || 'Production Company'
     }));
     
     res.json(response);
@@ -3240,7 +3252,11 @@ app.get('/api/labor-assignments', authenticateToken, async (req, res) => {
           u.full_name,
           u.username,
           u.company,
-          COALESCE(u.employee_code, u.profile_data->>'employee_code') as employee_code,
+          CASE 
+            WHEN u.employee_code IS NOT NULL AND u.employee_code != '' THEN u.employee_code
+            WHEN u.profile_data->>'employee_code' IS NOT NULL AND u.profile_data->>'employee_code' != '' THEN u.profile_data->>'employee_code'
+            ELSE LPAD(u.id::text, 4, '0')
+          END as employee_code,
           u.role as employee_role,
           m.name as machine_name,
           m.environment as machine_environment
