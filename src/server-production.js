@@ -80,6 +80,37 @@ app.use('/api/config', configurationRoutes);
 // Legacy route compatibility
 app.use('/api/labour', laborRoutes); // British spelling compatibility
 app.use('/api/planner', plannerRoutes); // Legacy planner endpoint compatibility
+app.use('/api/labor-planner', plannerRoutes); // Labor planner with dash compatibility
+
+// Labor assignments compatibility mappings
+app.get('/api/labor-assignments', (req, res, next) => {
+  req.url = '/assignments';
+  laborRoutes(req, res, next);
+});
+app.post('/api/labor-assignments', (req, res, next) => {
+  req.url = '/assignments';
+  laborRoutes(req, res, next);
+});
+app.delete('/api/labor-assignments/:id', (req, res, next) => {
+  req.url = '/assignments/' + req.params.id;
+  laborRoutes(req, res, next);
+});
+app.post('/api/labor-assignments/copy-week', (req, res, next) => {
+  req.url = '/assignments/copy-week';
+  laborRoutes(req, res, next);
+});
+app.post('/api/labor-assignments/finalize-week', (req, res, next) => {
+  req.url = '/assignments/finalize-week';
+  laborRoutes(req, res, next);
+});
+app.post('/api/labor-assignments/auto-populate-daily', (req, res, next) => {
+  req.url = '/assignments/auto-populate-daily';
+  laborRoutes(req, res, next);
+});
+app.post('/api/labor-assignments/lock-daily', (req, res, next) => {
+  req.url = '/assignments/lock-daily';
+  laborRoutes(req, res, next);
+});
 
 // Dashboard route compatibility - Production endpoints mapped to analytics
 app.get('/api/production/floor-overview', (req, res, next) => {
