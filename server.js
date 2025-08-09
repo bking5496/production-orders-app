@@ -3254,7 +3254,7 @@ app.get('/api/labor-assignments', authenticateToken, async (req, res) => {
       query += ` ORDER BY la.assignment_date, la.shift_type, la.machine_id, la.role`;
       
       const result = await client.query(query, params);
-      res.json({ success: true, data: result.rows });
+      res.json(result.rows);
       
     } finally {
       client.release();
@@ -3722,7 +3722,15 @@ app.get('/api/users', authenticateToken, async (req, res) => {
       const { role } = req.query;
       
       let query = `
-        SELECT id, username, full_name, employee_code, role, phone, profile_data, is_active
+        SELECT 
+          id, 
+          username, 
+          full_name, 
+          COALESCE(employee_code, profile_data->>'employee_code') as employee_code,
+          role, 
+          phone, 
+          profile_data, 
+          is_active
         FROM users 
         WHERE is_active = true
       `;
@@ -3738,7 +3746,7 @@ app.get('/api/users', authenticateToken, async (req, res) => {
       query += ` ORDER BY full_name, username`;
       
       const result = await client.query(query, params);
-      res.json({ success: true, data: result.rows });
+      res.json(result.rows);
       
     } finally {
       client.release();
