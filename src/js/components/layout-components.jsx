@@ -526,6 +526,8 @@ const Sidebar = ({ isOpen, onClose }) => {
         { name: 'Machines', href: '/machines', icon: 'settings', priority: 'daily', roles: ['operator', 'supervisor', 'manager', 'admin'] },
         { name: 'Labor Layout', href: '/labour-layout', icon: 'users', priority: 'daily', roles: ['supervisor', 'manager', 'admin'] },
         { name: 'Labor Planner', href: '/labor-planner', icon: 'calendar', priority: 'daily', roles: ['supervisor', 'manager', 'admin'] },
+        { name: 'Attendance Register', href: '/attendance-register', icon: 'userCheck', priority: 'daily', roles: ['supervisor', 'manager', 'admin'] },
+        { name: 'Maturation Room', href: '/maturation-room', icon: 'package', priority: 'daily', roles: ['operator', 'supervisor', 'manager', 'admin'] },
         { name: 'Analytics', href: '/analytics', icon: 'barChart3', priority: 'management', roles: ['manager', 'admin'] },
         { name: 'Shift Reports', href: '/shift-reports', icon: 'clock', priority: 'management', roles: ['supervisor', 'manager', 'admin'] },
         { name: 'Users', href: '/users', icon: 'users', priority: 'management', roles: ['admin'] },

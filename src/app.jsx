@@ -43,6 +43,8 @@ import { SettingsPage } from "./js/modules/settings-module.jsx";
 import AdminPanel from "./js/components/admin.jsx";
 import LabourLayout from "./js/components/labour-layout.jsx";
 import { LaborManagementSystem } from './js/components/labor-planner.jsx';
+import AttendanceRegister from './js/components/attendance-register.jsx';
+import MaturationRoom from './js/components/maturation-room.jsx';
 
 // Define the routes for the application
 const routes = [
@@ -57,6 +59,8 @@ const routes = [
     { path: '/users', component: UsersPage, title: 'User Management' },
     { path: '/settings', component: SettingsPage, title: 'Settings' },
     { path: '/admin', component: AdminPanel, title: 'Admin Panel' },
+    { path: '/attendance-register', component: AttendanceRegister, title: 'Attendance Register' },
+    { path: '/maturation-room', component: MaturationRoom, title: 'Maturation Room' },
 ];
 
 // Initialize the router
