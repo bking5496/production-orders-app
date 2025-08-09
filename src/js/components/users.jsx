@@ -114,11 +114,23 @@ export default function UsersPage() {
 
   const getRoleBadge = (role) => {
     const roleColors = {
-      admin: 'bg-purple-100 text-purple-800', supervisor: 'bg-blue-100 text-blue-800',
-      operator: 'bg-green-100 text-green-800', viewer: 'bg-gray-100 text-gray-800',
-      packer: 'bg-orange-100 text-orange-800'
+      // Login roles
+      admin: 'bg-purple-100 text-purple-800', 
+      supervisor: 'bg-blue-100 text-blue-800',
+      operator: 'bg-green-100 text-green-800', 
+      viewer: 'bg-gray-100 text-gray-800',
+      system: 'bg-red-100 text-red-800',
+      // Non-login roles (workforce)
+      packer: 'bg-orange-100 text-orange-800',
+      hopper_loader: 'bg-yellow-100 text-yellow-800',
+      forklift_driver: 'bg-indigo-100 text-indigo-800'
     };
-    return <span className={`px-2 py-1 rounded-full text-xs font-medium ${roleColors[role] || 'bg-gray-100 text-gray-800'}`}>{role.toUpperCase()}</span>;
+    
+    const displayRole = role === 'hopper_loader' ? 'HOPPER LOADER' : 
+                       role === 'forklift_driver' ? 'FORKLIFT DRIVER' : 
+                       role.toUpperCase();
+    
+    return <span className={`px-2 py-1 rounded-full text-xs font-medium ${roleColors[role] || 'bg-gray-100 text-gray-800'}`}>{displayRole}</span>;
   };
 
   return (
@@ -177,10 +189,17 @@ export default function UsersPage() {
             <input type="password" placeholder="Password" value={formData.password} onChange={(e) => setFormData({...formData, password: e.target.value})} className="w-full px-3 py-2 border rounded" required />
             <input type="password" placeholder="Confirm Password" value={formData.confirmPassword} onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})} className="w-full px-3 py-2 border rounded" required />
             <select value={formData.role} onChange={(e) => setFormData({...formData, role: e.target.value})} className="w-full px-3 py-2 border rounded">
-              <option value="operator">Operator</option>
-              <option value="supervisor">Supervisor</option>
-              <option value="admin">Administrator</option>
-              <option value="viewer">Viewer</option>
+              <optgroup label="Login Accounts">
+                <option value="admin">Administrator</option>
+                <option value="supervisor">Supervisor</option>
+                <option value="operator">Operator</option>
+                <option value="viewer">Viewer</option>
+              </optgroup>
+              <optgroup label="Workforce (Non-Login)">
+                <option value="packer">Packer</option>
+                <option value="hopper_loader">Hopper Loader</option>
+                <option value="forklift_driver">Forklift Driver</option>
+              </optgroup>
             </select>
             <div className="flex justify-end space-x-2"><button type="button" onClick={() => setShowAddModal(false)}>Cancel</button><button type="submit">Add User</button></div>
           </form>
@@ -202,10 +221,17 @@ export default function UsersPage() {
             <div>
                 <label>Role</label>
                 <select value={formData.role} onChange={(e) => setFormData({...formData, role: e.target.value})} className="w-full px-3 py-2 border rounded">
-                  <option value="operator">Operator</option>
-                  <option value="supervisor">Supervisor</option>
-                  <option value="admin">Administrator</option>
-                  <option value="viewer">Viewer</option>
+                  <optgroup label="Login Accounts">
+                    <option value="admin">Administrator</option>
+                    <option value="supervisor">Supervisor</option>
+                    <option value="operator">Operator</option>
+                    <option value="viewer">Viewer</option>
+                  </optgroup>
+                  <optgroup label="Workforce (Non-Login)">
+                    <option value="packer">Packer</option>
+                    <option value="hopper_loader">Hopper Loader</option>
+                    <option value="forklift_driver">Forklift Driver</option>
+                  </optgroup>
                 </select>
             </div>
             <div className="flex justify-end space-x-2"><button type="button" onClick={() => setShowEditModal(false)}>Cancel</button><button type="submit">Update User</button></div>
