@@ -3703,7 +3703,7 @@ app.get('/api/environments', authenticateToken, async (req, res) => {
         ORDER BY name
       `);
       
-      res.json({ success: true, data: result.rows });
+      res.json(result.rows);
       
     } finally {
       client.release();
