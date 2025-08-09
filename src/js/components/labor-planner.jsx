@@ -4,6 +4,24 @@ import API from '../core/api';
 import { Modal, Button } from './ui-components.jsx';
 import { useConnectionStatus } from '../core/websocket-hooks.js';
 
+// Simple WebSocket status indicator component
+const WebSocketStatusIndicator = () => {
+  const { isConnected, isAuthenticated } = useConnectionStatus();
+  
+  if (!isConnected) {
+    return null; // Don't show anything if disconnected
+  }
+  
+  return (
+    <div 
+      className={`inline-block w-2 h-2 rounded-full ml-1 ${
+        isAuthenticated ? 'bg-green-500' : 'bg-yellow-500'
+      }`}
+      title={isAuthenticated ? 'Connected' : 'Connecting...'}
+    />
+  );
+};
+
 const LaborPlanner = ({ currentUser }) => {
   const [selectedDate, setSelectedDate] = useState(() => {
     const today = new Date();
@@ -441,10 +459,11 @@ const LaborPlanner = ({ currentUser }) => {
                                     <div className="space-y-2">
                                       {roleAssignments.map(assignment => (
                                         <div key={assignment.id} className="flex items-center justify-between bg-gray-50 rounded-lg p-3 border border-gray-100">
-                                          <div>
+                                          <div className="flex items-center">
                                             <p className="font-medium text-gray-900 text-sm">
                                               {assignment.username || `Employee #${assignment.employee_id}`}
                                             </p>
+                                            <WebSocketStatusIndicator />
                                           </div>
                                           {isScheduled && (
                                             <Button

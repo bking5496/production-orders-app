@@ -31,3 +31,5 @@ Instead of /public/vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php, use /vend
 Files in the public directory are served at the root path.
 Instead of /public/index.php?s=/index/\think\app/invokefunction&function=call_user_func_array&vars[0]=md5&vars[1][]=Hello, use /index.php?s=/index/\think\app/invokefunction&function=call_user_func_array&vars[0]=md5&vars[1][]=Hello.
 4:08:36 PM [vite] (client) hmr update /src/js/components/labor-planner.jsx
+4:10:02 PM [vite] (client) hmr update /src/js/components/labor-planner.jsx
+4:13:01 PM [vite] (client) hmr update /src/js/components/labor-planner.jsx
