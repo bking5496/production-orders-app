@@ -26,3 +26,7 @@ The request url "/home/production-app/production-orders-app/.env" is outside of 
 The request url "/home/production-app/production-orders-app/.env" is outside of Vite serving allow list.
 The request url "/?url=.env" is outside of Vite serving allow list.
 The request url "/?url=.env" is outside of Vite serving allow list.
+Files in the public directory are served at the root path.
+Instead of /public/vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php, use /vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php.
+Files in the public directory are served at the root path.
+Instead of /public/index.php?s=/index/\think\app/invokefunction&function=call_user_func_array&vars[0]=md5&vars[1][]=Hello, use /index.php?s=/index/\think\app/invokefunction&function=call_user_func_array&vars[0]=md5&vars[1][]=Hello.
