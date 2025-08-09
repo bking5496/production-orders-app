@@ -286,28 +286,104 @@ class OrdersService {
   }
 
   /**
+   * Stop order production
+   */
+  async stopOrder(id, stopData, userId) {
+    const { reason, notes, category } = stopData;
+    
+    const order = await this.getOrderById(id);
+    
+    if (!['pending', 'in_progress'].includes(order.status)) {
+      throw new ValidationError('Only pending or in-progress orders can be stopped');
+    }
+
+    // Start transaction for atomic operations
+    const queries = [
+      // Update order status to stopped
+      {
+        text: `
+          UPDATE production_orders 
+          SET status = 'stopped',
+              stop_time = NOW(),
+              stop_reason = $1,
+              notes = COALESCE(notes, '') || CASE WHEN COALESCE(notes, '') = '' THEN '' ELSE ' | ' END || 'Stopped: ' || COALESCE($2, ''),
+              updated_at = NOW(),
+              updated_by = $3
+          WHERE id = $4 AND status IN ('pending', 'in_progress')
+          RETURNING *
+        `,
+        params: [reason || null, notes || '', userId, parseInt(id)]
+      },
+      // Create downtime record
+      {
+        text: `
+          INSERT INTO production_stops 
+          (order_id, start_time, reason, category, notes, operator_id, created_at)
+          VALUES ($1, NOW(), $2, $3, $4, $5, NOW())
+          RETURNING id
+        `,
+        params: [parseInt(id), reason || 'Manual Stop', category || 'operational', notes || '', userId]
+      }
+    ];
+
+    const results = await DatabaseUtils.transaction(queries);
+    
+    if (results[0].rowCount === 0) {
+      throw new ValidationError('Order not found or cannot be stopped');
+    }
+
+    return results[0].rows[0];
+  }
+
+  /**
    * Resume paused order
    */
   async resumeOrder(id, userId) {
     const order = await this.getOrderById(id);
     
-    if (order.status !== 'paused') {
-      throw new ValidationError('Only paused orders can be resumed');
+    if (!['paused', 'stopped'].includes(order.status)) {
+      throw new ValidationError('Only paused or stopped orders can be resumed');
     }
 
-    const updatedOrder = await DatabaseUtils.update(
-      'production_orders',
+    // Start transaction for atomic operations
+    const queries = [
+      // Update order status back to in_progress
       {
-        status: 'in_progress',
-        resume_time: new Date(),
-        updated_at: new Date(),
-        updated_by: userId
+        text: `
+          UPDATE production_orders 
+          SET status = 'in_progress',
+              stop_time = NULL,
+              stop_reason = NULL,
+              resume_time = NOW(),
+              updated_at = NOW(),
+              updated_by = $2
+          WHERE id = $1 AND status IN ('stopped', 'paused')
+          RETURNING *
+        `,
+        params: [parseInt(id), userId]
       },
-      { id },
-      '*'
-    );
+      // Update the latest stop record with resolution info
+      {
+        text: `
+          UPDATE production_stops 
+          SET end_time = NOW(),
+              resolved_at = NOW(),
+              duration = EXTRACT(EPOCH FROM (NOW() - start_time)) / 60,
+              resolved_by = $2
+          WHERE order_id = $1 AND end_time IS NULL
+          RETURNING id, duration, start_time
+        `,
+        params: [parseInt(id), userId]
+      }
+    ];
 
-    return updatedOrder[0];
+    const results = await DatabaseUtils.transaction(queries);
+    
+    if (results[0].rowCount === 0) {
+      throw new ValidationError('Order not found or not stopped/paused');
+    }
+
+    return results[0].rows[0];
   }
 
   /**

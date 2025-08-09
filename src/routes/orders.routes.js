@@ -288,6 +288,29 @@ router.post('/:id/pause',
 );
 
 /**
+ * POST /api/orders/:id/stop
+ * Stop order production
+ */
+router.post('/:id/stop',
+  authenticateToken,
+  requireRole(['admin', 'supervisor']),
+  [
+    body('reason').notEmpty().trim(),
+    body('notes').optional().trim(),
+    body('category').optional().trim()
+  ],
+  asyncHandler(async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.validationError(errors.array());
+    }
+
+    const stoppedOrder = await ordersService.stopOrder(req.params.id, req.body, req.user.id);
+    return res.success(stoppedOrder, 'Order stopped successfully');
+  })
+);
+
+/**
  * POST /api/orders/:id/resume
  * Resume paused order
  */

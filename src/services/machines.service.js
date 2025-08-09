@@ -8,23 +8,32 @@ class MachinesService {
    * Get all machines with optional filtering
    */
   async getAllMachines(filters = {}) {
-    const { environment } = filters;
+    const { environment, status } = filters;
     
     let query = `
       SELECT 
-        m.*,
-        po.id as current_order_id,
-        po.order_number,
-        po.product_name,
-        po.start_time
+        m.id, m.name, m.code, m.type, m.environment, m.status, m.capacity, m.production_rate,
+        m.crew_size, m.operators_per_shift, m.hopper_loaders_per_shift, m.packers_per_shift,
+        po.order_number
       FROM machines m
       LEFT JOIN production_orders po ON m.id = po.machine_id AND po.status IN ('in_progress', 'stopped')
+      WHERE 1=1
     `;
     
     const params = [];
+    let paramIndex = 1;
+    
     if (environment) {
-      query += ' WHERE m.environment = $1';
+      query += ` AND m.environment = $${paramIndex}`;
       params.push(environment);
+      paramIndex++;
+    }
+    
+    if (status) {
+      const statuses = status.split(',').map(s => s.trim());
+      query += ` AND m.status = ANY($${paramIndex})`;
+      params.push(statuses);
+      paramIndex++;
     }
     
     query += ' ORDER BY m.name';

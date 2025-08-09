@@ -15,7 +15,8 @@ const router = express.Router();
 router.get('/',
   authenticateToken,
   [
-    query('environment').optional().isString()
+    query('environment').optional().isString(),
+    query('status').optional().isString()
   ],
   asyncHandler(async (req, res) => {
     const errors = validationResult(req);
