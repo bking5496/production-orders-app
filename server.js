@@ -3061,7 +3061,11 @@ app.get('/api/labour/roster', authenticateToken, async (req, res) => {
           u.email,
           u.role as user_role,
           u.company,
-          COALESCE(u.employee_code, u.profile_data->>'employee_code') as employee_code,
+          CASE 
+            WHEN u.employee_code IS NOT NULL AND u.employee_code != '' THEN u.employee_code
+            WHEN u.profile_data->>'employee_code' IS NOT NULL AND u.profile_data->>'employee_code' != '' THEN u.profile_data->>'employee_code'
+            ELSE LPAD(u.id::text, 4, '0')
+          END as employee_code,
           m.name as machine_name,
           m.environment
         FROM labor_assignments la
