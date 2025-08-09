@@ -3895,25 +3895,13 @@ app.get('/api/attendance-register', authenticateToken, async (req, res) => {
           ar.marked_by,
           ar.created_at,
           m.name as machine_name,
-          CASE 
-            WHEN POSITION(' ' IN u.username) > 0 THEN 
-              INITCAP(SUBSTRING(u.username FROM 1 FOR POSITION(' ' IN u.username) - 1)) || 
-              SUBSTRING(u.username FROM POSITION(' ' IN u.username) FOR LENGTH(u.username) - POSITION(' ' IN reverse(u.username)) - POSITION(' ' IN u.username) + 1) || 
-              INITCAP(SUBSTRING(u.username FROM LENGTH(u.username) - POSITION(' ' IN reverse(u.username)) + 2))
-            ELSE INITCAP(u.username)
-          END as employee_name,
+          u.username as employee_name,
           CASE 
             WHEN u.employee_code IS NOT NULL AND u.employee_code != '' THEN u.employee_code
             WHEN u.profile_data->>'employee_code' IS NOT NULL AND u.profile_data->>'employee_code' != '' THEN u.profile_data->>'employee_code'
             ELSE LPAD(u.id::text, 4, '0')
           END as employee_code,
-          CASE 
-            WHEN POSITION(' ' IN marker.username) > 0 THEN 
-              INITCAP(SUBSTRING(marker.username FROM 1 FOR POSITION(' ' IN marker.username) - 1)) || 
-              SUBSTRING(marker.username FROM POSITION(' ' IN marker.username) FOR LENGTH(marker.username) - POSITION(' ' IN reverse(marker.username)) - POSITION(' ' IN marker.username) + 1) || 
-              INITCAP(SUBSTRING(marker.username FROM LENGTH(marker.username) - POSITION(' ' IN reverse(marker.username)) + 2))
-            ELSE INITCAP(marker.username)
-          END as marked_by_name
+          marker.username as marked_by_name
         FROM attendance_register ar
         JOIN machines m ON ar.machine_id = m.id
         JOIN users u ON ar.employee_id = u.id
@@ -3945,13 +3933,7 @@ app.get('/api/attendance-register', authenticateToken, async (req, res) => {
         SELECT 
           la.employee_id,
           la.machine_id,
-          CASE 
-            WHEN POSITION(' ' IN u.username) > 0 THEN 
-              INITCAP(SUBSTRING(u.username FROM 1 FOR POSITION(' ' IN u.username) - 1)) || 
-              SUBSTRING(u.username FROM POSITION(' ' IN u.username) FOR LENGTH(u.username) - POSITION(' ' IN reverse(u.username)) - POSITION(' ' IN u.username) + 1) || 
-              INITCAP(SUBSTRING(u.username FROM LENGTH(u.username) - POSITION(' ' IN reverse(u.username)) + 2))
-            ELSE INITCAP(u.username)
-          END as employee_name,
+          u.username as employee_name,
           CASE 
             WHEN u.employee_code IS NOT NULL AND u.employee_code != '' THEN u.employee_code
             WHEN u.profile_data->>'employee_code' IS NOT NULL AND u.profile_data->>'employee_code' != '' THEN u.profile_data->>'employee_code'
@@ -4314,25 +4296,13 @@ app.get('/api/attendance-register', authenticateToken, async (req, res) => {
           ar.marked_by,
           ar.created_at,
           m.name as machine_name,
-          CASE 
-            WHEN POSITION(' ' IN u.username) > 0 THEN 
-              INITCAP(SUBSTRING(u.username FROM 1 FOR POSITION(' ' IN u.username) - 1)) || 
-              SUBSTRING(u.username FROM POSITION(' ' IN u.username) FOR LENGTH(u.username) - POSITION(' ' IN reverse(u.username)) - POSITION(' ' IN u.username) + 1) || 
-              INITCAP(SUBSTRING(u.username FROM LENGTH(u.username) - POSITION(' ' IN reverse(u.username)) + 2))
-            ELSE INITCAP(u.username)
-          END as employee_name,
+          u.username as employee_name,
           CASE 
             WHEN u.employee_code IS NOT NULL AND u.employee_code != '' THEN u.employee_code
             WHEN u.profile_data->>'employee_code' IS NOT NULL AND u.profile_data->>'employee_code' != '' THEN u.profile_data->>'employee_code'
             ELSE LPAD(u.id::text, 4, '0')
           END as employee_code,
-          CASE 
-            WHEN POSITION(' ' IN marker.username) > 0 THEN 
-              INITCAP(SUBSTRING(marker.username FROM 1 FOR POSITION(' ' IN marker.username) - 1)) || 
-              SUBSTRING(marker.username FROM POSITION(' ' IN marker.username) FOR LENGTH(marker.username) - POSITION(' ' IN reverse(marker.username)) - POSITION(' ' IN marker.username) + 1) || 
-              INITCAP(SUBSTRING(marker.username FROM LENGTH(marker.username) - POSITION(' ' IN reverse(marker.username)) + 2))
-            ELSE INITCAP(marker.username)
-          END as marked_by_name
+          marker.username as marked_by_name
         FROM attendance_register ar
         JOIN machines m ON ar.machine_id = m.id
         JOIN users u ON ar.employee_id = u.id
@@ -4364,13 +4334,7 @@ app.get('/api/attendance-register', authenticateToken, async (req, res) => {
         SELECT 
           la.employee_id,
           la.machine_id,
-          CASE 
-            WHEN POSITION(' ' IN u.username) > 0 THEN 
-              INITCAP(SUBSTRING(u.username FROM 1 FOR POSITION(' ' IN u.username) - 1)) || 
-              SUBSTRING(u.username FROM POSITION(' ' IN u.username) FOR LENGTH(u.username) - POSITION(' ' IN reverse(u.username)) - POSITION(' ' IN u.username) + 1) || 
-              INITCAP(SUBSTRING(u.username FROM LENGTH(u.username) - POSITION(' ' IN reverse(u.username)) + 2))
-            ELSE INITCAP(u.username)
-          END as employee_name,
+          u.username as employee_name,
           CASE 
             WHEN u.employee_code IS NOT NULL AND u.employee_code != '' THEN u.employee_code
             WHEN u.profile_data->>'employee_code' IS NOT NULL AND u.profile_data->>'employee_code' != '' THEN u.profile_data->>'employee_code'
