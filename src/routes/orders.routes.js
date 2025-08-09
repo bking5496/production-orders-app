@@ -354,6 +354,14 @@ router.post('/:id/resume',
   requireRole(['admin', 'supervisor', 'operator']),
   asyncHandler(async (req, res) => {
     const resumedOrder = await ordersService.resumeOrder(req.params.id, req.user.id);
+    
+    // Broadcast order resume
+    req.broadcast('order_resumed', {
+      id: resumedOrder.id,
+      order_number: resumedOrder.order_number,
+      status: resumedOrder.status
+    }, 'production');
+    
     return res.success(resumedOrder, 'Order resumed successfully');
   })
 );
@@ -378,6 +386,16 @@ router.post('/:id/complete',
     }
 
     const completedOrder = await ordersService.completeOrder(req.params.id, req.body, req.user.id);
+    
+    // Broadcast order completion
+    req.broadcast('order_completed', {
+      id: completedOrder.id,
+      order_number: completedOrder.order_number,
+      status: completedOrder.status,
+      actual_quantity: completedOrder.actual_quantity,
+      stop_time: completedOrder.stop_time
+    }, 'production');
+    
     return res.success(completedOrder, 'Order completed successfully');
   })
 );

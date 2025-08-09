@@ -322,7 +322,7 @@ class OrdersService {
           VALUES ($1, NOW(), $2, $3, $4, $5, NOW())
           RETURNING id
         `,
-        params: [parseInt(id), reason || 'Manual Stop', category || 'operational', notes || '', userId]
+        params: [parseInt(id), reason || 'Manual Stop', category || 'Other', notes || '', userId]
       }
     ];
 
