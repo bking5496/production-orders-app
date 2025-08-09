@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Calendar, Factory, Plus, Users, X, ChevronLeft, ChevronRight, UserCheck, Truck } from 'lucide-react';
 import API from '../core/api';
 import { Modal, Button } from './ui-components.jsx';
+import { useConnectionStatus } from '../core/websocket-hooks.js';
 
 const LaborPlanner = ({ currentUser }) => {
   const [selectedDate, setSelectedDate] = useState(() => {
