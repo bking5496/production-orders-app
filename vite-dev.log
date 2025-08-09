@@ -51,3 +51,4 @@ Instead of /public/index.php?s=/index/\think\app/invokefunction&function=call_us
 6:10:12 PM [vite] (client) page reload server.js
 6:10:36 PM [vite] (client) page reload server.js
 6:10:58 PM [vite] (client) page reload server.js
+The request url "/home/production-app/production-orders-app/.env" is outside of Vite serving allow list.
