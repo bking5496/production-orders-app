@@ -103,8 +103,8 @@ export default function MachinesPage() {
   const loadEnvironments = async () => {
     try {
       const response = await API.get('/environments');
-      // Handle the response format - environments API returns { success: true, data: [...] }
-      const environmentsData = response?.data?.data || response?.data || [];
+      // Handle the response format - environments API returns raw array
+      const environmentsData = Array.isArray(response) ? response : [];
       console.log('🌍 Environments loaded in machines.jsx:', environmentsData);
       setEnvironments(environmentsData);
     } catch (error) {

@@ -118,13 +118,13 @@ const ConnectionStatus = () => {
         };
 
         // Listen to WebSocket events if service is available
-        if (window.WebSocketService) {
-            window.WebSocketService.on('connected', handleWsConnected);
-            window.WebSocketService.on('authenticated', handleWsConnected);
-            window.WebSocketService.on('disconnected', handleWsDisconnected);
-            window.WebSocketService.on('reconnecting', handleWsReconnecting);
+        if (window.EnhancedWebSocketService) {
+            window.EnhancedWebSocketService.on('connected', handleWsConnected);
+            window.EnhancedWebSocketService.on('authenticated', handleWsConnected);
+            window.EnhancedWebSocketService.on('disconnected', handleWsDisconnected);
+            window.EnhancedWebSocketService.on('reconnecting', handleWsReconnecting);
             
-            const status = window.WebSocketService.getStatus();
+            const status = window.EnhancedWebSocketService.getConnectionStatus();
             setWsStatus(status.isConnected ? 'connected' : status.state);
         }
 
@@ -142,11 +142,11 @@ const ConnectionStatus = () => {
             window.removeEventListener('offline', handleOffline);
             document.removeEventListener('mousedown', handleClickOutside);
             
-            if (window.WebSocketService) {
-                window.WebSocketService.off('connected', handleWsConnected);
-                window.WebSocketService.off('authenticated', handleWsConnected);
-                window.WebSocketService.off('disconnected', handleWsDisconnected);
-                window.WebSocketService.off('reconnecting', handleWsReconnecting);
+            if (window.EnhancedWebSocketService) {
+                window.EnhancedWebSocketService.off('connected', handleWsConnected);
+                window.EnhancedWebSocketService.off('authenticated', handleWsConnected);
+                window.EnhancedWebSocketService.off('disconnected', handleWsDisconnected);
+                window.EnhancedWebSocketService.off('reconnecting', handleWsReconnecting);
             }
         };
     }, [isOnline]);

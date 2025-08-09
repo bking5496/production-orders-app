@@ -128,6 +128,11 @@ export default function UsersPage() {
             {users.map(user => (
               <tr key={user.id}>
                 <td className="px-6 py-4 whitespace-nowrap">{user.username}</td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <span className="text-sm text-gray-900 font-mono">
+                    {user.employee_code || `EMP${user.id.toString().padStart(4, '0')}`}
+                  </span>
+                </td>
                 <td className="px-6 py-4 whitespace-nowrap">{user.email}</td>
                 <td className="px-6 py-4 whitespace-nowrap">{getRoleBadge(user.role)}</td>
                 <td className="px-6 py-4 whitespace-nowrap">{user.is_active ? 'Active' : 'Inactive'}</td>
