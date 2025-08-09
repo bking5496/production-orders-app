@@ -195,6 +195,16 @@ router.post('/',
     }
 
     const newOrder = await ordersService.createOrder(req.body, req.user.id);
+    
+    // Broadcast order creation
+    req.broadcast('order_created', {
+      id: newOrder.id,
+      order_number: newOrder.order_number,
+      product_name: newOrder.product_name,
+      status: newOrder.status,
+      environment: newOrder.environment
+    }, 'production');
+    
     return res.created(newOrder, 'Order created successfully');
   })
 );
@@ -260,6 +270,14 @@ router.post('/:id/start',
     const { machine_id } = req.body;
     const startedOrder = await ordersService.startOrder(req.params.id, machine_id, req.user.id);
     
+    // Broadcast order start
+    req.broadcast('order_started', {
+      id: startedOrder.id,
+      order_number: startedOrder.order_number,
+      status: startedOrder.status,
+      start_time: startedOrder.start_time
+    }, 'production');
+    
     return res.success(startedOrder, 'Order started successfully');
   })
 );
@@ -282,6 +300,14 @@ router.post('/:id/pause',
 
     const { reason } = req.body;
     const pausedOrder = await ordersService.pauseOrder(req.params.id, reason, req.user.id);
+    
+    // Broadcast order pause
+    req.broadcast('order_paused', {
+      id: pausedOrder.id,
+      order_number: pausedOrder.order_number,
+      status: pausedOrder.status,
+      reason: reason
+    }, 'production');
     
     return res.success(pausedOrder, 'Order paused successfully');
   })
@@ -306,6 +332,15 @@ router.post('/:id/stop',
     }
 
     const stoppedOrder = await ordersService.stopOrder(req.params.id, req.body, req.user.id);
+    
+    // Broadcast order stop
+    req.broadcast('order_stopped', {
+      id: stoppedOrder.id,
+      order_number: stoppedOrder.order_number,
+      status: stoppedOrder.status,
+      stop_reason: stoppedOrder.stop_reason
+    }, 'production');
+    
     return res.success(stoppedOrder, 'Order stopped successfully');
   })
 );

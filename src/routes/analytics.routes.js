@@ -9,6 +9,28 @@ const analyticsService = require('../services/analytics.service');
 const router = express.Router();
 
 /**
+ * GET /api/analytics/dashboard
+ * Get dashboard analytics data
+ */
+router.get('/dashboard',
+  authenticateToken,
+  [
+    query('start_date').optional().isISO8601(),
+    query('end_date').optional().isISO8601(),
+    query('environment').optional().isString()
+  ],
+  asyncHandler(async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.validationError(errors.array());
+    }
+
+    const dashboardData = await analyticsService.getDashboardData(req.query);
+    return res.success(dashboardData, 'Dashboard data retrieved successfully');
+  })
+);
+
+/**
  * GET /api/analytics/summary
  * Get analytics summary with basic production metrics
  */

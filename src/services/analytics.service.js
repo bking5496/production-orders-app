@@ -5,6 +5,35 @@ const { ValidationError } = require('../middleware/error-handler');
 class AnalyticsService {
 
   /**
+   * Get comprehensive dashboard data
+   */
+  async getDashboardData(filters = {}) {
+    const [
+      activeOrders,
+      machinesOverview,
+      floorOverview,
+      productionStatus
+    ] = await Promise.all([
+      this.getActiveOrders(),
+      this.getMachinesOverview(filters.environment),
+      this.getProductionFloorOverview(),
+      this.getProductionStatus()
+    ]);
+
+    return {
+      activeOrders,
+      machinesOverview,
+      floorOverview,
+      productionStatus,
+      summary: {
+        totalActiveOrders: activeOrders.length,
+        machineCount: machinesOverview.machines?.length || 0,
+        onlineCount: machinesOverview.machines?.filter(m => m.status === 'available' || m.status === 'in_use').length || 0
+      }
+    };
+  }
+
+  /**
    * Get active production orders
    */
   async getActiveOrders() {
