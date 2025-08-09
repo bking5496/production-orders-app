@@ -23,3 +23,6 @@ The request url "/home/production-app/production-orders-app/.env" is outside of 
 12:39:29 PM [vite] (client) page reload server.js
 1:10:19 PM [vite] (client) hmr update /src/js/components/shift-reports.jsx
 1:18:41 PM [vite] (client) hmr update /src/js/components/shift-reports.jsx
+The request url "/home/production-app/production-orders-app/.env" is outside of Vite serving allow list.
+The request url "/?url=.env" is outside of Vite serving allow list.
+The request url "/?url=.env" is outside of Vite serving allow list.
