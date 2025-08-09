@@ -68,7 +68,8 @@ export default function MaturationRoom() {
 
     const loadCompletedOrders = async () => {
         try {
-            const response = await API.get('/orders?status=completed');
+            // Get completed orders from blending machines only (including archived)
+            const response = await API.get('/orders?status=completed&environment=blending&include_archived=true');
             // Handle both direct array response and wrapped response
             const orders = Array.isArray(response) ? response : (response.data || []);
             const ordersWithoutMaturation = orders.filter(order => 
@@ -76,7 +77,7 @@ export default function MaturationRoom() {
             );
             setCompletedOrders(ordersWithoutMaturation);
         } catch (error) {
-            console.error('Failed to load completed orders:', error);
+            console.error('Failed to load completed blending orders:', error);
             setCompletedOrders([]);
         }
     };

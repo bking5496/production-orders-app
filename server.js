@@ -1069,53 +1069,59 @@ app.get('/api/machines/stats',
 // Production order routes
 app.get('/api/orders',
   authenticateToken,
-  (req, res) => {
-    const { environment, status, include_archived, date } = req.query;
-    
-    let query = `
-      SELECT 
-        o.*,
-        m.name as machine_name,
-        u.username as operator_name
-      FROM production_orders o
-      LEFT JOIN machines m ON o.machine_id = m.id
-      LEFT JOIN users u ON o.operator_id = u.id
-      WHERE 1=1
-    `;
-    
-    const params = [];
-    let paramIndex = 1;
-    
-    // By default, exclude archived orders unless specifically requested
-    if (include_archived !== 'true') {
-      query += ' AND (o.archived = false OR o.archived IS NULL)';
-    }
-    
-    if (environment) {
-      query += ` AND o.environment = $${paramIndex++}`;
-      params.push(environment);
-    }
-    
-    if (status) {
-      query += ` AND o.status = $${paramIndex++}`;
-      params.push(status);
-    }
-    
-    // Date filtering for labor planning
-    if (date) {
-      query += ` AND DATE(o.due_date) = $${paramIndex++}`;
-      params.push(date);
-    }
-    
-    query += ' ORDER BY o.created_at DESC';
-    
-    db.all(query, params, (err, orders) => {
-      if (err) {
-        console.error('Orders API error:', err);
-        return res.status(500).json({ error: 'Database error' });
+  async (req, res) => {
+    try {
+      const client = await pool.connect();
+      try {
+        const { environment, status, include_archived, date } = req.query;
+        
+        let query = `
+          SELECT 
+            o.*,
+            m.name as machine_name,
+            u.username as operator_name
+          FROM production_orders o
+          LEFT JOIN machines m ON o.machine_id = m.id
+          LEFT JOIN users u ON o.operator_id = u.id
+          WHERE 1=1
+        `;
+        
+        const params = [];
+        let paramIndex = 1;
+        
+        // By default, exclude archived orders unless specifically requested
+        if (include_archived !== 'true') {
+          query += ' AND (o.archived = false OR o.archived IS NULL)';
+        }
+        
+        if (environment) {
+          query += ` AND m.environment = $${paramIndex++}`;
+          params.push(environment);
+        }
+        
+        if (status) {
+          query += ` AND o.status = $${paramIndex++}`;
+          params.push(status);
+        }
+        
+        // Date filtering for labor planning
+        if (date) {
+          query += ` AND DATE(o.due_date) = $${paramIndex++}`;
+          params.push(date);
+        }
+        
+        query += ' ORDER BY o.created_at DESC';
+        
+        const result = await client.query(query, params);
+        res.json(result.rows);
+        
+      } finally {
+        client.release();
       }
-      res.json(orders);
-    });
+    } catch (error) {
+      console.error('Orders API error:', error);
+      res.status(500).json({ error: 'Database error', details: error.message });
+    }
   }
 );
 
@@ -3995,7 +4001,7 @@ app.get('/api/attendance-register', authenticateToken, async (req, res) => {
       const result = await client.query(query, params);
       
       // Also get employees who should be present but haven't been marked
-      const assignmentsQuery = `
+      let assignmentsQuery = `
         SELECT 
           la.employee_id,
           la.machine_id,
