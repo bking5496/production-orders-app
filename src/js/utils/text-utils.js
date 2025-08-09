@@ -11,16 +11,34 @@ export const capitalizeWords = (str) => {
 };
 
 /**
- * Format user display name consistently
+ * Format user display name consistently - capitalize first and last words only
  * @param {object} user - User object with username and other properties
  * @returns {string} - Formatted display name
  */
 export const formatUserDisplayName = (user) => {
     if (!user) return 'Unknown';
     
-    // Use fullName if available, otherwise use username
-    const name = user.fullName || user.username || 'Unknown';
-    return capitalizeWords(name);
+    // Use employee_name if available (already formatted by server), then fullName, then username
+    const name = user.employee_name || user.fullName || user.username || 'Unknown';
+    
+    // If the server already formatted it (contains uppercase), return as-is
+    if (name && /[A-Z]/.test(name)) {
+        return name;
+    }
+    
+    // Otherwise, format with first and last word capitalized
+    if (!name) return 'Unknown';
+    const words = name.split(' ').filter(word => word.length > 0);
+    if (words.length === 0) return name;
+    
+    const formattedWords = words.map((word, index) => {
+        if (index === 0 || index === words.length - 1) {
+            return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+        }
+        return word.toLowerCase();
+    });
+    
+    return formattedWords.join(' ');
 };
 
 /**

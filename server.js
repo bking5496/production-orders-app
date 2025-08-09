@@ -3786,7 +3786,11 @@ app.get('/api/users', authenticateToken, async (req, res) => {
           id, 
           username, 
           full_name, 
-          COALESCE(employee_code, profile_data->>'employee_code') as employee_code,
+          CASE 
+            WHEN employee_code IS NOT NULL AND employee_code != '' THEN employee_code
+            WHEN profile_data->>'employee_code' IS NOT NULL AND profile_data->>'employee_code' != '' THEN profile_data->>'employee_code'
+            ELSE LPAD(id::text, 4, '0')
+          END as employee_code,
           role, 
           phone, 
           profile_data, 
@@ -3861,6 +3865,349 @@ app.get('/api/machines', authenticateToken, async (req, res) => {
   } catch (error) {
     console.error('Error fetching machines:', error);
     res.status(500).json({ error: 'Failed to fetch machines', details: error.message });
+  }
+});
+
+// ================================================================
+// ATTENDANCE REGISTER ENDPOINTS
+// ================================================================
+
+// Get attendance data for a specific date, machine, and shift
+app.get('/api/attendance-register', authenticateToken, async (req, res) => {
+  try {
+    const client = await pool.connect();
+    try {
+      const { date, machine_id, shift } = req.query;
+      const targetDate = date || new Date().toISOString().split('T')[0];
+      
+      let query = `
+        SELECT 
+          ar.id,
+          ar.date,
+          ar.machine_id,
+          ar.employee_id,
+          ar.shift_type,
+          ar.status,
+          ar.check_in_time,
+          ar.check_out_time,
+          ar.hours_worked,
+          ar.notes,
+          ar.marked_by,
+          ar.created_at,
+          m.name as machine_name,
+          CASE 
+            WHEN POSITION(' ' IN u.username) > 0 THEN 
+              INITCAP(SUBSTRING(u.username FROM 1 FOR POSITION(' ' IN u.username) - 1)) || 
+              SUBSTRING(u.username FROM POSITION(' ' IN u.username) FOR LENGTH(u.username) - POSITION(' ' IN reverse(u.username)) - POSITION(' ' IN u.username) + 1) || 
+              INITCAP(SUBSTRING(u.username FROM LENGTH(u.username) - POSITION(' ' IN reverse(u.username)) + 2))
+            ELSE INITCAP(u.username)
+          END as employee_name,
+          CASE 
+            WHEN u.employee_code IS NOT NULL AND u.employee_code != '' THEN u.employee_code
+            WHEN u.profile_data->>'employee_code' IS NOT NULL AND u.profile_data->>'employee_code' != '' THEN u.profile_data->>'employee_code'
+            ELSE LPAD(u.id::text, 4, '0')
+          END as employee_code,
+          CASE 
+            WHEN POSITION(' ' IN marker.username) > 0 THEN 
+              INITCAP(SUBSTRING(marker.username FROM 1 FOR POSITION(' ' IN marker.username) - 1)) || 
+              SUBSTRING(marker.username FROM POSITION(' ' IN marker.username) FOR LENGTH(marker.username) - POSITION(' ' IN reverse(marker.username)) - POSITION(' ' IN marker.username) + 1) || 
+              INITCAP(SUBSTRING(marker.username FROM LENGTH(marker.username) - POSITION(' ' IN reverse(marker.username)) + 2))
+            ELSE INITCAP(marker.username)
+          END as marked_by_name
+        FROM attendance_register ar
+        JOIN machines m ON ar.machine_id = m.id
+        JOIN users u ON ar.employee_id = u.id
+        LEFT JOIN users marker ON ar.marked_by = marker.id
+        WHERE ar.date = $1
+      `;
+      
+      const params = [targetDate];
+      let paramIndex = 2;
+      
+      if (machine_id && machine_id !== 'all') {
+        query += ` AND ar.machine_id = $${paramIndex}`;
+        params.push(machine_id);
+        paramIndex++;
+      }
+      
+      if (shift) {
+        query += ` AND ar.shift_type = $${paramIndex}`;
+        params.push(shift);
+        paramIndex++;
+      }
+      
+      query += ` ORDER BY m.name, u.username`;
+      
+      const result = await client.query(query, params);
+      
+      // Also get employees who should be present but haven't been marked
+      let assignmentsQuery = `
+        SELECT 
+          la.employee_id,
+          la.machine_id,
+          CASE 
+            WHEN POSITION(' ' IN u.username) > 0 THEN 
+              INITCAP(SUBSTRING(u.username FROM 1 FOR POSITION(' ' IN u.username) - 1)) || 
+              SUBSTRING(u.username FROM POSITION(' ' IN u.username) FOR LENGTH(u.username) - POSITION(' ' IN reverse(u.username)) - POSITION(' ' IN u.username) + 1) || 
+              INITCAP(SUBSTRING(u.username FROM LENGTH(u.username) - POSITION(' ' IN reverse(u.username)) + 2))
+            ELSE INITCAP(u.username)
+          END as employee_name,
+          CASE 
+            WHEN u.employee_code IS NOT NULL AND u.employee_code != '' THEN u.employee_code
+            WHEN u.profile_data->>'employee_code' IS NOT NULL AND u.profile_data->>'employee_code' != '' THEN u.profile_data->>'employee_code'
+            ELSE LPAD(u.id::text, 4, '0')
+          END as employee_code,
+          m.name as machine_name
+        FROM labor_assignments la
+        JOIN users u ON la.employee_id = u.id
+        JOIN machines m ON la.machine_id = m.id
+        WHERE la.assignment_date = $1
+      `;
+      
+      let assignmentParams = [targetDate];
+      let assignmentParamIndex = 2;
+      
+      if (machine_id && machine_id !== 'all') {
+        assignmentsQuery += ` AND la.machine_id = $${assignmentParamIndex}`;
+        assignmentParams.push(machine_id);
+        assignmentParamIndex++;
+      }
+      
+      if (shift) {
+        assignmentsQuery += ` AND la.shift_type = $${assignmentParamIndex}`;
+        assignmentParams.push(shift);
+      }
+      
+      const assignments = await client.query(assignmentsQuery, assignmentParams);
+      
+      // Merge attendance records with assignments
+      const attendanceMap = new Map();
+      result.rows.forEach(record => {
+        const key = `${record.employee_id}-${record.machine_id}`;
+        attendanceMap.set(key, record);
+      });
+      
+      const completeData = assignments.rows.map(assignment => {
+        const key = `${assignment.employee_id}-${assignment.machine_id}`;
+        const attendanceRecord = attendanceMap.get(key);
+        
+        return {
+          employee_id: assignment.employee_id,
+          machine_id: assignment.machine_id,
+          employee_name: assignment.employee_name,
+          employee_code: assignment.employee_code,
+          machine_name: assignment.machine_name,
+          shift_type: shift || 'day',
+          status: attendanceRecord?.status || null,
+          check_in_time: attendanceRecord?.check_in_time || null,
+          check_out_time: attendanceRecord?.check_out_time || null,
+          hours_worked: attendanceRecord?.hours_worked || null,
+          notes: attendanceRecord?.notes || null,
+          marked_by: attendanceRecord?.marked_by_name || null,
+          created_at: attendanceRecord?.created_at || null
+        };
+      });
+      
+      res.json({ success: true, data: completeData });
+      
+    } finally {
+      client.release();
+    }
+  } catch (error) {
+    console.error('Error fetching attendance register:', error);
+    res.status(500).json({ error: 'Failed to fetch attendance register', details: error.message });
+  }
+});
+
+// Mark or update attendance
+app.post('/api/attendance-register', authenticateToken, requireRole(['supervisor', 'admin']), async (req, res) => {
+  try {
+    const client = await pool.connect();
+    try {
+      const { date, machine_id, employee_id, shift_type, status, check_in_time, notes, marked_by } = req.body;
+      
+      const result = await client.query(`
+        INSERT INTO attendance_register (
+          date, machine_id, employee_id, shift_type, status, check_in_time, notes, marked_by
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+        ON CONFLICT (date, machine_id, employee_id, shift_type)
+        DO UPDATE SET 
+          status = EXCLUDED.status,
+          check_in_time = EXCLUDED.check_in_time,
+          notes = EXCLUDED.notes,
+          marked_by = EXCLUDED.marked_by,
+          updated_at = CURRENT_TIMESTAMP
+        RETURNING *
+      `, [date, machine_id, employee_id, shift_type, status, check_in_time, notes, marked_by]);
+      
+      res.json({ success: true, data: result.rows[0] });
+      
+    } finally {
+      client.release();
+    }
+  } catch (error) {
+    console.error('Error marking attendance:', error);
+    res.status(500).json({ error: 'Failed to mark attendance', details: error.message });
+  }
+});
+
+// ================================================================
+// MATURATION ROOM ENDPOINTS
+// ================================================================
+
+// Get all maturation room data
+app.get('/api/maturation-room', authenticateToken, async (req, res) => {
+  try {
+    const client = await pool.connect();
+    try {
+      const query = `
+        SELECT 
+          mr.*,
+          po.order_number,
+          confirmer.username as confirmed_by_name,
+          quality_checker.username as quality_checked_by_name
+        FROM maturation_room mr
+        LEFT JOIN production_orders po ON mr.production_order_id = po.id
+        LEFT JOIN users confirmer ON mr.confirmed_by = confirmer.id
+        LEFT JOIN users quality_checker ON mr.quality_checked_by = quality_checker.id
+        ORDER BY mr.maturation_date DESC, mr.created_at DESC
+      `;
+      
+      const result = await client.query(query);
+      res.json({ success: true, data: result.rows });
+      
+    } finally {
+      client.release();
+    }
+  } catch (error) {
+    console.error('Error fetching maturation room data:', error);
+    res.status(500).json({ error: 'Failed to fetch maturation room data', details: error.message });
+  }
+});
+
+// Add blend to maturation room
+app.post('/api/maturation-room', authenticateToken, requireRole(['supervisor', 'admin']), async (req, res) => {
+  try {
+    const client = await pool.connect();
+    try {
+      const {
+        production_order_id, blend_name, batch_number, quantity_produced, quantity_expected,
+        unit_of_measurement, maturation_date, expected_maturation_days, storage_location,
+        temperature, humidity, confirmed_by
+      } = req.body;
+      
+      const result = await client.query(`
+        INSERT INTO maturation_room (
+          production_order_id, blend_name, batch_number, quantity_produced, quantity_expected,
+          unit_of_measurement, maturation_date, expected_maturation_days, storage_location,
+          temperature, humidity, confirmed_by
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
+        RETURNING *
+      `, [
+        production_order_id, blend_name, batch_number, quantity_produced, quantity_expected,
+        unit_of_measurement, maturation_date, expected_maturation_days, storage_location,
+        temperature, humidity, confirmed_by
+      ]);
+      
+      res.json({ success: true, data: result.rows[0] });
+      
+    } finally {
+      client.release();
+    }
+  } catch (error) {
+    console.error('Error adding to maturation room:', error);
+    res.status(500).json({ error: 'Failed to add to maturation room', details: error.message });
+  }
+});
+
+// Update maturation room status
+app.put('/api/maturation-room/:id/status', authenticateToken, requireRole(['supervisor', 'admin']), async (req, res) => {
+  try {
+    const client = await pool.connect();
+    try {
+      const { id } = req.params;
+      const { status, quality_checked, quality_check_date, quality_checked_by } = req.body;
+      
+      const result = await client.query(`
+        UPDATE maturation_room 
+        SET status = $1, quality_checked = $2, quality_check_date = $3, quality_checked_by = $4, updated_at = CURRENT_TIMESTAMP
+        WHERE id = $5
+        RETURNING *
+      `, [status, quality_checked, quality_check_date, quality_checked_by, id]);
+      
+      if (result.rows.length === 0) {
+        return res.status(404).json({ error: 'Maturation record not found' });
+      }
+      
+      res.json({ success: true, data: result.rows[0] });
+      
+    } finally {
+      client.release();
+    }
+  } catch (error) {
+    console.error('Error updating maturation status:', error);
+    res.status(500).json({ error: 'Failed to update maturation status', details: error.message });
+  }
+});
+
+// Add daily check for maturation
+app.post('/api/maturation-room/daily-check', authenticateToken, requireRole(['supervisor', 'admin', 'operator']), async (req, res) => {
+  try {
+    const client = await pool.connect();
+    try {
+      const { maturation_room_id, check_date, temperature, humidity, visual_condition, notes, checked_by } = req.body;
+      
+      const result = await client.query(`
+        INSERT INTO maturation_daily_checks (
+          maturation_room_id, check_date, temperature, humidity, visual_condition, notes, checked_by
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7)
+        ON CONFLICT (maturation_room_id, check_date)
+        DO UPDATE SET 
+          temperature = EXCLUDED.temperature,
+          humidity = EXCLUDED.humidity,
+          visual_condition = EXCLUDED.visual_condition,
+          notes = EXCLUDED.notes,
+          checked_by = EXCLUDED.checked_by,
+          created_at = CURRENT_TIMESTAMP
+        RETURNING *
+      `, [maturation_room_id, check_date, temperature, humidity, visual_condition, notes, checked_by]);
+      
+      res.json({ success: true, data: result.rows[0] });
+      
+    } finally {
+      client.release();
+    }
+  } catch (error) {
+    console.error('Error adding daily check:', error);
+    res.status(500).json({ error: 'Failed to add daily check', details: error.message });
+  }
+});
+
+// Get daily checks for a specific maturation record
+app.get('/api/maturation-room/:id/daily-checks', authenticateToken, async (req, res) => {
+  try {
+    const client = await pool.connect();
+    try {
+      const { id } = req.params;
+      
+      const result = await client.query(`
+        SELECT 
+          mdc.*,
+          u.username as checked_by_name
+        FROM maturation_daily_checks mdc
+        LEFT JOIN users u ON mdc.checked_by = u.id
+        WHERE mdc.maturation_room_id = $1
+        ORDER BY mdc.check_date DESC
+      `, [id]);
+      
+      res.json({ success: true, data: result.rows });
+      
+    } finally {
+      client.release();
+    }
+  } catch (error) {
+    console.error('Error fetching daily checks:', error);
+    res.status(500).json({ error: 'Failed to fetch daily checks', details: error.message });
   }
 });
 
@@ -3967,13 +4314,25 @@ app.get('/api/attendance-register', authenticateToken, async (req, res) => {
           ar.marked_by,
           ar.created_at,
           m.name as machine_name,
-          u.username as employee_name,
+          CASE 
+            WHEN POSITION(' ' IN u.username) > 0 THEN 
+              INITCAP(SUBSTRING(u.username FROM 1 FOR POSITION(' ' IN u.username) - 1)) || 
+              SUBSTRING(u.username FROM POSITION(' ' IN u.username) FOR LENGTH(u.username) - POSITION(' ' IN reverse(u.username)) - POSITION(' ' IN u.username) + 1) || 
+              INITCAP(SUBSTRING(u.username FROM LENGTH(u.username) - POSITION(' ' IN reverse(u.username)) + 2))
+            ELSE INITCAP(u.username)
+          END as employee_name,
           CASE 
             WHEN u.employee_code IS NOT NULL AND u.employee_code != '' THEN u.employee_code
             WHEN u.profile_data->>'employee_code' IS NOT NULL AND u.profile_data->>'employee_code' != '' THEN u.profile_data->>'employee_code'
             ELSE LPAD(u.id::text, 4, '0')
           END as employee_code,
-          marker.username as marked_by_name
+          CASE 
+            WHEN POSITION(' ' IN marker.username) > 0 THEN 
+              INITCAP(SUBSTRING(marker.username FROM 1 FOR POSITION(' ' IN marker.username) - 1)) || 
+              SUBSTRING(marker.username FROM POSITION(' ' IN marker.username) FOR LENGTH(marker.username) - POSITION(' ' IN reverse(marker.username)) - POSITION(' ' IN marker.username) + 1) || 
+              INITCAP(SUBSTRING(marker.username FROM LENGTH(marker.username) - POSITION(' ' IN reverse(marker.username)) + 2))
+            ELSE INITCAP(marker.username)
+          END as marked_by_name
         FROM attendance_register ar
         JOIN machines m ON ar.machine_id = m.id
         JOIN users u ON ar.employee_id = u.id
@@ -4005,7 +4364,13 @@ app.get('/api/attendance-register', authenticateToken, async (req, res) => {
         SELECT 
           la.employee_id,
           la.machine_id,
-          u.username as employee_name,
+          CASE 
+            WHEN POSITION(' ' IN u.username) > 0 THEN 
+              INITCAP(SUBSTRING(u.username FROM 1 FOR POSITION(' ' IN u.username) - 1)) || 
+              SUBSTRING(u.username FROM POSITION(' ' IN u.username) FOR LENGTH(u.username) - POSITION(' ' IN reverse(u.username)) - POSITION(' ' IN u.username) + 1) || 
+              INITCAP(SUBSTRING(u.username FROM LENGTH(u.username) - POSITION(' ' IN reverse(u.username)) + 2))
+            ELSE INITCAP(u.username)
+          END as employee_name,
           CASE 
             WHEN u.employee_code IS NOT NULL AND u.employee_code != '' THEN u.employee_code
             WHEN u.profile_data->>'employee_code' IS NOT NULL AND u.profile_data->>'employee_code' != '' THEN u.profile_data->>'employee_code'

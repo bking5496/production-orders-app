@@ -91,3 +91,7 @@ The request url "/home/production-app/production-orders-app/.env" is outside of 
 10:04:01 PM [vite] (client) page reload server.js
 10:06:29 PM [vite] (client) page reload server.js
 10:09:16 PM [vite] (client) hmr update /src/js/components/maturation-room.jsx
+10:12:28 PM [vite] (client) page reload server.js
+10:14:29 PM [vite] (client) page reload server.js
+10:14:42 PM [vite] (client) page reload server.js
+10:15:18 PM [vite] (client) hmr update /src/js/components/machines.jsx, /src/js/components/labour-layout.jsx, /src/js/components/labor-planner.jsx, /src/js/components/attendance-register.jsx, /src/js/components/maturation-room.jsx
