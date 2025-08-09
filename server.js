@@ -865,6 +865,28 @@ app.put('/api/machines/:id',
     const { id } = req.params;
     const updates = req.body;
     
+    console.log('Machine update request for ID:', id);
+    console.log('Updates object:', updates);
+    console.log('Update keys:', Object.keys(updates));
+    
+    // Only allow specific fields to prevent SQL errors
+    const allowedFields = [
+      'name', 'code', 'type', 'environment', 'status', 'capacity', 'production_rate', 
+      'location', 'specifications', 'shift_cycle_enabled', 'cycle_start_date', 
+      'crew_size', 'operators_per_shift', 'hopper_loaders_per_shift', 'packers_per_shift'
+    ];
+    
+    const filteredUpdates = {};
+    Object.keys(updates).forEach(key => {
+      if (allowedFields.includes(key)) {
+        filteredUpdates[key] = updates[key];
+      } else {
+        console.log(`Ignoring unknown field: ${key}`);
+      }
+    });
+    
+    console.log('Filtered updates:', filteredUpdates);
+    
     try {
       const client = await pool.connect();
       try {
@@ -884,9 +906,9 @@ app.put('/api/machines/:id',
         }
         
         // Build update query with proper PostgreSQL syntax
-        const fields = Object.keys(updates).map((key, i) => `${key} = $${i + 1}`);
+        const fields = Object.keys(filteredUpdates).map((key, i) => `${key} = $${i + 1}`);
         fields.push('updated_at = NOW()');
-        const values = Object.values(updates);
+        const values = Object.values(filteredUpdates);
         values.push(id);
         
         const updateResult = await client.query(
