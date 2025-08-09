@@ -706,7 +706,10 @@ const LaborPlanner = ({ currentUser }) => {
                 <div className="space-y-2">
                   {getFilteredEmployees().filter(user => user.role === 'operator').map(driver => (
                     <div key={driver.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border">
-                      <span className="text-sm font-medium">{driver.username}</span>
+                      <div className="flex items-center">
+                        <span className="text-sm font-medium">{driver.username}</span>
+                        <WebSocketStatusIndicator />
+                      </div>
                       <Button
                         onClick={() => handleAssignWorker({id: 'forklift-station', name: 'Forklift Operations'}, 'day', 'forklift_driver')}
                         size="sm"
@@ -728,7 +731,10 @@ const LaborPlanner = ({ currentUser }) => {
                 <div className="space-y-2">
                   {getFilteredEmployees().filter(user => user.role === 'operator').map(driver => (
                     <div key={driver.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border">
-                      <span className="text-sm font-medium">{driver.username}</span>
+                      <div className="flex items-center">
+                        <span className="text-sm font-medium">{driver.username}</span>
+                        <WebSocketStatusIndicator />
+                      </div>
                       <Button
                         onClick={() => handleAssignWorker({id: 'forklift-station', name: 'Forklift Operations'}, 'night', 'forklift_driver')}
                         size="sm"
