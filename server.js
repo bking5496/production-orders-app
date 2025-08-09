@@ -879,7 +879,14 @@ app.put('/api/machines/:id',
     const filteredUpdates = {};
     Object.keys(updates).forEach(key => {
       if (allowedFields.includes(key)) {
-        filteredUpdates[key] = updates[key];
+        let value = updates[key];
+        
+        // Handle date fields - convert empty strings to null
+        if (key === 'cycle_start_date' && value === '') {
+          value = null;
+        }
+        
+        filteredUpdates[key] = value;
       } else {
         console.log(`Ignoring unknown field: ${key}`);
       }

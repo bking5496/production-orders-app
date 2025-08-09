@@ -339,13 +339,13 @@ export default function MachinesPage() {
   }, []);
 
   useWebSocketEvent('machine_updated', (data) => {
-    console.log('📝 Machine updated:', data.data);
+    console.log('📝 Machine updated:', data);
     setMachines(prevMachines => {
       return prevMachines.map(machine => 
-        machine.id === data.data.machine.id ? data.data.machine : machine
+        machine.id === data.id ? data : machine
       );
     });
-    showNotification(`Machine "${data.data.machine.name}" updated`, 'info');
+    showNotification(`Machine "${data.name}" updated`, 'info');
   }, []);
 
   useWebSocketEvent('machine_deleted', (data) => {
