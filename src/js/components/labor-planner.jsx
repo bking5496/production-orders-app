@@ -555,11 +555,16 @@ const LaborPlanner = ({ currentUser }) => {
                         assignmentForm.employee_id === user.id.toString() ? 'bg-blue-50 border-l-4 border-l-blue-500' : ''
                       }`}
                     >
-                      <div>
-                        <p className="font-medium text-gray-900 text-sm">{user.username}</p>
-                        {user.first_name && (
-                          <p className="text-xs text-gray-500">{user.first_name} {user.last_name}</p>
-                        )}
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <div className="flex items-center">
+                            <p className="font-medium text-gray-900 text-sm">{user.username}</p>
+                            <WebSocketStatusIndicator />
+                          </div>
+                          {user.first_name && (
+                            <p className="text-xs text-gray-500">{user.first_name} {user.last_name}</p>
+                          )}
+                        </div>
                       </div>
                     </div>
                   ))}
@@ -623,7 +628,10 @@ const LaborPlanner = ({ currentUser }) => {
                 <div className="space-y-2">
                   {getFilteredEmployees().filter(user => user.role === 'supervisor').map(supervisor => (
                     <div key={supervisor.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border">
-                      <span className="text-sm font-medium">{supervisor.username}</span>
+                      <div className="flex items-center">
+                        <span className="text-sm font-medium">{supervisor.username}</span>
+                        <WebSocketStatusIndicator />
+                      </div>
                       <Button
                         onClick={() => handleAssignWorker({id: 'supervisor-station', name: 'Supervision'}, 'day', 'supervisor')}
                         size="sm"
@@ -645,7 +653,10 @@ const LaborPlanner = ({ currentUser }) => {
                 <div className="space-y-2">
                   {getFilteredEmployees().filter(user => user.role === 'supervisor').map(supervisor => (
                     <div key={supervisor.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border">
-                      <span className="text-sm font-medium">{supervisor.username}</span>
+                      <div className="flex items-center">
+                        <span className="text-sm font-medium">{supervisor.username}</span>
+                        <WebSocketStatusIndicator />
+                      </div>
                       <Button
                         onClick={() => handleAssignWorker({id: 'supervisor-station', name: 'Supervision'}, 'night', 'supervisor')}
                         size="sm"
