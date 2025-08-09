@@ -69,12 +69,15 @@ export default function MaturationRoom() {
     const loadCompletedOrders = async () => {
         try {
             const response = await API.get('/orders?status=completed');
-            const ordersWithoutMaturation = response.filter(order => 
+            // Handle both direct array response and wrapped response
+            const orders = Array.isArray(response) ? response : (response.data || []);
+            const ordersWithoutMaturation = orders.filter(order => 
                 !maturationData.some(mat => mat.production_order_id === order.id)
             );
             setCompletedOrders(ordersWithoutMaturation);
         } catch (error) {
             console.error('Failed to load completed orders:', error);
+            setCompletedOrders([]);
         }
     };
 
@@ -192,7 +195,9 @@ export default function MaturationRoom() {
     };
 
     const filterMaturationData = () => {
-        let filtered = maturationData;
+        // Ensure maturationData is always an array
+        const dataArray = Array.isArray(maturationData) ? maturationData : [];
+        let filtered = dataArray;
         
         if (statusFilter !== 'all') {
             filtered = filtered.filter(item => item.status === statusFilter);
@@ -310,7 +315,7 @@ export default function MaturationRoom() {
                 {/* Summary Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
                     {maturationStatuses.slice(0, 4).map(status => {
-                        const count = maturationData.filter(item => item.status === status.value).length;
+                        const count = Array.isArray(maturationData) ? maturationData.filter(item => item.status === status.value).length : 0;
                         const IconComponent = status.icon;
                         return (
                             <div key={status.value} className={`bg-white rounded-xl shadow-sm border border-${status.color}-100 p-6`}>

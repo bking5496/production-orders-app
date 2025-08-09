@@ -106,10 +106,12 @@ export default function AttendanceRegister() {
     };
 
     const filterAttendanceData = () => {
-        if (!searchTerm.trim()) return attendanceData;
+        // Ensure attendanceData is always an array
+        const dataArray = Array.isArray(attendanceData) ? attendanceData : [];
+        if (!searchTerm.trim()) return dataArray;
         
         const searchLower = searchTerm.toLowerCase();
-        return attendanceData.filter(record => 
+        return dataArray.filter(record => 
             record.employee_name?.toLowerCase().includes(searchLower) ||
             record.employee_code?.toLowerCase().includes(searchLower) ||
             record.machine_name?.toLowerCase().includes(searchLower)
