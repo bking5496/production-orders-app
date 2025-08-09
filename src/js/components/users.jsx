@@ -121,7 +121,7 @@ export default function UsersPage() {
         <table className="min-w-full">
           <thead className="bg-gray-50">
             <tr>
-              {['User', 'Email', 'Role', 'Status', 'Actions'].map(h => <th key={h} className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{h}</th>)}
+              {['User', 'Employee Code', 'Email', 'Role', 'Status', 'Actions'].map(h => <th key={h} className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{h}</th>)}
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
