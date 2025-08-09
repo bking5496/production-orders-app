@@ -3,6 +3,7 @@ import { Calendar, Factory, Plus, Users, X, ChevronLeft, ChevronRight, UserCheck
 import API from '../core/api';
 import { Modal, Button } from './ui-components.jsx';
 import { useConnectionStatus } from '../core/websocket-hooks.js';
+import { formatUserDisplayName } from '../utils/text-utils';
 
 // Simple WebSocket status indicator component
 const WebSocketStatusIndicator = () => {
@@ -461,7 +462,7 @@ const LaborPlanner = ({ currentUser }) => {
                                         <div key={assignment.id} className="flex items-center justify-between bg-gray-50 rounded-lg p-3 border border-gray-100">
                                           <div className="flex items-center">
                                             <p className="font-medium text-gray-900 text-sm">
-                                              {assignment.username || `Employee #${assignment.employee_id}`}
+                                              {formatUserDisplayName(assignment) || `Employee #${assignment.employee_id}`}
                                             </p>
                                             <WebSocketStatusIndicator />
                                           </div>
@@ -558,7 +559,7 @@ const LaborPlanner = ({ currentUser }) => {
                       <div className="flex items-center justify-between">
                         <div>
                           <div className="flex items-center">
-                            <p className="font-medium text-gray-900 text-sm">{user.username}</p>
+                            <p className="font-medium text-gray-900 text-sm">{formatUserDisplayName(user)}</p>
                             <WebSocketStatusIndicator />
                           </div>
                           {user.first_name && (
@@ -629,7 +630,7 @@ const LaborPlanner = ({ currentUser }) => {
                   {getFilteredEmployees().filter(user => user.role === 'supervisor').map(supervisor => (
                     <div key={supervisor.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border">
                       <div className="flex items-center">
-                        <span className="text-sm font-medium">{supervisor.username}</span>
+                        <span className="text-sm font-medium">{formatUserDisplayName(supervisor)}</span>
                         <WebSocketStatusIndicator />
                       </div>
                       <Button
@@ -654,7 +655,7 @@ const LaborPlanner = ({ currentUser }) => {
                   {getFilteredEmployees().filter(user => user.role === 'supervisor').map(supervisor => (
                     <div key={supervisor.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border">
                       <div className="flex items-center">
-                        <span className="text-sm font-medium">{supervisor.username}</span>
+                        <span className="text-sm font-medium">{formatUserDisplayName(supervisor)}</span>
                         <WebSocketStatusIndicator />
                       </div>
                       <Button
@@ -707,7 +708,7 @@ const LaborPlanner = ({ currentUser }) => {
                   {getFilteredEmployees().filter(user => user.role === 'operator').map(driver => (
                     <div key={driver.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border">
                       <div className="flex items-center">
-                        <span className="text-sm font-medium">{driver.username}</span>
+                        <span className="text-sm font-medium">{formatUserDisplayName(driver)}</span>
                         <WebSocketStatusIndicator />
                       </div>
                       <Button
@@ -732,7 +733,7 @@ const LaborPlanner = ({ currentUser }) => {
                   {getFilteredEmployees().filter(user => user.role === 'operator').map(driver => (
                     <div key={driver.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border">
                       <div className="flex items-center">
-                        <span className="text-sm font-medium">{driver.username}</span>
+                        <span className="text-sm font-medium">{formatUserDisplayName(driver)}</span>
                         <WebSocketStatusIndicator />
                       </div>
                       <Button
