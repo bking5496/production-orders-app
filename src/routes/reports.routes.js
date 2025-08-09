@@ -42,6 +42,29 @@ router.get('/downtime',
 );
 
 /**
+ * GET /api/reports/waste
+ * Get production waste report
+ */
+router.get('/waste',
+  authenticateToken,
+  [
+    query('start_date').optional().isISO8601(),
+    query('end_date').optional().isISO8601(),
+    query('machine_id').optional().isInt(),
+    query('category').optional().isString()
+  ],
+  asyncHandler(async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.validationError(errors.array());
+    }
+
+    const wasteReport = await reportsService.getWasteReport(req.query);
+    return res.success(wasteReport, 'Waste report retrieved successfully');
+  })
+);
+
+/**
  * GET /api/reports/production-summary
  * Get production summary report
  */

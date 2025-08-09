@@ -370,6 +370,92 @@ class ReportsService {
       }
     };
   }
+
+  /**
+   * Get waste report
+   */
+  async getWasteReport(filters = {}) {
+    const { 
+      start_date = '2024-01-01', 
+      end_date = new Date().toISOString().split('T')[0],
+      machine_id,
+      category 
+    } = filters;
+
+    // Get waste data from production_waste table
+    let whereClause = 'WHERE pw.recorded_at >= $1 AND pw.recorded_at <= $2';
+    let params = [start_date, end_date];
+    let paramIndex = 3;
+
+    if (machine_id) {
+      whereClause += ` AND po.machine_id = $${paramIndex}`;
+      params.push(machine_id);
+      paramIndex++;
+    }
+
+    if (category) {
+      whereClause += ` AND pw.waste_type = $${paramIndex}`;
+      params.push(category);
+      paramIndex++;
+    }
+
+    const wasteQuery = `
+      SELECT 
+        pw.id,
+        pw.recorded_at,
+        pw.waste_type,
+        pw.quantity,
+        pw.unit,
+        pw.cost_per_unit,
+        pw.total_cost,
+        pw.reason,
+        m.name as machine_name,
+        po.order_number,
+        u.full_name as recorded_by_name
+      FROM production_waste pw
+      LEFT JOIN production_orders po ON pw.order_id = po.id
+      LEFT JOIN machines m ON po.machine_id = m.id
+      LEFT JOIN users u ON pw.recorded_by = u.id
+      ${whereClause}
+      ORDER BY pw.recorded_at DESC
+    `;
+
+    // Get summary data
+    const summaryQuery = `
+      SELECT 
+        pw.waste_type,
+        COUNT(*) as incident_count,
+        SUM(pw.quantity) as total_quantity,
+        AVG(pw.quantity) as avg_quantity,
+        SUM(pw.total_cost) as total_cost
+      FROM production_waste pw
+      LEFT JOIN production_orders po ON pw.order_id = po.id
+      LEFT JOIN machines m ON po.machine_id = m.id
+      ${whereClause}
+      GROUP BY pw.waste_type
+      ORDER BY total_cost DESC
+    `;
+
+    const [records, summary] = await Promise.all([
+      DatabaseUtils.raw(wasteQuery, params),
+      DatabaseUtils.raw(summaryQuery, params)
+    ]);
+
+    return {
+      records: records.rows,
+      summary: summary.rows,
+      totals: {
+        total_incidents: records.rows.length,
+        total_cost: summary.rows.reduce((sum, item) => sum + (parseFloat(item.total_cost) || 0), 0),
+        total_quantity: summary.rows.reduce((sum, item) => sum + (parseFloat(item.total_quantity) || 0), 0)
+      },
+      filters: { start_date, end_date, machine_id, category },
+      metadata: {
+        report_generated: new Date().toISOString(),
+        total_records: records.rows.length
+      }
+    };
+  }
 }
 
 module.exports = new ReportsService();
