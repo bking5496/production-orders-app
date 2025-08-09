@@ -95,12 +95,30 @@ export default function UsersPage() {
     }
   };
 
+  // Function to capitalize first and last words
+  const formatDisplayName = (name) => {
+    if (!name) return '';
+    const words = name.split(' ').filter(word => word.length > 0);
+    if (words.length === 0) return name;
+    
+    // Capitalize first and last word, keep middle words as they are
+    const formattedWords = words.map((word, index) => {
+      if (index === 0 || index === words.length - 1) {
+        return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+      }
+      return word; // Keep middle words unchanged
+    });
+    
+    return formattedWords.join(' ');
+  };
+
   const getRoleBadge = (role) => {
     const roleColors = {
       admin: 'bg-purple-100 text-purple-800', supervisor: 'bg-blue-100 text-blue-800',
-      operator: 'bg-green-100 text-green-800', viewer: 'bg-gray-100 text-gray-800'
+      operator: 'bg-green-100 text-green-800', viewer: 'bg-gray-100 text-gray-800',
+      packer: 'bg-orange-100 text-orange-800'
     };
-    return <span className={`px-2 py-1 rounded-full text-xs font-medium ${roleColors[role] || ''}`}>{role.toUpperCase()}</span>;
+    return <span className={`px-2 py-1 rounded-full text-xs font-medium ${roleColors[role] || 'bg-gray-100 text-gray-800'}`}>{role.toUpperCase()}</span>;
   };
 
   return (
@@ -127,10 +145,10 @@ export default function UsersPage() {
           <tbody className="bg-white divide-y divide-gray-200">
             {users.map(user => (
               <tr key={user.id}>
-                <td className="px-6 py-4 whitespace-nowrap">{user.username}</td>
+                <td className="px-6 py-4 whitespace-nowrap">{formatDisplayName(user.username)}</td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <span className="text-sm text-gray-900 font-mono">
-                    {user.employee_code || `EMP${user.id.toString().padStart(4, '0')}`}
+                    {user.employee_code || user.id.toString().padStart(4, '0')}
                   </span>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">{user.email}</td>
