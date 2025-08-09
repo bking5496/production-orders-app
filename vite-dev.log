@@ -48,3 +48,6 @@ Instead of /public/index.php?s=/index/\think\app/invokefunction&function=call_us
 5:45:37 PM [vite] (client) page reload server.js
 5:55:21 PM [vite] (client) page reload server.js
 5:57:21 PM [vite] (client) hmr update /src/js/components/machines.jsx
+6:10:12 PM [vite] (client) page reload server.js
+6:10:36 PM [vite] (client) page reload server.js
+6:10:58 PM [vite] (client) page reload server.js
