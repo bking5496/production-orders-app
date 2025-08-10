@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Settings, Plus, Search, Filter, RefreshCw, Edit3, Trash2, AlertTriangle, Activity, Clock, BarChart3, CheckCircle, XCircle, Wrench, Users, Calendar, RotateCcw, Info, Wifi } from 'lucide-react';
+import { Settings, Plus, Search, Filter, RefreshCw, Edit3, Trash2, AlertTriangle, Activity, Clock, BarChart3, CheckCircle, XCircle, Wrench, Users, Calendar, RotateCcw, Info, Wifi, Sun, Moon } from 'lucide-react';
 import API from '../core/api';
 import { formatUserDisplayName, formatEmployeeCode } from '../utils/text-utils';
 import { Modal, Card, Button, Badge } from './ui-components.jsx';
@@ -27,6 +27,7 @@ export default function MachinesPage() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showStatusModal, setShowStatusModal] = useState(false);
+  const [showScheduleModal, setShowScheduleModal] = useState(false);
   
   // State for the machine being edited and the form data
   const [selectedMachine, setSelectedMachine] = useState(null);
@@ -52,6 +53,10 @@ export default function MachinesPage() {
   ]);
   const [employees, setEmployees] = useState([]);
   const [loadingEmployees, setLoadingEmployees] = useState(false);
+  
+  // Schedule modal state
+  const [machineSchedule, setMachineSchedule] = useState([]);
+  const [loadingSchedule, setLoadingSchedule] = useState(false);
 
   // Update form environment when environments are loaded
   useEffect(() => {
@@ -227,6 +232,45 @@ export default function MachinesPage() {
     } catch (error) {
       console.error('Failed to load crews:', error);
       // Keep default crews on error
+    }
+  };
+
+  // Function to load schedule data for a machine
+  const loadMachineSchedule = async (machineId) => {
+    setLoadingSchedule(true);
+    try {
+      // Get labor assignments for the next 14 days
+      const endDate = new Date();
+      endDate.setDate(endDate.getDate() + 14);
+      const startDate = new Date();
+      startDate.setDate(startDate.getDate() - 7);
+      
+      const response = await API.get(`/labor-assignments`, {
+        params: {
+          machine_id: machineId,
+          start_date: startDate.toISOString().split('T')[0],
+          end_date: endDate.toISOString().split('T')[0]
+        }
+      });
+      
+      // Group assignments by date
+      const scheduleByDate = {};
+      if (response.data) {
+        response.data.forEach(assignment => {
+          const date = assignment.assignment_date;
+          if (!scheduleByDate[date]) {
+            scheduleByDate[date] = { day: [], night: [] };
+          }
+          scheduleByDate[date][assignment.shift_type].push(assignment);
+        });
+      }
+      
+      setMachineSchedule(scheduleByDate);
+    } catch (error) {
+      console.error('Failed to load machine schedule:', error);
+      setMachineSchedule({});
+    } finally {
+      setLoadingSchedule(false);
     }
   };
 
@@ -723,6 +767,20 @@ export default function MachinesPage() {
                     <StatusIcon className="w-4 h-4 mr-1" />
                     Status
                   </Button>
+                  
+                  <Button 
+                    onClick={() => {
+                      setSelectedMachine(machine);
+                      loadMachineSchedule(machine.id);
+                      setShowScheduleModal(true);
+                    }}
+                    variant="outline"
+                    size="sm"
+                    className="flex-1"
+                  >
+                    <Calendar className="w-4 h-4 mr-1" />
+                    Schedule
+                  </Button>
                 
                 {machine.status !== 'in_use' && (
                   <Button 
@@ -1164,6 +1222,129 @@ export default function MachinesPage() {
                 Cancel
               </Button>
             </div>
+          </div>
+        </Modal>
+      )}
+
+      {/* Schedule Modal */}
+      {showScheduleModal && selectedMachine && (
+        <Modal 
+          title={`Schedule - ${selectedMachine.name}`} 
+          onClose={() => setShowScheduleModal(false)}
+          size="large"
+        >
+          <div className="p-6">
+            {loadingSchedule ? (
+              <div className="text-center py-8">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+                <p className="text-gray-500 mt-2">Loading schedule...</p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                <div className="flex items-center justify-between mb-6">
+                  <h3 className="text-lg font-semibold text-gray-900">21-Day Schedule</h3>
+                  <div className="flex items-center gap-4 text-sm text-gray-600">
+                    <div className="flex items-center gap-1">
+                      <Sun className="w-4 h-4 text-yellow-500" />
+                      <span>Day Shift</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <Moon className="w-4 h-4 text-blue-500" />
+                      <span>Night Shift</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="grid grid-cols-7 gap-2">
+                  {/* Generate 21 days starting from 7 days ago */}
+                  {Array.from({ length: 21 }, (_, index) => {
+                    const date = new Date();
+                    date.setDate(date.getDate() - 7 + index);
+                    const dateStr = date.toISOString().split('T')[0];
+                    const dayData = machineSchedule[dateStr] || { day: [], night: [] };
+                    const isToday = dateStr === new Date().toISOString().split('T')[0];
+                    const isPast = date < new Date(new Date().toDateString());
+                    
+                    // Determine the icon based on shift coverage
+                    let shiftIcon;
+                    const hasDayShift = dayData.day.length > 0;
+                    const hasNightShift = dayData.night.length > 0;
+                    
+                    if (hasDayShift && hasNightShift) {
+                      // Full day coverage - show both sun and moon
+                      shiftIcon = (
+                        <div className="flex items-center justify-center gap-1">
+                          <Sun className="w-3 h-3 text-yellow-500" />
+                          <Moon className="w-3 h-3 text-blue-500" />
+                        </div>
+                      );
+                    } else if (hasDayShift) {
+                      // Day shift only
+                      shiftIcon = <Sun className="w-4 h-4 text-yellow-500" />;
+                    } else if (hasNightShift) {
+                      // Night shift only  
+                      shiftIcon = <Moon className="w-4 h-4 text-blue-500" />;
+                    } else {
+                      // No shifts scheduled
+                      shiftIcon = <div className="w-4 h-4 rounded-full bg-gray-200"></div>;
+                    }
+                    
+                    return (
+                      <div
+                        key={dateStr}
+                        className={`p-3 rounded-lg border text-center ${
+                          isToday 
+                            ? 'bg-blue-50 border-blue-300 ring-2 ring-blue-200' 
+                            : isPast 
+                              ? 'bg-gray-50 border-gray-200' 
+                              : 'bg-white border-gray-200 hover:bg-gray-50'
+                        }`}
+                        title={`${date.toLocaleDateString()} - ${hasDayShift ? 'Day: ' + dayData.day.length + ' workers' : ''} ${hasNightShift ? 'Night: ' + dayData.night.length + ' workers' : ''}`}
+                      >
+                        <div className="text-xs font-medium text-gray-600 mb-1">
+                          {date.toLocaleDateString('en-US', { weekday: 'short' })}
+                        </div>
+                        <div className="text-sm font-semibold text-gray-900 mb-2">
+                          {date.getDate()}
+                        </div>
+                        {shiftIcon}
+                        {(hasDayShift || hasNightShift) && (
+                          <div className="text-xs text-gray-500 mt-1">
+                            {dayData.day.length + dayData.night.length} workers
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+                
+                {/* Legend */}
+                <div className="mt-6 p-4 bg-gray-50 rounded-lg">
+                  <h4 className="text-sm font-medium text-gray-900 mb-3">Legend</h4>
+                  <div className="grid grid-cols-2 gap-4 text-sm">
+                    <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-1">
+                        <Sun className="w-4 h-4 text-yellow-500" />
+                        <Moon className="w-4 h-4 text-blue-500" />
+                      </div>
+                      <span className="text-gray-700">Both shifts scheduled</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Sun className="w-4 h-4 text-yellow-500" />
+                      <span className="text-gray-700">Day shift only</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Moon className="w-4 h-4 text-blue-500" />
+                      <span className="text-gray-700">Night shift only</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-4 h-4 rounded-full bg-gray-200"></div>
+                      <span className="text-gray-700">No shifts scheduled</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </Modal>
       )}

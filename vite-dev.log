@@ -4397,3 +4397,9 @@ The request url "/home/production-app/production-orders-app/.env" is outside of 
       at async loadAndTransform (file:///home/production-app/production-orders-app/node_modules/vite/dist/node/chunks/dep-BHkUv4Z8.js:26451:26)
 7:31:46 PM [vite] (client) hmr update /src/js/components/attendance-register.jsx
 7:37:22 PM [vite] (client) hmr update /src/js/components/attendance-register.jsx
+8:42:49 PM [vite] (client) hmr update /src/js/components/machines.jsx
+8:42:55 PM [vite] (client) hmr update /src/js/components/machines.jsx
+8:43:06 PM [vite] (client) hmr update /src/js/components/machines.jsx
+8:43:32 PM [vite] (client) hmr update /src/js/components/machines.jsx
+8:43:42 PM [vite] (client) hmr update /src/js/components/machines.jsx
+8:44:15 PM [vite] (client) hmr update /src/js/components/machines.jsx
