@@ -81,7 +81,7 @@ const LaborPlanner = ({ currentUser }) => {
 
   const fetchExistingAssignments = async () => {
     try {
-      const response = await API.get(`/labor-assignments?date=${selectedDate}`);
+      const response = await API.get(`/labor-assignments?start_date=${selectedDate}&end_date=${selectedDate}`);
       const assignmentData = {};
       (response?.data || response || []).forEach(assignment => {
         const key = `${assignment.machine_id}-${assignment.shift_type}`;
