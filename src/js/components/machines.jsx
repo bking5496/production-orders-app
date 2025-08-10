@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Settings, Plus, Search, Filter, RefreshCw, Edit3, Trash2, AlertTriangle, Activity, Clock, BarChart3, CheckCircle, XCircle, Wrench, Users, Calendar, RotateCcw, Info, Wifi, Sun, Moon } from 'lucide-react';
+import { Settings, Plus, Search, Filter, RefreshCw, Edit3, Trash2, AlertTriangle, Activity, Clock, BarChart3, CheckCircle, XCircle, Wrench, Users, Calendar, RotateCcw, Info, Wifi, Sun, Moon, Factory } from 'lucide-react';
 import API from '../core/api';
 import { formatUserDisplayName, formatEmployeeCode } from '../utils/text-utils';
 import { Modal, Card, Button, Badge } from './ui-components.jsx';
@@ -1286,8 +1286,12 @@ export default function MachinesPage() {
             ) : (
               <div className="space-y-4">
                 <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-lg font-semibold text-gray-900">21-Day Schedule</h3>
+                  <h3 className="text-lg font-semibold text-gray-900">21-Day Production Schedule</h3>
                   <div className="flex items-center gap-4 text-sm text-gray-600">
+                    <div className="flex items-center gap-1">
+                      <Factory className="w-4 h-4 text-green-600" />
+                      <span>Production Orders</span>
+                    </div>
                     <div className="flex items-center gap-1">
                       <Sun className="w-4 h-4 text-yellow-500" />
                       <span>Day Shift</span>
