@@ -100,3 +100,6 @@ The request url "/home/production-app/production-orders-app/.env" is outside of 
 The request url "/home/production-app/production-orders-app/.env" is outside of Vite serving allow list.
 The request url "/home/production-app/production-orders-app/.env" is outside of Vite serving allow list.
 The request url "/home/production-app/production-orders-app/.env" is outside of Vite serving allow list.
+6:16:43 PM [vite] (client) hmr update /src/js/components/maturation-room.jsx
+6:18:28 PM [vite] (client) hmr update /src/js/components/maturation-room.jsx
+6:18:34 PM [vite] (client) hmr update /src/js/components/maturation-room.jsx

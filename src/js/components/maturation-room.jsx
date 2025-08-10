@@ -225,7 +225,7 @@ export default function MaturationRoom() {
                 item.status,
                 item.quantity_produced,
                 item.quantity_expected,
-                item.variance_percentage?.toFixed(2) || '0.00',
+                (item.variance_percentage && typeof item.variance_percentage === 'number') ? item.variance_percentage.toFixed(2) : '0.00',
                 item.maturation_date,
                 getDaysInMaturation(item.maturation_date),
                 item.estimated_completion_date,
@@ -383,7 +383,7 @@ export default function MaturationRoom() {
                                                 </td>
                                                 <td className="px-6 py-4 whitespace-nowrap">
                                                     <div className={`text-sm font-medium ${getVarianceColor(item.variance_percentage || 0)}`}>
-                                                        {item.variance_percentage ? `${item.variance_percentage.toFixed(1)}%` : '0.0%'}
+                                                        {item.variance_percentage && typeof item.variance_percentage === 'number' ? `${item.variance_percentage.toFixed(1)}%` : '0.0%'}
                                                     </div>
                                                 </td>
                                                 <td className="px-6 py-4 whitespace-nowrap">
@@ -441,134 +441,152 @@ export default function MaturationRoom() {
 
             {/* Add to Maturation Modal */}
             {showAddModal && (
-                <Modal title="Add Blend to Maturation" onClose={() => setShowAddModal(false)} size="large">
-                    <form onSubmit={addToMaturation} className="space-y-4">
-                        <div className="grid grid-cols-2 gap-4">
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">Production Order</label>
-                                <select
-                                    value={formData.production_order_id}
-                                    onChange={(e) => {
-                                        const selectedOrder = completedOrders.find(o => o.id.toString() === e.target.value);
-                                        setFormData({
-                                            ...formData,
-                                            production_order_id: e.target.value,
-                                            blend_name: selectedOrder?.product_name || '',
-                                            quantity_expected: selectedOrder?.quantity || ''
-                                        });
-                                    }}
-                                    className="w-full px-3 py-2 border rounded-lg"
-                                    required
-                                >
-                                    <option value="">Select Order</option>
-                                    {completedOrders.map(order => (
-                                        <option key={order.id} value={order.id}>
-                                            {order.order_number} - {order.product_name}
-                                        </option>
-                                    ))}
-                                </select>
+                <Modal title="Add Blend to Maturation" onClose={() => setShowAddModal(false)} size="medium">
+                    <form onSubmit={addToMaturation} className="space-y-6">
+                        {/* Order Selection */}
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                                <Package className="w-4 h-4 inline mr-2" />
+                                Production Order (Completed)
+                            </label>
+                            <select
+                                value={formData.production_order_id}
+                                onChange={(e) => {
+                                    const selectedOrder = completedOrders.find(o => o.id.toString() === e.target.value);
+                                    setFormData({
+                                        ...formData,
+                                        production_order_id: e.target.value,
+                                        blend_name: selectedOrder?.product_name || '',
+                                        batch_number: selectedOrder?.order_number || '',
+                                        quantity_expected: selectedOrder?.quantity || '',
+                                        quantity_produced: selectedOrder?.quantity || '',
+                                        unit_of_measurement: selectedOrder?.unit_of_measurement || 'kg'
+                                    });
+                                }}
+                                className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                required
+                            >
+                                <option value="">Select Completed Order</option>
+                                {completedOrders.map(order => (
+                                    <option key={order.id} value={order.id}>
+                                        {order.order_number} - {order.product_name} ({order.quantity} {order.unit_of_measurement || 'kg'})
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+
+                        {/* Display Confirmed Details */}
+                        {formData.production_order_id && (
+                            <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                                <h4 className="text-sm font-semibold text-green-800 mb-3 flex items-center">
+                                    <CheckCircle2 className="w-4 h-4 mr-2" />
+                                    Confirmed Order Details
+                                </h4>
+                                <div className="grid grid-cols-2 gap-4 text-sm">
+                                    <div>
+                                        <span className="text-gray-600">Product:</span>
+                                        <p className="font-medium text-gray-900">{formData.blend_name}</p>
+                                    </div>
+                                    <div>
+                                        <span className="text-gray-600">Batch Number:</span>
+                                        <p className="font-mono font-medium text-gray-900">{formData.batch_number}</p>
+                                    </div>
+                                    <div>
+                                        <span className="text-gray-600">Quantity:</span>
+                                        <p className="font-medium text-gray-900">{formData.quantity_produced} {formData.unit_of_measurement}</p>
+                                    </div>
+                                    <div>
+                                        <span className="text-gray-600">Unit:</span>
+                                        <p className="font-medium text-gray-900">{formData.unit_of_measurement}</p>
+                                    </div>
+                                </div>
                             </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">Batch Number</label>
-                                <input
-                                    type="text"
-                                    value={formData.batch_number}
-                                    onChange={(e) => setFormData({...formData, batch_number: e.target.value})}
-                                    className="w-full px-3 py-2 border rounded-lg"
-                                    placeholder="Enter unique batch number"
-                                    required
-                                />
+                        )}
+
+                        {/* Maturation Configuration */}
+                        <div className="border-t pt-4">
+                            <h4 className="text-sm font-semibold text-gray-800 mb-4 flex items-center">
+                                <Clock className="w-4 h-4 mr-2" />
+                                Maturation Configuration
+                            </h4>
+                            
+                            <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">Expected Maturation (days)</label>
+                                    <input
+                                        type="number"
+                                        value={formData.expected_maturation_days}
+                                        onChange={(e) => setFormData({...formData, expected_maturation_days: e.target.value})}
+                                        className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                        min="1"
+                                        max="365"
+                                        required
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">Storage Location</label>
+                                    <input
+                                        type="text"
+                                        value={formData.storage_location}
+                                        onChange={(e) => setFormData({...formData, storage_location: e.target.value})}
+                                        className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                        placeholder="e.g., Room A1, Bay 3"
+                                        required
+                                    />
+                                </div>
                             </div>
                         </div>
 
-                        <div className="grid grid-cols-3 gap-4">
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">Quantity Produced</label>
-                                <input
-                                    type="number"
-                                    step="0.01"
-                                    value={formData.quantity_produced}
-                                    onChange={(e) => setFormData({...formData, quantity_produced: e.target.value})}
-                                    className="w-full px-3 py-2 border rounded-lg"
-                                    required
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">Quantity Expected</label>
-                                <input
-                                    type="number"
-                                    step="0.01"
-                                    value={formData.quantity_expected}
-                                    onChange={(e) => setFormData({...formData, quantity_expected: e.target.value})}
-                                    className="w-full px-3 py-2 border rounded-lg"
-                                    required
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">Unit</label>
-                                <select
-                                    value={formData.unit_of_measurement}
-                                    onChange={(e) => setFormData({...formData, unit_of_measurement: e.target.value})}
-                                    className="w-full px-3 py-2 border rounded-lg"
-                                >
-                                    <option value="kg">Kilograms</option>
-                                    <option value="tons">Tons</option>
-                                    <option value="liters">Liters</option>
-                                    <option value="units">Units</option>
-                                </select>
+                        {/* Initial Conditions (Optional) */}
+                        <div className="border-t pt-4">
+                            <h4 className="text-sm font-semibold text-gray-800 mb-4 flex items-center">
+                                <Thermometer className="w-4 h-4 mr-2" />
+                                Initial Conditions (Optional)
+                            </h4>
+                            
+                            <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">Initial Temperature (°C)</label>
+                                    <input
+                                        type="number"
+                                        step="0.1"
+                                        value={formData.temperature}
+                                        onChange={(e) => setFormData({...formData, temperature: e.target.value})}
+                                        className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                        placeholder="e.g., 20.5"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">Initial Humidity (%)</label>
+                                    <input
+                                        type="number"
+                                        step="0.1"
+                                        value={formData.humidity}
+                                        onChange={(e) => setFormData({...formData, humidity: e.target.value})}
+                                        className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                        placeholder="e.g., 65.0"
+                                    />
+                                </div>
                             </div>
                         </div>
 
-                        <div className="grid grid-cols-2 gap-4">
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">Storage Location</label>
-                                <input
-                                    type="text"
-                                    value={formData.storage_location}
-                                    onChange={(e) => setFormData({...formData, storage_location: e.target.value})}
-                                    className="w-full px-3 py-2 border rounded-lg"
-                                    placeholder="e.g., Room A1, Bay 3"
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">Expected Maturation (days)</label>
-                                <input
-                                    type="number"
-                                    value={formData.expected_maturation_days}
-                                    onChange={(e) => setFormData({...formData, expected_maturation_days: e.target.value})}
-                                    className="w-full px-3 py-2 border rounded-lg"
-                                />
-                            </div>
+                        {/* Notes */}
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">Notes (Optional)</label>
+                            <textarea
+                                value={formData.notes}
+                                onChange={(e) => setFormData({...formData, notes: e.target.value})}
+                                className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                rows="3"
+                                placeholder="Any additional notes about the maturation process..."
+                            />
                         </div>
 
-                        <div className="grid grid-cols-2 gap-4">
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">Initial Temperature (°C)</label>
-                                <input
-                                    type="number"
-                                    step="0.1"
-                                    value={formData.temperature}
-                                    onChange={(e) => setFormData({...formData, temperature: e.target.value})}
-                                    className="w-full px-3 py-2 border rounded-lg"
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">Initial Humidity (%)</label>
-                                <input
-                                    type="number"
-                                    step="0.1"
-                                    value={formData.humidity}
-                                    onChange={(e) => setFormData({...formData, humidity: e.target.value})}
-                                    className="w-full px-3 py-2 border rounded-lg"
-                                />
-                            </div>
-                        </div>
-
-                        <div className="flex justify-end space-x-3">
+                        <div className="flex justify-end space-x-3 pt-4 border-t">
                             <Button type="button" variant="secondary" onClick={() => setShowAddModal(false)}>
                                 Cancel
                             </Button>
-                            <Button type="submit">
+                            <Button type="submit" disabled={!formData.production_order_id}>
                                 Add to Maturation
                             </Button>
                         </div>
