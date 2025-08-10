@@ -41,7 +41,7 @@ export default function AttendanceRegister() {
         try {
             const response = await API.get('/machines');
             const runningMachines = response.filter(machine => 
-                machine.status === 'running' || machine.status === 'active' || machine.status === 'in_use'
+                machine.status === 'running' || machine.status === 'active' || machine.status === 'in_use' || machine.status === 'available'
             );
             setMachines(runningMachines);
         } catch (error) {
