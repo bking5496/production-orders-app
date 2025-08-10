@@ -1313,27 +1313,46 @@ export default function MachinesPage() {
                     const isToday = dateStr === new Date().toISOString().split('T')[0];
                     const isPast = date < new Date(new Date().toDateString());
                     
-                    // Determine the icon based on shift coverage
+                    // Determine the icon based on production orders and shift coverage
                     let shiftIcon;
                     const hasDayShift = dayData.day.length > 0;
                     const hasNightShift = dayData.night.length > 0;
+                    const hasOrders = dayData.orders && dayData.orders.length > 0;
                     
-                    if (hasDayShift && hasNightShift) {
-                      // Full day coverage - show both sun and moon
-                      shiftIcon = (
-                        <div className="flex items-center justify-center gap-1">
-                          <Sun className="w-3 h-3 text-yellow-500" />
-                          <Moon className="w-3 h-3 text-blue-500" />
-                        </div>
-                      );
-                    } else if (hasDayShift) {
-                      // Day shift only
-                      shiftIcon = <Sun className="w-4 h-4 text-yellow-500" />;
-                    } else if (hasNightShift) {
-                      // Night shift only  
-                      shiftIcon = <Moon className="w-4 h-4 text-blue-500" />;
+                    if (hasOrders) {
+                      if (hasDayShift && hasNightShift) {
+                        // Production running both shifts
+                        shiftIcon = (
+                          <div className="flex items-center justify-center gap-1">
+                            <Factory className="w-3 h-3 text-green-600" />
+                            <div className="flex gap-1">
+                              <Sun className="w-2 h-2 text-yellow-500" />
+                              <Moon className="w-2 h-2 text-blue-500" />
+                            </div>
+                          </div>
+                        );
+                      } else if (hasDayShift) {
+                        // Production day shift only
+                        shiftIcon = (
+                          <div className="flex items-center justify-center gap-1">
+                            <Factory className="w-3 h-3 text-green-600" />
+                            <Sun className="w-2 h-2 text-yellow-500" />
+                          </div>
+                        );
+                      } else if (hasNightShift) {
+                        // Production night shift only  
+                        shiftIcon = (
+                          <div className="flex items-center justify-center gap-1">
+                            <Factory className="w-3 h-3 text-green-600" />
+                            <Moon className="w-2 h-2 text-blue-500" />
+                          </div>
+                        );
+                      } else {
+                        // Production scheduled but no specific shift
+                        shiftIcon = <Factory className="w-4 h-4 text-green-600" />;
+                      }
                     } else {
-                      // No shifts scheduled
+                      // No production orders scheduled
                       shiftIcon = <div className="w-4 h-4 rounded-full bg-gray-200"></div>;
                     }
                     
@@ -1347,7 +1366,7 @@ export default function MachinesPage() {
                               ? 'bg-gray-50 border-gray-200' 
                               : 'bg-white border-gray-200 hover:bg-gray-50'
                         }`}
-                        title={`${date.toLocaleDateString()} - ${hasDayShift ? 'Day: ' + dayData.day.length + ' workers' : ''} ${hasNightShift ? 'Night: ' + dayData.night.length + ' workers' : ''}`}
+                        title={`${date.toLocaleDateString()} - ${hasOrders ? dayData.orders.map(o => `${o.order_number}: ${o.product_name}`).join(', ') : 'No production scheduled'}`}
                       >
                         <div className="text-xs font-medium text-gray-600 mb-1">
                           {date.toLocaleDateString('en-US', { weekday: 'short' })}
@@ -1356,9 +1375,9 @@ export default function MachinesPage() {
                           {date.getDate()}
                         </div>
                         {shiftIcon}
-                        {(hasDayShift || hasNightShift) && (
+                        {hasOrders && (
                           <div className="text-xs text-gray-500 mt-1">
-                            {dayData.day.length + dayData.night.length} workers
+                            {dayData.orders.length} order{dayData.orders.length !== 1 ? 's' : ''}
                           </div>
                         )}
                       </div>
@@ -1368,27 +1387,39 @@ export default function MachinesPage() {
                 
                 {/* Legend */}
                 <div className="mt-6 p-4 bg-gray-50 rounded-lg">
-                  <h4 className="text-sm font-medium text-gray-900 mb-3">Legend</h4>
+                  <h4 className="text-sm font-medium text-gray-900 mb-3">Production Schedule Legend</h4>
                   <div className="grid grid-cols-2 gap-4 text-sm">
                     <div className="flex items-center gap-2">
                       <div className="flex items-center gap-1">
-                        <Sun className="w-4 h-4 text-yellow-500" />
-                        <Moon className="w-4 h-4 text-blue-500" />
+                        <Factory className="w-4 h-4 text-green-600" />
+                        <div className="flex gap-1">
+                          <Sun className="w-3 h-3 text-yellow-500" />
+                          <Moon className="w-3 h-3 text-blue-500" />
+                        </div>
                       </div>
-                      <span className="text-gray-700">Both shifts scheduled</span>
+                      <span className="text-gray-700">Production both shifts</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Sun className="w-4 h-4 text-yellow-500" />
-                      <span className="text-gray-700">Day shift only</span>
+                      <div className="flex items-center gap-1">
+                        <Factory className="w-4 h-4 text-green-600" />
+                        <Sun className="w-3 h-3 text-yellow-500" />
+                      </div>
+                      <span className="text-gray-700">Day shift production</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Moon className="w-4 h-4 text-blue-500" />
-                      <span className="text-gray-700">Night shift only</span>
+                      <div className="flex items-center gap-1">
+                        <Factory className="w-4 h-4 text-green-600" />
+                        <Moon className="w-3 h-3 text-blue-500" />
+                      </div>
+                      <span className="text-gray-700">Night shift production</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <div className="w-4 h-4 rounded-full bg-gray-200"></div>
-                      <span className="text-gray-700">No shifts scheduled</span>
+                      <span className="text-gray-700">No production scheduled</span>
                     </div>
+                  </div>
+                  <div className="mt-3 text-xs text-gray-600">
+                    <p>🏭 Shows production orders scheduled on this machine</p>
                   </div>
                 </div>
               </div>
