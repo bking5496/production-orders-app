@@ -239,29 +239,73 @@ export default function MachinesPage() {
   const loadMachineSchedule = async (machineId) => {
     setLoadingSchedule(true);
     try {
-      // Get labor assignments for the next 14 days
+      // Get production orders scheduled on this machine for the next 21 days
       const endDate = new Date();
       endDate.setDate(endDate.getDate() + 14);
       const startDate = new Date();
       startDate.setDate(startDate.getDate() - 7);
       
-      const response = await API.get(`/labor-assignments`, {
+      const response = await API.get(`/orders`, {
         params: {
           machine_id: machineId,
-          start_date: startDate.toISOString().split('T')[0],
-          end_date: endDate.toISOString().split('T')[0]
+          include_scheduled: true
         }
       });
       
-      // Group assignments by date
+      // Group orders by scheduled dates
       const scheduleByDate = {};
-      if (response.data) {
-        response.data.forEach(assignment => {
-          const date = assignment.assignment_date;
-          if (!scheduleByDate[date]) {
-            scheduleByDate[date] = { day: [], night: [] };
+      if (Array.isArray(response) || (response.data && Array.isArray(response.data))) {
+        const orders = Array.isArray(response) ? response : response.data;
+        
+        orders.forEach(order => {
+          if (order.machine_id === machineId && order.scheduled_start_date) {
+            const startDate = order.scheduled_start_date;
+            const endDate = order.scheduled_end_date || startDate;
+            
+            // Add order to all dates it spans
+            const start = new Date(startDate);
+            const end = new Date(endDate);
+            
+            for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+              const dateStr = d.toISOString().split('T')[0];
+              if (!scheduleByDate[dateStr]) {
+                scheduleByDate[dateStr] = { day: [], night: [], orders: [] };
+              }
+              
+              // Add to appropriate shift based on start/end shifts
+              const isStartDate = dateStr === startDate;
+              const isEndDate = dateStr === endDate;
+              
+              if (isStartDate && order.scheduled_start_shift) {
+                scheduleByDate[dateStr][order.scheduled_start_shift].push({
+                  type: 'order',
+                  ...order
+                });
+              }
+              
+              if (isEndDate && order.scheduled_end_shift && order.scheduled_end_shift !== order.scheduled_start_shift) {
+                scheduleByDate[dateStr][order.scheduled_end_shift].push({
+                  type: 'order',
+                  ...order
+                });
+              }
+              
+              // For middle dates, show as running in both shifts
+              if (!isStartDate && !isEndDate) {
+                scheduleByDate[dateStr].day.push({
+                  type: 'order_running',
+                  ...order
+                });
+                scheduleByDate[dateStr].night.push({
+                  type: 'order_running',
+                  ...order
+                });
+              }
+              
+              // Store order reference for detailed view
+              scheduleByDate[dateStr].orders.push(order);
+            }
           }
-          scheduleByDate[date][assignment.shift_type].push(assignment);
         });
       }
       
