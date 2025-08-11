@@ -4483,3 +4483,9 @@ The request url "/home/production-app/production-orders-app/.env" is outside of 
 7:20:16 PM [vite] (client) hmr update /src/js/components/machines.jsx
 7:20:41 PM [vite] (client) hmr update /src/js/components/analytics.jsx
 7:20:54 PM [vite] (client) hmr update /src/js/components/analytics.jsx
+10:15:43 PM [vite] (client) hmr update /src/js/components/shift-reports.jsx
+10:16:26 PM [vite] (client) hmr update /src/js/components/dashboard.jsx
+10:17:07 PM [vite] (client) hmr update /src/js/components/production-dashboard.jsx
+10:18:43 PM [vite] (client) hmr update /src/js/components/dashboard.jsx
+10:18:56 PM [vite] (client) hmr update /src/js/components/dashboard.jsx
+10:19:19 PM [vite] (client) hmr update /src/js/components/dashboard.jsx

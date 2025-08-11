@@ -992,8 +992,19 @@ export default function UltraProductionFloorMonitor() {
     };
 
     useEffect(() => {
+        // Check authentication before loading data
+        const token = localStorage.getItem('token');
+        if (!token) {
+            console.warn('⚠️ No authentication token found - user needs to log in');
+            setLoading(false);
+            return;
+        }
+        
         fetchData();
-        const interval = setInterval(fetchData, 5000);
+        const interval = setInterval(() => {
+            console.log('🔄 Periodic refresh - reloading production dashboard');
+            fetchData();
+        }, 5000);
         return () => clearInterval(interval);
     }, [fetchData]);
 

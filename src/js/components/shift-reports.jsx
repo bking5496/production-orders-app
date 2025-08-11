@@ -171,8 +171,19 @@ export default function ShiftReports() {
     };
 
     useEffect(() => {
+        // Check authentication before loading data
+        const token = localStorage.getItem('token');
+        if (!token) {
+            console.warn('⚠️ No authentication token found - user needs to log in');
+            setLoading(false);
+            return;
+        }
+        
         loadData();
-        const interval = setInterval(loadData, 30000); // Refresh every 30 seconds
+        const interval = setInterval(() => {
+            console.log('🔄 Periodic refresh - reloading shift reports');
+            loadData();
+        }, 30000); // Refresh every 30 seconds
         return () => clearInterval(interval);
     }, [selectedEnvironment]);
 

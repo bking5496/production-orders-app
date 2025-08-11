@@ -338,10 +338,19 @@ export default function Dashboard() {
   const { notifications: wsNotifications } = useNotifications();
 
   useEffect(() => {
+    // Check authentication before loading data
+    const token = localStorage.getItem('token');
+    if (!token) {
+      console.warn('⚠️ No authentication token found - user needs to log in');
+      setLoading(false);
+      return;
+    }
+    
     loadDashboardData();
     
     // Set up auto-refresh every 30 seconds
     refreshIntervalRef.current = setInterval(() => {
+      console.log('🔄 Periodic refresh - reloading dashboard data');
       loadDashboardData(true);
     }, 30000);
     
@@ -379,6 +388,14 @@ export default function Dashboard() {
     setTimeout(() => setNotification(null), 3000);
   };
   
+  // Helper function to ensure array response
+  const ensureArray = (data, label = 'data') => {
+    if (Array.isArray(data)) return data;
+    if (data?.data && Array.isArray(data.data)) return data.data;
+    console.warn(`⚠️ ${label} is not an array:`, data);
+    return [];
+  };
+
   const loadDashboardData = async (isRefresh = false) => {
     if (isRefresh) setRefreshing(true);
     else setLoading(true);
@@ -390,14 +407,17 @@ export default function Dashboard() {
         API.get('/users').catch(() => ({ data: [] }))
       ]);
 
-      // Handle response formats for each API call
-      const orders = ordersResponse?.data || ordersResponse || [];
-      const machines = machinesResponse?.data || machinesResponse || [];
-      const users = usersResponse?.data || usersResponse || [];
+      // Ensure all responses are arrays
+      const orders = ensureArray(ordersResponse, 'orders');
+      const machines = ensureArray(machinesResponse, 'machines');  
+      const users = ensureArray(usersResponse, 'users');
       
-      console.log('📊 Dashboard data loaded - Orders:', orders.length, 'Machines:', machines.length, 'Users:', users.length);
+      console.log('📊 Dashboard data loaded:');
+      console.log('  - Orders:', orders.length, 'items');
+      console.log('  - Machines:', machines.length, 'items');
+      console.log('  - Users:', users.length, 'items');
       
-      // Calculate comprehensive order stats
+      // Calculate comprehensive order stats with array safety
       const orderStats = {
         total: orders.length,
         pending: orders.filter(o => o.status === 'pending').length,

@@ -1,7 +1,7 @@
 module.exports = {
   apps: [{
     name: 'production-management',
-    script: './server.js',
+    script: './src/server-production.js',
     instances: 1,
     autorestart: true,
     watch: false,
