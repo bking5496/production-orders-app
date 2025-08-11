@@ -261,7 +261,7 @@ router.post('/attendance-register',
     body('machine_id').isInt({ min: 1 }).withMessage('Valid machine ID is required'),
     body('shift_type').isIn(['day', 'night', 'afternoon']).withMessage('Valid shift type is required'),
     body('status').isIn(['present', 'absent', 'late']).withMessage('Valid status is required'),
-    body('check_in_time').optional().matches(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/),
+    body('check_in_time').optional({ nullable: true }).matches(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/),
     body('notes').optional().isString()
   ],
   asyncHandler(async (req, res) => {

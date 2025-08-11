@@ -725,6 +725,18 @@ class LaborService {
   async markAttendance(attendanceData, userId) {
     const { date, machine_id, employee_id, shift_type, status, check_in_time, notes } = attendanceData;
     
+    // Convert HH:MM format to full timestamp if needed
+    let processedCheckInTime = null;
+    if (check_in_time) {
+      if (check_in_time.match(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/)) {
+        // If it's HH:MM format, combine with date
+        processedCheckInTime = `${date} ${check_in_time}:00`;
+      } else {
+        // If it's already a full timestamp, use as-is
+        processedCheckInTime = check_in_time;
+      }
+    }
+    
     const query = `
       INSERT INTO attendance_register (
         date, machine_id, employee_id, shift_type, status, check_in_time, notes, marked_by
@@ -739,7 +751,7 @@ class LaborService {
     `;
     
     const result = await DatabaseUtils.raw(query, [
-      date, machine_id, employee_id, shift_type, status, check_in_time, notes, userId
+      date, machine_id, employee_id, shift_type, status, processedCheckInTime, notes, userId
     ]);
     
     return result.rows[0];
