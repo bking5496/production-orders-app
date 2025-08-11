@@ -54,11 +54,15 @@ export default function AttendanceRegister() {
             if (response && response.success && Array.isArray(response.data)) {
                 workers = response.data;
                 console.log('✅ Using response.data array');
+            } else if (response && response.success && response.data === null) {
+                workers = [];
+                console.log('⚠️ Response data is null, treating as empty array');
             } else if (Array.isArray(response)) {
                 workers = response;
                 console.log('✅ Using direct response array');
             } else {
                 console.log('❌ Unexpected response structure');
+                console.log('   Response:', response);
             }
             
             console.log(`👥 Found ${workers.length} scheduled workers:`, workers);
