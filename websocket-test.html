@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WebSocket Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .log { background: #f0f0f0; padding: 10px; height: 400px; overflow-y: auto; margin: 10px 0; }
+        .connected { color: green; }
+        .error { color: red; }
+        .info { color: blue; }
+        button { margin: 5px; padding: 10px; }
+        input { padding: 5px; margin: 5px; }
+    </style>
+</head>
+<body>
+    <h1>Enhanced WebSocket Test</h1>
+    
+    <div>
+        <input type="text" id="token" placeholder="JWT Token" style="width: 400px;">
+        <button onclick="getTokenFromAPI()">Get Token from API</button>
+        <button onclick="connect()">Connect</button>
+        <button onclick="disconnect()">Disconnect</button>
+    </div>
+    
+    <div>
+        <button onclick="subscribe()">Subscribe to Channels</button>
+        <button onclick="sendPing()">Send Ping</button>
+        <button onclick="joinRoom()">Join Production Room</button>
+    </div>
+    
+    <div class="log" id="log"></div>
+
+    <script>
+        let ws = null;
+        let connectionId = null;
+
+        function log(message, type = 'info') {
+            const logElement = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            const className = type === 'error' ? 'error' : type === 'connected' ? 'connected' : 'info';
+            logElement.innerHTML += `<div class="${className}">[${timestamp}] ${message}</div>`;
+            logElement.scrollTop = logElement.scrollHeight;
+        }
+
+        async function getTokenFromAPI() {
+            try {
+                // First try to login as admin
+                const loginResponse = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: 'admin', password: 'admin123' })
+                });
+
+                if (!loginResponse.ok) {
+                    log(`Login failed: ${loginResponse.status}`, 'error');
+                    return;
+                }
+
+                const loginData = await loginResponse.json();
+                if (loginData.success && loginData.data.token) {
+                    document.getElementById('token').value = loginData.data.token;
+                    log(`✅ Got token from login: ${loginData.data.user.username}`, 'connected');
+                    return;
+                }
+
+                // Fallback: Try to get WebSocket token if user is already authenticated
+                const existingToken = localStorage.getItem('token');
+                if (!existingToken) {
+                    log('❌ No existing token found', 'error');
+                    return;
+                }
+
+                const wsTokenResponse = await fetch('/api/auth/websocket-token', {
+                    headers: { 'Authorization': `Bearer ${existingToken}` }
+                });
+
+                if (wsTokenResponse.ok) {
+                    const data = await wsTokenResponse.json();
+                    document.getElementById('token').value = data.data.token;
+                    log(`✅ Got WebSocket token for: ${data.data.user.username}`, 'connected');
+                } else {
+                    log(`❌ Failed to get WebSocket token: ${wsTokenResponse.status}`, 'error');
+                }
+            } catch (error) {
+                log(`❌ Error getting token: ${error.message}`, 'error');
+            }
+        }
+
+        function connect() {
+            const token = document.getElementById('token').value;
+            if (!token) {
+                log('❌ Please enter a token first', 'error');
+                return;
+            }
+
+            if (ws) {
+                ws.close();
+            }
+
+            // Try connecting with token in query parameter
+            const wsUrl = `ws://localhost:3000?token=${encodeURIComponent(token)}`;
+            log(`🔗 Connecting to: ${wsUrl}`);
+            
+            ws = new WebSocket(wsUrl);
+
+            ws.onopen = function(event) {
+                log('✅ WebSocket connected!', 'connected');
+            };
+
+            ws.onmessage = function(event) {
+                try {
+                    const message = JSON.parse(event.data);
+                    log(`📨 Received: ${message.type} - ${JSON.stringify(message.data)}`, 'info');
+                    
+                    if (message.type === 'welcome') {
+                        connectionId = message.data.clientId;
+                        log(`🎉 Authenticated as: ${message.data.user.username} (${message.data.user.role})`, 'connected');
+                    }
+                } catch (error) {
+                    log(`📨 Raw message: ${event.data}`, 'info');
+                }
+            };
+
+            ws.onclose = function(event) {
+                log(`🔌 WebSocket closed: ${event.code} - ${event.reason}`, 'error');
+            };
+
+            ws.onerror = function(error) {
+                log(`💥 WebSocket error: ${error}`, 'error');
+            };
+        }
+
+        function disconnect() {
+            if (ws) {
+                ws.close();
+                ws = null;
+            }
+        }
+
+        function subscribe() {
+            if (!ws || ws.readyState !== WebSocket.OPEN) {
+                log('❌ WebSocket not connected', 'error');
+                return;
+            }
+
+            const message = {
+                type: 'subscribe',
+                data: {
+                    channels: ['machines', 'production', 'notifications']
+                }
+            };
+
+            ws.send(JSON.stringify(message));
+            log('📺 Subscribing to channels: machines, production, notifications');
+        }
+
+        function sendPing() {
+            if (!ws || ws.readyState !== WebSocket.OPEN) {
+                log('❌ WebSocket not connected', 'error');
+                return;
+            }
+
+            const message = {
+                type: 'ping',
+                data: { clientTime: Date.now() }
+            };
+
+            ws.send(JSON.stringify(message));
+            log('💓 Sent ping');
+        }
+
+        function joinRoom() {
+            if (!ws || ws.readyState !== WebSocket.OPEN) {
+                log('❌ WebSocket not connected', 'error');
+                return;
+            }
+
+            const message = {
+                type: 'join_room',
+                data: { room: 'production' }
+            };
+
+            ws.send(JSON.stringify(message));
+            log('🏠 Joining production room');
+        }
+
+        // Auto-get token on page load
+        window.onload = function() {
+            log('🚀 WebSocket Test Page Loaded');
+            getTokenFromAPI();
+        };
+    </script>
+</body>
+</html>

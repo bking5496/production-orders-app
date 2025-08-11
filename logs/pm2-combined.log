@@ -49030,3 +49030,137 @@ Error: bind EADDRINUSE null:3000
 2025-08-11T22:29:26: 🔗 Client acquired from pool
 2025-08-11T22:29:26: 🔓 Client released back to pool
 2025-08-11T22:29:26: 🔓 Client released back to pool
+2025-08-11T22:30:28: 🌍 DEBUG: Testing environments service...
+2025-08-11T22:30:28: ✅ New PostgreSQL client connected
+2025-08-11T22:30:28: 🔗 Client acquired from pool
+2025-08-11T22:30:28: 🔓 Client released back to pool
+2025-08-11T22:30:28: 🌍 DEBUG: Environments service returned: 3 environments
+2025-08-11T22:30:28: 🌍 DEBUG: Sample environment: {
+  id: 7,
+  code: 'blending',
+  name: 'Blending',
+  description: null,
+  color: 'green',
+  machine_types: [ 'Blending' ],
+  is_active: true,
+  created_at: 2025-08-04T17:00:13.746Z,
+  updated_at: 2025-08-04T18:28:30.463Z
+}
+2025-08-11T22:30:46: 🔗 Client acquired from pool
+2025-08-11T22:30:46: 🔓 Client released back to pool
+2025-08-11T22:30:46: 🔗 Client acquired from pool
+2025-08-11T22:30:46: 🔓 Client released back to pool
+2025-08-11T22:30:46: ✅ New PostgreSQL client connected
+2025-08-11T22:30:46: 🔗 Client acquired from pool
+2025-08-11T22:30:46: ✅ New PostgreSQL client connected
+2025-08-11T22:30:46: 🔗 Client acquired from pool
+2025-08-11T22:30:46: 🔓 Client released back to pool
+2025-08-11T22:30:46: 🔓 Client released back to pool
+2025-08-11T22:30:46: ✅ New PostgreSQL client connected
+2025-08-11T22:30:46: 🔗 Client acquired from pool
+2025-08-11T22:30:46: 🔓 Client released back to pool
+2025-08-11T22:30:47: 🔗 Client acquired from pool
+2025-08-11T22:30:47: 🔓 Client released back to pool
+2025-08-11T22:30:50: 🔧 DEBUG: Testing machines service...
+2025-08-11T22:30:50: 🔗 Client acquired from pool
+2025-08-11T22:30:50: 🔓 Client released back to pool
+2025-08-11T22:30:50: 🔧 DEBUG: Machines service returned: 17 machines
+2025-08-11T22:30:50: 🔧 DEBUG: Sample machine: {
+  id: 24,
+  name: 'Blender MaxMix',
+  code: null,
+  type: 'Blending',
+  environment: 'blending',
+  status: 'in_use',
+  capacity: 100,
+  production_rate: null,
+  crew_size: 1,
+  operators_per_shift: 2,
+  hopper_loaders_per_shift: 1,
+  packers_per_shift: 3,
+  order_number: 'GEN004'
+}
+2025-08-11T22:30:58: JWT verification failed: invalid signature
+2025-08-11T22:31:02: 🔒 Auth failure: test from ::1 - Invalid input - curl/8.5.0
+2025-08-11T22:31:07: 🔗 Client acquired from pool
+2025-08-11T22:31:07: 🔓 Client released back to pool
+2025-08-11T22:31:07: 🔗 Client acquired from pool
+2025-08-11T22:31:07: 🔓 Client released back to pool
+2025-08-11T22:31:07: 🔗 Client acquired from pool
+2025-08-11T22:31:07: 🔓 Client released back to pool
+2025-08-11T22:31:09: 🔗 Client acquired from pool
+2025-08-11T22:31:09: 🔗 Client acquired from pool
+2025-08-11T22:31:09: 🔓 Client released back to pool
+2025-08-11T22:31:09: 🔗 Client acquired from pool
+2025-08-11T22:31:09: 🔓 Client released back to pool
+2025-08-11T22:31:09: 🔓 Client released back to pool
+2025-08-11T22:31:36: 🔒 Auth failure: admin from ::1 - Invalid input - curl/8.5.0
+2025-08-11T22:32:15: ✅ New PostgreSQL client connected
+2025-08-11T22:32:15: 🔗 Client acquired from pool
+2025-08-11T22:32:15: 🔓 Client released back to pool
+2025-08-11T22:32:15: ✅ New PostgreSQL client connected
+2025-08-11T22:32:15: 🔗 Client acquired from pool
+2025-08-11T22:32:15: 🔓 Client released back to pool
+2025-08-11T22:32:15: 🔗 Client acquired from pool
+2025-08-11T22:32:15: 🔓 Client released back to pool
+2025-08-11T22:32:15: 🔗 Client acquired from pool
+2025-08-11T22:32:15: 🔓 Client released back to pool
+2025-08-11T22:32:15: 🔗 Client acquired from pool
+2025-08-11T22:32:15: 🔓 Client released back to pool
+2025-08-11T22:32:16: 🔗 Client acquired from pool
+2025-08-11T22:32:16: 🔓 Client released back to pool
+2025-08-11T22:32:47: 🌐 WebSocket server initialized
+2025-08-11T22:32:47: 🧹 WebSocket cleanup scheduler started
+2025-08-11T22:32:47: 🧪 Testing refactored components...
+2025-08-11T22:32:47: 🚀 Production refactored server running on port 3000
+2025-08-11T22:32:47: 📊 Health check: http://localhost:3000/api/health
+2025-08-11T22:32:47: 🔐 Auth test: http://localhost:3000/api/auth/login
+2025-08-11T22:32:47: ⚙️ System routes: http://localhost:3000/api/system/health
+2025-08-11T22:32:47: 🌐 WebSocket server initialized and ready
+2025-08-11T22:32:47: ✅ New PostgreSQL client connected
+2025-08-11T22:32:47: 🔗 Client acquired from pool
+2025-08-11T22:32:47: 🔓 Client released back to pool
+2025-08-11T22:32:47: ✅ Database connection: OK
+2025-08-11T22:32:47: ✅ Authentication middleware: OK
+2025-08-11T22:32:47: ✅ Response utilities: OK
+2025-08-11T22:32:47: ✅ Database utilities: OK
+2025-08-11T22:32:47: 🎉 All components tested successfully!
+2025-08-11T22:32:47: ✅ All components tested successfully
+2025-08-11T22:32:50: 🌍 DEBUG: Testing environments routing...
+2025-08-11T22:32:50: 🔗 Client acquired from pool
+2025-08-11T22:32:50: 🔓 Client released back to pool
+2025-08-11T22:32:51: 🌍 DEBUG: Direct service call returned: 3
+2025-08-11T22:32:54: 🌍 DEBUG: Testing /api/system/environments directly...
+2025-08-11T22:32:54: 🔗 Client acquired from pool
+2025-08-11T22:32:54: 🔓 Client released back to pool
+2025-08-11T22:34:20: 🌐 WebSocket server initialized
+2025-08-11T22:34:20: 🧹 WebSocket cleanup scheduler started
+2025-08-11T22:34:20: 🧪 Testing refactored components...
+2025-08-11T22:34:20: 🚀 Production refactored server running on port 3000
+2025-08-11T22:34:20: 📊 Health check: http://localhost:3000/api/health
+2025-08-11T22:34:20: 🔐 Auth test: http://localhost:3000/api/auth/login
+2025-08-11T22:34:20: ⚙️ System routes: http://localhost:3000/api/system/health
+2025-08-11T22:34:20: 🌐 WebSocket server initialized and ready
+2025-08-11T22:34:20: ✅ New PostgreSQL client connected
+2025-08-11T22:34:20: 🔗 Client acquired from pool
+2025-08-11T22:34:20: 🔓 Client released back to pool
+2025-08-11T22:34:20: ✅ Database connection: OK
+2025-08-11T22:34:20: ✅ Authentication middleware: OK
+2025-08-11T22:34:20: ✅ Response utilities: OK
+2025-08-11T22:34:20: ✅ Database utilities: OK
+2025-08-11T22:34:20: 🎉 All components tested successfully!
+2025-08-11T22:34:20: ✅ All components tested successfully
+2025-08-11T22:34:33: 🔗 Client acquired from pool
+2025-08-11T22:34:33: 🔓 Client released back to pool
+2025-08-11T22:34:37: 🔗 Client acquired from pool
+2025-08-11T22:34:37: 🔓 Client released back to pool
+2025-08-11T22:35:15: JWT verification failed: Expected ':' after property name in JSON at position 5
+2025-08-11T22:37:00: ✅ New PostgreSQL client connected
+2025-08-11T22:37:00: 🔗 Client acquired from pool
+2025-08-11T22:37:00: 🔓 Client released back to pool
+2025-08-11T22:37:00: 🔗 Client acquired from pool
+2025-08-11T22:37:00: 🔓 Client released back to pool
+2025-08-11T22:37:00: ✅ Auth success: admin from ::1 - curl/8.5.0
+2025-08-11T22:37:05: New WebSocket connection attempt
+2025-08-11T22:37:05: ✅ WebSocket authenticated: admin (admin)
+2025-08-11T22:39:07: 🔌 WebSocket disconnected: admin

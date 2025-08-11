@@ -4491,3 +4491,4 @@ The request url "/home/production-app/production-orders-app/.env" is outside of 
 10:19:19 PM [vite] (client) hmr update /src/js/components/dashboard.jsx
 10:20:26 PM [vite] (client) hmr update /src/js/components/analytics.jsx
 10:20:38 PM [vite] (client) hmr update /src/js/components/analytics.jsx
+10:36:45 PM [vite] (client) page reload websocket-test.html

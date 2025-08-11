@@ -124,6 +124,75 @@ app.get('/api/debug/machines', async (req, res) => {
   }
 });
 
+// DEBUG: Test the routing issue for environments
+app.get('/api/debug/environments-route', async (req, res) => {
+  try {
+    console.log('🌍 DEBUG: Testing environments routing...');
+    
+    // Test direct system service call
+    const systemService = require('./services/system.service');
+    const environments = await systemService.getEnvironments();
+    console.log('🌍 DEBUG: Direct service call returned:', environments?.length || 0);
+    
+    // Test with modified request (like the actual routing does)
+    const mockReq = {
+      originalUrl: '/api/environments',
+      url: '/environments',
+      baseUrl: '/api/system'
+    };
+    
+    res.json({
+      success: true,
+      debug: 'environments routing test',
+      directService: {
+        count: environments?.length || 0,
+        data: environments || []
+      },
+      routingTest: mockReq,
+      message: `Direct service: ${environments?.length || 0} environments`
+    });
+  } catch (error) {
+    console.error('🌍 DEBUG: Environments routing error:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message,
+      stack: error.stack
+    });
+  }
+});
+
+// DEBUG: Test authenticated route directly
+app.get('/api/debug/system-environments', async (req, res) => {
+  try {
+    console.log('🌍 DEBUG: Testing /api/system/environments directly...');
+    
+    // Import required modules
+    const { authenticateToken } = require('./middleware/auth');
+    const systemService = require('./services/system.service');
+    
+    // Test with a mock authenticated user
+    const mockUser = { id: 4, username: 'admin', role: 'admin' };
+    
+    const environments = await systemService.getEnvironments();
+    
+    res.json({
+      success: true,
+      debug: 'system/environments test',
+      mockUser: mockUser,
+      count: environments?.length || 0,
+      data: environments || [],
+      message: `Found ${environments?.length || 0} environments via system route`
+    });
+  } catch (error) {
+    console.error('🌍 DEBUG: System environments error:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message,
+      stack: error.stack
+    });
+  }
+});
+
 
 
 // API Routes
@@ -210,62 +279,129 @@ app.put('/api/settings/general', (req, res, next) => {
   req.url = '/settings/general';
   systemRoutes(req, res, next);
 });
-// Environments endpoints - redirect to system routes
-app.get('/api/environments', (req, res, next) => {
-  req.originalUrl = req.url;
-  req.url = '/environments';
-  req.baseUrl = '/api/system';
-  systemRoutes(req, res, next);
+// Environments endpoints - direct forwarding to system service
+const systemService = require('./services/system.service');
+const { authenticateToken, requireRole } = require('./middleware/auth');
+
+app.get('/api/environments', authenticateToken, async (req, res) => {
+  try {
+    const environments = await systemService.getEnvironments();
+    return res.success(environments, 'Environments retrieved successfully');
+  } catch (error) {
+    console.error('🌍 Error retrieving environments:', error);
+    return res.status(500).json({
+      success: false,
+      error: error.message,
+      message: 'Failed to retrieve environments'
+    });
+  }
 });
 
-app.post('/api/environments', (req, res, next) => {
-  req.originalUrl = req.url;
-  req.url = '/environments';
-  req.baseUrl = '/api/system';
-  systemRoutes(req, res, next);
+app.post('/api/environments', authenticateToken, requireRole(['admin']), async (req, res) => {
+  try {
+    const newEnvironment = await systemService.createEnvironment(req.body, req.user.id);
+    return res.success(newEnvironment, 'Environment created successfully', 201);
+  } catch (error) {
+    console.error('🌍 Error creating environment:', error);
+    return res.status(500).json({
+      success: false,
+      error: error.message,
+      message: 'Failed to create environment'
+    });
+  }
 });
 
-app.put('/api/environments/:id', (req, res, next) => {
-  req.originalUrl = req.url;
-  req.url = '/environments/' + req.params.id;
-  req.baseUrl = '/api/system';
-  systemRoutes(req, res, next);
+app.put('/api/environments/:id', authenticateToken, requireRole(['admin']), async (req, res) => {
+  try {
+    const updatedEnvironment = await systemService.updateEnvironment(
+      parseInt(req.params.id), 
+      req.body, 
+      req.user.id
+    );
+    return res.success(updatedEnvironment, 'Environment updated successfully');
+  } catch (error) {
+    console.error('🌍 Error updating environment:', error);
+    return res.status(500).json({
+      success: false,
+      error: error.message,
+      message: 'Failed to update environment'
+    });
+  }
 });
 
-app.delete('/api/environments/:id', (req, res, next) => {
-  req.originalUrl = req.url;
-  req.url = '/environments/' + req.params.id;
-  req.baseUrl = '/api/system';
-  systemRoutes(req, res, next);
+app.delete('/api/environments/:id', authenticateToken, requireRole(['admin']), async (req, res) => {
+  try {
+    await systemService.deleteEnvironment(parseInt(req.params.id), req.user.id);
+    return res.success(null, 'Environment deleted successfully');
+  } catch (error) {
+    console.error('🌍 Error deleting environment:', error);
+    return res.status(500).json({
+      success: false,
+      error: error.message,
+      message: 'Failed to delete environment'
+    });
+  }
 });
 
-// Machine Types endpoints - redirect to system routes
-app.get('/api/machine-types', (req, res, next) => {
-  req.originalUrl = req.url;
-  req.url = '/machine-types';
-  req.baseUrl = '/api/system';
-  systemRoutes(req, res, next);
+// Machine Types endpoints - direct forwarding to system service
+app.get('/api/machine-types', authenticateToken, async (req, res) => {
+  try {
+    const machineTypes = await systemService.getMachineTypes();
+    return res.success(machineTypes, 'Machine types retrieved successfully');
+  } catch (error) {
+    console.error('⚙️ Error retrieving machine types:', error);
+    return res.status(500).json({
+      success: false,
+      error: error.message,
+      message: 'Failed to retrieve machine types'
+    });
+  }
 });
 
-app.post('/api/machine-types', (req, res, next) => {
-  req.originalUrl = req.url;
-  req.url = '/machine-types';
-  req.baseUrl = '/api/system';
-  systemRoutes(req, res, next);
+app.post('/api/machine-types', authenticateToken, requireRole(['admin']), async (req, res) => {
+  try {
+    const newMachineType = await systemService.createMachineType(req.body, req.user.id);
+    return res.success(newMachineType, 'Machine type created successfully', 201);
+  } catch (error) {
+    console.error('⚙️ Error creating machine type:', error);
+    return res.status(500).json({
+      success: false,
+      error: error.message,
+      message: 'Failed to create machine type'
+    });
+  }
 });
 
-app.put('/api/machine-types/:id', (req, res, next) => {
-  req.originalUrl = req.url;
-  req.url = '/machine-types/' + req.params.id;
-  req.baseUrl = '/api/system';
-  systemRoutes(req, res, next);
+app.put('/api/machine-types/:id', authenticateToken, requireRole(['admin']), async (req, res) => {
+  try {
+    const updatedMachineType = await systemService.updateMachineType(
+      parseInt(req.params.id), 
+      req.body, 
+      req.user.id
+    );
+    return res.success(updatedMachineType, 'Machine type updated successfully');
+  } catch (error) {
+    console.error('⚙️ Error updating machine type:', error);
+    return res.status(500).json({
+      success: false,
+      error: error.message,
+      message: 'Failed to update machine type'
+    });
+  }
 });
 
-app.delete('/api/machine-types/:id', (req, res, next) => {
-  req.originalUrl = req.url;
-  req.url = '/machine-types/' + req.params.id;
-  req.baseUrl = '/api/system';
-  systemRoutes(req, res, next);
+app.delete('/api/machine-types/:id', authenticateToken, requireRole(['admin']), async (req, res) => {
+  try {
+    await systemService.deleteMachineType(parseInt(req.params.id), req.user.id);
+    return res.success(null, 'Machine type deleted successfully');
+  } catch (error) {
+    console.error('⚙️ Error deleting machine type:', error);
+    return res.status(500).json({
+      success: false,
+      error: error.message,
+      message: 'Failed to delete machine type'
+    });
+  }
 });
 app.use('/api/settings', systemRoutes); // Settings endpoints compatibility
 app.use('/api/system', systemRoutes); // System routes

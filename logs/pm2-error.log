@@ -30380,3 +30380,7 @@ Error: bind EADDRINUSE null:3000
   code: 'ERR_ERL_UNEXPECTED_X_FORWARDED_FOR',
   help: 'https://express-rate-limit.github.io/ERR_ERL_UNEXPECTED_X_FORWARDED_FOR/'
 }
+2025-08-11T22:30:58: JWT verification failed: invalid signature
+2025-08-11T22:31:02: 🔒 Auth failure: test from ::1 - Invalid input - curl/8.5.0
+2025-08-11T22:31:36: 🔒 Auth failure: admin from ::1 - Invalid input - curl/8.5.0
+2025-08-11T22:35:15: JWT verification failed: Expected ':' after property name in JSON at position 5
