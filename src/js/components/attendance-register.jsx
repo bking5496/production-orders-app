@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar, Users, Check, X, Clock, AlertTriangle, Search } from 'lucide-react';
+import { Calendar, Users, Check, X, Clock, AlertTriangle, Search, ChevronLeft, ChevronRight } from 'lucide-react';
 import API from '../core/api';
 import { useAuth } from '../core/auth';
 import { Modal, Button } from './ui-components.jsx';
