@@ -148,28 +148,61 @@ app.put('/api/settings/general', (req, res, next) => {
   req.url = '/settings/general';
   systemRoutes(req, res, next);
 });
+// Environments endpoints - redirect to system routes
 app.get('/api/environments', (req, res, next) => {
+  req.originalUrl = req.url;
   req.url = '/environments';
+  req.baseUrl = '/api/system';
   systemRoutes(req, res, next);
 });
+
 app.post('/api/environments', (req, res, next) => {
+  req.originalUrl = req.url;
   req.url = '/environments';
+  req.baseUrl = '/api/system';
   systemRoutes(req, res, next);
 });
+
+app.put('/api/environments/:id', (req, res, next) => {
+  req.originalUrl = req.url;
+  req.url = '/environments/' + req.params.id;
+  req.baseUrl = '/api/system';
+  systemRoutes(req, res, next);
+});
+
+app.delete('/api/environments/:id', (req, res, next) => {
+  req.originalUrl = req.url;
+  req.url = '/environments/' + req.params.id;
+  req.baseUrl = '/api/system';
+  systemRoutes(req, res, next);
+});
+
+// Machine Types endpoints - redirect to system routes
 app.get('/api/machine-types', (req, res, next) => {
+  req.originalUrl = req.url;
   req.url = '/machine-types';
+  req.baseUrl = '/api/system';
   systemRoutes(req, res, next);
 });
+
 app.post('/api/machine-types', (req, res, next) => {
+  req.originalUrl = req.url;
   req.url = '/machine-types';
+  req.baseUrl = '/api/system';
   systemRoutes(req, res, next);
 });
+
 app.put('/api/machine-types/:id', (req, res, next) => {
+  req.originalUrl = req.url;
   req.url = '/machine-types/' + req.params.id;
+  req.baseUrl = '/api/system';
   systemRoutes(req, res, next);
 });
+
 app.delete('/api/machine-types/:id', (req, res, next) => {
+  req.originalUrl = req.url;
   req.url = '/machine-types/' + req.params.id;
+  req.baseUrl = '/api/system';
   systemRoutes(req, res, next);
 });
 app.use('/api/settings', systemRoutes); // Settings endpoints compatibility
