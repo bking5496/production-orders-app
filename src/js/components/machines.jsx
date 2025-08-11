@@ -108,8 +108,8 @@ export default function MachinesPage() {
   const loadEnvironments = async () => {
     try {
       const response = await API.get('/environments');
-      // Handle the response format - environments API returns raw array
-      const environmentsData = Array.isArray(response) ? response : [];
+      // Handle the response format - check for both new and old formats
+      const environmentsData = response?.data || (Array.isArray(response) ? response : []);
       console.log('🌍 Environments loaded in machines.jsx:', environmentsData);
       setEnvironments(environmentsData);
     } catch (error) {
@@ -121,7 +121,8 @@ export default function MachinesPage() {
   // Function to fetch machine types from the backend API
   const loadMachineTypes = async () => {
     try {
-      const data = await API.get('/machine-types');
+      const response = await API.get('/machine-types');
+      const data = response.data || response; // Handle both new and old response formats
       setMachineTypes(data);
     } catch (error) {
       console.error('Failed to load machine types:', error);
@@ -154,7 +155,8 @@ export default function MachinesPage() {
     
     try {
       console.log('🔧 Loading machines...');
-      const data = await API.get('/machines');
+      const response = await API.get('/machines');
+      const data = response.data || response; // Handle both new and old response formats
       console.log('✅ Machines loaded successfully:', data?.length || 0, 'machines');
       setMachines(data);
     } catch (error) {

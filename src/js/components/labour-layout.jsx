@@ -152,13 +152,17 @@ export default function LabourLayoutPage() {
     const fetchRosterForDate = async (date) => {
         setLoading(true);
         try {
-            const data = await API.get('/labour/roster?date=' + date);
+            const response = await API.get('/labour/roster?date=' + date);
+            const data = response?.data || response;
+            console.log('✅ Labour roster loaded for', date, ':', data);
             setRosterData(data);
         } catch (error) {
-            console.error('Failed to fetch roster for ' + date + ':', error);
+            console.error('❌ Failed to fetch roster for ' + date + ':', error);
             try {
-                const fallbackData = await API.get('/labour/today');
-                setRosterData({
+                const fallbackResponse = await API.get('/labour/today');
+                const fallbackData = fallbackResponse?.data || fallbackResponse;
+                console.log('📅 Using today\'s labour data as fallback:', fallbackData);
+                setRosterData(fallbackData || {
                     supervisors: [],
                     assignments: [],
                     machinesInUse: [],

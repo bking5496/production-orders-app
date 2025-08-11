@@ -367,10 +367,12 @@ export default function ProductionOrdersSystem() {
       if (!refreshing) setLoading(true);
       // Always include archived orders so the frontend can filter properly
       const response = await API.get('/orders?include_archived=true');
-      setOrders(response?.data || response || []);
+      const ordersData = response?.data || response || [];
+      console.log('✅ Orders loaded:', Array.isArray(ordersData) ? ordersData.length : 'Invalid data format', 'orders');
+      setOrders(Array.isArray(ordersData) ? ordersData : []);
     } catch (error) {
-      console.error('Error loading orders:', error);
-      showNotification('Failed to load orders', 'error');
+      console.error('❌ Error loading orders:', error);
+      showNotification(`Failed to load orders: ${error.message || 'Unknown error'}`, 'error');
     } finally {
       setLoading(false);
       setRefreshing(false);
