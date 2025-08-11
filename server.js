@@ -4034,7 +4034,8 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
-// Load enhanced endpoints
+// Load enhanced endpoints (commented out - missing files)
+/*
 try {
   const enhancedWorkflowEndpoints = require('./enhanced-workflow-endpoints.js');
   const enhancedDowntimeEndpoints = require('./enhanced-downtime-endpoints.js');
@@ -4053,6 +4054,7 @@ try {
 } catch (error) {
   console.error('❌ Failed to load enhanced endpoints:', error.message);
 }
+*/
 
 // Graceful shutdown
 process.on('SIGTERM', () => {
@@ -4166,26 +4168,22 @@ app.get('/api/attendance-register', authenticateToken, async (req, res) => {
         ORDER BY m.name, la.role, u.full_name
       `;
       
-      const params = [targetDate];
-      let paramIndex = 2;
+      const params = [targetDate, shift];
       
-      if (machine_id && machine_id !== 'all') {
-        query += ` AND ar.machine_id = $${paramIndex}`;
-        params.push(machine_id);
-        paramIndex++;
-      }
-      
-      if (shift) {
-        query += ` AND ar.shift_type = $${paramIndex}`;
-        params.push(shift);
-        paramIndex++;
-      }
-      
-      query += ` ORDER BY m.name, u.username`;
-      
+      console.log('🔍 Executing attendance query with params:', params);
       const result = await client.query(query, params);
+      console.log(`✅ Found ${result.rows.length} scheduled workers for attendance`);
       
-      // Also get employees who should be present but haven't been marked
+      
+      res.json({ 
+        success: true, 
+        message: 'Attendance register data retrieved successfully', 
+        data: result.rows,
+        timestamp: new Date().toISOString()
+      });
+      
+      /*
+      // REMOVED: Complex merging logic - using simple direct query instead
       let assignmentsQuery = `
         SELECT 
           la.employee_id,
@@ -4271,9 +4269,7 @@ app.get('/api/attendance-register', authenticateToken, async (req, res) => {
       finalData.forEach((worker, index) => {
         console.log(`   ${index + 1}. ${worker.employee_name} (${worker.employee_code}) - ${worker.machine_name} - Status: ${worker.status || 'Not marked'}`);
       });
-      
-      console.log('📤 SENDING RESPONSE:', { success: true, data: finalData });
-      res.json({ success: true, data: finalData });
+      */
       
     } finally {
       client.release();
