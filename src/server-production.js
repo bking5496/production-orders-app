@@ -107,6 +107,16 @@ app.post('/api/labor-assignments/auto-populate-daily', (req, res, next) => {
   req.url = '/assignments/auto-populate-daily';
   laborRoutes(req, res, next);
 });
+
+// Attendance register compatibility mappings
+app.get('/api/attendance-register', (req, res, next) => {
+  req.url = '/attendance-register';
+  laborRoutes(req, res, next);
+});
+app.post('/api/attendance-register', (req, res, next) => {
+  req.url = '/attendance-register';
+  laborRoutes(req, res, next);
+});
 app.post('/api/labor-assignments/lock-daily', (req, res, next) => {
   req.url = '/assignments/lock-daily';
   laborRoutes(req, res, next);

@@ -662,6 +662,89 @@ class LaborService {
     return await this.getLabourRoster(today);
   }
 
+  /**
+   * Get attendance register data
+   */
+  async getAttendanceRegister(filters) {
+    const { date, shift, machine_id } = filters;
+    const targetDate = date || new Date().toISOString().split('T')[0];
+    
+    // Get labor assignments for the specified date and shift
+    let query = `
+      SELECT DISTINCT
+        la.id as assignment_id,
+        la.employee_id,
+        la.machine_id,
+        la.assignment_date,
+        la.shift_type,
+        la.role as assignment_role,
+        u.username,
+        u.full_name,
+        CASE 
+          WHEN u.employee_code IS NOT NULL AND u.employee_code != '' THEN u.employee_code
+          WHEN u.profile_data->>'employee_code' IS NOT NULL AND u.profile_data->>'employee_code' != '' THEN u.profile_data->>'employee_code'
+          ELSE LPAD(u.id::text, 4, '0')
+        END as employee_code,
+        COALESCE(u.full_name, u.username) as employee_name,
+        m.name as machine_name,
+        m.environment as machine_environment,
+        ar.status,
+        ar.check_in_time,
+        ar.notes as attendance_notes,
+        ar.marked_by
+      FROM labor_assignments la
+      JOIN users u ON la.employee_id = u.id
+      LEFT JOIN machines m ON la.machine_id = m.id
+      LEFT JOIN attendance_register ar ON (
+        ar.date = la.assignment_date 
+        AND ar.employee_id = la.employee_id 
+        AND ar.machine_id = la.machine_id 
+        AND ar.shift_type = la.shift_type
+      )
+      WHERE la.assignment_date = $1 
+        AND la.shift_type = $2
+        AND u.is_active = true
+        AND (m.status IN ('available', 'in_use', 'maintenance') OR m.status IS NULL)
+      ORDER BY m.name, la.role, u.full_name
+    `;
+    
+    const params = [targetDate, shift];
+    
+    if (machine_id && machine_id !== 'all') {
+      query += ` AND la.machine_id = $3`;
+      params.push(machine_id);
+    }
+    
+    const result = await DatabaseUtils.raw(query, params);
+    return result.rows;
+  }
+
+  /**
+   * Mark attendance
+   */
+  async markAttendance(attendanceData, userId) {
+    const { date, machine_id, employee_id, shift_type, status, check_in_time, notes } = attendanceData;
+    
+    const query = `
+      INSERT INTO attendance_register (
+        date, machine_id, employee_id, shift_type, status, check_in_time, notes, marked_by
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+      ON CONFLICT (date, machine_id, employee_id, shift_type)
+      DO UPDATE SET 
+        status = EXCLUDED.status,
+        check_in_time = EXCLUDED.check_in_time,
+        notes = EXCLUDED.notes,
+        marked_by = EXCLUDED.marked_by
+      RETURNING *
+    `;
+    
+    const result = await DatabaseUtils.raw(query, [
+      date, machine_id, employee_id, shift_type, status, check_in_time, notes, userId
+    ]);
+    
+    return result.rows[0];
+  }
+
 }
 
 module.exports = new LaborService();

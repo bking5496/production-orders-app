@@ -226,6 +226,65 @@ router.post('/assignments/lock-daily',
   })
 );
 
+/**
+ * GET /api/labor/attendance-register
+ * Get attendance data for a specific date, machine, and shift
+ */
+router.get('/attendance-register',
+  authenticateToken,
+  [
+    query('date').optional().isISO8601(),
+    query('shift').notEmpty().isIn(['day', 'night', 'afternoon']).withMessage('Valid shift is required'),
+    query('machine_id').optional().isInt()
+  ],
+  asyncHandler(async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.validationError(errors.array());
+    }
+
+    const attendanceData = await laborService.getAttendanceRegister(req.query);
+    return res.success(attendanceData, 'Attendance register data retrieved successfully');
+  })
+);
+
+/**
+ * POST /api/labor/attendance-register
+ * Mark or update attendance
+ */
+router.post('/attendance-register',
+  authenticateToken,
+  requireRole(['supervisor', 'admin']),
+  [
+    body('date').isISO8601().withMessage('Valid date is required'),
+    body('employee_id').isInt({ min: 1 }).withMessage('Valid employee ID is required'),
+    body('machine_id').isInt({ min: 1 }).withMessage('Valid machine ID is required'),
+    body('shift_type').isIn(['day', 'night', 'afternoon']).withMessage('Valid shift type is required'),
+    body('status').isIn(['present', 'absent', 'late']).withMessage('Valid status is required'),
+    body('check_in_time').optional().matches(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/),
+    body('notes').optional().isString()
+  ],
+  asyncHandler(async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.validationError(errors.array());
+    }
+
+    const attendanceRecord = await laborService.markAttendance(req.body, req.user.id);
+    
+    // Broadcast attendance update via WebSocket
+    if (req.broadcast) {
+      req.broadcast('attendance_marked', {
+        attendanceRecord,
+        user: req.user.username,
+        timestamp: new Date().toISOString()
+      }, 'labor');
+    }
+    
+    return res.success(attendanceRecord, 'Attendance marked successfully');
+  })
+);
+
 // British spelling aliases
 router.get('/roster', 
   authenticateToken,
