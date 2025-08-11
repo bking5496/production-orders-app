@@ -4268,12 +4268,15 @@ app.get('/api/attendance-register', authenticateToken, async (req, res) => {
         };
       });
       
-      console.log(`✅ Returning ${completeData.length} workers to attendance register`);
-      completeData.forEach((worker, index) => {
+      // Ensure we always return an array, never null
+      const finalData = Array.isArray(completeData) ? completeData : [];
+      
+      console.log(`✅ Returning ${finalData.length} workers to attendance register`);
+      finalData.forEach((worker, index) => {
         console.log(`   ${index + 1}. ${worker.employee_name} (${worker.employee_code}) - ${worker.machine_name} - Status: ${worker.status || 'Not marked'}`);
       });
       
-      res.json({ success: true, data: completeData });
+      res.json({ success: true, data: finalData });
       
     } finally {
       client.release();
