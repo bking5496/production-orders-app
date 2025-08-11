@@ -30549,3 +30549,41 @@ Error: bind EADDRINUSE null:3000
   user: 'admin',
   timestamp: '2025-08-11T21:03:50.233Z'
 }
+2025-08-11T23:10:28: ValidationError: The 'X-Forwarded-For' header is set but the Express 'trust proxy' setting is false (default). This could indicate a misconfiguration which would prevent express-rate-limit from accurately identifying users. See https://express-rate-limit.github.io/ERR_ERL_UNEXPECTED_X_FORWARDED_FOR/ for more information.
+    at Object.xForwardedForHeader (/home/production-app/production-orders-app/node_modules/express-rate-limit/dist/index.cjs:185:13)
+    at wrappedValidations.<computed> [as xForwardedForHeader] (/home/production-app/production-orders-app/node_modules/express-rate-limit/dist/index.cjs:397:22)
+    at Object.keyGenerator (/home/production-app/production-orders-app/node_modules/express-rate-limit/dist/index.cjs:658:20)
+    at /home/production-app/production-orders-app/node_modules/express-rate-limit/dist/index.cjs:710:32
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async /home/production-app/production-orders-app/node_modules/express-rate-limit/dist/index.cjs:691:5 {
+  code: 'ERR_ERL_UNEXPECTED_X_FORWARDED_FOR',
+  help: 'https://express-rate-limit.github.io/ERR_ERL_UNEXPECTED_X_FORWARDED_FOR/'
+}
+2025-08-11T23:10:29: Error occurred: {
+  error: 'insert or update on table "attendance_register" violates foreign key constraint "attendance_register_machine_id_fkey"',
+  stack: 'error: insert or update on table "attendance_register" violates foreign key constraint "attendance_register_machine_id_fkey"\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.raw (/home/production-app/production-orders-app/src/utils/database.js:146:12)\n' +
+    '    at async LaborService.markAttendance (/home/production-app/production-orders-app/src/services/labor.service.js:753:20)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/labor.routes.js:273:30',
+  url: '/attendance-register',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-11T21:10:29.049Z'
+}
+2025-08-11T23:11:49: Error occurred: {
+  error: 'insert or update on table "attendance_register" violates foreign key constraint "attendance_register_employee_id_fkey"',
+  stack: 'error: insert or update on table "attendance_register" violates foreign key constraint "attendance_register_employee_id_fkey"\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.raw (/home/production-app/production-orders-app/src/utils/database.js:146:12)\n' +
+    '    at async LaborService.markAttendance (/home/production-app/production-orders-app/src/services/labor.service.js:753:20)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/labor.routes.js:273:30',
+  url: '/attendance-register',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-11T21:11:49.109Z'
+}

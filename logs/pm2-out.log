@@ -47225,3 +47225,167 @@
 2025-08-11T23:07:49: ✅ Database utilities: OK
 2025-08-11T23:07:49: 🎉 All components tested successfully!
 2025-08-11T23:07:49: ✅ All components tested successfully
+2025-08-11T23:10:13: ✅ New PostgreSQL client connected
+2025-08-11T23:10:13: 🔗 Client acquired from pool
+2025-08-11T23:10:13: ✅ New PostgreSQL client connected
+2025-08-11T23:10:13: 🔗 Client acquired from pool
+2025-08-11T23:10:13: ✅ New PostgreSQL client connected
+2025-08-11T23:10:13: 🔗 Client acquired from pool
+2025-08-11T23:10:13: ✅ New PostgreSQL client connected
+2025-08-11T23:10:13: 🔗 Client acquired from pool
+2025-08-11T23:10:13: ✅ New PostgreSQL client connected
+2025-08-11T23:10:13: 🔗 Client acquired from pool
+2025-08-11T23:10:13: 🔓 Client released back to pool
+2025-08-11T23:10:13: 🔓 Client released back to pool
+2025-08-11T23:10:13: 🔓 Client released back to pool
+2025-08-11T23:10:13: 🔓 Client released back to pool
+2025-08-11T23:10:13: 🔓 Client released back to pool
+2025-08-11T23:10:13: New WebSocket connection attempt
+2025-08-11T23:10:13: ✅ WebSocket authenticated: admin (admin)
+2025-08-11T23:10:13: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-11T23:10:13: 🏠 admin joined room: production
+2025-08-11T23:10:13: 🔗 Client acquired from pool
+2025-08-11T23:10:13: 🔓 Client released back to pool
+2025-08-11T23:10:13: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-11T23:10:13: 🏠 admin joined room: production
+2025-08-11T23:10:13: 🔗 Client acquired from pool
+2025-08-11T23:10:13: 🔗 Client acquired from pool
+2025-08-11T23:10:13: 🔓 Client released back to pool
+2025-08-11T23:10:13: 🔗 Client acquired from pool
+2025-08-11T23:10:13: 🔓 Client released back to pool
+2025-08-11T23:10:13: 🔗 Client acquired from pool
+2025-08-11T23:10:13: 🔓 Client released back to pool
+2025-08-11T23:10:13: 🔓 Client released back to pool
+2025-08-11T23:10:13: 🔗 Client acquired from pool
+2025-08-11T23:10:13: 🔓 Client released back to pool
+2025-08-11T23:10:13: 🔗 Client acquired from pool
+2025-08-11T23:10:13: 🔓 Client released back to pool
+2025-08-11T23:10:13: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-11T23:10:13: 🏠 admin joined room: production
+2025-08-11T23:10:13: 🔗 Client acquired from pool
+2025-08-11T23:10:13: 🔓 Client released back to pool
+2025-08-11T23:10:28: 🔗 Client acquired from pool
+2025-08-11T23:10:28: 🔓 Client released back to pool
+2025-08-11T23:10:28: 🔗 Client acquired from pool
+2025-08-11T23:10:28: 🔓 Client released back to pool
+2025-08-11T23:10:28: ✅ Auth success: admin from ::ffff:127.0.0.1 - node
+2025-08-11T23:10:29: 🔗 Client acquired from pool
+2025-08-11T23:10:29: 🔓 Client released back to pool
+2025-08-11T23:11:48: ✅ New PostgreSQL client connected
+2025-08-11T23:11:48: 🔗 Client acquired from pool
+2025-08-11T23:11:48: 🔓 Client released back to pool
+2025-08-11T23:11:48: 🔗 Client acquired from pool
+2025-08-11T23:11:48: 🔓 Client released back to pool
+2025-08-11T23:11:48: ✅ Auth success: admin from ::ffff:127.0.0.1 - node
+2025-08-11T23:11:49: 🔗 Client acquired from pool
+2025-08-11T23:11:49: 🔓 Client released back to pool
+2025-08-11T23:12:02: 🔗 Client acquired from pool
+2025-08-11T23:12:02: 🔓 Client released back to pool
+2025-08-11T23:12:02: 🔗 Client acquired from pool
+2025-08-11T23:12:02: 🔓 Client released back to pool
+2025-08-11T23:12:02: ✅ Auth success: admin from ::ffff:127.0.0.1 - node
+2025-08-11T23:12:02: 🔗 Client acquired from pool
+2025-08-11T23:12:02: 🔓 Client released back to pool
+2025-08-11T23:12:02: 📡 Broadcast sent: attendance_marked to channel: labor (0 clients)
+2025-08-11T23:12:10: 🔗 Client acquired from pool
+2025-08-11T23:12:10: 🔓 Client released back to pool
+2025-08-11T23:12:10: 🔗 Client acquired from pool
+2025-08-11T23:12:10: 🔓 Client released back to pool
+2025-08-11T23:12:10: ✅ Auth success: admin from ::1 - node
+2025-08-11T23:12:10: 🔗 Client acquired from pool
+2025-08-11T23:12:10: 🔓 Client released back to pool
+2025-08-11T23:12:10: 📡 Broadcast sent: attendance_marked to channel: labor (0 clients)
+2025-08-11T23:12:19: 📺 admin subscribed to: [ 'machines', 'production', 'alerts' ]
+2025-08-11T23:12:19: 🔗 Client acquired from pool
+2025-08-11T23:12:19: 🔓 Client released back to pool
+2025-08-11T23:12:19: 🔗 Client acquired from pool
+2025-08-11T23:12:19: 🔓 Client released back to pool
+2025-08-11T23:12:19: ✅ New PostgreSQL client connected
+2025-08-11T23:12:19: 🔗 Client acquired from pool
+2025-08-11T23:12:19: 🔓 Client released back to pool
+2025-08-11T23:12:19: ✅ New PostgreSQL client connected
+2025-08-11T23:12:19: 🔗 Client acquired from pool
+2025-08-11T23:12:19: 🔓 Client released back to pool
+2025-08-11T23:12:19: 🔗 Client acquired from pool
+2025-08-11T23:12:19: 🔓 Client released back to pool
+2025-08-11T23:12:19: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-11T23:12:19: 🏠 admin joined room: production
+2025-08-11T23:12:49: ✅ New PostgreSQL client connected
+2025-08-11T23:12:49: 🔗 Client acquired from pool
+2025-08-11T23:12:49: ✅ New PostgreSQL client connected
+2025-08-11T23:12:49: 🔗 Client acquired from pool
+2025-08-11T23:12:49: 🔓 Client released back to pool
+2025-08-11T23:12:49: 🔓 Client released back to pool
+2025-08-11T23:12:49: ✅ New PostgreSQL client connected
+2025-08-11T23:12:49: 🔗 Client acquired from pool
+2025-08-11T23:12:49: 🔓 Client released back to pool
+2025-08-11T23:13:16: 🔗 Client acquired from pool
+2025-08-11T23:13:16: 🔓 Client released back to pool
+2025-08-11T23:13:21: 🔌 WebSocket disconnected: admin
+2025-08-11T23:13:22: 🔗 Client acquired from pool
+2025-08-11T23:13:22: 🔓 Client released back to pool
+2025-08-11T23:13:22: ✅ New PostgreSQL client connected
+2025-08-11T23:13:22: 🔗 Client acquired from pool
+2025-08-11T23:13:22: 🔓 Client released back to pool
+2025-08-11T23:13:23: 🔗 Client acquired from pool
+2025-08-11T23:13:23: 🔓 Client released back to pool
+2025-08-11T23:13:23: 🔗 Client acquired from pool
+2025-08-11T23:13:23: 🔓 Client released back to pool
+2025-08-11T23:13:23: New WebSocket connection attempt
+2025-08-11T23:13:23: ✅ WebSocket authenticated: admin (admin)
+2025-08-11T23:13:23: 🔌 WebSocket disconnected: admin
+2025-08-11T23:13:24: 🔗 Client acquired from pool
+2025-08-11T23:13:24: 🔓 Client released back to pool
+2025-08-11T23:13:24: 🔗 Client acquired from pool
+2025-08-11T23:13:24: 🔓 Client released back to pool
+2025-08-11T23:13:24: 🔗 Client acquired from pool
+2025-08-11T23:13:24: 🔓 Client released back to pool
+2025-08-11T23:13:24: 🔗 Client acquired from pool
+2025-08-11T23:13:24: 🔓 Client released back to pool
+2025-08-11T23:13:24: New WebSocket connection attempt
+2025-08-11T23:13:24: ✅ WebSocket authenticated: admin (admin)
+2025-08-11T23:13:24: 🔗 Client acquired from pool
+2025-08-11T23:13:24: 🔓 Client released back to pool
+2025-08-11T23:13:24: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-11T23:13:24: 🏠 admin joined room: production
+2025-08-11T23:16:50: 🔌 WebSocket disconnected: admin
