@@ -4492,3 +4492,7 @@ The request url "/home/production-app/production-orders-app/.env" is outside of 
 10:20:26 PM [vite] (client) hmr update /src/js/components/analytics.jsx
 10:20:38 PM [vite] (client) hmr update /src/js/components/analytics.jsx
 10:36:45 PM [vite] (client) page reload websocket-test.html
+10:42:18 PM [vite] (client) hmr update /src/app.jsx, /src/js/components/global-websocket-notifications.jsx, /src/js/components/websocket-debug.jsx, /src/js/components/dashboard.jsx, /src/js/components/production-dashboard.jsx, /src/js/components/orders.jsx, /src/js/components/machines.jsx, /src/js/components/analytics.jsx, /src/js/components/users.jsx, /src/js/components/websocket-status.jsx, /src/js/components/labor-planner.jsx
+10:42:27 PM [vite] (client) page reload websocket-test.html
+10:49:38 PM [vite] (client) hmr update /src/app.jsx, /src/js/components/global-websocket-notifications.jsx, /src/js/components/websocket-debug.jsx, /src/js/components/dashboard.jsx, /src/js/components/production-dashboard.jsx, /src/js/components/orders.jsx, /src/js/components/machines.jsx, /src/js/components/analytics.jsx, /src/js/components/users.jsx, /src/js/components/websocket-status.jsx, /src/js/components/labor-planner.jsx
+The request url "/home/production-app/production-orders-app/.env" is outside of Vite serving allow list.

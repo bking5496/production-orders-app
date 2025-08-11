@@ -281,7 +281,7 @@ export function useConnectionStatus() {
 
 // Auto-connection hook - connects WebSocket when user is authenticated
 export function useAutoConnect() {
-    const { connect, isConnected } = useWebSocket();
+    const { connect, isConnected, isAuthenticated, subscribe } = useWebSocket();
 
     useEffect(() => {
         const checkAuthAndConnect = async () => {
@@ -327,4 +327,59 @@ export function useAutoConnect() {
             checkAuthAndConnect();
         }
     }, [connect, isConnected]);
+
+    // Auto-subscribe to channels after authentication
+    useEffect(() => {
+        if (isConnected && isAuthenticated) {
+            const subscribeToChannels = async () => {
+                try {
+                    // Get user role to determine appropriate channels
+                    const token = localStorage.getItem('token');
+                    if (!token) return;
+
+                    // Decode JWT to get user role (simple decode, not verification)
+                    const base64Url = token.split('.')[1];
+                    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                    const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+                        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                    }).join(''));
+                    const userData = JSON.parse(jsonPayload);
+
+                    // Subscribe to channels based on role
+                    const baseChannels = ['general', 'notifications'];
+                    let channels = [...baseChannels];
+
+                    switch (userData.role) {
+                        case 'admin':
+                            channels.push('admin', 'production', 'machines', 'alerts', 'analytics');
+                            break;
+                        case 'supervisor':
+                            channels.push('production', 'machines', 'alerts', 'analytics');
+                            break;
+                        case 'operator':
+                            channels.push('production', 'machines');
+                            break;
+                        default:
+                            // Keep only base channels for other roles
+                            break;
+                    }
+
+                    console.log(`📺 Auto-subscribing to channels for ${userData.role}:`, channels);
+                    subscribe(channels);
+                    
+                    // Join production room for production-related updates
+                    if (['admin', 'supervisor', 'operator'].includes(userData.role)) {
+                        enhancedWebSocketService.joinRoom('production');
+                    }
+
+                } catch (error) {
+                    console.error('Failed to auto-subscribe to channels:', error);
+                }
+            };
+
+            // Small delay to ensure WebSocket is fully connected
+            const timer = setTimeout(subscribeToChannels, 100);
+            return () => clearTimeout(timer);
+        }
+    }, [isConnected, isAuthenticated, subscribe]);
 }

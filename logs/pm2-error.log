@@ -30384,3 +30384,46 @@ Error: bind EADDRINUSE null:3000
 2025-08-11T22:31:02: 🔒 Auth failure: test from ::1 - Invalid input - curl/8.5.0
 2025-08-11T22:31:36: 🔒 Auth failure: admin from ::1 - Invalid input - curl/8.5.0
 2025-08-11T22:35:15: JWT verification failed: Expected ':' after property name in JSON at position 5
+2025-08-11T22:44:43: JWT verification failed: jwt malformed
+2025-08-11T22:46:35: Error occurred: {
+  error: 'column "resume_time" of relation "production_orders" does not exist',
+  stack: 'error: column "resume_time" of relation "production_orders" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.transaction (/home/production-app/production-orders-app/src/config/database.js:56:24)\n' +
+    '    at async DatabaseUtils.transaction (/home/production-app/production-orders-app/src/utils/database.js:153:12)\n' +
+    '    at async OrdersService.resumeOrder (/home/production-app/production-orders-app/src/services/orders.service.js:380:21)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/orders.routes.js:356:26',
+  url: '/api/orders/82/resume',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-11T20:46:35.962Z'
+}
+2025-08-11T22:46:37: Error occurred: {
+  error: 'column "resume_time" of relation "production_orders" does not exist',
+  stack: 'error: column "resume_time" of relation "production_orders" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.transaction (/home/production-app/production-orders-app/src/config/database.js:56:24)\n' +
+    '    at async DatabaseUtils.transaction (/home/production-app/production-orders-app/src/utils/database.js:153:12)\n' +
+    '    at async OrdersService.resumeOrder (/home/production-app/production-orders-app/src/services/orders.service.js:380:21)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/orders.routes.js:356:26',
+  url: '/api/orders/82/resume',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-11T20:46:37.041Z'
+}
+2025-08-11T22:46:39: Error occurred: {
+  error: 'column "resume_time" of relation "production_orders" does not exist',
+  stack: 'error: column "resume_time" of relation "production_orders" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.transaction (/home/production-app/production-orders-app/src/config/database.js:56:24)\n' +
+    '    at async DatabaseUtils.transaction (/home/production-app/production-orders-app/src/utils/database.js:153:12)\n' +
+    '    at async OrdersService.resumeOrder (/home/production-app/production-orders-app/src/services/orders.service.js:380:21)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/orders.routes.js:356:26',
+  url: '/api/orders/82/resume',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-11T20:46:39.133Z'
+}

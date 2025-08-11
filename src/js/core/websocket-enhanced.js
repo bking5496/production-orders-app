@@ -535,7 +535,7 @@ class EnhancedWebSocketService {
             }
 
             const data = await response.json();
-            return data.token;
+            return data.data?.token || data.token;
         } catch (error) {
             console.error('Failed to get WebSocket token:', error);
             return null;
