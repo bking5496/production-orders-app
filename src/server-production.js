@@ -66,6 +66,7 @@ app.get('/api/health', (req, res) => {
   }, 'Refactored server is running');
 });
 
+
 // API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/orders', ordersRoutes);
