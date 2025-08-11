@@ -117,6 +117,12 @@ app.post('/api/attendance-register', (req, res, next) => {
   req.url = '/attendance-register';
   laborRoutes(req, res, next);
 });
+
+// Labor planner compatibility mappings
+app.get('/api/labor-planner/machines', (req, res, next) => {
+  req.url = '/planner/machines';
+  laborRoutes(req, res, next);
+});
 app.post('/api/labor-assignments/lock-daily', (req, res, next) => {
   req.url = '/assignments/lock-daily';
   laborRoutes(req, res, next);
@@ -168,6 +174,70 @@ app.delete('/api/machine-types/:id', (req, res, next) => {
 });
 app.use('/api/settings', systemRoutes); // Settings endpoints compatibility
 app.use('/api/system', systemRoutes); // System routes
+
+// =============================================================================
+// MISSING ENDPOINTS - Added directly for compatibility
+// =============================================================================
+
+// Import required modules for direct endpoints
+const DatabaseUtils = require('./utils/database');
+const { authenticateToken, requireRole } = require('./middleware/auth');
+
+// Maturation Room Endpoints
+app.get('/api/maturation-room', authenticateToken, async (req, res) => {
+  try {
+    const query = `
+      SELECT 
+        mr.*,
+        po.order_number,
+        po.product_name,
+        u.username as confirmed_by_name,
+        qc_user.username as quality_checked_by_name,
+        CASE 
+          WHEN mr.quantity_expected > 0 THEN 
+            ROUND(((mr.quantity_produced - mr.quantity_expected) / mr.quantity_expected * 100)::numeric, 2)
+          ELSE 0 
+        END as variance_percentage,
+        (mr.maturation_date + INTERVAL '1 day' * mr.expected_maturation_days) as estimated_completion_date
+      FROM maturation_room mr
+      LEFT JOIN production_orders po ON mr.production_order_id = po.id
+      LEFT JOIN users u ON mr.confirmed_by = u.id
+      LEFT JOIN users qc_user ON mr.quality_checked_by = qc_user.id
+      ORDER BY mr.maturation_date DESC, mr.id DESC
+    `;
+    
+    const result = await DatabaseUtils.raw(query);
+    return res.success(result.rows, 'Maturation room data retrieved successfully');
+  } catch (error) {
+    console.error('❌ Failed to fetch maturation room data:', error);
+    return res.error('Failed to fetch maturation room data', error.message);
+  }
+});
+
+app.post('/api/maturation-room', authenticateToken, requireRole(['supervisor', 'admin']), async (req, res) => {
+  try {
+    const maturationRecord = {
+      ...req.body,
+      status: 'maturing',
+      confirmed_by: req.user.id,
+      created_at: new Date()
+    };
+    
+    const result = await DatabaseUtils.insert('maturation_room', maturationRecord, '*');
+    
+    // Broadcast update via WebSocket if available
+    if (req.broadcast) {
+      req.broadcast('maturation_room_added', result, 'production');
+    }
+    
+    return res.success(result, 'Order added to maturation room successfully');
+  } catch (error) {
+    console.error('❌ Failed to add to maturation room:', error);
+    return res.error('Failed to add to maturation room', error.message);
+  }
+});
+
+// =============================================================================
 
 // Catch-all for frontend routes (SPA) - exclude API routes
 app.get('*', (req, res, next) => {
