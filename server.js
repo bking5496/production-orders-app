@@ -3868,38 +3868,6 @@ app.get('/api/machines', authenticateToken, async (req, res) => {
   }
 });
 
-// Mark or update attendance
-app.post('/api/attendance-register', authenticateToken, requireRole(['supervisor', 'admin']), async (req, res) => {
-  try {
-    const client = await pool.connect();
-    try {
-      const { date, machine_id, employee_id, shift_type, status, check_in_time, notes, marked_by } = req.body;
-      
-      const result = await client.query(`
-        INSERT INTO attendance_register (
-          date, machine_id, employee_id, shift_type, status, check_in_time, notes, marked_by
-        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
-        ON CONFLICT (date, machine_id, employee_id, shift_type)
-        DO UPDATE SET 
-          status = EXCLUDED.status,
-          check_in_time = EXCLUDED.check_in_time,
-          notes = EXCLUDED.notes,
-          marked_by = EXCLUDED.marked_by,
-          updated_at = CURRENT_TIMESTAMP
-        RETURNING *
-      `, [date, machine_id, employee_id, shift_type, status, check_in_time, notes, marked_by]);
-      
-      res.json({ success: true, data: result.rows[0] });
-      
-    } finally {
-      client.release();
-    }
-  } catch (error) {
-    console.error('Error marking attendance:', error);
-    res.status(500).json({ error: 'Failed to mark attendance', details: error.message });
-  }
-});
-
 // ================================================================
 // MATURATION ROOM ENDPOINTS
 // ================================================================
