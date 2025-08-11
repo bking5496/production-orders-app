@@ -76,17 +76,115 @@ app.use('/api/system', systemRoutes);
 // Legacy route compatibility
 app.use('/api/labour', laborRoutes); // British spelling compatibility
 
-// Attendance register direct route (for backward compatibility with frontend)
-app.get('/api/attendance-register', (req, res, next) => {
-  // Redirect to the labor route handler
-  req.url = '/attendance-register' + (req.url.includes('?') ? req.url.substring(req.url.indexOf('?')) : '');
-  laborRoutes(req, res, next);
+// Attendance Register Endpoints (direct implementation for compatibility)
+const { authenticateToken, requireRole } = require('./src/middleware/auth');
+const DatabaseUtils = require('./src/utils/database');
+
+// Get attendance data for a specific date, machine, and shift
+app.get('/api/attendance-register', authenticateToken, async (req, res) => {
+  console.log('===== ATTENDANCE REGISTER API HIT =====');
+  console.log('Time:', new Date().toISOString());
+  console.log('Query params:', JSON.stringify(req.query));
+  console.log('User:', req.user?.username || 'Unknown');
+  
+  try {
+    const { date, machine_id, shift } = req.query;
+    const targetDate = date || new Date().toISOString().split('T')[0];
+    
+    console.log(`Target date: ${targetDate}`);
+    console.log(`Machine ID: ${machine_id}`);
+    console.log(`Shift: ${shift}`);
+    
+    // Get labor assignments for the specified date and shift
+    let query = `
+      SELECT DISTINCT
+        la.id as assignment_id,
+        la.employee_id,
+        la.machine_id,
+        la.assignment_date,
+        la.shift_type,
+        la.role as assignment_role,
+        u.username,
+        u.full_name,
+        CASE 
+          WHEN u.employee_code IS NOT NULL AND u.employee_code != '' THEN u.employee_code
+          WHEN u.profile_data->>'employee_code' IS NOT NULL AND u.profile_data->>'employee_code' != '' THEN u.profile_data->>'employee_code'
+          ELSE LPAD(u.id::text, 4, '0')
+        END as employee_code,
+        COALESCE(u.full_name, u.username) as employee_name,
+        m.name as machine_name,
+        m.environment as machine_environment,
+        ar.status,
+        ar.check_in_time,
+        ar.notes as attendance_notes,
+        ar.marked_by
+      FROM labor_assignments la
+      JOIN users u ON la.employee_id = u.id
+      LEFT JOIN machines m ON la.machine_id = m.id
+      LEFT JOIN attendance_register ar ON (
+        ar.date = la.assignment_date 
+        AND ar.employee_id = la.employee_id 
+        AND ar.machine_id = la.machine_id 
+        AND ar.shift_type = la.shift_type
+      )
+      WHERE la.assignment_date = $1 
+        AND la.shift_type = $2
+        AND u.is_active = true
+        AND (m.status IN ('available', 'in_use', 'maintenance') OR m.status IS NULL)
+      ORDER BY m.name, la.role, u.full_name
+    `;
+    
+    const params = [targetDate, shift];
+    
+    console.log('🔍 Executing attendance query with params:', params);
+    const result = await DatabaseUtils.raw(query, params);
+    console.log(`✅ Found ${result.rows.length} scheduled workers for attendance`);
+    
+    return res.success(result.rows, 'Attendance register data retrieved successfully');
+    
+  } catch (error) {
+    console.error('❌ Failed to fetch attendance register:', error);
+    return res.error('Failed to fetch attendance register', error.message);
+  }
 });
 
-app.post('/api/attendance-register', (req, res, next) => {
-  // Redirect to the labor route handler
-  req.url = '/attendance-register';
-  laborRoutes(req, res, next);
+// Mark or update attendance
+app.post('/api/attendance-register', authenticateToken, requireRole(['supervisor', 'admin']), async (req, res) => {
+  try {
+    const { date, machine_id, employee_id, shift_type, status, check_in_time, notes } = req.body;
+    
+    const query = `
+      INSERT INTO attendance_register (
+        date, machine_id, employee_id, shift_type, status, check_in_time, notes, marked_by
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+      ON CONFLICT (date, machine_id, employee_id, shift_type)
+      DO UPDATE SET 
+        status = EXCLUDED.status,
+        check_in_time = EXCLUDED.check_in_time,
+        notes = EXCLUDED.notes,
+        marked_by = EXCLUDED.marked_by
+      RETURNING *
+    `;
+    
+    const result = await DatabaseUtils.raw(query, [
+      date, machine_id, employee_id, shift_type, status, check_in_time, notes, req.user.id
+    ]);
+    
+    // Broadcast attendance update via WebSocket if available
+    if (req.broadcast) {
+      req.broadcast('attendance_marked', {
+        attendanceRecord: result.rows[0],
+        user: req.user.username,
+        timestamp: new Date().toISOString()
+      }, 'labor');
+    }
+    
+    return res.success(result.rows[0], 'Attendance marked successfully');
+    
+  } catch (error) {
+    console.error('❌ Error marking attendance:', error);
+    return res.error('Failed to mark attendance', error.message);
+  }
 });
 
 // Dashboard route compatibility
