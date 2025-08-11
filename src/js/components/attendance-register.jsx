@@ -114,6 +114,19 @@ export default function AttendanceRegister() {
         }
     };
 
+    // Date navigation functions
+    const navigatePreviousDay = () => {
+        const currentDate = new Date(selectedDate);
+        currentDate.setDate(currentDate.getDate() - 1);
+        setSelectedDate(currentDate.toISOString().split('T')[0]);
+    };
+
+    const navigateNextDay = () => {
+        const currentDate = new Date(selectedDate);
+        currentDate.setDate(currentDate.getDate() + 1);
+        setSelectedDate(currentDate.toISOString().split('T')[0]);
+    };
+
     const getStatusBadge = (status) => {
         const statusConfig = attendanceStatuses.find(s => s.value === status) || attendanceStatuses[0];
         const IconComponent = statusConfig.icon;
@@ -167,12 +180,28 @@ export default function AttendanceRegister() {
                         {/* Date Selection */}
                         <div className="flex items-center gap-2">
                             <Calendar className="w-4 h-4 text-blue-300" />
-                            <input
-                                type="date"
-                                value={selectedDate}
-                                onChange={(e) => setSelectedDate(e.target.value)}
-                                className="bg-white bg-opacity-20 text-white px-3 py-2 rounded-lg border border-white border-opacity-20 focus:border-opacity-40"
-                            />
+                            <div className="flex items-center gap-1">
+                                <button
+                                    onClick={navigatePreviousDay}
+                                    className="bg-white bg-opacity-20 text-white p-2 rounded-lg border border-white border-opacity-20 hover:bg-opacity-30 transition-colors"
+                                    title="Previous day"
+                                >
+                                    <ChevronLeft className="w-4 h-4" />
+                                </button>
+                                <input
+                                    type="date"
+                                    value={selectedDate}
+                                    onChange={(e) => setSelectedDate(e.target.value)}
+                                    className="bg-white bg-opacity-20 text-white px-3 py-2 rounded-lg border border-white border-opacity-20 focus:border-opacity-40 min-w-[140px]"
+                                />
+                                <button
+                                    onClick={navigateNextDay}
+                                    className="bg-white bg-opacity-20 text-white p-2 rounded-lg border border-white border-opacity-20 hover:bg-opacity-30 transition-colors"
+                                    title="Next day"
+                                >
+                                    <ChevronRight className="w-4 h-4" />
+                                </button>
+                            </div>
                         </div>
 
                         {/* Shift Selection */}

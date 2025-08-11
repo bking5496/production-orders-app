@@ -4142,17 +4142,22 @@ async function ensureMachineAvailability() {
 
 // Get attendance data for a specific date, machine, and shift
 app.get('/api/attendance-register', authenticateToken, async (req, res) => {
+  console.log('===== ATTENDANCE REGISTER API HIT =====');
+  console.log('Time:', new Date().toISOString());
+  console.log('Query params:', JSON.stringify(req.query));
+  console.log('User:', req.user?.username || 'Unknown');
+  
   try {
-    console.log('🔍 ATTENDANCE REGISTER API DEBUG:');
-    console.log(`📅 Query params:`, req.query);
-    console.log(`👤 User:`, req.user ? `${req.user.username} (ID: ${req.user.id})` : 'Unknown');
-    
     const client = await pool.connect();
+    console.log('✅ Database connection established');
+    
     try {
       const { date, machine_id, shift } = req.query;
       const targetDate = date || new Date().toISOString().split('T')[0];
       
-      console.log(`🎯 Processed params: date=${targetDate}, machine_id=${machine_id}, shift=${shift}`);
+      console.log(`Target date: ${targetDate}`);
+      console.log(`Machine ID: ${machine_id}`);
+      console.log(`Shift: ${shift}`);
       
       let query = `
         SELECT 
@@ -4234,10 +4239,18 @@ app.get('/api/attendance-register', authenticateToken, async (req, res) => {
         assignmentParams.push(shift);
       }
       
-      console.log(`🔍 Labor assignments query:`, assignmentsQuery);
-      console.log(`🔍 Query params:`, assignmentParams);
+      console.log('📋 LABOR ASSIGNMENTS QUERY:');
+      console.log(assignmentsQuery);
+      console.log('📋 QUERY PARAMETERS:', assignmentParams);
+      
       const assignments = await client.query(assignmentsQuery, assignmentParams);
-      console.log(`📊 Found ${assignments.rows.length} labor assignments`);
+      console.log(`📊 LABOR ASSIGNMENTS RESULT: ${assignments.rows.length} rows found`);
+      
+      if (assignments.rows.length > 0) {
+        console.log('First assignment:', JSON.stringify(assignments.rows[0], null, 2));
+      } else {
+        console.log('❌ NO LABOR ASSIGNMENTS FOUND - This is the problem!');
+      }
       
       // Merge attendance records with assignments
       const attendanceMap = new Map();
@@ -4268,14 +4281,20 @@ app.get('/api/attendance-register', authenticateToken, async (req, res) => {
         };
       });
       
+      console.log('🔄 PROCESSING COMPLETE DATA...');
+      console.log('completeData type:', typeof completeData);
+      console.log('completeData length:', completeData?.length);
+      console.log('completeData:', JSON.stringify(completeData, null, 2));
+      
       // Ensure we always return an array, never null
       const finalData = Array.isArray(completeData) ? completeData : [];
       
-      console.log(`✅ Returning ${finalData.length} workers to attendance register`);
+      console.log(`✅ FINAL RESPONSE: ${finalData.length} workers`);
       finalData.forEach((worker, index) => {
         console.log(`   ${index + 1}. ${worker.employee_name} (${worker.employee_code}) - ${worker.machine_name} - Status: ${worker.status || 'Not marked'}`);
       });
       
+      console.log('📤 SENDING RESPONSE:', { success: true, data: finalData });
       res.json({ success: true, data: finalData });
       
     } finally {
