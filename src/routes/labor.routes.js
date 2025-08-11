@@ -226,6 +226,63 @@ router.post('/assignments/lock-daily',
   })
 );
 
+/**
+ * GET /api/attendance-register
+ * Get attendance register data for a specific date and shift
+ */
+router.get('/attendance-register',
+  authenticateToken,
+  [
+    query('date').notEmpty().isISO8601().withMessage('Valid date is required'),
+    query('shift').notEmpty().isIn(['day', 'night', 'afternoon']).withMessage('Valid shift is required')
+  ],
+  asyncHandler(async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.validationError(errors.array());
+    }
+
+    const { date, shift } = req.query;
+    const attendanceData = await laborService.getAttendanceRegister(date, shift);
+    return res.success(attendanceData, 'Attendance register data retrieved successfully');
+  })
+);
+
+/**
+ * POST /api/attendance-register
+ * Mark or update attendance for a worker
+ */
+router.post('/attendance-register',
+  authenticateToken,
+  requireRole(['supervisor', 'admin']),
+  [
+    body('date').notEmpty().isISO8601().withMessage('Valid date is required'),
+    body('employee_id').isInt({ min: 1 }).withMessage('Valid employee ID is required'),
+    body('shift_type').isIn(['day', 'night', 'afternoon']).withMessage('Valid shift type is required'),
+    body('status').isIn(['present', 'absent', 'late', 'sick', 'leave']).withMessage('Valid status is required'),
+    body('machine_id').optional().isInt({ min: 1 }),
+    body('check_in_time').optional().isString(),
+    body('notes').optional().isString()
+  ],
+  asyncHandler(async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.validationError(errors.array());
+    }
+
+    const attendanceRecord = await laborService.markAttendance(req.body, req.user.id);
+    
+    // Broadcast attendance update via WebSocket
+    req.broadcast('attendance_marked', {
+      attendanceRecord,
+      user: req.user.username,
+      timestamp: new Date().toISOString()
+    }, 'labor');
+
+    return res.success(attendanceRecord, 'Attendance marked successfully');
+  })
+);
+
 // British spelling aliases
 router.get('/roster', 
   authenticateToken,

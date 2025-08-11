@@ -76,6 +76,19 @@ app.use('/api/system', systemRoutes);
 // Legacy route compatibility
 app.use('/api/labour', laborRoutes); // British spelling compatibility
 
+// Attendance register direct route (for backward compatibility with frontend)
+app.get('/api/attendance-register', (req, res, next) => {
+  // Redirect to the labor route handler
+  req.url = '/attendance-register' + (req.url.includes('?') ? req.url.substring(req.url.indexOf('?')) : '');
+  laborRoutes(req, res, next);
+});
+
+app.post('/api/attendance-register', (req, res, next) => {
+  // Redirect to the labor route handler
+  req.url = '/attendance-register';
+  laborRoutes(req, res, next);
+});
+
 // Dashboard route compatibility
 app.use('/api/production', analyticsRoutes); // Production endpoints under analytics
 

@@ -661,6 +661,118 @@ class LaborService {
     const today = new Date().toISOString().split('T')[0];
     return await this.getLabourRoster(today);
   }
+
+  /**
+   * Get attendance register data for a specific date and shift
+   */
+  async getAttendanceRegister(date, shift) {
+    if (!date || !shift) {
+      throw new ValidationError('Date and shift parameters are required');
+    }
+
+    console.log('📋 ATTENDANCE SERVICE DEBUG:');
+    console.log(`📅 Date: ${date}, 🕐 Shift: ${shift}`);
+
+    // Get scheduled workers for the date and shift from labor assignments
+    const query = `
+      SELECT DISTINCT
+        la.id as assignment_id,
+        la.employee_id,
+        la.machine_id,
+        la.assignment_date,
+        la.shift_type,
+        la.role as assignment_role,
+        u.username,
+        u.full_name,
+        -- Employee code formatting with COALESCE and CASE
+        CASE 
+          WHEN u.employee_code IS NOT NULL AND u.employee_code != '' THEN u.employee_code
+          WHEN u.profile_data->>'employee_code' IS NOT NULL AND u.profile_data->>'employee_code' != '' THEN u.profile_data->>'employee_code'
+          ELSE LPAD(u.id::text, 4, '0')
+        END as employee_code,
+        COALESCE(u.full_name, u.username) as employee_name,
+        m.name as machine_name,
+        m.environment as machine_environment,
+        -- Get attendance status if already marked
+        ar.status,
+        ar.check_in_time,
+        ar.notes as attendance_notes,
+        ar.marked_by,
+        ar.marked_at
+      FROM labor_assignments la
+      JOIN users u ON la.employee_id = u.id
+      LEFT JOIN machines m ON la.machine_id = m.id
+      LEFT JOIN attendance_register ar ON (
+        ar.date = la.assignment_date 
+        AND ar.employee_id = la.employee_id 
+        AND ar.machine_id = la.machine_id 
+        AND ar.shift_type = la.shift_type
+      )
+      WHERE la.assignment_date = $1 
+        AND la.shift_type = $2
+        AND u.is_active = true
+        AND (m.status IN ('available', 'in_use', 'maintenance') OR m.status IS NULL)
+      ORDER BY m.name, la.role, u.full_name
+    `;
+
+    console.log('🔍 Executing attendance query with params:', [date, shift]);
+    const result = await DatabaseUtils.raw(query, [date, shift]);
+    console.log(`✅ Found ${result.rows.length} scheduled workers for attendance`);
+
+    return result.rows;
+  }
+
+  /**
+   * Mark or update attendance
+   */
+  async markAttendance(attendanceData, userId) {
+    const { date, machine_id, employee_id, shift_type, status, check_in_time, notes } = attendanceData;
+
+    if (!date || !employee_id || !shift_type || !status) {
+      throw new ValidationError('Date, employee ID, shift type, and status are required');
+    }
+
+    const attendanceRecord = {
+      date,
+      machine_id: machine_id || null,
+      employee_id,
+      shift_type,
+      status,
+      check_in_time: check_in_time || null,
+      notes: notes || '',
+      marked_by: userId,
+      marked_at: new Date()
+    };
+
+    // Use upsert to handle conflicts (update if exists, insert if not)
+    const query = `
+      INSERT INTO attendance_register (
+        date, machine_id, employee_id, shift_type, status, check_in_time, notes, marked_by, marked_at
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+      ON CONFLICT (date, machine_id, employee_id, shift_type)
+      DO UPDATE SET
+        status = EXCLUDED.status,
+        check_in_time = EXCLUDED.check_in_time,
+        notes = EXCLUDED.notes,
+        marked_by = EXCLUDED.marked_by,
+        marked_at = EXCLUDED.marked_at
+      RETURNING *
+    `;
+
+    const result = await DatabaseUtils.raw(query, [
+      attendanceRecord.date,
+      attendanceRecord.machine_id,
+      attendanceRecord.employee_id,
+      attendanceRecord.shift_type,
+      attendanceRecord.status,
+      attendanceRecord.check_in_time,
+      attendanceRecord.notes,
+      attendanceRecord.marked_by,
+      attendanceRecord.marked_at
+    ]);
+
+    return result.rows[0];
+  }
 }
 
 module.exports = new LaborService();
