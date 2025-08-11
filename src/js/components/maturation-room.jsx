@@ -50,8 +50,14 @@ export default function MaturationRoom() {
 
     useEffect(() => {
         loadMaturationData();
-        loadCompletedOrders();
     }, []);
+
+    // Load completed orders after maturation data is loaded
+    useEffect(() => {
+        if (maturationData.length >= 0) { // Load even if empty array
+            loadCompletedOrders();
+        }
+    }, [maturationData]);
 
     const loadMaturationData = async () => {
         setLoading(true);
@@ -72,9 +78,21 @@ export default function MaturationRoom() {
             const response = await API.get('/orders?status=completed&environment=blending&include_archived=true');
             // Handle both direct array response and wrapped response
             const orders = Array.isArray(response) ? response : (response.data || []);
-            const ordersWithoutMaturation = orders.filter(order => 
-                !maturationData.some(mat => mat.production_order_id === order.id)
-            );
+            // Filter out orders that are already in maturation room
+            console.log('📊 Total completed orders found:', orders.length);
+            console.log('📊 Current maturation records:', maturationData.length);
+            
+            const ordersWithoutMaturation = orders.filter(order => {
+                const isAlreadyInMaturation = maturationData.some(mat => 
+                    mat.production_order_id === order.id || mat.production_order_id === order.order_id
+                );
+                if (isAlreadyInMaturation) {
+                    console.log(`🚫 Order ${order.order_number} already in maturation, excluding`);
+                }
+                return !isAlreadyInMaturation;
+            });
+            
+            console.log('✅ Available orders for maturation:', ordersWithoutMaturation.length);
             setCompletedOrders(ordersWithoutMaturation);
         } catch (error) {
             console.error('Failed to load completed blending orders:', error);
