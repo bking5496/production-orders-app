@@ -4414,3 +4414,6 @@ The request url "/home/production-app/production-orders-app/.env" is outside of 
 The request url "/home/production-app/production-orders-app/.env" is outside of Vite serving allow list.
 The request url "/home/production-app/production-orders-app/.env" is outside of Vite serving allow list.
 The request url "/home/production-app/production-orders-app/.env" is outside of Vite serving allow list.
+Files in the public directory are served at the root path.
+Instead of /public/.git/config, use /.git/config.
+The request url "/home/production-app/production-orders-app/.env" is outside of Vite serving allow list.
