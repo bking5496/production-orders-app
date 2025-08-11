@@ -91,9 +91,10 @@ export default function AdminPanel() {
 
   const loadEnvironments = async () => {
     try {
-      const environmentsData = await API.get('/environments');
+      const environmentsResponse = await API.get('/environments');
+      const environmentsData = environmentsResponse?.data || environmentsResponse || [];
       console.log('Loaded environments:', environmentsData);
-      setEnvironments(environmentsData);
+      setEnvironments(Array.isArray(environmentsData) ? environmentsData : []);
     } catch (error) {
       console.error('Failed to load environments:', error);
       showNotification('Failed to load environments', 'danger');
@@ -103,9 +104,10 @@ export default function AdminPanel() {
 
   const loadMachineTypes = async () => {
     try {
-      const machineTypesData = await API.get('/machine-types');
+      const machineTypesResponse = await API.get('/machine-types');
+      const machineTypesData = machineTypesResponse?.data || machineTypesResponse || [];
       console.log('Loaded machine types:', machineTypesData);
-      setAvailableMachineTypes(machineTypesData);
+      setAvailableMachineTypes(Array.isArray(machineTypesData) ? machineTypesData : []);
     } catch (error) {
       console.error('Failed to load machine types:', error);
       setAvailableMachineTypes([]);

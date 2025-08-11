@@ -594,14 +594,16 @@ const OrderDetailsModal = ({ isOpen, onClose, orderId, orderNumber }) => {
             let stops = [];
             try {
                 const downtimeResponse = await API.get(`/reports/downtime?order_id=${orderId}`);
-                stops = downtimeResponse.records || downtimeResponse.data?.records || [];
-                console.log('Downtime response for order', orderId, ':', downtimeResponse);
+                const downtimeData = downtimeResponse?.data || downtimeResponse;
+                stops = downtimeData?.records || downtimeData || [];
+                console.log('📋 Downtime response for order', orderId, ':', stops);
                 
                 if (!Array.isArray(stops) || stops.length === 0) {
-                    console.log('No stops found for specific order, trying all stops...');
+                    console.log('🔄 No stops found for specific order, trying all stops...');
                     const allStopsResponse = await API.get('/reports/downtime');
-                    const allStops = allStopsResponse.records || allStopsResponse.data?.records || [];
-                    console.log('All stops:', allStops);
+                    const allStopsData = allStopsResponse?.data || allStopsResponse;
+                    const allStops = allStopsData?.records || allStopsData || [];
+                    console.log('📊 All stops:', allStops);
                     stops = Array.isArray(allStops) ? allStops.filter(stop => stop.order_id == orderId) : [];
                 }
             } catch (downtimeError) {
@@ -946,16 +948,17 @@ export default function UltraProductionFloorMonitor() {
     const fetchData = useCallback(async () => {
         try {
             setError(null);
-            const data = await API.get('/production/floor-overview');
-            console.log('Production floor overview data:', data);
+            const response = await API.get('/production/floor-overview');
+            const data = response?.data || response;
+            console.log('✅ Production floor overview data:', data);
             
-            const activeOrders = data.activeOrders || [];
-            const machineStatus = data.machineStatus || [];
-            const todayStats = data.todayStats || {};
+            const activeOrders = data?.activeOrders || [];
+            const machineStatus = data?.machineStatus || [];
+            const todayStats = data?.todayStats || {};
             
-            console.log('Active orders:', activeOrders);
-            console.log('Machine status:', machineStatus);
-            console.log('Today stats:', todayStats);
+            console.log('📊 Active orders:', activeOrders.length);
+            console.log('🏭 Machine status:', machineStatus.length);
+            console.log('📈 Today stats:', todayStats);
             
             setOverviewData(data || {});
         } catch (error) {

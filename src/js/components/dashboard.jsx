@@ -384,11 +384,18 @@ export default function Dashboard() {
     else setLoading(true);
     
     try {
-      const [orders, machines, users] = await Promise.all([
-        API.getOrders().catch(() => []),
-        API.getMachines().catch(() => []),
-        API.get('/users').catch(() => [])
+      const [ordersResponse, machinesResponse, usersResponse] = await Promise.all([
+        API.get('/orders').catch(() => ({ data: [] })),
+        API.get('/machines').catch(() => ({ data: [] })),
+        API.get('/users').catch(() => ({ data: [] }))
       ]);
+
+      // Handle response formats for each API call
+      const orders = ordersResponse?.data || ordersResponse || [];
+      const machines = machinesResponse?.data || machinesResponse || [];
+      const users = usersResponse?.data || usersResponse || [];
+      
+      console.log('📊 Dashboard data loaded - Orders:', orders.length, 'Machines:', machines.length, 'Users:', users.length);
       
       // Calculate comprehensive order stats
       const orderStats = {

@@ -80,12 +80,12 @@ export default function AnalyticsPage() {
       ]);
       
       setAnalytics({
-        orders: ordersData || [],
-        machines: machinesData || [],
-        employees: employeesData || [],
-        assignments: assignmentsData || [],
-        summary: summaryData?.summary || {},
-        downtime: downtimeData || {},
+        orders: ordersData?.data || ordersData || [],
+        machines: machinesData?.data || machinesData || [],
+        employees: employeesData?.data || employeesData || [],
+        assignments: assignmentsData?.data || assignmentsData || [],
+        summary: summaryData?.data?.summary || summaryData?.summary || {},
+        downtime: downtimeData?.data || downtimeData || {},
         downtimeRecords: downtimeRecordsData?.records || [],
         downtimeSummary: downtimeRecordsData?.summary || {},
         categoryBreakdown: downtimeRecordsData?.category_breakdown || {}
@@ -127,7 +127,8 @@ export default function AnalyticsPage() {
       ]);
       
       // Update analytics with archived orders
-      const completedOrders = archivedOrders || [];
+      const completedOrders = archivedOrders?.data || archivedOrders || [];
+      const wasteReportsData = wasteData?.data || wasteData || [];
       
       // Merge with existing analytics orders
       setAnalytics(prev => ({
@@ -136,7 +137,7 @@ export default function AnalyticsPage() {
         archivedOrders: completedOrders
       }));
       
-      setWasteReports(wasteData || []);
+      setWasteReports(wasteReportsData);
       
       console.log('Loaded archived orders:', completedOrders.length);
     } catch (error) {
@@ -149,13 +150,14 @@ export default function AnalyticsPage() {
           status: 'completed'
         }).toString();
         
-        const completedOrders = await API.get(`/orders?${params}&archived=true`);
+        const completedOrdersResponse = await API.get(`/orders?${params}&archived=true`);
+        const completedOrders = completedOrdersResponse?.data || completedOrdersResponse || [];
         setAnalytics(prev => ({
           ...prev,
-          orders: [...prev.orders, ...(completedOrders || [])],
-          archivedOrders: completedOrders || []
+          orders: [...prev.orders, ...completedOrders],
+          archivedOrders: completedOrders
         }));
-        console.log('Loaded completed orders from alternative endpoint:', (completedOrders || []).length);
+        console.log('Loaded completed orders from alternative endpoint:', completedOrders.length);
       } catch (altError) {
         console.error('Alternative archived orders endpoint also failed:', altError);
       }
@@ -166,12 +168,13 @@ export default function AnalyticsPage() {
   const viewWasteReport = async (order) => {
     try {
       // Get waste data for this specific order
-      const wasteData = await API.get(`/orders/${order.id}/waste`);
+      const wasteDataResponse = await API.get(`/orders/${order.id}/waste`);
+      const wasteData = wasteDataResponse?.data || wasteDataResponse || [];
       
       setSelectedWasteReport({
         order,
-        wasteData: wasteData || [],
-        metrics: wasteData ? {
+        wasteData: wasteData,
+        metrics: wasteData.length > 0 ? {
           totalWeight: wasteData.reduce((sum, w) => sum + (w.weight || 0), 0),
           itemCount: wasteData.length,
           categories: [...new Set(wasteData.map(w => w.item_type))]

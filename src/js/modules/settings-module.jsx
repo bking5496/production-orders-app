@@ -306,7 +306,8 @@ const SystemSettings = () => {
     useEffect(() => {
         const fetchSettings = async () => {
             try {
-                const data = await API.get('/settings/system');
+                const response = await API.get('/settings/system');
+                const data = response?.data || response || {};
                 // Ensure defaults if data is empty
                 setSettings(prev => ({...prev, ...data}));
             } catch (error) {

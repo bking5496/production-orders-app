@@ -50,11 +50,13 @@ export default function ShiftReports() {
             setLoading(true);
             
             // Get environments
-            const envData = await API.get('/environments');
+            const envResponse = await API.get('/environments');
+            const envData = envResponse?.data || envResponse || [];
             setEnvironments(Array.isArray(envData) ? envData : []);
             
             // Get production floor data instead of non-existent shift endpoints
-            const productionData = await API.get('/production/floor-overview');
+            const productionResponse = await API.get('/production/floor-overview');
+            const productionData = productionResponse?.data || productionResponse;
             
             // Generate current shift report from production data
             if (productionData) {

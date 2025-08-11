@@ -109,9 +109,9 @@ export default function MachinesPage() {
     try {
       const response = await API.get('/environments');
       // Handle the response format - check for both new and old formats
-      const environmentsData = response?.data || (Array.isArray(response) ? response : []);
-      console.log('🌍 Environments loaded in machines.jsx:', environmentsData);
-      setEnvironments(environmentsData);
+      const environmentsData = response?.data || response || [];
+      console.log('🌍 Environments loaded in machines.jsx:', Array.isArray(environmentsData) ? environmentsData.length : 'Invalid data format', environmentsData);
+      setEnvironments(Array.isArray(environmentsData) ? environmentsData : []);
     } catch (error) {
       console.error('Failed to load environments:', error);
       showNotification('Failed to load environments', 'danger');
@@ -122,8 +122,9 @@ export default function MachinesPage() {
   const loadMachineTypes = async () => {
     try {
       const response = await API.get('/machine-types');
-      const data = response.data || response; // Handle both new and old response formats
-      setMachineTypes(data);
+      const data = response?.data || response || []; // Handle both new and old response formats
+      console.log('🛠️ Machine types loaded:', Array.isArray(data) ? data.length : 'Invalid data format', data);
+      setMachineTypes(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error('Failed to load machine types:', error);
       showNotification('Failed to load machine types', 'danger');
@@ -156,9 +157,11 @@ export default function MachinesPage() {
     try {
       console.log('🔧 Loading machines...');
       const response = await API.get('/machines');
-      const data = response.data || response; // Handle both new and old response formats
-      console.log('✅ Machines loaded successfully:', data?.length || 0, 'machines');
-      setMachines(data);
+      const data = response?.data || response || []; // Handle both new and old response formats
+      console.log('✅ Raw machines response:', response);
+      console.log('✅ Processed machines data:', data);
+      console.log('✅ Machines loaded successfully:', Array.isArray(data) ? data.length : 'Invalid data format', 'machines');
+      setMachines(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error('❌ Failed to load machines:', error);
       

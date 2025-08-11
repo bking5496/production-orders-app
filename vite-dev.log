@@ -4464,3 +4464,19 @@ The request url "/home/production-app/production-orders-app/.env" is outside of 
 6:28:05 PM [vite] (client) hmr update /src/js/components/machines.jsx
 6:29:14 PM [vite] (client) hmr update /src/js/components/orders.jsx
 6:29:53 PM [vite] (client) hmr update /src/js/components/labour-layout.jsx
+6:30:24 PM [vite] (client) hmr update /src/js/components/dashboard.jsx
+6:31:01 PM [vite] (client) hmr update /src/js/components/production-dashboard.jsx
+6:31:18 PM [vite] (client) hmr update /src/js/components/production-dashboard.jsx
+6:31:46 PM [vite] (client) hmr update /src/js/components/shift-reports.jsx
+6:32:04 PM [vite] (client) hmr update /src/js/components/analytics.jsx
+6:32:09 PM [vite] (client) hmr update /src/js/components/analytics.jsx
+6:33:26 PM [vite] (client) hmr update /src/js/components/analytics.jsx
+6:33:32 PM [vite] (client) hmr update /src/js/components/analytics.jsx
+6:33:39 PM [vite] (client) hmr update /src/js/components/analytics.jsx
+6:33:58 PM [vite] (client) hmr update /src/js/components/admin.jsx
+6:34:04 PM [vite] (client) hmr update /src/js/components/admin.jsx
+6:34:42 PM [vite] (client) hmr update /src/js/modules/settings-module.jsx
+6:36:13 PM [vite] (client) hmr update /src/js/components/machines.jsx
+6:36:20 PM [vite] (client) hmr update /src/js/components/machines.jsx
+6:36:28 PM [vite] (client) hmr update /src/js/components/machines.jsx
+The request url "/home/production-app/production-orders-app/.env" is outside of Vite serving allow list.
