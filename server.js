@@ -4,21 +4,21 @@ const cors = require('cors');
 const path = require('path');
 
 // Import our new modular components
-const { addResponseUtils } = require('./utils/response');
-const { errorHandler, notFoundHandler } = require('./middleware/error-handler');
+const { addResponseUtils } = require('./src/utils/response');
+const { errorHandler, notFoundHandler } = require('./src/middleware/error-handler');
 
 // Import routes
-const authRoutes = require('./routes/auth.routes');
-const ordersRoutes = require('./routes/orders.routes');
-const machinesRoutes = require('./routes/machines.routes');
-const usersRoutes = require('./routes/users.routes');
-const laborRoutes = require('./routes/labor.routes');
-const analyticsRoutes = require('./routes/analytics.routes');
-const reportsRoutes = require('./routes/reports.routes');
-const systemRoutes = require('./routes/system.routes');
+const authRoutes = require('./src/routes/auth.routes');
+const ordersRoutes = require('./src/routes/orders.routes');
+const machinesRoutes = require('./src/routes/machines.routes');
+const usersRoutes = require('./src/routes/users.routes');
+const laborRoutes = require('./src/routes/labor.routes');
+const analyticsRoutes = require('./src/routes/analytics.routes');
+const reportsRoutes = require('./src/routes/reports.routes');
+const systemRoutes = require('./src/routes/system.routes');
 
 // WebSocket integration
-const { initializeWebSocket, addWebSocketToApp, startCleanupSchedule } = require('./middleware/websocket');
+const { initializeWebSocket, addWebSocketToApp, startCleanupSchedule } = require('./src/middleware/websocket');
 
 // Create Express app
 const app = express();
@@ -116,22 +116,22 @@ const testComponents = async () => {
   
   try {
     // Test database connection
-    const db = require('./config/database');
+    const db = require('./src/config/database');
     await db.query('SELECT NOW() as current_time');
     console.log('✅ Database connection: OK');
     
     // Test authentication middleware
-    const auth = require('./middleware/auth');
+    const auth = require('./src/middleware/auth');
     const testToken = auth.generateToken({ id: 1, username: 'test', role: 'admin' });
     const decoded = auth.verifyToken(testToken);
     console.log('✅ Authentication middleware: OK');
     
     // Test response utilities
-    const { ResponseUtils } = require('./utils/response');
+    const { ResponseUtils } = require('./src/utils/response');
     console.log('✅ Response utilities: OK');
     
     // Test database utils
-    const DatabaseUtils = require('./utils/database');
+    const DatabaseUtils = require('./src/utils/database');
     console.log('✅ Database utilities: OK');
     
     console.log('🎉 All components tested successfully!');
