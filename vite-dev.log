@@ -4417,3 +4417,7 @@ The request url "/home/production-app/production-orders-app/.env" is outside of 
 Files in the public directory are served at the root path.
 Instead of /public/.git/config, use /.git/config.
 The request url "/home/production-app/production-orders-app/.env" is outside of Vite serving allow list.
+7:54:50 AM [vite] (client) hmr update /src/js/components/attendance-register.jsx
+7:55:04 AM [vite] (client) page reload server.js
+7:55:17 AM [vite] (client) page reload server.js
+7:55:30 AM [vite] (client) page reload server.js

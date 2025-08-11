@@ -4143,10 +4143,16 @@ async function ensureMachineAvailability() {
 // Get attendance data for a specific date, machine, and shift
 app.get('/api/attendance-register', authenticateToken, async (req, res) => {
   try {
+    console.log('🔍 ATTENDANCE REGISTER API DEBUG:');
+    console.log(`📅 Query params:`, req.query);
+    console.log(`👤 User:`, req.user ? `${req.user.username} (ID: ${req.user.id})` : 'Unknown');
+    
     const client = await pool.connect();
     try {
       const { date, machine_id, shift } = req.query;
       const targetDate = date || new Date().toISOString().split('T')[0];
+      
+      console.log(`🎯 Processed params: date=${targetDate}, machine_id=${machine_id}, shift=${shift}`);
       
       let query = `
         SELECT 
@@ -4228,7 +4234,10 @@ app.get('/api/attendance-register', authenticateToken, async (req, res) => {
         assignmentParams.push(shift);
       }
       
+      console.log(`🔍 Labor assignments query:`, assignmentsQuery);
+      console.log(`🔍 Query params:`, assignmentParams);
       const assignments = await client.query(assignmentsQuery, assignmentParams);
+      console.log(`📊 Found ${assignments.rows.length} labor assignments`);
       
       // Merge attendance records with assignments
       const attendanceMap = new Map();
@@ -4236,6 +4245,7 @@ app.get('/api/attendance-register', authenticateToken, async (req, res) => {
         const key = `${record.employee_id}-${record.machine_id}`;
         attendanceMap.set(key, record);
       });
+      console.log(`📊 Found ${result.rows.length} existing attendance records`);
       
       const completeData = assignments.rows.map(assignment => {
         const key = `${assignment.employee_id}-${assignment.machine_id}`;
@@ -4256,6 +4266,11 @@ app.get('/api/attendance-register', authenticateToken, async (req, res) => {
           marked_by: attendanceRecord?.marked_by_name || null,
           created_at: attendanceRecord?.created_at || null
         };
+      });
+      
+      console.log(`✅ Returning ${completeData.length} workers to attendance register`);
+      completeData.forEach((worker, index) => {
+        console.log(`   ${index + 1}. ${worker.employee_name} (${worker.employee_code}) - ${worker.machine_name} - Status: ${worker.status || 'Not marked'}`);
       });
       
       res.json({ success: true, data: completeData });

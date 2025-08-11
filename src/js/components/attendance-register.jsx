@@ -33,7 +33,9 @@ export default function AttendanceRegister() {
     const loadScheduledWorkers = async () => {
         setLoading(true);
         try {
-            console.log(`Loading scheduled workers for: ${selectedDate}, shift: ${selectedShift}`);
+            console.log('🔍 ATTENDANCE REGISTER DEBUG:');
+            console.log(`📅 Date: ${selectedDate}, 🕐 Shift: ${selectedShift}`);
+            console.log('🔑 Auth token exists:', !!localStorage.getItem('token'));
             
             // Use the attendance register API directly
             const params = new URLSearchParams({
@@ -41,26 +43,39 @@ export default function AttendanceRegister() {
                 shift: selectedShift
             });
             
+            console.log(`🌐 API call: /attendance-register?${params}`);
             const response = await API.get(`/attendance-register?${params}`);
-            console.log('Raw API response:', response);
+            console.log('📥 Raw API response:', response);
+            console.log('📥 Response type:', typeof response);
+            console.log('📥 Response keys:', response ? Object.keys(response) : 'null');
             
             // Handle the response structure
             let workers = [];
             if (response && response.success && Array.isArray(response.data)) {
                 workers = response.data;
+                console.log('✅ Using response.data array');
             } else if (Array.isArray(response)) {
                 workers = response;
+                console.log('✅ Using direct response array');
+            } else {
+                console.log('❌ Unexpected response structure');
             }
             
-            console.log(`Found ${workers.length} scheduled workers:`, workers);
+            console.log(`👥 Found ${workers.length} scheduled workers:`, workers);
+            workers.forEach((worker, index) => {
+                console.log(`   ${index + 1}. ${worker.employee_name} (${worker.employee_code}) - ${worker.machine_name}`);
+            });
+            
             setScheduledWorkers(workers);
             
             // Extract unique machines from the workers
             const machines = [...new Set(workers.map(w => w.machine_name).filter(Boolean))];
+            console.log(`🏭 Available machines:`, machines);
             setAvailableMachines(['all', ...machines]);
             
         } catch (error) {
-            console.error('Failed to load scheduled workers:', error);
+            console.error('❌ Failed to load scheduled workers:', error);
+            console.error('❌ Error details:', error.response?.data || error.message);
             setScheduledWorkers([]);
             setAvailableMachines(['all']);
         } finally {
