@@ -343,7 +343,10 @@ app.get('/api/labor-assignments', authenticateToken, async (req, res) => {
         la.start_time,
         la.end_time,
         la.hourly_rate,
-        la.status,
+        la.overtime_eligible,
+        la.created_at,
+        la.created_by,
+        la.updated_at,
         u.username,
         u.full_name,
         CASE 
@@ -354,7 +357,8 @@ app.get('/api/labor-assignments', authenticateToken, async (req, res) => {
         COALESCE(u.full_name, u.username) as employee_name,
         m.name as machine_name,
         m.environment as machine_environment,
-        'Production Company' as company
+        'Production Company' as company,
+        'scheduled' as status
       FROM labor_assignments la
       JOIN users u ON la.employee_id = u.id
       LEFT JOIN machines m ON la.machine_id = m.id
@@ -407,6 +411,326 @@ app.get('/api/labor-assignments', authenticateToken, async (req, res) => {
   } catch (error) {
     console.error('❌ Failed to fetch labor assignments:', error);
     return res.error('Failed to fetch labor assignments', error.message);
+  }
+});
+
+// Create or update labor assignment
+app.post('/api/labor-assignments', authenticateToken, requireRole(['admin', 'supervisor']), async (req, res) => {
+  try {
+    const { employee_id, machine_id, assignment_date, shift_type, role, start_time, end_time, hourly_rate } = req.body;
+
+    const assignmentData = {
+      employee_id,
+      machine_id,
+      assignment_date,
+      shift_type: shift_type || 'day',
+      role: role || 'operator',
+      start_time,
+      end_time,
+      hourly_rate,
+      created_by: req.user.id,
+      created_at: new Date()
+    };
+
+    // Check for existing assignment
+    const existing = await DatabaseUtils.findOne('labor_assignments', {
+      employee_id,
+      machine_id,
+      assignment_date,
+      shift_type: shift_type || 'day',
+      role: role || 'operator'
+    });
+
+    let result;
+    if (existing) {
+      // Update existing
+      result = await DatabaseUtils.update('labor_assignments', { id: existing.id }, {
+        start_time,
+        end_time,
+        hourly_rate,
+        updated_at: new Date()
+      }, '*');
+    } else {
+      // Create new
+      result = await DatabaseUtils.insert('labor_assignments', assignmentData, '*');
+    }
+
+    if (req.broadcast) {
+      req.broadcast('labor_assignment_updated', {
+        assignment: result,
+        user: req.user.username,
+        timestamp: new Date().toISOString()
+      }, 'labor');
+    }
+
+    return res.success(result, existing ? 'Labor assignment updated successfully' : 'Labor assignment created successfully');
+  } catch (error) {
+    console.error('❌ Failed to create/update labor assignment:', error);
+    return res.error('Failed to create/update labor assignment', error.message);
+  }
+});
+
+// Delete labor assignment
+app.delete('/api/labor-assignments/:id', authenticateToken, requireRole(['admin', 'supervisor']), async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    const assignment = await DatabaseUtils.findOne('labor_assignments', { id });
+    if (!assignment) {
+      return res.error('Labor assignment not found', null, 404);
+    }
+
+    await DatabaseUtils.delete('labor_assignments', { id });
+
+    if (req.broadcast) {
+      req.broadcast('labor_assignment_deleted', {
+        assignmentId: id,
+        user: req.user.username,
+        timestamp: new Date().toISOString()
+      }, 'labor');
+    }
+
+    return res.success(null, 'Labor assignment deleted successfully');
+  } catch (error) {
+    console.error('❌ Failed to delete labor assignment:', error);
+    return res.error('Failed to delete labor assignment', error.message);
+  }
+});
+
+// Copy previous week's assignments
+app.post('/api/labor-assignments/copy-week', authenticateToken, requireRole(['admin', 'supervisor']), async (req, res) => {
+  try {
+    const { source_week, target_week, environment } = req.body;
+
+    if (!source_week || !target_week || !environment) {
+      return res.error('Source week, target week, and environment are required', null, 400);
+    }
+
+    // Delete existing assignments for target week
+    const deleteQuery = `
+      DELETE FROM labor_assignments la
+      USING machines m
+      WHERE la.machine_id = m.id 
+      AND la.assignment_date = $1 
+      AND m.environment = $2
+    `;
+    
+    await DatabaseUtils.raw(deleteQuery, [target_week, environment]);
+
+    // Copy assignments from source to target
+    const copyQuery = `
+      INSERT INTO labor_assignments 
+      (employee_id, machine_id, assignment_date, shift_type, role, start_time, end_time, hourly_rate, created_by)
+      SELECT 
+        la.employee_id,
+        la.machine_id,
+        $2 as assignment_date,
+        la.shift_type,
+        la.role,
+        la.start_time,
+        la.end_time,
+        la.hourly_rate,
+        $3 as created_by
+      FROM labor_assignments la
+      LEFT JOIN machines m ON la.machine_id = m.id
+      WHERE la.assignment_date = $1 
+      AND (m.environment = $4 OR la.machine_id IS NULL)
+    `;
+
+    const result = await DatabaseUtils.raw(copyQuery, [source_week, target_week, req.user.id, environment]);
+    
+    return res.success({ 
+      copied_count: result.rowCount,
+      message: `Copied ${result.rowCount} assignments from ${source_week} to ${target_week}`
+    }, 'Week assignments copied successfully');
+  } catch (error) {
+    console.error('❌ Failed to copy week assignments:', error);
+    return res.error('Failed to copy week assignments', error.message);
+  }
+});
+
+// =============================================================================
+// ADDITIONAL MISSING ENDPOINTS FOR MACHINES AND LABOUR-LAYOUT
+// =============================================================================
+
+// Get machine statistics
+app.get('/api/machines/stats', authenticateToken, async (req, res) => {
+  try {
+    const query = `
+      SELECT 
+        environment,
+        COUNT(*) as total,
+        SUM(CASE WHEN status = 'available' THEN 1 ELSE 0 END) as available,
+        SUM(CASE WHEN status = 'in_use' THEN 1 ELSE 0 END) as in_use,
+        SUM(CASE WHEN status = 'maintenance' THEN 1 ELSE 0 END) as maintenance,
+        SUM(CASE WHEN status = 'offline' THEN 1 ELSE 0 END) as offline
+      FROM machines
+      GROUP BY environment
+    `;
+    
+    const result = await DatabaseUtils.raw(query);
+    return res.success(result.rows, 'Machine statistics retrieved successfully');
+  } catch (error) {
+    console.error('❌ Failed to fetch machine statistics:', error);
+    return res.error('Failed to fetch machine statistics', error.message);
+  }
+});
+
+// Machines status - Critical priority endpoint
+app.get('/api/machines/status', authenticateToken, async (req, res) => {
+  try {
+    const query = `
+      SELECT 
+        id,
+        name,
+        type,
+        status,
+        environment
+      FROM machines
+      ORDER BY name
+    `;
+    
+    const result = await DatabaseUtils.raw(query);
+    return res.success(result.rows, 'Machine status retrieved successfully');
+  } catch (error) {
+    console.error('❌ Failed to fetch machine status:', error);
+    return res.error('Failed to fetch machine status', error.message);
+  }
+});
+
+// Get machines with active orders for a specific date and environment
+app.get('/api/machines/daily-active', authenticateToken, async (req, res) => {
+  try {
+    const { date, environment } = req.query;
+    
+    if (!date || !environment) {
+      return res.error('Date and environment are required', null, 400);
+    }
+    
+    const query = `
+      SELECT DISTINCT 
+        m.id,
+        m.name,
+        m.type,
+        m.environment,
+        po.id as order_id,
+        po.order_number,
+        po.product_name,
+        po.start_time,
+        po.status as order_status,
+        po.machine_id
+      FROM machines m
+      LEFT JOIN production_orders po ON m.id = po.machine_id 
+        AND DATE(po.start_time AT TIME ZONE 'UTC' AT TIME ZONE '+02:00') = $1
+        AND po.status IN ('in_progress', 'paused', 'pending')
+      WHERE m.environment = $2 AND m.status != 'offline'
+      ORDER BY m.name
+    `;
+    
+    const result = await DatabaseUtils.raw(query, [date, environment]);
+    return res.success(result.rows, 'Daily active machines retrieved successfully');
+  } catch (error) {
+    console.error('❌ Failed to fetch daily active machines:', error);
+    return res.error('Failed to fetch daily active machines', error.message);
+  }
+});
+
+// Labour roster endpoint
+app.get('/api/labour/roster', authenticateToken, async (req, res) => {
+  try {
+    const { date } = req.query;
+    const targetDate = date || new Date().toISOString().split('T')[0];
+    
+    const query = `
+      SELECT 
+        la.id,
+        la.employee_id,
+        la.machine_id,
+        la.assignment_date,
+        la.shift_type,
+        la.role,
+        la.start_time,
+        la.end_time,
+        la.hourly_rate,
+        u.username,
+        u.full_name,
+        CASE 
+          WHEN u.employee_code IS NOT NULL AND u.employee_code != '' THEN u.employee_code
+          WHEN u.profile_data->>'employee_code' IS NOT NULL AND u.profile_data->>'employee_code' != '' THEN u.profile_data->>'employee_code'
+          ELSE LPAD(u.id::text, 4, '0')
+        END as employee_code,
+        COALESCE(u.full_name, u.username) as employee_name,
+        m.name as machine_name,
+        m.environment,
+        'Production Company' as company,
+        'scheduled' as status
+      FROM labor_assignments la
+      JOIN users u ON la.employee_id = u.id
+      LEFT JOIN machines m ON la.machine_id = m.id
+      WHERE la.assignment_date = $1 AND u.is_active = true
+      ORDER BY m.name, la.shift_type, la.role
+    `;
+    
+    const result = await DatabaseUtils.raw(query, [targetDate]);
+    return res.success(result.rows, 'Labour roster retrieved successfully');
+  } catch (error) {
+    console.error('❌ Failed to fetch labour roster:', error);
+    return res.error('Failed to fetch labour roster', error.message);
+  }
+});
+
+// Today's labour data
+app.get('/api/labour/today', authenticateToken, async (req, res) => {
+  try {
+    const today = new Date().toISOString().split('T')[0];
+    
+    // Get today's assignments
+    const assignmentsQuery = `
+      SELECT 
+        la.*,
+        u.username,
+        u.full_name,
+        CASE 
+          WHEN u.employee_code IS NOT NULL AND u.employee_code != '' THEN u.employee_code
+          WHEN u.profile_data->>'employee_code' IS NOT NULL AND u.profile_data->>'employee_code' != '' THEN u.profile_data->>'employee_code'
+          ELSE LPAD(u.id::text, 4, '0')
+        END as employee_code,
+        COALESCE(u.full_name, u.username) as employee_name,
+        m.name as machine_name,
+        m.environment,
+        'Production Company' as company
+      FROM labor_assignments la
+      JOIN users u ON la.employee_id = u.id
+      LEFT JOIN machines m ON la.machine_id = m.id
+      WHERE la.assignment_date = $1 AND u.is_active = true
+      ORDER BY la.shift_type, m.name, la.role
+    `;
+    
+    const assignments = await DatabaseUtils.raw(assignmentsQuery, [today]);
+    
+    // Get summary data
+    const summaryQuery = `
+      SELECT 
+        COUNT(*) as total_assignments,
+        COUNT(DISTINCT la.employee_id) as total_workers,
+        COUNT(DISTINCT la.machine_id) as total_machines,
+        COUNT(CASE WHEN la.shift_type = 'day' THEN 1 END) as day_assignments,
+        COUNT(CASE WHEN la.shift_type = 'night' THEN 1 END) as night_assignments
+      FROM labor_assignments la
+      JOIN users u ON la.employee_id = u.id
+      WHERE la.assignment_date = $1 AND u.is_active = true
+    `;
+    
+    const summary = await DatabaseUtils.raw(summaryQuery, [today]);
+    
+    return res.success({
+      assignments: assignments.rows,
+      summary: summary.rows[0],
+      date: today
+    }, 'Today\'s labour data retrieved successfully');
+  } catch (error) {
+    console.error('❌ Failed to fetch today\'s labour data:', error);
+    return res.error('Failed to fetch today\'s labour data', error.message);
   }
 });
 
