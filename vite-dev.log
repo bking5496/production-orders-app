@@ -4480,3 +4480,6 @@ The request url "/home/production-app/production-orders-app/.env" is outside of 
 6:36:20 PM [vite] (client) hmr update /src/js/components/machines.jsx
 6:36:28 PM [vite] (client) hmr update /src/js/components/machines.jsx
 The request url "/home/production-app/production-orders-app/.env" is outside of Vite serving allow list.
+7:20:16 PM [vite] (client) hmr update /src/js/components/machines.jsx
+7:20:41 PM [vite] (client) hmr update /src/js/components/analytics.jsx
+7:20:54 PM [vite] (client) hmr update /src/js/components/analytics.jsx

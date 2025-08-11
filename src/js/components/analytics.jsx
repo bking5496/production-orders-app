@@ -104,11 +104,27 @@ export default function AnalyticsPage() {
   };
 
   useEffect(() => {
+    // Check authentication before loading analytics
+    const token = localStorage.getItem('token');
+    if (!token) {
+      console.warn('⚠️ No authentication token found - user needs to log in');
+      showNotification('Please log in to access analytics data', 'danger');
+      setLoading(false);
+      return;
+    }
+    
     loadAnalytics();
   }, [dateRange]);
   
   // Load completed orders after initial analytics load
   useEffect(() => {
+    // Check authentication before loading waste data
+    const token = localStorage.getItem('token');
+    if (!token) {
+      console.warn('⚠️ No authentication token found - skipping waste data load');
+      return;
+    }
+    
     loadCompletedOrdersWithWaste();
   }, [dateRange]);
 

@@ -397,18 +397,27 @@ export default function MachinesPage() {
 
   // useEffect runs when the component loads.
   useEffect(() => {
-    // Only load data if we have a valid token
+    // Load data regardless of WebSocket authentication status  
     const token = localStorage.getItem('token');
     if (!token) {
-      console.warn('⚠️ No authentication token found, skipping data load');
+      console.warn('⚠️ No authentication token found - user needs to log in');
+      setNotification({ message: 'Please log in to access machine data', type: 'warning' });
+      setLoading(false);
       return;
     }
     
+    // Load all data immediately (WebSocket is optional for data loading)
     loadEnvironments(); // Load environments first
     loadMachineTypes(); // Load managed machine types
     loadMachines(); // Fetch data immediately
     loadEmployees(); // Load employees for crew assignments
-    const interval = setInterval(loadMachines, 30000); // And refresh every 30 seconds
+    
+    // Set up periodic refresh (independent of WebSocket)
+    const interval = setInterval(() => {
+      console.log('🔄 Periodic refresh - reloading machines data');
+      loadMachines();
+    }, 30000);
+    
     return () => clearInterval(interval); // Clean up the interval when the component is unmounted
   }, []);
 
