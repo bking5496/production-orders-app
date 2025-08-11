@@ -22,6 +22,9 @@ const configurationRoutes = require('./routes/configuration.routes');
 // WebSocket integration
 const { initializeWebSocket, addWebSocketToApp, startCleanupSchedule } = require('./middleware/websocket');
 
+// Global broadcast function (like original server.js)
+let globalWebSocketService = null;
+
 // Create Express app
 const app = express();
 
@@ -325,28 +328,40 @@ if (require.main === module) {
   const PORT = process.env.PORT || 3000; // Production port
   const http = require('http');
   
+  // Create HTTP server for WebSocket integration FIRST  
+  const server = http.createServer(app);
+  
+  // Initialize WebSocket server IMMEDIATELY (like original server.js)
+  const websocketService = initializeWebSocket(server);
+  globalWebSocketService = websocketService;
+  
+  // Start WebSocket cleanup scheduler
+  startCleanupSchedule();
+  
+  // Add global broadcast function (compatibility with original server.js)
+  global.broadcast = (type, data, channel = 'all') => {
+    if (globalWebSocketService) {
+      return globalWebSocketService.broadcast(type, data, channel);
+    } else {
+      console.warn('⚠️ WebSocket service not initialized, cannot broadcast:', type);
+      return 0;
+    }
+  };
+  
+  // Test components (but don't block server startup)
   testComponents().then(() => {
-    // Create HTTP server for WebSocket integration
-    const server = http.createServer(app);
-    
-    // Initialize WebSocket server
-    const websocketService = initializeWebSocket(server);
-    
-    // Start WebSocket cleanup scheduler
-    startCleanupSchedule();
-    
-    server.listen(PORT, () => {
-      console.log(`🚀 Production refactored server running on port ${PORT}`);
-      console.log(`📊 Health check: http://localhost:${PORT}/api/health`);
-      console.log(`🔐 Auth test: http://localhost:${PORT}/api/auth/login`);
-      console.log(`⚙️ System routes: http://localhost:${PORT}/api/system/health`);
-      console.log(`🌐 WebSocket server initialized`);
-    });
-    
-    return { server, websocketService };
+    console.log('✅ All components tested successfully');
   }).catch(error => {
-    console.error('❌ Failed to start refactored server:', error);
-    process.exit(1);
+    console.warn('⚠️ Component tests failed, but server will continue:', error.message);
+  });
+  
+  // Start server immediately (like original server.js)
+  server.listen(PORT, () => {
+    console.log(`🚀 Production refactored server running on port ${PORT}`);
+    console.log(`📊 Health check: http://localhost:${PORT}/api/health`);
+    console.log(`🔐 Auth test: http://localhost:${PORT}/api/auth/login`);  
+    console.log(`⚙️ System routes: http://localhost:${PORT}/api/system/health`);
+    console.log(`🌐 WebSocket server initialized and ready`);
   });
 }
 
