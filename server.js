@@ -190,6 +190,226 @@ app.post('/api/attendance-register', authenticateToken, requireRole(['supervisor
   }
 });
 
+// =============================================================================
+// MISSING CRITICAL ENDPOINTS - RESTORED FROM MONOLITHIC SERVER
+// =============================================================================
+
+// Maturation Room Endpoints
+app.get('/api/maturation-room', authenticateToken, async (req, res) => {
+  try {
+    const query = `
+      SELECT 
+        mr.*,
+        po.order_number,
+        po.product_name,
+        u.username as confirmed_by_name,
+        qc_user.username as quality_checked_by_name,
+        CASE 
+          WHEN mr.quantity_expected > 0 THEN 
+            ROUND(((mr.quantity_produced - mr.quantity_expected) / mr.quantity_expected * 100)::numeric, 2)
+          ELSE 0 
+        END as variance_percentage,
+        (mr.maturation_date + INTERVAL '1 day' * mr.expected_maturation_days) as estimated_completion_date
+      FROM maturation_room mr
+      LEFT JOIN production_orders po ON mr.production_order_id = po.id
+      LEFT JOIN users u ON mr.confirmed_by = u.id
+      LEFT JOIN users qc_user ON mr.quality_checked_by = qc_user.id
+      ORDER BY mr.maturation_date DESC, mr.id DESC
+    `;
+    
+    const result = await DatabaseUtils.raw(query);
+    return res.success(result.rows, 'Maturation room data retrieved successfully');
+  } catch (error) {
+    console.error('❌ Failed to fetch maturation room data:', error);
+    return res.error('Failed to fetch maturation room data', error.message);
+  }
+});
+
+app.post('/api/maturation-room', authenticateToken, requireRole(['supervisor', 'admin']), async (req, res) => {
+  try {
+    const maturationRecord = {
+      ...req.body,
+      status: 'maturing',
+      confirmed_by: req.user.id,
+      created_at: new Date()
+    };
+
+    const result = await DatabaseUtils.insert('maturation_room', maturationRecord, '*');
+    
+    if (req.broadcast) {
+      req.broadcast('maturation_added', {
+        record: result,
+        user: req.user.username,
+        timestamp: new Date().toISOString()
+      }, 'maturation');
+    }
+
+    return res.success(result, 'Blend added to maturation room successfully');
+  } catch (error) {
+    console.error('❌ Failed to add to maturation room:', error);
+    return res.error('Failed to add to maturation room', error.message);
+  }
+});
+
+app.put('/api/maturation-room/:id/status', authenticateToken, requireRole(['supervisor', 'admin']), async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updateData = {
+      ...req.body,
+      updated_at: new Date()
+    };
+
+    const result = await DatabaseUtils.update('maturation_room', { id }, updateData, '*');
+    
+    if (!result) {
+      return res.error('Maturation record not found', null, 404);
+    }
+
+    if (req.broadcast) {
+      req.broadcast('maturation_status_updated', {
+        record: result,
+        user: req.user.username,
+        timestamp: new Date().toISOString()
+      }, 'maturation');
+    }
+
+    return res.success(result, 'Maturation status updated successfully');
+  } catch (error) {
+    console.error('❌ Failed to update maturation status:', error);
+    return res.error('Failed to update maturation status', error.message);
+  }
+});
+
+app.post('/api/maturation-room/daily-check', authenticateToken, requireRole(['supervisor', 'admin', 'operator']), async (req, res) => {
+  try {
+    const dailyCheck = {
+      ...req.body,
+      checked_by: req.user.id,
+      created_at: new Date()
+    };
+
+    const result = await DatabaseUtils.insert('maturation_daily_checks', dailyCheck, '*');
+
+    if (req.broadcast) {
+      req.broadcast('maturation_check_added', {
+        check: result,
+        user: req.user.username,
+        timestamp: new Date().toISOString()
+      }, 'maturation');
+    }
+
+    return res.success(result, 'Daily check added successfully');
+  } catch (error) {
+    console.error('❌ Failed to add daily check:', error);
+    return res.error('Failed to add daily check', error.message);
+  }
+});
+
+app.get('/api/maturation-room/:id/daily-checks', authenticateToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    const query = `
+      SELECT 
+        mdc.*,
+        u.username as checked_by_name
+      FROM maturation_daily_checks mdc
+      LEFT JOIN users u ON mdc.checked_by = u.id
+      WHERE mdc.maturation_room_id = $1
+      ORDER BY mdc.check_date DESC
+    `;
+    
+    const result = await DatabaseUtils.raw(query, [id]);
+    return res.success(result.rows, 'Daily checks retrieved successfully');
+  } catch (error) {
+    console.error('❌ Failed to fetch daily checks:', error);
+    return res.error('Failed to fetch daily checks', error.message);
+  }
+});
+
+// Labor Assignments Endpoints
+app.get('/api/labor-assignments', authenticateToken, async (req, res) => {
+  try {
+    const { start_date, end_date, environment, machine_id, employee_id, shift_type } = req.query;
+    
+    let query = `
+      SELECT DISTINCT
+        la.id,
+        la.employee_id,
+        la.machine_id,
+        la.assignment_date,
+        la.shift_type,
+        la.role,
+        la.start_time,
+        la.end_time,
+        la.hourly_rate,
+        la.status,
+        u.username,
+        u.full_name,
+        CASE 
+          WHEN u.employee_code IS NOT NULL AND u.employee_code != '' THEN u.employee_code
+          WHEN u.profile_data->>'employee_code' IS NOT NULL AND u.profile_data->>'employee_code' != '' THEN u.profile_data->>'employee_code'
+          ELSE LPAD(u.id::text, 4, '0')
+        END as employee_code,
+        COALESCE(u.full_name, u.username) as employee_name,
+        m.name as machine_name,
+        m.environment as machine_environment,
+        'Production Company' as company
+      FROM labor_assignments la
+      JOIN users u ON la.employee_id = u.id
+      LEFT JOIN machines m ON la.machine_id = m.id
+      WHERE u.is_active = true
+    `;
+    
+    const params = [];
+    let paramIndex = 1;
+    
+    if (start_date) {
+      query += ` AND la.assignment_date >= $${paramIndex}`;
+      params.push(start_date);
+      paramIndex++;
+    }
+    
+    if (end_date) {
+      query += ` AND la.assignment_date <= $${paramIndex}`;
+      params.push(end_date);
+      paramIndex++;
+    }
+    
+    if (environment) {
+      query += ` AND m.environment = $${paramIndex}`;
+      params.push(environment);
+      paramIndex++;
+    }
+    
+    if (machine_id) {
+      query += ` AND la.machine_id = $${paramIndex}`;
+      params.push(machine_id);
+      paramIndex++;
+    }
+    
+    if (employee_id) {
+      query += ` AND la.employee_id = $${paramIndex}`;
+      params.push(employee_id);
+      paramIndex++;
+    }
+    
+    if (shift_type) {
+      query += ` AND la.shift_type = $${paramIndex}`;
+      params.push(shift_type);
+      paramIndex++;
+    }
+    
+    query += ` ORDER BY la.assignment_date DESC, la.shift_type, m.name, la.role`;
+    
+    const result = await DatabaseUtils.raw(query, params);
+    return res.success(result.rows, 'Labor assignments retrieved successfully');
+  } catch (error) {
+    console.error('❌ Failed to fetch labor assignments:', error);
+    return res.error('Failed to fetch labor assignments', error.message);
+  }
+});
+
 // Dashboard route compatibility
 app.use('/api/production', analyticsRoutes); // Production endpoints under analytics
 
