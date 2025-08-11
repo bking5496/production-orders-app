@@ -13,6 +13,14 @@ import { useAutoConnect } from '../core/websocket-hooks.js';
 import { WebSocketStatusCompact } from './websocket-status.jsx';
 
 export default function AnalyticsPage() {
+  // Helper function to ensure array response
+  const ensureArray = (data, label = 'data') => {
+    if (Array.isArray(data)) return data;
+    if (data?.data && Array.isArray(data.data)) return data.data;
+    console.warn(`⚠️ ${label} is not an array:`, data);
+    return [];
+  };
+
   // WebSocket integration
   useAutoConnect();
   
@@ -80,10 +88,10 @@ export default function AnalyticsPage() {
       ]);
       
       setAnalytics({
-        orders: ordersData?.data || ordersData || [],
-        machines: machinesData?.data || machinesData || [],
-        employees: employeesData?.data || employeesData || [],
-        assignments: assignmentsData?.data || assignmentsData || [],
+        orders: ensureArray(ordersData, 'orders'),
+        machines: ensureArray(machinesData, 'machines'),
+        employees: ensureArray(employeesData, 'employees'),
+        assignments: ensureArray(assignmentsData, 'assignments'),
         summary: summaryData?.data?.summary || summaryData?.summary || {},
         downtime: downtimeData?.data || downtimeData || {},
         downtimeRecords: downtimeRecordsData?.records || [],

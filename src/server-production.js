@@ -18,6 +18,7 @@ const reportsRoutes = require('./routes/reports.routes');
 const systemRoutes = require('./routes/system.routes');
 const plannerRoutes = require('./routes/planner.routes');
 const configurationRoutes = require('./routes/configuration.routes');
+const maturationRoutes = require('./routes/maturation.routes');
 
 // WebSocket integration
 const { initializeWebSocket, addWebSocketToApp, startCleanupSchedule } = require('./middleware/websocket');
@@ -69,6 +70,61 @@ app.get('/api/health', (req, res) => {
   }, 'Refactored server is running');
 });
 
+// DEBUG: Test environments endpoint without auth
+app.get('/api/debug/environments', async (req, res) => {
+  try {
+    console.log('🌍 DEBUG: Testing environments service...');
+    const systemService = require('./services/system.service');
+    const environments = await systemService.getEnvironments();
+    
+    console.log('🌍 DEBUG: Environments service returned:', environments?.length || 0, 'environments');
+    console.log('🌍 DEBUG: Sample environment:', environments?.[0] || 'No environments');
+    
+    res.json({
+      success: true,
+      debug: 'environments service test',
+      count: environments?.length || 0,
+      data: environments || [],
+      message: `Found ${environments?.length || 0} environments`
+    });
+  } catch (error) {
+    console.error('🌍 DEBUG: Environments service error:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message,
+      stack: error.stack
+    });
+  }
+});
+
+// DEBUG: Test machines endpoint without auth  
+app.get('/api/debug/machines', async (req, res) => {
+  try {
+    console.log('🔧 DEBUG: Testing machines service...');
+    const machinesService = require('./services/machines.service');
+    const machines = await machinesService.getAllMachines();
+    
+    console.log('🔧 DEBUG: Machines service returned:', machines?.length || 0, 'machines');
+    console.log('🔧 DEBUG: Sample machine:', machines?.[0] || 'No machines');
+    
+    res.json({
+      success: true,
+      debug: 'machines service test',
+      count: machines?.length || 0,
+      data: machines || [],
+      message: `Found ${machines?.length || 0} machines`
+    });
+  } catch (error) {
+    console.error('🔧 DEBUG: Machines service error:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message,
+      stack: error.stack
+    });
+  }
+});
+
+
 
 // API Routes
 app.use('/api/auth', authRoutes);
@@ -80,11 +136,13 @@ app.use('/api/analytics', analyticsRoutes);
 app.use('/api/reports', reportsRoutes);
 app.use('/api/system', systemRoutes);
 app.use('/api/config', configurationRoutes);
+app.use('/api/maturation', maturationRoutes);
 
 // Legacy route compatibility
 app.use('/api/labour', laborRoutes); // British spelling compatibility
 app.use('/api/planner', plannerRoutes); // Legacy planner endpoint compatibility
 app.use('/api/labor-planner', plannerRoutes); // Labor planner with dash compatibility
+app.use('/api/maturation-room', maturationRoutes); // Legacy maturation-room endpoint compatibility
 
 // Labor assignments compatibility mappings
 app.get('/api/labor-assignments', (req, res, next) => {
@@ -212,67 +270,6 @@ app.delete('/api/machine-types/:id', (req, res, next) => {
 app.use('/api/settings', systemRoutes); // Settings endpoints compatibility
 app.use('/api/system', systemRoutes); // System routes
 
-// =============================================================================
-// MISSING ENDPOINTS - Added directly for compatibility
-// =============================================================================
-
-// Import required modules for direct endpoints
-const DatabaseUtils = require('./utils/database');
-const { authenticateToken, requireRole } = require('./middleware/auth');
-
-// Maturation Room Endpoints
-app.get('/api/maturation-room', authenticateToken, async (req, res) => {
-  try {
-    const query = `
-      SELECT 
-        mr.*,
-        po.order_number,
-        po.product_name,
-        u.username as confirmed_by_name,
-        qc_user.username as quality_checked_by_name,
-        CASE 
-          WHEN mr.quantity_expected > 0 THEN 
-            ROUND(((mr.quantity_produced - mr.quantity_expected) / mr.quantity_expected * 100)::numeric, 2)
-          ELSE 0 
-        END as variance_percentage,
-        (mr.maturation_date + INTERVAL '1 day' * mr.expected_maturation_days) as estimated_completion_date
-      FROM maturation_room mr
-      LEFT JOIN production_orders po ON mr.production_order_id = po.id
-      LEFT JOIN users u ON mr.confirmed_by = u.id
-      LEFT JOIN users qc_user ON mr.quality_checked_by = qc_user.id
-      ORDER BY mr.maturation_date DESC, mr.id DESC
-    `;
-    
-    const result = await DatabaseUtils.raw(query);
-    return res.success(result.rows, 'Maturation room data retrieved successfully');
-  } catch (error) {
-    console.error('❌ Failed to fetch maturation room data:', error);
-    return res.error('Failed to fetch maturation room data', error.message);
-  }
-});
-
-app.post('/api/maturation-room', authenticateToken, requireRole(['supervisor', 'admin']), async (req, res) => {
-  try {
-    const maturationRecord = {
-      ...req.body,
-      status: 'maturing',
-      confirmed_by: req.user.id,
-      created_at: new Date()
-    };
-    
-    const result = await DatabaseUtils.insert('maturation_room', maturationRecord, '*');
-    
-    // Broadcast update via WebSocket if available
-    if (req.broadcast) {
-      req.broadcast('maturation_room_added', result, 'production');
-    }
-    
-    return res.success(result, 'Order added to maturation room successfully');
-  } catch (error) {
-    console.error('❌ Failed to add to maturation room:', error);
-    return res.error('Failed to add to maturation room', error.message);
-  }
-});
 
 // =============================================================================
 
