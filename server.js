@@ -13,6 +13,7 @@ const ordersRoutes = require('./src/routes/orders.routes');
 const machinesRoutes = require('./src/routes/machines.routes');
 const usersRoutes = require('./src/routes/users.routes');
 const laborRoutes = require('./src/routes/labor.routes');
+const plannerRoutes = require('./src/routes/planner.routes');
 const analyticsRoutes = require('./src/routes/analytics.routes');
 const reportsRoutes = require('./src/routes/reports.routes');
 const systemRoutes = require('./src/routes/system.routes');
@@ -69,12 +70,14 @@ app.use('/api/orders', ordersRoutes);
 app.use('/api/machines', machinesRoutes);
 app.use('/api/users', usersRoutes);
 app.use('/api/labor', laborRoutes);
+app.use('/api/planner', plannerRoutes);
 app.use('/api/analytics', analyticsRoutes);
 app.use('/api/reports', reportsRoutes);
 app.use('/api/system', systemRoutes);
 
 // Legacy route compatibility
 app.use('/api/labour', laborRoutes); // British spelling compatibility
+app.use('/api/labor-planner', plannerRoutes); // Legacy labor-planner compatibility
 
 // Attendance Register Endpoints (direct implementation for compatibility)
 const { authenticateToken, requireRole } = require('./src/middleware/auth');
