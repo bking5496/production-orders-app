@@ -30427,3 +30427,97 @@ Error: bind EADDRINUSE null:3000
   user: 'admin',
   timestamp: '2025-08-11T20:46:39.133Z'
 }
+2025-08-11T22:55:24: Error occurred: {
+  error: 'column "resume_time" of relation "production_orders" does not exist',
+  stack: 'error: column "resume_time" of relation "production_orders" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.transaction (/home/production-app/production-orders-app/src/config/database.js:56:24)\n' +
+    '    at async DatabaseUtils.transaction (/home/production-app/production-orders-app/src/utils/database.js:153:12)\n' +
+    '    at async OrdersService.resumeOrder (/home/production-app/production-orders-app/src/services/orders.service.js:380:21)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/orders.routes.js:356:26',
+  url: '/api/orders/82/resume',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-11T20:55:24.472Z'
+}
+2025-08-11T22:55:25: Error occurred: {
+  error: 'column "resume_time" of relation "production_orders" does not exist',
+  stack: 'error: column "resume_time" of relation "production_orders" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.transaction (/home/production-app/production-orders-app/src/config/database.js:56:24)\n' +
+    '    at async DatabaseUtils.transaction (/home/production-app/production-orders-app/src/utils/database.js:153:12)\n' +
+    '    at async OrdersService.resumeOrder (/home/production-app/production-orders-app/src/services/orders.service.js:380:21)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/orders.routes.js:356:26',
+  url: '/api/orders/82/resume',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-11T20:55:25.552Z'
+}
+2025-08-11T22:55:27: Error occurred: {
+  error: 'column "resume_time" of relation "production_orders" does not exist',
+  stack: 'error: column "resume_time" of relation "production_orders" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.transaction (/home/production-app/production-orders-app/src/config/database.js:56:24)\n' +
+    '    at async DatabaseUtils.transaction (/home/production-app/production-orders-app/src/utils/database.js:153:12)\n' +
+    '    at async OrdersService.resumeOrder (/home/production-app/production-orders-app/src/services/orders.service.js:380:21)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/orders.routes.js:356:26',
+  url: '/api/orders/82/resume',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-11T20:55:27.622Z'
+}
+2025-08-11T22:55:59: ValidationError: The 'X-Forwarded-For' header is set but the Express 'trust proxy' setting is false (default). This could indicate a misconfiguration which would prevent express-rate-limit from accurately identifying users. See https://express-rate-limit.github.io/ERR_ERL_UNEXPECTED_X_FORWARDED_FOR/ for more information.
+    at Object.xForwardedForHeader (/home/production-app/production-orders-app/node_modules/express-rate-limit/dist/index.cjs:185:13)
+    at wrappedValidations.<computed> [as xForwardedForHeader] (/home/production-app/production-orders-app/node_modules/express-rate-limit/dist/index.cjs:397:22)
+    at Object.keyGenerator (/home/production-app/production-orders-app/node_modules/express-rate-limit/dist/index.cjs:658:20)
+    at /home/production-app/production-orders-app/node_modules/express-rate-limit/dist/index.cjs:710:32
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async /home/production-app/production-orders-app/node_modules/express-rate-limit/dist/index.cjs:691:5 {
+  code: 'ERR_ERL_UNEXPECTED_X_FORWARDED_FOR',
+  help: 'https://express-rate-limit.github.io/ERR_ERL_UNEXPECTED_X_FORWARDED_FOR/'
+}
+2025-08-11T22:56:20: Error occurred: {
+  error: 'column "resume_time" of relation "production_orders" does not exist',
+  stack: 'error: column "resume_time" of relation "production_orders" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.transaction (/home/production-app/production-orders-app/src/config/database.js:56:24)\n' +
+    '    at async DatabaseUtils.transaction (/home/production-app/production-orders-app/src/utils/database.js:153:12)\n' +
+    '    at async OrdersService.resumeOrder (/home/production-app/production-orders-app/src/services/orders.service.js:380:21)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/orders.routes.js:356:26',
+  url: '/api/orders/80/resume',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-11T20:56:20.010Z'
+}
+2025-08-11T22:56:21: Error occurred: {
+  error: 'column "resume_time" of relation "production_orders" does not exist',
+  stack: 'error: column "resume_time" of relation "production_orders" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.transaction (/home/production-app/production-orders-app/src/config/database.js:56:24)\n' +
+    '    at async DatabaseUtils.transaction (/home/production-app/production-orders-app/src/utils/database.js:153:12)\n' +
+    '    at async OrdersService.resumeOrder (/home/production-app/production-orders-app/src/services/orders.service.js:380:21)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/orders.routes.js:356:26',
+  url: '/api/orders/80/resume',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-11T20:56:21.076Z'
+}
+2025-08-11T22:56:23: Error occurred: {
+  error: 'column "resume_time" of relation "production_orders" does not exist',
+  stack: 'error: column "resume_time" of relation "production_orders" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.transaction (/home/production-app/production-orders-app/src/config/database.js:56:24)\n' +
+    '    at async DatabaseUtils.transaction (/home/production-app/production-orders-app/src/utils/database.js:153:12)\n' +
+    '    at async OrdersService.resumeOrder (/home/production-app/production-orders-app/src/services/orders.service.js:380:21)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/orders.routes.js:356:26',
+  url: '/api/orders/80/resume',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-11T20:56:23.153Z'
+}

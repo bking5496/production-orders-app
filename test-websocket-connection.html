@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WebSocket Connection Test for oracles.africa</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .log { background: #f0f0f0; padding: 10px; height: 400px; overflow-y: auto; margin: 10px 0; }
+        .connected { color: green; }
+        .error { color: red; }
+        .info { color: blue; }
+        button { margin: 5px; padding: 10px; }
+        input { padding: 5px; margin: 5px; }
+        .status { 
+            padding: 10px; 
+            margin: 10px 0; 
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .status.online { background-color: #d4edda; color: #155724; }
+        .status.offline { background-color: #f8d7da; color: #721c24; }
+        .status.connecting { background-color: #fff3cd; color: #856404; }
+    </style>
+</head>
+<body>
+    <h1>WebSocket Connection Test for oracles.africa:3000</h1>
+    
+    <div class="status offline" id="status">Status: Disconnected</div>
+    
+    <div>
+        <button onclick="loginAndConnect()">🔐 Login & Connect WebSocket</button>
+        <button onclick="testPing()">💓 Send Ping</button>
+        <button onclick="subscribeToChannels()">📺 Subscribe to Channels</button>
+        <button onclick="disconnect()">🔌 Disconnect</button>
+        <button onclick="clearLog()">🧹 Clear Log</button>
+    </div>
+    
+    <div class="log" id="log"></div>
+
+    <script>
+        let ws = null;
+        let token = null;
+
+        function log(message, type = 'info') {
+            const logElement = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            const className = type === 'error' ? 'error' : type === 'connected' ? 'connected' : 'info';
+            logElement.innerHTML += `<div class="${className}">[${timestamp}] ${message}</div>`;
+            logElement.scrollTop = logElement.scrollHeight;
+        }
+
+        function updateStatus(status, className) {
+            const statusElement = document.getElementById('status');
+            statusElement.textContent = `Status: ${status}`;
+            statusElement.className = `status ${className}`;
+        }
+
+        function clearLog() {
+            document.getElementById('log').innerHTML = '';
+        }
+
+        async function loginAndConnect() {
+            try {
+                updateStatus('Authenticating...', 'connecting');
+                log('🔐 Attempting to login as admin...');
+                
+                // Step 1: Login
+                const loginResponse = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: 'admin', password: 'admin123' })
+                });
+
+                if (!loginResponse.ok) {
+                    throw new Error(`Login failed: ${loginResponse.status}`);
+                }
+
+                const loginData = await loginResponse.json();
+                if (!loginData.success || !loginData.data.token) {
+                    throw new Error('Login response missing token');
+                }
+
+                token = loginData.data.token;
+                log(`✅ Login successful! User: ${loginData.data.user.username} (${loginData.data.user.role})`, 'connected');
+                
+                // Store token in localStorage for WebSocket to find
+                localStorage.setItem('token', token);
+                log('💾 Token stored in localStorage');
+
+                // Step 2: Get WebSocket token
+                log('📡 Requesting WebSocket token...');
+                const wsTokenResponse = await fetch('/api/auth/websocket-token', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (!wsTokenResponse.ok) {
+                    throw new Error(`WebSocket token request failed: ${wsTokenResponse.status}`);
+                }
+
+                const wsTokenData = await wsTokenResponse.json();
+                const wsToken = wsTokenData.data?.token || wsTokenData.token;
+                
+                if (!wsToken) {
+                    throw new Error('WebSocket token not received');
+                }
+
+                log(`🎉 WebSocket token obtained: ${wsToken.substring(0, 20)}...`, 'connected');
+
+                // Step 3: Connect WebSocket
+                connectWebSocket(wsToken);
+
+            } catch (error) {
+                log(`❌ Authentication/Connection failed: ${error.message}`, 'error');
+                updateStatus('Authentication Failed', 'offline');
+            }
+        }
+
+        function connectWebSocket(wsToken) {
+            if (ws) {
+                ws.close();
+            }
+
+            updateStatus('Connecting WebSocket...', 'connecting');
+            log(`🔗 Connecting to WebSocket with token: ${wsToken.substring(0, 20)}...`);
+
+            // Connect to WebSocket with token in query parameter
+            const wsUrl = `ws://localhost:3000?token=${encodeURIComponent(wsToken)}`;
+            ws = new WebSocket(wsUrl);
+
+            ws.onopen = function(event) {
+                log('🎉 WebSocket connected successfully!', 'connected');
+                updateStatus('Connected & Authenticated', 'online');
+            };
+
+            ws.onmessage = function(event) {
+                try {
+                    const message = JSON.parse(event.data);
+                    log(`📨 Received: ${message.type} - ${JSON.stringify(message.data)}`, 'info');
+                    
+                    if (message.type === 'welcome') {
+                        log(`🎉 WebSocket authenticated! Client ID: ${message.data.clientId}`, 'connected');
+                        log(`👤 Logged in as: ${message.data.user.username} (${message.data.user.role})`, 'connected');
+                    }
+                } catch (error) {
+                    log(`📨 Raw message: ${event.data}`, 'info');
+                }
+            };
+
+            ws.onclose = function(event) {
+                log(`🔌 WebSocket closed: ${event.code} - ${event.reason}`, 'error');
+                updateStatus('Disconnected', 'offline');
+            };
+
+            ws.onerror = function(error) {
+                log(`💥 WebSocket error: ${error}`, 'error');
+                updateStatus('Connection Error', 'offline');
+            };
+        }
+
+        function testPing() {
+            if (!ws || ws.readyState !== WebSocket.OPEN) {
+                log('❌ WebSocket not connected', 'error');
+                return;
+            }
+
+            const message = {
+                type: 'ping',
+                data: { clientTime: Date.now() }
+            };
+
+            ws.send(JSON.stringify(message));
+            log('💓 Sent ping');
+        }
+
+        function subscribeToChannels() {
+            if (!ws || ws.readyState !== WebSocket.OPEN) {
+                log('❌ WebSocket not connected', 'error');
+                return;
+            }
+
+            const message = {
+                type: 'subscribe',
+                data: {
+                    channels: ['admin', 'production', 'machines', 'alerts', 'notifications']
+                }
+            };
+
+            ws.send(JSON.stringify(message));
+            log('📺 Subscribing to admin channels: admin, production, machines, alerts, notifications');
+        }
+
+        function disconnect() {
+            if (ws) {
+                ws.close();
+                ws = null;
+            }
+            updateStatus('Disconnected', 'offline');
+            log('🔌 WebSocket disconnected manually');
+        }
+
+        // Auto-clear log and start fresh
+        window.onload = function() {
+            log('🚀 WebSocket Test Page Loaded for oracles.africa:3000');
+            log('📍 Click "Login & Connect WebSocket" to test the connection');
+        };
+    </script>
+</body>
+</html>

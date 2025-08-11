@@ -512,21 +512,30 @@ class EnhancedWebSocketService {
     async getWebSocketToken() {
         try {
             const token = localStorage.getItem('token');
-            const headers = { 'Content-Type': 'application/json' };
+            console.log('🔐 Checking for stored token:', token ? `${token.substring(0, 20)}...` : 'None found');
             
-            // Add Authorization header if token exists
-            if (token) {
-                headers.Authorization = `Bearer ${token}`;
+            if (!token) {
+                console.log('ℹ️ No token in localStorage, cannot get WebSocket token');
+                return null;
             }
+
+            const headers = { 
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            };
             
+            console.log('📡 Requesting WebSocket token from /api/auth/websocket-token');
             const response = await fetch('/api/auth/websocket-token', {
                 method: 'GET',
                 credentials: 'include',
                 headers: headers
             });
 
+            console.log('📡 WebSocket token response status:', response.status);
+
             if (response.status === 401) {
-                console.warn('🚫 Not authenticated for WebSocket');
+                console.warn('🚫 Not authenticated for WebSocket - token may be expired');
+                localStorage.removeItem('token'); // Clean up expired token
                 return null;
             }
 
@@ -535,9 +544,11 @@ class EnhancedWebSocketService {
             }
 
             const data = await response.json();
-            return data.data?.token || data.token;
+            const wsToken = data.data?.token || data.token;
+            console.log('🎉 WebSocket token obtained successfully:', wsToken ? `${wsToken.substring(0, 20)}...` : 'None');
+            return wsToken;
         } catch (error) {
-            console.error('Failed to get WebSocket token:', error);
+            console.error('💥 Failed to get WebSocket token:', error);
             return null;
         }
     }

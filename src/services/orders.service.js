@@ -354,7 +354,6 @@ class OrdersService {
           SET status = 'in_progress',
               stop_time = NULL,
               stop_reason = NULL,
-              resume_time = NOW(),
               updated_at = NOW(),
               updated_by = $2
           WHERE id = $1 AND status IN ('stopped', 'paused')
