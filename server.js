@@ -52,7 +52,7 @@ app.use(addResponseUtils);
 app.use(addWebSocketToApp);
 
 // Serve static files
-app.use(express.static(path.join(__dirname, '../dist')));
+app.use(express.static(path.join(__dirname, 'dist')));
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
@@ -745,7 +745,7 @@ app.use('/api/machine-types', systemRoutes); // Direct machine types access
 // Catch-all for frontend routes (SPA)
 app.get('*', (req, res) => {
   if (!req.path.startsWith('/api')) {
-    res.sendFile(path.join(__dirname, '../dist/index.html'));
+    res.sendFile(path.join(__dirname, 'dist/index.html'));
   } else {
     notFoundHandler(req, res);
   }
