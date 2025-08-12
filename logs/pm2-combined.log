@@ -55989,3 +55989,1662 @@ Error: bind EADDRINUSE null:3000
 2025-08-12T19:59:36: 🔓 Client released back to pool
 2025-08-12T19:59:36: 🔗 Client acquired from pool
 2025-08-12T19:59:36: 🔓 Client released back to pool
+2025-08-12T20:00:31: 🔌 WebSocket disconnected: admin
+2025-08-12T20:00:32: ✅ New PostgreSQL client connected
+2025-08-12T20:00:32: 🔗 Client acquired from pool
+2025-08-12T20:00:32: ✅ New PostgreSQL client connected
+2025-08-12T20:00:32: 🔗 Client acquired from pool
+2025-08-12T20:00:32: 🔓 Client released back to pool
+2025-08-12T20:00:32: 🔓 Client released back to pool
+2025-08-12T20:00:32: 🔗 Client acquired from pool
+2025-08-12T20:00:32: 🔓 Client released back to pool
+2025-08-12T20:00:32: 🔗 Client acquired from pool
+2025-08-12T20:00:32: 🔓 Client released back to pool
+2025-08-12T20:00:32: 🔗 Client acquired from pool
+2025-08-12T20:00:32: 🔗 Client acquired from pool
+2025-08-12T20:00:32: 🔓 Client released back to pool
+2025-08-12T20:00:32: 🔓 Client released back to pool
+2025-08-12T20:00:32: 🔗 Client acquired from pool
+2025-08-12T20:00:32: 🔓 Client released back to pool
+2025-08-12T20:00:32: ✅ New PostgreSQL client connected
+2025-08-12T20:00:32: 🔗 Client acquired from pool
+2025-08-12T20:00:32: 🔓 Client released back to pool
+2025-08-12T20:00:32: 🔗 Client acquired from pool
+2025-08-12T20:00:32: 🔓 Client released back to pool
+2025-08-12T20:00:32: New WebSocket connection attempt
+2025-08-12T20:00:32: ✅ WebSocket authenticated: admin (admin)
+2025-08-12T20:00:32: 🔗 Client acquired from pool
+2025-08-12T20:00:32: 🔓 Client released back to pool
+2025-08-12T20:00:32: 🔗 Client acquired from pool
+2025-08-12T20:00:32: 🔓 Client released back to pool
+2025-08-12T20:00:32: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-12T20:00:32: 🏠 admin joined room: production
+2025-08-12T20:00:32: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-12T20:00:32: 🏠 admin joined room: production
+2025-08-12T20:00:34: 🔌 WebSocket disconnected: admin
+2025-08-12T20:00:35: 🔗 Client acquired from pool
+2025-08-12T20:00:35: 🔗 Client acquired from pool
+2025-08-12T20:00:35: 🔓 Client released back to pool
+2025-08-12T20:00:35: 🔓 Client released back to pool
+2025-08-12T20:00:35: 🔗 Client acquired from pool
+2025-08-12T20:00:35: 🔓 Client released back to pool
+2025-08-12T20:00:35: 🔗 Client acquired from pool
+2025-08-12T20:00:35: 🔓 Client released back to pool
+2025-08-12T20:00:35: 🔗 Client acquired from pool
+2025-08-12T20:00:35: 🔗 Client acquired from pool
+2025-08-12T20:00:35: 🔗 Client acquired from pool
+2025-08-12T20:00:35: 🔓 Client released back to pool
+2025-08-12T20:00:35: 🔗 Client acquired from pool
+2025-08-12T20:00:35: 🔓 Client released back to pool
+2025-08-12T20:00:35: 🔓 Client released back to pool
+2025-08-12T20:00:35: 🔓 Client released back to pool
+2025-08-12T20:00:35: 🔗 Client acquired from pool
+2025-08-12T20:00:35: 🔓 Client released back to pool
+2025-08-12T20:00:35: New WebSocket connection attempt
+2025-08-12T20:00:35: ✅ WebSocket authenticated: admin (admin)
+2025-08-12T20:00:35: 🔗 Client acquired from pool
+2025-08-12T20:00:35: 🔓 Client released back to pool
+2025-08-12T20:00:35: 🔗 Client acquired from pool
+2025-08-12T20:00:35: 🔓 Client released back to pool
+2025-08-12T20:00:35: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-12T20:00:35: 🏠 admin joined room: production
+2025-08-12T20:00:35: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-12T20:00:35: 🏠 admin joined room: production
+2025-08-12T20:00:38: 📺 admin subscribed to: [ 'machines', 'production' ]
+2025-08-12T20:00:38: 🔗 Client acquired from pool
+2025-08-12T20:00:38: 🔗 Client acquired from pool
+2025-08-12T20:00:38: 🔗 Client acquired from pool
+2025-08-12T20:00:38: 🔓 Client released back to pool
+2025-08-12T20:00:38: 🔓 Client released back to pool
+2025-08-12T20:00:38: 🔗 Client acquired from pool
+2025-08-12T20:00:38: 🔓 Client released back to pool
+2025-08-12T20:00:38: 🔗 Client acquired from pool
+2025-08-12T20:00:38: 🔓 Client released back to pool
+2025-08-12T20:00:38: 🔓 Client released back to pool
+2025-08-12T20:00:38: 🔗 Client acquired from pool
+2025-08-12T20:00:38: 🔓 Client released back to pool
+2025-08-12T20:00:38: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-12T20:00:38: 🏠 admin joined room: production
+2025-08-12T20:00:40: 📺 admin subscribed to: [ 'production', 'machines' ]
+2025-08-12T20:00:40: 🔗 Client acquired from pool
+2025-08-12T20:00:40: 🔗 Client acquired from pool
+2025-08-12T20:00:40: 🔗 Client acquired from pool
+2025-08-12T20:00:40: 🔓 Client released back to pool
+2025-08-12T20:00:40: 🔓 Client released back to pool
+2025-08-12T20:00:40: 🔓 Client released back to pool
+2025-08-12T20:00:40: ✅ New PostgreSQL client connected
+2025-08-12T20:00:40: 🔗 Client acquired from pool
+2025-08-12T20:00:40: ✅ New PostgreSQL client connected
+2025-08-12T20:00:40: 🔗 Client acquired from pool
+2025-08-12T20:00:40: 🔓 Client released back to pool
+2025-08-12T20:00:40: 🔓 Client released back to pool
+2025-08-12T20:00:40: 🔗 Client acquired from pool
+2025-08-12T20:00:40: 🔓 Client released back to pool
+2025-08-12T20:00:40: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-12T20:00:40: 🏠 admin joined room: production
+2025-08-12T20:00:44: 📺 admin subscribed to: [ 'machines', 'production', 'alerts' ]
+2025-08-12T20:00:44: 🔗 Client acquired from pool
+2025-08-12T20:00:44: 🔓 Client released back to pool
+2025-08-12T20:00:44: 🔗 Client acquired from pool
+2025-08-12T20:00:44: 🔓 Client released back to pool
+2025-08-12T20:00:44: 🔗 Client acquired from pool
+2025-08-12T20:00:44: 🔗 Client acquired from pool
+2025-08-12T20:00:44: 🔗 Client acquired from pool
+2025-08-12T20:00:44: 🔓 Client released back to pool
+2025-08-12T20:00:44: 🔓 Client released back to pool
+2025-08-12T20:00:44: 🔓 Client released back to pool
+2025-08-12T20:00:44: 🔗 Client acquired from pool
+2025-08-12T20:00:44: 🔓 Client released back to pool
+2025-08-12T20:00:46: 🔌 WebSocket disconnected: admin
+2025-08-12T20:00:46: 🔗 Client acquired from pool
+2025-08-12T20:00:46: 🔗 Client acquired from pool
+2025-08-12T20:00:46: 🔓 Client released back to pool
+2025-08-12T20:00:46: 🔓 Client released back to pool
+2025-08-12T20:00:47: 🔗 Client acquired from pool
+2025-08-12T20:00:47: 🔓 Client released back to pool
+2025-08-12T20:00:47: 🔗 Client acquired from pool
+2025-08-12T20:00:47: 🔗 Client acquired from pool
+2025-08-12T20:00:47: 🔗 Client acquired from pool
+2025-08-12T20:00:47: 🔗 Client acquired from pool
+2025-08-12T20:00:47: 🔓 Client released back to pool
+2025-08-12T20:00:47: 🔓 Client released back to pool
+2025-08-12T20:00:47: 🔗 Client acquired from pool
+2025-08-12T20:00:47: 🔓 Client released back to pool
+2025-08-12T20:00:47: 🔓 Client released back to pool
+2025-08-12T20:00:47: 🔓 Client released back to pool
+2025-08-12T20:00:47: 🔗 Client acquired from pool
+2025-08-12T20:00:47: 🔓 Client released back to pool
+2025-08-12T20:00:48: New WebSocket connection attempt
+2025-08-12T20:00:48: ✅ WebSocket authenticated: admin (admin)
+2025-08-12T20:00:48: 🔗 Client acquired from pool
+2025-08-12T20:00:48: 🔓 Client released back to pool
+2025-08-12T20:00:49: 🔗 Client acquired from pool
+2025-08-12T20:00:49: 🔓 Client released back to pool
+2025-08-12T20:00:49: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-12T20:00:49: 🏠 admin joined room: production
+2025-08-12T20:00:49: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-12T20:00:49: 🏠 admin joined room: production
+2025-08-12T20:00:52: 🔗 Client acquired from pool
+2025-08-12T20:00:52: 🔗 Client acquired from pool
+2025-08-12T20:00:52: 🔗 Client acquired from pool
+2025-08-12T20:00:52: 🔗 Client acquired from pool
+2025-08-12T20:00:52: 🔓 Client released back to pool
+2025-08-12T20:00:52: 🔓 Client released back to pool
+2025-08-12T20:00:52: 🔓 Client released back to pool
+2025-08-12T20:00:52: 🔓 Client released back to pool
+2025-08-12T20:00:57: 🔗 Client acquired from pool
+2025-08-12T20:00:57: 🔗 Client acquired from pool
+2025-08-12T20:00:57: 🔗 Client acquired from pool
+2025-08-12T20:00:57: 🔗 Client acquired from pool
+2025-08-12T20:00:57: 🔓 Client released back to pool
+2025-08-12T20:00:57: 🔓 Client released back to pool
+2025-08-12T20:00:57: 🔓 Client released back to pool
+2025-08-12T20:00:57: 🔓 Client released back to pool
+2025-08-12T20:01:01: 📺 admin subscribed to: [ 'machines', 'production', 'alerts' ]
+2025-08-12T20:01:01: 🔗 Client acquired from pool
+2025-08-12T20:01:01: 🔓 Client released back to pool
+2025-08-12T20:01:01: 🔗 Client acquired from pool
+2025-08-12T20:01:01: 🔗 Client acquired from pool
+2025-08-12T20:01:01: 🔓 Client released back to pool
+2025-08-12T20:01:01: 🔗 Client acquired from pool
+2025-08-12T20:01:01: 🔓 Client released back to pool
+2025-08-12T20:01:01: 🔗 Client acquired from pool
+2025-08-12T20:01:01: 🔓 Client released back to pool
+2025-08-12T20:01:01: 🔓 Client released back to pool
+2025-08-12T20:01:01: 🔗 Client acquired from pool
+2025-08-12T20:01:01: 🔓 Client released back to pool
+2025-08-12T20:01:01: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-12T20:01:01: 🏠 admin joined room: production
+2025-08-12T20:01:04: 🔌 WebSocket disconnected: admin
+2025-08-12T20:01:04: 🔗 Client acquired from pool
+2025-08-12T20:01:04: 🔓 Client released back to pool
+2025-08-12T20:01:04: 🔗 Client acquired from pool
+2025-08-12T20:01:04: 🔓 Client released back to pool
+2025-08-12T20:01:04: 🔗 Client acquired from pool
+2025-08-12T20:01:04: 🔓 Client released back to pool
+2025-08-12T20:01:04: 🔗 Client acquired from pool
+2025-08-12T20:01:04: 🔓 Client released back to pool
+2025-08-12T20:01:04: 🔗 Client acquired from pool
+2025-08-12T20:01:04: 🔗 Client acquired from pool
+2025-08-12T20:01:04: 🔗 Client acquired from pool
+2025-08-12T20:01:04: 🔗 Client acquired from pool
+2025-08-12T20:01:04: 🔓 Client released back to pool
+2025-08-12T20:01:04: 🔓 Client released back to pool
+2025-08-12T20:01:04: 🔓 Client released back to pool
+2025-08-12T20:01:04: 🔓 Client released back to pool
+2025-08-12T20:01:04: 🔗 Client acquired from pool
+2025-08-12T20:01:04: 🔓 Client released back to pool
+2025-08-12T20:01:05: New WebSocket connection attempt
+2025-08-12T20:01:05: ✅ WebSocket authenticated: admin (admin)
+2025-08-12T20:01:05: 🔗 Client acquired from pool
+2025-08-12T20:01:05: 🔓 Client released back to pool
+2025-08-12T20:01:05: 🔗 Client acquired from pool
+2025-08-12T20:01:05: 🔓 Client released back to pool
+2025-08-12T20:01:05: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-12T20:01:05: 🏠 admin joined room: production
+2025-08-12T20:01:05: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-12T20:01:05: 🏠 admin joined room: production
+2025-08-12T20:01:07: 🔗 Client acquired from pool
+2025-08-12T20:01:07: 🔓 Client released back to pool
+2025-08-12T20:01:07: 🔗 Client acquired from pool
+2025-08-12T20:01:07: 🔓 Client released back to pool
+2025-08-12T20:01:07: 🔗 Client acquired from pool
+2025-08-12T20:01:07: 🔓 Client released back to pool
+2025-08-12T20:01:07: 🔗 Client acquired from pool
+2025-08-12T20:01:07: 🔓 Client released back to pool
+2025-08-12T20:01:07: 🔗 Client acquired from pool
+2025-08-12T20:01:07: 🔓 Client released back to pool
+2025-08-12T20:01:07: 🔗 Client acquired from pool
+2025-08-12T20:01:07: 🔗 Client acquired from pool
+2025-08-12T20:01:07: 🔗 Client acquired from pool
+2025-08-12T20:01:07: 🔗 Client acquired from pool
+2025-08-12T20:01:07: 🔗 Client acquired from pool
+2025-08-12T20:01:07: 🔓 Client released back to pool
+2025-08-12T20:01:07: 🔓 Client released back to pool
+2025-08-12T20:01:07: 🔓 Client released back to pool
+2025-08-12T20:01:07: 🔗 Client acquired from pool
+2025-08-12T20:01:07: 🔓 Client released back to pool
+2025-08-12T20:01:07: 🔓 Client released back to pool
+2025-08-12T20:01:07: 🔗 Client acquired from pool
+2025-08-12T20:01:07: 🔗 Client acquired from pool
+2025-08-12T20:01:07: 🔓 Client released back to pool
+2025-08-12T20:01:07: 🔓 Client released back to pool
+2025-08-12T20:01:07: 🔓 Client released back to pool
+2025-08-12T20:01:07: 🔗 Client acquired from pool
+2025-08-12T20:01:07: 🔓 Client released back to pool
+2025-08-12T20:01:07: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-12T20:01:07: 🏠 admin joined room: production
+2025-08-12T20:01:08: 🔗 Client acquired from pool
+2025-08-12T20:01:08: 🔓 Client released back to pool
+2025-08-12T20:01:08: 🔗 Client acquired from pool
+2025-08-12T20:01:08: 🔗 Client acquired from pool
+2025-08-12T20:01:08: 🔗 Client acquired from pool
+2025-08-12T20:01:08: 🔗 Client acquired from pool
+2025-08-12T20:01:08: 🔓 Client released back to pool
+2025-08-12T20:01:08: 🔓 Client released back to pool
+2025-08-12T20:01:08: 🔓 Client released back to pool
+2025-08-12T20:01:08: 🔓 Client released back to pool
+2025-08-12T20:01:09: 🔗 Client acquired from pool
+2025-08-12T20:01:09: 🔓 Client released back to pool
+2025-08-12T20:01:09: 🔗 Client acquired from pool
+2025-08-12T20:01:09: 🔗 Client acquired from pool
+2025-08-12T20:01:09: 🔓 Client released back to pool
+2025-08-12T20:01:09: 🔓 Client released back to pool
+2025-08-12T20:01:09: 🔗 Client acquired from pool
+2025-08-12T20:01:09: 🔗 Client acquired from pool
+2025-08-12T20:01:09: 🔓 Client released back to pool
+2025-08-12T20:01:09: 🔗 Client acquired from pool
+2025-08-12T20:01:09: 🔗 Client acquired from pool
+2025-08-12T20:01:09: 🔗 Client acquired from pool
+2025-08-12T20:01:09: 🔓 Client released back to pool
+2025-08-12T20:01:09: 🔗 Client acquired from pool
+2025-08-12T20:01:09: 🔓 Client released back to pool
+2025-08-12T20:01:09: 🔗 Client acquired from pool
+2025-08-12T20:01:09: 🔓 Client released back to pool
+2025-08-12T20:01:09: 🔓 Client released back to pool
+2025-08-12T20:01:09: 🔗 Client acquired from pool
+2025-08-12T20:01:09: 🔓 Client released back to pool
+2025-08-12T20:01:09: 🔓 Client released back to pool
+2025-08-12T20:01:09: 🔗 Client acquired from pool
+2025-08-12T20:01:09: 🔗 Client acquired from pool
+2025-08-12T20:01:09: 🔓 Client released back to pool
+2025-08-12T20:01:09: 🔓 Client released back to pool
+2025-08-12T20:01:09: 🔓 Client released back to pool
+2025-08-12T20:01:09: 🔗 Client acquired from pool
+2025-08-12T20:01:09: 🔓 Client released back to pool
+2025-08-12T20:01:09: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-12T20:01:09: 🏠 admin joined room: production
+2025-08-12T20:01:22: 🔗 Client acquired from pool
+2025-08-12T20:01:22: 🔓 Client released back to pool
+2025-08-12T20:01:22: 🔗 Client acquired from pool
+2025-08-12T20:01:22: 🔗 Client acquired from pool
+2025-08-12T20:01:22: 🔗 Client acquired from pool
+2025-08-12T20:01:22: 🔓 Client released back to pool
+2025-08-12T20:01:22: 🔓 Client released back to pool
+2025-08-12T20:01:22: 🔓 Client released back to pool
+2025-08-12T20:01:23: 🔗 Client acquired from pool
+2025-08-12T20:01:23: 🔓 Client released back to pool
+2025-08-12T20:01:23: 🔗 Client acquired from pool
+2025-08-12T20:01:23: 🔓 Client released back to pool
+2025-08-12T20:01:23: 🔗 Client acquired from pool
+2025-08-12T20:01:23: 🔓 Client released back to pool
+2025-08-12T20:01:28: 🔗 Client acquired from pool
+2025-08-12T20:01:28: 🔗 Client acquired from pool
+2025-08-12T20:01:28: 🔓 Client released back to pool
+2025-08-12T20:01:28: 🔓 Client released back to pool
+2025-08-12T20:01:28: 🔗 Client acquired from pool
+2025-08-12T20:01:28: 🔓 Client released back to pool
+2025-08-12T20:01:28: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-12T20:01:28: 🏠 admin joined room: production
+2025-08-12T20:01:35: 🔗 Client acquired from pool
+2025-08-12T20:01:35: 🔓 Client released back to pool
+2025-08-12T20:01:35: 🔗 Client acquired from pool
+2025-08-12T20:01:35: 🔗 Client acquired from pool
+2025-08-12T20:01:35: 🔓 Client released back to pool
+2025-08-12T20:01:35: 🔓 Client released back to pool
+2025-08-12T20:02:03: 🔗 Client acquired from pool
+2025-08-12T20:02:03: 🔓 Client released back to pool
+2025-08-12T20:02:03: 🔗 Client acquired from pool
+2025-08-12T20:02:03: 🔓 Client released back to pool
+2025-08-12T20:02:03: 🔗 Client acquired from pool
+2025-08-12T20:02:03: 🔓 Client released back to pool
+2025-08-12T20:02:03: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-12T20:02:03: 🏠 admin joined room: production
+2025-08-12T20:02:16: 📺 admin subscribed to: [ 'machines', 'production', 'alerts' ]
+2025-08-12T20:02:16: 🔗 Client acquired from pool
+2025-08-12T20:02:16: 🔓 Client released back to pool
+2025-08-12T20:02:16: 🔗 Client acquired from pool
+2025-08-12T20:02:16: 🔓 Client released back to pool
+2025-08-12T20:02:16: ✅ New PostgreSQL client connected
+2025-08-12T20:02:16: 🔗 Client acquired from pool
+2025-08-12T20:02:16: ✅ New PostgreSQL client connected
+2025-08-12T20:02:16: 🔗 Client acquired from pool
+2025-08-12T20:02:16: 🔓 Client released back to pool
+2025-08-12T20:02:16: 🔓 Client released back to pool
+2025-08-12T20:02:16: ✅ New PostgreSQL client connected
+2025-08-12T20:02:16: 🔗 Client acquired from pool
+2025-08-12T20:02:16: 🔓 Client released back to pool
+2025-08-12T20:02:16: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-12T20:02:16: 🏠 admin joined room: production
+2025-08-12T20:02:16: 🔗 Client acquired from pool
+2025-08-12T20:02:16: 🔓 Client released back to pool
+2025-08-12T20:02:22: 🔗 Client acquired from pool
+2025-08-12T20:02:22: 🔓 Client released back to pool
+2025-08-12T20:02:22: 🔗 Client acquired from pool
+2025-08-12T20:02:22: 🔗 Client acquired from pool
+2025-08-12T20:02:22: 🔓 Client released back to pool
+2025-08-12T20:02:22: 🔓 Client released back to pool
+2025-08-12T20:02:22: 🔗 Client acquired from pool
+2025-08-12T20:02:22: 🔗 Client acquired from pool
+2025-08-12T20:02:22: 🔓 Client released back to pool
+2025-08-12T20:02:22: 🔓 Client released back to pool
+2025-08-12T20:02:22: 🔗 Client acquired from pool
+2025-08-12T20:02:22: 🔓 Client released back to pool
+2025-08-12T20:02:22: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-12T20:02:22: 🏠 admin joined room: production
+2025-08-12T20:02:22: 📺 admin subscribed to: [ 'machines', 'production' ]
+2025-08-12T20:02:22: 🔗 Client acquired from pool
+2025-08-12T20:02:22: 🔗 Client acquired from pool
+2025-08-12T20:02:22: 🔓 Client released back to pool
+2025-08-12T20:02:22: 🔗 Client acquired from pool
+2025-08-12T20:02:22: 🔓 Client released back to pool
+2025-08-12T20:02:22: 🔗 Client acquired from pool
+2025-08-12T20:02:22: 🔓 Client released back to pool
+2025-08-12T20:02:22: 🔗 Client acquired from pool
+2025-08-12T20:02:22: 🔓 Client released back to pool
+2025-08-12T20:02:22: 🔓 Client released back to pool
+2025-08-12T20:02:22: 🔗 Client acquired from pool
+2025-08-12T20:02:22: 🔓 Client released back to pool
+2025-08-12T20:02:22: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-12T20:02:22: 🏠 admin joined room: production
+2025-08-12T20:02:24: 📺 admin subscribed to: [ 'production', 'machines' ]
+2025-08-12T20:02:24: 🔗 Client acquired from pool
+2025-08-12T20:02:24: 🔗 Client acquired from pool
+2025-08-12T20:02:24: 🔗 Client acquired from pool
+2025-08-12T20:02:24: 🔗 Client acquired from pool
+2025-08-12T20:02:24: 🔓 Client released back to pool
+2025-08-12T20:02:24: 🔓 Client released back to pool
+2025-08-12T20:02:24: 🔓 Client released back to pool
+2025-08-12T20:02:24: 🔓 Client released back to pool
+2025-08-12T20:02:24: ✅ New PostgreSQL client connected
+2025-08-12T20:02:24: 🔗 Client acquired from pool
+2025-08-12T20:02:24: 🔓 Client released back to pool
+2025-08-12T20:02:24: 🔗 Client acquired from pool
+2025-08-12T20:02:24: 🔓 Client released back to pool
+2025-08-12T20:02:24: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-12T20:02:24: 🏠 admin joined room: production
+2025-08-12T20:02:29: 📺 admin subscribed to: [ 'machines', 'production' ]
+2025-08-12T20:02:29: 🔗 Client acquired from pool
+2025-08-12T20:02:29: 🔓 Client released back to pool
+2025-08-12T20:02:29: 🔗 Client acquired from pool
+2025-08-12T20:02:29: 🔗 Client acquired from pool
+2025-08-12T20:02:29: 🔓 Client released back to pool
+2025-08-12T20:02:29: 🔗 Client acquired from pool
+2025-08-12T20:02:29: 🔗 Client acquired from pool
+2025-08-12T20:02:29: 🔓 Client released back to pool
+2025-08-12T20:02:29: 🔓 Client released back to pool
+2025-08-12T20:02:29: 🔓 Client released back to pool
+2025-08-12T20:02:29: 🔗 Client acquired from pool
+2025-08-12T20:02:29: 🔓 Client released back to pool
+2025-08-12T20:02:29: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-12T20:02:29: 🏠 admin joined room: production
+2025-08-12T20:02:47: 🔗 Client acquired from pool
+2025-08-12T20:02:47: 🔓 Client released back to pool
+2025-08-12T20:02:47: 🔗 Client acquired from pool
+2025-08-12T20:02:47: 🔗 Client acquired from pool
+2025-08-12T20:02:47: 🔓 Client released back to pool
+2025-08-12T20:02:47: 🔓 Client released back to pool
+2025-08-12T20:02:48: 🔗 Client acquired from pool
+2025-08-12T20:02:48: 🔓 Client released back to pool
+2025-08-12T20:02:48: 🔗 Client acquired from pool
+2025-08-12T20:02:48: 🔓 Client released back to pool
+2025-08-12T20:02:48: 🔗 Client acquired from pool
+2025-08-12T20:02:48: 🔓 Client released back to pool
+2025-08-12T20:02:49: 🔗 Client acquired from pool
+2025-08-12T20:02:49: 🔓 Client released back to pool
+2025-08-12T20:02:49: 🔗 Client acquired from pool
+2025-08-12T20:02:49: 🔓 Client released back to pool
+2025-08-12T20:02:49: 🔗 Client acquired from pool
+2025-08-12T20:02:49: 🔓 Client released back to pool
+2025-08-12T20:02:49: 🔗 Client acquired from pool
+2025-08-12T20:02:49: 🔓 Client released back to pool
+2025-08-12T20:02:50: 🔗 Client acquired from pool
+2025-08-12T20:02:50: 🔓 Client released back to pool
+2025-08-12T20:02:50: 🔗 Client acquired from pool
+2025-08-12T20:02:50: 🔗 Client acquired from pool
+2025-08-12T20:02:50: 🔓 Client released back to pool
+2025-08-12T20:02:50: 🔗 Client acquired from pool
+2025-08-12T20:02:50: 🔓 Client released back to pool
+2025-08-12T20:02:50: 🔓 Client released back to pool
+2025-08-12T20:02:51: 🔗 Client acquired from pool
+2025-08-12T20:02:51: 🔓 Client released back to pool
+2025-08-12T20:02:51: 🔗 Client acquired from pool
+2025-08-12T20:02:51: 🔓 Client released back to pool
+2025-08-12T20:02:51: 🔗 Client acquired from pool
+2025-08-12T20:02:51: 🔓 Client released back to pool
+2025-08-12T20:02:55: 🔗 Client acquired from pool
+2025-08-12T20:02:55: 🔓 Client released back to pool
+2025-08-12T20:02:55: 🔗 Client acquired from pool
+2025-08-12T20:02:55: 🔓 Client released back to pool
+2025-08-12T20:02:55: 🔗 Client acquired from pool
+2025-08-12T20:02:55: 🔓 Client released back to pool
+2025-08-12T20:02:57: 🔗 Client acquired from pool
+2025-08-12T20:02:57: 🔓 Client released back to pool
+2025-08-12T20:02:57: 🔗 Client acquired from pool
+2025-08-12T20:02:57: 🔓 Client released back to pool
+2025-08-12T20:02:57: 🔗 Client acquired from pool
+2025-08-12T20:02:57: 🔓 Client released back to pool
+2025-08-12T20:02:57: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-12T20:02:57: 🏠 admin joined room: production
+2025-08-12T20:04:09: 📺 admin subscribed to: [ 'machines', 'production', 'alerts' ]
+2025-08-12T20:04:09: ✅ New PostgreSQL client connected
+2025-08-12T20:04:09: 🔗 Client acquired from pool
+2025-08-12T20:04:09: ✅ New PostgreSQL client connected
+2025-08-12T20:04:09: 🔗 Client acquired from pool
+2025-08-12T20:04:09: ✅ New PostgreSQL client connected
+2025-08-12T20:04:09: 🔗 Client acquired from pool
+2025-08-12T20:04:09: 🔓 Client released back to pool
+2025-08-12T20:04:09: 🔓 Client released back to pool
+2025-08-12T20:04:09: ✅ New PostgreSQL client connected
+2025-08-12T20:04:09: 🔗 Client acquired from pool
+2025-08-12T20:04:09: 🔓 Client released back to pool
+2025-08-12T20:04:09: 🔓 Client released back to pool
+2025-08-12T20:04:09: ✅ New PostgreSQL client connected
+2025-08-12T20:04:09: 🔗 Client acquired from pool
+2025-08-12T20:04:09: 🔓 Client released back to pool
+2025-08-12T20:04:09: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-12T20:04:09: 🏠 admin joined room: production
+2025-08-12T20:04:09: 🔗 Client acquired from pool
+2025-08-12T20:04:09: 🔓 Client released back to pool
+2025-08-12T20:04:22: 🔗 Client acquired from pool
+2025-08-12T20:04:22: 🔓 Client released back to pool
+2025-08-12T20:04:22: 🔗 Client acquired from pool
+2025-08-12T20:04:22: 🔗 Client acquired from pool
+2025-08-12T20:04:22: 🔓 Client released back to pool
+2025-08-12T20:04:22: 🔓 Client released back to pool
+2025-08-12T20:04:22: 🔗 Client acquired from pool
+2025-08-12T20:04:22: 🔓 Client released back to pool
+2025-08-12T20:04:37: 📺 admin subscribed to: [ 'machines', 'production' ]
+2025-08-12T20:04:37: 🔗 Client acquired from pool
+2025-08-12T20:04:37: 🔗 Client acquired from pool
+2025-08-12T20:04:37: 🔗 Client acquired from pool
+2025-08-12T20:04:37: 🔓 Client released back to pool
+2025-08-12T20:04:37: 🔓 Client released back to pool
+2025-08-12T20:04:37: 🔗 Client acquired from pool
+2025-08-12T20:04:37: 🔓 Client released back to pool
+2025-08-12T20:04:37: 🔗 Client acquired from pool
+2025-08-12T20:04:37: 🔓 Client released back to pool
+2025-08-12T20:04:37: 🔓 Client released back to pool
+2025-08-12T20:04:37: 🔗 Client acquired from pool
+2025-08-12T20:04:37: 🔓 Client released back to pool
+2025-08-12T20:04:37: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-12T20:04:37: 🏠 admin joined room: production
+2025-08-12T20:04:40: 🔗 Client acquired from pool
+2025-08-12T20:04:40: 🔓 Client released back to pool
+2025-08-12T20:04:40: 🔗 Client acquired from pool
+2025-08-12T20:04:40: 🔓 Client released back to pool
+2025-08-12T20:04:40: 🔗 Client acquired from pool
+2025-08-12T20:04:40: 🔓 Client released back to pool
+2025-08-12T20:04:40: 🔗 Client acquired from pool
+2025-08-12T20:04:40: 🔓 Client released back to pool
+2025-08-12T20:04:41: 🔗 Client acquired from pool
+2025-08-12T20:04:41: 🔗 Client acquired from pool
+2025-08-12T20:04:41: 🔗 Client acquired from pool
+2025-08-12T20:04:41: 🔓 Client released back to pool
+2025-08-12T20:04:41: 🔓 Client released back to pool
+2025-08-12T20:04:41: 🔓 Client released back to pool
+2025-08-12T20:04:42: 📺 admin subscribed to: [ 'production', 'machines' ]
+2025-08-12T20:04:42: 🔗 Client acquired from pool
+2025-08-12T20:04:42: 🔗 Client acquired from pool
+2025-08-12T20:04:42: 🔗 Client acquired from pool
+2025-08-12T20:04:42: 🔓 Client released back to pool
+2025-08-12T20:04:42: 🔓 Client released back to pool
+2025-08-12T20:04:42: 🔓 Client released back to pool
+2025-08-12T20:04:42: ✅ New PostgreSQL client connected
+2025-08-12T20:04:42: 🔗 Client acquired from pool
+2025-08-12T20:04:42: ✅ New PostgreSQL client connected
+2025-08-12T20:04:42: 🔗 Client acquired from pool
+2025-08-12T20:04:42: 🔓 Client released back to pool
+2025-08-12T20:04:42: 🔓 Client released back to pool
+2025-08-12T20:04:42: 🔗 Client acquired from pool
+2025-08-12T20:04:42: 🔓 Client released back to pool
+2025-08-12T20:04:42: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-12T20:04:42: 🏠 admin joined room: production
+2025-08-12T20:04:44: 🔗 Client acquired from pool
+2025-08-12T20:04:44: 🔓 Client released back to pool
+2025-08-12T20:04:44: 🔗 Client acquired from pool
+2025-08-12T20:04:44: 🔗 Client acquired from pool
+2025-08-12T20:04:44: 🔗 Client acquired from pool
+2025-08-12T20:04:44: 🔓 Client released back to pool
+2025-08-12T20:04:44: 🔓 Client released back to pool
+2025-08-12T20:04:44: 🔓 Client released back to pool
+2025-08-12T20:04:47: 🔗 Client acquired from pool
+2025-08-12T20:04:47: 🔗 Client acquired from pool
+2025-08-12T20:04:47: 🔗 Client acquired from pool
+2025-08-12T20:04:47: 🔗 Client acquired from pool
+2025-08-12T20:04:47: 🔓 Client released back to pool
+2025-08-12T20:04:47: 🔓 Client released back to pool
+2025-08-12T20:04:47: 🔓 Client released back to pool
+2025-08-12T20:04:47: 🔓 Client released back to pool
+2025-08-12T20:04:48: 🔗 Client acquired from pool
+2025-08-12T20:04:48: 🔓 Client released back to pool
+2025-08-12T20:04:48: 🔗 Client acquired from pool
+2025-08-12T20:04:48: 🔗 Client acquired from pool
+2025-08-12T20:04:48: 🔓 Client released back to pool
+2025-08-12T20:04:48: 🔓 Client released back to pool
+2025-08-12T20:04:48: 🔗 Client acquired from pool
+2025-08-12T20:04:48: 🔗 Client acquired from pool
+2025-08-12T20:04:48: 🔓 Client released back to pool
+2025-08-12T20:04:48: 🔓 Client released back to pool
+2025-08-12T20:04:48: 🔗 Client acquired from pool
+2025-08-12T20:04:48: 🔗 Client acquired from pool
+2025-08-12T20:04:48: 🔗 Client acquired from pool
+2025-08-12T20:04:48: 🔗 Client acquired from pool
+2025-08-12T20:04:48: 🔗 Client acquired from pool
+2025-08-12T20:04:48: 🔓 Client released back to pool
+2025-08-12T20:04:48: 🔓 Client released back to pool
+2025-08-12T20:04:48: 🔓 Client released back to pool
+2025-08-12T20:04:48: 🔓 Client released back to pool
+2025-08-12T20:04:48: 🔓 Client released back to pool
+2025-08-12T20:04:48: 🔗 Client acquired from pool
+2025-08-12T20:04:48: 🔓 Client released back to pool
+2025-08-12T20:04:48: 🔗 Client acquired from pool
+2025-08-12T20:04:48: 🔗 Client acquired from pool
+2025-08-12T20:04:48: 🔓 Client released back to pool
+2025-08-12T20:04:48: 🔓 Client released back to pool
+2025-08-12T20:04:48: 🔗 Client acquired from pool
+2025-08-12T20:04:48: 🔓 Client released back to pool
+2025-08-12T20:04:48: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-12T20:04:48: 🏠 admin joined room: production
+2025-08-12T20:04:48: 🔗 Client acquired from pool
+2025-08-12T20:04:48: 🔓 Client released back to pool
+2025-08-12T20:04:49: 🔗 Client acquired from pool
+2025-08-12T20:04:49: 🔗 Client acquired from pool
+2025-08-12T20:04:49: 🔗 Client acquired from pool
+2025-08-12T20:04:49: 🔗 Client acquired from pool
+2025-08-12T20:04:49: 🔓 Client released back to pool
+2025-08-12T20:04:49: 🔓 Client released back to pool
+2025-08-12T20:04:49: 🔓 Client released back to pool
+2025-08-12T20:04:49: 🔓 Client released back to pool
+2025-08-12T20:04:53: 📺 admin subscribed to: [ 'machines', 'production', 'alerts' ]
+2025-08-12T20:04:53: 🔗 Client acquired from pool
+2025-08-12T20:04:53: 🔓 Client released back to pool
+2025-08-12T20:04:53: 🔗 Client acquired from pool
+2025-08-12T20:04:53: 🔗 Client acquired from pool
+2025-08-12T20:04:53: 🔓 Client released back to pool
+2025-08-12T20:04:53: 🔓 Client released back to pool
+2025-08-12T20:04:53: 🔗 Client acquired from pool
+2025-08-12T20:04:53: 🔗 Client acquired from pool
+2025-08-12T20:04:53: 🔓 Client released back to pool
+2025-08-12T20:04:53: 🔓 Client released back to pool
+2025-08-12T20:04:54: 🔗 Client acquired from pool
+2025-08-12T20:04:54: 🔓 Client released back to pool
+2025-08-12T20:04:54: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-12T20:04:54: 🏠 admin joined room: production
+2025-08-12T20:04:55: 📺 admin subscribed to: [ 'production', 'machines' ]
+2025-08-12T20:04:55: 🔗 Client acquired from pool
+2025-08-12T20:04:55: 🔓 Client released back to pool
+2025-08-12T20:04:55: 🔗 Client acquired from pool
+2025-08-12T20:04:55: 🔗 Client acquired from pool
+2025-08-12T20:04:55: 🔗 Client acquired from pool
+2025-08-12T20:04:55: 🔗 Client acquired from pool
+2025-08-12T20:04:55: 🔓 Client released back to pool
+2025-08-12T20:04:55: 🔓 Client released back to pool
+2025-08-12T20:04:55: 🔓 Client released back to pool
+2025-08-12T20:04:55: 🔓 Client released back to pool
+2025-08-12T20:04:55: 🔗 Client acquired from pool
+2025-08-12T20:04:55: 🔓 Client released back to pool
+2025-08-12T20:04:55: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-12T20:04:55: 🏠 admin joined room: production
+2025-08-12T20:05:00: 🔗 Client acquired from pool
+2025-08-12T20:05:00: 🔗 Client acquired from pool
+2025-08-12T20:05:00: 🔗 Client acquired from pool
+2025-08-12T20:05:00: 🔗 Client acquired from pool
+2025-08-12T20:05:00: 🔓 Client released back to pool
+2025-08-12T20:05:00: 🔓 Client released back to pool
+2025-08-12T20:05:00: 🔓 Client released back to pool
+2025-08-12T20:05:00: 🔓 Client released back to pool
+2025-08-12T20:05:05: 🔗 Client acquired from pool
+2025-08-12T20:05:05: 🔗 Client acquired from pool
+2025-08-12T20:05:05: 🔗 Client acquired from pool
+2025-08-12T20:05:05: 🔗 Client acquired from pool
+2025-08-12T20:05:05: 🔓 Client released back to pool
+2025-08-12T20:05:05: 🔓 Client released back to pool
+2025-08-12T20:05:05: 🔓 Client released back to pool
+2025-08-12T20:05:05: 🔓 Client released back to pool
+2025-08-12T20:05:10: 🔗 Client acquired from pool
+2025-08-12T20:05:10: 🔗 Client acquired from pool
+2025-08-12T20:05:10: 🔗 Client acquired from pool
+2025-08-12T20:05:10: 🔗 Client acquired from pool
+2025-08-12T20:05:10: 🔓 Client released back to pool
+2025-08-12T20:05:10: 🔓 Client released back to pool
+2025-08-12T20:05:10: 🔓 Client released back to pool
+2025-08-12T20:05:10: 🔓 Client released back to pool
+2025-08-12T20:05:15: 🔗 Client acquired from pool
+2025-08-12T20:05:15: 🔗 Client acquired from pool
+2025-08-12T20:05:15: 🔗 Client acquired from pool
+2025-08-12T20:05:15: 🔗 Client acquired from pool
+2025-08-12T20:05:15: 🔓 Client released back to pool
+2025-08-12T20:05:15: 🔓 Client released back to pool
+2025-08-12T20:05:15: 🔓 Client released back to pool
+2025-08-12T20:05:15: 🔓 Client released back to pool
+2025-08-12T20:05:20: 🔗 Client acquired from pool
+2025-08-12T20:05:20: 🔗 Client acquired from pool
+2025-08-12T20:05:20: 🔗 Client acquired from pool
+2025-08-12T20:05:20: 🔗 Client acquired from pool
+2025-08-12T20:05:20: 🔓 Client released back to pool
+2025-08-12T20:05:20: 🔓 Client released back to pool
+2025-08-12T20:05:20: 🔓 Client released back to pool
+2025-08-12T20:05:20: 🔓 Client released back to pool
+2025-08-12T20:05:25: 🔗 Client acquired from pool
+2025-08-12T20:05:25: 🔗 Client acquired from pool
+2025-08-12T20:05:25: 🔗 Client acquired from pool
+2025-08-12T20:05:25: 🔗 Client acquired from pool
+2025-08-12T20:05:25: 🔓 Client released back to pool
+2025-08-12T20:05:25: 🔓 Client released back to pool
+2025-08-12T20:05:25: 🔓 Client released back to pool
+2025-08-12T20:05:25: 🔓 Client released back to pool
+2025-08-12T20:05:30: 🔗 Client acquired from pool
+2025-08-12T20:05:30: 🔗 Client acquired from pool
+2025-08-12T20:05:30: 🔗 Client acquired from pool
+2025-08-12T20:05:30: 🔗 Client acquired from pool
+2025-08-12T20:05:30: 🔓 Client released back to pool
+2025-08-12T20:05:30: 🔓 Client released back to pool
+2025-08-12T20:05:30: 🔓 Client released back to pool
+2025-08-12T20:05:30: 🔓 Client released back to pool
+2025-08-12T20:05:35: 🔗 Client acquired from pool
+2025-08-12T20:05:35: 🔗 Client acquired from pool
+2025-08-12T20:05:35: 🔗 Client acquired from pool
+2025-08-12T20:05:35: 🔗 Client acquired from pool
+2025-08-12T20:05:35: 🔓 Client released back to pool
+2025-08-12T20:05:35: 🔓 Client released back to pool
+2025-08-12T20:05:35: 🔓 Client released back to pool
+2025-08-12T20:05:35: 🔓 Client released back to pool
+2025-08-12T20:05:40: 🔗 Client acquired from pool
+2025-08-12T20:05:40: 🔗 Client acquired from pool
+2025-08-12T20:05:40: 🔗 Client acquired from pool
+2025-08-12T20:05:40: 🔗 Client acquired from pool
+2025-08-12T20:05:40: 🔓 Client released back to pool
+2025-08-12T20:05:40: 🔓 Client released back to pool
+2025-08-12T20:05:40: 🔓 Client released back to pool
+2025-08-12T20:05:40: 🔓 Client released back to pool
+2025-08-12T20:05:45: 🔗 Client acquired from pool
+2025-08-12T20:05:45: 🔗 Client acquired from pool
+2025-08-12T20:05:45: 🔗 Client acquired from pool
+2025-08-12T20:05:45: 🔗 Client acquired from pool
+2025-08-12T20:05:45: 🔓 Client released back to pool
+2025-08-12T20:05:45: 🔓 Client released back to pool
+2025-08-12T20:05:45: 🔓 Client released back to pool
+2025-08-12T20:05:45: 🔓 Client released back to pool
+2025-08-12T20:05:50: 🔗 Client acquired from pool
+2025-08-12T20:05:50: 🔗 Client acquired from pool
+2025-08-12T20:05:50: 🔗 Client acquired from pool
+2025-08-12T20:05:50: 🔗 Client acquired from pool
+2025-08-12T20:05:50: 🔓 Client released back to pool
+2025-08-12T20:05:50: 🔓 Client released back to pool
+2025-08-12T20:05:50: 🔓 Client released back to pool
+2025-08-12T20:05:50: 🔓 Client released back to pool
+2025-08-12T20:05:53: 📺 admin subscribed to: [ 'machines', 'production' ]
+2025-08-12T20:05:53: 🔗 Client acquired from pool
+2025-08-12T20:05:53: 🔗 Client acquired from pool
+2025-08-12T20:05:53: 🔓 Client released back to pool
+2025-08-12T20:05:53: 🔓 Client released back to pool
+2025-08-12T20:05:53: 🔗 Client acquired from pool
+2025-08-12T20:05:53: 🔗 Client acquired from pool
+2025-08-12T20:05:53: 🔗 Client acquired from pool
+2025-08-12T20:05:53: 🔓 Client released back to pool
+2025-08-12T20:05:53: 🔓 Client released back to pool
+2025-08-12T20:05:53: 🔓 Client released back to pool
+2025-08-12T20:05:53: 🔗 Client acquired from pool
+2025-08-12T20:05:53: 🔓 Client released back to pool
+2025-08-12T20:05:53: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-12T20:05:53: 🏠 admin joined room: production
+2025-08-12T20:06:04: 🔗 Client acquired from pool
+2025-08-12T20:06:04: 🔓 Client released back to pool
+2025-08-12T20:06:04: 🔗 Client acquired from pool
+2025-08-12T20:06:04: 🔓 Client released back to pool
+2025-08-12T20:06:04: 🔗 Client acquired from pool
+2025-08-12T20:06:04: 🔓 Client released back to pool
+2025-08-12T20:06:41: ✅ New PostgreSQL client connected
+2025-08-12T20:06:41: 🔗 Client acquired from pool
+2025-08-12T20:06:41: 🔓 Client released back to pool
+2025-08-12T20:06:41: ✅ New PostgreSQL client connected
+2025-08-12T20:06:41: 🔗 Client acquired from pool
+2025-08-12T20:06:41: ✅ New PostgreSQL client connected
+2025-08-12T20:06:41: 🔗 Client acquired from pool
+2025-08-12T20:06:41: ✅ New PostgreSQL client connected
+2025-08-12T20:06:41: 🔗 Client acquired from pool
+2025-08-12T20:06:41: 🔓 Client released back to pool
+2025-08-12T20:06:41: ✅ New PostgreSQL client connected
+2025-08-12T20:06:41: 🔗 Client acquired from pool
+2025-08-12T20:06:41: ✅ New PostgreSQL client connected
+2025-08-12T20:06:41: 🔗 Client acquired from pool
+2025-08-12T20:06:41: ✅ New PostgreSQL client connected
+2025-08-12T20:06:41: 🔗 Client acquired from pool
+2025-08-12T20:06:41: 🔓 Client released back to pool
+2025-08-12T20:06:41: 🔓 Client released back to pool
+2025-08-12T20:06:41: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-12T20:06:41: 🏠 admin joined room: production
+2025-08-12T20:06:41: ✅ New PostgreSQL client connected
+2025-08-12T20:06:41: 🔗 Client acquired from pool
+2025-08-12T20:06:41: ✅ New PostgreSQL client connected
+2025-08-12T20:06:41: 🔗 Client acquired from pool
+2025-08-12T20:06:41: ✅ New PostgreSQL client connected
+2025-08-12T20:06:41: 🔗 Client acquired from pool
+2025-08-12T20:06:41: ✅ New PostgreSQL client connected
+2025-08-12T20:06:41: 🔗 Client acquired from pool
+2025-08-12T20:06:41: 🔓 Client released back to pool
+2025-08-12T20:06:41: ✅ New PostgreSQL client connected
+2025-08-12T20:06:41: 🔗 Client acquired from pool
+2025-08-12T20:06:41: 🔓 Client released back to pool
+2025-08-12T20:06:41: ✅ New PostgreSQL client connected
+2025-08-12T20:06:42: 🔗 Client acquired from pool
+2025-08-12T20:06:42: 🔓 Client released back to pool
+2025-08-12T20:06:42: 🔓 Client released back to pool
+2025-08-12T20:06:42: 🔓 Client released back to pool
+2025-08-12T20:06:42: 🔓 Client released back to pool
+2025-08-12T20:06:42: 🔓 Client released back to pool
+2025-08-12T20:06:42: 🔓 Client released back to pool
+2025-08-12T20:06:42: 🔓 Client released back to pool
+2025-08-12T20:06:42: 🔗 Client acquired from pool
+2025-08-12T20:06:42: 🔓 Client released back to pool
+2025-08-12T20:06:42: 🔗 Client acquired from pool
+2025-08-12T20:06:42: 🔓 Client released back to pool
+2025-08-12T20:06:42: 🔗 Client acquired from pool
+2025-08-12T20:06:42: 🔗 Client acquired from pool
+2025-08-12T20:06:42: 🔗 Client acquired from pool
+2025-08-12T20:06:42: 🔗 Client acquired from pool
+2025-08-12T20:06:42: 🔓 Client released back to pool
+2025-08-12T20:06:42: 🔓 Client released back to pool
+2025-08-12T20:06:42: 🔓 Client released back to pool
+2025-08-12T20:06:42: 🔓 Client released back to pool
+2025-08-12T20:06:54: 🔗 Client acquired from pool
+2025-08-12T20:06:54: 🔓 Client released back to pool
+2025-08-12T20:06:54: 🔗 Client acquired from pool
+2025-08-12T20:06:54: 🔓 Client released back to pool
+2025-08-12T20:06:55: 🔗 Client acquired from pool
+2025-08-12T20:06:55: 🔓 Client released back to pool
+2025-08-12T20:06:55: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-12T20:06:55: 🏠 admin joined room: production
+2025-08-12T20:07:12: 🔗 Client acquired from pool
+2025-08-12T20:07:12: 🔓 Client released back to pool
+2025-08-12T20:07:12: 🔗 Client acquired from pool
+2025-08-12T20:07:12: 🔗 Client acquired from pool
+2025-08-12T20:07:12: 🔗 Client acquired from pool
+2025-08-12T20:07:12: 🔓 Client released back to pool
+2025-08-12T20:07:12: 🔓 Client released back to pool
+2025-08-12T20:07:12: 🔗 Client acquired from pool
+2025-08-12T20:07:12: 🔓 Client released back to pool
+2025-08-12T20:07:12: 🔓 Client released back to pool
+2025-08-12T20:07:12: 🔗 Client acquired from pool
+2025-08-12T20:07:12: 🔓 Client released back to pool
+2025-08-12T20:07:12: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-12T20:07:12: 🏠 admin joined room: production
+2025-08-12T20:07:13: 📺 admin subscribed to: [ 'machines', 'production' ]
+2025-08-12T20:07:13: 🔗 Client acquired from pool
+2025-08-12T20:07:13: 🔓 Client released back to pool
+2025-08-12T20:07:13: 🔗 Client acquired from pool
+2025-08-12T20:07:13: 🔗 Client acquired from pool
+2025-08-12T20:07:13: 🔗 Client acquired from pool
+2025-08-12T20:07:13: 🔓 Client released back to pool
+2025-08-12T20:07:13: 🔗 Client acquired from pool
+2025-08-12T20:07:13: 🔓 Client released back to pool
+2025-08-12T20:07:13: 🔓 Client released back to pool
+2025-08-12T20:07:13: 🔓 Client released back to pool
+2025-08-12T20:07:13: 🔗 Client acquired from pool
+2025-08-12T20:07:13: 🔓 Client released back to pool
+2025-08-12T20:07:13: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-12T20:07:13: 🏠 admin joined room: production
+2025-08-12T20:07:18: 🔗 Client acquired from pool
+2025-08-12T20:07:18: 🔓 Client released back to pool
+2025-08-12T20:07:43: 🔗 Client acquired from pool
+2025-08-12T20:07:43: 🔓 Client released back to pool
+2025-08-12T20:08:13: ✅ New PostgreSQL client connected
+2025-08-12T20:08:13: 🔗 Client acquired from pool
+2025-08-12T20:08:13: 🔓 Client released back to pool
+2025-08-12T20:08:43: 🔗 Client acquired from pool
+2025-08-12T20:08:43: 🔓 Client released back to pool
+2025-08-12T20:08:44: 🔗 Client acquired from pool
+2025-08-12T20:08:44: 🔓 Client released back to pool
+2025-08-12T20:08:44: 🔗 Client acquired from pool
+2025-08-12T20:08:44: 🔓 Client released back to pool
+2025-08-12T20:08:44: ⚙️ Error creating machine type: error: value too long for type character varying(100)
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)
+    at async DatabaseUtils.insert (/home/production-app/production-orders-app/src/utils/database.js:61:20)
+    at async SystemService.createMachineType (/home/production-app/production-orders-app/src/services/system.service.js:282:28)
+    at async /home/production-app/production-orders-app/src/server-production.js:413:28 {
+  length: 99,
+  severity: 'ERROR',
+  code: '22001',
+  detail: undefined,
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'varchar.c',
+  line: '638',
+  routine: 'varchar'
+}
+2025-08-12T20:08:44: 🔗 Client acquired from pool
+2025-08-12T20:08:44: 🔓 Client released back to pool
+2025-08-12T20:08:44: 🔗 Client acquired from pool
+2025-08-12T20:08:44: 🔓 Client released back to pool
+2025-08-12T20:08:44: Error occurred: {
+  error: 'column "order_number" of relation "machines" does not exist',
+  stack: 'error: column "order_number" of relation "machines" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.update (/home/production-app/production-orders-app/src/utils/database.js:86:20)\n' +
+    '    at async MachinesService.updateMachine (/home/production-app/production-orders-app/src/services/machines.service.js:122:28)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:134:28',
+  url: '/api/machines/40',
+  method: 'PUT',
+  user: 'admin',
+  timestamp: '2025-08-12T18:08:44.098Z'
+}
+2025-08-12T20:08:45: 🔗 Client acquired from pool
+2025-08-12T20:08:45: 🔓 Client released back to pool
+2025-08-12T20:08:45: 🔗 Client acquired from pool
+2025-08-12T20:08:45: 🔓 Client released back to pool
+2025-08-12T20:08:45: ⚙️ Error creating machine type: error: value too long for type character varying(100)
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)
+    at async DatabaseUtils.insert (/home/production-app/production-orders-app/src/utils/database.js:61:20)
+    at async SystemService.createMachineType (/home/production-app/production-orders-app/src/services/system.service.js:282:28)
+    at async /home/production-app/production-orders-app/src/server-production.js:413:28 {
+  length: 99,
+  severity: 'ERROR',
+  code: '22001',
+  detail: undefined,
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'varchar.c',
+  line: '638',
+  routine: 'varchar'
+}
+2025-08-12T20:08:45: ✅ New PostgreSQL client connected
+2025-08-12T20:08:45: 🔗 Client acquired from pool
+2025-08-12T20:08:45: 🔓 Client released back to pool
+2025-08-12T20:08:45: 🔗 Client acquired from pool
+2025-08-12T20:08:45: 🔓 Client released back to pool
+2025-08-12T20:08:45: Error occurred: {
+  error: 'column "order_number" of relation "machines" does not exist',
+  stack: 'error: column "order_number" of relation "machines" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.update (/home/production-app/production-orders-app/src/utils/database.js:86:20)\n' +
+    '    at async MachinesService.updateMachine (/home/production-app/production-orders-app/src/services/machines.service.js:122:28)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:134:28',
+  url: '/api/machines/40',
+  method: 'PUT',
+  user: 'admin',
+  timestamp: '2025-08-12T18:08:45.190Z'
+}
+2025-08-12T20:08:47: 🔗 Client acquired from pool
+2025-08-12T20:08:47: 🔗 Client acquired from pool
+2025-08-12T20:08:47: 🔓 Client released back to pool
+2025-08-12T20:08:47: 🔗 Client acquired from pool
+2025-08-12T20:08:47: 🔓 Client released back to pool
+2025-08-12T20:08:47: ⚙️ Error creating machine type: error: value too long for type character varying(100)
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)
+    at async DatabaseUtils.insert (/home/production-app/production-orders-app/src/utils/database.js:61:20)
+    at async SystemService.createMachineType (/home/production-app/production-orders-app/src/services/system.service.js:282:28)
+    at async /home/production-app/production-orders-app/src/server-production.js:413:28 {
+  length: 99,
+  severity: 'ERROR',
+  code: '22001',
+  detail: undefined,
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'varchar.c',
+  line: '638',
+  routine: 'varchar'
+}
+2025-08-12T20:08:47: 🔓 Client released back to pool
+2025-08-12T20:08:47: 🔗 Client acquired from pool
+2025-08-12T20:08:47: 🔓 Client released back to pool
+2025-08-12T20:08:47: Error occurred: {
+  error: 'column "order_number" of relation "machines" does not exist',
+  stack: 'error: column "order_number" of relation "machines" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.update (/home/production-app/production-orders-app/src/utils/database.js:86:20)\n' +
+    '    at async MachinesService.updateMachine (/home/production-app/production-orders-app/src/services/machines.service.js:122:28)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:134:28',
+  url: '/api/machines/40',
+  method: 'PUT',
+  user: 'admin',
+  timestamp: '2025-08-12T18:08:47.321Z'
+}
+2025-08-12T20:08:48: 🔗 Client acquired from pool
+2025-08-12T20:08:48: 🔓 Client released back to pool
+2025-08-12T20:08:48: 🔗 Client acquired from pool
+2025-08-12T20:08:48: 🔗 Client acquired from pool
+2025-08-12T20:08:48: 🔓 Client released back to pool
+2025-08-12T20:08:48: ⚙️ Error creating machine type: error: value too long for type character varying(100)
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)
+    at async DatabaseUtils.insert (/home/production-app/production-orders-app/src/utils/database.js:61:20)
+    at async SystemService.createMachineType (/home/production-app/production-orders-app/src/services/system.service.js:282:28)
+    at async /home/production-app/production-orders-app/src/server-production.js:413:28 {
+  length: 99,
+  severity: 'ERROR',
+  code: '22001',
+  detail: undefined,
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'varchar.c',
+  line: '638',
+  routine: 'varchar'
+}
+2025-08-12T20:08:48: 🔓 Client released back to pool
+2025-08-12T20:08:48: 🔗 Client acquired from pool
+2025-08-12T20:08:48: 🔓 Client released back to pool
+2025-08-12T20:08:48: Error occurred: {
+  error: 'column "order_number" of relation "machines" does not exist',
+  stack: 'error: column "order_number" of relation "machines" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.update (/home/production-app/production-orders-app/src/utils/database.js:86:20)\n' +
+    '    at async MachinesService.updateMachine (/home/production-app/production-orders-app/src/services/machines.service.js:122:28)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:134:28',
+  url: '/api/machines/40',
+  method: 'PUT',
+  user: 'admin',
+  timestamp: '2025-08-12T18:08:48.075Z'
+}
+2025-08-12T20:08:49: 🔗 Client acquired from pool
+2025-08-12T20:08:49: 🔗 Client acquired from pool
+2025-08-12T20:08:49: 🔓 Client released back to pool
+2025-08-12T20:08:49: 🔗 Client acquired from pool
+2025-08-12T20:08:49: 🔓 Client released back to pool
+2025-08-12T20:08:49: 🔗 Client acquired from pool
+2025-08-12T20:08:49: 🔓 Client released back to pool
+2025-08-12T20:08:49: ⚙️ Error creating machine type: error: value too long for type character varying(100)
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)
+    at async DatabaseUtils.insert (/home/production-app/production-orders-app/src/utils/database.js:61:20)
+    at async SystemService.createMachineType (/home/production-app/production-orders-app/src/services/system.service.js:282:28)
+    at async /home/production-app/production-orders-app/src/server-production.js:413:28 {
+  length: 99,
+  severity: 'ERROR',
+  code: '22001',
+  detail: undefined,
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'varchar.c',
+  line: '638',
+  routine: 'varchar'
+}
+2025-08-12T20:08:49: 🔓 Client released back to pool
+2025-08-12T20:08:49: Error occurred: {
+  error: 'column "order_number" of relation "machines" does not exist',
+  stack: 'error: column "order_number" of relation "machines" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.update (/home/production-app/production-orders-app/src/utils/database.js:86:20)\n' +
+    '    at async MachinesService.updateMachine (/home/production-app/production-orders-app/src/services/machines.service.js:122:28)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:134:28',
+  url: '/api/machines/40',
+  method: 'PUT',
+  user: 'admin',
+  timestamp: '2025-08-12T18:08:49.152Z'
+}
+2025-08-12T20:08:51: 🔗 Client acquired from pool
+2025-08-12T20:08:51: 🔓 Client released back to pool
+2025-08-12T20:08:51: 🔗 Client acquired from pool
+2025-08-12T20:08:51: 🔓 Client released back to pool
+2025-08-12T20:08:51: Error occurred: {
+  error: 'column "order_number" of relation "machines" does not exist',
+  stack: 'error: column "order_number" of relation "machines" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.update (/home/production-app/production-orders-app/src/utils/database.js:86:20)\n' +
+    '    at async MachinesService.updateMachine (/home/production-app/production-orders-app/src/services/machines.service.js:122:28)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:134:28',
+  url: '/api/machines/40',
+  method: 'PUT',
+  user: 'admin',
+  timestamp: '2025-08-12T18:08:51.047Z'
+}
+2025-08-12T20:08:51: 🔗 Client acquired from pool
+2025-08-12T20:08:51: 🔓 Client released back to pool
+2025-08-12T20:08:51: 🔗 Client acquired from pool
+2025-08-12T20:08:51: 🔓 Client released back to pool
+2025-08-12T20:08:51: ⚙️ Error creating machine type: error: value too long for type character varying(100)
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)
+    at async DatabaseUtils.insert (/home/production-app/production-orders-app/src/utils/database.js:61:20)
+    at async SystemService.createMachineType (/home/production-app/production-orders-app/src/services/system.service.js:282:28)
+    at async /home/production-app/production-orders-app/src/server-production.js:413:28 {
+  length: 99,
+  severity: 'ERROR',
+  code: '22001',
+  detail: undefined,
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'varchar.c',
+  line: '638',
+  routine: 'varchar'
+}
+2025-08-12T20:08:51: 🔗 Client acquired from pool
+2025-08-12T20:08:51: 🔓 Client released back to pool
+2025-08-12T20:08:51: 🔗 Client acquired from pool
+2025-08-12T20:08:51: 🔓 Client released back to pool
+2025-08-12T20:08:51: Error occurred: {
+  error: 'column "order_number" of relation "machines" does not exist',
+  stack: 'error: column "order_number" of relation "machines" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.update (/home/production-app/production-orders-app/src/utils/database.js:86:20)\n' +
+    '    at async MachinesService.updateMachine (/home/production-app/production-orders-app/src/services/machines.service.js:122:28)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:134:28',
+  url: '/api/machines/40',
+  method: 'PUT',
+  user: 'admin',
+  timestamp: '2025-08-12T18:08:51.237Z'
+}
+2025-08-12T20:08:51: 🔗 Client acquired from pool
+2025-08-12T20:08:51: 🔓 Client released back to pool
+2025-08-12T20:08:51: 🔗 Client acquired from pool
+2025-08-12T20:08:51: 🔓 Client released back to pool
+2025-08-12T20:08:51: Error occurred: {
+  error: 'column "order_number" of relation "machines" does not exist',
+  stack: 'error: column "order_number" of relation "machines" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.update (/home/production-app/production-orders-app/src/utils/database.js:86:20)\n' +
+    '    at async MachinesService.updateMachine (/home/production-app/production-orders-app/src/services/machines.service.js:122:28)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:134:28',
+  url: '/api/machines/40',
+  method: 'PUT',
+  user: 'admin',
+  timestamp: '2025-08-12T18:08:51.389Z'
+}
+2025-08-12T20:08:52: 🔗 Client acquired from pool
+2025-08-12T20:08:52: 🔓 Client released back to pool
+2025-08-12T20:08:52: 🔗 Client acquired from pool
+2025-08-12T20:08:52: 🔓 Client released back to pool
+2025-08-12T20:08:52: Error occurred: {
+  error: 'column "order_number" of relation "machines" does not exist',
+  stack: 'error: column "order_number" of relation "machines" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.update (/home/production-app/production-orders-app/src/utils/database.js:86:20)\n' +
+    '    at async MachinesService.updateMachine (/home/production-app/production-orders-app/src/services/machines.service.js:122:28)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:134:28',
+  url: '/api/machines/40',
+  method: 'PUT',
+  user: 'admin',
+  timestamp: '2025-08-12T18:08:52.118Z'
+}
+2025-08-12T20:08:52: 🔗 Client acquired from pool
+2025-08-12T20:08:52: 🔓 Client released back to pool
+2025-08-12T20:08:52: 🔗 Client acquired from pool
+2025-08-12T20:08:52: 🔓 Client released back to pool
+2025-08-12T20:08:52: Error occurred: {
+  error: 'column "order_number" of relation "machines" does not exist',
+  stack: 'error: column "order_number" of relation "machines" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.update (/home/production-app/production-orders-app/src/utils/database.js:86:20)\n' +
+    '    at async MachinesService.updateMachine (/home/production-app/production-orders-app/src/services/machines.service.js:122:28)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:134:28',
+  url: '/api/machines/40',
+  method: 'PUT',
+  user: 'admin',
+  timestamp: '2025-08-12T18:08:52.457Z'
+}
+2025-08-12T20:08:54: 🔗 Client acquired from pool
+2025-08-12T20:08:54: 🔓 Client released back to pool
+2025-08-12T20:08:54: 🔗 Client acquired from pool
+2025-08-12T20:08:54: 🔓 Client released back to pool
+2025-08-12T20:08:54: Error occurred: {
+  error: 'column "order_number" of relation "machines" does not exist',
+  stack: 'error: column "order_number" of relation "machines" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.update (/home/production-app/production-orders-app/src/utils/database.js:86:20)\n' +
+    '    at async MachinesService.updateMachine (/home/production-app/production-orders-app/src/services/machines.service.js:122:28)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:134:28',
+  url: '/api/machines/40',
+  method: 'PUT',
+  user: 'admin',
+  timestamp: '2025-08-12T18:08:54.188Z'
+}
+2025-08-12T20:08:54: 🔗 Client acquired from pool
+2025-08-12T20:08:54: 🔓 Client released back to pool
+2025-08-12T20:08:54: 🔗 Client acquired from pool
+2025-08-12T20:08:54: 🔓 Client released back to pool
+2025-08-12T20:08:54: Error occurred: {
+  error: 'column "order_number" of relation "machines" does not exist',
+  stack: 'error: column "order_number" of relation "machines" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.update (/home/production-app/production-orders-app/src/utils/database.js:86:20)\n' +
+    '    at async MachinesService.updateMachine (/home/production-app/production-orders-app/src/services/machines.service.js:122:28)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:134:28',
+  url: '/api/machines/40',
+  method: 'PUT',
+  user: 'admin',
+  timestamp: '2025-08-12T18:08:54.536Z'
+}
+2025-08-12T20:08:55: 🔗 Client acquired from pool
+2025-08-12T20:08:55: 🔓 Client released back to pool
+2025-08-12T20:08:55: 🔗 Client acquired from pool
+2025-08-12T20:08:55: 🔓 Client released back to pool
+2025-08-12T20:08:55: Error occurred: {
+  error: 'column "order_number" of relation "machines" does not exist',
+  stack: 'error: column "order_number" of relation "machines" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.update (/home/production-app/production-orders-app/src/utils/database.js:86:20)\n' +
+    '    at async MachinesService.updateMachine (/home/production-app/production-orders-app/src/services/machines.service.js:122:28)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:134:28',
+  url: '/api/machines/40',
+  method: 'PUT',
+  user: 'admin',
+  timestamp: '2025-08-12T18:08:55.662Z'
+}
+2025-08-12T20:08:56: 🔗 Client acquired from pool
+2025-08-12T20:08:56: 🔓 Client released back to pool
+2025-08-12T20:08:56: 🔗 Client acquired from pool
+2025-08-12T20:08:56: 🔓 Client released back to pool
+2025-08-12T20:08:56: Error occurred: {
+  error: 'column "order_number" of relation "machines" does not exist',
+  stack: 'error: column "order_number" of relation "machines" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.update (/home/production-app/production-orders-app/src/utils/database.js:86:20)\n' +
+    '    at async MachinesService.updateMachine (/home/production-app/production-orders-app/src/services/machines.service.js:122:28)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:134:28',
+  url: '/api/machines/40',
+  method: 'PUT',
+  user: 'admin',
+  timestamp: '2025-08-12T18:08:56.757Z'
+}
+2025-08-12T20:08:57: 🔗 Client acquired from pool
+2025-08-12T20:08:57: 🔓 Client released back to pool
+2025-08-12T20:08:57: 🔗 Client acquired from pool
+2025-08-12T20:08:57: 🔓 Client released back to pool
+2025-08-12T20:08:57: Error occurred: {
+  error: 'column "order_number" of relation "machines" does not exist',
+  stack: 'error: column "order_number" of relation "machines" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.update (/home/production-app/production-orders-app/src/utils/database.js:86:20)\n' +
+    '    at async MachinesService.updateMachine (/home/production-app/production-orders-app/src/services/machines.service.js:122:28)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:134:28',
+  url: '/api/machines/40',
+  method: 'PUT',
+  user: 'admin',
+  timestamp: '2025-08-12T18:08:57.146Z'
+}
+2025-08-12T20:08:58: 🔗 Client acquired from pool
+2025-08-12T20:08:58: 🔓 Client released back to pool
+2025-08-12T20:08:58: 🔗 Client acquired from pool
+2025-08-12T20:08:58: 🔓 Client released back to pool
+2025-08-12T20:08:58: Error occurred: {
+  error: 'column "order_number" of relation "machines" does not exist',
+  stack: 'error: column "order_number" of relation "machines" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.update (/home/production-app/production-orders-app/src/utils/database.js:86:20)\n' +
+    '    at async MachinesService.updateMachine (/home/production-app/production-orders-app/src/services/machines.service.js:122:28)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:134:28',
+  url: '/api/machines/40',
+  method: 'PUT',
+  user: 'admin',
+  timestamp: '2025-08-12T18:08:58.250Z'
+}
+2025-08-12T20:08:58: 🔗 Client acquired from pool
+2025-08-12T20:08:58: 🔓 Client released back to pool
+2025-08-12T20:08:58: 🔗 Client acquired from pool
+2025-08-12T20:08:58: 🔓 Client released back to pool
+2025-08-12T20:08:58: Error occurred: {
+  error: 'column "order_number" of relation "machines" does not exist',
+  stack: 'error: column "order_number" of relation "machines" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.update (/home/production-app/production-orders-app/src/utils/database.js:86:20)\n' +
+    '    at async MachinesService.updateMachine (/home/production-app/production-orders-app/src/services/machines.service.js:122:28)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:134:28',
+  url: '/api/machines/40',
+  method: 'PUT',
+  user: 'admin',
+  timestamp: '2025-08-12T18:08:58.839Z'
+}
+2025-08-12T20:09:00: 🔗 Client acquired from pool
+2025-08-12T20:09:00: 🔓 Client released back to pool
+2025-08-12T20:09:00: 🔗 Client acquired from pool
+2025-08-12T20:09:00: 🔓 Client released back to pool
+2025-08-12T20:09:00: Error occurred: {
+  error: 'column "order_number" of relation "machines" does not exist',
+  stack: 'error: column "order_number" of relation "machines" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.update (/home/production-app/production-orders-app/src/utils/database.js:86:20)\n' +
+    '    at async MachinesService.updateMachine (/home/production-app/production-orders-app/src/services/machines.service.js:122:28)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:134:28',
+  url: '/api/machines/40',
+  method: 'PUT',
+  user: 'admin',
+  timestamp: '2025-08-12T18:09:00.324Z'
+}
+2025-08-12T20:09:02: 🔗 Client acquired from pool
+2025-08-12T20:09:02: 🔓 Client released back to pool
+2025-08-12T20:09:02: 🔗 Client acquired from pool
+2025-08-12T20:09:02: 🔓 Client released back to pool
+2025-08-12T20:09:02: Error occurred: {
+  error: 'column "order_number" of relation "machines" does not exist',
+  stack: 'error: column "order_number" of relation "machines" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.update (/home/production-app/production-orders-app/src/utils/database.js:86:20)\n' +
+    '    at async MachinesService.updateMachine (/home/production-app/production-orders-app/src/services/machines.service.js:122:28)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:134:28',
+  url: '/api/machines/40',
+  method: 'PUT',
+  user: 'admin',
+  timestamp: '2025-08-12T18:09:02.709Z'
+}
+2025-08-12T20:09:03: 🔗 Client acquired from pool
+2025-08-12T20:09:03: 🔓 Client released back to pool
+2025-08-12T20:09:03: 🔗 Client acquired from pool
+2025-08-12T20:09:03: 🔓 Client released back to pool
+2025-08-12T20:09:03: Error occurred: {
+  error: 'column "order_number" of relation "machines" does not exist',
+  stack: 'error: column "order_number" of relation "machines" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.update (/home/production-app/production-orders-app/src/utils/database.js:86:20)\n' +
+    '    at async MachinesService.updateMachine (/home/production-app/production-orders-app/src/services/machines.service.js:122:28)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:134:28',
+  url: '/api/machines/40',
+  method: 'PUT',
+  user: 'admin',
+  timestamp: '2025-08-12T18:09:03.792Z'
+}
+2025-08-12T20:09:05: 🔗 Client acquired from pool
+2025-08-12T20:09:05: 🔓 Client released back to pool
+2025-08-12T20:09:05: 🔗 Client acquired from pool
+2025-08-12T20:09:05: 🔓 Client released back to pool
+2025-08-12T20:09:05: Error occurred: {
+  error: 'column "order_number" of relation "machines" does not exist',
+  stack: 'error: column "order_number" of relation "machines" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.update (/home/production-app/production-orders-app/src/utils/database.js:86:20)\n' +
+    '    at async MachinesService.updateMachine (/home/production-app/production-orders-app/src/services/machines.service.js:122:28)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:134:28',
+  url: '/api/machines/40',
+  method: 'PUT',
+  user: 'admin',
+  timestamp: '2025-08-12T18:09:05.866Z'
+}
+2025-08-12T20:09:10: 🔗 Client acquired from pool
+2025-08-12T20:09:10: 🔗 Client acquired from pool
+2025-08-12T20:09:10: 🔓 Client released back to pool
+2025-08-12T20:09:10: 🔗 Client acquired from pool
+2025-08-12T20:09:10: 🔓 Client released back to pool
+2025-08-12T20:09:10: 🔓 Client released back to pool
+2025-08-12T20:09:11: 🔗 Client acquired from pool
+2025-08-12T20:09:11: 🔓 Client released back to pool
+2025-08-12T20:09:11: 🔗 Client acquired from pool
+2025-08-12T20:09:11: 🔓 Client released back to pool
+2025-08-12T20:09:11: 🔗 Client acquired from pool
+2025-08-12T20:09:11: 🔓 Client released back to pool
+2025-08-12T20:09:14: 🔌 WebSocket disconnected: admin
+2025-08-12T20:09:15: 🔗 Client acquired from pool
+2025-08-12T20:09:15: 🔓 Client released back to pool
+2025-08-12T20:09:15: 🔗 Client acquired from pool
+2025-08-12T20:09:15: 🔓 Client released back to pool
+2025-08-12T20:09:16: 🔗 Client acquired from pool
+2025-08-12T20:09:16: 🔓 Client released back to pool
+2025-08-12T20:09:16: 🔗 Client acquired from pool
+2025-08-12T20:09:16: 🔓 Client released back to pool
+2025-08-12T20:09:16: 🔗 Client acquired from pool
+2025-08-12T20:09:16: 🔓 Client released back to pool
+2025-08-12T20:09:16: 🔗 Client acquired from pool
+2025-08-12T20:09:16: 🔓 Client released back to pool
+2025-08-12T20:09:16: New WebSocket connection attempt
+2025-08-12T20:09:16: ✅ WebSocket authenticated: admin (admin)
+2025-08-12T20:09:16: 🔗 Client acquired from pool
+2025-08-12T20:09:16: 🔓 Client released back to pool
+2025-08-12T20:09:16: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-12T20:09:16: 🏠 admin joined room: production
+2025-08-12T20:09:22: 🔗 Client acquired from pool
+2025-08-12T20:09:22: 🔓 Client released back to pool
+2025-08-12T20:09:22: 🔗 Client acquired from pool
+2025-08-12T20:09:22: 🔓 Client released back to pool
+2025-08-12T20:09:22: 🔗 Client acquired from pool
+2025-08-12T20:09:22: 🔓 Client released back to pool
+2025-08-12T20:09:22: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-12T20:09:22: 🏠 admin joined room: production

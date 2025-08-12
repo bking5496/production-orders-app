@@ -197,7 +197,7 @@ export default function MachinesPage() {
       const employees = usersData.map(user => ({
         id: user.id,
         name: formatUserDisplayName(user),
-        employee_code: formatEmployeeCode(user.employee_code) || `EMP${user.id.toString().padStart(3, '0')}`,
+        employee_code: formatEmployeeCode(user.employee_code),
         role: user.role,
         is_active: user.is_active
       })).filter(emp => emp.is_active !== false); // Only active employees

@@ -42,32 +42,23 @@ export const formatUserDisplayName = (user) => {
 };
 
 /**
- * Format employee code for display - standardize to 4-digit format
+ * Format employee code for display - preserve original format without adding zeros
  * @param {string|number} code - Employee code or user ID
- * @returns {string} - Formatted employee code (4-digit format)
+ * @returns {string} - Employee code as stored in database
  */
 export const formatEmployeeCode = (code) => {
     if (!code) return 'N/A';
     
-    // If it's already a 4-digit number, return as-is
-    if (typeof code === 'number' || /^\d{4}$/.test(code)) {
-        return code.toString().padStart(4, '0');
-    }
-    
-    // If it's in EMP format (EMP0001, EMP001, etc.), extract the number
+    // If it's in EMP format (EMP0001, EMP001, etc.), extract the number but preserve format
     if (typeof code === 'string' && code.toUpperCase().startsWith('EMP')) {
         const numericPart = code.replace(/^EMP0*/i, '');
         if (/^\d+$/.test(numericPart)) {
-            return numericPart.padStart(4, '0');
+            // Return the numeric part without adding zeros
+            return numericPart;
         }
     }
     
-    // If it's a plain number as string, format it
-    if (typeof code === 'string' && /^\d+$/.test(code)) {
-        return code.padStart(4, '0');
-    }
-    
-    // Return as-is if we can't parse it
+    // For all other cases, return the code exactly as it is
     return code.toString();
 };
 

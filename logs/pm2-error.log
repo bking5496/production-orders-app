@@ -30616,3 +30616,447 @@ Error: bind EADDRINUSE null:3000
 2025-08-12T14:06:58: JWT verification failed: jwt expired
 2025-08-12T14:07:01: JWT verification failed: jwt expired
 2025-08-12T19:37:50: JWT verification failed: Expected ':' after property name in JSON at position 5
+2025-08-12T20:08:44: ⚙️ Error creating machine type: error: value too long for type character varying(100)
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)
+    at async DatabaseUtils.insert (/home/production-app/production-orders-app/src/utils/database.js:61:20)
+    at async SystemService.createMachineType (/home/production-app/production-orders-app/src/services/system.service.js:282:28)
+    at async /home/production-app/production-orders-app/src/server-production.js:413:28 {
+  length: 99,
+  severity: 'ERROR',
+  code: '22001',
+  detail: undefined,
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'varchar.c',
+  line: '638',
+  routine: 'varchar'
+}
+2025-08-12T20:08:44: Error occurred: {
+  error: 'column "order_number" of relation "machines" does not exist',
+  stack: 'error: column "order_number" of relation "machines" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.update (/home/production-app/production-orders-app/src/utils/database.js:86:20)\n' +
+    '    at async MachinesService.updateMachine (/home/production-app/production-orders-app/src/services/machines.service.js:122:28)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:134:28',
+  url: '/api/machines/40',
+  method: 'PUT',
+  user: 'admin',
+  timestamp: '2025-08-12T18:08:44.098Z'
+}
+2025-08-12T20:08:45: ⚙️ Error creating machine type: error: value too long for type character varying(100)
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)
+    at async DatabaseUtils.insert (/home/production-app/production-orders-app/src/utils/database.js:61:20)
+    at async SystemService.createMachineType (/home/production-app/production-orders-app/src/services/system.service.js:282:28)
+    at async /home/production-app/production-orders-app/src/server-production.js:413:28 {
+  length: 99,
+  severity: 'ERROR',
+  code: '22001',
+  detail: undefined,
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'varchar.c',
+  line: '638',
+  routine: 'varchar'
+}
+2025-08-12T20:08:45: Error occurred: {
+  error: 'column "order_number" of relation "machines" does not exist',
+  stack: 'error: column "order_number" of relation "machines" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.update (/home/production-app/production-orders-app/src/utils/database.js:86:20)\n' +
+    '    at async MachinesService.updateMachine (/home/production-app/production-orders-app/src/services/machines.service.js:122:28)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:134:28',
+  url: '/api/machines/40',
+  method: 'PUT',
+  user: 'admin',
+  timestamp: '2025-08-12T18:08:45.190Z'
+}
+2025-08-12T20:08:47: ⚙️ Error creating machine type: error: value too long for type character varying(100)
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)
+    at async DatabaseUtils.insert (/home/production-app/production-orders-app/src/utils/database.js:61:20)
+    at async SystemService.createMachineType (/home/production-app/production-orders-app/src/services/system.service.js:282:28)
+    at async /home/production-app/production-orders-app/src/server-production.js:413:28 {
+  length: 99,
+  severity: 'ERROR',
+  code: '22001',
+  detail: undefined,
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'varchar.c',
+  line: '638',
+  routine: 'varchar'
+}
+2025-08-12T20:08:47: Error occurred: {
+  error: 'column "order_number" of relation "machines" does not exist',
+  stack: 'error: column "order_number" of relation "machines" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.update (/home/production-app/production-orders-app/src/utils/database.js:86:20)\n' +
+    '    at async MachinesService.updateMachine (/home/production-app/production-orders-app/src/services/machines.service.js:122:28)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:134:28',
+  url: '/api/machines/40',
+  method: 'PUT',
+  user: 'admin',
+  timestamp: '2025-08-12T18:08:47.321Z'
+}
+2025-08-12T20:08:48: ⚙️ Error creating machine type: error: value too long for type character varying(100)
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)
+    at async DatabaseUtils.insert (/home/production-app/production-orders-app/src/utils/database.js:61:20)
+    at async SystemService.createMachineType (/home/production-app/production-orders-app/src/services/system.service.js:282:28)
+    at async /home/production-app/production-orders-app/src/server-production.js:413:28 {
+  length: 99,
+  severity: 'ERROR',
+  code: '22001',
+  detail: undefined,
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'varchar.c',
+  line: '638',
+  routine: 'varchar'
+}
+2025-08-12T20:08:48: Error occurred: {
+  error: 'column "order_number" of relation "machines" does not exist',
+  stack: 'error: column "order_number" of relation "machines" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.update (/home/production-app/production-orders-app/src/utils/database.js:86:20)\n' +
+    '    at async MachinesService.updateMachine (/home/production-app/production-orders-app/src/services/machines.service.js:122:28)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:134:28',
+  url: '/api/machines/40',
+  method: 'PUT',
+  user: 'admin',
+  timestamp: '2025-08-12T18:08:48.075Z'
+}
+2025-08-12T20:08:49: ⚙️ Error creating machine type: error: value too long for type character varying(100)
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)
+    at async DatabaseUtils.insert (/home/production-app/production-orders-app/src/utils/database.js:61:20)
+    at async SystemService.createMachineType (/home/production-app/production-orders-app/src/services/system.service.js:282:28)
+    at async /home/production-app/production-orders-app/src/server-production.js:413:28 {
+  length: 99,
+  severity: 'ERROR',
+  code: '22001',
+  detail: undefined,
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'varchar.c',
+  line: '638',
+  routine: 'varchar'
+}
+2025-08-12T20:08:49: Error occurred: {
+  error: 'column "order_number" of relation "machines" does not exist',
+  stack: 'error: column "order_number" of relation "machines" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.update (/home/production-app/production-orders-app/src/utils/database.js:86:20)\n' +
+    '    at async MachinesService.updateMachine (/home/production-app/production-orders-app/src/services/machines.service.js:122:28)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:134:28',
+  url: '/api/machines/40',
+  method: 'PUT',
+  user: 'admin',
+  timestamp: '2025-08-12T18:08:49.152Z'
+}
+2025-08-12T20:08:51: Error occurred: {
+  error: 'column "order_number" of relation "machines" does not exist',
+  stack: 'error: column "order_number" of relation "machines" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.update (/home/production-app/production-orders-app/src/utils/database.js:86:20)\n' +
+    '    at async MachinesService.updateMachine (/home/production-app/production-orders-app/src/services/machines.service.js:122:28)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:134:28',
+  url: '/api/machines/40',
+  method: 'PUT',
+  user: 'admin',
+  timestamp: '2025-08-12T18:08:51.047Z'
+}
+2025-08-12T20:08:51: ⚙️ Error creating machine type: error: value too long for type character varying(100)
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)
+    at async DatabaseUtils.insert (/home/production-app/production-orders-app/src/utils/database.js:61:20)
+    at async SystemService.createMachineType (/home/production-app/production-orders-app/src/services/system.service.js:282:28)
+    at async /home/production-app/production-orders-app/src/server-production.js:413:28 {
+  length: 99,
+  severity: 'ERROR',
+  code: '22001',
+  detail: undefined,
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'varchar.c',
+  line: '638',
+  routine: 'varchar'
+}
+2025-08-12T20:08:51: Error occurred: {
+  error: 'column "order_number" of relation "machines" does not exist',
+  stack: 'error: column "order_number" of relation "machines" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.update (/home/production-app/production-orders-app/src/utils/database.js:86:20)\n' +
+    '    at async MachinesService.updateMachine (/home/production-app/production-orders-app/src/services/machines.service.js:122:28)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:134:28',
+  url: '/api/machines/40',
+  method: 'PUT',
+  user: 'admin',
+  timestamp: '2025-08-12T18:08:51.237Z'
+}
+2025-08-12T20:08:51: Error occurred: {
+  error: 'column "order_number" of relation "machines" does not exist',
+  stack: 'error: column "order_number" of relation "machines" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.update (/home/production-app/production-orders-app/src/utils/database.js:86:20)\n' +
+    '    at async MachinesService.updateMachine (/home/production-app/production-orders-app/src/services/machines.service.js:122:28)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:134:28',
+  url: '/api/machines/40',
+  method: 'PUT',
+  user: 'admin',
+  timestamp: '2025-08-12T18:08:51.389Z'
+}
+2025-08-12T20:08:52: Error occurred: {
+  error: 'column "order_number" of relation "machines" does not exist',
+  stack: 'error: column "order_number" of relation "machines" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.update (/home/production-app/production-orders-app/src/utils/database.js:86:20)\n' +
+    '    at async MachinesService.updateMachine (/home/production-app/production-orders-app/src/services/machines.service.js:122:28)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:134:28',
+  url: '/api/machines/40',
+  method: 'PUT',
+  user: 'admin',
+  timestamp: '2025-08-12T18:08:52.118Z'
+}
+2025-08-12T20:08:52: Error occurred: {
+  error: 'column "order_number" of relation "machines" does not exist',
+  stack: 'error: column "order_number" of relation "machines" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.update (/home/production-app/production-orders-app/src/utils/database.js:86:20)\n' +
+    '    at async MachinesService.updateMachine (/home/production-app/production-orders-app/src/services/machines.service.js:122:28)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:134:28',
+  url: '/api/machines/40',
+  method: 'PUT',
+  user: 'admin',
+  timestamp: '2025-08-12T18:08:52.457Z'
+}
+2025-08-12T20:08:54: Error occurred: {
+  error: 'column "order_number" of relation "machines" does not exist',
+  stack: 'error: column "order_number" of relation "machines" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.update (/home/production-app/production-orders-app/src/utils/database.js:86:20)\n' +
+    '    at async MachinesService.updateMachine (/home/production-app/production-orders-app/src/services/machines.service.js:122:28)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:134:28',
+  url: '/api/machines/40',
+  method: 'PUT',
+  user: 'admin',
+  timestamp: '2025-08-12T18:08:54.188Z'
+}
+2025-08-12T20:08:54: Error occurred: {
+  error: 'column "order_number" of relation "machines" does not exist',
+  stack: 'error: column "order_number" of relation "machines" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.update (/home/production-app/production-orders-app/src/utils/database.js:86:20)\n' +
+    '    at async MachinesService.updateMachine (/home/production-app/production-orders-app/src/services/machines.service.js:122:28)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:134:28',
+  url: '/api/machines/40',
+  method: 'PUT',
+  user: 'admin',
+  timestamp: '2025-08-12T18:08:54.536Z'
+}
+2025-08-12T20:08:55: Error occurred: {
+  error: 'column "order_number" of relation "machines" does not exist',
+  stack: 'error: column "order_number" of relation "machines" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.update (/home/production-app/production-orders-app/src/utils/database.js:86:20)\n' +
+    '    at async MachinesService.updateMachine (/home/production-app/production-orders-app/src/services/machines.service.js:122:28)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:134:28',
+  url: '/api/machines/40',
+  method: 'PUT',
+  user: 'admin',
+  timestamp: '2025-08-12T18:08:55.662Z'
+}
+2025-08-12T20:08:56: Error occurred: {
+  error: 'column "order_number" of relation "machines" does not exist',
+  stack: 'error: column "order_number" of relation "machines" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.update (/home/production-app/production-orders-app/src/utils/database.js:86:20)\n' +
+    '    at async MachinesService.updateMachine (/home/production-app/production-orders-app/src/services/machines.service.js:122:28)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:134:28',
+  url: '/api/machines/40',
+  method: 'PUT',
+  user: 'admin',
+  timestamp: '2025-08-12T18:08:56.757Z'
+}
+2025-08-12T20:08:57: Error occurred: {
+  error: 'column "order_number" of relation "machines" does not exist',
+  stack: 'error: column "order_number" of relation "machines" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.update (/home/production-app/production-orders-app/src/utils/database.js:86:20)\n' +
+    '    at async MachinesService.updateMachine (/home/production-app/production-orders-app/src/services/machines.service.js:122:28)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:134:28',
+  url: '/api/machines/40',
+  method: 'PUT',
+  user: 'admin',
+  timestamp: '2025-08-12T18:08:57.146Z'
+}
+2025-08-12T20:08:58: Error occurred: {
+  error: 'column "order_number" of relation "machines" does not exist',
+  stack: 'error: column "order_number" of relation "machines" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.update (/home/production-app/production-orders-app/src/utils/database.js:86:20)\n' +
+    '    at async MachinesService.updateMachine (/home/production-app/production-orders-app/src/services/machines.service.js:122:28)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:134:28',
+  url: '/api/machines/40',
+  method: 'PUT',
+  user: 'admin',
+  timestamp: '2025-08-12T18:08:58.250Z'
+}
+2025-08-12T20:08:58: Error occurred: {
+  error: 'column "order_number" of relation "machines" does not exist',
+  stack: 'error: column "order_number" of relation "machines" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.update (/home/production-app/production-orders-app/src/utils/database.js:86:20)\n' +
+    '    at async MachinesService.updateMachine (/home/production-app/production-orders-app/src/services/machines.service.js:122:28)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:134:28',
+  url: '/api/machines/40',
+  method: 'PUT',
+  user: 'admin',
+  timestamp: '2025-08-12T18:08:58.839Z'
+}
+2025-08-12T20:09:00: Error occurred: {
+  error: 'column "order_number" of relation "machines" does not exist',
+  stack: 'error: column "order_number" of relation "machines" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.update (/home/production-app/production-orders-app/src/utils/database.js:86:20)\n' +
+    '    at async MachinesService.updateMachine (/home/production-app/production-orders-app/src/services/machines.service.js:122:28)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:134:28',
+  url: '/api/machines/40',
+  method: 'PUT',
+  user: 'admin',
+  timestamp: '2025-08-12T18:09:00.324Z'
+}
+2025-08-12T20:09:02: Error occurred: {
+  error: 'column "order_number" of relation "machines" does not exist',
+  stack: 'error: column "order_number" of relation "machines" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.update (/home/production-app/production-orders-app/src/utils/database.js:86:20)\n' +
+    '    at async MachinesService.updateMachine (/home/production-app/production-orders-app/src/services/machines.service.js:122:28)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:134:28',
+  url: '/api/machines/40',
+  method: 'PUT',
+  user: 'admin',
+  timestamp: '2025-08-12T18:09:02.709Z'
+}
+2025-08-12T20:09:03: Error occurred: {
+  error: 'column "order_number" of relation "machines" does not exist',
+  stack: 'error: column "order_number" of relation "machines" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.update (/home/production-app/production-orders-app/src/utils/database.js:86:20)\n' +
+    '    at async MachinesService.updateMachine (/home/production-app/production-orders-app/src/services/machines.service.js:122:28)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:134:28',
+  url: '/api/machines/40',
+  method: 'PUT',
+  user: 'admin',
+  timestamp: '2025-08-12T18:09:03.792Z'
+}
+2025-08-12T20:09:05: Error occurred: {
+  error: 'column "order_number" of relation "machines" does not exist',
+  stack: 'error: column "order_number" of relation "machines" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.update (/home/production-app/production-orders-app/src/utils/database.js:86:20)\n' +
+    '    at async MachinesService.updateMachine (/home/production-app/production-orders-app/src/services/machines.service.js:122:28)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:134:28',
+  url: '/api/machines/40',
+  method: 'PUT',
+  user: 'admin',
+  timestamp: '2025-08-12T18:09:05.866Z'
+}

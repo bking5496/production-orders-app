@@ -290,7 +290,7 @@ const EnhancedAlertCard = ({ alert, index }) => {
               {alert.message}
             </p>
             <p className="text-xs text-gray-500">
-              {alert.time.toLocaleTimeString()}
+              {new Date(alert.time).toLocaleTimeString()}
             </p>
           </div>
           
