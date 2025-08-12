@@ -53320,3 +53320,8 @@ Error: bind EADDRINUSE null:3000
 2025-08-12T13:14:32: 🔗 Client acquired from pool
 2025-08-12T13:14:32: 🔓 Client released back to pool
 2025-08-12T13:27:38: 🔌 WebSocket disconnected: admin
+2025-08-12T14:06:55: JWT verification failed: jwt expired
+2025-08-12T14:06:55: JWT verification failed: jwt expired
+2025-08-12T14:06:55: JWT verification failed: jwt expired
+2025-08-12T14:06:58: JWT verification failed: jwt expired
+2025-08-12T14:07:01: JWT verification failed: jwt expired
