@@ -94,9 +94,9 @@ export default function AnalyticsPage() {
         assignments: ensureArray(assignmentsData, 'assignments'),
         summary: summaryData?.data?.summary || summaryData?.summary || {},
         downtime: downtimeData?.data || downtimeData || {},
-        downtimeRecords: downtimeRecordsData?.records || [],
-        downtimeSummary: downtimeRecordsData?.summary || {},
-        categoryBreakdown: downtimeRecordsData?.category_breakdown || {}
+        downtimeRecords: downtimeRecordsData?.data?.records || downtimeRecordsData?.records || [],
+        downtimeSummary: downtimeRecordsData?.data?.summary || downtimeRecordsData?.summary || {},
+        categoryBreakdown: downtimeRecordsData?.data?.category_breakdown || downtimeRecordsData?.category_breakdown || {}
       });
     } catch (error) {
       console.error('Failed to load analytics:', error);
