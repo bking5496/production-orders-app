@@ -343,6 +343,54 @@ app.delete('/api/environments/:id', authenticateToken, requireRole(['admin']), a
   }
 });
 
+// Alerts endpoint - Production stops as alerts
+app.get('/api/alerts', authenticateToken, async (req, res) => {
+  try {
+    const DatabaseUtils = require('./utils/database');
+    
+    // Get recent production stops as alerts
+    const alerts = await DatabaseUtils.raw(`
+      SELECT 
+        ps.id,
+        ps.reason as message,
+        ps.category,
+        ps.created_at as time,
+        ps.resolved_at,
+        ps.supervisor_notified,
+        po.order_number,
+        ps.order_id,
+        CASE 
+          WHEN ps.category IN ('Quality', 'Safety') THEN 'critical'
+          WHEN ps.category IN ('Equipment', 'Material') THEN 'warning'  
+          ELSE 'info'
+        END as type
+      FROM production_stops ps
+      LEFT JOIN production_orders po ON ps.order_id = po.id
+      ORDER BY ps.created_at DESC
+      LIMIT 20
+    `);
+    
+    // Transform to match dashboard format
+    const formattedAlerts = alerts.map(alert => ({
+      id: alert.id,
+      message: `${alert.category}: ${alert.message}${alert.order_number ? ` (${alert.order_number})` : ''}`,
+      type: alert.type,
+      time: new Date(alert.time),
+      resolved: !!alert.resolved_at,
+      order_id: alert.order_id
+    }));
+    
+    return res.success(formattedAlerts, 'Alerts retrieved successfully');
+  } catch (error) {
+    console.error('🔔 Error retrieving alerts:', error);
+    return res.status(500).json({
+      success: false,
+      error: error.message,
+      message: 'Failed to retrieve alerts'
+    });
+  }
+});
+
 // Machine Types endpoints - direct forwarding to system service
 app.get('/api/machine-types', authenticateToken, async (req, res) => {
   try {

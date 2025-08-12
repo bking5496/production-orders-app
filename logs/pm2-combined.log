@@ -51443,3 +51443,4 @@ Error: bind EADDRINUSE null:3000
 2025-08-12T07:52:58: 🔓 Client released back to pool
 2025-08-12T07:52:58: 🔗 Client acquired from pool
 2025-08-12T07:52:58: 🔓 Client released back to pool
+2025-08-12T08:28:38: 🔌 WebSocket disconnected: admin
