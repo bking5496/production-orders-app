@@ -52283,3 +52283,7 @@ Error: bind EADDRINUSE null:3000
 2025-08-12T09:39:38: ✅ New PostgreSQL client connected
 2025-08-12T09:39:38: 🔗 Client acquired from pool
 2025-08-12T09:39:38: 🔓 Client released back to pool
+2025-08-12T09:40:40: ✅ New PostgreSQL client connected
+2025-08-12T09:40:40: 🔗 Client acquired from pool
+2025-08-12T09:40:40: 🔓 Client released back to pool
+2025-08-12T09:45:40: 🔌 WebSocket disconnected: admin
