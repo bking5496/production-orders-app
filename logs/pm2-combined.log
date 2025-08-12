@@ -51203,3 +51203,70 @@ Error: bind EADDRINUSE null:3000
 ]
 2025-08-11T23:13:24: 🏠 admin joined room: production
 2025-08-11T23:16:50: 🔌 WebSocket disconnected: admin
+2025-08-12T07:48:07: ✅ New PostgreSQL client connected
+2025-08-12T07:48:07: 🔗 Client acquired from pool
+2025-08-12T07:48:07: ✅ New PostgreSQL client connected
+2025-08-12T07:48:07: 🔗 Client acquired from pool
+2025-08-12T07:48:07: 🔓 Client released back to pool
+2025-08-12T07:48:07: 🔓 Client released back to pool
+2025-08-12T07:48:07: 🔗 Client acquired from pool
+2025-08-12T07:48:07: 🔓 Client released back to pool
+2025-08-12T07:48:07: 🔗 Client acquired from pool
+2025-08-12T07:48:07: 🔓 Client released back to pool
+2025-08-12T07:48:07: 🔗 Client acquired from pool
+2025-08-12T07:48:07: 🔗 Client acquired from pool
+2025-08-12T07:48:07: 🔓 Client released back to pool
+2025-08-12T07:48:07: 🔓 Client released back to pool
+2025-08-12T07:48:07: ✅ New PostgreSQL client connected
+2025-08-12T07:48:07: 🔗 Client acquired from pool
+2025-08-12T07:48:07: 🔓 Client released back to pool
+2025-08-12T07:48:07: 🔗 Client acquired from pool
+2025-08-12T07:48:07: 🔓 Client released back to pool
+2025-08-12T07:48:07: New WebSocket connection attempt
+2025-08-12T07:48:07: ✅ WebSocket authenticated: admin (admin)
+2025-08-12T07:48:07: 🔗 Client acquired from pool
+2025-08-12T07:48:07: 🔓 Client released back to pool
+2025-08-12T07:48:07: 🔗 Client acquired from pool
+2025-08-12T07:48:07: 🔓 Client released back to pool
+2025-08-12T07:48:07: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-12T07:48:07: 🏠 admin joined room: production
+2025-08-12T07:48:07: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-12T07:48:07: 🏠 admin joined room: production
+2025-08-12T07:48:38: ✅ New PostgreSQL client connected
+2025-08-12T07:48:38: 🔗 Client acquired from pool
+2025-08-12T07:48:38: ✅ New PostgreSQL client connected
+2025-08-12T07:48:38: 🔗 Client acquired from pool
+2025-08-12T07:48:38: 🔓 Client released back to pool
+2025-08-12T07:48:38: 🔓 Client released back to pool
+2025-08-12T07:48:38: ✅ New PostgreSQL client connected
+2025-08-12T07:48:38: 🔗 Client acquired from pool
+2025-08-12T07:48:38: 🔓 Client released back to pool
+2025-08-12T07:49:08: 🔗 Client acquired from pool
+2025-08-12T07:49:08: 🔗 Client acquired from pool
+2025-08-12T07:49:08: 🔗 Client acquired from pool
+2025-08-12T07:49:08: 🔓 Client released back to pool
+2025-08-12T07:49:08: 🔓 Client released back to pool
+2025-08-12T07:49:08: 🔓 Client released back to pool
+2025-08-12T07:49:38: 🔗 Client acquired from pool
+2025-08-12T07:49:38: 🔗 Client acquired from pool
+2025-08-12T07:49:38: 🔓 Client released back to pool
+2025-08-12T07:49:38: 🔓 Client released back to pool
+2025-08-12T07:49:38: ✅ New PostgreSQL client connected
+2025-08-12T07:49:38: 🔗 Client acquired from pool
+2025-08-12T07:49:38: 🔓 Client released back to pool

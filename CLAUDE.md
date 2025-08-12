@@ -12,18 +12,14 @@
 - Everything with a list or step by step process needs to be configurable.
 
 ## Recent Major Changes
-- **2025-08-11:** **🏗️ ARCHITECTURE MIGRATION COMPLETE:** Fully migrated to modular server architecture, archived monolithic server.js
-- **2025-08-11:** **🗂️ SERVER ARCHIVAL:** Moved legacy server.js to archived/server-monolithic.js for reference
+- **2025-08-11:** **✅ ATTENDANCE REGISTER FIX:** Fixed validation errors in attendance endpoint - now accepts null check_in_time values
+- **2025-08-11:** **🏗️ PRODUCTION SERVER ACTIVE:** Using `/src/server-production.js` as primary server on port 3000 (oracles.africa)
+- **2025-08-11:** **🔧 WEBSOCKET & API FIXES:** Fixed environments/machines endpoints, WebSocket authentication, resume functionality
 - **2025-08-07:** **🏗️ MAJOR ARCHITECTURE REFACTORING:** Complete server.js modularization from 3,889 lines to maintainable service architecture
 - **2025-08-07:** **🌐 WEBSOCKET SERVICE EXTRACTION:** Advanced real-time communication with JWT auth, channels, and room management
-- **2025-08-07:** **⚙️ SYSTEM MANAGEMENT:** Complete system health monitoring, settings, and configuration endpoints
-- **2025-08-07:** **📊 ANALYTICS & REPORTING:** Comprehensive business intelligence and CSV export capabilities
 - **2025-08-02:** **DYNAMIC CONFIGURATION SYSTEM:** Implemented comprehensive configurable system for all lists and workflows
 - **2025-08-02:** **POSTGRESQL MIGRATION:** Complete migration from SQLite to PostgreSQL with enhanced performance
-- **2025-08-01:** **MAJOR UPGRADE:** Complete mobile responsiveness transformation with touch-optimized components
-- **2025-08-01:** **WEBSOCKET INTEGRATION:** Real-time WebSocket system with enhanced hooks and auto-reconnection
 - **2025-08-01:** **REACT 19 UPGRADE:** Upgraded to React 19.1.0 with modern concurrent features
-- **2025-08-01:** **MOBILE ARCHITECTURE:** Added comprehensive mobile components and adaptive refresh system
 
 ## Knowledge Management
 - Use byterover-mcp to store and retrieve knowledge and context
@@ -54,292 +50,151 @@ const dbPassword = getSecret('DB_PASSWORD');
 PGPASSWORD=$(node -e "console.log(require('./security/secrets-manager').getSecret('DB_PASSWORD'))") psql -h localhost -U postgres -d production_orders
 ```
 
-## 🔄 Server Management & Rebuilding
+## 🔄 Server Management & Production Deployment
+
+### **CURRENT PRODUCTION SERVER**
+- **File:** `/home/production-app/production-orders-app/src/server-production.js`
+- **URL:** `https://oracles.africa` (port 3000)
+- **PM2 Process:** `production-management`
+- **Status:** ✅ Active and serving production traffic
 
 ### **After Code Updates - CRITICAL PROCESS**
-When making changes to server-side code (server.js, endpoints, database functions), follow these steps:
-
-1. **Stop PM2 Server:**
 ```bash
-npx pm2 stop production-management
-npx pm2 delete production-management
-```
+# 1. Restart PM2 server (no rebuild needed for server changes)
+npx pm2 restart production-management
 
-2. **Rebuild Application:**
-```bash
-npm run build
-```
-
-3. **Restart with PM2:**
-```bash
-npx pm2 start server.js --name "production-management"
-npx pm2 save
-```
-
-4. **Verify Restart:**
-```bash
+# 2. Verify restart
 npx pm2 status
 npx pm2 logs production-management --lines 20
+
+# 3. Test health
+curl https://oracles.africa/api/health
 ```
 
-### **Development vs Production**
-- **Development:** Use `npm run dev` for hot reload
-- **Production:** Always use PM2 for process management
-- **After updates:** Always rebuild before restarting PM2
+### **For Frontend Changes Only**
+```bash
+# Build and deploy frontend
+npm run build
+```
 
 ### **Database Connection Verification**
 ```bash
 # Check database health
-curl http://localhost:3000/api/health
+curl https://oracles.africa/api/health
 
 # Direct database test
 PGPASSWORD=$(node -e "console.log(require('./security/secrets-manager').getSecret('DB_PASSWORD'))") psql -h localhost -U postgres -d production_orders -c "SELECT NOW();"
 ```
 
-## 🏗️ **Refactored Architecture - Modular Design**
+## 🏗️ **Current File Structure**
 
-### **🎯 Architecture Overview**
-**TRANSFORMATION COMPLETE:** Successfully refactored monolithic 3,889-line server.js into maintainable, scalable service architecture.
-
-### **📁 File Structure**
+### **📁 Production Architecture**
 ```
 /home/production-app/production-orders-app/
-├── src/                           # 🏗️ NEW: Modular Backend Architecture
-│   ├── config/                    # Configuration management
+├── src/
+│   ├── server-production.js      # 🎯 MAIN PRODUCTION SERVER (port 3000)
+│   ├── config/
 │   │   └── database.js           # PostgreSQL connection & pooling
-│   ├── middleware/               # Express middleware components
+│   ├── middleware/
 │   │   ├── auth.js              # JWT authentication & role-based access
 │   │   ├── error-handler.js     # Global error handling & custom errors
 │   │   └── websocket.js         # WebSocket integration middleware
-│   ├── services/                # Business logic layer (NEW)
+│   ├── services/                # Business logic layer
 │   │   ├── orders.service.js    # Production orders management
 │   │   ├── machines.service.js  # Machine lifecycle & performance
 │   │   ├── users.service.js     # User management & authentication
-│   │   ├── labor.service.js     # Labor planning & assignments
+│   │   ├── labor.service.js     # Labor planning & assignments ✅
 │   │   ├── analytics.service.js # Dashboard metrics & analytics
 │   │   ├── reports.service.js   # Reporting & CSV exports
 │   │   ├── websocket.service.js # Real-time communication
 │   │   └── system.service.js    # System settings & health
-│   ├── routes/                  # HTTP endpoint definitions (NEW)
+│   ├── routes/                  # HTTP endpoint definitions
 │   │   ├── auth.routes.js       # Authentication endpoints
 │   │   ├── orders.routes.js     # Production orders API
 │   │   ├── machines.routes.js   # Machine management API
 │   │   ├── users.routes.js      # User management API
-│   │   ├── labor.routes.js      # Labor planning API
+│   │   ├── labor.routes.js      # Labor planning API ✅ FIXED
 │   │   ├── analytics.routes.js  # Dashboard & analytics API
 │   │   ├── reports.routes.js    # Reporting API
 │   │   └── system.routes.js     # System management API
-│   ├── utils/                   # Utility functions (NEW)
+│   ├── utils/                   # Utility functions
 │   │   ├── database.js          # Database CRUD utilities
 │   │   └── response.js          # Standardized API responses
-│   └── server-refactored.js     # 🧪 TEST: Modular server (port 3001)
-├── src/js/                      # Frontend React Components
-│   ├── components/              # React UI components
-│   ├── core/                    # Core frontend utilities
-│   └── utils/                   # Frontend utilities
-├── security/                    # Security & secrets management
+│   └── js/                      # Frontend React Components
+│       ├── components/          # React UI components
+│       ├── core/               # Core frontend utilities
+│       └── utils/              # Frontend utilities
+├── security/
 │   └── secrets-manager.js       # Environment secrets
-├── server.js                    # 📜 LEGACY: Original monolithic server
-├── REFACTORING-PROGRESS.md      # 📊 Detailed refactoring documentation
-└── CLAUDE.md                    # 📖 This file
+├── ecosystem.config.js          # PM2 configuration
+└── CLAUDE.md                   # 📖 This file
 ```
 
-### **🔧 Service Layer Architecture**
 
-**Business Logic Separation:**
-```javascript
-// Service handles pure business logic
-class OrdersService {
-  async createOrder(orderData, userId) {
-    // Validation, business rules, database operations
-    const order = await DatabaseUtils.insert('production_orders', {
-      ...orderData,
-      created_by: userId,
-      created_at: new Date()
-    });
-    return order;
-  }
-}
-
-// Route handles HTTP concerns & real-time notifications
-router.post('/orders', 
-  authenticateToken, 
-  requireRole(['admin', 'supervisor']),
-  [body('order_number').notEmpty()],
-  asyncHandler(async (req, res) => {
-    const order = await ordersService.createOrder(req.body, req.user.id);
-    req.broadcast('order_created', order, 'production'); // WebSocket
-    return res.success(order, 'Order created successfully', 201);
-  })
-);
-```
-
-### **🌐 WebSocket Real-Time System**
-
-**Advanced Features:**
-- **JWT Authentication:** Secure WebSocket connections with token validation
-- **Channel Subscriptions:** Role-based channel access (`admin`, `production`, `machines`)
-- **Room Management:** Targeted broadcasting for specific groups
-- **Auto-Cleanup:** Inactive connection management
-- **Heartbeat Monitoring:** Connection health verification
-
-**Usage Pattern:**
-```javascript
-// In any route - broadcast real-time updates
-req.broadcast('machine_status_changed', machineData, 'machines');
-req.websocket.sendToUser(userId, 'notification', alertData);
-req.websocket.getConnectedCount(); // Monitor connections
-```
-
-### **📊 System Health & Monitoring**
-
-**Comprehensive Health Checks:**
-```bash
-# System health endpoint
-curl http://localhost:3001/api/system/health
-
-# Response includes:
-{
-  "status": "healthy",
-  "database": { "status": "connected", "totalTables": 49 },
-  "system": { "uptime": 123.45, "memory": {...} },
-  "services": { "websocket": "running", "authentication": "running" }
-}
-```
-
-### **⚙️ Database Layer**
-
-**Connection Management:**
-- **PostgreSQL Pooling:** Efficient connection reuse
-- **Transaction Support:** ACID compliance for complex operations
-- **CRUD Utilities:** Standardized database operations
-- **Query Optimization:** Prepared statements and connection pooling
-
-**Usage:**
-```javascript
-const DatabaseUtils = require('./src/utils/database');
-
-// Standardized operations
-const orders = await DatabaseUtils.select('production_orders', { status: 'active' });
-const newOrder = await DatabaseUtils.insert('production_orders', orderData, '*');
-await DatabaseUtils.transaction([
-  { text: 'INSERT INTO orders...', params: [...] },
-  { text: 'UPDATE inventory...', params: [...] }
-]);
-```
-
-### **🔒 Security & Authentication**
-
-**Multi-Layer Security:**
-- **JWT Tokens:** Stateless authentication with role-based access
-- **Secrets Manager:** Environment-based secret management
-- **Role Validation:** Granular permission controls
-- **Request Validation:** Express-validator integration
-- **WebSocket Security:** Token-based WebSocket authentication
-
-### **📈 Benefits Achieved**
-1. **Modularity:** 8 focused service classes vs 1 monolithic file
-2. **Maintainability:** Clear separation of concerns
-3. **Scalability:** Independent service scaling
-4. **Testing:** Unit testable components
-5. **Team Development:** Multiple developers can work simultaneously
-6. **Real-Time:** Advanced WebSocket integration
-7. **Monitoring:** Comprehensive health and performance tracking
-
-## 🔧 Dynamic Configuration System
-
-### **Core Principle**
-Everything with a list or step-by-step process is now fully configurable through the admin interface. No more hardcoded values in components.
-
-### **Configuration Categories:**
-1. **Order Management:** Statuses, priorities, transitions, validation rules
-2. **Machine Management:** Statuses, types, environments, capacity settings
-3. **User Roles:** Role definitions, permission matrices, access controls
-4. **Production Workflow:** Stop reasons, quality checkpoints, waste types
-5. **Business Rules:** Operational constraints, validation thresholds
-6. **UI Settings:** Display preferences, color schemes, interface options
-7. **System Settings:** Core configuration, external integrations
-
-### **Database Schema:**
-```sql
-configuration_categories    -- Category definitions
-configuration_items        -- Individual config items with validation
-configuration_history      -- Change tracking and audit trail
-```
-
-### **Frontend Integration:**
-```jsx
-// Use dynamic configuration in components
-import { useDynamicConfig, useConfigArray } from '../core/dynamic-config.js';
-import { DynamicStatusBadge, DynamicStatusSelect } from './dynamic-status-badge.jsx';
-
-// Get order statuses dynamically
-const { items: orderStatuses } = useConfigArray('order_management.order_statuses');
-
-// Use configurable status components
-<DynamicStatusBadge status={order.status} type="order" />
-<DynamicStatusSelect value={status} onChange={setStatus} type="order" />
-```
-
-### **API Endpoints:**
-- `GET /api/config/public` - Public configuration for frontend
-- `GET /api/config/categories` - Admin: Configuration categories
-- `PUT /api/config/items/:id` - Admin: Update configuration
-- `GET /api/config/items/:id/history` - Admin: Change history
-- `GET /api/config/export` - Admin: Export all configurations
-
-### **Real-time Updates:**
-Configuration changes broadcast via WebSocket to all connected clients for immediate updates without page refresh.
-
-### **Development Guidelines:**
-- **NEVER hardcode lists or statuses** - Always use dynamic configuration
-- **Use configuration hooks** - `useDynamicConfig()`, `useConfigArray()`, `useConfigObject()`
-- **Validate against configuration** - Use `ConfigUtils.isValidStatusTransition()`
-- **Update through admin interface** - Not code changes
 
 ## 🔧 Development Rules & Standards
 
 ### **CRITICAL DEVELOPMENT GUIDELINES** (Must Follow)
 
-1. **📁 File Management:**
+1. **🎯 Production Server:**
+   - **ALWAYS use `/src/server-production.js`** - This is the active production server
+   - **Port 3000** serves oracles.africa
+   - **Never modify archived/legacy files** unless specifically needed
+
+2. **📁 File Management:**
    - **NEVER create new files if existing ones serve the purpose**
    - Always check for existing components, utilities, or modules first
    - Prefer editing/extending existing files over creating duplicates
-   - Only create new files when implementing entirely new features
 
-2. **🗃️ Database Schema:**
+3. **🗃️ Database Schema:**
    - **NEVER create new database columns if existing ones exist**
    - Always check current schema before adding columns
    - Use `ALTER TABLE ADD COLUMN IF NOT EXISTS` for safety
-   - Verify column existence with information_schema queries
 
-3. **🔌 API Development:**
-   - **NEVER create duplicate API endpoints**
-   - Check existing routes in server.js before adding new ones
-   - Extend existing endpoints with new functionality when possible
+4. **🔌 API Development:**
+   - **Check existing routes in server-production.js before adding new ones**
    - Follow REST conventions and existing naming patterns
+   - **Use proper Express validator patterns:**
+     ```javascript
+     // For optional fields that can be null:
+     body('field_name').optional({ nullable: true }).validation_method()
+     ```
 
-4. **⚡ Full-Stack Integration:**
+5. **⚡ Full-Stack Integration:**
    - **ALL new features must update backend, frontend, AND database**
-   - Database changes require corresponding API updates
-   - API changes require frontend component updates
    - Test integration across all three layers
+   - Always restart PM2 after server changes: `npx pm2 restart production-management`
 
-5. **🏗️ File Structure Preservation:**
-   - **Maintain existing file organization structure**
-   - Follow established patterns in `/src/js/components/`
-   - Use existing utility files in `/src/js/utils/`
-   - Respect the modular architecture
-
-6. **📤 Version Control:**
-   - **COMMIT ALL CHANGES to GitHub after completion**
-   - Use descriptive commit messages with feature context
-   - Include all modified files (backend, frontend, database)
-   - Follow existing commit message patterns
-
-7. **⚙️ Configuration Management:**
+6. **⚙️ Configuration Management:**
    - **ALL lists and step-by-step processes MUST be configurable**
    - Use dynamic configuration system instead of hardcoded values
    - Never hardcode status lists, user roles, or workflow steps
-   - Always use `useDynamicConfig()` hooks for configuration data
-   - Update configuration through admin interface, not code changes
+
+## 🔧 Recent Fixes Applied
+
+### **✅ Attendance Register Validation (August 11, 2025)**
+**Problem:** Frontend getting "400 Bad Request" validation errors when marking attendance
+**Solution:** Fixed validation in `src/routes/labor.routes.js:264`
+```javascript
+// BEFORE (broken):
+body('check_in_time').optional().matches(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/)
+
+// AFTER (fixed):
+body('check_in_time').optional({ nullable: true }).matches(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/)
+```
+**Status:** ✅ Fully resolved and tested
+
+### **✅ Production Server Routes (August 11, 2025)**
+- Fixed broken route redirection in server-production.js
+- Implemented direct service forwarding for `/api/environments` and `/api/machines`
+- Added missing `resume_time` column to production_orders table
+- Fixed WebSocket token authentication
+
+## 📝 Important Notes for Tomorrow
+1. **Continue with:** Next tasks or features as needed
+2. **Server Status:** Production server stable on oracles.africa:3000
+3. **Knowledge Base:** All fixes documented in byterover-mcp
+4. **Architecture:** Modular design working well, no major changes needed
+
+---
+*Last Updated: August 11, 2025 - All critical fixes applied and verified*
