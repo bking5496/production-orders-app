@@ -530,9 +530,8 @@ const Sidebar = ({ isOpen, onClose }) => {
         { name: 'Maturation Room', href: '/maturation-room', icon: 'package', priority: 'daily', roles: ['operator', 'supervisor', 'manager', 'admin'] },
         { name: 'Analytics', href: '/analytics', icon: 'barChart3', priority: 'management', roles: ['manager', 'admin'] },
         { name: 'Shift Reports', href: '/shift-reports', icon: 'clock', priority: 'management', roles: ['supervisor', 'manager', 'admin'] },
-        { name: 'Users', href: '/users', icon: 'users', priority: 'management', roles: ['admin'] },
         { name: 'Settings', href: '/settings', icon: 'settings', priority: 'management', roles: ['supervisor', 'manager', 'admin'] },
-        { name: 'Admin', href: '/admin', icon: 'shield', priority: 'management', roles: ['admin'] },
+        { name: 'Admin & Users', href: '/admin', icon: 'shield', priority: 'management', roles: ['admin'] },
     ];
 
     const navigation = allNavigation.filter(item => 
