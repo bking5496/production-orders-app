@@ -450,22 +450,22 @@ export default function Dashboard() {
         on_time_delivery: onTimeDelivery
       };
 
-      // Generate mock alerts for demo
-      const mockAlerts = [
-        { message: 'Machine M001 efficiency below threshold', type: 'warning', time: new Date() },
-        { message: 'Order ORD-2024-001 completed successfully', type: 'info', time: new Date(Date.now() - 300000) },
-        { message: 'Quality check required for Batch B123', type: 'critical', time: new Date(Date.now() - 600000) }
-      ].slice(0, Math.floor(Math.random() * 3) + 1);
+      // Calculate alert stats
+      const alertStats = {
+        critical: alerts.filter(a => a.type === 'critical').length,
+        warning: alerts.filter(a => a.type === 'warning').length,
+        info: alerts.filter(a => a.type === 'info').length
+      };
 
       setStats({
         orders: orderStats,
         machines: machineStats,
         production: productionStats,
-        alerts: { critical: 1, warning: 2, info: 1 }
+        alerts: alertStats
       });
       
       setRecentOrders(orders.slice(0, 5));
-      setRecentAlerts(mockAlerts);
+      setRecentAlerts(alerts.slice(0, 5));
       
       // Update sparkline data
       setSparklineData(prev => ({
