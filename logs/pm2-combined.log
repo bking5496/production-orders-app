@@ -53506,3 +53506,27 @@ Error: bind EADDRINUSE null:3000
   'analytics'
 ]
 2025-08-12T14:59:43: 🏠 admin joined room: production
+2025-08-12T15:00:13: ✅ New PostgreSQL client connected
+2025-08-12T15:00:13: 🔗 Client acquired from pool
+2025-08-12T15:00:13: 🔓 Client released back to pool
+2025-08-12T15:00:43: 🔗 Client acquired from pool
+2025-08-12T15:00:43: 🔓 Client released back to pool
+2025-08-12T15:01:13: ✅ New PostgreSQL client connected
+2025-08-12T15:01:13: 🔗 Client acquired from pool
+2025-08-12T15:01:13: 🔓 Client released back to pool
+2025-08-12T15:01:43: 🔗 Client acquired from pool
+2025-08-12T15:01:43: 🔓 Client released back to pool
+2025-08-12T15:02:13: ✅ New PostgreSQL client connected
+2025-08-12T15:02:13: 🔗 Client acquired from pool
+2025-08-12T15:02:13: 🔓 Client released back to pool
+2025-08-12T15:02:43: 🔗 Client acquired from pool
+2025-08-12T15:02:43: 🔓 Client released back to pool
+2025-08-12T15:03:13: ✅ New PostgreSQL client connected
+2025-08-12T15:03:13: 🔗 Client acquired from pool
+2025-08-12T15:03:13: 🔓 Client released back to pool
+2025-08-12T15:03:43: 🔗 Client acquired from pool
+2025-08-12T15:03:43: 🔓 Client released back to pool
+2025-08-12T15:04:34: ✅ New PostgreSQL client connected
+2025-08-12T15:04:34: 🔗 Client acquired from pool
+2025-08-12T15:04:34: 🔓 Client released back to pool
+2025-08-12T15:04:36: 🔌 WebSocket disconnected: admin
