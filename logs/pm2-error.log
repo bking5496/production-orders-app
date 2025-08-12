@@ -31270,3 +31270,45 @@ Error: bind EADDRINUSE null:3000
   user: 'admin',
   timestamp: '2025-08-12T18:28:41.661Z'
 }
+2025-08-12T20:30:02: Error occurred: {
+  error: 'column "deactivated_at" of relation "users" does not exist',
+  stack: 'error: column "deactivated_at" of relation "users" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.update (/home/production-app/production-orders-app/src/utils/database.js:86:20)\n' +
+    '    at async UsersService.deactivateUser (/home/production-app/production-orders-app/src/services/users.service.js:282:5)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/users.routes.js:237:29',
+  url: '/api/users/8',
+  method: 'DELETE',
+  user: 'admin',
+  timestamp: '2025-08-12T18:30:02.126Z'
+}
+2025-08-12T20:30:03: Error occurred: {
+  error: 'column "deactivated_at" of relation "users" does not exist',
+  stack: 'error: column "deactivated_at" of relation "users" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.update (/home/production-app/production-orders-app/src/utils/database.js:86:20)\n' +
+    '    at async UsersService.deactivateUser (/home/production-app/production-orders-app/src/services/users.service.js:282:5)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/users.routes.js:237:29',
+  url: '/api/users/8',
+  method: 'DELETE',
+  user: 'admin',
+  timestamp: '2025-08-12T18:30:03.201Z'
+}
+2025-08-12T20:30:05: Error occurred: {
+  error: 'column "deactivated_at" of relation "users" does not exist',
+  stack: 'error: column "deactivated_at" of relation "users" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.update (/home/production-app/production-orders-app/src/utils/database.js:86:20)\n' +
+    '    at async UsersService.deactivateUser (/home/production-app/production-orders-app/src/services/users.service.js:282:5)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/users.routes.js:237:29',
+  url: '/api/users/8',
+  method: 'DELETE',
+  user: 'admin',
+  timestamp: '2025-08-12T18:30:05.281Z'
+}

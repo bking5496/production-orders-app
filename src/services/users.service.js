@@ -180,8 +180,7 @@ class UsersService {
       phone: phone ? phone.trim() : null,
       profile_data: JSON.stringify(profile_data),
       is_active: true,
-      created_at: new Date(),
-      created_by: createdByUserId
+      created_at: new Date()
     });
 
     // Return user without password hash
@@ -233,7 +232,6 @@ class UsersService {
     delete cleanUpdateData.password_hash;
     delete cleanUpdateData.created_at;
     delete cleanUpdateData.updated_at;
-    delete cleanUpdateData.updated_by;
     
     // Trim string fields
     if (cleanUpdateData.username) cleanUpdateData.username = cleanUpdateData.username.trim();
@@ -251,8 +249,7 @@ class UsersService {
       'users',
       {
         ...cleanUpdateData,
-        updated_at: new Date(),
-        updated_by: updatedByUserId
+        updated_at: new Date()
       },
       { id }
     );
@@ -283,8 +280,7 @@ class UsersService {
       'users',
       {
         is_active: false,
-        deactivated_at: new Date(),
-        deactivated_by: deactivatedByUserId
+        updated_at: new Date()
       },
       { id }
     );
@@ -303,10 +299,7 @@ class UsersService {
       'users',
       {
         is_active: true,
-        reactivated_at: new Date(),
-        reactivated_by: reactivatedByUserId,
-        deactivated_at: null,
-        deactivated_by: null
+        updated_at: new Date()
       },
       { id }
     );
