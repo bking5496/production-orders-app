@@ -423,7 +423,7 @@ export default function LabourLayoutPage() {
                                                                 <tr key={`supervisor-${supervisor.id}`} className="hover:bg-blue-50 transition-colors">
                                                                     <td className="px-6 py-4 whitespace-nowrap">
                                                                         <span className="text-sm text-gray-600 font-mono font-semibold">
-                                                                            {formatEmployeeCode(supervisor.employee_code)}
+                                                                            ID: {formatEmployeeCode(supervisor.employee_code)}
                                                                         </span>
                                                                     </td>
                                                                     <td className="px-6 py-4 whitespace-nowrap">
@@ -496,7 +496,7 @@ export default function LabourLayoutPage() {
                                                                 <tr key={`assignment-${assignment.id}`} className="hover:bg-green-50 transition-colors">
                                                                     <td className="px-6 py-4 whitespace-nowrap">
                                                                         <span className="text-sm text-gray-600 font-mono font-semibold">
-                                                                            {formatEmployeeCode(assignment.employee_code)}
+                                                                            ID: {formatEmployeeCode(assignment.employee_code)}
                                                                         </span>
                                                                     </td>
                                                                     <td className="px-6 py-4 whitespace-nowrap">

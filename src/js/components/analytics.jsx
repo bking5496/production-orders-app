@@ -154,10 +154,9 @@ export default function AnalyticsPage() {
       const completedOrders = archivedOrders?.data || archivedOrders || [];
       const wasteReportsData = wasteData?.data || wasteData || [];
       
-      // Merge with existing analytics orders
+      // Replace archived orders (don't append to avoid duplicates)
       setAnalytics(prev => ({
         ...prev,
-        orders: [...prev.orders, ...completedOrders],
         archivedOrders: completedOrders
       }));
       
@@ -178,7 +177,6 @@ export default function AnalyticsPage() {
         const completedOrders = completedOrdersResponse?.data || completedOrdersResponse || [];
         setAnalytics(prev => ({
           ...prev,
-          orders: [...prev.orders, ...completedOrders],
           archivedOrders: completedOrders
         }));
         console.log('Loaded completed orders from alternative endpoint:', completedOrders.length);

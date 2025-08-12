@@ -26,7 +26,7 @@ export default function DowntimeReport() {
       });
       
       const response = await API.get(`/reports/downtime?${queryParams}`);
-      setDowntimeData(response);
+      setDowntimeData(response?.data || response);
     } catch (error) {
       setError('Failed to load downtime data');
       console.error('Downtime report error:', error);
