@@ -596,6 +596,11 @@ class LaborService {
         u.username,
         u.email,
         u.role,
+        CASE 
+          WHEN u.employee_code IS NOT NULL AND u.employee_code != '' THEN u.employee_code
+          WHEN u.profile_data->>'employee_code' IS NOT NULL AND u.profile_data->>'employee_code' != '' THEN u.profile_data->>'employee_code'
+          ELSE LPAD(u.id::text, 4, '0')
+        END as employee_code,
         la.shift_type
       FROM labor_assignments la
       JOIN users u ON la.employee_id = u.id
@@ -618,7 +623,7 @@ class LaborService {
         id: s.id,
         fullName: s.username,
         name: s.username,
-        employee_code: `EMP${s.id.toString().padStart(4, '0')}`,
+        employee_code: s.employee_code,
         shift: s.shift_type || 'day',
         status: 'scheduled',
         role: s.role,
