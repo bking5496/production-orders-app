@@ -401,21 +401,24 @@ export default function Dashboard() {
     else setLoading(true);
     
     try {
-      const [ordersResponse, machinesResponse, usersResponse] = await Promise.all([
+      const [ordersResponse, machinesResponse, usersResponse, alertsResponse] = await Promise.all([
         API.get('/orders').catch(() => ({ data: [] })),
         API.get('/machines').catch(() => ({ data: [] })),
-        API.get('/users').catch(() => ({ data: [] }))
+        API.get('/users').catch(() => ({ data: [] })),
+        API.get('/alerts').catch(() => ({ data: [] }))
       ]);
 
       // Ensure all responses are arrays
       const orders = ensureArray(ordersResponse, 'orders');
       const machines = ensureArray(machinesResponse, 'machines');  
       const users = ensureArray(usersResponse, 'users');
+      const alerts = ensureArray(alertsResponse, 'alerts');
       
       console.log('📊 Dashboard data loaded:');
       console.log('  - Orders:', orders.length, 'items');
       console.log('  - Machines:', machines.length, 'items');
       console.log('  - Users:', users.length, 'items');
+      console.log('  - Alerts:', alerts.length, 'items');
       
       // Calculate comprehensive order stats with array safety
       const orderStats = {
