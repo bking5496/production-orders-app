@@ -227,6 +227,14 @@ class UsersService {
     // Prepare update data
     const cleanUpdateData = { ...updateData };
     
+    // Remove fields that shouldn't be updated directly
+    delete cleanUpdateData.id;
+    delete cleanUpdateData.password; // Password updates should use separate endpoint
+    delete cleanUpdateData.password_hash;
+    delete cleanUpdateData.created_at;
+    delete cleanUpdateData.updated_at;
+    delete cleanUpdateData.updated_by;
+    
     // Trim string fields
     if (cleanUpdateData.username) cleanUpdateData.username = cleanUpdateData.username.trim();
     if (cleanUpdateData.email) cleanUpdateData.email = cleanUpdateData.email.toLowerCase().trim();

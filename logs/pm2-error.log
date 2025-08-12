@@ -31186,3 +31186,87 @@ Error: bind EADDRINUSE null:3000
   user: 'admin',
   timestamp: '2025-08-12T18:13:59.041Z'
 }
+2025-08-12T20:21:09: Error occurred: {
+  error: 'column "password" of relation "users" does not exist',
+  stack: 'error: column "password" of relation "users" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.update (/home/production-app/production-orders-app/src/utils/database.js:86:20)\n' +
+    '    at async UsersService.updateUser (/home/production-app/production-orders-app/src/services/users.service.js:242:5)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/users.routes.js:165:25',
+  url: '/api/users/5',
+  method: 'PUT',
+  user: 'admin',
+  timestamp: '2025-08-12T18:21:09.521Z'
+}
+2025-08-12T20:21:10: Error occurred: {
+  error: 'column "password" of relation "users" does not exist',
+  stack: 'error: column "password" of relation "users" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.update (/home/production-app/production-orders-app/src/utils/database.js:86:20)\n' +
+    '    at async UsersService.updateUser (/home/production-app/production-orders-app/src/services/users.service.js:242:5)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/users.routes.js:165:25',
+  url: '/api/users/5',
+  method: 'PUT',
+  user: 'admin',
+  timestamp: '2025-08-12T18:21:10.710Z'
+}
+2025-08-12T20:21:13: Error occurred: {
+  error: 'column "password" of relation "users" does not exist',
+  stack: 'error: column "password" of relation "users" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.update (/home/production-app/production-orders-app/src/utils/database.js:86:20)\n' +
+    '    at async UsersService.updateUser (/home/production-app/production-orders-app/src/services/users.service.js:242:5)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/users.routes.js:165:25',
+  url: '/api/users/5',
+  method: 'PUT',
+  user: 'admin',
+  timestamp: '2025-08-12T18:21:13.615Z'
+}
+2025-08-12T20:28:38: Error occurred: {
+  error: 'column "updated_by" of relation "users" does not exist',
+  stack: 'error: column "updated_by" of relation "users" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.update (/home/production-app/production-orders-app/src/utils/database.js:86:20)\n' +
+    '    at async UsersService.updateUser (/home/production-app/production-orders-app/src/services/users.service.js:250:5)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/users.routes.js:165:25',
+  url: '/api/users/5',
+  method: 'PUT',
+  user: 'admin',
+  timestamp: '2025-08-12T18:28:38.496Z'
+}
+2025-08-12T20:28:39: Error occurred: {
+  error: 'column "updated_by" of relation "users" does not exist',
+  stack: 'error: column "updated_by" of relation "users" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.update (/home/production-app/production-orders-app/src/utils/database.js:86:20)\n' +
+    '    at async UsersService.updateUser (/home/production-app/production-orders-app/src/services/users.service.js:250:5)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/users.routes.js:165:25',
+  url: '/api/users/5',
+  method: 'PUT',
+  user: 'admin',
+  timestamp: '2025-08-12T18:28:39.580Z'
+}
+2025-08-12T20:28:41: Error occurred: {
+  error: 'column "updated_by" of relation "users" does not exist',
+  stack: 'error: column "updated_by" of relation "users" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.update (/home/production-app/production-orders-app/src/utils/database.js:86:20)\n' +
+    '    at async UsersService.updateUser (/home/production-app/production-orders-app/src/services/users.service.js:250:5)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/users.routes.js:165:25',
+  url: '/api/users/5',
+  method: 'PUT',
+  user: 'admin',
+  timestamp: '2025-08-12T18:28:41.661Z'
+}
