@@ -4498,3 +4498,4 @@ The request url "/home/production-app/production-orders-app/.env" is outside of 
 The request url "/home/production-app/production-orders-app/.env" is outside of Vite serving allow list.
 10:53:34 PM [vite] (client) hmr update /src/app.jsx, /src/js/components/global-websocket-notifications.jsx, /src/js/components/websocket-debug.jsx, /src/js/components/dashboard.jsx, /src/js/components/production-dashboard.jsx, /src/js/components/orders.jsx, /src/js/components/machines.jsx, /src/js/components/analytics.jsx, /src/js/components/users.jsx, /src/js/components/websocket-status.jsx, /src/js/components/labor-planner.jsx
 10:54:50 PM [vite] (client) page reload test-websocket-connection.html
+The request url "/home/production-app/production-orders-app/.env" is outside of Vite serving allow list.
