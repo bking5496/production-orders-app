@@ -53118,3 +53118,4 @@ Error: bind EADDRINUSE null:3000
   'analytics'
 ]
 2025-08-12T12:47:25: 🏠 admin joined room: production
+2025-08-12T12:57:38: 🔌 WebSocket disconnected: admin
