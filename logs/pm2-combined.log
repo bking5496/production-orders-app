@@ -51471,3 +51471,41 @@ Error: bind EADDRINUSE null:3000
   'analytics'
 ]
 2025-08-12T08:41:52: 🏠 admin joined room: production
+2025-08-12T08:50:51: 🌐 WebSocket server initialized
+2025-08-12T08:50:51: 🧹 WebSocket cleanup scheduler started
+2025-08-12T08:50:51: 🧪 Testing refactored components...
+2025-08-12T08:50:51: 🚀 Production refactored server running on port 3000
+2025-08-12T08:50:51: 📊 Health check: http://localhost:3000/api/health
+2025-08-12T08:50:51: 🔐 Auth test: http://localhost:3000/api/auth/login
+2025-08-12T08:50:51: ⚙️ System routes: http://localhost:3000/api/system/health
+2025-08-12T08:50:51: 🌐 WebSocket server initialized and ready
+2025-08-12T08:50:51: ✅ New PostgreSQL client connected
+2025-08-12T08:50:51: 🔗 Client acquired from pool
+2025-08-12T08:50:51: 🔓 Client released back to pool
+2025-08-12T08:50:51: ✅ Database connection: OK
+2025-08-12T08:50:51: ✅ Authentication middleware: OK
+2025-08-12T08:50:51: ✅ Response utilities: OK
+2025-08-12T08:50:51: ✅ Database utilities: OK
+2025-08-12T08:50:51: 🎉 All components tested successfully!
+2025-08-12T08:50:51: ✅ All components tested successfully
+2025-08-12T08:51:38: ValidationError: The 'X-Forwarded-For' header is set but the Express 'trust proxy' setting is false (default). This could indicate a misconfiguration which would prevent express-rate-limit from accurately identifying users. See https://express-rate-limit.github.io/ERR_ERL_UNEXPECTED_X_FORWARDED_FOR/ for more information.
+    at Object.xForwardedForHeader (/home/production-app/production-orders-app/node_modules/express-rate-limit/dist/index.cjs:185:13)
+    at wrappedValidations.<computed> [as xForwardedForHeader] (/home/production-app/production-orders-app/node_modules/express-rate-limit/dist/index.cjs:397:22)
+    at Object.keyGenerator (/home/production-app/production-orders-app/node_modules/express-rate-limit/dist/index.cjs:658:20)
+    at /home/production-app/production-orders-app/node_modules/express-rate-limit/dist/index.cjs:710:32
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async /home/production-app/production-orders-app/node_modules/express-rate-limit/dist/index.cjs:691:5 {
+  code: 'ERR_ERL_UNEXPECTED_X_FORWARDED_FOR',
+  help: 'https://express-rate-limit.github.io/ERR_ERL_UNEXPECTED_X_FORWARDED_FOR/'
+}
+2025-08-12T08:51:38: ✅ New PostgreSQL client connected
+2025-08-12T08:51:38: 🔗 Client acquired from pool
+2025-08-12T08:51:38: 🔓 Client released back to pool
+2025-08-12T08:51:38: 🔗 Client acquired from pool
+2025-08-12T08:51:38: 🔓 Client released back to pool
+2025-08-12T08:51:38: ✅ Auth success: admin from ::ffff:127.0.0.1 - curl/8.5.0
+2025-08-12T08:51:43: 🔗 Client acquired from pool
+2025-08-12T08:51:43: 🔓 Client released back to pool
+2025-08-12T08:51:43: 🔔 Error retrieving alerts: TypeError: alerts.map is not a function
+    at /home/production-app/production-orders-app/src/server-production.js:374:36
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)

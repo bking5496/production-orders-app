@@ -349,7 +349,7 @@ app.get('/api/alerts', authenticateToken, async (req, res) => {
     const DatabaseUtils = require('./utils/database');
     
     // Get recent production stops as alerts
-    const alerts = await DatabaseUtils.raw(`
+    const alertsResult = await DatabaseUtils.raw(`
       SELECT 
         ps.id,
         ps.reason as message,
@@ -370,8 +370,13 @@ app.get('/api/alerts', authenticateToken, async (req, res) => {
       LIMIT 20
     `);
     
-    // Transform to match dashboard format
-    const formattedAlerts = alerts.map(alert => ({
+    console.log('🔔 Raw alerts result type:', typeof alertsResult);
+    console.log('🔔 Raw alerts result:', alertsResult);
+    
+    // Extract rows from the result (may be wrapped in pg result object)
+    const alertsArray = Array.isArray(alertsResult) ? alertsResult : 
+                        alertsResult?.rows ? alertsResult.rows : [];
+    const formattedAlerts = alertsArray.map(alert => ({
       id: alert.id,
       message: `${alert.category}: ${alert.message}${alert.order_number ? ` (${alert.order_number})` : ''}`,
       type: alert.type,
