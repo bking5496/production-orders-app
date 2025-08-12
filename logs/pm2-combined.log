@@ -51509,3 +51509,652 @@ Error: bind EADDRINUSE null:3000
 2025-08-12T08:51:43: 🔔 Error retrieving alerts: TypeError: alerts.map is not a function
     at /home/production-app/production-orders-app/src/server-production.js:374:36
     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+2025-08-12T09:00:02: 🌐 WebSocket server initialized
+2025-08-12T09:00:02: 🧹 WebSocket cleanup scheduler started
+2025-08-12T09:00:02: 🧪 Testing refactored components...
+2025-08-12T09:00:02: 🚀 Production refactored server running on port 3000
+2025-08-12T09:00:02: 📊 Health check: http://localhost:3000/api/health
+2025-08-12T09:00:02: 🔐 Auth test: http://localhost:3000/api/auth/login
+2025-08-12T09:00:02: ⚙️ System routes: http://localhost:3000/api/system/health
+2025-08-12T09:00:02: 🌐 WebSocket server initialized and ready
+2025-08-12T09:00:02: ✅ New PostgreSQL client connected
+2025-08-12T09:00:02: 🔗 Client acquired from pool
+2025-08-12T09:00:02: 🔓 Client released back to pool
+2025-08-12T09:00:02: ✅ Database connection: OK
+2025-08-12T09:00:02: ✅ Authentication middleware: OK
+2025-08-12T09:00:02: ✅ Response utilities: OK
+2025-08-12T09:00:02: ✅ Database utilities: OK
+2025-08-12T09:00:02: 🎉 All components tested successfully!
+2025-08-12T09:00:02: ✅ All components tested successfully
+2025-08-12T09:00:09: 🔗 Client acquired from pool
+2025-08-12T09:00:09: 🔓 Client released back to pool
+2025-08-12T09:00:09: 🔔 Raw alerts result type: object
+2025-08-12T09:00:09: 🔔 Raw alerts result: Result {
+  command: 'SELECT',
+  rowCount: 20,
+  oid: null,
+  rows: [
+    {
+      id: 85,
+      message: 'Unplanned Stop',
+      category: 'Equipment',
+      time: 2025-08-11T21:03:37.580Z,
+      resolved_at: null,
+      supervisor_notified: false,
+      order_number: 'GEN012',
+      order_id: 80,
+      type: 'warning'
+    },
+    {
+      id: 84,
+      message: 'Unplanned Stop',
+      category: 'Quality',
+      time: 2025-08-11T20:56:17.752Z,
+      resolved_at: 2025-08-11T21:03:34.782Z,
+      supervisor_notified: false,
+      order_number: 'GEN012',
+      order_id: 80,
+      type: 'critical'
+    },
+    {
+      id: 83,
+      message: 'Unplanned Stop',
+      category: 'Equipment',
+      time: 2025-08-11T17:02:07.060Z,
+      resolved_at: 2025-08-11T21:02:24.540Z,
+      supervisor_notified: false,
+      order_number: 'GEN014',
+      order_id: 82,
+      type: 'warning'
+    },
+    {
+      id: 82,
+      message: 'Unplanned Stop',
+      category: 'Equipment',
+      time: 2025-08-11T13:08:00.357Z,
+      resolved_at: 2025-08-11T13:08:02.965Z,
+      supervisor_notified: true,
+      order_number: 'GEN012',
+      order_id: 80,
+      type: 'warning'
+    },
+    {
+      id: 81,
+      message: 'Unplanned Stop',
+      category: 'Equipment',
+      time: 2025-08-09T10:14:03.097Z,
+      resolved_at: 2025-08-10T17:19:43.236Z,
+      supervisor_notified: true,
+      order_number: 'GEN012',
+      order_id: 80,
+      type: 'warning'
+    },
+    {
+      id: 80,
+      message: 'Test stop',
+      category: 'Other',
+      time: 2025-08-09T10:09:07.054Z,
+      resolved_at: 2025-08-09T10:13:59.847Z,
+      supervisor_notified: true,
+      order_number: 'GEN013',
+      order_id: 81,
+      type: 'info'
+    },
+    {
+      id: 79,
+      message: 'Unplanned Stop',
+      category: 'Equipment',
+      time: 2025-08-08T18:06:06.609Z,
+      resolved_at: 2025-08-08T18:06:14.486Z,
+      supervisor_notified: true,
+      order_number: 'GEN012',
+      order_id: 80,
+      type: 'warning'
+    },
+    {
+      id: 78,
+      message: 'Unplanned Stop',
+      category: 'Equipment',
+      time: 2025-08-06T21:33:13.543Z,
+      resolved_at: 2025-08-06T21:33:14.898Z,
+      supervisor_notified: true,
+      order_number: 'GEN011',
+      order_id: 79,
+      type: 'warning'
+    },
+    {
+      id: 77,
+      message: 'Unplanned Stop',
+      category: 'Equipment',
+      time: 2025-08-06T21:33:10.198Z,
+      resolved_at: 2025-08-06T21:33:16.085Z,
+      supervisor_notified: true,
+      order_number: 'GEN013',
+      order_id: 81,
+      type: 'warning'
+    },
+    {
+      id: 76,
+      message: 'Unplanned Stop',
+      category: 'Equipment',
+      time: 2025-08-06T21:05:52.196Z,
+      resolved_at: 2025-08-06T21:05:54.181Z,
+      supervisor_notified: true,
+      order_number: 'GEN012',
+      order_id: 80,
+      type: 'warning'
+    },
+    {
+      id: 75,
+      message: 'Unplanned Stop',
+      category: 'Safety',
+      time: 2025-08-06T17:12:09.717Z,
+      resolved_at: 2025-08-06T17:13:17.347Z,
+      supervisor_notified: true,
+      order_number: 'GEN006',
+      order_id: 68,
+      type: 'critical'
+    },
+    {
+      id: 74,
+      message: 'Planned Stop',
+      category: 'Break',
+      time: 2025-08-06T13:43:10.509Z,
+      resolved_at: 2025-08-06T17:12:34.170Z,
+      supervisor_notified: true,
+      order_number: 'GEN007',
+      order_id: 69,
+      type: 'info'
+    },
+    {
+      id: 73,
+      message: 'planned',
+      category: 'Other',
+      time: 2025-08-05T16:09:50.206Z,
+      resolved_at: 2025-08-05T21:46:34.694Z,
+      supervisor_notified: true,
+      order_number: 'GEN005',
+      order_id: 67,
+      type: 'info'
+    },
+    {
+      id: 72,
+      message: 'technical',
+      category: 'Equipment',
+      time: 2025-08-05T16:09:36.777Z,
+      resolved_at: 2025-08-05T21:46:36.370Z,
+      supervisor_notified: true,
+      order_number: 'GEN004',
+      order_id: 66,
+      type: 'warning'
+    },
+    {
+      id: 68,
+      message: 'power',
+      category: 'Equipment',
+      time: 2025-08-05T14:27:12.833Z,
+      resolved_at: 2025-08-05T21:46:32.879Z,
+      supervisor_notified: true,
+      order_number: 'GEN006',
+      order_id: 68,
+      type: 'warning'
+    },
+    {
+      id: 67,
+      message: 'planned',
+      category: 'Equipment',
+      time: 2025-08-05T12:45:42.246Z,
+      resolved_at: 2025-08-05T14:24:08.264Z,
+      supervisor_notified: true,
+      order_number: 'GEN005',
+      order_id: 67,
+      type: 'warning'
+    },
+    {
+      id: 66,
+      message: 'quality',
+      category: 'Equipment',
+      time: 2025-08-05T12:30:47.636Z,
+      resolved_at: 2025-08-05T14:24:12.609Z,
+      supervisor_notified: true,
+      order_number: 'GEN001',
+      order_id: 63,
+      type: 'warning'
+    },
+    {
+      id: 65,
+      message: 'quality',
+      category: 'Equipment',
+      time: 2025-08-05T12:30:43.077Z,
+      resolved_at: 2025-08-05T14:24:10.807Z,
+      supervisor_notified: true,
+      order_number: 'GEN002',
+      order_id: 64,
+      type: 'warning'
+    },
+    {
+      id: 64,
+      message: 'material',
+      category: 'Equipment',
+      time: 2025-08-05T12:30:37.500Z,
+      resolved_at: 2025-08-05T14:24:06.478Z,
+      supervisor_notified: true,
+      order_number: 'GEN004',
+      order_id: 66,
+      type: 'warning'
+    },
+    {
+      id: 63,
+      message: 'planned',
+      category: 'Equipment',
+      time: 2025-08-05T12:20:19.448Z,
+      resolved_at: 2025-08-05T12:27:09.790Z,
+      supervisor_notified: true,
+      order_number: 'GEN005',
+      order_id: 67,
+      type: 'warning'
+    }
+  ],
+  fields: [
+    Field {
+      name: 'id',
+      tableID: 16522,
+      columnID: 1,
+      dataTypeID: 23,
+      dataTypeSize: 4,
+      dataTypeModifier: -1,
+      format: 'text'
+    },
+    Field {
+      name: 'message',
+      tableID: 16522,
+      columnID: 3,
+      dataTypeID: 25,
+      dataTypeSize: -1,
+      dataTypeModifier: -1,
+      format: 'text'
+    },
+    Field {
+      name: 'category',
+      tableID: 16522,
+      columnID: 4,
+      dataTypeID: 1043,
+      dataTypeSize: -1,
+      dataTypeModifier: 54,
+      format: 'text'
+    },
+    Field {
+      name: 'time',
+      tableID: 16522,
+      columnID: 15,
+      dataTypeID: 1184,
+      dataTypeSize: 8,
+      dataTypeModifier: -1,
+      format: 'text'
+    },
+    Field {
+      name: 'resolved_at',
+      tableID: 16522,
+      columnID: 16,
+      dataTypeID: 1184,
+      dataTypeSize: 8,
+      dataTypeModifier: -1,
+      format: 'text'
+    },
+    Field {
+      name: 'supervisor_notified',
+      tableID: 16522,
+      columnID: 12,
+      dataTypeID: 16,
+      dataTypeSize: 1,
+      dataTypeModifier: -1,
+      format: 'text'
+    },
+    Field {
+      name: 'order_number',
+      tableID: 16482,
+      columnID: 2,
+      dataTypeID: 1043,
+      dataTypeSize: -1,
+      dataTypeModifier: 54,
+      format: 'text'
+    },
+    Field {
+      name: 'order_id',
+      tableID: 16522,
+      columnID: 2,
+      dataTypeID: 23,
+      dataTypeSize: 4,
+      dataTypeModifier: -1,
+      format: 'text'
+    },
+    Field {
+      name: 'type',
+      tableID: 0,
+      columnID: 0,
+      dataTypeID: 25,
+      dataTypeSize: -1,
+      dataTypeModifier: -1,
+      format: 'text'
+    }
+  ],
+  _parsers: [
+    [Function: parseInteger],
+    [Function: noParse],
+    [Function: noParse],
+    [Function: parseDate],
+    [Function: parseDate],
+    [Function: parseBool],
+    [Function: noParse],
+    [Function: parseInteger],
+    [Function: noParse]
+  ],
+  _types: TypeOverrides {
+    _types: {
+      getTypeParser: [Function: getTypeParser],
+      setTypeParser: [Function: setTypeParser],
+      arrayParser: [Object],
+      builtins: [Object]
+    },
+    text: {},
+    binary: {}
+  },
+  RowCtor: null,
+  rowAsArray: false,
+  _prebuiltEmptyResultObject: {
+    id: null,
+    message: null,
+    category: null,
+    time: null,
+    resolved_at: null,
+    supervisor_notified: null,
+    order_number: null,
+    order_id: null,
+    type: null
+  }
+}
+2025-08-12T09:08:19: ✅ New PostgreSQL client connected
+2025-08-12T09:08:19: 🔗 Client acquired from pool
+2025-08-12T09:08:19: 🔓 Client released back to pool
+2025-08-12T09:08:19: ✅ New PostgreSQL client connected
+2025-08-12T09:08:19: 🔗 Client acquired from pool
+2025-08-12T09:08:19: 🔓 Client released back to pool
+2025-08-12T09:08:19: 🔗 Client acquired from pool
+2025-08-12T09:08:19: 🔓 Client released back to pool
+2025-08-12T09:08:19: New WebSocket connection attempt
+2025-08-12T09:08:19: ✅ WebSocket authenticated: admin (admin)
+2025-08-12T09:08:19: 🔗 Client acquired from pool
+2025-08-12T09:08:19: 🔗 Client acquired from pool
+2025-08-12T09:08:19: 🔓 Client released back to pool
+2025-08-12T09:08:19: 🔓 Client released back to pool
+2025-08-12T09:08:19: 🔗 Client acquired from pool
+2025-08-12T09:08:19: 🔓 Client released back to pool
+2025-08-12T09:08:19: 🔗 Client acquired from pool
+2025-08-12T09:08:19: 🔓 Client released back to pool
+2025-08-12T09:08:19: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-12T09:08:19: 🏠 admin joined room: production
+2025-08-12T09:08:21: 📺 admin subscribed to: [ 'machines', 'production', 'alerts' ]
+2025-08-12T09:08:21: 🔗 Client acquired from pool
+2025-08-12T09:08:21: 🔓 Client released back to pool
+2025-08-12T09:08:21: 🔗 Client acquired from pool
+2025-08-12T09:08:21: 🔗 Client acquired from pool
+2025-08-12T09:08:21: 🔓 Client released back to pool
+2025-08-12T09:08:21: 🔗 Client acquired from pool
+2025-08-12T09:08:21: 🔓 Client released back to pool
+2025-08-12T09:08:21: 🔓 Client released back to pool
+2025-08-12T09:08:21: 🔗 Client acquired from pool
+2025-08-12T09:08:21: 🔓 Client released back to pool
+2025-08-12T09:08:21: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-12T09:08:21: 🏠 admin joined room: production
+2025-08-12T09:08:30: 📺 admin subscribed to: [ 'production', 'machines' ]
+2025-08-12T09:08:30: 🔗 Client acquired from pool
+2025-08-12T09:08:30: 🔓 Client released back to pool
+2025-08-12T09:08:30: 🔗 Client acquired from pool
+2025-08-12T09:08:30: 🔗 Client acquired from pool
+2025-08-12T09:08:30: 🔓 Client released back to pool
+2025-08-12T09:08:30: 🔓 Client released back to pool
+2025-08-12T09:08:30: ✅ New PostgreSQL client connected
+2025-08-12T09:08:30: 🔗 Client acquired from pool
+2025-08-12T09:08:30: ✅ New PostgreSQL client connected
+2025-08-12T09:08:30: 🔗 Client acquired from pool
+2025-08-12T09:08:30: 🔓 Client released back to pool
+2025-08-12T09:08:30: 🔓 Client released back to pool
+2025-08-12T09:08:30: 🔗 Client acquired from pool
+2025-08-12T09:08:30: 🔓 Client released back to pool
+2025-08-12T09:08:30: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-12T09:08:30: 🏠 admin joined room: production
+2025-08-12T09:08:35: 🔗 Client acquired from pool
+2025-08-12T09:08:35: 🔗 Client acquired from pool
+2025-08-12T09:08:35: 🔗 Client acquired from pool
+2025-08-12T09:08:35: 🔗 Client acquired from pool
+2025-08-12T09:08:35: 🔓 Client released back to pool
+2025-08-12T09:08:35: 🔓 Client released back to pool
+2025-08-12T09:08:35: 🔓 Client released back to pool
+2025-08-12T09:08:35: 🔓 Client released back to pool
+2025-08-12T09:08:38: 🔗 Client acquired from pool
+2025-08-12T09:08:38: 🔓 Client released back to pool
+2025-08-12T09:08:39: 🔗 Client acquired from pool
+2025-08-12T09:08:39: 🔗 Client acquired from pool
+2025-08-12T09:08:39: 🔗 Client acquired from pool
+2025-08-12T09:08:39: 🔓 Client released back to pool
+2025-08-12T09:08:39: 🔓 Client released back to pool
+2025-08-12T09:08:39: 🔓 Client released back to pool
+2025-08-12T09:08:40: 🔗 Client acquired from pool
+2025-08-12T09:08:40: 🔗 Client acquired from pool
+2025-08-12T09:08:40: 🔗 Client acquired from pool
+2025-08-12T09:08:40: 🔗 Client acquired from pool
+2025-08-12T09:08:40: 🔓 Client released back to pool
+2025-08-12T09:08:40: 🔓 Client released back to pool
+2025-08-12T09:08:40: 🔓 Client released back to pool
+2025-08-12T09:08:40: 🔓 Client released back to pool
+2025-08-12T09:08:41: 🔗 Client acquired from pool
+2025-08-12T09:08:41: 🔓 Client released back to pool
+2025-08-12T09:08:41: 🔗 Client acquired from pool
+2025-08-12T09:08:41: 🔓 Client released back to pool
+2025-08-12T09:08:41: 🔗 Client acquired from pool
+2025-08-12T09:08:41: 🔗 Client acquired from pool
+2025-08-12T09:08:41: 🔓 Client released back to pool
+2025-08-12T09:08:41: 🔓 Client released back to pool
+2025-08-12T09:08:41: 🔗 Client acquired from pool
+2025-08-12T09:08:41: 🔓 Client released back to pool
+2025-08-12T09:08:42: 🔗 Client acquired from pool
+2025-08-12T09:08:42: 🔓 Client released back to pool
+2025-08-12T09:08:42: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-12T09:08:42: 🏠 admin joined room: production
+2025-08-12T09:08:48: 🔗 Client acquired from pool
+2025-08-12T09:08:48: 🔓 Client released back to pool
+2025-08-12T09:08:48: 🔗 Transaction client acquired from pool
+2025-08-12T09:08:48: 🔓 Transaction client released back to pool
+2025-08-12T09:08:48: 📡 Broadcast sent: order_stopped to channel: production (1 clients)
+2025-08-12T09:08:48: 🔗 Client acquired from pool
+2025-08-12T09:08:48: 🔓 Client released back to pool
+2025-08-12T09:08:48: 🔗 Client acquired from pool
+2025-08-12T09:08:48: 🔓 Client released back to pool
+2025-08-12T09:08:48: 🔗 Client acquired from pool
+2025-08-12T09:08:48: 🔓 Client released back to pool
+2025-08-12T09:08:48: 🔗 Client acquired from pool
+2025-08-12T09:08:48: 🔓 Client released back to pool
+2025-08-12T09:08:51: 📺 admin subscribed to: [ 'machines', 'production' ]
+2025-08-12T09:08:51: 🔗 Client acquired from pool
+2025-08-12T09:08:51: 🔓 Client released back to pool
+2025-08-12T09:08:51: 🔗 Client acquired from pool
+2025-08-12T09:08:51: 🔗 Client acquired from pool
+2025-08-12T09:08:51: 🔓 Client released back to pool
+2025-08-12T09:08:51: 🔗 Client acquired from pool
+2025-08-12T09:08:51: 🔓 Client released back to pool
+2025-08-12T09:08:51: 🔗 Client acquired from pool
+2025-08-12T09:08:51: 🔓 Client released back to pool
+2025-08-12T09:08:51: 🔓 Client released back to pool
+2025-08-12T09:08:51: 🔗 Client acquired from pool
+2025-08-12T09:08:51: 🔓 Client released back to pool
+2025-08-12T09:08:51: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-12T09:08:51: 🏠 admin joined room: production
+2025-08-12T09:08:53: 🔗 Client acquired from pool
+2025-08-12T09:08:53: 🔓 Client released back to pool
+2025-08-12T09:08:57: 🔗 Client acquired from pool
+2025-08-12T09:08:57: 🔓 Client released back to pool
+2025-08-12T09:08:57: 🔗 Client acquired from pool
+2025-08-12T09:08:57: 🔗 Client acquired from pool
+2025-08-12T09:08:57: 🔓 Client released back to pool
+2025-08-12T09:08:57: 🔓 Client released back to pool
+2025-08-12T09:08:59: 🔗 Client acquired from pool
+2025-08-12T09:08:59: 🔗 Client acquired from pool
+2025-08-12T09:08:59: 🔓 Client released back to pool
+2025-08-12T09:08:59: 🔓 Client released back to pool
+2025-08-12T09:08:59: 🔗 Client acquired from pool
+2025-08-12T09:08:59: 🔓 Client released back to pool
+2025-08-12T09:09:02: 🔗 Client acquired from pool
+2025-08-12T09:09:02: 🔓 Client released back to pool
+2025-08-12T09:09:04: 🔗 Client acquired from pool
+2025-08-12T09:09:04: 🔗 Client acquired from pool
+2025-08-12T09:09:04: 🔗 Client acquired from pool
+2025-08-12T09:09:04: 🔗 Client acquired from pool
+2025-08-12T09:09:04: 🔓 Client released back to pool
+2025-08-12T09:09:04: 🔗 Client acquired from pool
+2025-08-12T09:09:04: 🔓 Client released back to pool
+2025-08-12T09:09:04: 🔓 Client released back to pool
+2025-08-12T09:09:04: 🔓 Client released back to pool
+2025-08-12T09:09:04: 🔗 Client acquired from pool
+2025-08-12T09:09:04: 🔓 Client released back to pool
+2025-08-12T09:09:04: 🔗 Client acquired from pool
+2025-08-12T09:09:04: 🔓 Client released back to pool
+2025-08-12T09:09:04: 🔗 Client acquired from pool
+2025-08-12T09:09:04: 🔓 Client released back to pool
+2025-08-12T09:09:04: 🔗 Client acquired from pool
+2025-08-12T09:09:04: 🔗 Client acquired from pool
+2025-08-12T09:09:04: 🔓 Client released back to pool
+2025-08-12T09:09:04: 🔗 Client acquired from pool
+2025-08-12T09:09:04: 🔓 Client released back to pool
+2025-08-12T09:09:04: 🔓 Client released back to pool
+2025-08-12T09:09:04: 🔓 Client released back to pool
+2025-08-12T09:09:04: 🔗 Client acquired from pool
+2025-08-12T09:09:04: 🔓 Client released back to pool
+2025-08-12T09:09:04: ✅ New PostgreSQL client connected
+2025-08-12T09:09:04: 🔗 Client acquired from pool
+2025-08-12T09:09:04: ✅ New PostgreSQL client connected
+2025-08-12T09:09:04: 🔗 Client acquired from pool
+2025-08-12T09:09:04: 🔓 Client released back to pool
+2025-08-12T09:09:04: 🔓 Client released back to pool
+2025-08-12T09:09:04: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-12T09:09:04: 🏠 admin joined room: production
+2025-08-12T09:09:06: 🔗 Client acquired from pool
+2025-08-12T09:09:06: 🔗 Client acquired from pool
+2025-08-12T09:09:06: 🔗 Client acquired from pool
+2025-08-12T09:09:06: 🔓 Client released back to pool
+2025-08-12T09:09:06: 🔓 Client released back to pool
+2025-08-12T09:09:06: 🔓 Client released back to pool
+2025-08-12T09:09:23: 🔗 Client acquired from pool
+2025-08-12T09:09:23: 🔗 Client acquired from pool
+2025-08-12T09:09:23: 🔗 Client acquired from pool
+2025-08-12T09:09:23: 🔓 Client released back to pool
+2025-08-12T09:09:23: 🔓 Client released back to pool
+2025-08-12T09:09:23: 🔓 Client released back to pool
+2025-08-12T09:09:26: 🔌 WebSocket disconnected: admin
+2025-08-12T09:09:26: 🔗 Client acquired from pool
+2025-08-12T09:09:26: 🔓 Client released back to pool
+2025-08-12T09:09:26: 🔗 Client acquired from pool
+2025-08-12T09:09:26: 🔓 Client released back to pool
+2025-08-12T09:09:26: 🔗 Client acquired from pool
+2025-08-12T09:09:26: 🔓 Client released back to pool
+2025-08-12T09:09:26: 🔗 Client acquired from pool
+2025-08-12T09:09:26: 🔓 Client released back to pool
+2025-08-12T09:09:26: New WebSocket connection attempt
+2025-08-12T09:09:26: ✅ WebSocket authenticated: admin (admin)
+2025-08-12T09:09:26: 🔗 Client acquired from pool
+2025-08-12T09:09:26: 🔓 Client released back to pool
+2025-08-12T09:09:26: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-12T09:09:26: 🏠 admin joined room: production
+2025-08-12T09:09:28: 🔗 Client acquired from pool
+2025-08-12T09:09:28: 🔗 Client acquired from pool
+2025-08-12T09:09:28: 🔓 Client released back to pool
+2025-08-12T09:09:28: 🔗 Client acquired from pool
+2025-08-12T09:09:28: 🔓 Client released back to pool
+2025-08-12T09:09:28: 🔗 Client acquired from pool
+2025-08-12T09:09:28: 🔓 Client released back to pool
+2025-08-12T09:09:28: 🔗 Client acquired from pool
+2025-08-12T09:09:28: 🔓 Client released back to pool
+2025-08-12T09:09:28: 🔓 Client released back to pool
+2025-08-12T09:09:28: 🔗 Client acquired from pool
+2025-08-12T09:09:28: 🔗 Client acquired from pool
+2025-08-12T09:09:28: 🔗 Client acquired from pool
+2025-08-12T09:09:28: 🔗 Client acquired from pool
+2025-08-12T09:09:28: 🔓 Client released back to pool
+2025-08-12T09:09:28: 🔓 Client released back to pool
+2025-08-12T09:09:28: 🔗 Client acquired from pool
+2025-08-12T09:09:28: 🔗 Client acquired from pool
+2025-08-12T09:09:28: 🔓 Client released back to pool
+2025-08-12T09:09:28: 🔓 Client released back to pool
+2025-08-12T09:09:28: 🔓 Client released back to pool
+2025-08-12T09:09:28: 🔓 Client released back to pool
+2025-08-12T09:09:28: 🔗 Client acquired from pool
+2025-08-12T09:09:28: 🔗 Client acquired from pool
+2025-08-12T09:09:28: 🔓 Client released back to pool
+2025-08-12T09:09:28: 🔗 Client acquired from pool
+2025-08-12T09:09:28: 🔓 Client released back to pool
+2025-08-12T09:09:28: 🔓 Client released back to pool
+2025-08-12T09:09:28: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-12T09:09:28: 🏠 admin joined room: production

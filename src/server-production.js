@@ -370,9 +370,6 @@ app.get('/api/alerts', authenticateToken, async (req, res) => {
       LIMIT 20
     `);
     
-    console.log('🔔 Raw alerts result type:', typeof alertsResult);
-    console.log('🔔 Raw alerts result:', alertsResult);
-    
     // Extract rows from the result (may be wrapped in pg result object)
     const alertsArray = Array.isArray(alertsResult) ? alertsResult : 
                         alertsResult?.rows ? alertsResult.rows : [];
