@@ -763,10 +763,32 @@ export default function MachinesPage() {
           const StatusIcon = statusConfig.icon;
           
           return (
-            <Card key={machine.id} className={`p-6 border-l-4 ${statusConfig.border} hover:shadow-lg transition-all duration-300`}>
+            <Card key={machine.id} className={`p-6 border-l-4 ${statusConfig.border} hover:shadow-lg transition-all duration-300 overflow-hidden`}>
+              {/* Machine Image */}
+              {machine.specifications?.image && (
+                <div className="mb-4 -mx-6 -mt-6 relative">
+                  <img 
+                    src={machine.specifications.image} 
+                    alt={`${machine.name} machine`}
+                    className="w-full h-48 object-cover rounded-t-lg"
+                    onError={(e) => {
+                      e.target.style.display = 'none';
+                    }}
+                  />
+                  <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/30 to-transparent pointer-events-none rounded-t-lg"></div>
+                </div>
+              )}
+              
               <div className="flex justify-between items-start mb-4">
                 <div className="flex-1">
-                  <h3 className="text-lg font-semibold text-gray-800 mb-1">{machine.name}</h3>
+                  <h3 className="text-lg font-semibold text-gray-800 mb-1 flex items-center gap-2">
+                    {machine.name}
+                    {machine.specifications?.image && (
+                      <span className="px-2 py-1 bg-blue-100 text-blue-600 text-xs rounded-full font-medium">
+                        📸 Visual
+                      </span>
+                    )}
+                  </h3>
                   <p className="text-sm text-gray-500 mb-2">{machine.type}</p>
                   <p className="text-xs text-gray-400 capitalize">{machine.environment} Environment</p>
                 </div>
@@ -799,7 +821,8 @@ export default function MachinesPage() {
                       cycle_start_date: machine.cycle_start_date || '',
                       operators_per_shift: machine.operators_per_shift == null ? '' : machine.operators_per_shift,
                       hopper_loaders_per_shift: machine.hopper_loaders_per_shift == null ? '' : machine.hopper_loaders_per_shift,
-                      packers_per_shift: machine.packers_per_shift == null ? '' : machine.packers_per_shift
+                      packers_per_shift: machine.packers_per_shift == null ? '' : machine.packers_per_shift,
+                      specifications: machine.specifications || {}
                     });
                     // Load crews for this machine
                     await loadCrewsForMachine(machine.id);
@@ -1087,6 +1110,59 @@ export default function MachinesPage() {
                   onChange={(e) => setFormData({...formData, production_rate: parseInt(e.target.value)})} 
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
                 />
+              </div>
+            </div>
+            
+            {/* Machine Image Section */}
+            <div className="border-t pt-6 mt-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
+                  <span className="text-purple-600 text-sm">📸</span>
+                </div>
+                Machine Visual
+              </h3>
+              
+              {/* Current Image Preview */}
+              {selectedMachine?.specifications?.image && (
+                <div className="mb-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
+                  <p className="text-sm font-medium text-gray-700 mb-2">Current Image</p>
+                  <div className="relative w-48 h-32 mx-auto">
+                    <img 
+                      src={selectedMachine.specifications.image} 
+                      alt={`${selectedMachine.name} machine`}
+                      className="w-full h-full object-cover rounded-lg border border-gray-300"
+                      onError={(e) => {
+                        e.target.style.display = 'none';
+                      }}
+                    />
+                  </div>
+                  <p className="text-xs text-gray-500 mt-2 text-center">
+                    Path: {selectedMachine.specifications.image}
+                  </p>
+                </div>
+              )}
+              
+              {/* Image Path Input */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Image Path (Optional)
+                </label>
+                <input 
+                  type="text" 
+                  placeholder="/assets/machines/machine-name.png" 
+                  value={formData.specifications?.image || ''} 
+                  onChange={(e) => {
+                    const specs = formData.specifications || {};
+                    setFormData({
+                      ...formData, 
+                      specifications: { ...specs, image: e.target.value }
+                    });
+                  }} 
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  Enter the path to machine image (relative to public directory)
+                </p>
               </div>
             </div>
             

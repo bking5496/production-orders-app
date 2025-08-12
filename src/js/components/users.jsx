@@ -4,6 +4,7 @@ import { useAuth } from '../core/auth';
 import { Modal } from './ui-components.jsx';
 import { useAutoConnect } from '../core/websocket-hooks.js';
 import { WebSocketStatusCompact } from './websocket-status.jsx';
+import { formatEmployeeCode } from '../utils/text-utils';
 
 export default function UsersPage() {
   const [users, setUsers] = useState([]);
@@ -160,7 +161,7 @@ export default function UsersPage() {
                 <td className="px-6 py-4 whitespace-nowrap">{formatDisplayName(user.username)}</td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <span className="text-sm text-gray-900 font-mono">
-                    {user.employee_code || user.id.toString().padStart(4, '0')}
+                    {formatEmployeeCode(user.employee_code)}
                   </span>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">{user.email}</td>

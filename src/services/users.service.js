@@ -6,6 +6,29 @@ const { NotFoundError, ValidationError } = require('../middleware/error-handler'
 class UsersService {
   
   /**
+   * Helper method to get the standard user fields with proper employee code formatting
+   */
+  getUserSelectFields() {
+    return `
+      id, 
+      username, 
+      full_name,
+      CASE 
+        WHEN employee_code IS NOT NULL AND employee_code != '' THEN employee_code
+        WHEN profile_data->>'employee_code' IS NOT NULL AND profile_data->>'employee_code' != '' THEN profile_data->>'employee_code'
+        ELSE LPAD(id::text, 4, '0')
+      END as employee_code,
+      role, 
+      email, 
+      phone, 
+      profile_data, 
+      is_active, 
+      created_at, 
+      last_login
+    `;
+  }
+
+  /**
    * Get all users with optional filtering
    */
   async getAllUsers(filters = {}) {
@@ -22,7 +45,7 @@ class UsersService {
       // For multiple roles, we need to use raw query
       if (roles.length > 1) {
         let query = `
-          SELECT id, username, full_name, employee_code, role, email, phone, profile_data, is_active, created_at, last_login
+          SELECT ${this.getUserSelectFields().trim()}
           FROM users 
         `;
         
@@ -49,32 +72,50 @@ class UsersService {
       }
     }
     
-    const users = await DatabaseUtils.select(
-      'users',
-      conditions,
-      {
-        orderBy: 'full_name, username',
-        select: 'id, username, full_name, employee_code, role, email, phone, profile_data, is_active, created_at, last_login'
-      }
-    );
+    // Use raw query for consistent employee code formatting
+    let query = `
+      SELECT ${this.getUserSelectFields().trim()}
+      FROM users 
+    `;
     
-    return users;
+    const params = [];
+    let whereConditions = [];
+    
+    if (!include_inactive) {
+      whereConditions.push('is_active = true');
+    }
+    
+    if (conditions.role) {
+      whereConditions.push('role = $' + (params.length + 1));
+      params.push(conditions.role);
+    }
+    
+    if (whereConditions.length > 0) {
+      query += 'WHERE ' + whereConditions.join(' AND ') + ' ';
+    }
+    
+    query += 'ORDER BY full_name, username';
+    
+    const result = await DatabaseUtils.raw(query, params);
+    return result.rows;
   }
 
   /**
    * Get user by ID
    */
   async getUserById(id) {
-    const user = await DatabaseUtils.findOne(
-      'users', 
-      { id },
-      'id, username, full_name, employee_code, role, email, phone, profile_data, is_active, created_at, last_login'
-    );
+    const query = `
+      SELECT ${this.getUserSelectFields().trim()}
+      FROM users
+      WHERE id = $1
+    `;
     
-    if (!user) {
+    const result = await DatabaseUtils.raw(query, [id]);
+    
+    if (!result.rows.length) {
       throw new NotFoundError('User');
     }
-    return user;
+    return result.rows[0];
   }
 
   /**
@@ -198,18 +239,18 @@ class UsersService {
       cleanUpdateData.profile_data = JSON.stringify(cleanUpdateData.profile_data);
     }
 
-    const updatedUser = await DatabaseUtils.update(
+    await DatabaseUtils.update(
       'users',
       {
         ...cleanUpdateData,
         updated_at: new Date(),
         updated_by: updatedByUserId
       },
-      { id },
-      'id, username, full_name, employee_code, role, email, phone, profile_data, is_active, created_at, last_login'
+      { id }
     );
 
-    return updatedUser[0];
+    // Return user with properly formatted employee code
+    return await this.getUserById(id);
   }
 
   /**
@@ -230,18 +271,18 @@ class UsersService {
       }
     }
 
-    const updatedUser = await DatabaseUtils.update(
+    await DatabaseUtils.update(
       'users',
       {
         is_active: false,
         deactivated_at: new Date(),
         deactivated_by: deactivatedByUserId
       },
-      { id },
-      'id, username, full_name, employee_code, role, email, phone, profile_data, is_active, created_at, last_login'
+      { id }
     );
 
-    return updatedUser[0];
+    // Return user with properly formatted employee code
+    return await this.getUserById(id);
   }
 
   /**
@@ -250,7 +291,7 @@ class UsersService {
   async reactivateUser(id, reactivatedByUserId) {
     await this.getUserById(id); // Ensure user exists
     
-    const updatedUser = await DatabaseUtils.update(
+    await DatabaseUtils.update(
       'users',
       {
         is_active: true,
@@ -259,11 +300,11 @@ class UsersService {
         deactivated_at: null,
         deactivated_by: null
       },
-      { id },
-      'id, username, full_name, employee_code, role, email, phone, profile_data, is_active, created_at, last_login'
+      { id }
     );
 
-    return updatedUser[0];
+    // Return user with properly formatted employee code
+    return await this.getUserById(id);
   }
 
   /**
@@ -297,12 +338,24 @@ class UsersService {
     const { role, include_inactive = false } = filters;
     
     let query = `
-      SELECT id, username, full_name, employee_code, role, email, phone, is_active
+      SELECT 
+        id, 
+        username, 
+        full_name,
+        CASE 
+          WHEN employee_code IS NOT NULL AND employee_code != '' THEN employee_code
+          WHEN profile_data->>'employee_code' IS NOT NULL AND profile_data->>'employee_code' != '' THEN profile_data->>'employee_code'
+          ELSE LPAD(id::text, 4, '0')
+        END as employee_code,
+        role, 
+        email, 
+        phone, 
+        is_active
       FROM users 
       WHERE (
         LOWER(username) LIKE LOWER($1) OR
         LOWER(full_name) LIKE LOWER($1) OR
-        LOWER(employee_code) LIKE LOWER($1) OR
+        LOWER(COALESCE(employee_code, profile_data->>'employee_code', LPAD(id::text, 4, '0'))) LIKE LOWER($1) OR
         LOWER(email) LIKE LOWER($1)
       )
     `;
@@ -339,16 +392,24 @@ class UsersService {
       throw new ValidationError('Invalid role');
     }
 
-    const users = await DatabaseUtils.select(
-      'users',
-      { role, is_active: true },
-      {
-        select: 'id, username, full_name, employee_code, role',
-        orderBy: 'full_name, username'
-      }
-    );
+    const query = `
+      SELECT 
+        id, 
+        username, 
+        full_name,
+        CASE 
+          WHEN employee_code IS NOT NULL AND employee_code != '' THEN employee_code
+          WHEN profile_data->>'employee_code' IS NOT NULL AND profile_data->>'employee_code' != '' THEN profile_data->>'employee_code'
+          ELSE LPAD(id::text, 4, '0')
+        END as employee_code,
+        role
+      FROM users
+      WHERE role = $1 AND is_active = true
+      ORDER BY full_name, username
+    `;
 
-    return users;
+    const result = await DatabaseUtils.raw(query, [role]);
+    return result.rows;
   }
 }
 

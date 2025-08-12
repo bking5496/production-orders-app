@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import API from '../core/api';
 import { Modal, Card, Button, Badge } from './ui-components.jsx';
+import { formatEmployeeCode } from '../utils/text-utils';
 
 export default function AdminPanel() {
   const [users, setUsers] = useState([]);
@@ -689,7 +690,7 @@ export default function AdminPanel() {
                         <div className="text-sm font-medium text-gray-900">{user.username}</div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{user.email}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{user.employee_code || '-'}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 font-mono">{formatEmployeeCode(user.employee_code)}</td>
                       <td className="px-6 py-4 whitespace-nowrap">{getRoleBadge(user.role)}</td>
                       <td className="px-6 py-4 whitespace-nowrap">{getStatusBadge(user.is_active)}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
