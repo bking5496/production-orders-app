@@ -575,6 +575,11 @@ class LaborService {
         u.username,
         u.email,
         u.role as user_role,
+        CASE 
+          WHEN u.employee_code IS NOT NULL AND u.employee_code != '' THEN u.employee_code
+          WHEN u.profile_data->>'employee_code' IS NOT NULL AND u.profile_data->>'employee_code' != '' THEN u.profile_data->>'employee_code'
+          ELSE LPAD(u.id::text, 4, '0')
+        END as employee_code,
         m.name as machine_name,
         m.environment
       FROM labor_assignments la
@@ -624,7 +629,7 @@ class LaborService {
         employee_id: a.employee_id,
         fullName: a.username,
         name: a.username,
-        employee_code: `EMP${a.employee_id.toString().padStart(4, '0')}`,
+        employee_code: a.employee_code,
         machine: a.machine_name,
         machine_id: a.machine_id,
         position: a.role,

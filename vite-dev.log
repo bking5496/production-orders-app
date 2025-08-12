@@ -14161,3 +14161,5 @@ The request url "/home/production-app/production-orders-app/.env" is outside of 
 7:27:23 PM [vite] (client) hmr update /src/js/components/downtime-report.jsx
 7:28:35 PM [vite] (client) hmr update /src/js/components/analytics.jsx
 7:28:49 PM [vite] (client) hmr update /src/js/components/analytics.jsx
+7:37:16 PM [vite] (client) hmr update /src/js/components/labour-layout.jsx
+7:37:23 PM [vite] (client) hmr update /src/js/components/labour-layout.jsx
