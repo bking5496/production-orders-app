@@ -48855,3 +48855,12 @@
 2025-08-12T10:10:50: 🔓 Client released back to pool
 2025-08-12T10:10:50: 🔓 Client released back to pool
 2025-08-12T10:10:50: 🔌 WebSocket disconnected: admin
+2025-08-12T12:11:01: ✅ New PostgreSQL client connected
+2025-08-12T12:11:01: 🔗 Client acquired from pool
+2025-08-12T12:11:01: 🔓 Client released back to pool
+2025-08-12T12:11:01: 🔗 Client acquired from pool
+2025-08-12T12:11:01: 🔓 Client released back to pool
+2025-08-12T12:11:01: ✅ Auth success: admin from ::ffff:127.0.0.1 - curl/8.5.0
+2025-08-12T12:15:25: ✅ New PostgreSQL client connected
+2025-08-12T12:15:25: 🔗 Client acquired from pool
+2025-08-12T12:15:25: 🔓 Client released back to pool
