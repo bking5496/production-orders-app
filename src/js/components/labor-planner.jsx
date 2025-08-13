@@ -84,7 +84,10 @@ const LaborPlanner = ({ currentUser }) => {
       const response = await API.get(`/labor-assignments?start_date=${selectedDate}&end_date=${selectedDate}`);
       const assignmentData = {};
       (response?.data || response || []).forEach(assignment => {
-        const key = `${assignment.machine_id}-${assignment.shift_type}`;
+        // For factory-wide assignments (null machine_id), use a special key
+        const key = assignment.machine_id === null 
+          ? `factory-wide-${assignment.role}-${assignment.shift_type}`
+          : `${assignment.machine_id}-${assignment.shift_type}`;
         if (!assignmentData[key]) assignmentData[key] = [];
         assignmentData[key].push(assignment);
       });
