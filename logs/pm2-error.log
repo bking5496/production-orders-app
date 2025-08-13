@@ -870,3 +870,284 @@
   line: '3722',
   routine: 'errorMissingColumn'
 }
+2025-08-14T00:30:06: Error occurred: {
+  error: 'Cannot change status while machine is in use or paused',
+  stack: 'ValidationError: Cannot change status while machine is in use or paused\n' +
+    '    at MachinesService.updateMachineStatus (/home/production-app/production-orders-app/src/services/machines.service.js:167:13)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:176:28',
+  url: '/api/machines/24/status',
+  method: 'PATCH',
+  user: 'admin',
+  timestamp: '2025-08-13T22:30:06.694Z'
+}
+2025-08-14T00:30:20: Error getting machine crews: error: column "crew_data" does not exist
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)
+    at async DatabaseUtils.raw (/home/production-app/production-orders-app/src/utils/database.js:146:12)
+    at async MachinesService.getMachineCrews (/home/production-app/production-orders-app/src/services/machines.service.js:350:22)
+    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:194:19 {
+  length: 109,
+  severity: 'ERROR',
+  code: '42703',
+  detail: undefined,
+  hint: undefined,
+  position: '17',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'parse_relation.c',
+  line: '3722',
+  routine: 'errorMissingColumn'
+}
+2025-08-14T00:32:03: Error getting machine crews: error: column "crew_data" does not exist
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)
+    at async DatabaseUtils.raw (/home/production-app/production-orders-app/src/utils/database.js:146:12)
+    at async MachinesService.getMachineCrews (/home/production-app/production-orders-app/src/services/machines.service.js:350:22)
+    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:194:19 {
+  length: 109,
+  severity: 'ERROR',
+  code: '42703',
+  detail: undefined,
+  hint: undefined,
+  position: '17',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'parse_relation.c',
+  line: '3722',
+  routine: 'errorMissingColumn'
+}
+2025-08-14T00:32:07: Error saving machine crews: error: column "crew_data" of relation "machine_crews" does not exist
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)
+    at async DatabaseUtils.raw (/home/production-app/production-orders-app/src/utils/database.js:146:12)
+    at async MachinesService.saveMachineCrews (/home/production-app/production-orders-app/src/services/machines.service.js:397:22)
+    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:213:20 {
+  length: 135,
+  severity: 'ERROR',
+  code: '42703',
+  detail: undefined,
+  hint: undefined,
+  position: '49',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'parse_target.c',
+  line: '1066',
+  routine: 'checkInsertTargets'
+}
+2025-08-14T00:32:07: Error occurred: {
+  error: 'Failed to save machine crews: column "crew_data" of relation "machine_crews" does not exist',
+  stack: 'Error: Failed to save machine crews: column "crew_data" of relation "machine_crews" does not exist\n' +
+    '    at MachinesService.saveMachineCrews (/home/production-app/production-orders-app/src/services/machines.service.js:411:13)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:213:20',
+  url: '/api/machines/40/crews',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-13T22:32:07.084Z'
+}
+2025-08-14T00:32:08: Error saving machine crews: error: column "crew_data" of relation "machine_crews" does not exist
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)
+    at async DatabaseUtils.raw (/home/production-app/production-orders-app/src/utils/database.js:146:12)
+    at async MachinesService.saveMachineCrews (/home/production-app/production-orders-app/src/services/machines.service.js:397:22)
+    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:213:20 {
+  length: 135,
+  severity: 'ERROR',
+  code: '42703',
+  detail: undefined,
+  hint: undefined,
+  position: '49',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'parse_target.c',
+  line: '1066',
+  routine: 'checkInsertTargets'
+}
+2025-08-14T00:32:08: Error occurred: {
+  error: 'Failed to save machine crews: column "crew_data" of relation "machine_crews" does not exist',
+  stack: 'Error: Failed to save machine crews: column "crew_data" of relation "machine_crews" does not exist\n' +
+    '    at MachinesService.saveMachineCrews (/home/production-app/production-orders-app/src/services/machines.service.js:411:13)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:213:20',
+  url: '/api/machines/40/crews',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-13T22:32:08.153Z'
+}
+2025-08-14T00:32:10: Error saving machine crews: error: column "crew_data" of relation "machine_crews" does not exist
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)
+    at async DatabaseUtils.raw (/home/production-app/production-orders-app/src/utils/database.js:146:12)
+    at async MachinesService.saveMachineCrews (/home/production-app/production-orders-app/src/services/machines.service.js:397:22)
+    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:213:20 {
+  length: 135,
+  severity: 'ERROR',
+  code: '42703',
+  detail: undefined,
+  hint: undefined,
+  position: '49',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'parse_target.c',
+  line: '1066',
+  routine: 'checkInsertTargets'
+}
+2025-08-14T00:32:10: Error occurred: {
+  error: 'Failed to save machine crews: column "crew_data" of relation "machine_crews" does not exist',
+  stack: 'Error: Failed to save machine crews: column "crew_data" of relation "machine_crews" does not exist\n' +
+    '    at MachinesService.saveMachineCrews (/home/production-app/production-orders-app/src/services/machines.service.js:411:13)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:213:20',
+  url: '/api/machines/40/crews',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-13T22:32:10.223Z'
+}
+2025-08-14T00:33:29: Error saving machine crews: error: column "updated_by" of relation "machine_crews" does not exist
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)
+    at async DatabaseUtils.raw (/home/production-app/production-orders-app/src/utils/database.js:146:12)
+    at async MachinesService.saveMachineCrews (/home/production-app/production-orders-app/src/services/machines.service.js:397:22)
+    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:213:20 {
+  length: 136,
+  severity: 'ERROR',
+  code: '42703',
+  detail: undefined,
+  hint: undefined,
+  position: '72',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'parse_target.c',
+  line: '1066',
+  routine: 'checkInsertTargets'
+}
+2025-08-14T00:33:29: Error occurred: {
+  error: 'Failed to save machine crews: column "updated_by" of relation "machine_crews" does not exist',
+  stack: 'Error: Failed to save machine crews: column "updated_by" of relation "machine_crews" does not exist\n' +
+    '    at MachinesService.saveMachineCrews (/home/production-app/production-orders-app/src/services/machines.service.js:411:13)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:213:20',
+  url: '/api/machines/40/crews',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-13T22:33:29.156Z'
+}
+2025-08-14T00:33:30: Error saving machine crews: error: column "updated_by" of relation "machine_crews" does not exist
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)
+    at async DatabaseUtils.raw (/home/production-app/production-orders-app/src/utils/database.js:146:12)
+    at async MachinesService.saveMachineCrews (/home/production-app/production-orders-app/src/services/machines.service.js:397:22)
+    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:213:20 {
+  length: 136,
+  severity: 'ERROR',
+  code: '42703',
+  detail: undefined,
+  hint: undefined,
+  position: '72',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'parse_target.c',
+  line: '1066',
+  routine: 'checkInsertTargets'
+}
+2025-08-14T00:33:30: Error occurred: {
+  error: 'Failed to save machine crews: column "updated_by" of relation "machine_crews" does not exist',
+  stack: 'Error: Failed to save machine crews: column "updated_by" of relation "machine_crews" does not exist\n' +
+    '    at MachinesService.saveMachineCrews (/home/production-app/production-orders-app/src/services/machines.service.js:411:13)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:213:20',
+  url: '/api/machines/40/crews',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-13T22:33:30.242Z'
+}
+2025-08-14T00:33:32: Error saving machine crews: error: column "updated_by" of relation "machine_crews" does not exist
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)
+    at async DatabaseUtils.raw (/home/production-app/production-orders-app/src/utils/database.js:146:12)
+    at async MachinesService.saveMachineCrews (/home/production-app/production-orders-app/src/services/machines.service.js:397:22)
+    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:213:20 {
+  length: 136,
+  severity: 'ERROR',
+  code: '42703',
+  detail: undefined,
+  hint: undefined,
+  position: '72',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'parse_target.c',
+  line: '1066',
+  routine: 'checkInsertTargets'
+}
+2025-08-14T00:33:32: Error occurred: {
+  error: 'Failed to save machine crews: column "updated_by" of relation "machine_crews" does not exist',
+  stack: 'Error: Failed to save machine crews: column "updated_by" of relation "machine_crews" does not exist\n' +
+    '    at MachinesService.saveMachineCrews (/home/production-app/production-orders-app/src/services/machines.service.js:411:13)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:213:20',
+  url: '/api/machines/40/crews',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-13T22:33:32.311Z'
+}
+2025-08-14T00:39:59: JWT verification failed: jwt expired
+2025-08-14T00:39:59: JWT verification failed: jwt expired
+2025-08-14T00:39:59: JWT verification failed: jwt expired
+2025-08-14T00:40:00: JWT verification failed: jwt expired

@@ -415,7 +415,7 @@ export default function MachinesPage() {
   // Save crew assignments
   const saveCrewAssignments = async (machineId) => {
     try {
-      await API.post(`/machines/${machineId}/crews`, crews);
+      await API.post(`/machines/${machineId}/crews`, { crews });
       showNotification('Crew assignments saved successfully');
     } catch (error) {
       console.error('Failed to save crew assignments:', error);

@@ -333,28 +333,19 @@ class MachinesService {
    */
   async getMachineCrews(machineId) {
     try {
-      // Ensure machine_crews table exists first
-      await DatabaseUtils.raw(`
-        CREATE TABLE IF NOT EXISTS machine_crews (
-          id SERIAL PRIMARY KEY,
-          machine_id INTEGER NOT NULL REFERENCES machines(id) ON DELETE CASCADE,
-          crew_data JSONB NOT NULL,
-          created_by INTEGER REFERENCES users(id),
-          updated_by INTEGER REFERENCES users(id),
-          created_at TIMESTAMP DEFAULT NOW(),
-          updated_at TIMESTAMP DEFAULT NOW(),
-          UNIQUE(machine_id)
-        )
-      `);
-
       const result = await DatabaseUtils.raw(`
-        SELECT crew_data
+        SELECT crew_letter, cycle_offset, employees
         FROM machine_crews 
-        WHERE machine_id = $1
+        WHERE machine_id = $1 AND is_active = true
+        ORDER BY crew_letter
       `, [machineId]);
       
-      if (result.rows.length > 0 && result.rows[0].crew_data) {
-        return JSON.parse(result.rows[0].crew_data);
+      if (result.rows.length > 0) {
+        return result.rows.map(row => ({
+          letter: row.crew_letter,
+          offset: row.cycle_offset,
+          employees: JSON.parse(row.employees || '[]')
+        }));
       }
       
       // Return default crew structure if none exists
@@ -379,33 +370,29 @@ class MachinesService {
    */
   async saveMachineCrews(machineId, crews, userId) {
     try {
-      // Ensure machine_crews table exists
+      // Delete existing crews for this machine
       await DatabaseUtils.raw(`
-        CREATE TABLE IF NOT EXISTS machine_crews (
-          id SERIAL PRIMARY KEY,
-          machine_id INTEGER NOT NULL REFERENCES machines(id) ON DELETE CASCADE,
-          crew_data JSONB NOT NULL,
-          created_by INTEGER REFERENCES users(id),
-          updated_by INTEGER REFERENCES users(id),
-          created_at TIMESTAMP DEFAULT NOW(),
-          updated_at TIMESTAMP DEFAULT NOW(),
-          UNIQUE(machine_id)
-        )
-      `);
+        DELETE FROM machine_crews WHERE machine_id = $1
+      `, [machineId]);
 
-      // Use upsert to insert or update crew data
-      const result = await DatabaseUtils.raw(`
-        INSERT INTO machine_crews (machine_id, crew_data, created_by, updated_by)
-        VALUES ($1, $2, $3, $3)
-        ON CONFLICT (machine_id)
-        DO UPDATE SET 
-          crew_data = EXCLUDED.crew_data,
-          updated_by = EXCLUDED.updated_by,
-          updated_at = NOW()
-        RETURNING *
-      `, [machineId, JSON.stringify(crews), userId]);
+      // Insert new crew data
+      if (crews && crews.length > 0) {
+        for (const crew of crews) {
+          await DatabaseUtils.raw(`
+            INSERT INTO machine_crews (
+              machine_id, crew_letter, cycle_offset, employees, created_by
+            ) VALUES ($1, $2, $3, $4, $5)
+          `, [
+            machineId,
+            crew.letter,
+            crew.offset,
+            JSON.stringify(crew.employees || []),
+            userId
+          ]);
+        }
+      }
 
-      return result.rows[0];
+      return { success: true, message: 'Crew assignments saved successfully' };
     } catch (error) {
       console.error('Error saving machine crews:', error);
       throw new Error('Failed to save machine crews: ' + error.message);
