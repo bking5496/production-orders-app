@@ -729,7 +729,7 @@ class LaborService {
       LEFT JOIN attendance_register ar ON (
         ar.date = la.assignment_date 
         AND ar.employee_id = la.employee_id 
-        AND ar.machine_id = la.machine_id 
+        AND (ar.machine_id = la.machine_id OR (ar.machine_id IS NULL AND la.machine_id IS NULL))
         AND ar.shift_type = la.shift_type
       )
       WHERE la.assignment_date = $1 
