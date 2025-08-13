@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar, Download, RefreshCw, Eye, Users, ClipboardList, UserCheck, Settings, Edit2 } from 'lucide-react';
+import { Calendar, Download, RefreshCw, Eye, Users, ClipboardList, UserCheck, Settings, Edit2, ChevronLeft, ChevronRight } from 'lucide-react';
 import API from '../core/api';
 import { formatUserDisplayName, formatEmployeeCode, formatRoleName } from '../utils/text-utils';
 
@@ -149,6 +149,14 @@ export default function LabourLayoutPage() {
     const [selectedShift, setSelectedShift] = useState('all');
     const [selectedMachine, setSelectedMachine] = useState('all');
 
+    // Date navigation functions
+    const navigateDate = (direction) => {
+        const currentDate = new Date(selectedDate);
+        currentDate.setDate(currentDate.getDate() + direction);
+        const newDate = currentDate.toISOString().split('T')[0];
+        setSelectedDate(newDate);
+    };
+
     const fetchRosterForDate = async (date) => {
         setLoading(true);
         try {
@@ -279,6 +287,13 @@ export default function LabourLayoutPage() {
                         </div>
                         <div className="flex flex-wrap items-center gap-3">
                             <div className="bg-white bg-opacity-10 backdrop-blur-sm rounded-lg px-3 py-2 flex items-center gap-2">
+                                <button 
+                                    onClick={() => navigateDate(-1)}
+                                    className="text-white hover:text-blue-200 transition-colors p-1 hover:bg-white hover:bg-opacity-10 rounded"
+                                    title="Previous day"
+                                >
+                                    <ChevronLeft className="w-4 h-4" />
+                                </button>
                                 <Calendar className="w-4 h-4" />
                                 <input 
                                     type="date" 
@@ -286,6 +301,13 @@ export default function LabourLayoutPage() {
                                     onChange={e => setSelectedDate(e.target.value)} 
                                     className="bg-transparent text-white placeholder-blue-200 border-none outline-none text-sm font-medium"
                                 />
+                                <button 
+                                    onClick={() => navigateDate(1)}
+                                    className="text-white hover:text-blue-200 transition-colors p-1 hover:bg-white hover:bg-opacity-10 rounded"
+                                    title="Next day"
+                                >
+                                    <ChevronRight className="w-4 h-4" />
+                                </button>
                             </div>
                             <button 
                                 onClick={() => window.location.href = '/labor-planner?date=' + selectedDate}
