@@ -173,6 +173,37 @@ router.patch('/:id/status',
 );
 
 /**
+ * GET /api/machines/:id/crews
+ * Get crew assignments for a machine
+ */
+router.get('/:id/crews',
+  authenticateToken,
+  asyncHandler(async (req, res) => {
+    const crews = await machinesService.getMachineCrews(req.params.id);
+    return res.success(crews, 'Machine crews retrieved successfully');
+  })
+);
+
+/**
+ * POST /api/machines/:id/crews
+ * Save crew assignments for a machine
+ */
+router.post('/:id/crews',
+  authenticateToken,
+  requireRole(['admin', 'supervisor']),
+  [body('crews').isArray().withMessage('Crews must be an array')],
+  asyncHandler(async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.validationError(errors.array());
+    }
+
+    const result = await machinesService.saveMachineCrews(req.params.id, req.body.crews || req.body, req.user.id);
+    return res.success(result, 'Machine crews saved successfully');
+  })
+);
+
+/**
  * DELETE /api/machines/:id
  * Delete machine (only if no production history)
  */

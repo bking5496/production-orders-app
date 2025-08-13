@@ -309,6 +309,76 @@ class MachinesService {
     const result = await DatabaseUtils.raw(query, [date]);
     return result.rows;
   }
+
+  /**
+   * Get crew assignments for a machine
+   */
+  async getMachineCrews(machineId) {
+    try {
+      const result = await DatabaseUtils.raw(`
+        SELECT crew_data
+        FROM machine_crews 
+        WHERE machine_id = $1
+      `, [machineId]);
+      
+      if (result.rows.length > 0 && result.rows[0].crew_data) {
+        return JSON.parse(result.rows[0].crew_data);
+      }
+      
+      // Return default crew structure if none exists
+      return [
+        { letter: 'A', offset: 0, employees: [] },
+        { letter: 'B', offset: 2, employees: [] },
+        { letter: 'C', offset: 4, employees: [] }
+      ];
+    } catch (error) {
+      console.error('Error getting machine crews:', error);
+      // Return default crew structure on error
+      return [
+        { letter: 'A', offset: 0, employees: [] },
+        { letter: 'B', offset: 2, employees: [] },
+        { letter: 'C', offset: 4, employees: [] }
+      ];
+    }
+  }
+
+  /**
+   * Save crew assignments for a machine
+   */
+  async saveMachineCrews(machineId, crews, userId) {
+    try {
+      // Ensure machine_crews table exists
+      await DatabaseUtils.raw(`
+        CREATE TABLE IF NOT EXISTS machine_crews (
+          id SERIAL PRIMARY KEY,
+          machine_id INTEGER NOT NULL REFERENCES machines(id) ON DELETE CASCADE,
+          crew_data JSONB NOT NULL,
+          created_by INTEGER REFERENCES users(id),
+          updated_by INTEGER REFERENCES users(id),
+          created_at TIMESTAMP DEFAULT NOW(),
+          updated_at TIMESTAMP DEFAULT NOW(),
+          UNIQUE(machine_id)
+        )
+      `);
+
+      // Use upsert to insert or update crew data
+      const result = await DatabaseUtils.raw(`
+        INSERT INTO machine_crews (machine_id, crew_data, created_by, updated_by)
+        VALUES ($1, $2, $3, $3)
+        ON CONFLICT (machine_id)
+        DO UPDATE SET 
+          crew_data = EXCLUDED.crew_data,
+          updated_by = EXCLUDED.updated_by,
+          updated_at = NOW()
+        RETURNING *
+      `, [machineId, JSON.stringify(crews), userId]);
+
+      return result.rows[0];
+    } catch (error) {
+      console.error('Error saving machine crews:', error);
+      throw new Error('Failed to save machine crews: ' + error.message);
+    }
+  }
 }
 
 module.exports = new MachinesService();
