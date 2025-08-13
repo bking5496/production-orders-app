@@ -61856,3 +61856,70 @@ Error: bind EADDRINUSE null:3000
   'analytics'
 ]
 2025-08-13T07:49:59: 🏠 admin joined room: production
+2025-08-13T07:50:02: 🔗 Client acquired from pool
+2025-08-13T07:50:02: 🔓 Client released back to pool
+2025-08-13T07:50:02: 🔗 Client acquired from pool
+2025-08-13T07:50:02: 🔗 Client acquired from pool
+2025-08-13T07:50:02: 🔓 Client released back to pool
+2025-08-13T07:50:02: 🔓 Client released back to pool
+2025-08-13T07:50:05: 🔗 Client acquired from pool
+2025-08-13T07:50:05: 🔓 Client released back to pool
+2025-08-13T07:50:05: 🔗 Client acquired from pool
+2025-08-13T07:50:05: 🔓 Client released back to pool
+2025-08-13T07:50:05: 🔗 Client acquired from pool
+2025-08-13T07:50:05: 🔓 Client released back to pool
+2025-08-13T07:50:07: 📺 admin subscribed to: [ 'machines', 'production' ]
+2025-08-13T07:50:07: 🔗 Client acquired from pool
+2025-08-13T07:50:07: 🔓 Client released back to pool
+2025-08-13T07:50:07: 🔗 Client acquired from pool
+2025-08-13T07:50:07: 🔗 Client acquired from pool
+2025-08-13T07:50:07: 🔗 Client acquired from pool
+2025-08-13T07:50:07: 🔓 Client released back to pool
+2025-08-13T07:50:07: 🔓 Client released back to pool
+2025-08-13T07:50:07: 🔗 Client acquired from pool
+2025-08-13T07:50:07: 🔓 Client released back to pool
+2025-08-13T07:50:07: 🔓 Client released back to pool
+2025-08-13T07:50:07: 🔗 Client acquired from pool
+2025-08-13T07:50:07: 🔓 Client released back to pool
+2025-08-13T07:50:07: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-13T07:50:07: 🏠 admin joined room: production
+2025-08-13T07:50:07: 🔗 Client acquired from pool
+2025-08-13T07:50:07: 🔓 Client released back to pool
+2025-08-13T07:50:07: 🔗 Client acquired from pool
+2025-08-13T07:50:07: 🔓 Client released back to pool
+2025-08-13T07:50:07: 🔗 Client acquired from pool
+2025-08-13T07:50:07: 🔓 Client released back to pool
+2025-08-13T07:50:10: 🔗 Client acquired from pool
+2025-08-13T07:50:10: 🔓 Client released back to pool
+2025-08-13T07:50:10: 🔗 Client acquired from pool
+2025-08-13T07:50:10: 🔓 Client released back to pool
+2025-08-13T07:50:10: 🔗 Client acquired from pool
+2025-08-13T07:50:10: 🔓 Client released back to pool
+2025-08-13T07:50:36: 🔗 Client acquired from pool
+2025-08-13T07:50:36: 🔓 Client released back to pool
+2025-08-13T07:50:36: 🔗 Client acquired from pool
+2025-08-13T07:50:36: 🔓 Client released back to pool
+2025-08-13T07:50:36: 🔗 Client acquired from pool
+2025-08-13T07:50:36: 🔓 Client released back to pool
+2025-08-13T07:53:20: ✅ New PostgreSQL client connected
+2025-08-13T07:53:20: 🔗 Client acquired from pool
+2025-08-13T07:53:20: 🔓 Client released back to pool
+2025-08-13T07:53:20: 🔗 Client acquired from pool
+2025-08-13T07:53:20: 🔓 Client released back to pool
+2025-08-13T07:53:20: 🔗 Client acquired from pool
+2025-08-13T07:53:20: 🔓 Client released back to pool
+2025-08-13T07:53:23: 🔗 Client acquired from pool
+2025-08-13T07:53:23: 🔓 Client released back to pool
+2025-08-13T07:53:23: 🔗 Client acquired from pool
+2025-08-13T07:53:23: 🔓 Client released back to pool
+2025-08-13T07:53:23: ✅ New PostgreSQL client connected
+2025-08-13T07:53:23: 🔗 Client acquired from pool
+2025-08-13T07:53:23: 🔓 Client released back to pool

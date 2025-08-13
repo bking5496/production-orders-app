@@ -535,7 +535,9 @@ const LaborPlanner = ({ currentUser }) => {
                   <input
                     id="employee-search"
                     type="text"
-                    value={employeeSearch}
+                    value={employeeSearch || (assignmentForm.employee_id ? 
+                      formatUserDisplayName(availableUsers.find(u => u.id.toString() === assignmentForm.employee_id)) || 
+                      `Employee #${assignmentForm.employee_id}` : '')}
                     onChange={(e) => setEmployeeSearch(e.target.value)}
                     className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-3 focus:ring-blue-500/20 focus:border-blue-500 shadow-sm transition-all duration-200"
                     placeholder="Type to search employees..."
@@ -545,7 +547,12 @@ const LaborPlanner = ({ currentUser }) => {
                 
                 {/* Employee List */}
                 <div className="mt-3 max-h-60 overflow-y-auto border-2 border-gray-100 rounded-xl bg-white shadow-sm">
-                  {getFilteredWorkers().map(user => (
+                  {(assignmentForm.role === 'supervisor' ? 
+                    getFilteredEmployees().filter(user => user.role === 'supervisor') :
+                    assignmentForm.role === 'forklift_driver' ? 
+                    getFilteredEmployees() :
+                    getFilteredWorkers()
+                  ).map(user => (
                     <div
                       key={user.id}
                       onClick={() => {
@@ -569,8 +576,13 @@ const LaborPlanner = ({ currentUser }) => {
                       </div>
                     </div>
                   ))}
-                  {getFilteredWorkers().length === 0 && (
-                    <p className="p-4 text-gray-500 text-sm text-center">No available workers found</p>
+                  {(assignmentForm.role === 'supervisor' ? 
+                    getFilteredEmployees().filter(user => user.role === 'supervisor') :
+                    assignmentForm.role === 'forklift_driver' ? 
+                    getFilteredEmployees() :
+                    getFilteredWorkers()
+                  ).length === 0 && (
+                    <p className="p-4 text-gray-500 text-sm text-center">No available {assignmentForm.role === 'supervisor' ? 'supervisors' : assignmentForm.role === 'forklift_driver' ? 'drivers' : 'workers'} found</p>
                   )}
                 </div>
               </div>
@@ -634,7 +646,13 @@ const LaborPlanner = ({ currentUser }) => {
                         <WebSocketStatusIndicator />
                       </div>
                       <Button
-                        onClick={() => handleAssignWorker({id: 'supervisor-station', name: 'Supervision'}, 'day', 'supervisor')}
+                        onClick={() => {
+                          setAssignmentForm({employee_id: supervisor.id.toString(), role: 'supervisor'});
+                          setSelectedMachine({id: 'supervisor-station', name: 'Supervision'});
+                          setSelectedShift('day');
+                          setShowSupervisorModal(false);
+                          setShowAssignmentModal(true);
+                        }}
                         size="sm"
                         className="w-7 h-7 p-0 bg-green-500 text-white rounded-full hover:bg-green-600"
                       >
@@ -659,7 +677,13 @@ const LaborPlanner = ({ currentUser }) => {
                         <WebSocketStatusIndicator />
                       </div>
                       <Button
-                        onClick={() => handleAssignWorker({id: 'supervisor-station', name: 'Supervision'}, 'night', 'supervisor')}
+                        onClick={() => {
+                          setAssignmentForm({employee_id: supervisor.id.toString(), role: 'supervisor'});
+                          setSelectedMachine({id: 'supervisor-station', name: 'Supervision'});
+                          setSelectedShift('night');
+                          setShowSupervisorModal(false);
+                          setShowAssignmentModal(true);
+                        }}
                         size="sm"
                         className="w-7 h-7 p-0 bg-green-500 text-white rounded-full hover:bg-green-600"
                       >
@@ -712,7 +736,13 @@ const LaborPlanner = ({ currentUser }) => {
                         <WebSocketStatusIndicator />
                       </div>
                       <Button
-                        onClick={() => handleAssignWorker({id: 'forklift-station', name: 'Forklift Operations'}, 'day', 'forklift_driver')}
+                        onClick={() => {
+                          setAssignmentForm({employee_id: driver.id.toString(), role: 'forklift_driver'});
+                          setSelectedMachine({id: 'forklift-station', name: 'Forklift Operations'});
+                          setSelectedShift('day');
+                          setShowForkliftModal(false);
+                          setShowAssignmentModal(true);
+                        }}
                         size="sm"
                         className="w-7 h-7 p-0 bg-green-500 text-white rounded-full hover:bg-green-600"
                       >
@@ -737,7 +767,13 @@ const LaborPlanner = ({ currentUser }) => {
                         <WebSocketStatusIndicator />
                       </div>
                       <Button
-                        onClick={() => handleAssignWorker({id: 'forklift-station', name: 'Forklift Operations'}, 'night', 'forklift_driver')}
+                        onClick={() => {
+                          setAssignmentForm({employee_id: driver.id.toString(), role: 'forklift_driver'});
+                          setSelectedMachine({id: 'forklift-station', name: 'Forklift Operations'});
+                          setSelectedShift('night');
+                          setShowForkliftModal(false);
+                          setShowAssignmentModal(true);
+                        }}
                         size="sm"
                         className="w-7 h-7 p-0 bg-green-500 text-white rounded-full hover:bg-green-600"
                       >
