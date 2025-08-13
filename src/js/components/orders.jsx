@@ -69,7 +69,7 @@ const ORDER_STATUSES = {
 
 const PRIORITY_LEVELS = {
   low: { label: 'Low', color: 'bg-gray-100 text-gray-800 border-gray-200' },
-  normal: { label: 'Normal', color: 'bg-blue-100 text-blue-800 border-blue-200' },
+  medium: { label: 'Medium', color: 'bg-blue-100 text-blue-800 border-blue-200' },
   high: { label: 'High', color: 'bg-orange-100 text-orange-800 border-orange-200' },
   urgent: { label: 'Urgent', color: 'bg-red-100 text-red-800 border-red-200' }
 };
@@ -242,7 +242,7 @@ export default function ProductionOrdersSystem() {
     order_number: '',
     product_name: '',
     quantity: '',
-    priority: 'normal',
+    priority: 'medium',
     environment: '',
     due_date: '',
     specifications: '',
@@ -435,11 +435,36 @@ export default function ProductionOrdersSystem() {
     try {
       setLoading(true);
       const orderData = {
-        ...formData,
-        order_number: formData.order_number || `ORD-${Date.now()}`,
+        order_number: formData.order_number.trim() || `ORD-${Date.now()}`,
+        product_name: formData.product_name.trim(),
         quantity: parseInt(formData.quantity),
-        created_by: 1 // Current user ID
+        priority: formData.priority || 'medium'
       };
+      
+      // Only add optional fields if they have values
+      if (formData.environment && formData.environment.trim()) {
+        orderData.environment = formData.environment.trim();
+      }
+      if (formData.due_date) {
+        orderData.due_date = formData.due_date;
+      }
+      if (formData.specifications && formData.specifications.trim()) {
+        try {
+          orderData.specifications = JSON.parse(formData.specifications);
+        } catch (e) {
+          orderData.specifications = { notes: formData.specifications.trim() };
+        }
+      }
+      if (formData.customer_info && formData.customer_info.trim()) {
+        try {
+          orderData.customer_info = JSON.parse(formData.customer_info);
+        } catch (e) {
+          orderData.customer_info = { info: formData.customer_info.trim() };
+        }
+      }
+      if (formData.batch_number && formData.batch_number.trim()) {
+        orderData.notes = `Batch: ${formData.batch_number.trim()}`;
+      }
       
       await API.post('/orders', orderData);
       setShowCreateModal(false);
@@ -748,7 +773,7 @@ export default function ProductionOrdersSystem() {
       order_number: '',
       product_name: '',
       quantity: '',
-      priority: 'normal',
+      priority: 'medium',
       environment: '',
       due_date: '',
       specifications: '',
@@ -851,8 +876,8 @@ export default function ProductionOrdersSystem() {
 
   // Get priority info with null safety
   const getPriorityInfo = (priority) => {
-    if (!priority) return PRIORITY_LEVELS.normal;
-    return PRIORITY_LEVELS[priority] || PRIORITY_LEVELS.normal;
+    if (!priority) return PRIORITY_LEVELS.medium;
+    return PRIORITY_LEVELS[priority] || PRIORITY_LEVELS.medium;
   };
 
   // Calculate production time
