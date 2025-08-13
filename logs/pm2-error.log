@@ -31322,3 +31322,48 @@ Error: bind EADDRINUSE null:3000
   code: 'ERR_ERL_UNEXPECTED_X_FORWARDED_FOR',
   help: 'https://express-rate-limit.github.io/ERR_ERL_UNEXPECTED_X_FORWARDED_FOR/'
 }
+2025-08-13T08:12:59: Error occurred: {
+  error: 'invalid input syntax for type integer: "supervisor-station"',
+  stack: 'error: invalid input syntax for type integer: "supervisor-station"\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.select (/home/production-app/production-orders-app/src/utils/database.js:43:20)\n' +
+    '    at async DatabaseUtils.findOne (/home/production-app/production-orders-app/src/utils/database.js:118:18)\n' +
+    '    at async LaborService.createOrUpdateLaborAssignment (/home/production-app/production-orders-app/src/services/labor.service.js:281:32)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/labor.routes.js:125:24',
+  url: '/assignments',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-13T06:12:59.721Z'
+}
+2025-08-13T08:13:00: Error occurred: {
+  error: 'invalid input syntax for type integer: "supervisor-station"',
+  stack: 'error: invalid input syntax for type integer: "supervisor-station"\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.select (/home/production-app/production-orders-app/src/utils/database.js:43:20)\n' +
+    '    at async DatabaseUtils.findOne (/home/production-app/production-orders-app/src/utils/database.js:118:18)\n' +
+    '    at async LaborService.createOrUpdateLaborAssignment (/home/production-app/production-orders-app/src/services/labor.service.js:281:32)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/labor.routes.js:125:24',
+  url: '/assignments',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-13T06:13:00.773Z'
+}
+2025-08-13T08:13:02: Error occurred: {
+  error: 'invalid input syntax for type integer: "supervisor-station"',
+  stack: 'error: invalid input syntax for type integer: "supervisor-station"\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.select (/home/production-app/production-orders-app/src/utils/database.js:43:20)\n' +
+    '    at async DatabaseUtils.findOne (/home/production-app/production-orders-app/src/utils/database.js:118:18)\n' +
+    '    at async LaborService.createOrUpdateLaborAssignment (/home/production-app/production-orders-app/src/services/labor.service.js:281:32)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/labor.routes.js:125:24',
+  url: '/assignments',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-13T06:13:02.820Z'
+}
