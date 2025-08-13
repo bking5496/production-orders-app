@@ -282,7 +282,7 @@ router.post('/attendance-register',
     body('status').isIn(['present', 'absent', 'late']).withMessage('Valid status is required'),
     body('check_in_time').optional({ nullable: true }).matches(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/),
     body('notes').optional().isString(),
-    body('marked_by').optional().isInt({ min: 1 }).withMessage('Valid marked_by user ID is required')
+    body('marked_by').optional({ nullable: true }).isInt({ min: 1 }).withMessage('Valid marked_by user ID is required')
   ],
   asyncHandler(async (req, res) => {
     const errors = validationResult(req);
