@@ -509,7 +509,21 @@ export default function MachinesPage() {
   const handleAddMachine = async (e) => {
     e.preventDefault();
     try {
-      await API.post('/machines', formData);
+      // Only include fields that exist in machines table
+      const machineData = {
+        name: formData.name,
+        type: formData.type,
+        environment: formData.environment,
+        capacity: parseInt(formData.capacity) || 100,
+        production_rate: parseFloat(formData.production_rate) || 60,
+        operators_per_shift: parseInt(formData.operators_per_shift) || 2,
+        hopper_loaders_per_shift: parseInt(formData.hopper_loaders_per_shift) || 1,
+        packers_per_shift: parseInt(formData.packers_per_shift) || 3,
+        shift_cycle_enabled: Boolean(formData.shift_cycle_enabled),
+        cycle_start_date: formData.cycle_start_date || null
+      };
+      
+      await API.post('/machines', machineData);
       setShowAddModal(false);
       loadMachines();
       showNotification('Machine added successfully');
@@ -523,7 +537,21 @@ export default function MachinesPage() {
     e.preventDefault();
     try {
       // Update machine settings
-      await API.put(`/machines/${selectedMachine.id}`, formData);
+      // Only include fields that exist in machines table
+      const machineData = {
+        name: formData.name,
+        type: formData.type,
+        environment: formData.environment,
+        capacity: parseInt(formData.capacity) || 100,
+        production_rate: parseFloat(formData.production_rate) || 60,
+        operators_per_shift: parseInt(formData.operators_per_shift) || 2,
+        hopper_loaders_per_shift: parseInt(formData.hopper_loaders_per_shift) || 1,
+        packers_per_shift: parseInt(formData.packers_per_shift) || 3,
+        shift_cycle_enabled: Boolean(formData.shift_cycle_enabled),
+        cycle_start_date: formData.cycle_start_date || null
+      };
+      
+      await API.put(`/machines/${selectedMachine.id}`, machineData);
       
       // If shift cycle is enabled, save crew assignments
       if (formData.shift_cycle_enabled) {
@@ -603,13 +631,11 @@ export default function MachinesPage() {
   // Helper function to render SCADA status badge
   const getStatusBadge = (status) => {
     const config = STATUS_COLORS[status] || STATUS_COLORS.offline;
-    const Icon = config.icon;
     
     return (
-      <div className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold ${config.bg} ${config.text} border ${config.border}`}>
-        <div className={`w-2 h-2 rounded-full mr-2 ${config.indicator} ${config.pulse}`}></div>
-        <Icon className="w-3 h-3 mr-1" />
-        {status.replace('_', ' ').toUpperCase()}
+      <div className={`inline-flex items-center px-3 py-1 text-xs font-bold font-mono ${config.bg} ${config.text} border ${config.border}`}>
+        <span className="mr-2">{config.symbol}</span>
+        {config.label}
       </div>
     );
   };
@@ -1618,7 +1644,6 @@ export default function MachinesPage() {
             
             <div className="grid grid-cols-2 gap-4">
               {Object.entries(STATUS_COLORS).map(([status, config]) => {
-                const Icon = config.icon;
                 return (
                   <Button
                     key={status}
@@ -1626,11 +1651,11 @@ export default function MachinesPage() {
                     className={`${selectedMachine.status === status ? 'bg-blue-600 border-blue-500' : 'bg-slate-800 hover:bg-slate-700 border-slate-600'} border-2 h-20 flex flex-col items-center justify-center text-white font-bold transition-all duration-200`}
                     disabled={selectedMachine.status === status}
                   >
-                    <Icon className={`w-6 h-6 mb-2 ${config.text}`} />
+                    <span className={`text-2xl mb-2 ${config.text}`}>{config.symbol}</span>
                     <span className="text-xs font-bold">
-                      {status.replace('_', ' ').toUpperCase()}
+                      {config.label}
                     </span>
-                    <div className={`w-2 h-2 rounded-full mt-1 ${config.indicator} ${config.pulse}`}></div>
+                    <div className={`w-2 h-2 rounded-full mt-1 ${config.indicator}`}></div>
                   </Button>
                 );
               })}

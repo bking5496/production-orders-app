@@ -703,3 +703,170 @@
   user: 'admin',
   timestamp: '2025-08-13T22:17:55.082Z'
 }
+2025-08-14T00:23:18: Error getting machine crews: error: column "crew_data" does not exist
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)
+    at async DatabaseUtils.raw (/home/production-app/production-orders-app/src/utils/database.js:146:12)
+    at async MachinesService.getMachineCrews (/home/production-app/production-orders-app/src/services/machines.service.js:350:22)
+    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:194:19 {
+  length: 109,
+  severity: 'ERROR',
+  code: '42703',
+  detail: undefined,
+  hint: undefined,
+  position: '17',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'parse_relation.c',
+  line: '3722',
+  routine: 'errorMissingColumn'
+}
+2025-08-14T00:24:22: Error getting machine crews: error: column "crew_data" does not exist
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)
+    at async DatabaseUtils.raw (/home/production-app/production-orders-app/src/utils/database.js:146:12)
+    at async MachinesService.getMachineCrews (/home/production-app/production-orders-app/src/services/machines.service.js:350:22)
+    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:194:19 {
+  length: 109,
+  severity: 'ERROR',
+  code: '42703',
+  detail: undefined,
+  hint: undefined,
+  position: '17',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'parse_relation.c',
+  line: '3722',
+  routine: 'errorMissingColumn'
+}
+2025-08-14T00:24:26: Error occurred: {
+  error: 'column "order_number" of relation "machines" does not exist',
+  stack: 'error: column "order_number" of relation "machines" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.update (/home/production-app/production-orders-app/src/utils/database.js:86:20)\n' +
+    '    at async MachinesService.updateMachine (/home/production-app/production-orders-app/src/services/machines.service.js:140:28)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:146:28',
+  url: '/api/machines/40',
+  method: 'PUT',
+  user: 'admin',
+  timestamp: '2025-08-13T22:24:26.191Z'
+}
+2025-08-14T00:24:27: Error occurred: {
+  error: 'column "order_number" of relation "machines" does not exist',
+  stack: 'error: column "order_number" of relation "machines" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.update (/home/production-app/production-orders-app/src/utils/database.js:86:20)\n' +
+    '    at async MachinesService.updateMachine (/home/production-app/production-orders-app/src/services/machines.service.js:140:28)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:146:28',
+  url: '/api/machines/40',
+  method: 'PUT',
+  user: 'admin',
+  timestamp: '2025-08-13T22:24:27.266Z'
+}
+2025-08-14T00:24:29: Error occurred: {
+  error: 'column "order_number" of relation "machines" does not exist',
+  stack: 'error: column "order_number" of relation "machines" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.update (/home/production-app/production-orders-app/src/utils/database.js:86:20)\n' +
+    '    at async MachinesService.updateMachine (/home/production-app/production-orders-app/src/services/machines.service.js:140:28)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:146:28',
+  url: '/api/machines/40',
+  method: 'PUT',
+  user: 'admin',
+  timestamp: '2025-08-13T22:24:29.349Z'
+}
+2025-08-14T00:27:24: Error getting machine crews: error: column "crew_data" does not exist
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)
+    at async DatabaseUtils.raw (/home/production-app/production-orders-app/src/utils/database.js:146:12)
+    at async MachinesService.getMachineCrews (/home/production-app/production-orders-app/src/services/machines.service.js:350:22)
+    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:194:19 {
+  length: 109,
+  severity: 'ERROR',
+  code: '42703',
+  detail: undefined,
+  hint: undefined,
+  position: '17',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'parse_relation.c',
+  line: '3722',
+  routine: 'errorMissingColumn'
+}
+2025-08-14T00:27:31: Error getting machine crews: error: column "crew_data" does not exist
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)
+    at async DatabaseUtils.raw (/home/production-app/production-orders-app/src/utils/database.js:146:12)
+    at async MachinesService.getMachineCrews (/home/production-app/production-orders-app/src/services/machines.service.js:350:22)
+    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:194:19 {
+  length: 109,
+  severity: 'ERROR',
+  code: '42703',
+  detail: undefined,
+  hint: undefined,
+  position: '17',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'parse_relation.c',
+  line: '3722',
+  routine: 'errorMissingColumn'
+}
+2025-08-14T00:27:56: Error getting machine crews: error: column "crew_data" does not exist
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)
+    at async DatabaseUtils.raw (/home/production-app/production-orders-app/src/utils/database.js:146:12)
+    at async MachinesService.getMachineCrews (/home/production-app/production-orders-app/src/services/machines.service.js:350:22)
+    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:194:19 {
+  length: 109,
+  severity: 'ERROR',
+  code: '42703',
+  detail: undefined,
+  hint: undefined,
+  position: '17',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'parse_relation.c',
+  line: '3722',
+  routine: 'errorMissingColumn'
+}
