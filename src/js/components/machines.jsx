@@ -1735,49 +1735,81 @@ export default function MachinesPage() {
         </Modal>
       )}
 
-      {/* Schedule Modal */}
+      {/* HMI Schedule Modal */}
       {showScheduleModal && selectedMachine && (
         <Modal 
-          title={`Schedule - ${selectedMachine.name}`} 
+          title={`PRODUCTION SCHEDULE - ${selectedMachine.name.toUpperCase()}`} 
           onClose={() => setShowScheduleModal(false)}
           size="large"
         >
-          <div className="p-6">
+          <div className="bg-slate-900 rounded-none">
+          <div className="p-8">
             {loadingSchedule ? (
               <div className="text-center py-8">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
                 <p className="text-gray-500 mt-2">Loading schedule...</p>
               </div>
             ) : (
-              <div className="space-y-4">
+              <div className="space-y-6 bg-slate-800 p-6 border-4 border-slate-600">
                 <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-lg font-semibold text-gray-900">21-Day Production Schedule</h3>
-                  <div className="flex items-center gap-4 text-sm text-gray-600">
-                    <div className="flex items-center gap-1">
-                      <Factory className="w-4 h-4 text-green-600" />
-                      <span>Production Orders</span>
+                  <h3 className="text-xl font-bold text-white uppercase font-mono">{new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })} Production Schedule</h3>
+                  <div className="flex items-center gap-6 text-slate-300">
+                    <div className="flex items-center gap-2">
+                      <div className="w-4 h-4 bg-green-400 rounded-full"></div>
+                      <span className="font-mono font-bold">PRODUCTION ORDERS</span>
                     </div>
-                    <div className="flex items-center gap-1">
-                      <Sun className="w-4 h-4 text-yellow-500" />
-                      <span>Day Shift</span>
+                    <div className="flex items-center gap-2">
+                      <div className="w-4 h-4 bg-yellow-400 rounded-full"></div>
+                      <span className="font-mono font-bold">DAY SHIFT</span>
                     </div>
-                    <div className="flex items-center gap-1">
-                      <Moon className="w-4 h-4 text-blue-500" />
-                      <span>Night Shift</span>
+                    <div className="flex items-center gap-2">
+                      <div className="w-4 h-4 bg-blue-400 rounded-full"></div>
+                      <span className="font-mono font-bold">NIGHT SHIFT</span>
                     </div>
                   </div>
                 </div>
                 
-                <div className="grid grid-cols-7 gap-2">
-                  {/* Generate 21 days starting from 7 days ago */}
-                  {Array.from({ length: 21 }, (_, index) => {
-                    const date = new Date();
-                    date.setDate(date.getDate() - 7 + index);
+                <div className="grid grid-cols-7 gap-3">
+                  {/* Generate current month calendar */}
+                  {(() => {
+                    const today = new Date();
+                    const year = today.getFullYear();
+                    const month = today.getMonth();
+                    const firstDay = new Date(year, month, 1);
+                    const lastDay = new Date(year, month + 1, 0);
+                    const startDate = new Date(firstDay);
+                    startDate.setDate(startDate.getDate() - firstDay.getDay()); // Start from Sunday
+                    
+                    const days = [];
+                    for (let i = 0; i < 42; i++) { // 6 weeks max
+                      const currentDate = new Date(startDate);
+                      currentDate.setDate(startDate.getDate() + i);
+                      if (currentDate > lastDay && currentDate.getDate() > 7) break;
+                      days.push(currentDate);
+                    }
+                    
+                    return days;
+                  })().map((date, index) => {
                     const dateStr = date.toISOString().split('T')[0];
                     const dayData = machineSchedule[dateStr] || { day: [], night: [] };
                     const isToday = dateStr === new Date().toISOString().split('T')[0];
                     const isPast = date < new Date(new Date().toDateString());
+                    const isCurrentMonth = date.getMonth() === new Date().getMonth();
                     
+                    // Add weekday headers for first row
+                    if (index < 7) {
+                      const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+                      if (index === 0) {
+                        return [
+                          // Weekday headers
+                          ...weekdays.map(day => (
+                            <div key={`header-${day}`} className="p-2 text-center font-bold text-slate-400 text-xs uppercase tracking-wider">
+                              {day}
+                            </div>
+                          ))
+                        ];
+                      }
+                    }
                     // Determine the icon based on production orders and shift coverage
                     let shiftIcon;
                     const hasDayShift = dayData.day.length > 0;
@@ -1824,25 +1856,30 @@ export default function MachinesPage() {
                     return (
                       <div
                         key={dateStr}
-                        className={`p-3 rounded-lg border text-center ${
+                        className={`aspect-square p-3 border-2 text-center transition-all duration-200 ${
                           isToday 
-                            ? 'bg-blue-50 border-blue-300 ring-2 ring-blue-200' 
-                            : isPast 
-                              ? 'bg-gray-50 border-gray-200' 
-                              : 'bg-white border-gray-200 hover:bg-gray-50'
+                            ? 'bg-blue-600 border-blue-400 text-white shadow-lg' 
+                            : !isCurrentMonth
+                              ? 'bg-slate-600 border-slate-500 text-slate-400'
+                              : isPast 
+                                ? 'bg-slate-700 border-slate-600 text-slate-300' 
+                                : 'bg-slate-800 border-slate-600 text-white hover:bg-slate-700'
                         }`}
                         title={`${date.toLocaleDateString()} - ${hasOrders ? dayData.orders.map(o => `${o.order_number}: ${o.product_name}`).join(', ') : 'No production scheduled'}`}
                       >
-                        <div className="text-xs font-medium text-gray-600 mb-1">
-                          {date.toLocaleDateString('en-US', { weekday: 'short' })}
-                        </div>
-                        <div className="text-sm font-semibold text-gray-900 mb-2">
+                        <div className="text-lg font-bold font-mono mb-2">
                           {date.getDate()}
                         </div>
-                        {shiftIcon}
+                        <div className="flex justify-center">
+                          {hasOrders ? (
+                            <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+                          ) : (
+                            <div className="w-3 h-3 bg-slate-500 rounded-full"></div>
+                          )}
+                        </div>
                         {hasOrders && (
-                          <div className="text-xs text-gray-500 mt-1">
-                            {dayData.orders.length} order{dayData.orders.length !== 1 ? 's' : ''}
+                          <div className="text-xs mt-1 font-mono">
+                            {dayData.orders.length}
                           </div>
                         )}
                       </div>
@@ -1889,6 +1926,7 @@ export default function MachinesPage() {
                 </div>
               </div>
             )}
+          </div>
           </div>
         </Modal>
       )}
