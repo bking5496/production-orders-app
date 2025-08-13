@@ -925,13 +925,12 @@ export default function MachinesPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-8">
               {filteredMachines.filter(m => m.environment === 'blending').map(machine => {
                 const statusConfig = STATUS_COLORS[machine.status] || STATUS_COLORS.offline;
-                const StatusIcon = statusConfig.icon;
                 
                 return (
                   <div key={machine.id} className={`bg-slate-800 border ${statusConfig.border} rounded-lg p-6 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden relative`}>
                     {/* Status Indicator */}
                     <div className="absolute top-4 right-4">
-                      <div className={`w-3 h-3 rounded-full ${statusConfig.indicator} ${statusConfig.pulse}`}></div>
+                      <div className={`w-3 h-3 rounded-full ${statusConfig.indicator}`}></div>
                     </div>
                     
                     {/* Compact Machine Header */}
@@ -978,7 +977,7 @@ export default function MachinesPage() {
                           }}
                           className="bg-slate-700 hover:bg-slate-600 text-white border-slate-600 text-xs py-2"
                         >
-                          <StatusIcon className="w-3 h-3" />
+                          <span className={`text-lg ${statusConfig.text}`}>{statusConfig.symbol}</span>
                         </Button>
                         
                         <Button 
@@ -1036,13 +1035,12 @@ export default function MachinesPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-8">
               {filteredMachines.filter(m => m.environment === 'packaging').map(machine => {
                 const statusConfig = STATUS_COLORS[machine.status] || STATUS_COLORS.offline;
-                const StatusIcon = statusConfig.icon;
                 
                 return (
                   <div key={machine.id} className={`bg-slate-800 border ${statusConfig.border} rounded-lg p-6 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden relative`}>
                     {/* Status Indicator */}
                     <div className="absolute top-4 right-4">
-                      <div className={`w-3 h-3 rounded-full ${statusConfig.indicator} ${statusConfig.pulse}`}></div>
+                      <div className={`w-3 h-3 rounded-full ${statusConfig.indicator}`}></div>
                     </div>
                     
                     {/* Compact Machine Header */}
@@ -1089,7 +1087,7 @@ export default function MachinesPage() {
                           }}
                           className="bg-slate-700 hover:bg-slate-600 text-white border-slate-600 text-xs py-2"
                         >
-                          <StatusIcon className="w-3 h-3" />
+                          <span className={`text-lg ${statusConfig.text}`}>{statusConfig.symbol}</span>
                         </Button>
                         
                         <Button 
