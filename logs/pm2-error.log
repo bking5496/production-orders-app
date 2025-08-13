@@ -40,3 +40,87 @@
   user: 'admin',
   timestamp: '2025-08-13T20:02:49.062Z'
 }
+2025-08-13T22:17:03: Error occurred: {
+  error: 'null value in column "machine_id" of relation "attendance_register" violates not-null constraint',
+  stack: 'error: null value in column "machine_id" of relation "attendance_register" violates not-null constraint\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.raw (/home/production-app/production-orders-app/src/utils/database.js:146:12)\n' +
+    '    at async LaborService.markAttendance (/home/production-app/production-orders-app/src/services/labor.service.js:791:20)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/labor.routes.js:299:30',
+  url: '/attendance-register',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-13T20:17:03.545Z'
+}
+2025-08-13T22:17:04: Error occurred: {
+  error: 'null value in column "machine_id" of relation "attendance_register" violates not-null constraint',
+  stack: 'error: null value in column "machine_id" of relation "attendance_register" violates not-null constraint\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.raw (/home/production-app/production-orders-app/src/utils/database.js:146:12)\n' +
+    '    at async LaborService.markAttendance (/home/production-app/production-orders-app/src/services/labor.service.js:791:20)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/labor.routes.js:299:30',
+  url: '/attendance-register',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-13T20:17:04.624Z'
+}
+2025-08-13T22:17:06: Error occurred: {
+  error: 'null value in column "machine_id" of relation "attendance_register" violates not-null constraint',
+  stack: 'error: null value in column "machine_id" of relation "attendance_register" violates not-null constraint\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.raw (/home/production-app/production-orders-app/src/utils/database.js:146:12)\n' +
+    '    at async LaborService.markAttendance (/home/production-app/production-orders-app/src/services/labor.service.js:791:20)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/labor.routes.js:299:30',
+  url: '/attendance-register',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-13T20:17:06.703Z'
+}
+2025-08-13T22:17:33: Error occurred: {
+  error: 'null value in column "machine_id" of relation "attendance_register" violates not-null constraint',
+  stack: 'error: null value in column "machine_id" of relation "attendance_register" violates not-null constraint\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.raw (/home/production-app/production-orders-app/src/utils/database.js:146:12)\n' +
+    '    at async LaborService.markAttendance (/home/production-app/production-orders-app/src/services/labor.service.js:791:20)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/labor.routes.js:299:30',
+  url: '/attendance-register',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-13T20:17:33.723Z'
+}
+2025-08-13T22:17:34: Error occurred: {
+  error: 'null value in column "machine_id" of relation "attendance_register" violates not-null constraint',
+  stack: 'error: null value in column "machine_id" of relation "attendance_register" violates not-null constraint\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.raw (/home/production-app/production-orders-app/src/utils/database.js:146:12)\n' +
+    '    at async LaborService.markAttendance (/home/production-app/production-orders-app/src/services/labor.service.js:791:20)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/labor.routes.js:299:30',
+  url: '/attendance-register',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-13T20:17:34.802Z'
+}
+2025-08-13T22:17:36: Error occurred: {
+  error: 'null value in column "machine_id" of relation "attendance_register" violates not-null constraint',
+  stack: 'error: null value in column "machine_id" of relation "attendance_register" violates not-null constraint\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.raw (/home/production-app/production-orders-app/src/utils/database.js:146:12)\n' +
+    '    at async LaborService.markAttendance (/home/production-app/production-orders-app/src/services/labor.service.js:791:20)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/labor.routes.js:299:30',
+  url: '/attendance-register',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-13T20:17:36.883Z'
+}

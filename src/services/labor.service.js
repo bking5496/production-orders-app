@@ -566,7 +566,7 @@ class LaborService {
       date = new Date().toISOString().split('T')[0];
     }
 
-    // Get actual labor assignments for the specified date
+    // Get actual labor assignments for the specified date with attendance status
     const assignments = await DatabaseUtils.raw(`
       SELECT 
         la.id,
@@ -587,15 +587,22 @@ class LaborService {
           ELSE LPAD(u.id::text, 4, '0')
         END as employee_code,
         m.name as machine_name,
-        m.environment
+        m.environment,
+        COALESCE(ar.status, 'scheduled') as attendance_status
       FROM labor_assignments la
       JOIN users u ON la.employee_id = u.id
       JOIN machines m ON la.machine_id = m.id
+      LEFT JOIN attendance_register ar ON (
+        ar.date = la.assignment_date 
+        AND ar.employee_id = la.employee_id 
+        AND ar.machine_id = la.machine_id 
+        AND ar.shift_type = la.shift_type
+      )
       WHERE la.assignment_date = $1
       ORDER BY m.name, la.shift_type, la.role
     `, [date]);
 
-    // Get supervisors who have assignments for this date
+    // Get supervisors who have assignments for this date with attendance status
     const supervisors = await DatabaseUtils.raw(`
       SELECT DISTINCT
         u.id,
@@ -607,9 +614,17 @@ class LaborService {
           WHEN u.profile_data->>'employee_code' IS NOT NULL AND u.profile_data->>'employee_code' != '' THEN u.profile_data->>'employee_code'
           ELSE LPAD(u.id::text, 4, '0')
         END as employee_code,
-        la.shift_type
+        la.shift_type,
+        la.machine_id,
+        COALESCE(ar.status, 'scheduled') as attendance_status
       FROM labor_assignments la
       JOIN users u ON la.employee_id = u.id
+      LEFT JOIN attendance_register ar ON (
+        ar.date = la.assignment_date 
+        AND ar.employee_id = la.employee_id 
+        AND ar.machine_id = la.machine_id 
+        AND ar.shift_type = la.shift_type
+      )
       WHERE la.assignment_date = $1 
         AND (u.role = 'supervisor' OR u.role = 'admin')
       ORDER BY u.username
@@ -631,7 +646,7 @@ class LaborService {
         name: s.username,
         employee_code: s.employee_code,
         shift: s.shift_type || 'day',
-        status: 'scheduled',
+        status: s.attendance_status,
         role: s.role,
         position: 'Supervisor'
       })),
@@ -647,7 +662,7 @@ class LaborService {
         shift: a.shift_type,
         shift_type: a.shift_type,
         company: 'Production Company',
-        status: 'scheduled',
+        status: a.attendance_status,
         role: a.user_role,
         production_area: a.environment,
         start_time: a.start_time,
@@ -746,10 +761,13 @@ class LaborService {
     if (check_in_time) {
       if (check_in_time.match(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])?$/)) {
         // If it's HH:MM or HH:MM:SS format, combine with date
-        processedCheckInTime = `${date} ${check_in_time}`;
-        // Add seconds if not present
-        if (!check_in_time.includes(':') || check_in_time.split(':').length === 2) {
+        const timeParts = check_in_time.split(':');
+        if (timeParts.length === 2) {
+          // HH:MM format - add seconds
           processedCheckInTime = `${date} ${check_in_time}:00`;
+        } else if (timeParts.length === 3) {
+          // HH:MM:SS format - use as-is with date
+          processedCheckInTime = `${date} ${check_in_time}`;
         }
       } else {
         // If it's already a full timestamp, use as-is
