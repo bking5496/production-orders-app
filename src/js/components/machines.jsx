@@ -93,40 +93,36 @@ export default function MachinesPage() {
 
   const STATUS_COLORS = {
     available: { 
-      bg: 'bg-green-50', 
-      text: 'text-green-600', 
-      border: 'border-green-300', 
-      icon: CheckCircle,
-      glow: 'shadow-green-200',
-      indicator: 'bg-green-400',
-      pulse: 'animate-pulse'
+      symbol: '■',
+      label: 'RDY',
+      bg: 'bg-slate-800',
+      text: 'text-green-400',
+      border: 'border-slate-600',
+      indicator: 'bg-green-400'
     },
     in_use: { 
-      bg: 'bg-blue-50', 
-      text: 'text-blue-600', 
-      border: 'border-blue-300', 
-      icon: Activity,
-      glow: 'shadow-blue-200',
-      indicator: 'bg-blue-500',
-      pulse: 'animate-bounce'
+      symbol: '▶',
+      label: 'RUN',
+      bg: 'bg-slate-800',
+      text: 'text-blue-400',
+      border: 'border-slate-600',
+      indicator: 'bg-blue-400'
     },
     maintenance: { 
-      bg: 'bg-yellow-50', 
-      text: 'text-yellow-600', 
-      border: 'border-yellow-300', 
-      icon: Wrench,
-      glow: 'shadow-yellow-200',
-      indicator: 'bg-yellow-500',
-      pulse: 'animate-pulse'
+      symbol: '⚠',
+      label: 'MNT',
+      bg: 'bg-slate-800',
+      text: 'text-yellow-400',
+      border: 'border-slate-600',
+      indicator: 'bg-yellow-400'
     },
     offline: { 
-      bg: 'bg-red-50', 
-      text: 'text-red-600', 
-      border: 'border-red-300', 
-      icon: XCircle,
-      glow: 'shadow-red-200',
-      indicator: 'bg-red-500',
-      pulse: ''
+      symbol: '●',
+      label: 'OFF',
+      bg: 'bg-slate-800',
+      text: 'text-red-400',
+      border: 'border-slate-600',
+      indicator: 'bg-red-400'
     }
   };
 
@@ -618,63 +614,37 @@ export default function MachinesPage() {
     );
   };
 
-  // Statistics panel component
+  // Compact industrial statistics panel
   const StatisticsPanel = () => (
-    <div className="grid grid-cols-2 md:grid-cols-6 gap-4 mb-6">
-      <Card className="p-4">
-        <div className="flex items-center gap-2">
-          <Settings className="w-5 h-5 text-gray-600" />
-          <div>
-            <p className="text-sm text-gray-500">Total</p>
-            <p className="text-2xl font-bold text-gray-800">{stats.total}</p>
+    <div className="bg-slate-800 border border-slate-600 p-3 mb-4">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-6 text-slate-300 font-mono text-sm">
+          <div className="flex items-center gap-2">
+            <span className="text-white font-bold">TOT</span>
+            <span className="text-lg">{stats.total}</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+            <span>{stats.available}</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
+            <span>{stats.inUse}</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
+            <span>{stats.maintenance}</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 bg-red-400 rounded-full"></div>
+            <span>{stats.offline}</span>
           </div>
         </div>
-      </Card>
-      <Card className="p-4">
-        <div className="flex items-center gap-2">
-          <CheckCircle className="w-5 h-5 text-green-600" />
-          <div>
-            <p className="text-sm text-gray-500">Available</p>
-            <p className="text-2xl font-bold text-green-600">{stats.available}</p>
-          </div>
+        <div className="text-slate-300 font-mono text-sm">
+          <span className="text-white font-bold">UTIL: </span>
+          <span className="text-lg">{stats.utilizationRate}%</span>
         </div>
-      </Card>
-      <Card className="p-4">
-        <div className="flex items-center gap-2">
-          <Activity className="w-5 h-5 text-blue-600" />
-          <div>
-            <p className="text-sm text-gray-500">In Use</p>
-            <p className="text-2xl font-bold text-blue-600">{stats.inUse}</p>
-          </div>
-        </div>
-      </Card>
-      <Card className="p-4">
-        <div className="flex items-center gap-2">
-          <Wrench className="w-5 h-5 text-yellow-600" />
-          <div>
-            <p className="text-sm text-gray-500">Maintenance</p>
-            <p className="text-2xl font-bold text-yellow-600">{stats.maintenance}</p>
-          </div>
-        </div>
-      </Card>
-      <Card className="p-4">
-        <div className="flex items-center gap-2">
-          <XCircle className="w-5 h-5 text-red-600" />
-          <div>
-            <p className="text-sm text-gray-500">Offline</p>
-            <p className="text-2xl font-bold text-red-600">{stats.offline}</p>
-          </div>
-        </div>
-      </Card>
-      <Card className="p-4">
-        <div className="flex items-center gap-2">
-          <BarChart3 className="w-5 h-5 text-purple-600" />
-          <div>
-            <p className="text-sm text-gray-500">Utilization</p>
-            <p className="text-2xl font-bold text-purple-600">{stats.utilizationRate}%</p>
-          </div>
-        </div>
-      </Card>
+      </div>
     </div>
   );
 
@@ -730,16 +700,15 @@ export default function MachinesPage() {
               </div>
               <div>
                 <div className="flex items-center gap-3">
-                  <h1 className="text-3xl font-bold text-white">Production Control System</h1>
+                  <h1 className="text-2xl font-bold text-white font-mono">PRODUCTION CONTROL HMI</h1>
                   <div className="flex items-center gap-2">
                     <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                    <span className="text-green-400 text-sm font-medium">ONLINE</span>
+                    <span className="text-green-400 text-sm font-medium font-mono">ONLINE</span>
                   </div>
                   <WebSocketStatusCompact />
                 </div>
-                <p className="text-slate-300 mt-1 flex items-center gap-2">
-                  <Workflow className="w-4 h-4" />
-                  Industrial SCADA Interface • Real-time Equipment Monitoring
+                <p className="text-slate-400 mt-1 font-mono text-xs">
+                  REAL-TIME EQUIPMENT MONITORING SYSTEM
                 </p>
               </div>
             </div>
@@ -965,44 +934,17 @@ export default function MachinesPage() {
                       <div className={`w-3 h-3 rounded-full ${statusConfig.indicator} ${statusConfig.pulse}`}></div>
                     </div>
                     
-                    {/* Machine Header */}
-                    <div className="mb-4">
-                      <div className="flex items-center gap-3 mb-2">
-                        <div className={`w-10 h-10 ${statusConfig.bg} rounded-lg flex items-center justify-center border ${statusConfig.border}`}>
-                          <StatusIcon className={`w-5 h-5 ${statusConfig.text}`} />
-                        </div>
+                    {/* Compact Machine Header */}
+                    <div className="mb-3">
+                      <div className="flex items-center justify-between mb-2">
                         <div className="flex-1">
-                          <h3 className="text-lg font-bold text-white mb-1">{machine.name}</h3>
-                          <p className="text-slate-400 text-sm">{machine.type}</p>
+                          <h3 className="text-lg font-bold text-white font-mono">{machine.name}</h3>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className={`text-2xl ${statusConfig.text}`}>{statusConfig.symbol}</span>
+                          <span className={`text-xs font-bold font-mono ${statusConfig.text}`}>{statusConfig.label}</span>
                         </div>
                       </div>
-                      
-                      {/* Status Badge */}
-                      <div className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold ${statusConfig.bg} ${statusConfig.text} border ${statusConfig.border}`}>
-                        <div className={`w-2 h-2 rounded-full mr-2 ${statusConfig.indicator} ${statusConfig.pulse}`}></div>
-                        {machine.status.replace('_', ' ').toUpperCase()}
-                      </div>
-                    </div>
-                    
-                    {/* Machine Metrics */}
-                    <div className="grid grid-cols-2 gap-3 mb-4">
-                      <div className="bg-slate-700 rounded-lg p-3 border border-slate-600">
-                        <div className="flex items-center gap-2 mb-1">
-                          <Gauge className="w-4 h-4 text-blue-400" />
-                          <span className="text-slate-400 text-xs">CAPACITY</span>
-                        </div>
-                        <div className="text-white font-bold">{machine.capacity}</div>
-                      </div>
-                      
-                      {machine.production_rate && (
-                        <div className="bg-slate-700 rounded-lg p-3 border border-slate-600">
-                          <div className="flex items-center gap-2 mb-1">
-                            <Activity className="w-4 h-4 text-green-400" />
-                            <span className="text-slate-400 text-xs">RATE</span>
-                          </div>
-                          <div className="text-white font-bold">{machine.production_rate}/hr</div>
-                        </div>
-                      )}
                     </div>
                     
                     {/* Control Buttons */}
@@ -1103,44 +1045,17 @@ export default function MachinesPage() {
                       <div className={`w-3 h-3 rounded-full ${statusConfig.indicator} ${statusConfig.pulse}`}></div>
                     </div>
                     
-                    {/* Machine Header */}
-                    <div className="mb-4">
-                      <div className="flex items-center gap-3 mb-2">
-                        <div className={`w-10 h-10 ${statusConfig.bg} rounded-lg flex items-center justify-center border ${statusConfig.border}`}>
-                          <StatusIcon className={`w-5 h-5 ${statusConfig.text}`} />
-                        </div>
+                    {/* Compact Machine Header */}
+                    <div className="mb-3">
+                      <div className="flex items-center justify-between mb-2">
                         <div className="flex-1">
-                          <h3 className="text-lg font-bold text-white mb-1">{machine.name}</h3>
-                          <p className="text-slate-400 text-sm">{machine.type}</p>
+                          <h3 className="text-lg font-bold text-white font-mono">{machine.name}</h3>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className={`text-2xl ${statusConfig.text}`}>{statusConfig.symbol}</span>
+                          <span className={`text-xs font-bold font-mono ${statusConfig.text}`}>{statusConfig.label}</span>
                         </div>
                       </div>
-                      
-                      {/* Status Badge */}
-                      <div className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold ${statusConfig.bg} ${statusConfig.text} border ${statusConfig.border}`}>
-                        <div className={`w-2 h-2 rounded-full mr-2 ${statusConfig.indicator} ${statusConfig.pulse}`}></div>
-                        {machine.status.replace('_', ' ').toUpperCase()}
-                      </div>
-                    </div>
-                    
-                    {/* Machine Metrics */}
-                    <div className="grid grid-cols-2 gap-3 mb-4">
-                      <div className="bg-slate-700 rounded-lg p-3 border border-slate-600">
-                        <div className="flex items-center gap-2 mb-1">
-                          <Gauge className="w-4 h-4 text-blue-400" />
-                          <span className="text-slate-400 text-xs">CAPACITY</span>
-                        </div>
-                        <div className="text-white font-bold">{machine.capacity}</div>
-                      </div>
-                      
-                      {machine.production_rate && (
-                        <div className="bg-slate-700 rounded-lg p-3 border border-slate-600">
-                          <div className="flex items-center gap-2 mb-1">
-                            <Activity className="w-4 h-4 text-green-400" />
-                            <span className="text-slate-400 text-xs">RATE</span>
-                          </div>
-                          <div className="text-white font-bold">{machine.production_rate}/hr</div>
-                        </div>
-                      )}
                     </div>
                     
                     {/* Control Buttons */}
@@ -1769,7 +1684,7 @@ export default function MachinesPage() {
                   </div>
                 </div>
                 
-                <div className="grid grid-cols-7 gap-3">
+                <div className="grid grid-cols-7 gap-1 text-xs">
                   {/* Generate current month calendar */}
                   {(() => {
                     const today = new Date();
@@ -1803,8 +1718,8 @@ export default function MachinesPage() {
                         return [
                           // Weekday headers
                           ...weekdays.map(day => (
-                            <div key={`header-${day}`} className="p-2 text-center font-bold text-slate-400 text-xs uppercase tracking-wider">
-                              {day}
+                            <div key={`header-${day}`} className="h-6 text-center font-bold text-slate-400 text-xs uppercase leading-6">
+                              {day.charAt(0)}
                             </div>
                           ))
                         ];
@@ -1856,32 +1771,20 @@ export default function MachinesPage() {
                     return (
                       <div
                         key={dateStr}
-                        className={`aspect-square p-3 border-2 text-center transition-all duration-200 ${
+                        className={`h-8 w-8 border text-center text-xs font-mono transition-all ${
                           isToday 
-                            ? 'bg-blue-600 border-blue-400 text-white shadow-lg' 
+                            ? 'bg-blue-500 border-blue-400 text-white' 
                             : !isCurrentMonth
-                              ? 'bg-slate-600 border-slate-500 text-slate-400'
-                              : isPast 
-                                ? 'bg-slate-700 border-slate-600 text-slate-300' 
-                                : 'bg-slate-800 border-slate-600 text-white hover:bg-slate-700'
+                              ? 'bg-slate-700 border-slate-600 text-slate-500'
+                              : hasOrders
+                                ? 'bg-green-500 border-green-400 text-white'
+                                : 'bg-slate-800 border-slate-600 text-slate-300'
                         }`}
                         title={`${date.toLocaleDateString()} - ${hasOrders ? dayData.orders.map(o => `${o.order_number}: ${o.product_name}`).join(', ') : 'No production scheduled'}`}
                       >
-                        <div className="text-lg font-bold font-mono mb-2">
+                        <div className="leading-8">
                           {date.getDate()}
                         </div>
-                        <div className="flex justify-center">
-                          {hasOrders ? (
-                            <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
-                          ) : (
-                            <div className="w-3 h-3 bg-slate-500 rounded-full"></div>
-                          )}
-                        </div>
-                        {hasOrders && (
-                          <div className="text-xs mt-1 font-mono">
-                            {dayData.orders.length}
-                          </div>
-                        )}
                       </div>
                     );
                   })}
