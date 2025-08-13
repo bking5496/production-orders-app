@@ -1,0 +1,9 @@
+2025-08-13T13:43:05: ✅ New PostgreSQL client connected
+2025-08-13T13:43:05: 🔗 Client acquired from pool
+2025-08-13T13:43:05: 🔓 Client released back to pool
+2025-08-13T13:43:05: 🔗 Client acquired from pool
+2025-08-13T13:43:05: 🔓 Client released back to pool
+2025-08-13T13:43:05: ✅ Auth success: admin from ::ffff:127.0.0.1 - curl/8.5.0
+2025-08-13T13:43:05: 🔗 Client acquired from pool
+2025-08-13T13:43:05: 🔓 Client released back to pool
+2025-08-13T13:43:05: 📡 Broadcast sent: attendance_marked to channel: labor (0 clients)
