@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Settings, Plus, Search, Filter, RefreshCw, Edit3, Trash2, AlertTriangle, Activity, Clock, BarChart3, CheckCircle, XCircle, Wrench, Users, Calendar, RotateCcw, Info, Wifi, Sun, Moon, Factory, Zap, Thermometer, Gauge, Power, MonitorSpeaker, ShieldCheck, Workflow, Layers } from 'lucide-react';
+import { Settings, Plus, Search, Filter, RefreshCw, Edit3, Trash2, AlertTriangle, Activity, Clock, BarChart3, CheckCircle, XCircle, Wrench, Users, Calendar, RotateCcw, Info, Wifi, Sun, Moon, Factory, Zap, Thermometer, Gauge, Power, MonitorSpeaker, ShieldCheck, Workflow, Layers, Target, Cpu, Database, Cog } from 'lucide-react';
 import API from '../core/api';
 import { formatUserDisplayName, formatEmployeeCode } from '../utils/text-utils';
 import { Modal, Card, Button, Badge } from './ui-components.jsx';
@@ -953,7 +953,7 @@ export default function MachinesPage() {
               </div>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-8">
               {filteredMachines.filter(m => m.environment === 'blending').map(machine => {
                 const statusConfig = STATUS_COLORS[machine.status] || STATUS_COLORS.offline;
                 const StatusIcon = statusConfig.icon;
@@ -1091,7 +1091,7 @@ export default function MachinesPage() {
               </div>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-8">
               {filteredMachines.filter(m => m.environment === 'packaging').map(machine => {
                 const statusConfig = STATUS_COLORS[machine.status] || STATUS_COLORS.offline;
                 const StatusIcon = statusConfig.icon;
