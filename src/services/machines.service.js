@@ -43,6 +43,24 @@ class MachinesService {
   }
 
   /**
+   * Get machines with shift cycle enabled
+   */
+  async getMachinesWithShiftCycles() {
+    const query = `
+      SELECT 
+        id, name, environment, status, capacity, 
+        shift_cycle_enabled, cycle_start_date,
+        operators_per_shift, hopper_loaders_per_shift, packers_per_shift
+      FROM machines 
+      WHERE shift_cycle_enabled = true
+      ORDER BY environment, name
+    `;
+    
+    const result = await DatabaseUtils.raw(query);
+    return result.rows;
+  }
+
+  /**
    * Get machine by ID
    */
   async getMachineById(id) {
@@ -315,6 +333,20 @@ class MachinesService {
    */
   async getMachineCrews(machineId) {
     try {
+      // Ensure machine_crews table exists first
+      await DatabaseUtils.raw(`
+        CREATE TABLE IF NOT EXISTS machine_crews (
+          id SERIAL PRIMARY KEY,
+          machine_id INTEGER NOT NULL REFERENCES machines(id) ON DELETE CASCADE,
+          crew_data JSONB NOT NULL,
+          created_by INTEGER REFERENCES users(id),
+          updated_by INTEGER REFERENCES users(id),
+          created_at TIMESTAMP DEFAULT NOW(),
+          updated_at TIMESTAMP DEFAULT NOW(),
+          UNIQUE(machine_id)
+        )
+      `);
+
       const result = await DatabaseUtils.raw(`
         SELECT crew_data
         FROM machine_crews 

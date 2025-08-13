@@ -1,9 +1,28 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar, Factory, Plus, Users, X, ChevronLeft, ChevronRight, UserCheck, Truck } from 'lucide-react';
+import { Calendar, Factory, Plus, Users, X, ChevronLeft, ChevronRight, UserCheck, Truck, RotateCcw, Play } from 'lucide-react';
 import API from '../core/api';
 import { Modal, Button } from './ui-components.jsx';
 import { useConnectionStatus } from '../core/websocket-hooks.js';
 import { formatUserDisplayName } from '../utils/text-utils';
+
+// 2-2-2 Shift Cycle Utilities
+const calculateCrewAssignment = (startDate, currentDate, offset) => {
+  const start = new Date(startDate);
+  const current = new Date(currentDate);
+  const daysSinceStart = Math.floor((current - start) / (1000 * 60 * 60 * 24));
+  const cycleDay = (daysSinceStart + offset) % 6;
+  
+  if (cycleDay === 0 || cycleDay === 1) return 'day';
+  if (cycleDay === 2 || cycleDay === 3) return 'night';
+  return 'rest';
+};
+
+const generateShiftCycleSchedule = (startDate, crews, targetDate) => {
+  return crews.map(crew => ({
+    ...crew,
+    assignment: calculateCrewAssignment(startDate, targetDate, crew.offset)
+  }));
+};
 
 // Simple WebSocket status indicator component
 const WebSocketStatusIndicator = () => {
@@ -45,6 +64,80 @@ const LaborPlanner = ({ currentUser }) => {
   const [showForkliftModal, setShowForkliftModal] = useState(false);
   const [supervisorShift, setSupervisorShift] = useState('day');
   const [forkliftShift, setForkliftShift] = useState('day');
+  
+  // 2-2-2 Shift Cycle State
+  const [shiftCycleMachines, setShiftCycleMachines] = useState([]);
+  const [showShiftCycleModal, setShowShiftCycleModal] = useState(false);
+  const [selectedCycleMachine, setSelectedCycleMachine] = useState(null);
+  const [shiftMode, setShiftMode] = useState('manual'); // 'manual' or 'cycle'
+
+  // Fetch machines with 2-2-2 shift cycles enabled
+  const fetchShiftCycleMachines = async () => {
+    try {
+      const response = await API.get('/machines/shift-cycles');
+      
+      const machines = Array.isArray(response) ? response : response.data || [];
+      
+      // Get crews for each machine
+      for (const machine of machines) {
+        try {
+          const crews = await API.get(`/machines/${machine.id}/crews`);
+          machine.crews = Array.isArray(crews) ? crews : crews.data || [];
+        } catch (error) {
+          console.error(`Failed to load crews for machine ${machine.id}:`, error);
+          machine.crews = [];
+        }
+      }
+      
+      setShiftCycleMachines(machines);
+      console.log('Shift cycle machines:', machines);
+    } catch (error) {
+      console.error('Failed to fetch shift cycle machines:', error);
+      setShiftCycleMachines([]);
+    }
+  };
+
+  // Auto-assign crews based on 2-2-2 cycle
+  const autoAssignShiftCycle = async (machine) => {
+    if (!machine.cycle_start_date || !machine.crews?.length) {
+      alert('Machine must have a cycle start date and crews configured');
+      return;
+    }
+
+    try {
+      const schedule = generateShiftCycleSchedule(
+        machine.cycle_start_date,
+        machine.crews,
+        selectedDate
+      );
+
+      // Create assignments for each crew that's working today
+      for (const crew of schedule) {
+        if (crew.assignment !== 'rest' && crew.employees?.length > 0) {
+          for (const employee of crew.employees) {
+            const assignmentData = {
+              employee_id: employee.id,
+              machine_id: machine.id,
+              assignment_date: selectedDate,
+              shift_type: crew.assignment,
+              role: employee.role || 'operator',
+              start_time: crew.assignment === 'day' ? '06:00' : '18:00',
+              end_time: crew.assignment === 'day' ? '18:00' : '06:00',
+              hourly_rate: 150.00
+            };
+
+            await API.post('/labor-assignments', assignmentData);
+          }
+        }
+      }
+
+      alert(`Auto-assigned crews for ${machine.name} based on 2-2-2 cycle`);
+      fetchExistingAssignments();
+    } catch (error) {
+      console.error('Failed to auto-assign crews:', error);
+      alert('Failed to auto-assign crews: ' + (error.message || 'Unknown error'));
+    }
+  };
 
   // Date navigation helpers
   const navigateDate = (direction) => {
@@ -68,6 +161,7 @@ const LaborPlanner = ({ currentUser }) => {
     fetchScheduledMachines();
     fetchAvailableUsers();
     fetchExistingAssignments();
+    fetchShiftCycleMachines();
   }, [selectedDate]);
 
   const fetchAvailableUsers = async () => {
@@ -282,6 +376,30 @@ const LaborPlanner = ({ currentUser }) => {
               >
                 Assign Forklift Driver
               </Button>
+              
+              {/* Shift Mode Toggle */}
+              <div className="flex items-center gap-2 bg-white border border-gray-300 rounded-lg p-1">
+                <button
+                  onClick={() => setShiftMode('manual')}
+                  className={`px-3 py-1 text-sm font-medium rounded-md transition-colors ${
+                    shiftMode === 'manual' 
+                      ? 'bg-blue-500 text-white' 
+                      : 'text-gray-600 hover:bg-gray-100'
+                  }`}
+                >
+                  Manual
+                </button>
+                <button
+                  onClick={() => setShiftMode('cycle')}
+                  className={`px-3 py-1 text-sm font-medium rounded-md transition-colors ${
+                    shiftMode === 'cycle' 
+                      ? 'bg-green-500 text-white' 
+                      : 'text-gray-600 hover:bg-gray-100'
+                  }`}
+                >
+                  2-2-2 Cycle
+                </button>
+              </div>
             </div>
           </div>
           
@@ -441,11 +559,104 @@ const LaborPlanner = ({ currentUser }) => {
         </div>
       </div>
 
-      {/* Scheduled Machines */}
-      <div>
-        <h2 className="text-xl font-semibold text-gray-900 mb-4">
-          Scheduled Machines for {selectedDate}
-        </h2>
+      {/* Conditional View: Manual vs 2-2-2 Cycle */}
+      {shiftMode === 'manual' ? (
+        // Original Manual Scheduling View
+        <div>
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">
+            Scheduled Machines for {selectedDate}
+          </h2>
+        </div>
+      ) : (
+        // 2-2-2 Shift Cycle View
+        <div>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xl font-semibold text-gray-900">
+              2-2-2 Shift Cycle Management for {selectedDate}
+            </h2>
+            <div className="flex items-center gap-2 text-sm text-gray-600">
+              <RotateCcw className="w-4 h-4" />
+              <span>Automatic crew rotation every 6 days</span>
+            </div>
+          </div>
+          
+          {shiftCycleMachines.length === 0 ? (
+            <div className="text-center py-8 bg-gray-50 rounded-lg">
+              <RotateCcw className="w-12 h-12 text-gray-400 mx-auto mb-3" />
+              <p className="text-gray-600">No machines have 2-2-2 shift cycles enabled</p>
+              <p className="text-sm text-gray-500 mt-2">
+                Enable shift cycles in Machine Management to use this feature
+              </p>
+            </div>
+          ) : (
+            <div className="space-y-6">
+              {shiftCycleMachines.map(machine => {
+                const cycleSchedule = generateShiftCycleSchedule(
+                  machine.cycle_start_date,
+                  machine.crews || [],
+                  selectedDate
+                );
+                
+                return (
+                  <div key={machine.id} className="bg-white border border-gray-200 rounded-lg p-6">
+                    <div className="flex items-center justify-between mb-4">
+                      <div>
+                        <h3 className="text-lg font-semibold text-gray-900">{machine.name}</h3>
+                        <p className="text-sm text-blue-600">Environment: {machine.environment}</p>
+                        <p className="text-xs text-gray-500">
+                          Cycle started: {new Date(machine.cycle_start_date).toLocaleDateString()}
+                        </p>
+                      </div>
+                      <Button
+                        onClick={() => autoAssignShiftCycle(machine)}
+                        size="sm"
+                        className="bg-green-500 hover:bg-green-600 text-white"
+                        leftIcon={<Play className="w-4 h-4" />}
+                      >
+                        Auto Assign
+                      </Button>
+                    </div>
+                    
+                    {/* Crew Schedule Display */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      {cycleSchedule.map(crew => {
+                        const statusColors = {
+                          day: 'bg-yellow-100 text-yellow-800 border-yellow-200',
+                          night: 'bg-purple-100 text-purple-800 border-purple-200',
+                          rest: 'bg-gray-100 text-gray-600 border-gray-200'
+                        };
+                        
+                        return (
+                          <div key={crew.letter} className={`p-4 rounded-lg border-2 ${statusColors[crew.assignment]}`}>
+                            <div className="flex items-center justify-between mb-2">
+                              <h4 className="font-semibold">Crew {crew.letter}</h4>
+                              <span className="text-xs font-medium px-2 py-1 rounded-full bg-white bg-opacity-60">
+                                {crew.assignment.toUpperCase()}
+                              </span>
+                            </div>
+                            <div className="text-sm space-y-1">
+                              <p>Employees: {crew.employees?.length || 0}</p>
+                              {crew.assignment !== 'rest' && (
+                                <p className="text-xs">
+                                  {crew.assignment === 'day' ? '06:00 - 18:00' : '18:00 - 06:00'}
+                                </p>
+                              )}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      )}
+      
+      {/* Continue with manual mode content */}
+      {shiftMode === 'manual' && (
+        <div>
         
         {loading ? (
           <div className="text-center py-8">
@@ -620,7 +831,8 @@ const LaborPlanner = ({ currentUser }) => {
             ))}
           </div>
         )}
-      </div>
+        </div>
+      )}
 
       {/* Worker Assignment Modal */}
       {showAssignmentModal && (

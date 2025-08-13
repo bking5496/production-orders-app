@@ -54,6 +54,18 @@ router.get('/status',
 );
 
 /**
+ * GET /api/machines/shift-cycles
+ * Get machines with 2-2-2 shift cycles enabled
+ */
+router.get('/shift-cycles',
+  authenticateToken,
+  asyncHandler(async (req, res) => {
+    const machines = await machinesService.getMachinesWithShiftCycles();
+    return res.success(machines, 'Shift cycle machines retrieved successfully');
+  })
+);
+
+/**
  * GET /api/machines/daily-active
  * Get machines with active orders for a specific date and environment
  */
