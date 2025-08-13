@@ -591,15 +591,15 @@ class LaborService {
         COALESCE(ar.status, 'scheduled') as attendance_status
       FROM labor_assignments la
       JOIN users u ON la.employee_id = u.id
-      JOIN machines m ON la.machine_id = m.id
+      LEFT JOIN machines m ON la.machine_id = m.id
       LEFT JOIN attendance_register ar ON (
         ar.date = la.assignment_date 
         AND ar.employee_id = la.employee_id 
-        AND ar.machine_id = la.machine_id 
+        AND (ar.machine_id = la.machine_id OR (ar.machine_id IS NULL AND la.machine_id IS NULL))
         AND ar.shift_type = la.shift_type
       )
       WHERE la.assignment_date = $1
-      ORDER BY m.name, la.shift_type, la.role
+      ORDER BY COALESCE(m.name, 'Factory-wide'), la.shift_type, la.role
     `, [date]);
 
     // Get supervisors who have assignments for this date with attendance status
@@ -622,7 +622,7 @@ class LaborService {
       LEFT JOIN attendance_register ar ON (
         ar.date = la.assignment_date 
         AND ar.employee_id = la.employee_id 
-        AND ar.machine_id = la.machine_id 
+        AND (ar.machine_id = la.machine_id OR (ar.machine_id IS NULL AND la.machine_id IS NULL))
         AND ar.shift_type = la.shift_type
       )
       WHERE la.assignment_date = $1 
