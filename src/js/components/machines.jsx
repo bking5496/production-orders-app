@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Settings, Plus, Search, Filter, RefreshCw, Edit3, Trash2, AlertTriangle, Activity, Clock, BarChart3, CheckCircle, XCircle, Wrench, Users, Calendar, RotateCcw, Info, Wifi, Sun, Moon, Factory } from 'lucide-react';
+import { Settings, Plus, Search, Filter, RefreshCw, Edit3, Trash2, AlertTriangle, Activity, Clock, BarChart3, CheckCircle, XCircle, Wrench, Users, Calendar, RotateCcw, Info, Wifi, Sun, Moon, Factory, Zap, Thermometer, Gauge, Power, MonitorSpeaker, ShieldCheck, Workflow, Layers } from 'lucide-react';
 import API from '../core/api';
 import { formatUserDisplayName, formatEmployeeCode } from '../utils/text-utils';
 import { Modal, Card, Button, Badge } from './ui-components.jsx';
@@ -92,10 +92,42 @@ export default function MachinesPage() {
   }, [environments, machineTypes]);
 
   const STATUS_COLORS = {
-    available: { bg: 'bg-green-50', text: 'text-green-600', border: 'border-green-200', icon: CheckCircle },
-    in_use: { bg: 'bg-blue-50', text: 'text-blue-600', border: 'border-blue-200', icon: Activity },
-    maintenance: { bg: 'bg-yellow-50', text: 'text-yellow-600', border: 'border-yellow-200', icon: Wrench },
-    offline: { bg: 'bg-red-50', text: 'text-red-600', border: 'border-red-200', icon: XCircle }
+    available: { 
+      bg: 'bg-green-50', 
+      text: 'text-green-600', 
+      border: 'border-green-300', 
+      icon: CheckCircle,
+      glow: 'shadow-green-200',
+      indicator: 'bg-green-400',
+      pulse: 'animate-pulse'
+    },
+    in_use: { 
+      bg: 'bg-blue-50', 
+      text: 'text-blue-600', 
+      border: 'border-blue-300', 
+      icon: Activity,
+      glow: 'shadow-blue-200',
+      indicator: 'bg-blue-500',
+      pulse: 'animate-bounce'
+    },
+    maintenance: { 
+      bg: 'bg-yellow-50', 
+      text: 'text-yellow-600', 
+      border: 'border-yellow-300', 
+      icon: Wrench,
+      glow: 'shadow-yellow-200',
+      indicator: 'bg-yellow-500',
+      pulse: 'animate-pulse'
+    },
+    offline: { 
+      bg: 'bg-red-50', 
+      text: 'text-red-600', 
+      border: 'border-red-300', 
+      icon: XCircle,
+      glow: 'shadow-red-200',
+      indicator: 'bg-red-500',
+      pulse: ''
+    }
   };
 
   // Notification helper
@@ -572,16 +604,17 @@ export default function MachinesPage() {
     return { total, available, inUse, maintenance, offline, utilizationRate };
   }, [machines]);
 
-  // Helper function to render a modern status badge
+  // Helper function to render SCADA status badge
   const getStatusBadge = (status) => {
     const config = STATUS_COLORS[status] || STATUS_COLORS.offline;
     const Icon = config.icon;
     
     return (
-      <Badge variant={status === 'available' ? 'success' : status === 'in_use' ? 'info' : status === 'maintenance' ? 'warning' : 'danger'}>
+      <div className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold ${config.bg} ${config.text} border ${config.border}`}>
+        <div className={`w-2 h-2 rounded-full mr-2 ${config.indicator} ${config.pulse}`}></div>
         <Icon className="w-3 h-3 mr-1" />
         {status.replace('_', ' ').toUpperCase()}
-      </Badge>
+      </div>
     );
   };
 
@@ -647,357 +680,667 @@ export default function MachinesPage() {
 
   if (loading && machines.length === 0) {
     return (
-      <div className="p-6 text-center">
-        <div className="flex items-center justify-center gap-2 text-gray-500">
-          <RefreshCw className="w-5 h-5 animate-spin" />
-          Loading machines...
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center">
+        <div className="bg-slate-800 border border-slate-600 rounded-lg p-12 text-center shadow-xl">
+          <div className="w-16 h-16 bg-blue-600 rounded-lg flex items-center justify-center mx-auto mb-6">
+            <MonitorSpeaker className="w-8 h-8 text-white" />
+          </div>
+          <div className="flex items-center justify-center gap-3 text-white mb-4">
+            <RefreshCw className="w-6 h-6 animate-spin text-blue-400" />
+            <span className="text-xl font-bold">INITIALIZING SYSTEM...</span>
+          </div>
+          <div className="w-64 bg-slate-700 rounded-full h-2 mx-auto">
+            <div className="bg-blue-400 h-2 rounded-full animate-pulse" style={{width: '60%'}}></div>
+          </div>
+          <p className="text-slate-400 mt-4 font-mono text-sm">Loading production equipment data</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="p-6 space-y-6 bg-gray-50 min-h-screen">
-      {/* Notification */}
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+      {/* SCADA Notification */}
       {notification && (
-        <div className={`fixed top-4 right-4 p-4 rounded-lg shadow-lg z-50 ${
-          notification.type === 'success' ? 'bg-green-100 text-green-800 border border-green-200' :
-          notification.type === 'danger' ? 'bg-red-100 text-red-800 border border-red-200' :
-          'bg-blue-100 text-blue-800 border border-blue-200'
-        }`}>
-          {notification.message}
+        <div className="fixed top-6 right-6 z-50">
+          <div className={`p-4 rounded-lg shadow-xl border-l-4 backdrop-blur-sm ${
+            notification.type === 'success' ? 'bg-slate-800/95 text-green-400 border-green-500' :
+            notification.type === 'danger' ? 'bg-slate-800/95 text-red-400 border-red-500' :
+            'bg-slate-800/95 text-blue-400 border-blue-500'
+          }`}>
+            <div className="flex items-center gap-3">
+              <div className={`w-2 h-2 rounded-full animate-pulse ${
+                notification.type === 'success' ? 'bg-green-400' :
+                notification.type === 'danger' ? 'bg-red-400' :
+                'bg-blue-400'
+              }`}></div>
+              <span className="font-mono text-sm font-medium">{notification.message}</span>
+            </div>
+          </div>
         </div>
       )}
 
-      {/* Header */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div>
-          <div className="flex items-center gap-3">
-            <h1 className="text-3xl font-bold text-gray-800">Machine Management</h1>
-            <WebSocketStatusCompact />
-          </div>
-          <p className="text-gray-600 mt-1">Manage manufacturing equipment and monitor real-time status</p>
-        </div>
-        
-        <div className="flex items-center gap-4">
-          <Button 
-            onClick={handleRefresh}
-            disabled={refreshing}
-            variant="outline"
-          >
-            <RefreshCw className={`w-4 h-4 mr-2 ${refreshing ? 'animate-spin' : ''}`} />
-            Refresh
-          </Button>
-          
-          <Button onClick={() => {
-            setFormData({ name: '', type: '', environment: 'blending', capacity: 100, production_rate: 60 });
-            setShowAddModal(true);
-          }}>
-            <Plus className="w-4 h-4 mr-2" />
-            Add Machine
-          </Button>
-        </div>
-      </div>
-
-      {/* Statistics Panel */}
-      <StatisticsPanel />
-
-      {/* Filters and Search */}
-      <Card className="p-6">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          {/* Search */}
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-            <input
-              type="text"
-              placeholder="Search machines..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
-          </div>
-          
-          {/* Environment Filter */}
-          <div className="relative">
-            <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-            <select 
-              value={selectedEnvironment}
-              onChange={(e) => setSelectedEnvironment(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none"
-            >
-              <option value="all">All Environments</option>
-              {environments.map(env => (
-                <option key={env.id} value={env.code}>{env.name}</option>
-              ))}
-            </select>
-          </div>
-          
-          {/* Status Filter */}
-          <div>
-            <select 
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            >
-              <option value="all">All Statuses</option>
-              <option value="available">Available</option>
-              <option value="in_use">In Use</option>
-              <option value="maintenance">Maintenance</option>
-              <option value="offline">Offline</option>
-            </select>
-          </div>
-          
-          {/* Results Count */}
-          <div className="flex items-center justify-center md:justify-start">
-            <span className="text-sm text-gray-600">
-              Showing {filteredMachines.length} of {machines.length} machines
-            </span>
-          </div>
-        </div>
-      </Card>
-
-      {/* Machine Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {filteredMachines.map(machine => {
-          const statusConfig = STATUS_COLORS[machine.status] || STATUS_COLORS.offline;
-          const StatusIcon = statusConfig.icon;
-          
-          return (
-            <Card key={machine.id} className={`p-6 border-l-4 ${statusConfig.border} hover:shadow-lg transition-all duration-300 overflow-hidden`}>
-              {/* Machine Image */}
-              {machine.specifications?.image && (
-                <div className="mb-4 -mx-6 -mt-6 relative">
-                  <img 
-                    src={machine.specifications.image} 
-                    alt={`${machine.name} machine`}
-                    className="w-full h-48 object-cover rounded-t-lg"
-                    onError={(e) => {
-                      e.target.style.display = 'none';
-                    }}
-                  />
-                  <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/30 to-transparent pointer-events-none rounded-t-lg"></div>
-                </div>
-              )}
-              
-              <div className="flex justify-between items-start mb-4">
-                <div className="flex-1">
-                  <h3 className="text-lg font-semibold text-gray-800 mb-1 flex items-center gap-2">
-                    {machine.name}
-                    {machine.specifications?.image && (
-                      <span className="px-2 py-1 bg-blue-100 text-blue-600 text-xs rounded-full font-medium">
-                        📸 Visual
-                      </span>
-                    )}
-                  </h3>
-                  <p className="text-sm text-gray-500 mb-2">{machine.type}</p>
-                  <p className="text-xs text-gray-400 capitalize">{machine.environment} Environment</p>
-                </div>
-                {getStatusBadge(machine.status)}
+      {/* SCADA Header */}
+      <div className="bg-slate-800 border-b border-slate-600 shadow-lg">
+        <div className="max-w-7xl mx-auto px-6 py-4">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center shadow-lg">
+                <MonitorSpeaker className="w-7 h-7 text-white" />
               </div>
-              
-              {/* Machine Details */}
-              <div className="space-y-2 mb-4">
-                <div className="flex items-center justify-between text-sm">
-                  <span className="text-gray-500">Capacity:</span>
-                  <span className="font-medium">{machine.capacity}</span>
-                </div>
-                {machine.production_rate && (
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-500">Rate:</span>
-                    <span className="font-medium">{machine.production_rate}/hr</span>
+              <div>
+                <div className="flex items-center gap-3">
+                  <h1 className="text-3xl font-bold text-white">Production Control System</h1>
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                    <span className="text-green-400 text-sm font-medium">ONLINE</span>
                   </div>
-                )}
+                  <WebSocketStatusCompact />
+                </div>
+                <p className="text-slate-300 mt-1 flex items-center gap-2">
+                  <Workflow className="w-4 h-4" />
+                  Industrial SCADA Interface • Real-time Equipment Monitoring
+                </p>
+              </div>
+            </div>
+            
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2 px-3 py-2 bg-slate-700 rounded-lg border border-slate-600">
+                <Clock className="w-4 h-4 text-slate-400" />
+                <span className="text-slate-300 text-sm font-mono">
+                  {new Date().toLocaleTimeString()}
+                </span>
               </div>
               
-              {/* Enhanced Action Buttons */}
-              <div className="space-y-3 mt-4">
-                {/* Primary Edit Button */}
-                <Button 
-                  onClick={async () => {
-                    setSelectedMachine(machine);
-                    setFormData({
-                      ...machine,
-                      shift_cycle_enabled: machine.shift_cycle_enabled || false,
-                      cycle_start_date: machine.cycle_start_date || '',
-                      operators_per_shift: machine.operators_per_shift == null ? '' : machine.operators_per_shift,
-                      hopper_loaders_per_shift: machine.hopper_loaders_per_shift == null ? '' : machine.hopper_loaders_per_shift,
-                      packers_per_shift: machine.packers_per_shift == null ? '' : machine.packers_per_shift,
-                      specifications: machine.specifications || {}
-                    });
-                    // Load crews for this machine
-                    await loadCrewsForMachine(machine.id);
-                    setShowEditModal(true);
-                  }}
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2"
-                >
-                  <Edit3 className="w-5 h-5" />
-                  Edit Machine
-                </Button>
-                
-                {/* Secondary Actions */}
-                <div className="flex gap-2">
-                  <Button 
-                    onClick={() => {
-                      setSelectedMachine(machine);
-                      setShowStatusModal(true);
-                    }}
-                    variant="outline"
-                    size="sm"
-                    className="flex-1"
-                  >
-                    <StatusIcon className="w-4 h-4 mr-1" />
-                    Status
-                  </Button>
-                  
-                  <Button 
-                    onClick={() => {
-                      setSelectedMachine(machine);
-                      loadMachineSchedule(machine.id);
-                      setShowScheduleModal(true);
-                    }}
-                    variant="outline"
-                    size="sm"
-                    className="flex-1"
-                  >
-                    <Calendar className="w-4 h-4 mr-1" />
-                    Schedule
-                  </Button>
-                
-                {machine.status !== 'in_use' && (
-                  <Button 
-                    onClick={() => handleDeleteMachine(machine.id)}
-                    variant="outline"
-                    size="sm"
-                    className="text-red-600 hover:text-red-700 hover:border-red-300"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </Button>
-                )}
-                </div>
-              </div>
-            </Card>
-          );
-        })}
+              <Button 
+                onClick={handleRefresh}
+                disabled={refreshing}
+                className="bg-slate-700 hover:bg-slate-600 text-white border-slate-600"
+              >
+                <RefreshCw className={`w-4 h-4 mr-2 ${refreshing ? 'animate-spin' : ''}`} />
+                Refresh
+              </Button>
+              
+              <Button 
+                onClick={() => {
+                  setFormData({ name: '', type: '', environment: 'blending', capacity: 100, production_rate: 60 });
+                  setShowAddModal(true);
+                }}
+                className="bg-blue-600 hover:bg-blue-700 text-white"
+              >
+                <Plus className="w-4 h-4 mr-2" />
+                Add Machine
+              </Button>
+            </div>
+          </div>
+        </div>
       </div>
-      
-      {/* Empty State */}
-      {filteredMachines.length === 0 && (
-        <Card className="p-12 text-center">
-          <Settings className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-600 mb-2">No machines found</h3>
-          <p className="text-gray-500 mb-4">
-            {searchTerm || selectedEnvironment !== 'all' || statusFilter !== 'all'
-              ? 'Try adjusting your filters or search term'
-              : 'Get started by adding your first machine'}
-          </p>
-          {!searchTerm && selectedEnvironment === 'all' && statusFilter === 'all' && (
-            <Button onClick={() => {
-              setFormData({ name: '', type: '', environment: 'blending', capacity: 100, production_rate: 60 });
-              setShowAddModal(true);
-            }}>
-              <Plus className="w-4 h-4 mr-2" />
-              Add First Machine
-            </Button>
-          )}
-        </Card>
-      )}
 
-      {/* Add Machine Modal */}
-      {showAddModal && (
-        <Modal title="Add New Machine" onClose={() => setShowAddModal(false)}>
-          <form onSubmit={handleAddMachine} className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Machine Name</label>
-              <input 
-                type="text" 
-                placeholder="Enter machine name" 
-                value={formData.name} 
-                onChange={(e) => setFormData({...formData, name: e.target.value})} 
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
-                required 
+      {/* SCADA Statistics Panel */}
+      <div className="max-w-7xl mx-auto px-6 py-6">
+        <div className="grid grid-cols-2 md:grid-cols-6 gap-4 mb-6">
+          <div className="bg-slate-800 border border-slate-600 rounded-lg p-4 shadow-lg">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-slate-400 text-sm font-medium">TOTAL UNITS</p>
+                <p className="text-3xl font-bold text-white">{stats.total}</p>
+              </div>
+              <div className="w-10 h-10 bg-slate-700 rounded-lg flex items-center justify-center">
+                <Factory className="w-5 h-5 text-slate-300" />
+              </div>
+            </div>
+          </div>
+          
+          <div className="bg-slate-800 border border-green-500/30 rounded-lg p-4 shadow-lg">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-green-400 text-sm font-medium">AVAILABLE</p>
+                <p className="text-3xl font-bold text-green-400">{stats.available}</p>
+              </div>
+              <div className="w-10 h-10 bg-green-500/20 rounded-lg flex items-center justify-center">
+                <CheckCircle className="w-5 h-5 text-green-400" />
+              </div>
+            </div>
+            <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
+              <div className="bg-green-400 h-1 rounded-full animate-pulse" style={{width: `${stats.total > 0 ? (stats.available / stats.total) * 100 : 0}%`}}></div>
+            </div>
+          </div>
+          
+          <div className="bg-slate-800 border border-blue-500/30 rounded-lg p-4 shadow-lg">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-blue-400 text-sm font-medium">ACTIVE</p>
+                <p className="text-3xl font-bold text-blue-400">{stats.inUse}</p>
+              </div>
+              <div className="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center">
+                <Activity className="w-5 h-5 text-blue-400 animate-bounce" />
+              </div>
+            </div>
+            <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
+              <div className="bg-blue-400 h-1 rounded-full" style={{width: `${stats.total > 0 ? (stats.inUse / stats.total) * 100 : 0}%`}}></div>
+            </div>
+          </div>
+          
+          <div className="bg-slate-800 border border-yellow-500/30 rounded-lg p-4 shadow-lg">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-yellow-400 text-sm font-medium">MAINTENANCE</p>
+                <p className="text-3xl font-bold text-yellow-400">{stats.maintenance}</p>
+              </div>
+              <div className="w-10 h-10 bg-yellow-500/20 rounded-lg flex items-center justify-center">
+                <Wrench className="w-5 h-5 text-yellow-400" />
+              </div>
+            </div>
+            <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
+              <div className="bg-yellow-400 h-1 rounded-full animate-pulse" style={{width: `${stats.total > 0 ? (stats.maintenance / stats.total) * 100 : 0}%`}}></div>
+            </div>
+          </div>
+          
+          <div className="bg-slate-800 border border-red-500/30 rounded-lg p-4 shadow-lg">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-red-400 text-sm font-medium">OFFLINE</p>
+                <p className="text-3xl font-bold text-red-400">{stats.offline}</p>
+              </div>
+              <div className="w-10 h-10 bg-red-500/20 rounded-lg flex items-center justify-center">
+                <XCircle className="w-5 h-5 text-red-400" />
+              </div>
+            </div>
+            <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
+              <div className="bg-red-400 h-1 rounded-full" style={{width: `${stats.total > 0 ? (stats.offline / stats.total) * 100 : 0}%`}}></div>
+            </div>
+          </div>
+          
+          <div className="bg-slate-800 border border-purple-500/30 rounded-lg p-4 shadow-lg">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-purple-400 text-sm font-medium">EFFICIENCY</p>
+                <p className="text-3xl font-bold text-purple-400">{stats.utilizationRate}%</p>
+              </div>
+              <div className="w-10 h-10 bg-purple-500/20 rounded-lg flex items-center justify-center">
+                <Gauge className="w-5 h-5 text-purple-400" />
+              </div>
+            </div>
+            <div className="w-full bg-slate-700 rounded-full h-1 mt-2">
+              <div className="bg-purple-400 h-1 rounded-full" style={{width: `${stats.utilizationRate}%`}}></div>
+            </div>
+          </div>
+        </div>
+
+        {/* SCADA Control Panel */}
+        <div className="bg-slate-800 border border-slate-600 rounded-lg p-6 shadow-lg mb-6">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+              <ShieldCheck className="w-5 h-5 text-white" />
+            </div>
+            <h2 className="text-xl font-bold text-white">System Control Panel</h2>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            {/* Search */}
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-4 h-4" />
+              <input
+                type="text"
+                placeholder="Search equipment..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-10 pr-4 py-3 bg-slate-700 border border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-white placeholder-slate-400"
               />
             </div>
             
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Environment</label>
+            {/* Environment Filter */}
+            <div className="relative">
+              <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-4 h-4" />
               <select 
-                value={formData.environment} 
-                onChange={(e) => setFormData({...formData, environment: e.target.value, type: ''})} 
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                value={selectedEnvironment}
+                onChange={(e) => setSelectedEnvironment(e.target.value)}
+                className="w-full pl-10 pr-4 py-3 bg-slate-700 border border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-white appearance-none"
               >
-                <option value="">Select Environment</option>
+                <option value="all">All Production Areas</option>
                 {environments.map(env => (
                   <option key={env.id} value={env.code}>{env.name}</option>
                 ))}
               </select>
             </div>
             
+            {/* Status Filter */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Machine Type</label>
               <select 
-                value={formData.type} 
-                onChange={(e) => setFormData({...formData, type: e.target.value})} 
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
-                required
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value)}
+                className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-white"
               >
-                <option value="">Select machine type...</option>
-                {(MACHINE_TYPES[formData.environment] || []).map(type => 
-                  <option key={type.id || type.name} value={type.name || type}>{type.name || type}</option>
-                )}
+                <option value="all">All Status Types</option>
+                <option value="available">Available</option>
+                <option value="in_use">Active</option>
+                <option value="maintenance">Maintenance</option>
+                <option value="offline">Offline</option>
               </select>
-              <div className="mt-2 p-2 bg-gray-50 rounded-lg">
-                <input
-                  type="text"
-                  placeholder="Or type new machine type and press Enter"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-                  onKeyPress={(e) => {
-                    if (e.key === 'Enter' && e.target.value.trim()) {
-                      const newTypeName = e.target.value.trim();
-                      setFormData({...formData, type: newTypeName});
-                      createMachineTypeInline(newTypeName);
-                      e.target.value = '';
-                    }
-                  }}
-                />
-                <p className="text-xs text-gray-500 mt-1">Press Enter to create and select new machine type</p>
+            </div>
+            
+            {/* Results Count */}
+            <div className="flex items-center justify-center md:justify-start bg-slate-700 rounded-lg px-4 py-3 border border-slate-600">
+              <span className="text-sm text-slate-300 font-mono">
+                {filteredMachines.length} / {machines.length} units
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* SCADA Machine Grid - Separated by Environment */}
+        {/* Blending Environment Section */}
+        {(selectedEnvironment === 'all' || selectedEnvironment === 'blending') && (
+          <div className="mb-8">
+            <div className="bg-gradient-to-r from-orange-600 to-red-600 rounded-lg p-6 mb-6 shadow-lg">
+              <div className="flex items-center gap-4">
+                <div className="w-16 h-16 bg-white/20 rounded-lg flex items-center justify-center">
+                  <Layers className="w-8 h-8 text-white" />
+                </div>
+                <div>
+                  <h2 className="text-2xl font-bold text-white mb-1">BLENDING PRODUCTION AREA</h2>
+                  <p className="text-orange-100 flex items-center gap-2">
+                    <Thermometer className="w-4 h-4" />
+                    Raw Material Processing • Recipe Mixing • Quality Control
+                  </p>
+                </div>
+                <div className="ml-auto text-right">
+                  <div className="text-3xl font-bold text-white">
+                    {filteredMachines.filter(m => m.environment === 'blending').length}
+                  </div>
+                  <div className="text-orange-200 text-sm">UNITS</div>
+                </div>
               </div>
             </div>
             
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Capacity</label>
-                <input 
-                  type="number" 
-                  placeholder="100" 
-                  value={formData.capacity} 
-                  onChange={(e) => setFormData({...formData, capacity: parseInt(e.target.value)})} 
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
-                  required 
-                />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {filteredMachines.filter(m => m.environment === 'blending').map(machine => {
+                const statusConfig = STATUS_COLORS[machine.status] || STATUS_COLORS.offline;
+                const StatusIcon = statusConfig.icon;
+                
+                return (
+                  <div key={machine.id} className={`bg-slate-800 border ${statusConfig.border} rounded-lg p-6 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden relative`}>
+                    {/* Status Indicator */}
+                    <div className="absolute top-4 right-4">
+                      <div className={`w-3 h-3 rounded-full ${statusConfig.indicator} ${statusConfig.pulse}`}></div>
+                    </div>
+                    
+                    {/* Machine Header */}
+                    <div className="mb-4">
+                      <div className="flex items-center gap-3 mb-2">
+                        <div className={`w-10 h-10 ${statusConfig.bg} rounded-lg flex items-center justify-center border ${statusConfig.border}`}>
+                          <StatusIcon className={`w-5 h-5 ${statusConfig.text}`} />
+                        </div>
+                        <div className="flex-1">
+                          <h3 className="text-lg font-bold text-white mb-1">{machine.name}</h3>
+                          <p className="text-slate-400 text-sm">{machine.type}</p>
+                        </div>
+                      </div>
+                      
+                      {/* Status Badge */}
+                      <div className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold ${statusConfig.bg} ${statusConfig.text} border ${statusConfig.border}`}>
+                        <div className={`w-2 h-2 rounded-full mr-2 ${statusConfig.indicator} ${statusConfig.pulse}`}></div>
+                        {machine.status.replace('_', ' ').toUpperCase()}
+                      </div>
+                    </div>
+                    
+                    {/* Machine Metrics */}
+                    <div className="grid grid-cols-2 gap-3 mb-4">
+                      <div className="bg-slate-700 rounded-lg p-3 border border-slate-600">
+                        <div className="flex items-center gap-2 mb-1">
+                          <Gauge className="w-4 h-4 text-blue-400" />
+                          <span className="text-slate-400 text-xs">CAPACITY</span>
+                        </div>
+                        <div className="text-white font-bold">{machine.capacity}</div>
+                      </div>
+                      
+                      {machine.production_rate && (
+                        <div className="bg-slate-700 rounded-lg p-3 border border-slate-600">
+                          <div className="flex items-center gap-2 mb-1">
+                            <Activity className="w-4 h-4 text-green-400" />
+                            <span className="text-slate-400 text-xs">RATE</span>
+                          </div>
+                          <div className="text-white font-bold">{machine.production_rate}/hr</div>
+                        </div>
+                      )}
+                    </div>
+                    
+                    {/* Control Buttons */}
+                    <div className="space-y-2">
+                      <Button 
+                        onClick={async () => {
+                          setSelectedMachine(machine);
+                          setFormData({
+                            ...machine,
+                            shift_cycle_enabled: machine.shift_cycle_enabled || false,
+                            cycle_start_date: machine.cycle_start_date || '',
+                            operators_per_shift: machine.operators_per_shift == null ? '' : machine.operators_per_shift,
+                            hopper_loaders_per_shift: machine.hopper_loaders_per_shift == null ? '' : machine.hopper_loaders_per_shift,
+                            packers_per_shift: machine.packers_per_shift == null ? '' : machine.packers_per_shift,
+                            specifications: machine.specifications || {}
+                          });
+                          await loadCrewsForMachine(machine.id);
+                          setShowEditModal(true);
+                        }}
+                        className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2"
+                      >
+                        <Settings className="w-4 h-4" />
+                        CONFIGURE
+                      </Button>
+                      
+                      <div className="grid grid-cols-3 gap-2">
+                        <Button 
+                          onClick={() => {
+                            setSelectedMachine(machine);
+                            setShowStatusModal(true);
+                          }}
+                          className="bg-slate-700 hover:bg-slate-600 text-white border-slate-600 text-xs py-2"
+                        >
+                          <StatusIcon className="w-3 h-3" />
+                        </Button>
+                        
+                        <Button 
+                          onClick={() => {
+                            setSelectedMachine(machine);
+                            loadMachineSchedule(machine.id);
+                            setShowScheduleModal(true);
+                          }}
+                          className="bg-slate-700 hover:bg-slate-600 text-white border-slate-600 text-xs py-2"
+                        >
+                          <Calendar className="w-3 h-3" />
+                        </Button>
+                      
+                        {machine.status !== 'in_use' && (
+                          <Button 
+                            onClick={() => handleDeleteMachine(machine.id)}
+                            className="bg-red-600 hover:bg-red-700 text-white text-xs py-2"
+                          >
+                            <Trash2 className="w-3 h-3" />
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+        
+        {/* Packaging Environment Section */}
+        {(selectedEnvironment === 'all' || selectedEnvironment === 'packaging') && (
+          <div className="mb-8">
+            <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg p-6 mb-6 shadow-lg">
+              <div className="flex items-center gap-4">
+                <div className="w-16 h-16 bg-white/20 rounded-lg flex items-center justify-center">
+                  <Factory className="w-8 h-8 text-white" />
+                </div>
+                <div>
+                  <h2 className="text-2xl font-bold text-white mb-1">PACKAGING PRODUCTION AREA</h2>
+                  <p className="text-blue-100 flex items-center gap-2">
+                    <BarChart3 className="w-4 h-4" />
+                    Final Processing • Packaging Lines • Distribution Ready
+                  </p>
+                </div>
+                <div className="ml-auto text-right">
+                  <div className="text-3xl font-bold text-white">
+                    {filteredMachines.filter(m => m.environment === 'packaging').length}
+                  </div>
+                  <div className="text-blue-200 text-sm">UNITS</div>
+                </div>
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {filteredMachines.filter(m => m.environment === 'packaging').map(machine => {
+                const statusConfig = STATUS_COLORS[machine.status] || STATUS_COLORS.offline;
+                const StatusIcon = statusConfig.icon;
+                
+                return (
+                  <div key={machine.id} className={`bg-slate-800 border ${statusConfig.border} rounded-lg p-6 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden relative`}>
+                    {/* Status Indicator */}
+                    <div className="absolute top-4 right-4">
+                      <div className={`w-3 h-3 rounded-full ${statusConfig.indicator} ${statusConfig.pulse}`}></div>
+                    </div>
+                    
+                    {/* Machine Header */}
+                    <div className="mb-4">
+                      <div className="flex items-center gap-3 mb-2">
+                        <div className={`w-10 h-10 ${statusConfig.bg} rounded-lg flex items-center justify-center border ${statusConfig.border}`}>
+                          <StatusIcon className={`w-5 h-5 ${statusConfig.text}`} />
+                        </div>
+                        <div className="flex-1">
+                          <h3 className="text-lg font-bold text-white mb-1">{machine.name}</h3>
+                          <p className="text-slate-400 text-sm">{machine.type}</p>
+                        </div>
+                      </div>
+                      
+                      {/* Status Badge */}
+                      <div className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold ${statusConfig.bg} ${statusConfig.text} border ${statusConfig.border}`}>
+                        <div className={`w-2 h-2 rounded-full mr-2 ${statusConfig.indicator} ${statusConfig.pulse}`}></div>
+                        {machine.status.replace('_', ' ').toUpperCase()}
+                      </div>
+                    </div>
+                    
+                    {/* Machine Metrics */}
+                    <div className="grid grid-cols-2 gap-3 mb-4">
+                      <div className="bg-slate-700 rounded-lg p-3 border border-slate-600">
+                        <div className="flex items-center gap-2 mb-1">
+                          <Gauge className="w-4 h-4 text-blue-400" />
+                          <span className="text-slate-400 text-xs">CAPACITY</span>
+                        </div>
+                        <div className="text-white font-bold">{machine.capacity}</div>
+                      </div>
+                      
+                      {machine.production_rate && (
+                        <div className="bg-slate-700 rounded-lg p-3 border border-slate-600">
+                          <div className="flex items-center gap-2 mb-1">
+                            <Activity className="w-4 h-4 text-green-400" />
+                            <span className="text-slate-400 text-xs">RATE</span>
+                          </div>
+                          <div className="text-white font-bold">{machine.production_rate}/hr</div>
+                        </div>
+                      )}
+                    </div>
+                    
+                    {/* Control Buttons */}
+                    <div className="space-y-2">
+                      <Button 
+                        onClick={async () => {
+                          setSelectedMachine(machine);
+                          setFormData({
+                            ...machine,
+                            shift_cycle_enabled: machine.shift_cycle_enabled || false,
+                            cycle_start_date: machine.cycle_start_date || '',
+                            operators_per_shift: machine.operators_per_shift == null ? '' : machine.operators_per_shift,
+                            hopper_loaders_per_shift: machine.hopper_loaders_per_shift == null ? '' : machine.hopper_loaders_per_shift,
+                            packers_per_shift: machine.packers_per_shift == null ? '' : machine.packers_per_shift,
+                            specifications: machine.specifications || {}
+                          });
+                          await loadCrewsForMachine(machine.id);
+                          setShowEditModal(true);
+                        }}
+                        className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2"
+                      >
+                        <Settings className="w-4 h-4" />
+                        CONFIGURE
+                      </Button>
+                      
+                      <div className="grid grid-cols-3 gap-2">
+                        <Button 
+                          onClick={() => {
+                            setSelectedMachine(machine);
+                            setShowStatusModal(true);
+                          }}
+                          className="bg-slate-700 hover:bg-slate-600 text-white border-slate-600 text-xs py-2"
+                        >
+                          <StatusIcon className="w-3 h-3" />
+                        </Button>
+                        
+                        <Button 
+                          onClick={() => {
+                            setSelectedMachine(machine);
+                            loadMachineSchedule(machine.id);
+                            setShowScheduleModal(true);
+                          }}
+                          className="bg-slate-700 hover:bg-slate-600 text-white border-slate-600 text-xs py-2"
+                        >
+                          <Calendar className="w-3 h-3" />
+                        </Button>
+                      
+                        {machine.status !== 'in_use' && (
+                          <Button 
+                            onClick={() => handleDeleteMachine(machine.id)}
+                            className="bg-red-600 hover:bg-red-700 text-white text-xs py-2"
+                          >
+                            <Trash2 className="w-3 h-3" />
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+      
+        {/* SCADA Empty State */}
+        {filteredMachines.length === 0 && (
+          <div className="bg-slate-800 border border-slate-600 rounded-lg p-12 text-center shadow-lg">
+            <div className="w-20 h-20 bg-slate-700 rounded-lg flex items-center justify-center mx-auto mb-6">
+              <AlertTriangle className="w-10 h-10 text-yellow-400" />
+            </div>
+            <h3 className="text-xl font-bold text-white mb-2">NO EQUIPMENT DETECTED</h3>
+            <p className="text-slate-400 mb-6">
+              {searchTerm || selectedEnvironment !== 'all' || statusFilter !== 'all'
+                ? 'Adjust system filters to locate equipment'
+                : 'Initialize system by adding production equipment'}
+            </p>
+            {!searchTerm && selectedEnvironment === 'all' && statusFilter === 'all' && (
+              <Button 
+                onClick={() => {
+                  setFormData({ name: '', type: '', environment: 'blending', capacity: 100, production_rate: 60 });
+                  setShowAddModal(true);
+                }}
+                className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3"
+              >
+                <Plus className="w-5 h-5 mr-2" />
+                ADD FIRST UNIT
+              </Button>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* SCADA Add Machine Modal */}
+      {showAddModal && (
+        <Modal title="ADD NEW EQUIPMENT" onClose={() => setShowAddModal(false)}>
+          <div className="bg-slate-900 rounded-lg">
+            <form onSubmit={handleAddMachine} className="space-y-6 p-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-bold text-slate-300 mb-3 uppercase tracking-wide">Equipment Name</label>
+                  <input 
+                    type="text" 
+                    placeholder="Enter equipment designation" 
+                    value={formData.name} 
+                    onChange={(e) => setFormData({...formData, name: e.target.value})} 
+                    className="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-white placeholder-slate-400 font-mono" 
+                    required 
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-bold text-slate-300 mb-3 uppercase tracking-wide">Production Area</label>
+                  <select 
+                    value={formData.environment} 
+                    onChange={(e) => setFormData({...formData, environment: e.target.value, type: ''})} 
+                    className="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-white"
+                    required
+                  >
+                    <option value="">Select Production Area</option>
+                    {environments.map(env => (
+                      <option key={env.id} value={env.code}>{env.name.toUpperCase()}</option>
+                    ))}
+                  </select>
+                </div>
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Production Rate (/hr)</label>
-                <input 
-                  type="number" 
-                  placeholder="60" 
-                  value={formData.production_rate} 
-                  onChange={(e) => setFormData({...formData, production_rate: parseInt(e.target.value)})} 
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
-                />
+                <label className="block text-sm font-bold text-slate-300 mb-3 uppercase tracking-wide">Equipment Type</label>
+                <select 
+                  value={formData.type} 
+                  onChange={(e) => setFormData({...formData, type: e.target.value})} 
+                  className="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-white" 
+                  required
+                >
+                  <option value="">Select equipment type...</option>
+                  {(MACHINE_TYPES[formData.environment] || []).map(type => 
+                    <option key={type.id || type.name} value={type.name || type}>{type.name || type}</option>
+                  )}
+                </select>
+                <div className="mt-3 p-3 bg-slate-800 rounded-lg border border-slate-600">
+                  <input
+                    type="text"
+                    placeholder="Create new equipment type (press Enter)"
+                    className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-white placeholder-slate-400 text-sm"
+                    onKeyPress={(e) => {
+                      if (e.key === 'Enter' && e.target.value.trim()) {
+                        const newTypeName = e.target.value.trim();
+                        setFormData({...formData, type: newTypeName});
+                        createMachineTypeInline(newTypeName);
+                        e.target.value = '';
+                      }
+                    }}
+                  />
+                  <p className="text-xs text-slate-400 mt-2">Press Enter to create and select new equipment type</p>
+                </div>
               </div>
-            </div>
-            
-            <div className="flex justify-end gap-3 pt-4">
-              <Button type="button" onClick={() => setShowAddModal(false)} variant="outline">
-                Cancel
-              </Button>
-              <Button type="submit">
-                <Plus className="w-4 h-4 mr-2" />
-                Add Machine
-              </Button>
-            </div>
-          </form>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div className="bg-slate-800 p-4 rounded-lg border border-slate-600">
+                  <label className="block text-sm font-bold text-slate-300 mb-3 uppercase tracking-wide">Capacity</label>
+                  <input 
+                    type="number" 
+                    placeholder="100" 
+                    value={formData.capacity} 
+                    onChange={(e) => setFormData({...formData, capacity: parseInt(e.target.value)})} 
+                    className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-white font-mono" 
+                    required 
+                  />
+                </div>
+                
+                <div className="bg-slate-800 p-4 rounded-lg border border-slate-600">
+                  <label className="block text-sm font-bold text-slate-300 mb-3 uppercase tracking-wide">Rate (/hr)</label>
+                  <input 
+                    type="number" 
+                    placeholder="60" 
+                    value={formData.production_rate} 
+                    onChange={(e) => setFormData({...formData, production_rate: parseInt(e.target.value)})} 
+                    className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-white font-mono" 
+                  />
+                </div>
+              </div>
+              
+              <div className="flex justify-end gap-4 pt-6 border-t border-slate-600">
+                <Button 
+                  type="button" 
+                  onClick={() => setShowAddModal(false)} 
+                  className="bg-slate-700 hover:bg-slate-600 text-white border-slate-600 px-6 py-3"
+                >
+                  CANCEL
+                </Button>
+                <Button 
+                  type="submit"
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 font-bold"
+                >
+                  <Plus className="w-4 h-4 mr-2" />
+                  ADD EQUIPMENT
+                </Button>
+              </div>
+            </form>
+          </div>
         </Modal>
       )}
 
@@ -1322,38 +1665,44 @@ export default function MachinesPage() {
         </Modal>
       )}
       
-      {/* Status Change Modal */}
+      {/* SCADA Status Change Modal */}
       {showStatusModal && selectedMachine && (
-        <Modal title="Change Machine Status" onClose={() => setShowStatusModal(false)}>
-          <div className="space-y-4">
-            <div className="text-center">
-              <h3 className="text-lg font-medium text-gray-800 mb-2">{selectedMachine.name}</h3>
-              <p className="text-sm text-gray-500">Current status: {getStatusBadge(selectedMachine.status)}</p>
+        <Modal title="EQUIPMENT STATUS CONTROL" onClose={() => setShowStatusModal(false)}>
+          <div className="bg-slate-900 rounded-lg p-6 space-y-6">
+            <div className="text-center bg-slate-800 p-4 rounded-lg border border-slate-600">
+              <h3 className="text-xl font-bold text-white mb-2">{selectedMachine.name}</h3>
+              <div className="flex items-center justify-center gap-2">
+                <span className="text-slate-400">CURRENT STATUS:</span>
+                {getStatusBadge(selectedMachine.status)}
+              </div>
             </div>
             
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-4">
               {Object.entries(STATUS_COLORS).map(([status, config]) => {
                 const Icon = config.icon;
                 return (
                   <Button
                     key={status}
                     onClick={() => handleStatusChange(status)}
-                    variant={selectedMachine.status === status ? "default" : "outline"}
-                    className={`${config.bg} ${config.text} border-2 ${config.border} h-16 flex flex-col items-center justify-center`}
+                    className={`${selectedMachine.status === status ? 'bg-blue-600 border-blue-500' : 'bg-slate-800 hover:bg-slate-700 border-slate-600'} border-2 h-20 flex flex-col items-center justify-center text-white font-bold transition-all duration-200`}
                     disabled={selectedMachine.status === status}
                   >
-                    <Icon className="w-5 h-5 mb-1" />
-                    <span className="text-xs font-medium">
+                    <Icon className={`w-6 h-6 mb-2 ${config.text}`} />
+                    <span className="text-xs font-bold">
                       {status.replace('_', ' ').toUpperCase()}
                     </span>
+                    <div className={`w-2 h-2 rounded-full mt-1 ${config.indicator} ${config.pulse}`}></div>
                   </Button>
                 );
               })}
             </div>
             
-            <div className="flex justify-end pt-4">
-              <Button onClick={() => setShowStatusModal(false)} variant="outline">
-                Cancel
+            <div className="flex justify-end pt-4 border-t border-slate-600">
+              <Button 
+                onClick={() => setShowStatusModal(false)} 
+                className="bg-slate-700 hover:bg-slate-600 text-white border-slate-600 px-6 py-3"
+              >
+                CLOSE
               </Button>
             </div>
           </div>
