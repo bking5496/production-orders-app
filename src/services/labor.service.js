@@ -261,8 +261,14 @@ class LaborService {
     const { employee_id, machine_id, assignment_date, shift_type, role, start_time, end_time, hourly_rate } = assignmentData;
 
     // Validate required fields
-    if (!employee_id || !machine_id || !assignment_date || !shift_type || !role) {
-      throw new ValidationError('Employee, machine, date, shift type, and role are required');
+    if (!employee_id || !assignment_date || !shift_type || !role) {
+      throw new ValidationError('Employee, date, shift type, and role are required');
+    }
+
+    // Machine ID is required for regular roles, but optional for factory-wide roles
+    const factoryWideRoles = ['supervisor', 'forklift_driver'];
+    if (!factoryWideRoles.includes(role) && !machine_id) {
+      throw new ValidationError('Machine ID is required for this role');
     }
 
     // Validate shift type
