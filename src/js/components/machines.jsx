@@ -1344,321 +1344,347 @@ export default function MachinesPage() {
         </Modal>
       )}
 
-      {/* Edit Machine Modal */}
+      {/* SCADA Edit Machine Modal */}
       {showEditModal && selectedMachine && (
         <Modal 
-          title={`Edit Machine - ${selectedMachine.name}`} 
+          title={`CONFIGURE EQUIPMENT - ${selectedMachine.name.toUpperCase()}`} 
           onClose={() => setShowEditModal(false)}
           size="large"
         >
-          <div className="p-6">
-            {/* Enhanced Header */}
-            <div className="mb-6 pb-4 border-b border-gray-200">
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                  <Settings className="w-6 h-6 text-blue-600" />
+          <div className="bg-slate-900 rounded-lg">
+            {/* SCADA Header */}
+            <div className="bg-slate-800 border-b border-slate-600 p-6 rounded-t-lg">
+              <div className="flex items-center gap-4">
+                <div className="w-14 h-14 bg-blue-600 rounded-lg flex items-center justify-center shadow-lg">
+                  <Settings className="w-7 h-7 text-white" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900">Machine Configuration</h3>
-                  <p className="text-gray-600">Update machine settings and assignments</p>
+                  <h3 className="text-xl font-bold text-white mb-1">EQUIPMENT CONFIGURATION PANEL</h3>
+                  <p className="text-slate-400 flex items-center gap-2">
+                    <Workflow className="w-4 h-4" />
+                    Advanced System Parameters • Production Settings
+                  </p>
+                </div>
+                <div className="ml-auto">
+                  <div className="flex items-center gap-2 px-3 py-2 bg-green-600/20 rounded-lg border border-green-500/30">
+                    <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                    <span className="text-green-400 text-sm font-mono">ONLINE</span>
+                  </div>
                 </div>
               </div>
             </div>
 
-            <form onSubmit={handleEditMachine} className="space-y-6">
-              {/* Machine Name Section */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-bold text-gray-700 mb-3">
-                    Machine Name <span className="text-red-500">*</span>
-                  </label>
-                  <input 
-                    type="text" 
-                    placeholder="Enter machine name" 
-                    value={formData.name} 
-                    onChange={(e) => setFormData({...formData, name: e.target.value})} 
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-lg font-semibold" 
-                    required 
-                  />
+            <form onSubmit={handleEditMachine} className="p-6 space-y-8">
+              {/* Equipment Identification */}
+              <div className="bg-slate-800 border border-slate-600 rounded-lg p-6">
+                <h4 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                  <div className="w-6 h-6 bg-blue-500 rounded flex items-center justify-center">
+                    <span className="text-white text-xs font-bold">ID</span>
+                  </div>
+                  EQUIPMENT IDENTIFICATION
+                </h4>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-sm font-bold text-slate-300 mb-3 uppercase tracking-wide">
+                      Equipment Designation <span className="text-red-400">*</span>
+                    </label>
+                    <input 
+                      type="text" 
+                      placeholder="Enter equipment designation" 
+                      value={formData.name} 
+                      onChange={(e) => setFormData({...formData, name: e.target.value})} 
+                      className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-white font-mono text-lg font-bold" 
+                      required 
+                    />
+                  </div>
+              
+                  <div>
+                    <label className="block text-sm font-bold text-slate-300 mb-3 uppercase tracking-wide">
+                      Production Area <span className="text-red-400">*</span>
+                    </label>
+                    <select 
+                      value={formData.environment} 
+                      onChange={(e) => setFormData({...formData, environment: e.target.value, type: ''})} 
+                      className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-white text-lg"
+                      required
+                    >
+                      <option value="">Select Production Area</option>
+                      {environments.map(env => (
+                        <option key={env.id} value={env.code}>{env.name.toUpperCase()}</option>
+                      ))}
+                    </select>
+                    <p className="text-xs text-slate-400 mt-2">⚠️ Changing area will reset equipment type</p>
+                  </div>
                 </div>
+              </div>
             
+              {/* Equipment Type Configuration */}
+              <div className="bg-slate-800 border border-slate-600 rounded-lg p-6">
+                <h4 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                  <div className="w-6 h-6 bg-orange-500 rounded flex items-center justify-center">
+                    <Factory className="w-4 h-4 text-white" />
+                  </div>
+                  EQUIPMENT TYPE CONFIGURATION
+                </h4>
+                
                 <div>
-                  <label className="block text-sm font-bold text-gray-700 mb-3">
-                    Environment <span className="text-red-500">*</span>
-                  </label>
+                  <label className="block text-sm font-bold text-slate-300 mb-3 uppercase tracking-wide">Equipment Classification</label>
                   <select 
-                    value={formData.environment} 
-                    onChange={(e) => setFormData({...formData, environment: e.target.value, type: ''})} 
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-lg"
+                    value={formData.type} 
+                    onChange={(e) => setFormData({...formData, type: e.target.value})} 
+                    className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-white" 
                     required
                   >
-                    <option value="">Select Environment</option>
-                    {environments.map(env => (
-                      <option key={env.id} value={env.code}>{env.name}</option>
-                    ))}
+                    <option value="">Select Equipment Type</option>
+                    {(MACHINE_TYPES[formData.environment] || []).map(type => 
+                      <option key={type.id || type.name} value={type.name || type}>{type.name || type}</option>
+                    )}
                   </select>
-                  <p className="text-xs text-gray-500 mt-2">Changing environment will reset the machine type</p>
-                </div>
-              </div>
-            
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Machine Type</label>
-              <select 
-                value={formData.type} 
-                onChange={(e) => setFormData({...formData, type: e.target.value})} 
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
-                required
-              >
-                {(MACHINE_TYPES[formData.environment] || []).map(type => 
-                  <option key={type.id || type.name} value={type.name || type}>{type.name || type}</option>
-                )}
-              </select>
-              <div className="mt-2 p-2 bg-gray-50 rounded-lg">
-                <input
-                  type="text"
-                  placeholder="Or type new machine type and press Enter"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-                  onKeyPress={(e) => {
-                    if (e.key === 'Enter' && e.target.value.trim()) {
-                      const newTypeName = e.target.value.trim();
-                      setFormData({...formData, type: newTypeName});
-                      createMachineTypeInline(newTypeName);
-                      e.target.value = '';
-                    }
-                  }}
-                />
-                <p className="text-xs text-gray-500 mt-1">Press Enter to create and select new machine type</p>
-              </div>
-            </div>
-            
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Capacity</label>
-                <input 
-                  type="number" 
-                  placeholder="Capacity" 
-                  value={formData.capacity} 
-                  onChange={(e) => setFormData({...formData, capacity: parseInt(e.target.value)})} 
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
-                  required 
-                />
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Production Rate (/hr)</label>
-                <input 
-                  type="number" 
-                  placeholder="Production Rate" 
-                  value={formData.production_rate || ''} 
-                  onChange={(e) => setFormData({...formData, production_rate: parseInt(e.target.value)})} 
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
-                />
-              </div>
-            </div>
-            
-            {/* Machine Image Section */}
-            <div className="border-t pt-6 mt-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
-                  <span className="text-purple-600 text-sm">📸</span>
-                </div>
-                Machine Visual
-              </h3>
-              
-              {/* Current Image Preview */}
-              {selectedMachine?.specifications?.image && (
-                <div className="mb-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
-                  <p className="text-sm font-medium text-gray-700 mb-2">Current Image</p>
-                  <div className="relative w-48 h-32 mx-auto">
-                    <img 
-                      src={selectedMachine.specifications.image} 
-                      alt={`${selectedMachine.name} machine`}
-                      className="w-full h-full object-cover rounded-lg border border-gray-300"
-                      onError={(e) => {
-                        e.target.style.display = 'none';
+                  
+                  <div className="mt-4 p-4 bg-slate-700 rounded-lg border border-slate-600">
+                    <div className="flex items-center gap-3 mb-2">
+                      <Plus className="w-4 h-4 text-blue-400" />
+                      <span className="text-slate-300 text-sm font-bold">CREATE NEW TYPE</span>
+                    </div>
+                    <input
+                      type="text"
+                      placeholder="Enter new equipment type and press Enter"
+                      className="w-full px-3 py-2 bg-slate-800 border border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-white placeholder-slate-400 text-sm"
+                      onKeyPress={(e) => {
+                        if (e.key === 'Enter' && e.target.value.trim()) {
+                          const newTypeName = e.target.value.trim();
+                          setFormData({...formData, type: newTypeName});
+                          createMachineTypeInline(newTypeName);
+                          e.target.value = '';
+                        }
                       }}
                     />
+                    <p className="text-xs text-slate-400 mt-2">⚡ Press Enter to create and select new equipment type</p>
                   </div>
-                  <p className="text-xs text-gray-500 mt-2 text-center">
-                    Path: {selectedMachine.specifications.image}
-                  </p>
                 </div>
-              )}
-              
-              {/* Image Path Input */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Image Path (Optional)
-                </label>
-                <input 
-                  type="text" 
-                  placeholder="/assets/machines/machine-name.png" 
-                  value={formData.specifications?.image || ''} 
-                  onChange={(e) => {
-                    const specs = formData.specifications || {};
-                    setFormData({
-                      ...formData, 
-                      specifications: { ...specs, image: e.target.value }
-                    });
-                  }} 
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
-                />
-                <p className="text-xs text-gray-500 mt-1">
-                  Enter the path to machine image (relative to public directory)
-                </p>
               </div>
-            </div>
             
-            {/* Workforce Configuration */}
-            <div className="border-t pt-6 mt-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                <Users className="w-5 h-5 text-blue-600" />
-                Workforce Requirements
-              </h3>
-              
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
-                  <label className="block text-sm font-medium text-blue-800 mb-2">
-                    <Settings className="w-4 h-4 inline mr-1" />
-                    Operators per Shift
-                  </label>
-                  <input 
-                    type="number" 
-                    min="0"
-                    max="10"
-                    value={formData.operators_per_shift ?? 2}
-                    onChange={(e) => {
-                      const value = e.target.value === '' ? '' : Math.max(0, parseInt(e.target.value) || 0);
-                      setFormData({...formData, operators_per_shift: value});
-                    }}
-                    placeholder="Not applicable"
-                    className="w-full px-3 py-2 border border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
-                  />
-                  <p className="text-xs text-blue-600 mt-1">Machine operators needed • Blank = N/A, 0 = Automated</p>
-                </div>
+              {/* Performance Parameters */}
+              <div className="bg-slate-800 border border-slate-600 rounded-lg p-6">
+                <h4 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                  <div className="w-6 h-6 bg-green-500 rounded flex items-center justify-center">
+                    <Gauge className="w-4 h-4 text-white" />
+                  </div>
+                  PERFORMANCE PARAMETERS
+                </h4>
                 
-                <div className="bg-orange-50 p-4 rounded-lg border border-orange-200">
-                  <label className="block text-sm font-medium text-orange-800 mb-2">
-                    <BarChart3 className="w-4 h-4 inline mr-1" />
-                    Hopper Loaders per Shift
-                  </label>
-                  <input 
-                    type="number" 
-                    min="0"
-                    max="5"
-                    value={formData.hopper_loaders_per_shift ?? 1}
-                    onChange={(e) => {
-                      const value = e.target.value === '' ? '' : Math.max(0, parseInt(e.target.value) || 0);
-                      setFormData({...formData, hopper_loaders_per_shift: value});
-                    }}
-                    placeholder="Not applicable"
-                    className="w-full px-3 py-2 border border-orange-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent bg-white"
-                  />
-                  <p className="text-xs text-orange-600 mt-1">Material handling staff • Blank = N/A, 0 = Automated</p>
-                </div>
-                
-                <div className="bg-green-50 p-4 rounded-lg border border-green-200">
-                  <label className="block text-sm font-medium text-green-800 mb-2">
-                    <CheckCircle className="w-4 h-4 inline mr-1" />
-                    Packers per Shift
-                  </label>
-                  <input 
-                    type="number" 
-                    min="0"
-                    max="15"
-                    value={formData.packers_per_shift ?? 3}
-                    onChange={(e) => {
-                      const value = e.target.value === '' ? '' : Math.max(0, parseInt(e.target.value) || 0);
-                      setFormData({...formData, packers_per_shift: value});
-                    }}
-                    placeholder="Not applicable"
-                    className="w-full px-3 py-2 border border-green-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent bg-white"
-                  />
-                  <p className="text-xs text-green-600 mt-1">Packaging staff needed • Blank = N/A, 0 = Automated</p>
-                </div>
-              </div>
-              
-              <div className="bg-gray-50 p-4 rounded-lg mb-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h4 className="font-medium text-gray-900">Total Workforce per Shift</h4>
-                    <p className="text-sm text-gray-600">Combined staffing requirement</p>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-2xl font-bold text-gray-900">
-                      {(() => {
-                        const operators = formData.operators_per_shift === '' ? 0 : (formData.operators_per_shift ?? 2);
-                        const loaders = formData.hopper_loaders_per_shift === '' ? 0 : (formData.hopper_loaders_per_shift ?? 1);
-                        const packers = formData.packers_per_shift === '' ? 0 : (formData.packers_per_shift ?? 3);
-                        return operators + loaders + packers;
-                      })()}
-                    </div>
-                    <div className="text-sm text-gray-500">people</div>
-                  </div>
-                </div>
-              </div>
-              
-              {/* Simplified Shift Cycle Toggle */}
-              <div className="border-t pt-4">
-                <div className="flex items-center justify-between p-4 bg-indigo-50 rounded-lg border border-indigo-200">
-                  <div>
-                    <div className="flex items-center gap-2 mb-1">
-                      <RotateCcw className="w-5 h-5 text-indigo-600" />
-                      <span className="font-semibold text-gray-900">2-2-2 Shift Cycle</span>
-                      <span className="px-2 py-1 bg-indigo-100 text-indigo-700 text-xs rounded-full">Advanced</span>
-                    </div>
-                    <p className="text-sm text-gray-600">Automatic crew rotation with continuous coverage</p>
-                    <p className="text-xs text-indigo-600 mt-1">Configure detailed scheduling in Labor Planner →</p>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <input 
-                      type="checkbox" 
-                      id="shift_cycle_enabled"
-                      checked={formData.shift_cycle_enabled || false}
-                      onChange={(e) => setFormData({...formData, shift_cycle_enabled: e.target.checked})}
-                      className="w-5 h-5 text-indigo-600 rounded focus:ring-indigo-500"
-                    />
-                    <label htmlFor="shift_cycle_enabled" className="text-sm font-medium text-gray-700">
-                      Enable
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="bg-slate-700 border border-slate-600 rounded-lg p-4">
+                    <label className="block text-sm font-bold text-blue-400 mb-3 uppercase tracking-wide flex items-center gap-2">
+                      <Gauge className="w-4 h-4" />
+                      Maximum Capacity
                     </label>
+                    <input 
+                      type="number" 
+                      placeholder="Production Capacity" 
+                      value={formData.capacity} 
+                      onChange={(e) => setFormData({...formData, capacity: parseInt(e.target.value)})} 
+                      className="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-white font-mono text-xl font-bold text-center" 
+                      required 
+                    />
+                    <p className="text-xs text-slate-400 mt-2 text-center">Units per production cycle</p>
+                  </div>
+                  
+                  <div className="bg-slate-700 border border-slate-600 rounded-lg p-4">
+                    <label className="block text-sm font-bold text-green-400 mb-3 uppercase tracking-wide flex items-center gap-2">
+                      <Activity className="w-4 h-4" />
+                      Production Rate
+                    </label>
+                    <input 
+                      type="number" 
+                      placeholder="Units per Hour" 
+                      value={formData.production_rate || ''} 
+                      onChange={(e) => setFormData({...formData, production_rate: parseInt(e.target.value)})} 
+                      className="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-white font-mono text-xl font-bold text-center" 
+                    />
+                    <p className="text-xs text-slate-400 mt-2 text-center">Units per hour (optional)</p>
                   </div>
                 </div>
-              
-                {formData.shift_cycle_enabled && (
-                  <div className="mt-4 p-4 bg-white rounded-lg border border-indigo-200">
-                    <div className="text-center">
-                      <Calendar className="w-8 h-8 text-indigo-600 mx-auto mb-2" />
-                      <p className="text-sm font-medium text-gray-900 mb-1">Shift Cycle Enabled</p>
-                      <p className="text-xs text-gray-600 mb-3">Configure detailed crew assignments and schedules in the Labor Planner</p>
-                      <button 
-                        type="button"
-                        onClick={() => window.location.href = '/labor-planner'}
-                        className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-sm font-medium"
-                      >
-                        Open Labor Planner →
-                      </button>
+                
+                {/* Performance Summary */}
+                <div className="mt-4 bg-gradient-to-r from-blue-600/20 to-green-600/20 border border-blue-500/30 rounded-lg p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h5 className="font-bold text-white mb-1">PERFORMANCE METRICS</h5>
+                      <p className="text-slate-400 text-sm">Equipment efficiency indicators</p>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-2xl font-bold text-white">
+                        {formData.production_rate && formData.capacity ? 
+                          Math.round((formData.production_rate / formData.capacity) * 100) : 0}%
+                      </div>
+                      <div className="text-slate-400 text-sm">Efficiency Rate</div>
                     </div>
                   </div>
-                )}
+                </div>
               </div>
-            </div>
-            
-              {/* Enhanced Submit Section */}
-              <div className="flex justify-end gap-4 pt-8 border-t border-gray-200">
-                <Button 
-                  type="button" 
-                  onClick={() => setShowEditModal(false)} 
-                  className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-semibold"
-                >
-                  Cancel
-                </Button>
-                <Button 
-                  type="submit"
-                  className="px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-semibold flex items-center gap-2"
-                >
-                  <Settings className="w-5 h-5" />
-                  Update Machine
-                </Button>
+              
+              {/* Workforce Configuration */}
+              <div className="bg-slate-800 border border-slate-600 rounded-lg p-6">
+                <h4 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                  <div className="w-6 h-6 bg-purple-500 rounded flex items-center justify-center">
+                    <Users className="w-4 h-4 text-white" />
+                  </div>
+                  WORKFORCE REQUIREMENTS
+                </h4>
+                
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                  <div className="bg-blue-600/20 border border-blue-500/30 p-4 rounded-lg">
+                    <label className="block text-sm font-bold text-blue-400 mb-3 uppercase tracking-wide flex items-center gap-2">
+                      <Settings className="w-4 h-4" />
+                      Operators per Shift
+                    </label>
+                    <input 
+                      type="number" 
+                      min="0"
+                      max="10"
+                      value={formData.operators_per_shift ?? 2}
+                      onChange={(e) => {
+                        const value = e.target.value === '' ? '' : Math.max(0, parseInt(e.target.value) || 0);
+                        setFormData({...formData, operators_per_shift: value});
+                      }}
+                      placeholder="N/A"
+                      className="w-full px-3 py-3 bg-slate-700 border border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-white font-mono text-center text-xl font-bold"
+                    />
+                    <p className="text-xs text-blue-400 mt-2 text-center">Equipment operators • 0 = Automated</p>
+                  </div>
+                  
+                  <div className="bg-orange-600/20 border border-orange-500/30 p-4 rounded-lg">
+                    <label className="block text-sm font-bold text-orange-400 mb-3 uppercase tracking-wide flex items-center gap-2">
+                      <BarChart3 className="w-4 h-4" />
+                      Hopper Loaders
+                    </label>
+                    <input 
+                      type="number" 
+                      min="0"
+                      max="5"
+                      value={formData.hopper_loaders_per_shift ?? 1}
+                      onChange={(e) => {
+                        const value = e.target.value === '' ? '' : Math.max(0, parseInt(e.target.value) || 0);
+                        setFormData({...formData, hopper_loaders_per_shift: value});
+                      }}
+                      placeholder="N/A"
+                      className="w-full px-3 py-3 bg-slate-700 border border-slate-600 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-white font-mono text-center text-xl font-bold"
+                    />
+                    <p className="text-xs text-orange-400 mt-2 text-center">Material handlers • 0 = Automated</p>
+                  </div>
+                  
+                  <div className="bg-green-600/20 border border-green-500/30 p-4 rounded-lg">
+                    <label className="block text-sm font-bold text-green-400 mb-3 uppercase tracking-wide flex items-center gap-2">
+                      <CheckCircle className="w-4 h-4" />
+                      Packers per Shift
+                    </label>
+                    <input 
+                      type="number" 
+                      min="0"
+                      max="15"
+                      value={formData.packers_per_shift ?? 3}
+                      onChange={(e) => {
+                        const value = e.target.value === '' ? '' : Math.max(0, parseInt(e.target.value) || 0);
+                        setFormData({...formData, packers_per_shift: value});
+                      }}
+                      placeholder="N/A"
+                      className="w-full px-3 py-3 bg-slate-700 border border-slate-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 text-white font-mono text-center text-xl font-bold"
+                    />
+                    <p className="text-xs text-green-400 mt-2 text-center">Packaging staff • 0 = Automated</p>
+                  </div>
+                </div>
+                
+                <div className="bg-gradient-to-r from-slate-700 to-slate-600 border border-slate-500 p-4 rounded-lg mb-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h5 className="font-bold text-white mb-1">TOTAL WORKFORCE PER SHIFT</h5>
+                      <p className="text-slate-400 text-sm">Combined staffing requirement</p>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-3xl font-bold text-white">
+                        {(() => {
+                          const operators = formData.operators_per_shift === '' ? 0 : (formData.operators_per_shift ?? 2);
+                          const loaders = formData.hopper_loaders_per_shift === '' ? 0 : (formData.hopper_loaders_per_shift ?? 1);
+                          const packers = formData.packers_per_shift === '' ? 0 : (formData.packers_per_shift ?? 3);
+                          return operators + loaders + packers;
+                        })()}
+                      </div>
+                      <div className="text-slate-400 text-sm">PERSONNEL</div>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Advanced Shift Cycle */}
+                <div className="bg-indigo-600/20 border border-indigo-500/30 rounded-lg p-4">
+                  <div className="flex items-center justify-between mb-4">
+                    <div>
+                      <div className="flex items-center gap-3 mb-2">
+                        <RotateCcw className="w-5 h-5 text-indigo-400" />
+                        <span className="font-bold text-white">2-2-2 SHIFT CYCLE SYSTEM</span>
+                        <span className="px-2 py-1 bg-indigo-500 text-white text-xs rounded-full font-bold">ADVANCED</span>
+                      </div>
+                      <p className="text-slate-400 text-sm">Automated crew rotation with continuous coverage</p>
+                      <p className="text-indigo-400 text-xs mt-1">⚙️ Configure detailed scheduling in Labor Planner</p>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <input 
+                        type="checkbox" 
+                        id="shift_cycle_enabled"
+                        checked={formData.shift_cycle_enabled || false}
+                        onChange={(e) => setFormData({...formData, shift_cycle_enabled: e.target.checked})}
+                        className="w-5 h-5 text-indigo-600 bg-slate-700 border-slate-600 rounded focus:ring-indigo-500"
+                      />
+                      <label htmlFor="shift_cycle_enabled" className="text-sm font-bold text-white">
+                        ENABLE
+                      </label>
+                    </div>
+                  </div>
+                
+                  {formData.shift_cycle_enabled && (
+                    <div className="bg-slate-700 border border-slate-600 rounded-lg p-4">
+                      <div className="text-center">
+                        <Calendar className="w-8 h-8 text-indigo-400 mx-auto mb-3" />
+                        <p className="text-white font-bold mb-2">SHIFT CYCLE ACTIVATED</p>
+                        <p className="text-slate-400 text-sm mb-4">Advanced crew scheduling system enabled</p>
+                        <button 
+                          type="button"
+                          onClick={() => window.location.href = '/labor-planner'}
+                          className="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition-colors font-bold flex items-center gap-2 mx-auto"
+                        >
+                          <Workflow className="w-4 h-4" />
+                          OPEN LABOR PLANNER
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+              
+              {/* SCADA Control Actions */}
+              <div className="flex justify-between items-center pt-8 border-t border-slate-600">
+                <div className="flex items-center gap-3">
+                  <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+                  <span className="text-slate-400 text-sm font-mono">Configuration Ready</span>
+                </div>
+                
+                <div className="flex gap-4">
+                  <Button 
+                    type="button" 
+                    onClick={() => setShowEditModal(false)} 
+                    className="px-6 py-3 bg-slate-700 hover:bg-slate-600 text-white border border-slate-600 rounded-lg font-bold"
+                  >
+                    CANCEL
+                  </Button>
+                  <Button 
+                    type="submit"
+                    className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-bold flex items-center gap-2 shadow-lg"
+                  >
+                    <Settings className="w-5 h-5" />
+                    UPDATE EQUIPMENT
+                  </Button>
+                </div>
               </div>
             </form>
           </div>
