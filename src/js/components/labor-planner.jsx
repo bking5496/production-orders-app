@@ -168,7 +168,7 @@ const LaborPlanner = ({ currentUser }) => {
 
       const assignmentData = {
         employee_id: parseInt(assignmentForm.employee_id),
-        machine_id: selectedMachine.id,
+        machine_id: (assignmentForm.role === 'supervisor' || assignmentForm.role === 'forklift_driver') ? null : selectedMachine.id,
         assignment_date: selectedDate,
         shift_type: selectedShift,
         role: assignmentForm.role,

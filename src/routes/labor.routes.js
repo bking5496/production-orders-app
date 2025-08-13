@@ -95,15 +95,16 @@ router.post('/assignments',
   requireRole(['admin', 'supervisor']),
   [
     body('employee_id').isInt({ min: 1 }).withMessage('Valid employee ID is required'),
-    body('machine_id').custom((value) => {
-      // Allow integers for regular machines or specific strings for special assignments
+    body('machine_id').custom((value, { req }) => {
+      // Allow null for factory-wide roles (supervisor, forklift_driver)
+      if (value === null && ['supervisor', 'forklift_driver'].includes(req.body.role)) {
+        return true;
+      }
+      // Allow integers for regular machines
       if (Number.isInteger(parseInt(value)) && parseInt(value) > 0) {
         return true;
       }
-      if (typeof value === 'string' && ['supervisor-station', 'forklift-station'].includes(value)) {
-        return true;
-      }
-      throw new Error('Valid machine ID is required (integer > 0 or supervisor-station/forklift-station)');
+      throw new Error('Valid machine ID is required (integer > 0) or null for factory-wide roles');
     }),
     body('assignment_date').isISO8601().withMessage('Valid assignment date is required'),
     body('shift_type')
