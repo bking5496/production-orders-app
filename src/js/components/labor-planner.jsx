@@ -262,7 +262,7 @@ const LaborPlanner = ({ currentUser }) => {
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900 mb-2">Labor Planning</h1>
+            <h1 className="text-2xl font-bold text-gray-900 mb-2">Labor Planning System</h1>
             <div className="flex items-center gap-3">
               <Button
                 onClick={() => setShowSupervisorModal(true)}
