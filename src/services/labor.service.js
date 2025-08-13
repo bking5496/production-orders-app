@@ -741,12 +741,16 @@ class LaborService {
   async markAttendance(attendanceData, userId) {
     const { date, machine_id, employee_id, shift_type, status, check_in_time, notes } = attendanceData;
     
-    // Convert HH:MM format to full timestamp if needed
+    // Convert HH:MM or HH:MM:SS format to full timestamp if needed
     let processedCheckInTime = null;
     if (check_in_time) {
-      if (check_in_time.match(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/)) {
-        // If it's HH:MM format, combine with date
-        processedCheckInTime = `${date} ${check_in_time}:00`;
+      if (check_in_time.match(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])?$/)) {
+        // If it's HH:MM or HH:MM:SS format, combine with date
+        processedCheckInTime = `${date} ${check_in_time}`;
+        // Add seconds if not present
+        if (!check_in_time.includes(':') || check_in_time.split(':').length === 2) {
+          processedCheckInTime = `${date} ${check_in_time}:00`;
+        }
       } else {
         // If it's already a full timestamp, use as-is
         processedCheckInTime = check_in_time;

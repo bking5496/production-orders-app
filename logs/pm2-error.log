@@ -1,0 +1,42 @@
+2025-08-13T22:02:45: Error occurred: {
+  error: 'invalid input syntax for type timestamp: "22:02:44"',
+  stack: 'error: invalid input syntax for type timestamp: "22:02:44"\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.raw (/home/production-app/production-orders-app/src/utils/database.js:146:12)\n' +
+    '    at async LaborService.markAttendance (/home/production-app/production-orders-app/src/services/labor.service.js:769:20)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/labor.routes.js:299:30',
+  url: '/attendance-register',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-13T20:02:45.879Z'
+}
+2025-08-13T22:02:46: Error occurred: {
+  error: 'invalid input syntax for type timestamp: "22:02:44"',
+  stack: 'error: invalid input syntax for type timestamp: "22:02:44"\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.raw (/home/production-app/production-orders-app/src/utils/database.js:146:12)\n' +
+    '    at async LaborService.markAttendance (/home/production-app/production-orders-app/src/services/labor.service.js:769:20)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/labor.routes.js:299:30',
+  url: '/attendance-register',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-13T20:02:46.964Z'
+}
+2025-08-13T22:02:49: Error occurred: {
+  error: 'invalid input syntax for type timestamp: "22:02:44"',
+  stack: 'error: invalid input syntax for type timestamp: "22:02:44"\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.raw (/home/production-app/production-orders-app/src/utils/database.js:146:12)\n' +
+    '    at async LaborService.markAttendance (/home/production-app/production-orders-app/src/services/labor.service.js:769:20)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/labor.routes.js:299:30',
+  url: '/attendance-register',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-13T20:02:49.062Z'
+}
