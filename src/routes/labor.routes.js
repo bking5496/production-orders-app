@@ -95,14 +95,23 @@ router.post('/assignments',
   requireRole(['admin', 'supervisor']),
   [
     body('employee_id').isInt({ min: 1 }).withMessage('Valid employee ID is required'),
-    body('machine_id').isInt({ min: 1 }).withMessage('Valid machine ID is required'),
+    body('machine_id').custom((value) => {
+      // Allow integers for regular machines or specific strings for special assignments
+      if (Number.isInteger(parseInt(value)) && parseInt(value) > 0) {
+        return true;
+      }
+      if (typeof value === 'string' && ['supervisor-station', 'forklift-station'].includes(value)) {
+        return true;
+      }
+      throw new Error('Valid machine ID is required (integer > 0 or supervisor-station/forklift-station)');
+    }),
     body('assignment_date').isISO8601().withMessage('Valid assignment date is required'),
     body('shift_type')
       .isIn(['day', 'night', 'afternoon'])
       .withMessage('Shift type must be one of: day, night, afternoon'),
     body('role')
-      .isIn(['operator', 'hopper_loader', 'packer', 'supervisor'])
-      .withMessage('Role must be one of: operator, hopper_loader, packer, supervisor'),
+      .isIn(['operator', 'hopper_loader', 'packer', 'supervisor', 'forklift_driver'])
+      .withMessage('Role must be one of: operator, hopper_loader, packer, supervisor, forklift_driver'),
     body('start_time').optional().matches(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/),
     body('end_time').optional().matches(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/),
     body('hourly_rate').optional().isFloat({ min: 0 })
