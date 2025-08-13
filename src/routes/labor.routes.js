@@ -280,13 +280,19 @@ router.post('/attendance-register',
     }),
     body('shift_type').isIn(['day', 'night', 'afternoon']).withMessage('Valid shift type is required'),
     body('status').isIn(['present', 'absent', 'late']).withMessage('Valid status is required'),
-    body('check_in_time').optional({ nullable: true }).matches(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/),
+    body('check_in_time').optional({ nullable: true }).matches(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])?$/),
     body('notes').optional().isString(),
     body('marked_by').optional({ nullable: true }).isInt({ min: 1 }).withMessage('Valid marked_by user ID is required')
   ],
   asyncHandler(async (req, res) => {
+    // Log request data for debugging
+    console.log('🔍 ATTENDANCE POST DEBUG:');
+    console.log('📝 Request body:', JSON.stringify(req.body, null, 2));
+    console.log('👤 User:', req.user?.username);
+    
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
+      console.log('❌ Validation errors:', JSON.stringify(errors.array(), null, 2));
       return res.validationError(errors.array());
     }
 
