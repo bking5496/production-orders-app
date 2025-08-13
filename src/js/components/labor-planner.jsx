@@ -320,6 +320,124 @@ const LaborPlanner = ({ currentUser }) => {
         </div>
       </div>
 
+      {/* Factory-Wide Assignments (Supervisors & Forklift Drivers) */}
+      <div className="mb-6">
+        <h2 className="text-xl font-semibold text-gray-900 mb-4">Factory-Wide Assignments</h2>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Supervisors */}
+          <div className="bg-white rounded-xl shadow-sm border border-purple-100 p-6">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-3">
+                <div className="bg-purple-100 p-3 rounded-full">
+                  <UserCheck className="w-6 h-6 text-purple-600" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-purple-900">Supervisors</h3>
+                  <p className="text-sm text-purple-600">Factory oversight</p>
+                </div>
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {['day', 'night'].map(shift => {
+                const supervisorAssignments = Object.values(assignments).flat()
+                  .filter(a => a.role === 'supervisor' && a.shift_type === shift);
+                
+                return (
+                  <div key={shift} className="space-y-2">
+                    <h4 className="font-medium text-gray-900 flex items-center gap-2">
+                      <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
+                        shift === 'day' ? 'bg-yellow-100 text-yellow-800' : 'bg-purple-100 text-purple-800'
+                      }`}>
+                        {shift.charAt(0).toUpperCase() + shift.slice(1)} Shift
+                      </span>
+                    </h4>
+                    {supervisorAssignments.length > 0 ? (
+                      supervisorAssignments.map(assignment => (
+                        <div key={assignment.id} className="flex items-center justify-between bg-purple-50 rounded-lg p-3 border border-purple-100">
+                          <div className="flex items-center">
+                            <span className="text-sm font-medium text-gray-900">
+                              {formatUserDisplayName(assignment)}
+                            </span>
+                          </div>
+                          <button
+                            onClick={() => handleRemoveAssignment(assignment.id)}
+                            className="w-6 h-6 p-0 text-red-500 hover:text-red-700 hover:bg-red-50 border border-red-200 rounded-full flex items-center justify-center"
+                            title="Remove supervisor"
+                          >
+                            <X className="w-3 h-3" />
+                          </button>
+                        </div>
+                      ))
+                    ) : (
+                      <p className="text-xs italic text-gray-400 text-center py-2">
+                        No supervisor assigned
+                      </p>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Forklift Drivers */}
+          <div className="bg-white rounded-xl shadow-sm border border-orange-100 p-6">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-3">
+                <div className="bg-orange-100 p-3 rounded-full">
+                  <Truck className="w-6 h-6 text-orange-600" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-orange-900">Forklift Drivers</h3>
+                  <p className="text-sm text-orange-600">Material handling</p>
+                </div>
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {['day', 'night'].map(shift => {
+                const driverAssignments = Object.values(assignments).flat()
+                  .filter(a => a.role === 'forklift_driver' && a.shift_type === shift);
+                
+                return (
+                  <div key={shift} className="space-y-2">
+                    <h4 className="font-medium text-gray-900 flex items-center gap-2">
+                      <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
+                        shift === 'day' ? 'bg-yellow-100 text-yellow-800' : 'bg-purple-100 text-purple-800'
+                      }`}>
+                        {shift.charAt(0).toUpperCase() + shift.slice(1)} Shift
+                      </span>
+                    </h4>
+                    {driverAssignments.length > 0 ? (
+                      driverAssignments.map(assignment => (
+                        <div key={assignment.id} className="flex items-center justify-between bg-orange-50 rounded-lg p-3 border border-orange-100">
+                          <div className="flex items-center">
+                            <span className="text-sm font-medium text-gray-900">
+                              {formatUserDisplayName(assignment)}
+                            </span>
+                          </div>
+                          <button
+                            onClick={() => handleRemoveAssignment(assignment.id)}
+                            className="w-6 h-6 p-0 text-red-500 hover:text-red-700 hover:bg-red-50 border border-red-200 rounded-full flex items-center justify-center"
+                            title="Remove forklift driver"
+                          >
+                            <X className="w-3 h-3" />
+                          </button>
+                        </div>
+                      ))
+                    ) : (
+                      <p className="text-xs italic text-gray-400 text-center py-2">
+                        No forklift driver assigned
+                      </p>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Scheduled Machines */}
       <div>
         <h2 className="text-xl font-semibold text-gray-900 mb-4">
