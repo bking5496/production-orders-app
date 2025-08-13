@@ -268,7 +268,16 @@ router.post('/attendance-register',
   [
     body('date').isISO8601().withMessage('Valid date is required'),
     body('employee_id').isInt({ min: 1 }).withMessage('Valid employee ID is required'),
-    body('machine_id').isInt({ min: 1 }).withMessage('Valid machine ID is required'),
+    body('machine_id').custom((value, { req }) => {
+      // Allow null for factory-wide roles or require integer for machine-specific roles
+      if (value === null) {
+        return true; // Allow null machine_id for factory-wide assignments
+      }
+      if (Number.isInteger(parseInt(value)) && parseInt(value) > 0) {
+        return true;
+      }
+      throw new Error('Valid machine ID is required (integer > 0) or null for factory-wide assignments');
+    }),
     body('shift_type').isIn(['day', 'night', 'afternoon']).withMessage('Valid shift type is required'),
     body('status').isIn(['present', 'absent', 'late']).withMessage('Valid status is required'),
     body('check_in_time').optional({ nullable: true }).matches(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/),
