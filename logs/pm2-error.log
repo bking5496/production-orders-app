@@ -124,3 +124,213 @@
   user: 'admin',
   timestamp: '2025-08-13T20:17:36.883Z'
 }
+2025-08-13T22:26:27: Error occurred: {
+  error: 'there is no unique or exclusion constraint matching the ON CONFLICT specification',
+  stack: 'error: there is no unique or exclusion constraint matching the ON CONFLICT specification\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.raw (/home/production-app/production-orders-app/src/utils/database.js:146:12)\n' +
+    '    at async LaborService.markAttendance (/home/production-app/production-orders-app/src/services/labor.service.js:791:20)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/labor.routes.js:299:30',
+  url: '/attendance-register',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-13T20:26:27.068Z'
+}
+2025-08-13T22:26:28: Error occurred: {
+  error: 'there is no unique or exclusion constraint matching the ON CONFLICT specification',
+  stack: 'error: there is no unique or exclusion constraint matching the ON CONFLICT specification\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.raw (/home/production-app/production-orders-app/src/utils/database.js:146:12)\n' +
+    '    at async LaborService.markAttendance (/home/production-app/production-orders-app/src/services/labor.service.js:791:20)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/labor.routes.js:299:30',
+  url: '/attendance-register',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-13T20:26:28.143Z'
+}
+2025-08-13T22:26:30: Error occurred: {
+  error: 'there is no unique or exclusion constraint matching the ON CONFLICT specification',
+  stack: 'error: there is no unique or exclusion constraint matching the ON CONFLICT specification\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.raw (/home/production-app/production-orders-app/src/utils/database.js:146:12)\n' +
+    '    at async LaborService.markAttendance (/home/production-app/production-orders-app/src/services/labor.service.js:791:20)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/labor.routes.js:299:30',
+  url: '/attendance-register',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-13T20:26:30.063Z'
+}
+2025-08-13T22:26:30: Error occurred: {
+  error: 'there is no unique or exclusion constraint matching the ON CONFLICT specification',
+  stack: 'error: there is no unique or exclusion constraint matching the ON CONFLICT specification\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.raw (/home/production-app/production-orders-app/src/utils/database.js:146:12)\n' +
+    '    at async LaborService.markAttendance (/home/production-app/production-orders-app/src/services/labor.service.js:791:20)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/labor.routes.js:299:30',
+  url: '/attendance-register',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-13T20:26:30.214Z'
+}
+2025-08-13T22:26:31: Error occurred: {
+  error: 'there is no unique or exclusion constraint matching the ON CONFLICT specification',
+  stack: 'error: there is no unique or exclusion constraint matching the ON CONFLICT specification\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.raw (/home/production-app/production-orders-app/src/utils/database.js:146:12)\n' +
+    '    at async LaborService.markAttendance (/home/production-app/production-orders-app/src/services/labor.service.js:791:20)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/labor.routes.js:299:30',
+  url: '/attendance-register',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-13T20:26:31.643Z'
+}
+2025-08-13T22:26:33: Error occurred: {
+  error: 'there is no unique or exclusion constraint matching the ON CONFLICT specification',
+  stack: 'error: there is no unique or exclusion constraint matching the ON CONFLICT specification\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.raw (/home/production-app/production-orders-app/src/utils/database.js:146:12)\n' +
+    '    at async LaborService.markAttendance (/home/production-app/production-orders-app/src/services/labor.service.js:791:20)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/labor.routes.js:299:30',
+  url: '/attendance-register',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-13T20:26:33.724Z'
+}
+2025-08-13T22:26:37: Error occurred: {
+  error: 'there is no unique or exclusion constraint matching the ON CONFLICT specification',
+  stack: 'error: there is no unique or exclusion constraint matching the ON CONFLICT specification\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.raw (/home/production-app/production-orders-app/src/utils/database.js:146:12)\n' +
+    '    at async LaborService.markAttendance (/home/production-app/production-orders-app/src/services/labor.service.js:791:20)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/labor.routes.js:299:30',
+  url: '/attendance-register',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-13T20:26:37.333Z'
+}
+2025-08-13T22:26:38: Error occurred: {
+  error: 'there is no unique or exclusion constraint matching the ON CONFLICT specification',
+  stack: 'error: there is no unique or exclusion constraint matching the ON CONFLICT specification\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.raw (/home/production-app/production-orders-app/src/utils/database.js:146:12)\n' +
+    '    at async LaborService.markAttendance (/home/production-app/production-orders-app/src/services/labor.service.js:791:20)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/labor.routes.js:299:30',
+  url: '/attendance-register',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-13T20:26:38.415Z'
+}
+2025-08-13T22:26:40: Error occurred: {
+  error: 'there is no unique or exclusion constraint matching the ON CONFLICT specification',
+  stack: 'error: there is no unique or exclusion constraint matching the ON CONFLICT specification\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.raw (/home/production-app/production-orders-app/src/utils/database.js:146:12)\n' +
+    '    at async LaborService.markAttendance (/home/production-app/production-orders-app/src/services/labor.service.js:791:20)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/labor.routes.js:299:30',
+  url: '/attendance-register',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-13T20:26:40.504Z'
+}
+2025-08-13T22:26:48: Error occurred: {
+  error: 'there is no unique or exclusion constraint matching the ON CONFLICT specification',
+  stack: 'error: there is no unique or exclusion constraint matching the ON CONFLICT specification\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.raw (/home/production-app/production-orders-app/src/utils/database.js:146:12)\n' +
+    '    at async LaborService.markAttendance (/home/production-app/production-orders-app/src/services/labor.service.js:791:20)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/labor.routes.js:299:30',
+  url: '/attendance-register',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-13T20:26:48.503Z'
+}
+2025-08-13T22:26:49: Error occurred: {
+  error: 'there is no unique or exclusion constraint matching the ON CONFLICT specification',
+  stack: 'error: there is no unique or exclusion constraint matching the ON CONFLICT specification\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.raw (/home/production-app/production-orders-app/src/utils/database.js:146:12)\n' +
+    '    at async LaborService.markAttendance (/home/production-app/production-orders-app/src/services/labor.service.js:791:20)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/labor.routes.js:299:30',
+  url: '/attendance-register',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-13T20:26:49.573Z'
+}
+2025-08-13T22:26:51: Error occurred: {
+  error: 'there is no unique or exclusion constraint matching the ON CONFLICT specification',
+  stack: 'error: there is no unique or exclusion constraint matching the ON CONFLICT specification\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.raw (/home/production-app/production-orders-app/src/utils/database.js:146:12)\n' +
+    '    at async LaborService.markAttendance (/home/production-app/production-orders-app/src/services/labor.service.js:791:20)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/labor.routes.js:299:30',
+  url: '/attendance-register',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-13T20:26:51.649Z'
+}
+2025-08-13T22:28:12: Error occurred: {
+  error: 'there is no unique or exclusion constraint matching the ON CONFLICT specification',
+  stack: 'error: there is no unique or exclusion constraint matching the ON CONFLICT specification\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.raw (/home/production-app/production-orders-app/src/utils/database.js:146:12)\n' +
+    '    at async LaborService.markAttendance (/home/production-app/production-orders-app/src/services/labor.service.js:791:20)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/labor.routes.js:299:30',
+  url: '/attendance-register',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-13T20:28:12.907Z'
+}
+2025-08-13T22:28:14: Error occurred: {
+  error: 'there is no unique or exclusion constraint matching the ON CONFLICT specification',
+  stack: 'error: there is no unique or exclusion constraint matching the ON CONFLICT specification\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.raw (/home/production-app/production-orders-app/src/utils/database.js:146:12)\n' +
+    '    at async LaborService.markAttendance (/home/production-app/production-orders-app/src/services/labor.service.js:791:20)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/labor.routes.js:299:30',
+  url: '/attendance-register',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-13T20:28:14.071Z'
+}
+2025-08-13T22:28:16: Error occurred: {
+  error: 'there is no unique or exclusion constraint matching the ON CONFLICT specification',
+  stack: 'error: there is no unique or exclusion constraint matching the ON CONFLICT specification\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.raw (/home/production-app/production-orders-app/src/utils/database.js:146:12)\n' +
+    '    at async LaborService.markAttendance (/home/production-app/production-orders-app/src/services/labor.service.js:791:20)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/labor.routes.js:299:30',
+  url: '/attendance-register',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-13T20:28:16.170Z'
+}

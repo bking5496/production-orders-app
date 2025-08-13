@@ -775,22 +775,50 @@ class LaborService {
       }
     }
     
-    const query = `
-      INSERT INTO attendance_register (
-        date, machine_id, employee_id, shift_type, status, check_in_time, notes, marked_by
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
-      ON CONFLICT (date, machine_id, employee_id, shift_type)
-      DO UPDATE SET 
-        status = EXCLUDED.status,
-        check_in_time = EXCLUDED.check_in_time,
-        notes = EXCLUDED.notes,
-        marked_by = EXCLUDED.marked_by
-      RETURNING *
-    `;
+    // Use manual upsert approach since partial indexes don't work well with ON CONFLICT
     
-    const result = await DatabaseUtils.raw(query, [
-      date, machine_id, employee_id, shift_type, status, processedCheckInTime, notes, userId
-    ]);
+    // First, try to find existing record
+    let existingQuery, existingParams;
+    if (machine_id !== null) {
+      existingQuery = `
+        SELECT id FROM attendance_register 
+        WHERE date = $1 AND machine_id = $2 AND employee_id = $3 AND shift_type = $4
+      `;
+      existingParams = [date, machine_id, employee_id, shift_type];
+    } else {
+      existingQuery = `
+        SELECT id FROM attendance_register 
+        WHERE date = $1 AND machine_id IS NULL AND employee_id = $2 AND shift_type = $3
+      `;
+      existingParams = [date, employee_id, shift_type];
+    }
+    
+    const existing = await DatabaseUtils.raw(existingQuery, existingParams);
+    
+    let result;
+    if (existing.rows.length > 0) {
+      // Update existing record
+      const updateQuery = `
+        UPDATE attendance_register 
+        SET status = $1, check_in_time = $2, notes = $3, marked_by = $4, updated_at = NOW()
+        WHERE id = $5
+        RETURNING *
+      `;
+      result = await DatabaseUtils.raw(updateQuery, [
+        status, processedCheckInTime, notes, userId, existing.rows[0].id
+      ]);
+    } else {
+      // Insert new record
+      const insertQuery = `
+        INSERT INTO attendance_register (
+          date, machine_id, employee_id, shift_type, status, check_in_time, notes, marked_by
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+        RETURNING *
+      `;
+      result = await DatabaseUtils.raw(insertQuery, [
+        date, machine_id, employee_id, shift_type, status, processedCheckInTime, notes, userId
+      ]);
+    }
     
     return result.rows[0];
   }
