@@ -18,3 +18,5 @@
   code: 'ERR_ERL_UNEXPECTED_X_FORWARDED_FOR',
   help: 'https://express-rate-limit.github.io/ERR_ERL_UNEXPECTED_X_FORWARDED_FOR/'
 }
+2025-08-13T21:47:40: JWT verification failed: jwt malformed
+2025-08-13T21:48:13: JWT verification failed: Expected ':' after property name in JSON at position 5

@@ -91,13 +91,13 @@ export default function AttendanceRegister() {
         try {
             const attendanceRecord = {
                 date: selectedDate,
-                machine_id: worker.machine_id,
-                employee_id: worker.employee_id,
+                machine_id: parseInt(worker.machine_id),
+                employee_id: parseInt(worker.employee_id),
                 shift_type: selectedShift,
                 status: status,
                 check_in_time: checkInTime,
                 notes: notes,
-                marked_by: currentUser.id
+                marked_by: currentUser?.id || null
             };
 
             console.log('Marking attendance:', attendanceRecord);
