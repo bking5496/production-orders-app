@@ -31367,3 +31367,48 @@ Error: bind EADDRINUSE null:3000
   user: 'admin',
   timestamp: '2025-08-13T06:13:02.820Z'
 }
+2025-08-13T09:05:30: Error occurred: {
+  error: 'Employee, machine, date, shift type, and role are required',
+  stack: 'ValidationError: Employee, machine, date, shift type, and role are required\n' +
+    '    at LaborService.createOrUpdateLaborAssignment (/home/production-app/production-orders-app/src/services/labor.service.js:265:13)\n' +
+    '    at /home/production-app/production-orders-app/src/routes/labor.routes.js:126:43\n' +
+    '    at /home/production-app/production-orders-app/src/middleware/error-handler.js:9:21\n' +
+    '    at Layer.handle [as handle_request] (/home/production-app/production-orders-app/node_modules/express/lib/router/layer.js:95:5)\n' +
+    '    at next (/home/production-app/production-orders-app/node_modules/express/lib/router/route.js:149:13)\n' +
+    '    at middleware (/home/production-app/production-orders-app/node_modules/express-validator/lib/middlewares/check.js:16:13)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)',
+  url: '/assignments',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-13T07:05:30.149Z'
+}
+2025-08-13T09:07:03: Error occurred: {
+  error: 'Employee, machine, date, shift type, and role are required',
+  stack: 'ValidationError: Employee, machine, date, shift type, and role are required\n' +
+    '    at LaborService.createOrUpdateLaborAssignment (/home/production-app/production-orders-app/src/services/labor.service.js:265:13)\n' +
+    '    at /home/production-app/production-orders-app/src/routes/labor.routes.js:126:43\n' +
+    '    at /home/production-app/production-orders-app/src/middleware/error-handler.js:9:21\n' +
+    '    at Layer.handle [as handle_request] (/home/production-app/production-orders-app/node_modules/express/lib/router/layer.js:95:5)\n' +
+    '    at next (/home/production-app/production-orders-app/node_modules/express/lib/router/route.js:149:13)\n' +
+    '    at middleware (/home/production-app/production-orders-app/node_modules/express-validator/lib/middlewares/check.js:16:13)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)',
+  url: '/assignments',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-13T07:07:03.090Z'
+}
+2025-08-13T09:07:56: Error occurred: {
+  error: 'Employee, machine, date, shift type, and role are required',
+  stack: 'ValidationError: Employee, machine, date, shift type, and role are required\n' +
+    '    at LaborService.createOrUpdateLaborAssignment (/home/production-app/production-orders-app/src/services/labor.service.js:265:13)\n' +
+    '    at /home/production-app/production-orders-app/src/routes/labor.routes.js:126:43\n' +
+    '    at /home/production-app/production-orders-app/src/middleware/error-handler.js:9:21\n' +
+    '    at Layer.handle [as handle_request] (/home/production-app/production-orders-app/node_modules/express/lib/router/layer.js:95:5)\n' +
+    '    at next (/home/production-app/production-orders-app/node_modules/express/lib/router/route.js:149:13)\n' +
+    '    at middleware (/home/production-app/production-orders-app/node_modules/express-validator/lib/middlewares/check.js:16:13)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)',
+  url: '/assignments',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-13T07:07:56.031Z'
+}
