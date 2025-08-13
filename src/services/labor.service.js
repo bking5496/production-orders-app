@@ -272,7 +272,7 @@ class LaborService {
     }
 
     // Validate role
-    const validRoles = ['operator', 'hopper_loader', 'packer', 'supervisor'];
+    const validRoles = ['operator', 'hopper_loader', 'packer', 'supervisor', 'forklift_driver'];
     if (!validRoles.includes(role)) {
       throw new ValidationError('Invalid role. Must be one of: ' + validRoles.join(', '));
     }
