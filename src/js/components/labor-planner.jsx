@@ -646,12 +646,25 @@ const LaborPlanner = ({ currentUser }) => {
                         <WebSocketStatusIndicator />
                       </div>
                       <Button
-                        onClick={() => {
-                          setAssignmentForm({employee_id: supervisor.id.toString(), role: 'supervisor'});
-                          setSelectedMachine({id: 'supervisor-station', name: 'Supervision'});
-                          setSelectedShift('day');
-                          setShowSupervisorModal(false);
-                          setShowAssignmentModal(true);
+                        onClick={async () => {
+                          try {
+                            const assignmentData = {
+                              employee_id: parseInt(supervisor.id),
+                              machine_id: null,
+                              assignment_date: selectedDate,
+                              shift_type: 'day',
+                              role: 'supervisor',
+                              start_time: '06:00',
+                              end_time: '18:00',
+                              hourly_rate: 150.00
+                            };
+                            await API.post('/labor-assignments', assignmentData);
+                            fetchExistingAssignments();
+                            setShowSupervisorModal(false);
+                          } catch (error) {
+                            console.error('Failed to assign supervisor:', error);
+                            alert('Failed to assign supervisor: ' + (error.response?.data?.error || error.message));
+                          }
                         }}
                         size="sm"
                         className="w-7 h-7 p-0 bg-green-500 text-white rounded-full hover:bg-green-600"
@@ -677,12 +690,25 @@ const LaborPlanner = ({ currentUser }) => {
                         <WebSocketStatusIndicator />
                       </div>
                       <Button
-                        onClick={() => {
-                          setAssignmentForm({employee_id: supervisor.id.toString(), role: 'supervisor'});
-                          setSelectedMachine({id: 'supervisor-station', name: 'Supervision'});
-                          setSelectedShift('night');
-                          setShowSupervisorModal(false);
-                          setShowAssignmentModal(true);
+                        onClick={async () => {
+                          try {
+                            const assignmentData = {
+                              employee_id: parseInt(supervisor.id),
+                              machine_id: null,
+                              assignment_date: selectedDate,
+                              shift_type: 'night',
+                              role: 'supervisor',
+                              start_time: '18:00',
+                              end_time: '06:00',
+                              hourly_rate: 150.00
+                            };
+                            await API.post('/labor-assignments', assignmentData);
+                            fetchExistingAssignments();
+                            setShowSupervisorModal(false);
+                          } catch (error) {
+                            console.error('Failed to assign supervisor:', error);
+                            alert('Failed to assign supervisor: ' + (error.response?.data?.error || error.message));
+                          }
                         }}
                         size="sm"
                         className="w-7 h-7 p-0 bg-green-500 text-white rounded-full hover:bg-green-600"
@@ -736,12 +762,25 @@ const LaborPlanner = ({ currentUser }) => {
                         <WebSocketStatusIndicator />
                       </div>
                       <Button
-                        onClick={() => {
-                          setAssignmentForm({employee_id: driver.id.toString(), role: 'forklift_driver'});
-                          setSelectedMachine({id: 'forklift-station', name: 'Forklift Operations'});
-                          setSelectedShift('day');
-                          setShowForkliftModal(false);
-                          setShowAssignmentModal(true);
+                        onClick={async () => {
+                          try {
+                            const assignmentData = {
+                              employee_id: parseInt(driver.id),
+                              machine_id: null,
+                              assignment_date: selectedDate,
+                              shift_type: 'day',
+                              role: 'forklift_driver',
+                              start_time: '06:00',
+                              end_time: '18:00',
+                              hourly_rate: 150.00
+                            };
+                            await API.post('/labor-assignments', assignmentData);
+                            fetchExistingAssignments();
+                            setShowForkliftModal(false);
+                          } catch (error) {
+                            console.error('Failed to assign forklift driver:', error);
+                            alert('Failed to assign forklift driver: ' + (error.response?.data?.error || error.message));
+                          }
                         }}
                         size="sm"
                         className="w-7 h-7 p-0 bg-green-500 text-white rounded-full hover:bg-green-600"
@@ -767,12 +806,25 @@ const LaborPlanner = ({ currentUser }) => {
                         <WebSocketStatusIndicator />
                       </div>
                       <Button
-                        onClick={() => {
-                          setAssignmentForm({employee_id: driver.id.toString(), role: 'forklift_driver'});
-                          setSelectedMachine({id: 'forklift-station', name: 'Forklift Operations'});
-                          setSelectedShift('night');
-                          setShowForkliftModal(false);
-                          setShowAssignmentModal(true);
+                        onClick={async () => {
+                          try {
+                            const assignmentData = {
+                              employee_id: parseInt(driver.id),
+                              machine_id: null,
+                              assignment_date: selectedDate,
+                              shift_type: 'night',
+                              role: 'forklift_driver',
+                              start_time: '18:00',
+                              end_time: '06:00',
+                              hourly_rate: 150.00
+                            };
+                            await API.post('/labor-assignments', assignmentData);
+                            fetchExistingAssignments();
+                            setShowForkliftModal(false);
+                          } catch (error) {
+                            console.error('Failed to assign forklift driver:', error);
+                            alert('Failed to assign forklift driver: ' + (error.response?.data?.error || error.message));
+                          }
                         }}
                         size="sm"
                         className="w-7 h-7 p-0 bg-green-500 text-white rounded-full hover:bg-green-600"
