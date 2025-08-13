@@ -7,3 +7,78 @@
 2025-08-13T13:43:05: 🔗 Client acquired from pool
 2025-08-13T13:43:05: 🔓 Client released back to pool
 2025-08-13T13:43:05: 📡 Broadcast sent: attendance_marked to channel: labor (0 clients)
+2025-08-13T14:14:03: 🔌 WebSocket disconnected: admin
+2025-08-13T14:14:05: ✅ New PostgreSQL client connected
+2025-08-13T14:14:05: 🔗 Client acquired from pool
+2025-08-13T14:14:05: 🔓 Client released back to pool
+2025-08-13T14:14:05: ✅ New PostgreSQL client connected
+2025-08-13T14:14:05: 🔗 Client acquired from pool
+2025-08-13T14:14:05: 🔓 Client released back to pool
+2025-08-13T14:14:05: 🔗 Client acquired from pool
+2025-08-13T14:14:05: 🔓 Client released back to pool
+2025-08-13T14:14:05: New WebSocket connection attempt
+2025-08-13T14:14:05: ✅ WebSocket authenticated: admin (admin)
+2025-08-13T14:14:05: 🔗 Client acquired from pool
+2025-08-13T14:14:05: 🔗 Client acquired from pool
+2025-08-13T14:14:05: 🔓 Client released back to pool
+2025-08-13T14:14:05: 🔓 Client released back to pool
+2025-08-13T14:14:05: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-13T14:14:05: 🏠 admin joined room: production
+2025-08-13T14:14:51: ✅ New PostgreSQL client connected
+2025-08-13T14:14:51: 🔗 Client acquired from pool
+2025-08-13T14:14:51: 🔓 Client released back to pool
+2025-08-13T14:14:51: 🔗 Client acquired from pool
+2025-08-13T14:14:51: 🔓 Client released back to pool
+2025-08-13T14:14:51: ✅ Auth success: admin from ::ffff:127.0.0.1 - Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0
+2025-08-13T14:14:51: 🔗 Client acquired from pool
+2025-08-13T14:14:51: 🔓 Client released back to pool
+2025-08-13T14:14:51: 🔗 Client acquired from pool
+2025-08-13T14:14:51: 🔓 Client released back to pool
+2025-08-13T14:14:51: 🔗 Client acquired from pool
+2025-08-13T14:14:51: 🔓 Client released back to pool
+2025-08-13T14:14:51: ✅ New PostgreSQL client connected
+2025-08-13T14:14:51: 🔗 Client acquired from pool
+2025-08-13T14:14:51: 🔓 Client released back to pool
+2025-08-13T14:14:51: ✅ New PostgreSQL client connected
+2025-08-13T14:14:51: 🔗 Client acquired from pool
+2025-08-13T14:14:51: ✅ New PostgreSQL client connected
+2025-08-13T14:14:51: 🔗 Client acquired from pool
+2025-08-13T14:14:51: New WebSocket connection attempt
+2025-08-13T14:14:51: ✅ WebSocket authenticated: admin (admin)
+2025-08-13T14:14:51: 🔓 Client released back to pool
+2025-08-13T14:14:51: 🔓 Client released back to pool
+2025-08-13T14:14:51: 🔗 Client acquired from pool
+2025-08-13T14:14:51: 🔓 Client released back to pool
+2025-08-13T14:14:51: 🔗 Client acquired from pool
+2025-08-13T14:14:51: 🔓 Client released back to pool
+2025-08-13T14:14:51: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-13T14:14:51: 🏠 admin joined room: production
+2025-08-13T14:14:51: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-13T14:14:51: 🏠 admin joined room: production
+2025-08-13T14:14:53: 🔗 Client acquired from pool
+2025-08-13T14:14:53: 🔓 Client released back to pool
+2025-08-13T14:16:46: 🔌 WebSocket disconnected: admin
