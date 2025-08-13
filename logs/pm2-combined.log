@@ -7137,3 +7137,875 @@
 2025-08-14T00:09:57: 📡 Broadcast sent: attendance_marked to channel: labor (0 clients)
 2025-08-14T00:09:57: 🔗 Client acquired from pool
 2025-08-14T00:09:57: 🔓 Client released back to pool
+2025-08-14T00:10:16: 🔗 Client acquired from pool
+2025-08-14T00:10:16: 🔓 Client released back to pool
+2025-08-14T00:10:16: 🔗 Client acquired from pool
+2025-08-14T00:10:16: 🔓 Client released back to pool
+2025-08-14T00:10:17: ✅ New PostgreSQL client connected
+2025-08-14T00:10:17: 🔗 Client acquired from pool
+2025-08-14T00:10:17: 🔓 Client released back to pool
+2025-08-14T00:10:26: 🔗 Client acquired from pool
+2025-08-14T00:10:26: 🔓 Client released back to pool
+2025-08-14T00:10:26: 🔗 Client acquired from pool
+2025-08-14T00:10:26: 🔓 Client released back to pool
+2025-08-14T00:10:26: 🔗 Client acquired from pool
+2025-08-14T00:10:26: 🔓 Client released back to pool
+2025-08-14T00:10:26: 🔗 Client acquired from pool
+2025-08-14T00:10:26: 🔓 Client released back to pool
+2025-08-14T00:10:27: 🔗 Client acquired from pool
+2025-08-14T00:10:27: 🔓 Client released back to pool
+2025-08-14T00:10:34: 🔗 Client acquired from pool
+2025-08-14T00:10:34: 🔗 Client acquired from pool
+2025-08-14T00:10:34: 🔓 Client released back to pool
+2025-08-14T00:10:34: 🔓 Client released back to pool
+2025-08-14T00:10:34: 🔗 Client acquired from pool
+2025-08-14T00:10:34: 🔓 Client released back to pool
+2025-08-14T00:10:36: 🔗 Client acquired from pool
+2025-08-14T00:10:36: 🔓 Client released back to pool
+2025-08-14T00:10:36: 🔗 Client acquired from pool
+2025-08-14T00:10:36: 🔓 Client released back to pool
+2025-08-14T00:10:36: 🔗 Client acquired from pool
+2025-08-14T00:10:36: 🔓 Client released back to pool
+2025-08-14T00:10:42: 🌐 WebSocket server initialized
+2025-08-14T00:10:42: 🧹 WebSocket cleanup scheduler started
+2025-08-14T00:10:42: 🧪 Testing refactored components...
+2025-08-14T00:10:42: 🚀 Production refactored server running on port 3000
+2025-08-14T00:10:42: 📊 Health check: http://localhost:3000/api/health
+2025-08-14T00:10:42: 🔐 Auth test: http://localhost:3000/api/auth/login
+2025-08-14T00:10:42: ⚙️ System routes: http://localhost:3000/api/system/health
+2025-08-14T00:10:42: 🌐 WebSocket server initialized and ready
+2025-08-14T00:10:42: ✅ New PostgreSQL client connected
+2025-08-14T00:10:42: 🔗 Client acquired from pool
+2025-08-14T00:10:42: 🔓 Client released back to pool
+2025-08-14T00:10:42: ✅ Database connection: OK
+2025-08-14T00:10:42: ✅ Authentication middleware: OK
+2025-08-14T00:10:42: ✅ Response utilities: OK
+2025-08-14T00:10:42: ✅ Database utilities: OK
+2025-08-14T00:10:42: 🎉 All components tested successfully!
+2025-08-14T00:10:42: ✅ All components tested successfully
+2025-08-14T00:10:52: 🔗 Client acquired from pool
+2025-08-14T00:10:52: 🔓 Client released back to pool
+2025-08-14T00:10:52: ✅ New PostgreSQL client connected
+2025-08-14T00:10:52: 🔗 Client acquired from pool
+2025-08-14T00:10:52: 🔓 Client released back to pool
+2025-08-14T00:10:52: 🔗 Client acquired from pool
+2025-08-14T00:10:52: 🔓 Client released back to pool
+2025-08-14T00:10:52: 🔗 Client acquired from pool
+2025-08-14T00:10:52: 🔓 Client released back to pool
+2025-08-14T00:10:52: 🔗 Client acquired from pool
+2025-08-14T00:10:52: 🔓 Client released back to pool
+2025-08-14T00:10:52: 🔗 Client acquired from pool
+2025-08-14T00:10:52: 🔗 Client acquired from pool
+2025-08-14T00:10:52: 🔓 Client released back to pool
+2025-08-14T00:10:53: 🔓 Client released back to pool
+2025-08-14T00:10:53: 🔗 Client acquired from pool
+2025-08-14T00:10:53: 🔓 Client released back to pool
+2025-08-14T00:10:53: ✅ New PostgreSQL client connected
+2025-08-14T00:10:53: 🔗 Client acquired from pool
+2025-08-14T00:10:53: 🔓 Client released back to pool
+2025-08-14T00:10:53: New WebSocket connection attempt
+2025-08-14T00:10:53: ✅ WebSocket authenticated: admin (admin)
+2025-08-14T00:10:53: 🔗 Client acquired from pool
+2025-08-14T00:10:53: 🔓 Client released back to pool
+2025-08-14T00:10:53: 🔗 Client acquired from pool
+2025-08-14T00:10:53: 🔓 Client released back to pool
+2025-08-14T00:10:53: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-14T00:10:53: 🏠 admin joined room: production
+2025-08-14T00:10:53: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-14T00:10:53: 🏠 admin joined room: production
+2025-08-14T00:10:54: 🔗 Client acquired from pool
+2025-08-14T00:10:54: 🔓 Client released back to pool
+2025-08-14T00:10:54: 📺 admin subscribed to: [ 'machines', 'production' ]
+2025-08-14T00:10:54: 🔗 Client acquired from pool
+2025-08-14T00:10:54: 🔗 Client acquired from pool
+2025-08-14T00:10:54: 🔗 Client acquired from pool
+2025-08-14T00:10:54: 🔓 Client released back to pool
+2025-08-14T00:10:54: 🔗 Client acquired from pool
+2025-08-14T00:10:54: 🔓 Client released back to pool
+2025-08-14T00:10:54: 🔓 Client released back to pool
+2025-08-14T00:10:54: 🔓 Client released back to pool
+2025-08-14T00:10:54: 🔗 Client acquired from pool
+2025-08-14T00:10:54: 🔓 Client released back to pool
+2025-08-14T00:10:54: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-14T00:10:54: 🏠 admin joined room: production
+2025-08-14T00:10:59: 🔗 Client acquired from pool
+2025-08-14T00:10:59: 🔓 Client released back to pool
+2025-08-14T00:10:59: 🔗 Client acquired from pool
+2025-08-14T00:10:59: 🔓 Client released back to pool
+2025-08-14T00:10:59: Error getting machine crews: error: column "crew_data" does not exist
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)
+    at async DatabaseUtils.raw (/home/production-app/production-orders-app/src/utils/database.js:146:12)
+    at async MachinesService.getMachineCrews (/home/production-app/production-orders-app/src/services/machines.service.js:350:22)
+    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:194:19 {
+  length: 109,
+  severity: 'ERROR',
+  code: '42703',
+  detail: undefined,
+  hint: undefined,
+  position: '17',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'parse_relation.c',
+  line: '3722',
+  routine: 'errorMissingColumn'
+}
+2025-08-14T00:11:05: 🔗 Client acquired from pool
+2025-08-14T00:11:05: 🔓 Client released back to pool
+2025-08-14T00:11:05: 🔗 Client acquired from pool
+2025-08-14T00:11:05: 🔓 Client released back to pool
+2025-08-14T00:11:05: 🔗 Client acquired from pool
+2025-08-14T00:11:05: 🔓 Client released back to pool
+2025-08-14T00:11:10: 🔗 Client acquired from pool
+2025-08-14T00:11:10: 🔓 Client released back to pool
+2025-08-14T00:11:10: 🔗 Client acquired from pool
+2025-08-14T00:11:10: 🔗 Client acquired from pool
+2025-08-14T00:11:10: 🔗 Client acquired from pool
+2025-08-14T00:11:10: 🔓 Client released back to pool
+2025-08-14T00:11:10: 🔓 Client released back to pool
+2025-08-14T00:11:10: 🔓 Client released back to pool
+2025-08-14T00:11:39: 🔗 Client acquired from pool
+2025-08-14T00:11:39: 🔓 Client released back to pool
+2025-08-14T00:11:39: 🔗 Client acquired from pool
+2025-08-14T00:11:39: 🔗 Client acquired from pool
+2025-08-14T00:11:39: 🔗 Client acquired from pool
+2025-08-14T00:11:39: 🔓 Client released back to pool
+2025-08-14T00:11:39: 🔓 Client released back to pool
+2025-08-14T00:11:39: 🔓 Client released back to pool
+2025-08-14T00:11:39: 🔗 Client acquired from pool
+2025-08-14T00:11:39: 🔓 Client released back to pool
+2025-08-14T00:11:42: 🔗 Client acquired from pool
+2025-08-14T00:11:42: 🔓 Client released back to pool
+2025-08-14T00:11:42: 🔗 Client acquired from pool
+2025-08-14T00:11:42: 🔓 Client released back to pool
+2025-08-14T00:11:42: 🔗 Client acquired from pool
+2025-08-14T00:11:42: 🔓 Client released back to pool
+2025-08-14T00:11:44: 📺 admin subscribed to: [ 'machines', 'production' ]
+2025-08-14T00:11:44: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-14T00:11:44: 🏠 admin joined room: production
+2025-08-14T00:11:44: 🔗 Client acquired from pool
+2025-08-14T00:11:44: 🔗 Client acquired from pool
+2025-08-14T00:11:44: 🔓 Client released back to pool
+2025-08-14T00:11:44: 🔗 Client acquired from pool
+2025-08-14T00:11:44: 🔓 Client released back to pool
+2025-08-14T00:11:44: 🔓 Client released back to pool
+2025-08-14T00:11:44: 🔗 Client acquired from pool
+2025-08-14T00:11:44: 🔗 Client acquired from pool
+2025-08-14T00:11:44: 🔓 Client released back to pool
+2025-08-14T00:11:44: 🔓 Client released back to pool
+2025-08-14T00:11:44: 🔗 Client acquired from pool
+2025-08-14T00:11:44: 🔓 Client released back to pool
+2025-08-14T00:11:47: 🔗 Client acquired from pool
+2025-08-14T00:11:47: 🔓 Client released back to pool
+2025-08-14T00:11:47: 🔗 Client acquired from pool
+2025-08-14T00:11:47: 🔓 Client released back to pool
+2025-08-14T00:11:47: 🔗 Client acquired from pool
+2025-08-14T00:11:47: 🔓 Client released back to pool
+2025-08-14T00:11:47: 🔗 Client acquired from pool
+2025-08-14T00:11:47: 🔗 Client acquired from pool
+2025-08-14T00:11:47: 🔓 Client released back to pool
+2025-08-14T00:11:47: 🔓 Client released back to pool
+2025-08-14T00:11:47: 🔗 Client acquired from pool
+2025-08-14T00:11:47: 🔓 Client released back to pool
+2025-08-14T00:11:48: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-14T00:11:48: 🏠 admin joined room: production
+2025-08-14T00:12:46: ✅ New PostgreSQL client connected
+2025-08-14T00:12:46: 🔗 Client acquired from pool
+2025-08-14T00:12:46: 🔓 Client released back to pool
+2025-08-14T00:12:46: ✅ New PostgreSQL client connected
+2025-08-14T00:12:46: 🔗 Client acquired from pool
+2025-08-14T00:12:46: 🔓 Client released back to pool
+2025-08-14T00:12:46: ✅ New PostgreSQL client connected
+2025-08-14T00:12:46: 🔗 Client acquired from pool
+2025-08-14T00:12:46: 🔓 Client released back to pool
+2025-08-14T00:12:46: ✅ New PostgreSQL client connected
+2025-08-14T00:12:46: 🔗 Client acquired from pool
+2025-08-14T00:12:46: 🔓 Client released back to pool
+2025-08-14T00:12:47: 🔗 Client acquired from pool
+2025-08-14T00:12:47: 🔓 Client released back to pool
+2025-08-14T00:12:47: 🔗 Client acquired from pool
+2025-08-14T00:12:47: 🔓 Client released back to pool
+2025-08-14T00:12:47: 🔗 Client acquired from pool
+2025-08-14T00:12:47: 🔓 Client released back to pool
+2025-08-14T00:12:47: 🔗 Client acquired from pool
+2025-08-14T00:12:47: 🔓 Client released back to pool
+2025-08-14T00:12:47: 📺 admin subscribed to: [ 'machines', 'production' ]
+2025-08-14T00:12:47: 🔗 Client acquired from pool
+2025-08-14T00:12:47: 🔗 Client acquired from pool
+2025-08-14T00:12:47: 🔓 Client released back to pool
+2025-08-14T00:12:47: 🔓 Client released back to pool
+2025-08-14T00:12:48: 🔗 Client acquired from pool
+2025-08-14T00:12:48: 🔗 Client acquired from pool
+2025-08-14T00:12:48: 🔓 Client released back to pool
+2025-08-14T00:12:48: 🔓 Client released back to pool
+2025-08-14T00:12:48: 🔗 Client acquired from pool
+2025-08-14T00:12:48: 🔓 Client released back to pool
+2025-08-14T00:12:48: 🔗 Client acquired from pool
+2025-08-14T00:12:48: 🔓 Client released back to pool
+2025-08-14T00:12:48: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-14T00:12:48: 🏠 admin joined room: production
+2025-08-14T00:12:52: 🔗 Client acquired from pool
+2025-08-14T00:12:52: 🔓 Client released back to pool
+2025-08-14T00:12:52: 🔗 Client acquired from pool
+2025-08-14T00:12:52: 🔓 Client released back to pool
+2025-08-14T00:12:52: Error getting machine crews: error: column "crew_data" does not exist
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)
+    at async DatabaseUtils.raw (/home/production-app/production-orders-app/src/utils/database.js:146:12)
+    at async MachinesService.getMachineCrews (/home/production-app/production-orders-app/src/services/machines.service.js:350:22)
+    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:194:19 {
+  length: 109,
+  severity: 'ERROR',
+  code: '42703',
+  detail: undefined,
+  hint: undefined,
+  position: '17',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'parse_relation.c',
+  line: '3722',
+  routine: 'errorMissingColumn'
+}
+2025-08-14T00:12:58: 🔗 Client acquired from pool
+2025-08-14T00:12:58: 🔓 Client released back to pool
+2025-08-14T00:12:58: 🔗 Client acquired from pool
+2025-08-14T00:12:58: 🔓 Client released back to pool
+2025-08-14T00:12:58: Error occurred: {
+  error: 'column "order_number" of relation "machines" does not exist',
+  stack: 'error: column "order_number" of relation "machines" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.update (/home/production-app/production-orders-app/src/utils/database.js:86:20)\n' +
+    '    at async MachinesService.updateMachine (/home/production-app/production-orders-app/src/services/machines.service.js:140:28)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:146:28',
+  url: '/api/machines/40',
+  method: 'PUT',
+  user: 'admin',
+  timestamp: '2025-08-13T22:12:58.213Z'
+}
+2025-08-14T00:12:59: 🔗 Client acquired from pool
+2025-08-14T00:12:59: 🔓 Client released back to pool
+2025-08-14T00:12:59: 🔗 Client acquired from pool
+2025-08-14T00:12:59: 🔓 Client released back to pool
+2025-08-14T00:12:59: Error occurred: {
+  error: 'column "order_number" of relation "machines" does not exist',
+  stack: 'error: column "order_number" of relation "machines" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.update (/home/production-app/production-orders-app/src/utils/database.js:86:20)\n' +
+    '    at async MachinesService.updateMachine (/home/production-app/production-orders-app/src/services/machines.service.js:140:28)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:146:28',
+  url: '/api/machines/40',
+  method: 'PUT',
+  user: 'admin',
+  timestamp: '2025-08-13T22:12:59.282Z'
+}
+2025-08-14T00:13:01: 🔗 Client acquired from pool
+2025-08-14T00:13:01: 🔓 Client released back to pool
+2025-08-14T00:13:01: 🔗 Client acquired from pool
+2025-08-14T00:13:01: 🔓 Client released back to pool
+2025-08-14T00:13:01: Error occurred: {
+  error: 'column "order_number" of relation "machines" does not exist',
+  stack: 'error: column "order_number" of relation "machines" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.update (/home/production-app/production-orders-app/src/utils/database.js:86:20)\n' +
+    '    at async MachinesService.updateMachine (/home/production-app/production-orders-app/src/services/machines.service.js:140:28)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:146:28',
+  url: '/api/machines/40',
+  method: 'PUT',
+  user: 'admin',
+  timestamp: '2025-08-13T22:13:01.351Z'
+}
+2025-08-14T00:13:17: 🔗 Client acquired from pool
+2025-08-14T00:13:18: 🔓 Client released back to pool
+2025-08-14T00:13:38: 🔌 WebSocket disconnected: admin
+2025-08-14T00:13:39: 🔗 Client acquired from pool
+2025-08-14T00:13:39: 🔓 Client released back to pool
+2025-08-14T00:13:39: 🔗 Client acquired from pool
+2025-08-14T00:13:39: 🔓 Client released back to pool
+2025-08-14T00:13:39: 🔗 Client acquired from pool
+2025-08-14T00:13:39: 🔓 Client released back to pool
+2025-08-14T00:13:39: 🔗 Client acquired from pool
+2025-08-14T00:13:39: 🔓 Client released back to pool
+2025-08-14T00:13:39: 🔗 Client acquired from pool
+2025-08-14T00:13:39: 🔓 Client released back to pool
+2025-08-14T00:13:39: ✅ New PostgreSQL client connected
+2025-08-14T00:13:39: 🔗 Client acquired from pool
+2025-08-14T00:13:39: 🔓 Client released back to pool
+2025-08-14T00:13:39: ✅ New PostgreSQL client connected
+2025-08-14T00:13:39: 🔗 Client acquired from pool
+2025-08-14T00:13:39: ✅ New PostgreSQL client connected
+2025-08-14T00:13:39: 🔗 Client acquired from pool
+2025-08-14T00:13:39: 🔓 Client released back to pool
+2025-08-14T00:13:39: 🔓 Client released back to pool
+2025-08-14T00:13:39: 🔗 Client acquired from pool
+2025-08-14T00:13:39: 🔓 Client released back to pool
+2025-08-14T00:13:39: New WebSocket connection attempt
+2025-08-14T00:13:39: ✅ WebSocket authenticated: admin (admin)
+2025-08-14T00:13:39: 🔗 Client acquired from pool
+2025-08-14T00:13:39: 🔓 Client released back to pool
+2025-08-14T00:13:39: 🔗 Client acquired from pool
+2025-08-14T00:13:39: 🔓 Client released back to pool
+2025-08-14T00:13:39: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-14T00:13:39: 🏠 admin joined room: production
+2025-08-14T00:13:39: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-14T00:13:39: 🏠 admin joined room: production
+2025-08-14T00:13:43: 🔗 Client acquired from pool
+2025-08-14T00:13:43: 🔓 Client released back to pool
+2025-08-14T00:13:43: 🔗 Client acquired from pool
+2025-08-14T00:13:43: 🔓 Client released back to pool
+2025-08-14T00:13:43: Error getting machine crews: error: column "crew_data" does not exist
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)
+    at async DatabaseUtils.raw (/home/production-app/production-orders-app/src/utils/database.js:146:12)
+    at async MachinesService.getMachineCrews (/home/production-app/production-orders-app/src/services/machines.service.js:350:22)
+    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:194:19 {
+  length: 109,
+  severity: 'ERROR',
+  code: '42703',
+  detail: undefined,
+  hint: undefined,
+  position: '17',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'parse_relation.c',
+  line: '3722',
+  routine: 'errorMissingColumn'
+}
+2025-08-14T00:13:48: 🔗 Client acquired from pool
+2025-08-14T00:13:48: 🔓 Client released back to pool
+2025-08-14T00:13:48: 🔗 Client acquired from pool
+2025-08-14T00:13:48: 🔗 Client acquired from pool
+2025-08-14T00:13:48: 🔓 Client released back to pool
+2025-08-14T00:13:48: 🔓 Client released back to pool
+2025-08-14T00:13:48: 🔗 Client acquired from pool
+2025-08-14T00:13:48: 🔗 Client acquired from pool
+2025-08-14T00:13:48: 🔓 Client released back to pool
+2025-08-14T00:13:48: 🔓 Client released back to pool
+2025-08-14T00:13:48: 🔗 Client acquired from pool
+2025-08-14T00:13:48: 🔓 Client released back to pool
+2025-08-14T00:13:48: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-14T00:13:48: 🏠 admin joined room: production
+2025-08-14T00:14:46: ✅ New PostgreSQL client connected
+2025-08-14T00:14:46: 🔗 Client acquired from pool
+2025-08-14T00:14:46: 🔓 Client released back to pool
+2025-08-14T00:14:46: 🔗 Transaction client acquired from pool
+2025-08-14T00:14:46: 🔓 Transaction client released back to pool
+2025-08-14T00:14:46: 📡 Broadcast sent: order_resumed to channel: production (1 clients)
+2025-08-14T00:14:46: 🔗 Client acquired from pool
+2025-08-14T00:14:46: 🔓 Client released back to pool
+2025-08-14T00:14:46: 🔗 Client acquired from pool
+2025-08-14T00:14:46: 🔓 Client released back to pool
+2025-08-14T00:14:46: 🔗 Client acquired from pool
+2025-08-14T00:14:46: 🔓 Client released back to pool
+2025-08-14T00:14:48: 🔗 Client acquired from pool
+2025-08-14T00:14:48: 🔓 Client released back to pool
+2025-08-14T00:14:48: 🔗 Transaction client acquired from pool
+2025-08-14T00:14:48: 🔓 Transaction client released back to pool
+2025-08-14T00:14:48: 📡 Broadcast sent: order_stopped to channel: production (1 clients)
+2025-08-14T00:14:49: 🔗 Client acquired from pool
+2025-08-14T00:14:49: 🔓 Client released back to pool
+2025-08-14T00:14:49: 🔗 Client acquired from pool
+2025-08-14T00:14:49: 🔓 Client released back to pool
+2025-08-14T00:14:49: 🔗 Client acquired from pool
+2025-08-14T00:14:49: 🔓 Client released back to pool
+2025-08-14T00:14:49: 🔗 Client acquired from pool
+2025-08-14T00:14:49: 🔓 Client released back to pool
+2025-08-14T00:15:15: 📺 admin subscribed to: [ 'machines', 'production' ]
+2025-08-14T00:15:15: 🔗 Client acquired from pool
+2025-08-14T00:15:15: 🔓 Client released back to pool
+2025-08-14T00:15:15: 🔗 Client acquired from pool
+2025-08-14T00:15:15: 🔓 Client released back to pool
+2025-08-14T00:15:15: ✅ New PostgreSQL client connected
+2025-08-14T00:15:15: 🔗 Client acquired from pool
+2025-08-14T00:15:15: 🔓 Client released back to pool
+2025-08-14T00:15:15: ✅ New PostgreSQL client connected
+2025-08-14T00:15:15: 🔗 Client acquired from pool
+2025-08-14T00:15:15: ✅ New PostgreSQL client connected
+2025-08-14T00:15:15: 🔗 Client acquired from pool
+2025-08-14T00:15:15: 🔓 Client released back to pool
+2025-08-14T00:15:15: 🔓 Client released back to pool
+2025-08-14T00:15:15: 🔗 Client acquired from pool
+2025-08-14T00:15:15: 🔓 Client released back to pool
+2025-08-14T00:15:15: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-14T00:15:15: 🏠 admin joined room: production
+2025-08-14T00:15:16: 🔗 Client acquired from pool
+2025-08-14T00:15:16: 🔓 Client released back to pool
+2025-08-14T00:15:22: 🔗 Client acquired from pool
+2025-08-14T00:15:22: 🔓 Client released back to pool
+2025-08-14T00:15:22: 🔗 Client acquired from pool
+2025-08-14T00:15:22: 🔓 Client released back to pool
+2025-08-14T00:15:22: Error getting machine crews: error: column "crew_data" does not exist
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)
+    at async DatabaseUtils.raw (/home/production-app/production-orders-app/src/utils/database.js:146:12)
+    at async MachinesService.getMachineCrews (/home/production-app/production-orders-app/src/services/machines.service.js:350:22)
+    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:194:19 {
+  length: 109,
+  severity: 'ERROR',
+  code: '42703',
+  detail: undefined,
+  hint: undefined,
+  position: '17',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'parse_relation.c',
+  line: '3722',
+  routine: 'errorMissingColumn'
+}
+2025-08-14T00:15:25: 🔗 Client acquired from pool
+2025-08-14T00:15:25: 🔓 Client released back to pool
+2025-08-14T00:15:25: 🔗 Client acquired from pool
+2025-08-14T00:15:25: 🔓 Client released back to pool
+2025-08-14T00:15:25: Error occurred: {
+  error: 'column "order_number" of relation "machines" does not exist',
+  stack: 'error: column "order_number" of relation "machines" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.update (/home/production-app/production-orders-app/src/utils/database.js:86:20)\n' +
+    '    at async MachinesService.updateMachine (/home/production-app/production-orders-app/src/services/machines.service.js:140:28)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:146:28',
+  url: '/api/machines/38',
+  method: 'PUT',
+  user: 'admin',
+  timestamp: '2025-08-13T22:15:25.732Z'
+}
+2025-08-14T00:15:26: 🔗 Client acquired from pool
+2025-08-14T00:15:26: 🔓 Client released back to pool
+2025-08-14T00:15:26: 🔗 Client acquired from pool
+2025-08-14T00:15:26: 🔓 Client released back to pool
+2025-08-14T00:15:26: Error occurred: {
+  error: 'column "order_number" of relation "machines" does not exist',
+  stack: 'error: column "order_number" of relation "machines" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.update (/home/production-app/production-orders-app/src/utils/database.js:86:20)\n' +
+    '    at async MachinesService.updateMachine (/home/production-app/production-orders-app/src/services/machines.service.js:140:28)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:146:28',
+  url: '/api/machines/38',
+  method: 'PUT',
+  user: 'admin',
+  timestamp: '2025-08-13T22:15:26.820Z'
+}
+2025-08-14T00:15:28: 🔗 Client acquired from pool
+2025-08-14T00:15:28: 🔓 Client released back to pool
+2025-08-14T00:15:28: 🔗 Client acquired from pool
+2025-08-14T00:15:28: 🔓 Client released back to pool
+2025-08-14T00:15:28: Error occurred: {
+  error: 'column "order_number" of relation "machines" does not exist',
+  stack: 'error: column "order_number" of relation "machines" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.update (/home/production-app/production-orders-app/src/utils/database.js:86:20)\n' +
+    '    at async MachinesService.updateMachine (/home/production-app/production-orders-app/src/services/machines.service.js:140:28)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:146:28',
+  url: '/api/machines/38',
+  method: 'PUT',
+  user: 'admin',
+  timestamp: '2025-08-13T22:15:28.903Z'
+}
+2025-08-14T00:15:45: 🔗 Client acquired from pool
+2025-08-14T00:15:45: 🔓 Client released back to pool
+2025-08-14T00:16:15: 🔗 Client acquired from pool
+2025-08-14T00:16:15: 🔓 Client released back to pool
+2025-08-14T00:16:45: 🔗 Client acquired from pool
+2025-08-14T00:16:45: 🔓 Client released back to pool
+2025-08-14T00:17:15: 🔗 Client acquired from pool
+2025-08-14T00:17:15: 🔓 Client released back to pool
+2025-08-14T00:17:28: 🔗 Client acquired from pool
+2025-08-14T00:17:28: 🔓 Client released back to pool
+2025-08-14T00:17:28: 🔗 Client acquired from pool
+2025-08-14T00:17:28: 🔓 Client released back to pool
+2025-08-14T00:17:28: Error getting machine crews: error: column "crew_data" does not exist
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)
+    at async DatabaseUtils.raw (/home/production-app/production-orders-app/src/utils/database.js:146:12)
+    at async MachinesService.getMachineCrews (/home/production-app/production-orders-app/src/services/machines.service.js:350:22)
+    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:194:19 {
+  length: 109,
+  severity: 'ERROR',
+  code: '42703',
+  detail: undefined,
+  hint: undefined,
+  position: '17',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'parse_relation.c',
+  line: '3722',
+  routine: 'errorMissingColumn'
+}
+2025-08-14T00:17:33: 🔗 Client acquired from pool
+2025-08-14T00:17:33: 🔓 Client released back to pool
+2025-08-14T00:17:33: 🔗 Client acquired from pool
+2025-08-14T00:17:33: 🔓 Client released back to pool
+2025-08-14T00:17:33: Error getting machine crews: error: column "crew_data" does not exist
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)
+    at async DatabaseUtils.raw (/home/production-app/production-orders-app/src/utils/database.js:146:12)
+    at async MachinesService.getMachineCrews (/home/production-app/production-orders-app/src/services/machines.service.js:350:22)
+    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:194:19 {
+  length: 109,
+  severity: 'ERROR',
+  code: '42703',
+  detail: undefined,
+  hint: undefined,
+  position: '17',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'parse_relation.c',
+  line: '3722',
+  routine: 'errorMissingColumn'
+}
+2025-08-14T00:17:45: 🔗 Client acquired from pool
+2025-08-14T00:17:45: 🔓 Client released back to pool
+2025-08-14T00:17:48: 🔗 Client acquired from pool
+2025-08-14T00:17:48: 🔓 Client released back to pool
+2025-08-14T00:17:48: 🔗 Client acquired from pool
+2025-08-14T00:17:48: 🔓 Client released back to pool
+2025-08-14T00:17:48: Error occurred: {
+  error: 'column "order_number" of relation "machines" does not exist',
+  stack: 'error: column "order_number" of relation "machines" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.update (/home/production-app/production-orders-app/src/utils/database.js:86:20)\n' +
+    '    at async MachinesService.updateMachine (/home/production-app/production-orders-app/src/services/machines.service.js:140:28)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:146:28',
+  url: '/api/machines/40',
+  method: 'PUT',
+  user: 'admin',
+  timestamp: '2025-08-13T22:17:48.652Z'
+}
+2025-08-14T00:17:49: 🔗 Client acquired from pool
+2025-08-14T00:17:49: 🔓 Client released back to pool
+2025-08-14T00:17:49: 🔗 Client acquired from pool
+2025-08-14T00:17:49: 🔓 Client released back to pool
+2025-08-14T00:17:49: Error occurred: {
+  error: 'column "order_number" of relation "machines" does not exist',
+  stack: 'error: column "order_number" of relation "machines" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.update (/home/production-app/production-orders-app/src/utils/database.js:86:20)\n' +
+    '    at async MachinesService.updateMachine (/home/production-app/production-orders-app/src/services/machines.service.js:140:28)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:146:28',
+  url: '/api/machines/40',
+  method: 'PUT',
+  user: 'admin',
+  timestamp: '2025-08-13T22:17:49.728Z'
+}
+2025-08-14T00:17:51: 🔗 Client acquired from pool
+2025-08-14T00:17:51: 🔓 Client released back to pool
+2025-08-14T00:17:51: 🔗 Client acquired from pool
+2025-08-14T00:17:51: 🔓 Client released back to pool
+2025-08-14T00:17:51: Error occurred: {
+  error: 'column "order_number" of relation "machines" does not exist',
+  stack: 'error: column "order_number" of relation "machines" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.update (/home/production-app/production-orders-app/src/utils/database.js:86:20)\n' +
+    '    at async MachinesService.updateMachine (/home/production-app/production-orders-app/src/services/machines.service.js:140:28)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:146:28',
+  url: '/api/machines/40',
+  method: 'PUT',
+  user: 'admin',
+  timestamp: '2025-08-13T22:17:51.801Z'
+}
+2025-08-14T00:17:51: 🔗 Client acquired from pool
+2025-08-14T00:17:51: 🔓 Client released back to pool
+2025-08-14T00:17:51: 🔗 Client acquired from pool
+2025-08-14T00:17:51: 🔓 Client released back to pool
+2025-08-14T00:17:51: Error occurred: {
+  error: 'column "order_number" of relation "machines" does not exist',
+  stack: 'error: column "order_number" of relation "machines" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.update (/home/production-app/production-orders-app/src/utils/database.js:86:20)\n' +
+    '    at async MachinesService.updateMachine (/home/production-app/production-orders-app/src/services/machines.service.js:140:28)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:146:28',
+  url: '/api/machines/40',
+  method: 'PUT',
+  user: 'admin',
+  timestamp: '2025-08-13T22:17:51.929Z'
+}
+2025-08-14T00:17:52: 🔗 Client acquired from pool
+2025-08-14T00:17:52: 🔓 Client released back to pool
+2025-08-14T00:17:52: 🔗 Client acquired from pool
+2025-08-14T00:17:52: 🔓 Client released back to pool
+2025-08-14T00:17:52: Error occurred: {
+  error: 'column "order_number" of relation "machines" does not exist',
+  stack: 'error: column "order_number" of relation "machines" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.update (/home/production-app/production-orders-app/src/utils/database.js:86:20)\n' +
+    '    at async MachinesService.updateMachine (/home/production-app/production-orders-app/src/services/machines.service.js:140:28)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:146:28',
+  url: '/api/machines/40',
+  method: 'PUT',
+  user: 'admin',
+  timestamp: '2025-08-13T22:17:52.999Z'
+}
+2025-08-14T00:17:55: 🔗 Client acquired from pool
+2025-08-14T00:17:55: 🔓 Client released back to pool
+2025-08-14T00:17:55: 🔗 Client acquired from pool
+2025-08-14T00:17:55: 🔓 Client released back to pool
+2025-08-14T00:17:55: Error occurred: {
+  error: 'column "order_number" of relation "machines" does not exist',
+  stack: 'error: column "order_number" of relation "machines" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.update (/home/production-app/production-orders-app/src/utils/database.js:86:20)\n' +
+    '    at async MachinesService.updateMachine (/home/production-app/production-orders-app/src/services/machines.service.js:140:28)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:146:28',
+  url: '/api/machines/40',
+  method: 'PUT',
+  user: 'admin',
+  timestamp: '2025-08-13T22:17:55.082Z'
+}
+2025-08-14T00:18:15: 🌐 WebSocket server initialized
+2025-08-14T00:18:15: 🧹 WebSocket cleanup scheduler started
+2025-08-14T00:18:15: 🧪 Testing refactored components...
+2025-08-14T00:18:15: 🚀 Production refactored server running on port 3000
+2025-08-14T00:18:15: 📊 Health check: http://localhost:3000/api/health
+2025-08-14T00:18:15: 🔐 Auth test: http://localhost:3000/api/auth/login
+2025-08-14T00:18:15: ⚙️ System routes: http://localhost:3000/api/system/health
+2025-08-14T00:18:15: 🌐 WebSocket server initialized and ready
+2025-08-14T00:18:15: ✅ New PostgreSQL client connected
+2025-08-14T00:18:15: 🔗 Client acquired from pool
+2025-08-14T00:18:15: 🔓 Client released back to pool
+2025-08-14T00:18:15: ✅ Database connection: OK
+2025-08-14T00:18:15: ✅ Authentication middleware: OK
+2025-08-14T00:18:15: ✅ Response utilities: OK
+2025-08-14T00:18:15: ✅ Database utilities: OK
+2025-08-14T00:18:15: 🎉 All components tested successfully!
+2025-08-14T00:18:15: ✅ All components tested successfully
+2025-08-14T00:18:45: ✅ New PostgreSQL client connected
+2025-08-14T00:18:45: 🔗 Client acquired from pool
+2025-08-14T00:18:45: 🔓 Client released back to pool
+2025-08-14T00:18:58: 🔗 Client acquired from pool
+2025-08-14T00:18:58: 🔓 Client released back to pool
+2025-08-14T00:18:58: ✅ New PostgreSQL client connected
+2025-08-14T00:18:58: 🔗 Client acquired from pool
+2025-08-14T00:18:58: 🔓 Client released back to pool
+2025-08-14T00:18:58: 🔗 Client acquired from pool
+2025-08-14T00:18:58: 🔓 Client released back to pool
+2025-08-14T00:18:58: 🔗 Client acquired from pool
+2025-08-14T00:18:58: 🔓 Client released back to pool
+2025-08-14T00:18:58: 🔗 Client acquired from pool
+2025-08-14T00:18:58: 🔗 Client acquired from pool
+2025-08-14T00:18:58: 🔓 Client released back to pool
+2025-08-14T00:18:58: 🔗 Client acquired from pool
+2025-08-14T00:18:58: 🔓 Client released back to pool
+2025-08-14T00:18:58: 🔓 Client released back to pool
+2025-08-14T00:18:58: 🔗 Client acquired from pool
+2025-08-14T00:18:58: 🔓 Client released back to pool
+2025-08-14T00:18:58: 🔗 Client acquired from pool
+2025-08-14T00:18:58: 🔓 Client released back to pool
+2025-08-14T00:18:58: New WebSocket connection attempt
+2025-08-14T00:18:58: ✅ WebSocket authenticated: admin (admin)
+2025-08-14T00:18:58: 🔗 Client acquired from pool
+2025-08-14T00:18:58: 🔓 Client released back to pool
+2025-08-14T00:18:58: 🔗 Client acquired from pool
+2025-08-14T00:18:58: 🔓 Client released back to pool
+2025-08-14T00:18:58: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-14T00:18:58: 🏠 admin joined room: production
+2025-08-14T00:18:58: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-14T00:18:58: 🏠 admin joined room: production
+2025-08-14T00:19:03: 🔗 Client acquired from pool
+2025-08-14T00:19:03: 🔓 Client released back to pool
+2025-08-14T00:19:03: 🔗 Client acquired from pool
+2025-08-14T00:19:03: 🔓 Client released back to pool
+2025-08-14T00:19:03: 🔗 Client acquired from pool
+2025-08-14T00:19:03: 🔗 Client acquired from pool
+2025-08-14T00:19:03: 🔓 Client released back to pool
+2025-08-14T00:19:03: 🔓 Client released back to pool
+2025-08-14T00:19:03: ✅ New PostgreSQL client connected
+2025-08-14T00:19:03: 🔗 Client acquired from pool
+2025-08-14T00:19:03: 🔓 Client released back to pool
+2025-08-14T00:19:03: 🔗 Client acquired from pool
+2025-08-14T00:19:03: 🔓 Client released back to pool
+2025-08-14T00:19:03: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-14T00:19:03: 🏠 admin joined room: production
+2025-08-14T00:19:34: ✅ New PostgreSQL client connected
+2025-08-14T00:19:34: 🔗 Client acquired from pool
+2025-08-14T00:19:34: 🔓 Client released back to pool
+2025-08-14T00:19:59: 🔗 Client acquired from pool
+2025-08-14T00:19:59: 🔓 Client released back to pool
+2025-08-14T00:19:59: 🔗 Client acquired from pool
+2025-08-14T00:19:59: 🔓 Client released back to pool
+2025-08-14T00:19:59: 🔗 Client acquired from pool
+2025-08-14T00:19:59: 🔓 Client released back to pool
+2025-08-14T00:19:59: 🔗 Client acquired from pool
+2025-08-14T00:19:59: 🔓 Client released back to pool
+2025-08-14T00:19:59: ✅ New PostgreSQL client connected
+2025-08-14T00:19:59: 🔗 Client acquired from pool
+2025-08-14T00:19:59: 🔓 Client released back to pool
+2025-08-14T00:19:59: 🔗 Client acquired from pool
+2025-08-14T00:19:59: 🔓 Client released back to pool
+2025-08-14T00:19:59: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-14T00:19:59: 🏠 admin joined room: production

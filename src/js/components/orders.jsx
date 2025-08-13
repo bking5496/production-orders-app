@@ -420,11 +420,24 @@ export default function ProductionOrdersSystem() {
   // Order Management Functions
   const handleCreateOrder = async (e) => {
     e.preventDefault();
+    
+    // Basic validation
+    if (!formData.product_name.trim()) {
+      showNotification('Product name is required', 'error');
+      return;
+    }
+    
+    if (!formData.quantity || parseInt(formData.quantity) < 1) {
+      showNotification('Quantity must be at least 1', 'error');
+      return;
+    }
+    
     try {
       setLoading(true);
       const orderData = {
         ...formData,
         order_number: formData.order_number || `ORD-${Date.now()}`,
+        quantity: parseInt(formData.quantity),
         created_by: 1 // Current user ID
       };
       
