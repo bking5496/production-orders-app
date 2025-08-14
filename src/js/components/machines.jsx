@@ -1164,9 +1164,9 @@ export default function MachinesPage() {
           <div className="bg-slate-800 rounded-lg border border-slate-600 p-6">
             <div className="bg-slate-700 rounded-lg p-4 overflow-x-auto">
               <svg 
-                width="1000" 
-                height="350" 
-                viewBox="0 0 1000 350"
+                width="1400" 
+                height="500" 
+                viewBox="0 0 1400 500"
                 className="w-full h-auto border border-slate-500 rounded bg-slate-100"
               >
                 {/* Grid background */}
