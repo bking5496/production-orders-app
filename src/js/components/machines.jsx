@@ -1614,46 +1614,48 @@ export default function MachinesPage() {
                 
                 {/* 3D PACKAGING AREA - Isometric Right Side */}
                 <g>
-                  {/* 3D Packaging floor area */}
+                  {/* Clean packaging department area */}
                   <polygon 
-                    points="680,200 1500,100 1500,600 680,700" 
-                    fill="rgba(16, 185, 129, 0.08)" 
+                    points="1200,250 1800,180 1800,950 1200,1020" 
+                    fill="rgba(16, 185, 129, 0.06)" 
                     stroke="#10b981" 
                     strokeWidth="3"
-                    strokeDasharray="10,5"
+                    strokeDasharray="12,6"
                   />
                   
-                  {/* Department label */}
+                  {/* Department header */}
                   <text 
-                    x="690" 
-                    y="90"
-                    className="fill-emerald-700 text-lg font-mono font-bold"
-                    transform="rotate(-8 690 90)"
+                    x="1250" 
+                    y="170"
+                    className="fill-emerald-800 text-2xl font-mono font-bold"
                   >
-                    📦 PACKAGING DEPARTMENT
+                    PACKAGING DEPARTMENT
                   </text>
                   
                   {/* 3D Packaging machines - simplified for performance */}
                   {filteredMachines.filter(m => m.environment === 'packaging').map((machine, index) => {
+                    // CLEAN GRID LAYOUT - 4 columns, proper spacing
                     const positions3D = [
-                      // Main production lines (front row)
-                      { x: 720, y: 180, z: 25, w: 100, d: 30, h: 40, type: '3d_line' },
-                      { x: 850, y: 165, z: 25, w: 100, d: 30, h: 40, type: '3d_line' },
-                      { x: 980, y: 150, z: 25, w: 80, d: 25, h: 35, type: '3d_sealer' },
-                      { x: 1100, y: 135, z: 25, w: 80, d: 25, h: 35, type: '3d_sealer' },
-                      { x: 1220, y: 120, z: 30, w: 70, d: 70, h: 80, type: '3d_palletizer' },
+                      // Row 1 - Main production lines (4 machines, 150 unit spacing)
+                      { x: 1250, y: 320, z: 25, w: 80, d: 45, h: 50, type: '3d_line', name: 'CANLINE' },
+                      { x: 1400, y: 300, z: 25, w: 80, d: 45, h: 50, type: '3d_line', name: 'Canister Line' },
+                      { x: 1550, y: 280, z: 25, w: 75, d: 40, h: 45, type: '3d_sealer', name: 'Enflex f14' },
+                      { x: 1700, y: 260, z: 25, w: 75, d: 40, h: 45, type: '3d_sealer', name: 'Enflex fb 10 1;2' },
                       
-                      // Secondary lines (middle row)
-                      { x: 750, y: 250, z: 30, w: 110, d: 30, h: 40, type: '3d_line' },
-                      { x: 890, y: 235, z: 30, w: 80, d: 25, h: 35, type: '3d_auger' },
-                      { x: 1000, y: 220, z: 30, w: 100, d: 30, h: 35, type: '3d_stick' },
-                      { x: 1130, y: 205, z: 30, w: 80, d: 25, h: 35, type: '3d_line' },
-                      { x: 1240, y: 190, z: 30, w: 80, d: 25, h: 35, type: '3d_line' },
+                      // Row 2 - Secondary lines (4 machines, same spacing)
+                      { x: 1250, y: 450, z: 25, w: 90, d: 50, h: 55, type: '3d_line', name: 'NPS 5 Lane' },
+                      { x: 1400, y: 430, z: 25, w: 75, d: 40, h: 45, type: '3d_auger', name: 'NPS Auger 3' },
+                      { x: 1550, y: 410, z: 25, w: 85, d: 45, h: 50, type: '3d_stick', name: 'NPS Stick Pack' },
+                      { x: 1700, y: 390, z: 25, w: 75, d: 40, h: 45, type: '3d_line', name: 'Universal 1' },
                       
-                      // Specialty machines (back row)
-                      { x: 780, y: 320, z: 35, w: 80, d: 25, h: 35, type: '3d_line' },
-                      { x: 890, y: 305, z: 35, w: 80, d: 25, h: 35, type: '3d_tablet' },
-                      { x: 1000, y: 290, z: 35, w: 80, d: 25, h: 35, type: '3d_cube' }
+                      // Row 3 - Specialty equipment (4 machines)
+                      { x: 1250, y: 580, z: 25, w: 75, d: 40, h: 45, type: '3d_line', name: 'Universal 2' },
+                      { x: 1400, y: 560, z: 25, w: 75, d: 40, h: 45, type: '3d_line', name: 'Universal 3' },
+                      { x: 1550, y: 540, z: 25, w: 80, d: 45, h: 50, type: '3d_tablet', name: 'Corraza Tablet' },
+                      { x: 1700, y: 520, z: 25, w: 80, d: 45, h: 50, type: '3d_cube', name: 'CORAZZA CUBE' },
+                      
+                      // Row 4 - Final processing (remaining machines)
+                      { x: 1400, y: 710, z: 30, w: 100, d: 55, h: 60, type: '3d_palletizer', name: 'IlaPak' }
                     ];
                     
                     const pos = positions3D[index] || positions3D[0];
