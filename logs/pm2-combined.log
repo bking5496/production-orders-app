@@ -14167,3 +14167,440 @@
 2025-08-14T12:28:55: 🏠 admin joined room: production
 2025-08-14T12:29:09: 🔗 Client acquired from pool
 2025-08-14T12:29:09: 🔓 Client released back to pool
+2025-08-14T12:31:16: ✅ New PostgreSQL client connected
+2025-08-14T12:31:16: 🔗 Client acquired from pool
+2025-08-14T12:31:16: 🔓 Client released back to pool
+2025-08-14T12:31:16: ✅ New PostgreSQL client connected
+2025-08-14T12:31:16: 🔗 Client acquired from pool
+2025-08-14T12:31:16: 🔓 Client released back to pool
+2025-08-14T12:31:16: 🔗 Client acquired from pool
+2025-08-14T12:31:16: 🔓 Client released back to pool
+2025-08-14T12:31:16: 🔗 Client acquired from pool
+2025-08-14T12:31:16: 🔗 Client acquired from pool
+2025-08-14T12:31:16: 🔓 Client released back to pool
+2025-08-14T12:31:16: 🔓 Client released back to pool
+2025-08-14T12:31:16: 🔗 Client acquired from pool
+2025-08-14T12:31:16: 🔗 Client acquired from pool
+2025-08-14T12:31:16: 🔓 Client released back to pool
+2025-08-14T12:31:16: 🔓 Client released back to pool
+2025-08-14T12:31:16: 🔗 Client acquired from pool
+2025-08-14T12:31:16: 🔓 Client released back to pool
+2025-08-14T12:31:16: ✅ New PostgreSQL client connected
+2025-08-14T12:31:16: 🔗 Client acquired from pool
+2025-08-14T12:31:16: 🔓 Client released back to pool
+2025-08-14T12:31:16: New WebSocket connection attempt
+2025-08-14T12:31:16: ✅ WebSocket authenticated: admin (admin)
+2025-08-14T12:31:16: 🔗 Client acquired from pool
+2025-08-14T12:31:16: 🔗 Client acquired from pool
+2025-08-14T12:31:16: 🔓 Client released back to pool
+2025-08-14T12:31:16: 🔓 Client released back to pool
+2025-08-14T12:31:17: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-14T12:31:17: 🏠 admin joined room: production
+2025-08-14T12:31:17: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-14T12:31:17: 🏠 admin joined room: production
+2025-08-14T12:31:17: 🔗 Client acquired from pool
+2025-08-14T12:31:17: 🔓 Client released back to pool
+2025-08-14T12:31:17: 🔗 Client acquired from pool
+2025-08-14T12:31:17: 🔓 Client released back to pool
+2025-08-14T12:31:17: 🔗 Client acquired from pool
+2025-08-14T12:31:17: 🔓 Client released back to pool
+2025-08-14T12:31:17: 🔗 Client acquired from pool
+2025-08-14T12:31:17: 🔗 Client acquired from pool
+2025-08-14T12:31:17: 🔓 Client released back to pool
+2025-08-14T12:31:17: 🔗 Client acquired from pool
+2025-08-14T12:31:17: 🔓 Client released back to pool
+2025-08-14T12:31:17: 🔗 Client acquired from pool
+2025-08-14T12:31:17: 🔓 Client released back to pool
+2025-08-14T12:31:17: 🔗 Client acquired from pool
+2025-08-14T12:31:17: 🔓 Client released back to pool
+2025-08-14T12:31:17: 🔗 Client acquired from pool
+2025-08-14T12:31:17: 🔓 Client released back to pool
+2025-08-14T12:31:17: 🔓 Client released back to pool
+2025-08-14T12:31:17: New WebSocket connection attempt
+2025-08-14T12:31:17: ✅ WebSocket authenticated: admin (admin)
+2025-08-14T12:31:17: 🔗 Client acquired from pool
+2025-08-14T12:31:17: 🔗 Client acquired from pool
+2025-08-14T12:31:17: 🔓 Client released back to pool
+2025-08-14T12:31:17: 🔓 Client released back to pool
+2025-08-14T12:31:17: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-14T12:31:17: 🏠 admin joined room: production
+2025-08-14T12:31:17: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-14T12:31:17: 🏠 admin joined room: production
+2025-08-14T12:31:24: 🔗 Client acquired from pool
+2025-08-14T12:31:24: 🔓 Client released back to pool
+2025-08-14T12:31:24: 🔗 Client acquired from pool
+2025-08-14T12:31:24: 🔗 Client acquired from pool
+2025-08-14T12:31:24: 🔗 Client acquired from pool
+2025-08-14T12:31:24: 🔓 Client released back to pool
+2025-08-14T12:31:24: 🔓 Client released back to pool
+2025-08-14T12:31:24: 🔓 Client released back to pool
+2025-08-14T12:31:24: 🔗 Client acquired from pool
+2025-08-14T12:31:24: 🔓 Client released back to pool
+2025-08-14T12:31:24: ✅ New PostgreSQL client connected
+2025-08-14T12:31:24: 🔗 Client acquired from pool
+2025-08-14T12:31:24: 🔓 Client released back to pool
+2025-08-14T12:31:24: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-14T12:31:24: 🏠 admin joined room: production
+2025-08-14T12:31:26: 📺 admin subscribed to: [ 'machines', 'production' ]
+2025-08-14T12:31:27: 🔗 Client acquired from pool
+2025-08-14T12:31:27: 🔗 Client acquired from pool
+2025-08-14T12:31:27: 🔗 Client acquired from pool
+2025-08-14T12:31:27: 🔓 Client released back to pool
+2025-08-14T12:31:27: 🔗 Client acquired from pool
+2025-08-14T12:31:27: 🔓 Client released back to pool
+2025-08-14T12:31:27: 🔓 Client released back to pool
+2025-08-14T12:31:27: 🔗 Client acquired from pool
+2025-08-14T12:31:27: 🔓 Client released back to pool
+2025-08-14T12:31:27: 🔗 Client acquired from pool
+2025-08-14T12:31:27: 🔓 Client released back to pool
+2025-08-14T12:31:27: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-14T12:31:27: 🏠 admin joined room: production
+2025-08-14T12:31:27: 🔓 Client released back to pool
+2025-08-14T12:31:35: 🔗 Client acquired from pool
+2025-08-14T12:31:35: 🔓 Client released back to pool
+2025-08-14T12:31:35: 🔗 Client acquired from pool
+2025-08-14T12:31:35: 🔓 Client released back to pool
+2025-08-14T12:31:35: 🔗 Client acquired from pool
+2025-08-14T12:31:35: 🔓 Client released back to pool
+2025-08-14T12:31:38: 🔗 Client acquired from pool
+2025-08-14T12:31:38: 🔓 Client released back to pool
+2025-08-14T12:31:38: 🔗 Client acquired from pool
+2025-08-14T12:31:38: 🔓 Client released back to pool
+2025-08-14T12:31:38: 🔗 Client acquired from pool
+2025-08-14T12:31:38: 🔓 Client released back to pool
+2025-08-14T12:31:41: 🔗 Client acquired from pool
+2025-08-14T12:31:41: 🔓 Client released back to pool
+2025-08-14T12:31:42: 🔗 Client acquired from pool
+2025-08-14T12:31:42: 🔓 Client released back to pool
+2025-08-14T12:31:46: 🔗 Client acquired from pool
+2025-08-14T12:31:46: 🔗 Client acquired from pool
+2025-08-14T12:31:46: 🔗 Client acquired from pool
+2025-08-14T12:31:46: 🔗 Client acquired from pool
+2025-08-14T12:31:46: 🔓 Client released back to pool
+2025-08-14T12:31:46: 🔓 Client released back to pool
+2025-08-14T12:31:46: 🔓 Client released back to pool
+2025-08-14T12:31:46: 🔓 Client released back to pool
+2025-08-14T12:31:57: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-14T12:31:57: 🏠 admin joined room: production
+2025-08-14T12:31:57: 🔗 Client acquired from pool
+2025-08-14T12:31:57: 🔓 Client released back to pool
+2025-08-14T12:31:57: 🔗 Client acquired from pool
+2025-08-14T12:31:57: 🔗 Client acquired from pool
+2025-08-14T12:31:57: 🔓 Client released back to pool
+2025-08-14T12:31:57: 🔗 Client acquired from pool
+2025-08-14T12:31:57: 🔓 Client released back to pool
+2025-08-14T12:31:57: 🔗 Client acquired from pool
+2025-08-14T12:31:57: 🔓 Client released back to pool
+2025-08-14T12:31:57: 🔗 Client acquired from pool
+2025-08-14T12:31:57: 🔓 Client released back to pool
+2025-08-14T12:31:57: 🔓 Client released back to pool
+2025-08-14T12:32:08: 📺 admin subscribed to: [ 'production', 'machines' ]
+2025-08-14T12:32:08: 🔗 Client acquired from pool
+2025-08-14T12:32:08: 🔓 Client released back to pool
+2025-08-14T12:32:08: 🔗 Client acquired from pool
+2025-08-14T12:32:08: 🔗 Client acquired from pool
+2025-08-14T12:32:08: 🔗 Client acquired from pool
+2025-08-14T12:32:08: 🔗 Client acquired from pool
+2025-08-14T12:32:08: 🔓 Client released back to pool
+2025-08-14T12:32:08: 🔓 Client released back to pool
+2025-08-14T12:32:08: 🔗 Client acquired from pool
+2025-08-14T12:32:08: 🔓 Client released back to pool
+2025-08-14T12:32:08: 🔓 Client released back to pool
+2025-08-14T12:32:08: 🔓 Client released back to pool
+2025-08-14T12:32:08: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-14T12:32:08: 🏠 admin joined room: production
+2025-08-14T12:32:13: 🔗 Client acquired from pool
+2025-08-14T12:32:13: 🔗 Client acquired from pool
+2025-08-14T12:32:13: 🔗 Client acquired from pool
+2025-08-14T12:32:13: 🔗 Client acquired from pool
+2025-08-14T12:32:13: 🔓 Client released back to pool
+2025-08-14T12:32:13: 🔓 Client released back to pool
+2025-08-14T12:32:13: 🔓 Client released back to pool
+2025-08-14T12:32:13: 🔓 Client released back to pool
+2025-08-14T12:32:18: 🔗 Client acquired from pool
+2025-08-14T12:32:18: 🔗 Client acquired from pool
+2025-08-14T12:32:18: 🔗 Client acquired from pool
+2025-08-14T12:32:18: 🔗 Client acquired from pool
+2025-08-14T12:32:18: 🔓 Client released back to pool
+2025-08-14T12:32:18: 🔓 Client released back to pool
+2025-08-14T12:32:18: 🔓 Client released back to pool
+2025-08-14T12:32:18: 🔓 Client released back to pool
+2025-08-14T12:32:23: 🔗 Client acquired from pool
+2025-08-14T12:32:23: 🔗 Client acquired from pool
+2025-08-14T12:32:23: 🔗 Client acquired from pool
+2025-08-14T12:32:23: 🔗 Client acquired from pool
+2025-08-14T12:32:23: 🔓 Client released back to pool
+2025-08-14T12:32:23: 🔓 Client released back to pool
+2025-08-14T12:32:23: 🔓 Client released back to pool
+2025-08-14T12:32:23: 🔓 Client released back to pool
+2025-08-14T12:32:24: 🔗 Client acquired from pool
+2025-08-14T12:32:24: 🔓 Client released back to pool
+2025-08-14T12:32:24: 🔗 Client acquired from pool
+2025-08-14T12:32:24: 🔗 Client acquired from pool
+2025-08-14T12:32:24: 🔗 Client acquired from pool
+2025-08-14T12:32:24: 🔗 Client acquired from pool
+2025-08-14T12:32:24: 🔓 Client released back to pool
+2025-08-14T12:32:24: 🔓 Client released back to pool
+2025-08-14T12:32:24: 🔓 Client released back to pool
+2025-08-14T12:32:24: 🔓 Client released back to pool
+2025-08-14T12:32:26: 🔗 Client acquired from pool
+2025-08-14T12:32:26: 🔓 Client released back to pool
+2025-08-14T12:32:27: 🔗 Client acquired from pool
+2025-08-14T12:32:27: 🔗 Client acquired from pool
+2025-08-14T12:32:27: 🔓 Client released back to pool
+2025-08-14T12:32:27: 🔓 Client released back to pool
+2025-08-14T12:32:27: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-14T12:32:27: 🏠 admin joined room: production
+2025-08-14T12:32:27: 🔗 Client acquired from pool
+2025-08-14T12:32:27: 🔗 Client acquired from pool
+2025-08-14T12:32:27: 🔓 Client released back to pool
+2025-08-14T12:32:27: 🔗 Client acquired from pool
+2025-08-14T12:32:27: 🔗 Client acquired from pool
+2025-08-14T12:32:27: 🔗 Client acquired from pool
+2025-08-14T12:32:27: 🔓 Client released back to pool
+2025-08-14T12:32:27: 🔓 Client released back to pool
+2025-08-14T12:32:27: 🔓 Client released back to pool
+2025-08-14T12:32:27: 🔗 Client acquired from pool
+2025-08-14T12:32:27: 🔗 Client acquired from pool
+2025-08-14T12:32:27: 🔓 Client released back to pool
+2025-08-14T12:32:27: 🔗 Client acquired from pool
+2025-08-14T12:32:27: 🔓 Client released back to pool
+2025-08-14T12:32:27: 🔓 Client released back to pool
+2025-08-14T12:32:27: 🔓 Client released back to pool
+2025-08-14T12:32:27: 🔗 Client acquired from pool
+2025-08-14T12:32:27: 🔗 Client acquired from pool
+2025-08-14T12:32:27: 🔗 Client acquired from pool
+2025-08-14T12:32:27: 🔓 Client released back to pool
+2025-08-14T12:32:27: 🔓 Client released back to pool
+2025-08-14T12:32:27: 🔓 Client released back to pool
+2025-08-14T12:32:36: 📺 admin subscribed to: [ 'machines', 'production' ]
+2025-08-14T12:32:36: 🔗 Client acquired from pool
+2025-08-14T12:32:36: 🔓 Client released back to pool
+2025-08-14T12:32:36: 🔗 Client acquired from pool
+2025-08-14T12:32:36: 🔓 Client released back to pool
+2025-08-14T12:32:36: 🔗 Client acquired from pool
+2025-08-14T12:32:36: 🔗 Client acquired from pool
+2025-08-14T12:32:36: 🔓 Client released back to pool
+2025-08-14T12:32:36: 🔗 Client acquired from pool
+2025-08-14T12:32:36: 🔓 Client released back to pool
+2025-08-14T12:32:36: 🔗 Client acquired from pool
+2025-08-14T12:32:36: 🔓 Client released back to pool
+2025-08-14T12:32:36: 🔓 Client released back to pool
+2025-08-14T12:32:36: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-14T12:32:36: 🏠 admin joined room: production
+2025-08-14T12:32:38: 🔗 Client acquired from pool
+2025-08-14T12:32:38: 🔓 Client released back to pool
+2025-08-14T12:32:55: 🔗 Client acquired from pool
+2025-08-14T12:32:55: 🔓 Client released back to pool
+2025-08-14T12:32:55: 🔗 Client acquired from pool
+2025-08-14T12:32:55: 🔓 Client released back to pool
+2025-08-14T12:32:55: 🔗 Client acquired from pool
+2025-08-14T12:32:55: 🔓 Client released back to pool
+2025-08-14T12:32:55: 🔗 Client acquired from pool
+2025-08-14T12:32:55: 🔓 Client released back to pool
+2025-08-14T12:32:55: 🔗 Client acquired from pool
+2025-08-14T12:32:55: 🔓 Client released back to pool
+2025-08-14T12:32:55: 🔗 Client acquired from pool
+2025-08-14T12:32:55: 🔓 Client released back to pool
+2025-08-14T12:33:06: 🔗 Client acquired from pool
+2025-08-14T12:33:06: 🔓 Client released back to pool
+2025-08-14T12:33:06: 🔗 Client acquired from pool
+2025-08-14T12:33:06: 🔓 Client released back to pool
+2025-08-14T12:33:06: 🔗 Client acquired from pool
+2025-08-14T12:33:06: 🔓 Client released back to pool
+2025-08-14T12:33:11: 🔗 Client acquired from pool
+2025-08-14T12:33:11: 🔓 Client released back to pool
+2025-08-14T12:33:11: 🔗 Client acquired from pool
+2025-08-14T12:33:11: 🔓 Client released back to pool
+2025-08-14T12:33:11: 🔗 Client acquired from pool
+2025-08-14T12:33:11: 🔓 Client released back to pool
+2025-08-14T12:33:20: 🔗 Client acquired from pool
+2025-08-14T12:33:20: 🔓 Client released back to pool
+2025-08-14T12:33:20: 🔗 Client acquired from pool
+2025-08-14T12:33:20: 🔓 Client released back to pool
+2025-08-14T12:33:20: ✅ New PostgreSQL client connected
+2025-08-14T12:33:20: 🔗 Client acquired from pool
+2025-08-14T12:33:20: 🔓 Client released back to pool
+2025-08-14T12:33:20: ✅ New PostgreSQL client connected
+2025-08-14T12:33:20: 🔗 Client acquired from pool
+2025-08-14T12:33:20: 🔓 Client released back to pool
+2025-08-14T12:33:20: 🔗 Client acquired from pool
+2025-08-14T12:33:20: 🔓 Client released back to pool
+2025-08-14T12:33:20: 🔗 Client acquired from pool
+2025-08-14T12:33:20: 🔓 Client released back to pool
+2025-08-14T12:33:22: 🔗 Client acquired from pool
+2025-08-14T12:33:22: 🔗 Client acquired from pool
+2025-08-14T12:33:22: 🔓 Client released back to pool
+2025-08-14T12:33:22: 🔓 Client released back to pool
+2025-08-14T12:33:22: 🔗 Client acquired from pool
+2025-08-14T12:33:22: 🔗 Client acquired from pool
+2025-08-14T12:33:22: 🔓 Client released back to pool
+2025-08-14T12:33:22: 🔓 Client released back to pool
+2025-08-14T12:33:22: 🔗 Client acquired from pool
+2025-08-14T12:33:22: 🔓 Client released back to pool
+2025-08-14T12:33:22: 🔗 Client acquired from pool
+2025-08-14T12:33:22: 🔓 Client released back to pool
+2025-08-14T12:33:55: 🔌 WebSocket disconnected: admin
+2025-08-14T12:37:27: ✅ New PostgreSQL client connected
+2025-08-14T12:37:27: 🔗 Client acquired from pool
+2025-08-14T12:37:27: 🔓 Client released back to pool
+2025-08-14T12:37:27: ✅ New PostgreSQL client connected
+2025-08-14T12:37:27: 🔗 Client acquired from pool
+2025-08-14T12:37:27: 🔓 Client released back to pool
+2025-08-14T12:37:27: 🔗 Client acquired from pool
+2025-08-14T12:37:27: 🔓 Client released back to pool
+2025-08-14T12:37:28: New WebSocket connection attempt
+2025-08-14T12:37:28: ✅ WebSocket authenticated: admin (admin)
+2025-08-14T12:37:28: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-14T12:37:28: 🏠 admin joined room: production
+2025-08-14T12:37:28: 🔗 Client acquired from pool
+2025-08-14T12:37:28: 🔓 Client released back to pool
+2025-08-14T12:37:28: 🔗 Client acquired from pool
+2025-08-14T12:37:28: 🔓 Client released back to pool
+2025-08-14T12:37:28: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-14T12:37:28: 🏠 admin joined room: production
+2025-08-14T12:37:28: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-14T12:37:28: 🏠 admin joined room: production
+2025-08-14T12:37:31: 🔗 Client acquired from pool
+2025-08-14T12:37:31: 🔓 Client released back to pool
+2025-08-14T12:37:31: 🔗 Client acquired from pool
+2025-08-14T12:37:31: 🔓 Client released back to pool
+2025-08-14T12:37:31: 🔗 Client acquired from pool
+2025-08-14T12:37:31: 🔓 Client released back to pool
+2025-08-14T12:37:35: 🔗 Client acquired from pool
+2025-08-14T12:37:35: 🔓 Client released back to pool
+2025-08-14T12:37:35: 🔗 Client acquired from pool
+2025-08-14T12:37:35: 🔓 Client released back to pool
+2025-08-14T12:37:35: 🔗 Client acquired from pool
+2025-08-14T12:37:35: 🔓 Client released back to pool
+2025-08-14T12:37:38: 🔗 Client acquired from pool
+2025-08-14T12:37:38: 🔓 Client released back to pool
+2025-08-14T12:37:38: 🔗 Client acquired from pool
+2025-08-14T12:37:38: 🔓 Client released back to pool
+2025-08-14T12:37:38: 🔗 Client acquired from pool
+2025-08-14T12:37:38: 🔓 Client released back to pool
+2025-08-14T12:37:39: 🔗 Client acquired from pool
+2025-08-14T12:37:39: 🔓 Client released back to pool
+2025-08-14T12:37:41: 🔗 Client acquired from pool
+2025-08-14T12:37:41: 🔓 Client released back to pool
+2025-08-14T12:37:41: 🔗 Client acquired from pool
+2025-08-14T12:37:41: 🔓 Client released back to pool
+2025-08-14T12:37:41: 🔗 Client acquired from pool
+2025-08-14T12:37:41: 🔓 Client released back to pool
+2025-08-14T12:38:25: ✅ New PostgreSQL client connected
+2025-08-14T12:38:25: 🔗 Client acquired from pool
+2025-08-14T12:38:25: 🔓 Client released back to pool
+2025-08-14T12:38:25: 🔗 Client acquired from pool
+2025-08-14T12:38:25: 🔓 Client released back to pool
+2025-08-14T12:38:25: 🔗 Client acquired from pool
+2025-08-14T12:38:25: 🔓 Client released back to pool
+2025-08-14T12:38:28: 🔗 Client acquired from pool
+2025-08-14T12:38:28: 🔓 Client released back to pool
+2025-08-14T12:38:28: 🔗 Client acquired from pool
+2025-08-14T12:38:28: 🔓 Client released back to pool
+2025-08-14T12:38:28: 🔗 Client acquired from pool
+2025-08-14T12:38:28: 🔓 Client released back to pool

@@ -1764,7 +1764,7 @@ export default function MachinesPage() {
                       </g>
                     );
                   })}
-                </g>
+                  
                   <rect 
                     x="690" 
                     y="50" 
