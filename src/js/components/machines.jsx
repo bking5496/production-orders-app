@@ -1284,6 +1284,43 @@ export default function MachinesPage() {
                     </feMerge>
                   </filter>
                   
+                  {/* 4D Animation Definitions */}
+                  
+                  {/* Material Particle for Flow Animation */}
+                  <circle id="material-particle" r="3" fill="#3b82f6">
+                    <animate attributeName="opacity" values="0;1;1;0" dur="3s" repeatCount="indefinite"/>
+                  </circle>
+                  
+                  {/* Production Pulse Animation */}
+                  <g id="production-pulse">
+                    <circle r="8" fill="none" stroke="#10b981" strokeWidth="2" opacity="0.6">
+                      <animate attributeName="r" values="8;16;24" dur="2s" repeatCount="indefinite"/>
+                      <animate attributeName="opacity" values="0.6;0.3;0" dur="2s" repeatCount="indefinite"/>
+                      <animate attributeName="stroke-width" values="2;1;0.5" dur="2s" repeatCount="indefinite"/>
+                    </circle>
+                  </g>
+                  
+                  {/* Animated Conveyor Belt Pattern */}
+                  <pattern id="moving-conveyor" width="30" height="15" patternUnits="userSpaceOnUse">
+                    <rect width="30" height="15" fill="#4a5568"/>
+                    <rect x="0" y="0" width="3" height="15" fill="#2d3748">
+                      <animateTransform attributeName="transform" type="translate" 
+                                      values="0 0;30 0;0 0" dur="2s" repeatCount="indefinite"/>
+                    </rect>
+                    <rect x="15" y="0" width="3" height="15" fill="#2d3748">
+                      <animateTransform attributeName="transform" type="translate" 
+                                      values="0 0;30 0;0 0" dur="2s" repeatCount="indefinite"/>
+                    </rect>
+                    <circle cx="7" cy="7" r="2" fill="#6b7280">
+                      <animateTransform attributeName="transform" type="translate" 
+                                      values="0 0;30 0;0 0" dur="2s" repeatCount="indefinite"/>
+                    </circle>
+                    <circle cx="22" cy="7" r="2" fill="#6b7280">
+                      <animateTransform attributeName="transform" type="translate" 
+                                      values="0 0;30 0;0 0" dur="2s" repeatCount="indefinite"/>
+                    </circle>
+                  </pattern>
+                  
                   {/* Advanced Perspective Lighting */}
                   <radialGradient id="ambient-light" cx="50%" cy="30%">
                     <stop offset="0%" stopColor="#ffffff" stopOpacity="0.3"/>
@@ -1318,13 +1355,17 @@ export default function MachinesPage() {
                 <rect x="580" y="70" width="15" height="400" fill="#999" stroke="#666" strokeWidth="1"/>
                 <rect x="1050" y="70" width="15" height="800" fill="#999" stroke="#666" strokeWidth="1"/>
                 
-                {/* Main Conveyor System - Leal/Ploughshare to Maturation */}
-                <rect x="580" y="300" width="470" height="25" fill="url(#conveyor)"/>
-                <polygon points="1050,310 1070,300 1070,325 1050,335" fill="#4a5568"/>
+                {/* Animated Conveyor System - Leal/Ploughshare to Maturation */}
+                <rect x="580" y="300" width="470" height="25" fill="url(#moving-conveyor)"/>
+                <polygon points="1050,310 1070,300 1070,325 1050,335" fill="#4a5568">
+                  <animate attributeName="fill" values="#4a5568;#059669;#4a5568" dur="3s" repeatCount="indefinite"/>
+                </polygon>
                 
-                {/* Maturation to Corraza Conveyor */}
-                <rect x="1050" y="450" width="300" height="25" fill="url(#conveyor)"/>
-                <polygon points="1350,460 1370,450 1370,475 1350,485" fill="#4a5568"/>
+                {/* Animated Maturation to Corraza Conveyor */}
+                <rect x="1050" y="450" width="300" height="25" fill="url(#moving-conveyor)"/>
+                <polygon points="1350,460 1370,450 1370,475 1350,485" fill="#4a5568">
+                  <animate attributeName="fill" values="#4a5568;#dc2626;#4a5568" dur="3s" repeatCount="indefinite"/>
+                </polygon>
                 
                 {/* Safety Walking Paths */}
                 <rect x="60" y="500" width="500" height="20" fill="url(#safety-stripes)" opacity="0.8"/>
@@ -1348,53 +1389,123 @@ export default function MachinesPage() {
                 <rect x="1080" y="180" width="650" height="680" fill="none" stroke="#059669" strokeWidth="3" strokeDasharray="10,5" opacity="0.7"/>
                 <text x="1405" y="170" textAnchor="middle" className="fill-emerald-800 text-xl font-bold">PACKAGING AREA</text>
                 
-                {/* Specific Production Flow - Based on Real Manufacturing Process */}
+                {/* 4D Animated Production Flow - Real-Time Material Movement */}
                 <g className="production-flow">
-                  {/* Flow definitions with specific arrows */}
+                  {/* Flow definitions with animated arrows */}
                   <defs>
                     <marker id="flow-arrow" markerWidth="12" markerHeight="8" 
                             refX="10" refY="4" orient="auto">
-                      <polygon points="0 0, 12 4, 0 8" fill="#059669" stroke="#047857" strokeWidth="1"/>
+                      <polygon points="0 0, 12 4, 0 8" fill="#059669" stroke="#047857" strokeWidth="1">
+                        <animate attributeName="fill" values="#059669;#10b981;#059669" dur="1.5s" repeatCount="indefinite"/>
+                      </polygon>
                     </marker>
                     <marker id="end-flow-arrow" markerWidth="12" markerHeight="8" 
                             refX="10" refY="4" orient="auto">
-                      <polygon points="0 0, 12 4, 0 8" fill="#dc2626" stroke="#b91c1c" strokeWidth="1"/>
+                      <polygon points="0 0, 12 4, 0 8" fill="#dc2626" stroke="#b91c1c" strokeWidth="1">
+                        <animate attributeName="fill" values="#dc2626;#ef4444;#dc2626" dur="1.5s" repeatCount="indefinite"/>
+                      </polygon>
                     </marker>
                   </defs>
                   
-                  {/* Blender leal → Maturation */}
+                  {/* Material Flow Particles - Animated dots following paths */}
+                  <g className="material-particles">
+                    {/* Leal flow particles */}
+                    <use href="#material-particle">
+                      <animateMotion dur="6s" repeatCount="indefinite">
+                        <mpath href="#leal-flow-path"/>
+                      </animateMotion>
+                    </use>
+                    <use href="#material-particle" opacity="0.7">
+                      <animateMotion dur="6s" begin="2s" repeatCount="indefinite">
+                        <mpath href="#leal-flow-path"/>
+                      </animateMotion>
+                    </use>
+                    <use href="#material-particle" opacity="0.5">
+                      <animateMotion dur="6s" begin="4s" repeatCount="indefinite">
+                        <mpath href="#leal-flow-path"/>
+                      </animateMotion>
+                    </use>
+                    
+                    {/* Ploughshare flow particles */}
+                    <use href="#material-particle" fill="#f59e0b">
+                      <animateMotion dur="6s" repeatCount="indefinite">
+                        <mpath href="#ploughshare-flow-path"/>
+                      </animateMotion>
+                    </use>
+                    <use href="#material-particle" fill="#f59e0b" opacity="0.7">
+                      <animateMotion dur="6s" begin="2s" repeatCount="indefinite">
+                        <mpath href="#ploughshare-flow-path"/>
+                      </animateMotion>
+                    </use>
+                    
+                    {/* Output flow particles */}
+                    <use href="#material-particle" fill="#dc2626">
+                      <animateMotion dur="8s" repeatCount="indefinite">
+                        <mpath href="#tablet-flow-path"/>
+                      </animateMotion>
+                    </use>
+                    <use href="#material-particle" fill="#dc2626">
+                      <animateMotion dur="8s" begin="1s" repeatCount="indefinite">
+                        <mpath href="#cube-flow-path"/>
+                      </animateMotion>
+                    </use>
+                  </g>
+                  
+                  {/* Animated Flow Paths with Particle Trails */}
+                  
+                  {/* Blender leal → Maturation (Invisible paths for particles) */}
+                  <path id="leal-flow-path" d="M 230 280 Q 400 320 630 280" opacity="0"/>
                   <path d="M 230 280 Q 400 320 630 280" 
                         stroke="#059669" strokeWidth="4" fill="none" 
-                        markerEnd="url(#flow-arrow)" opacity="0.8"/>
+                        markerEnd="url(#flow-arrow)" opacity="0.8" strokeDasharray="10,5">
+                    <animate attributeName="stroke-dashoffset" values="0;-15;0" dur="2s" repeatCount="indefinite"/>
+                    <animate attributeName="opacity" values="0.6;1;0.6" dur="3s" repeatCount="indefinite"/>
+                  </path>
                   <text x="400" y="310" textAnchor="middle" 
                         className="fill-emerald-700 text-sm font-bold bg-white px-2 py-1">
+                    <animate attributeName="opacity" values="0.7;1;0.7" dur="2s" repeatCount="indefinite"/>
                     LEAL → MATURATION
                   </text>
                   
-                  {/* Blender Ploughshare → Maturation */}
+                  {/* Blender Ploughshare → Maturation (Invisible paths for particles) */}
+                  <path id="ploughshare-flow-path" d="M 230 440 Q 400 400 630 360" opacity="0"/>
                   <path d="M 230 440 Q 400 400 630 360" 
-                        stroke="#059669" strokeWidth="4" fill="none" 
-                        markerEnd="url(#flow-arrow)" opacity="0.8"/>
+                        stroke="#f59e0b" strokeWidth="4" fill="none" 
+                        markerEnd="url(#flow-arrow)" opacity="0.8" strokeDasharray="10,5">
+                    <animate attributeName="stroke-dashoffset" values="0;-15;0" dur="2s" repeatCount="indefinite"/>
+                    <animate attributeName="opacity" values="0.6;1;0.6" dur="3s" repeatCount="indefinite"/>
+                  </path>
                   <text x="400" y="390" textAnchor="middle" 
-                        className="fill-emerald-700 text-sm font-bold bg-white px-2 py-1">
+                        className="fill-amber-700 text-sm font-bold bg-white px-2 py-1">
+                    <animate attributeName="opacity" values="0.7;1;0.7" dur="2s" repeatCount="indefinite"/>
                     PLOUGHSHARE → MATURATION
                   </text>
                   
-                  {/* Maturation → Corraza Tablet */}
+                  {/* Maturation → Corraza Tablet (Invisible paths for particles) */}
+                  <path id="tablet-flow-path" d="M 1000 320 Q 1200 280 1400 500" opacity="0"/>
                   <path d="M 1000 320 Q 1200 280 1400 500" 
                         stroke="#dc2626" strokeWidth="4" fill="none" 
-                        markerEnd="url(#end-flow-arrow)" opacity="0.8"/>
+                        markerEnd="url(#end-flow-arrow)" opacity="0.8" strokeDasharray="8,4">
+                    <animate attributeName="stroke-dashoffset" values="0;-12;0" dur="1.5s" repeatCount="indefinite"/>
+                    <animate attributeName="stroke-width" values="4;6;4" dur="2s" repeatCount="indefinite"/>
+                  </path>
                   <text x="1200" y="370" textAnchor="middle" 
                         className="fill-red-700 text-sm font-bold bg-white px-2 py-1">
+                    <animate attributeName="opacity" values="0.7;1;0.7" dur="2s" repeatCount="indefinite"/>
                     → CORRAZA TABLET
                   </text>
                   
-                  {/* Maturation → Corraza Cube */}
+                  {/* Maturation → Corraza Cube (Invisible paths for particles) */}
+                  <path id="cube-flow-path" d="M 1000 380 Q 1200 420 1400 520" opacity="0"/>
                   <path d="M 1000 380 Q 1200 420 1400 520" 
                         stroke="#dc2626" strokeWidth="4" fill="none" 
-                        markerEnd="url(#end-flow-arrow)" opacity="0.8"/>
+                        markerEnd="url(#end-flow-arrow)" opacity="0.8" strokeDasharray="8,4">
+                    <animate attributeName="stroke-dashoffset" values="0;-12;0" dur="1.5s" repeatCount="indefinite"/>
+                    <animate attributeName="stroke-width" values="4;6;4" dur="2s" repeatCount="indefinite"/>
+                  </path>
                   <text x="1200" y="450" textAnchor="middle" 
                         className="fill-red-700 text-sm font-bold bg-white px-2 py-1">
+                    <animate attributeName="opacity" values="0.7;1;0.7" dur="2s" repeatCount="indefinite"/>
                     → CORRAZA CUBE
                   </text>
                   
@@ -1485,10 +1596,21 @@ export default function MachinesPage() {
                         <rect x={x+5} y={y+5} width="110" height="15" 
                               fill="#D0D0D0" stroke="#AAA" strokeWidth="1" rx="2"/>
                         
-                        {/* Status Indicator Light */}
+                        {/* Animated Status Indicator Light */}
                         <circle cx={x+105} cy={y+12.5} r="6" 
                                 fill={statusColor} stroke="#333" strokeWidth="1.5"
-                                style={{ filter: statusColor === '#10b981' ? 'drop-shadow(0 0 6px #10b981)' : 'none' }}/>
+                                style={{ filter: statusColor === '#10b981' ? 'drop-shadow(0 0 6px #10b981)' : 'none' }}>
+                          {statusColor === '#10b981' && (
+                            <animate attributeName="opacity" values="0.7;1;0.7" dur="1s" repeatCount="indefinite"/>
+                          )}
+                        </circle>
+                        
+                        {/* 4D Production Pulse for Running Machines */}
+                        {statusColor === '#10b981' && (
+                          <use href="#production-pulse" x={x+105} y={y+12.5}>
+                            <animate attributeName="opacity" values="0.8;0.4;0.8" dur="2s" repeatCount="indefinite"/>
+                          </use>
+                        )}
                         
                         {/* Control Panel */}
                         <rect x={x+85} y={y+25} width="30" height="25" 
@@ -1499,32 +1621,85 @@ export default function MachinesPage() {
                         <circle cx={x+100} cy={y+32} r="2" fill={statusColor === '#10b981' ? '#10b981' : '#4A5568'}/>
                         <circle cx={x+108} cy={y+32} r="2" fill="#4A5568"/>
                         
-                        {/* Equipment Details Based on Type */}
+                        {/* Equipment Details Based on Type with 4D Motion Animation */}
                         {machine.name.includes('Blender') && (
                           <g>
                             {/* Blender Tank */}
                             <ellipse cx={x+60} cy={y+40} rx="45" ry="20" fill="#F0F0F0" stroke="#CCC" strokeWidth="1"/>
-                            {/* Agitator */}
-                            <rect x={x+58} y={y+25} width="4" height="30" fill="#666" rx="2"/>
-                            <circle cx={x+60} cy={y+27} r="8" fill="#888" stroke="#555" strokeWidth="1"/>
+                            {/* Animated Agitator */}
+                            <g>
+                              <rect x={x+58} y={y+25} width="4" height="30" fill="#666" rx="2"/>
+                              <circle cx={x+60} cy={y+27} r="8" fill="#888" stroke="#555" strokeWidth="1">
+                                {statusColor === '#10b981' && (
+                                  <animateTransform attributeName="transform" 
+                                                    type="rotate" 
+                                                    values={`0 ${x+60} ${y+27};360 ${x+60} ${y+27}`} 
+                                                    dur="3s" 
+                                                    repeatCount="indefinite"/>
+                                )}
+                              </circle>
+                              {/* Rotating blades */}
+                              {statusColor === '#10b981' && (
+                                <g>
+                                  <line x1={x+54} y1={y+27} x2={x+66} y2={y+27} stroke="#555" strokeWidth="2">
+                                    <animateTransform attributeName="transform" 
+                                                      type="rotate" 
+                                                      values={`0 ${x+60} ${y+27};360 ${x+60} ${y+27}`} 
+                                                      dur="3s" 
+                                                      repeatCount="indefinite"/>
+                                  </line>
+                                  <line x1={x+60} y1={y+21} x2={x+60} y2={y+33} stroke="#555" strokeWidth="2">
+                                    <animateTransform attributeName="transform" 
+                                                      type="rotate" 
+                                                      values={`0 ${x+60} ${y+27};360 ${x+60} ${y+27}`} 
+                                                      dur="3s" 
+                                                      repeatCount="indefinite"/>
+                                  </line>
+                                </g>
+                              )}
+                            </g>
                           </g>
                         )}
                         
                         {machine.name.includes('Corraza') && (
                           <g>
-                            {/* Tablet Press */}
+                            {/* Animated Tablet Press */}
                             <rect x={x+30} y={y+30} width="60" height="20" fill="#F5F5F5" stroke="#DDD" strokeWidth="1" rx="10"/>
-                            <rect x={x+45} y={y+35} width="30" height="10" fill="#E0E0E0" stroke="#CCC" strokeWidth="1" rx="5"/>
+                            <rect x={x+45} y={y+35} width="30" height="10" fill="#E0E0E0" stroke="#CCC" strokeWidth="1" rx="5">
+                              {statusColor === '#10b981' && (
+                                <animate attributeName="height" values="10;8;10" dur="0.8s" repeatCount="indefinite"/>
+                              )}
+                            </rect>
+                            {/* Press plunger animation */}
+                            {statusColor === '#10b981' && (
+                              <rect x={x+58} y={y+32} width="4" height="16" fill="#999" rx="2">
+                                <animate attributeName="height" values="16;12;16" dur="0.8s" repeatCount="indefinite"/>
+                                <animate attributeName="y" values={`${y+32};${y+34};${y+32}`} dur="0.8s" repeatCount="indefinite"/>
+                              </rect>
+                            )}
                           </g>
                         )}
                         
                         {machine.environment === 'packaging' && !machine.name.includes('Corraza') && (
                           <g>
-                            {/* Packaging Line */}
-                            <rect x={x+10} y={y+35} width="100" height="8" fill="url(#conveyor)"/>
-                            <rect x={x+20} y={y+25} width="10" height="15" fill="#888"/>
-                            <rect x={x+40} y={y+25} width="10" height="15" fill="#888"/>
-                            <rect x={x+90} y={y+25} width="10" height="15" fill="#888"/>
+                            {/* Animated Packaging Line */}
+                            <rect x={x+10} y={y+35} width="100" height="8" fill="url(#moving-conveyor)"/>
+                            {/* Packaging arms with motion */}
+                            <rect x={x+20} y={y+25} width="10" height="15" fill="#888">
+                              {statusColor === '#10b981' && (
+                                <animate attributeName="y" values={`${y+25};${y+23};${y+25}`} dur="1.2s" repeatCount="indefinite"/>
+                              )}
+                            </rect>
+                            <rect x={x+40} y={y+25} width="10" height="15" fill="#888">
+                              {statusColor === '#10b981' && (
+                                <animate attributeName="y" values={`${y+25};${y+23};${y+25}`} dur="1.2s" begin="0.4s" repeatCount="indefinite"/>
+                              )}
+                            </rect>
+                            <rect x={x+90} y={y+25} width="10" height="15" fill="#888">
+                              {statusColor === '#10b981' && (
+                                <animate attributeName="y" values={`${y+25};${y+23};${y+25}`} dur="1.2s" begin="0.8s" repeatCount="indefinite"/>
+                              )}
+                            </rect>
                           </g>
                         )}
                         
