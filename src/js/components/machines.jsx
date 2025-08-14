@@ -1177,317 +1177,399 @@ export default function MachinesPage() {
                 </defs>
                 <rect width="100%" height="100%" fill="url(#grid)" />
                 
-                {/* Blending Area */}
+                {/* BLENDING AREA - Left side */}
                 <g>
                   <rect 
                     x="50" 
                     y="50" 
-                    width="400" 
-                    height="250"
+                    width="380" 
+                    height="180"
                     fill="none"
                     stroke="#6366f1"
-                    strokeWidth="2"
-                    strokeDasharray="5,5"
-                    rx="8"
+                    strokeWidth="3"
+                    strokeDasharray="8,4"
+                    rx="12"
                   />
                   <text 
                     x="60" 
-                    y="40"
-                    className="fill-indigo-600 text-sm font-mono font-bold"
+                    y="35"
+                    className="fill-indigo-600 text-lg font-mono font-bold"
                   >
-                    BLENDING AREA
+                    BLENDING DEPARTMENT
                   </text>
                   
-                  {/* Blending machines */}
-                  {filteredMachines.filter(m => m.environment === 'blending').slice(0, 4).map((machine, index) => {
+                  {/* Render ALL blending machines */}
+                  {filteredMachines.filter(m => m.environment === 'blending').map((machine, index) => {
                     const positions = [
-                      { x: 80, y: 100, width: 60, height: 40, type: 'mixer', defaultName: 'ROSS-PMX-100' },
-                      { x: 180, y: 100, width: 60, height: 40, type: 'mixer', defaultName: 'LITTLEFORD-FKM' },
-                      { x: 280, y: 80, width: 40, height: 80, type: 'tank', defaultName: 'NAUTA-MX-500' },
-                      { x: 80, y: 180, width: 240, height: 20, type: 'conveyor', defaultName: 'DORNER-CVB-240' }
+                      // Row 1: Main blenders
+                      { x: 70, y: 80, width: 70, height: 45, type: 'mixer', name: 'Blender leal' },
+                      { x: 160, y: 80, width: 70, height: 45, type: 'mixer', name: 'Blender MaxMix' }, 
+                      { x: 250, y: 80, width: 70, height: 45, type: 'mixer', name: 'Blender Ploughshare' },
+                      { x: 340, y: 80, width: 70, height: 45, type: 'mixer', name: 'Blender Winkwork' },
+                      // Row 2: Drum blender & liquid line
+                      { x: 70, y: 150, width: 90, height: 35, type: 'drum', name: 'Drumblender' },
+                      { x: 190, y: 150, width: 220, height: 35, type: 'liquid_line', name: 'Liquid Line' }
                     ];
-                    const pos = positions[index] || positions[0];
+                    
+                    const pos = positions[index] || { x: 70 + (index % 4) * 80, y: 80 + Math.floor(index / 4) * 70, width: 70, height: 45, type: 'mixer' };
                     const status = STATUS_COLORS[machine?.status] || STATUS_COLORS.offline;
+                    const statusColor = status.text === 'text-green-400' ? '#10b981' : 
+                                       status.text === 'text-blue-400' ? '#3b82f6' : 
+                                       status.text === 'text-yellow-400' ? '#f59e0b' : '#ef4444';
                     
                     return (
                       <g key={machine.id} onClick={() => setSelectedMachine(machine)} style={{ cursor: 'pointer' }}>
-                        {/* Machine shape based on type */}
+                        {/* Mixer machines */}
                         {pos.type === 'mixer' && (
                           <g>
-                            {/* Mixer body */}
                             <rect 
                               x={pos.x} y={pos.y} width={pos.width} height={pos.height}
-                              fill={status.text === 'text-green-400' ? '#10b981' : 
-                                    status.text === 'text-blue-400' ? '#3b82f6' : 
-                                    status.text === 'text-yellow-400' ? '#f59e0b' : '#ef4444'}
-                              stroke="#1f2937"
-                              strokeWidth="2"
-                              rx="8"
+                              fill={statusColor} stroke="#1f2937" strokeWidth="2" rx="8"
                             />
-                            {/* Control panel */}
-                            <rect 
-                              x={pos.x + 5} y={pos.y + 5} width="15" height="10"
-                              fill="#374151" stroke="#1f2937" strokeWidth="1" rx="2"
-                            />
-                            {/* Mixing chamber */}
-                            <circle 
-                              cx={pos.x + pos.width/2} cy={pos.y + pos.height/2}
-                              r="12" fill="none" stroke="#1f2937" strokeWidth="2"
-                            />
-                            {/* Mixing blades */}
-                            <line 
-                              x1={pos.x + pos.width/2 - 8} y1={pos.y + pos.height/2}
-                              x2={pos.x + pos.width/2 + 8} y2={pos.y + pos.height/2}
-                              stroke="#1f2937" strokeWidth="2"
-                            />
-                            <line 
-                              x1={pos.x + pos.width/2} y1={pos.y + pos.height/2 - 8}
-                              x2={pos.x + pos.width/2} y2={pos.y + pos.height/2 + 8}
-                              stroke="#1f2937" strokeWidth="2"
-                            />
+                            <rect x={pos.x + 5} y={pos.y + 5} width="18" height="12" fill="#374151" stroke="#1f2937" strokeWidth="1" rx="3"/>
+                            <circle cx={pos.x + pos.width/2} cy={pos.y + pos.height/2} r="14" fill="none" stroke="#1f2937" strokeWidth="3"/>
+                            <line x1={pos.x + pos.width/2 - 10} y1={pos.y + pos.height/2} x2={pos.x + pos.width/2 + 10} y2={pos.y + pos.height/2} stroke="#1f2937" strokeWidth="3"/>
+                            <line x1={pos.x + pos.width/2} y1={pos.y + pos.height/2 - 10} x2={pos.x + pos.width/2} y2={pos.y + pos.height/2 + 10} stroke="#1f2937" strokeWidth="3"/>
                           </g>
                         )}
-                        {pos.type === 'tank' && (
+                        
+                        {/* Drum blender */}
+                        {pos.type === 'drum' && (
                           <g>
-                            {/* Tank body */}
-                            <rect 
-                              x={pos.x} y={pos.y} width={pos.width} height={pos.height}
-                              fill={status.text === 'text-green-400' ? '#10b981' : 
-                                    status.text === 'text-blue-400' ? '#3b82f6' : 
-                                    status.text === 'text-yellow-400' ? '#f59e0b' : '#ef4444'}
-                              stroke="#1f2937"
-                              strokeWidth="2"
-                              rx="4"
-                            />
-                            {/* Tank top */}
-                            <ellipse 
-                              cx={pos.x + pos.width/2} cy={pos.y + 5}
-                              rx={pos.width/2 - 2} ry="5"
-                              fill="#1f2937"
-                            />
-                            {/* Level indicator lines */}
-                            <line x1={pos.x + 5} y1={pos.y + 25} x2={pos.x + pos.width - 5} y2={pos.y + 25} stroke="#1f2937" strokeWidth="1" opacity="0.5"/>
-                            <line x1={pos.x + 5} y1={pos.y + 40} x2={pos.x + pos.width - 5} y2={pos.y + 40} stroke="#1f2937" strokeWidth="1" opacity="0.5"/>
-                            <line x1={pos.x + 5} y1={pos.y + 55} x2={pos.x + pos.width - 5} y2={pos.y + 55} stroke="#1f2937" strokeWidth="1" opacity="0.5"/>
-                            {/* Outlet valve */}
-                            <circle cx={pos.x + pos.width/2} cy={pos.y + pos.height - 5} r="3" fill="#374151" stroke="#1f2937" strokeWidth="1"/>
+                            <rect x={pos.x} y={pos.y} width={pos.width} height={pos.height} fill={statusColor} stroke="#1f2937" strokeWidth="2" rx="18"/>
+                            <rect x={pos.x + 5} y={pos.y + 5} width="15" height="10" fill="#374151" stroke="#1f2937" strokeWidth="1" rx="2"/>
+                            <ellipse cx={pos.x + pos.width/2} cy={pos.y + pos.height/2} rx={pos.width/3} ry={pos.height/3} fill="none" stroke="#1f2937" strokeWidth="2"/>
+                            <line x1={pos.x + 15} y1={pos.y + pos.height/2} x2={pos.x + pos.width - 15} y2={pos.y + pos.height/2} stroke="#1f2937" strokeWidth="2"/>
                           </g>
                         )}
-                        {pos.type === 'conveyor' && (
+                        
+                        {/* Liquid line */}
+                        {pos.type === 'liquid_line' && (
                           <g>
-                            {/* Conveyor belt */}
-                            <rect 
-                              x={pos.x} y={pos.y} width={pos.width} height={pos.height}
-                              fill={status.text === 'text-green-400' ? '#10b981' : 
-                                    status.text === 'text-blue-400' ? '#3b82f6' : 
-                                    status.text === 'text-yellow-400' ? '#f59e0b' : '#ef4444'}
-                              stroke="#1f2937"
-                              strokeWidth="2"
-                              rx="10"
-                            />
-                            {/* Belt movement lines */}
-                            {[...Array(Math.floor(pos.width / 25))].map((_, i) => (
-                              <line 
-                                key={i}
-                                x1={pos.x + 10 + i * 25}
-                                y1={pos.y + 3}
-                                x2={pos.x + 20 + i * 25}
-                                y2={pos.y + pos.height - 3}
-                                stroke="#1f2937"
-                                strokeWidth="1"
-                                opacity="0.5"
-                              />
+                            <rect x={pos.x} y={pos.y} width={pos.width} height={pos.height} fill={statusColor} stroke="#1f2937" strokeWidth="2" rx="8"/>
+                            <rect x={pos.x + 5} y={pos.y + 5} width="20" height="10" fill="#374151" stroke="#1f2937" strokeWidth="1" rx="2"/>
+                            {[...Array(8)].map((_, i) => (
+                              <circle key={i} cx={pos.x + 30 + i * 25} cy={pos.y + pos.height/2} r="6" fill="#374151" stroke="#1f2937" strokeWidth="1"/>
                             ))}
-                            {/* Drive rollers */}
-                            <circle cx={pos.x + 10} cy={pos.y + pos.height/2} r="6" fill="#374151" stroke="#1f2937" strokeWidth="1"/>
-                            <circle cx={pos.x + pos.width - 10} cy={pos.y + pos.height/2} r="6" fill="#374151" stroke="#1f2937" strokeWidth="1"/>
+                            <line x1={pos.x + 30} y1={pos.y + 8} x2={pos.x + pos.width - 10} y2={pos.y + 8} stroke="#1f2937" strokeWidth="2"/>
+                            <line x1={pos.x + 30} y1={pos.y + pos.height - 8} x2={pos.x + pos.width - 10} y2={pos.y + pos.height - 8} stroke="#1f2937" strokeWidth="2"/>
                           </g>
                         )}
                         
                         {/* Machine label */}
                         <text 
-                          x={pos.x + pos.width/2} y={pos.y + pos.height + 15}
+                          x={pos.x + pos.width/2} y={pos.y + pos.height + 18}
                           textAnchor="middle"
-                          className="fill-slate-700 text-xs font-mono font-semibold"
+                          className="fill-slate-700 text-xs font-mono font-bold"
                         >
-                          {machine.name || pos.defaultName}
+                          {machine.name}
                         </text>
                         
                         {/* Status indicator */}
                         <circle 
-                          cx={pos.x + pos.width - 5} cy={pos.y + 5}
-                          r="4"
-                          fill={status.text === 'text-green-400' ? '#10b981' : 
-                                status.text === 'text-blue-400' ? '#3b82f6' : 
-                                status.text === 'text-yellow-400' ? '#f59e0b' : '#ef4444'}
-                          stroke="#1f2937"
-                          strokeWidth="1"
+                          cx={pos.x + pos.width - 8} cy={pos.y + 8}
+                          r="6" fill={statusColor} stroke="#1f2937" strokeWidth="2"
                         />
+                        
+                        {/* Status text */}
+                        <text 
+                          x={pos.x + pos.width - 8} y={pos.y - 5}
+                          textAnchor="middle"
+                          className="fill-slate-700 text-xs font-mono font-bold"
+                        >
+                          {STATUS_COLORS[machine?.status]?.label || 'OFF'}
+                        </text>
                       </g>
                     );
                   })}
                 </g>
                 
-                {/* Packaging Area */}
+                {/* MATURATION ROOM - Center */}
                 <g>
                   <rect 
-                    x="500" 
+                    x="460" 
                     y="50" 
-                    width="450" 
-                    height="250"
-                    fill="none"
-                    stroke="#10b981"
-                    strokeWidth="2"
-                    strokeDasharray="5,5"
-                    rx="8"
+                    width="200" 
+                    height="180"
+                    fill="rgba(139, 69, 19, 0.1)"
+                    stroke="#8b4513"
+                    strokeWidth="3"
+                    strokeDasharray="6,6"
+                    rx="12"
                   />
                   <text 
-                    x="510" 
-                    y="40"
-                    className="fill-emerald-600 text-sm font-mono font-bold"
+                    x="470" 
+                    y="35"
+                    className="fill-amber-700 text-lg font-mono font-bold"
                   >
-                    PACKAGING AREA
+                    MATURATION ROOM
                   </text>
                   
-                  {/* Packaging machines */}
-                  {filteredMachines.filter(m => m.environment === 'packaging').slice(0, 5).map((machine, index) => {
+                  {/* Maturation storage areas */}
+                  <g>
+                    <rect x="480" y="70" width="160" height="30" fill="#d2b48c" stroke="#8b4513" strokeWidth="2" rx="4"/>
+                    <text x="560" y="90" textAnchor="middle" className="fill-amber-800 text-xs font-mono font-bold">AGING TANKS A1-A4</text>
+                    
+                    <rect x="480" y="110" width="160" height="30" fill="#deb887" stroke="#8b4513" strokeWidth="2" rx="4"/>
+                    <text x="560" y="130" textAnchor="middle" className="fill-amber-800 text-xs font-mono font-bold">CURING CHAMBER B1-B4</text>
+                    
+                    <rect x="480" y="150" width="160" height="30" fill="#f5deb3" stroke="#8b4513" strokeWidth="2" rx="4"/>
+                    <text x="560" y="170" textAnchor="middle" className="fill-amber-800 text-xs font-mono font-bold">QUALITY HOLD C1-C4</text>
+                    
+                    <rect x="480" y="190" width="160" height="30" fill="#ffe4b5" stroke="#8b4513" strokeWidth="2" rx="4"/>
+                    <text x="560" y="210" textAnchor="middle" className="fill-amber-800 text-xs font-mono font-bold">RELEASE BUFFER D1-D4</text>
+                  </g>
+                </g>
+                
+                {/* PACKAGING AREA - Right side */}
+                <g>
+                  <rect 
+                    x="690" 
+                    y="50" 
+                    width="660" 
+                    height="400"
+                    fill="none"
+                    stroke="#10b981"
+                    strokeWidth="3"
+                    strokeDasharray="8,4"
+                    rx="12"
+                  />
+                  <text 
+                    x="700" 
+                    y="35"
+                    className="fill-emerald-600 text-lg font-mono font-bold"
+                  >
+                    PACKAGING DEPARTMENT
+                  </text>
+                  
+                  {/* Render ALL packaging machines */}
+                  {filteredMachines.filter(m => m.environment === 'packaging').map((machine, index) => {
                     const positions = [
-                      { x: 530, y: 80, width: 100, height: 30, type: 'line', defaultName: 'BOSCH-SV4020' },
-                      { x: 660, y: 80, width: 60, height: 30, type: 'sealer', defaultName: 'MULTIVAC-C200' },
-                      { x: 760, y: 80, width: 80, height: 90, type: 'palletizer', defaultName: 'ABB-IRB460' },
-                      { x: 530, y: 140, width: 100, height: 30, type: 'line', defaultName: 'BOSCH-SVB3601' },
-                      { x: 530, y: 200, width: 300, height: 20, type: 'conveyor', defaultName: 'FLEXLINK-XMS' }
+                      // Top row - Main packaging lines
+                      { x: 720, y: 80, width: 120, height: 35, type: 'line', name: 'CANLINE' },
+                      { x: 860, y: 80, width: 120, height: 35, type: 'line', name: 'Canister Line' },
+                      { x: 1000, y: 80, width: 100, height: 35, type: 'sealer', name: 'Enflex f14' },
+                      { x: 1120, y: 80, width: 100, height: 35, type: 'sealer', name: 'Enflex fb 10 1;2' },
+                      { x: 1240, y: 80, width: 80, height: 90, type: 'palletizer', name: 'IlaPak' },
+                      
+                      // Second row - NPS lines
+                      { x: 720, y: 140, width: 130, height: 35, type: 'line', name: 'NPS 5 Lane' },
+                      { x: 870, y: 140, width: 100, height: 35, type: 'auger', name: 'NPS Auger 3' },
+                      { x: 990, y: 140, width: 120, height: 35, type: 'stick', name: 'NPS Stick Pack' },
+                      { x: 1130, y: 140, width: 90, height: 35, type: 'line', name: 'Universal 1' },
+                      { x: 1240, y: 140, width: 90, height: 35, type: 'line', name: 'Universal 2' },
+                      
+                      // Third row - Universal & specialty
+                      { x: 720, y: 200, width: 90, height: 35, type: 'line', name: 'Universal 3' },
+                      { x: 830, y: 200, width: 100, height: 35, type: 'tablet', name: 'Corraza Tablet' },
+                      { x: 950, y: 200, width: 100, height: 35, type: 'cube', name: 'CORAZZA CUBE' },
+                      
+                      // Bottom conveyor systems
+                      { x: 720, y: 260, width: 620, height: 25, type: 'main_conveyor', name: 'Main Distribution Conveyor' },
+                      { x: 720, y: 300, width: 300, height: 25, type: 'conveyor', name: 'Quality Control Line' },
+                      { x: 1040, y: 300, width: 300, height: 25, type: 'conveyor', name: 'Palletizing Feed Line' },
+                      
+                      // Quality & finishing stations
+                      { x: 720, y: 350, width: 180, height: 40, type: 'quality', name: 'Quality Control Station' },
+                      { x: 920, y: 350, width: 120, height: 40, type: 'labeling', name: 'Labeling Station' },
+                      { x: 1060, y: 350, width: 120, height: 40, type: 'wrapping', name: 'Wrapping Station' },
+                      { x: 1200, y: 350, width: 140, height: 40, type: 'shipping', name: 'Shipping Dock' }
                     ];
-                    const pos = positions[index] || positions[0];
+                    
+                    const pos = positions[index] || { x: 720 + (index % 6) * 110, y: 80 + Math.floor(index / 6) * 60, width: 100, height: 35, type: 'line' };
                     const status = STATUS_COLORS[machine?.status] || STATUS_COLORS.offline;
+                    const statusColor = status.text === 'text-green-400' ? '#10b981' : 
+                                       status.text === 'text-blue-400' ? '#3b82f6' : 
+                                       status.text === 'text-yellow-400' ? '#f59e0b' : '#ef4444';
                     
                     return (
                       <g key={machine.id} onClick={() => setSelectedMachine(machine)} style={{ cursor: 'pointer' }}>
-                        {/* Machine shapes based on type */}
+                        {/* Production lines */}
                         {pos.type === 'line' && (
                           <g>
-                            {/* Production line base */}
-                            <rect 
-                              x={pos.x} y={pos.y} width={pos.width} height={pos.height}
-                              fill={status.text === 'text-green-400' ? '#10b981' : 
-                                    status.text === 'text-blue-400' ? '#3b82f6' : 
-                                    status.text === 'text-yellow-400' ? '#f59e0b' : '#ef4444'}
-                              stroke="#1f2937"
-                              strokeWidth="2"
-                              rx="4"
-                            />
-                            {/* Control panel */}
-                            <rect x={pos.x + 5} y={pos.y + 5} width="20" height="8" fill="#374151" stroke="#1f2937" strokeWidth="1" rx="2"/>
-                            {/* Processing sections */}
-                            <line x1={pos.x + 30} y1={pos.y + 2} x2={pos.x + 30} y2={pos.y + pos.height - 2} stroke="#1f2937" strokeWidth="1" opacity="0.5"/>
-                            <line x1={pos.x + 60} y1={pos.y + 2} x2={pos.x + 60} y2={pos.y + pos.height - 2} stroke="#1f2937" strokeWidth="1" opacity="0.5"/>
+                            <rect x={pos.x} y={pos.y} width={pos.width} height={pos.height} fill={statusColor} stroke="#1f2937" strokeWidth="2" rx="6"/>
+                            <rect x={pos.x + 5} y={pos.y + 5} width="25" height="12" fill="#374151" stroke="#1f2937" strokeWidth="1" rx="3"/>
+                            <line x1={pos.x + 35} y1={pos.y + 5} x2={pos.x + 35} y2={pos.y + pos.height - 5} stroke="#1f2937" strokeWidth="1"/>
+                            <line x1={pos.x + 65} y1={pos.y + 5} x2={pos.x + 65} y2={pos.y + pos.height - 5} stroke="#1f2937" strokeWidth="1"/>
+                            <line x1={pos.x + 95} y1={pos.y + 5} x2={pos.x + 95} y2={pos.y + pos.height - 5} stroke="#1f2937" strokeWidth="1"/>
                           </g>
                         )}
                         
+                        {/* Sealer machines */}
                         {pos.type === 'sealer' && (
                           <g>
-                            {/* Sealer body */}
-                            <rect 
-                              x={pos.x} y={pos.y} width={pos.width} height={pos.height}
-                              fill={status.text === 'text-green-400' ? '#10b981' : 
-                                    status.text === 'text-blue-400' ? '#3b82f6' : 
-                                    status.text === 'text-yellow-400' ? '#f59e0b' : '#ef4444'}
-                              stroke="#1f2937"
-                              strokeWidth="2"
-                              rx="4"
-                            />
-                            {/* Heat sealing bars */}
-                            <rect x={pos.x + 5} y={pos.y + 8} width={pos.width - 10} height="3" fill="#dc2626"/>
-                            <rect x={pos.x + 5} y={pos.y + pos.height - 11} width={pos.width - 10} height="3" fill="#dc2626"/>
-                            {/* Control panel */}
-                            <rect x={pos.x + pos.width - 15} y={pos.y + 5} width="10" height="8" fill="#374151" stroke="#1f2937" strokeWidth="1" rx="1"/>
+                            <rect x={pos.x} y={pos.y} width={pos.width} height={pos.height} fill={statusColor} stroke="#1f2937" strokeWidth="2" rx="6"/>
+                            <rect x={pos.x + 5} y={pos.y + 8} width={pos.width - 10} height="4" fill="#dc2626"/>
+                            <rect x={pos.x + 5} y={pos.y + pos.height - 12} width={pos.width - 10} height="4" fill="#dc2626"/>
+                            <rect x={pos.x + pos.width - 18} y={pos.y + 5} width="12" height="10" fill="#374151" stroke="#1f2937" strokeWidth="1" rx="2"/>
                           </g>
                         )}
                         
+                        {/* Palletizer */}
                         {pos.type === 'palletizer' && (
                           <g>
-                            {/* Palletizer base */}
-                            <rect 
-                              x={pos.x} y={pos.y + pos.height - 30} width={pos.width} height="30"
-                              fill={status.text === 'text-green-400' ? '#10b981' : 
-                                    status.text === 'text-blue-400' ? '#3b82f6' : 
-                                    status.text === 'text-yellow-400' ? '#f59e0b' : '#ef4444'}
-                              stroke="#1f2937"
-                              strokeWidth="2"
-                              rx="4"
-                            />
-                            {/* Robot arm */}
-                            <rect x={pos.x + pos.width/2 - 3} y={pos.y} width="6" height={pos.height - 30} fill="#374151" stroke="#1f2937" strokeWidth="1"/>
-                            {/* Robot head/gripper */}
-                            <rect x={pos.x + pos.width/2 - 12} y={pos.y} width="24" height="15" fill="#374151" stroke="#1f2937" strokeWidth="1" rx="2"/>
-                            {/* Control cabinet */}
-                            <rect x={pos.x + 5} y={pos.y + pos.height - 25} width="15" height="20" fill="#374151" stroke="#1f2937" strokeWidth="1" rx="2"/>
+                            <rect x={pos.x} y={pos.y + pos.height - 40} width={pos.width} height="40" fill={statusColor} stroke="#1f2937" strokeWidth="2" rx="6"/>
+                            <rect x={pos.x + pos.width/2 - 4} y={pos.y} width="8" height={pos.height - 40} fill="#374151" stroke="#1f2937" strokeWidth="1"/>
+                            <rect x={pos.x + pos.width/2 - 15} y={pos.y} width="30" height="20" fill="#374151" stroke="#1f2937" strokeWidth="1" rx="3"/>
+                            <rect x={pos.x + 5} y={pos.y + pos.height - 35} width="18" height="30" fill="#374151" stroke="#1f2937" strokeWidth="1" rx="3"/>
                           </g>
                         )}
                         
-                        {pos.type === 'conveyor' && (
+                        {/* Auger filler */}
+                        {pos.type === 'auger' && (
                           <g>
-                            {/* Conveyor belt */}
-                            <rect 
-                              x={pos.x} y={pos.y} width={pos.width} height={pos.height}
-                              fill={status.text === 'text-green-400' ? '#10b981' : 
-                                    status.text === 'text-blue-400' ? '#3b82f6' : 
-                                    status.text === 'text-yellow-400' ? '#f59e0b' : '#ef4444'}
-                              stroke="#1f2937"
-                              strokeWidth="2"
-                              rx="10"
-                            />
-                            {/* Belt sections */}
-                            {[...Array(Math.floor(pos.width / 30))].map((_, i) => (
-                              <line 
-                                key={i}
-                                x1={pos.x + 15 + i * 30}
-                                y1={pos.y + 2}
-                                x2={pos.x + 15 + i * 30}
-                                y2={pos.y + pos.height - 2}
-                                stroke="#1f2937"
-                                strokeWidth="1"
-                                opacity="0.3"
-                              />
+                            <rect x={pos.x} y={pos.y} width={pos.width} height={pos.height} fill={statusColor} stroke="#1f2937" strokeWidth="2" rx="6"/>
+                            <circle cx={pos.x + pos.width/2} cy={pos.y + pos.height/2} r="10" fill="#374151" stroke="#1f2937" strokeWidth="2"/>
+                            <path d={`M ${pos.x + pos.width/2 - 6} ${pos.y + pos.height/2} Q ${pos.x + pos.width/2} ${pos.y + pos.height/2 - 6} ${pos.x + pos.width/2 + 6} ${pos.y + pos.height/2} Q ${pos.x + pos.width/2} ${pos.y + pos.height/2 + 6} ${pos.x + pos.width/2 - 6} ${pos.y + pos.height/2}`} fill="none" stroke="#1f2937" strokeWidth="2"/>
+                          </g>
+                        )}
+                        
+                        {/* Stick pack machine */}
+                        {pos.type === 'stick' && (
+                          <g>
+                            <rect x={pos.x} y={pos.y} width={pos.width} height={pos.height} fill={statusColor} stroke="#1f2937" strokeWidth="2" rx="6"/>
+                            <rect x={pos.x + 5} y={pos.y + 5} width="15" height="8" fill="#374151" stroke="#1f2937" strokeWidth="1" rx="2"/>
+                            {[...Array(6)].map((_, i) => (
+                              <rect key={i} x={pos.x + 25 + i * 15} y={pos.y + 5} width="3" height={pos.height - 10} fill="#1f2937"/>
                             ))}
                           </g>
                         )}
                         
+                        {/* Tablet press */}
+                        {pos.type === 'tablet' && (
+                          <g>
+                            <rect x={pos.x} y={pos.y} width={pos.width} height={pos.height} fill={statusColor} stroke="#1f2937" strokeWidth="2" rx="6"/>
+                            <circle cx={pos.x + pos.width/2} cy={pos.y + pos.height/2} r="12" fill="#374151" stroke="#1f2937" strokeWidth="2"/>
+                            {[...Array(8)].map((_, i) => (
+                              <circle key={i} cx={pos.x + pos.width/2 + 8 * Math.cos(i * Math.PI / 4)} cy={pos.y + pos.height/2 + 8 * Math.sin(i * Math.PI / 4)} r="2" fill="#1f2937"/>
+                            ))}
+                          </g>
+                        )}
+                        
+                        {/* Cube machine */}
+                        {pos.type === 'cube' && (
+                          <g>
+                            <rect x={pos.x} y={pos.y} width={pos.width} height={pos.height} fill={statusColor} stroke="#1f2937" strokeWidth="2" rx="6"/>
+                            <rect x={pos.x + pos.width/2 - 8} y={pos.y + pos.height/2 - 8} width="16" height="16" fill="#374151" stroke="#1f2937" strokeWidth="2" rx="2"/>
+                            <line x1={pos.x + pos.width/2 - 8} y1={pos.y + pos.height/2} x2={pos.x + pos.width/2 + 8} y2={pos.y + pos.height/2} stroke="#1f2937" strokeWidth="1"/>
+                            <line x1={pos.x + pos.width/2} y1={pos.y + pos.height/2 - 8} x2={pos.x + pos.width/2} y2={pos.y + pos.height/2 + 8} stroke="#1f2937" strokeWidth="1"/>
+                          </g>
+                        )}
+                        
+                        {/* Main conveyor */}
+                        {pos.type === 'main_conveyor' && (
+                          <g>
+                            <rect x={pos.x} y={pos.y} width={pos.width} height={pos.height} fill={statusColor} stroke="#1f2937" strokeWidth="3" rx="12"/>
+                            {[...Array(Math.floor(pos.width / 40))].map((_, i) => (
+                              <line key={i} x1={pos.x + 20 + i * 40} y1={pos.y + 3} x2={pos.x + 30 + i * 40} y2={pos.y + pos.height - 3} stroke="#1f2937" strokeWidth="2" opacity="0.4"/>
+                            ))}
+                            <circle cx={pos.x + 15} cy={pos.y + pos.height/2} r="8" fill="#374151" stroke="#1f2937" strokeWidth="2"/>
+                            <circle cx={pos.x + pos.width - 15} cy={pos.y + pos.height/2} r="8" fill="#374151" stroke="#1f2937" strokeWidth="2"/>
+                          </g>
+                        )}
+                        
+                        {/* Regular conveyor */}
+                        {pos.type === 'conveyor' && (
+                          <g>
+                            <rect x={pos.x} y={pos.y} width={pos.width} height={pos.height} fill={statusColor} stroke="#1f2937" strokeWidth="2" rx="12"/>
+                            {[...Array(Math.floor(pos.width / 30))].map((_, i) => (
+                              <line key={i} x1={pos.x + 15 + i * 30} y1={pos.y + 2} x2={pos.x + 15 + i * 30} y2={pos.y + pos.height - 2} stroke="#1f2937" strokeWidth="1" opacity="0.3"/>
+                            ))}
+                          </g>
+                        )}
+                        
+                        {/* Quality control station */}
+                        {pos.type === 'quality' && (
+                          <g>
+                            <rect x={pos.x} y={pos.y} width={pos.width} height={pos.height} fill={statusColor} stroke="#1f2937" strokeWidth="2" rx="8"/>
+                            <rect x={pos.x + 10} y={pos.y + 10} width="40" height="20" fill="#374151" stroke="#1f2937" strokeWidth="1" rx="4"/>
+                            <rect x={pos.x + 60} y={pos.y + 5} width="50" height="10" fill="#374151" stroke="#1f2937" strokeWidth="1" rx="2"/>
+                            <rect x={pos.x + 120} y={pos.y + 10} width="30" height="20" fill="#374151" stroke="#1f2937" strokeWidth="1" rx="4"/>
+                            <circle cx={pos.x + pos.width - 15} cy={pos.y + 15} r="8" fill="#22c55e" stroke="#1f2937" strokeWidth="2"/>
+                          </g>
+                        )}
+                        
+                        {/* Labeling station */}
+                        {pos.type === 'labeling' && (
+                          <g>
+                            <rect x={pos.x} y={pos.y} width={pos.width} height={pos.height} fill={statusColor} stroke="#1f2937" strokeWidth="2" rx="8"/>
+                            <rect x={pos.x + 10} y={pos.y + 5} width="30" height="30" fill="#374151" stroke="#1f2937" strokeWidth="1" rx="4"/>
+                            <circle cx={pos.x + 60} cy={pos.y + 20} r="12" fill="none" stroke="#1f2937" strokeWidth="2"/>
+                            <rect x={pos.x + 80} y={pos.y + 10} width="25" height="20" fill="#374151" stroke="#1f2937" strokeWidth="1" rx="2"/>
+                          </g>
+                        )}
+                        
+                        {/* Wrapping station */}
+                        {pos.type === 'wrapping' && (
+                          <g>
+                            <rect x={pos.x} y={pos.y} width={pos.width} height={pos.height} fill={statusColor} stroke="#1f2937" strokeWidth="2" rx="8"/>
+                            <ellipse cx={pos.x + 30} cy={pos.y + 20} rx="20" ry="15" fill="none" stroke="#1f2937" strokeWidth="2"/>
+                            <rect x={pos.x + 60} y={pos.y + 10} width="40" height="20" fill="#374151" stroke="#1f2937" strokeWidth="1" rx="4"/>
+                          </g>
+                        )}
+                        
+                        {/* Shipping dock */}
+                        {pos.type === 'shipping' && (
+                          <g>
+                            <rect x={pos.x} y={pos.y} width={pos.width} height={pos.height} fill={statusColor} stroke="#1f2937" strokeWidth="2" rx="8"/>
+                            <rect x={pos.x + 10} y={pos.y + 5} width="30" height="15" fill="#374151" stroke="#1f2937" strokeWidth="1" rx="2"/>
+                            <rect x={pos.x + 50} y={pos.y + 5} width="30" height="15" fill="#374151" stroke="#1f2937" strokeWidth="1" rx="2"/>
+                            <rect x={pos.x + 90} y={pos.y + 5} width="30" height="15" fill="#374151" stroke="#1f2937" strokeWidth="1" rx="2"/>
+                            <rect x={pos.x + 10} y={pos.y + 25} width="120" height="10" fill="#6b7280" stroke="#1f2937" strokeWidth="1" rx="2"/>
+                          </g>
+                        )}
+                        
                         {/* Default shape for unrecognized types */}
-                        {!['line', 'sealer', 'palletizer', 'conveyor'].includes(pos.type) && (
+                        {!['line', 'sealer', 'palletizer', 'auger', 'stick', 'tablet', 'cube', 'main_conveyor', 'conveyor', 'quality', 'labeling', 'wrapping', 'shipping'].includes(pos.type) && (
                           <rect 
                             x={pos.x} y={pos.y} width={pos.width} height={pos.height}
-                            fill={status.text === 'text-green-400' ? '#10b981' : 
-                                  status.text === 'text-blue-400' ? '#3b82f6' : 
-                                  status.text === 'text-yellow-400' ? '#f59e0b' : '#ef4444'}
-                            stroke="#1f2937"
-                            strokeWidth="2"
-                            rx="4"
+                            fill={statusColor} stroke="#1f2937" strokeWidth="2" rx="6"
                           />
                         )}
                         
                         {/* Machine label */}
                         <text 
-                          x={pos.x + pos.width/2} y={pos.y + pos.height + 15}
+                          x={pos.x + pos.width/2} y={pos.y + pos.height + 18}
                           textAnchor="middle"
-                          className="fill-slate-700 text-xs font-mono font-semibold"
+                          className="fill-slate-700 text-xs font-mono font-bold"
                         >
-                          {machine.name || pos.defaultName}
+                          {machine.name}
                         </text>
                         
                         {/* Status indicator */}
                         <circle 
-                          cx={pos.x + pos.width - 5} cy={pos.y + 5}
-                          r="4"
-                          fill={status.text === 'text-green-400' ? '#10b981' : 
-                                status.text === 'text-blue-400' ? '#3b82f6' : 
-                                status.text === 'text-yellow-400' ? '#f59e0b' : '#ef4444'}
-                          stroke="#1f2937"
-                          strokeWidth="1"
+                          cx={pos.x + pos.width - 8} cy={pos.y + 8}
+                          r="6" fill={statusColor} stroke="#1f2937" strokeWidth="2"
                         />
+                        
+                        {/* Status text */}
+                        <text 
+                          x={pos.x + pos.width - 8} y={pos.y - 5}
+                          textAnchor="middle"
+                          className="fill-slate-700 text-xs font-mono font-bold"
+                        >
+                          {STATUS_COLORS[machine?.status]?.label || 'OFF'}
+                        </text>
                       </g>
                     );
                   })}
+                </g>
+                
+                {/* Process Flow Arrows */}
+                <g>
+                  {/* Blending to Maturation */}
+                  <defs>
+                    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                      <polygon points="0 0, 10 3.5, 0 7" fill="#374151"/>
+                    </marker>
+                  </defs>
+                  
+                  <path d="M 430 140 L 460 140" stroke="#374151" strokeWidth="4" fill="none" markerEnd="url(#arrowhead)"/>
+                  <text x="445" y="135" textAnchor="middle" className="fill-slate-700 text-xs font-mono">BLEND→MATURE</text>
+                  
+                  {/* Maturation to Packaging */}
+                  <path d="M 660 140 L 690 140" stroke="#374151" strokeWidth="4" fill="none" markerEnd="url(#arrowhead)"/>
+                  <text x="675" y="135" textAnchor="middle" className="fill-slate-700 text-xs font-mono">MATURE→PACK</text>
                 </g>
                 
                 {/* Flow arrows */}
