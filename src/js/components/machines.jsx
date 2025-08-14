@@ -1164,38 +1164,72 @@ export default function MachinesPage() {
           <div className="bg-slate-800 rounded-lg border border-slate-600 p-6">
             <div className="bg-slate-700 rounded-lg p-4 overflow-x-auto">
               <svg 
-                width="1400" 
-                height="500" 
-                viewBox="0 0 1400 500"
-                className="w-full h-auto border border-slate-500 rounded bg-slate-100"
+                width="1600" 
+                height="800" 
+                viewBox="0 0 1600 800"
+                className="w-full h-auto border border-slate-500 rounded bg-gradient-to-b from-slate-200 to-slate-300"
               >
-                {/* Grid background */}
+                {/* 3D Grid and Floor */}
                 <defs>
-                  <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
-                    <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#e2e8f0" strokeWidth="0.5"/>
+                  {/* 3D Floor Pattern */}
+                  <pattern id="floor-grid" width="40" height="23" patternUnits="userSpaceOnUse">
+                    <path d="M 0 0 L 40 0 L 20 23 L -20 23 Z" fill="none" stroke="#cbd5e1" strokeWidth="0.5"/>
+                    <path d="M 20 0 L 20 23" stroke="#cbd5e1" strokeWidth="0.3" opacity="0.5"/>
                   </pattern>
+                  
+                  {/* Gradients for 3D effect */}
+                  <linearGradient id="machine-top" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stopColor="#ffffff" stopOpacity="0.3"/>
+                    <stop offset="100%" stopColor="#000000" stopOpacity="0.1"/>
+                  </linearGradient>
+                  
+                  <linearGradient id="machine-side" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="#000000" stopOpacity="0.2"/>
+                    <stop offset="100%" stopColor="#ffffff" stopOpacity="0.1"/>
+                  </linearGradient>
+                  
+                  {/* Shadow filter */}
+                  <filter id="drop-shadow" x="-20%" y="-20%" width="140%" height="140%">
+                    <feDropShadow dx="4" dy="8" stdDeviation="3" floodOpacity="0.3"/>
+                  </filter>
                 </defs>
-                <rect width="100%" height="100%" fill="url(#grid)" />
                 
-                {/* BLENDING AREA - Left side */}
+                {/* 3D Isometric Floor */}
+                <rect width="100%" height="100%" fill="url(#floor-grid)" />
+                
+                {/* Factory walls and ceiling beams - 3D perspective */}
+                <g className="factory-structure" opacity="0.6">
+                  {/* Back walls */}
+                  <polygon points="100,100 1500,100 1400,50 200,50" fill="#94a3b8" stroke="#64748b" strokeWidth="2"/>
+                  <polygon points="100,100 100,600 200,550 200,50" fill="#64748b" stroke="#475569" strokeWidth="2"/>
+                  <polygon points="1500,100 1500,600 1400,550 1400,50" fill="#64748b" stroke="#475569" strokeWidth="2"/>
+                  
+                  {/* Ceiling beams */}
+                  <polygon points="200,50 1400,50 1400,30 200,30" fill="#9ca3af" stroke="#6b7280" strokeWidth="1"/>
+                  <polygon points="350,50 350,30 370,30 370,50" fill="#6b7280"/>
+                  <polygon points="650,50 650,30 670,30 670,50" fill="#6b7280"/>
+                  <polygon points="950,50 950,30 970,30 970,50" fill="#6b7280"/>
+                  <polygon points="1250,50 1250,30 1270,30 1270,50" fill="#6b7280"/>
+                </g>
+                
+                {/* 3D BLENDING AREA - Isometric Left Side */}
                 <g>
-                  <rect 
-                    x="50" 
-                    y="50" 
-                    width="380" 
-                    height="180"
-                    fill="none"
-                    stroke="#6366f1"
+                  {/* 3D Floor area for blending */}
+                  <polygon 
+                    points="120,200 450,120 450,350 120,430" 
+                    fill="rgba(99, 102, 241, 0.1)" 
+                    stroke="#6366f1" 
                     strokeWidth="3"
-                    strokeDasharray="8,4"
-                    rx="12"
+                    strokeDasharray="10,5"
                   />
+                  {/* Department label with 3D positioning */}
                   <text 
-                    x="60" 
-                    y="35"
-                    className="fill-indigo-600 text-lg font-mono font-bold"
+                    x="125" 
+                    y="110"
+                    className="fill-indigo-700 text-lg font-mono font-bold"
+                    transform="rotate(-15 125 110)"
                   >
-                    BLENDING DEPARTMENT
+                    🏭 BLENDING DEPARTMENT
                   </text>
                   
                   {/* Render ALL blending machines */}
