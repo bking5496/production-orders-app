@@ -1217,6 +1217,15 @@ export default function MachinesPage() {
               </div>
             </div>
             
+            {/* 4D Digital Twin Factory */}
+            <div className="mb-6">
+              <BabylonFactory 
+                machines={filteredMachines} 
+                environments={environments} 
+                onMachineClick={handleMachineClick}
+              />
+            </div>
+
             {/* Enhanced Compact Machine List */}
             <div className="mb-6 bg-white rounded-lg shadow-sm border border-gray-200 p-4">
               <div className="flex items-center justify-between mb-4">
@@ -1286,13 +1295,6 @@ export default function MachinesPage() {
                 })}
               </div>
             </div>
-
-            {/* 4D Digital Twin Factory */}
-            <BabylonFactory 
-              machines={filteredMachines} 
-              environments={environments} 
-              onMachineClick={handleMachineClick}
-            />
             
             {/* Technology Stack Info */}
             <div className="mt-6 grid grid-cols-3 gap-4">
