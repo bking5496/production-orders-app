@@ -1,11 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const BabylonFactory = ({ machines = [], environments = [] }) => {
-  const canvasRef = useRef(null);
-  const sceneRef = useRef(null);
-  const engineRef = useRef(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [error, setError] = useState(null);
+  const [containerId] = useState(() => `babylon-container-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`);
+  
+  let scene = null;
+  let engine = null;
 
   // Load Babylon.js dynamically
   const loadBabylonJS = async () => {
@@ -47,33 +48,37 @@ const BabylonFactory = ({ machines = [], environments = [] }) => {
   // Initialize Babylon.js scene
   const initializeBabylonScene = async () => {
     try {
-      if (!canvasRef.current) {
-        throw new Error('Canvas element not found');
+      const container = document.getElementById(containerId);
+      if (!container) {
+        throw new Error(`Container element with ID ${containerId} not found`);
       }
 
-      // Clear any existing canvas content
-      canvasRef.current.innerHTML = '';
+      console.log('🏭 Container found, creating canvas...');
 
-      // Create canvas element
+      // Clear any existing content
+      container.innerHTML = '';
+
+      // Create canvas element directly in the container
       const babylonCanvas = document.createElement('canvas');
-      babylonCanvas.id = 'babylonCanvas';
+      babylonCanvas.id = `babylonCanvas-${containerId}`;
       babylonCanvas.style.width = '100%';
       babylonCanvas.style.height = '100%';
       babylonCanvas.style.display = 'block';
       babylonCanvas.style.outline = 'none';
-      canvasRef.current.appendChild(babylonCanvas);
+      babylonCanvas.style.touchAction = 'none';
+      container.appendChild(babylonCanvas);
+
+      console.log('✅ Canvas created and appended to container');
 
       // Create Babylon engine
-      const engine = new window.BABYLON.Engine(babylonCanvas, true, {
+      engine = new window.BABYLON.Engine(babylonCanvas, true, {
         preserveDrawingBuffer: true,
         stencil: true,
         antialias: true
       });
-      engineRef.current = engine;
 
       // Create scene
-      const scene = new window.BABYLON.Scene(engine);
-      sceneRef.current = scene;
+      scene = new window.BABYLON.Scene(engine);
 
       // Setup camera
       const camera = new window.BABYLON.ArcRotateCamera(
@@ -172,7 +177,7 @@ const BabylonFactory = ({ machines = [], environments = [] }) => {
 
   // Create 3D machines in the scene
   const createMachines = (machineList) => {
-    if (!sceneRef.current || !Array.isArray(machineList) || machineList.length === 0) {
+    if (!scene || !Array.isArray(machineList) || machineList.length === 0) {
       return;
     }
 
@@ -186,7 +191,7 @@ const BabylonFactory = ({ machines = [], environments = [] }) => {
     };
 
     // Clear existing machines
-    const existingMachines = sceneRef.current.meshes.filter(mesh => 
+    const existingMachines = scene.meshes.filter(mesh => 
       mesh.name.startsWith('machine_')
     );
     existingMachines.forEach(mesh => mesh.dispose());
@@ -196,7 +201,7 @@ const BabylonFactory = ({ machines = [], environments = [] }) => {
         // Create machine body
         const machineBox = window.BABYLON.MeshBuilder.CreateBox(`machine_${machine.id}`, {
           width: 4, height: 3, depth: 3
-        }, sceneRef.current);
+        }, scene);
 
         // Position machines in departments
         let x, z;
@@ -217,7 +222,7 @@ const BabylonFactory = ({ machines = [], environments = [] }) => {
         machineBox.position = new window.BABYLON.Vector3(x, 1.5, z);
 
         // Create material with status color
-        const material = new window.BABYLON.StandardMaterial(`machineMat_${machine.id}`, sceneRef.current);
+        const material = new window.BABYLON.StandardMaterial(`machineMat_${machine.id}`, scene);
         const statusColor = machineColors[machine.status] || machineColors.offline;
         material.diffuseColor = statusColor;
         material.emissiveColor = statusColor.scale(0.2);
@@ -241,10 +246,10 @@ const BabylonFactory = ({ machines = [], environments = [] }) => {
         // Add machine name label
         const nameLabel = window.BABYLON.MeshBuilder.CreatePlane(`label_${machine.id}`, {
           width: 6, height: 1
-        }, sceneRef.current);
+        }, scene);
         nameLabel.position = new window.BABYLON.Vector3(x, 4, z);
         
-        const labelMaterial = new window.BABYLON.StandardMaterial(`labelMat_${machine.id}`, sceneRef.current);
+        const labelMaterial = new window.BABYLON.StandardMaterial(`labelMat_${machine.id}`, scene);
         labelMaterial.diffuseColor = new window.BABYLON.Color3(1, 1, 1);
         labelMaterial.emissiveColor = new window.BABYLON.Color3(0.3, 0.3, 0.3);
         nameLabel.material = labelMaterial;
@@ -260,24 +265,36 @@ const BabylonFactory = ({ machines = [], environments = [] }) => {
     const initialize = async () => {
       try {
         setError(null);
+        console.log('🏭 Starting Babylon factory initialization...');
+        
+        // First load Babylon.js libraries
         await loadBabylonJS();
+        console.log('✅ Babylon.js libraries loaded');
+        
+        // Wait a bit for DOM to be ready, then initialize
+        await new Promise(resolve => setTimeout(resolve, 300));
+        
+        // Initialize the scene
         await initializeBabylonScene();
+        console.log('✅ Babylon scene initialized');
+        
       } catch (error) {
         console.error('❌ Babylon factory initialization failed:', error);
         setError(error.message);
       }
     };
 
+    // Start initialization
     initialize();
 
     // Cleanup
     return () => {
-      if (engineRef.current) {
-        engineRef.current.dispose();
+      if (engine) {
+        engine.dispose();
       }
       window.removeEventListener('resize', () => {});
     };
-  }, []);
+  }, [containerId]);
 
   // Update machines when prop changes
   useEffect(() => {
@@ -316,10 +333,10 @@ const BabylonFactory = ({ machines = [], environments = [] }) => {
   }
 
   return (
-    <div className="w-full h-96 bg-gray-900 rounded-lg overflow-hidden">
+    <div className="w-full h-96 bg-gray-900 rounded-lg overflow-hidden relative">
       <div 
-        ref={canvasRef} 
-        className="w-full h-full"
+        id={containerId}
+        className="w-full h-full absolute inset-0"
         style={{ minHeight: '400px' }}
       />
     </div>
