@@ -1309,18 +1309,63 @@ export default function MachinesPage() {
                   </text>
                 </g>
                 
-                {/* Material flow arrows - functional, not decorative */}
-                <g className="process-flow" stroke="#64748b" strokeWidth="3" fill="none" markerEnd="url(#arrowhead)">
+                {/* Specific Production Flow - Based on Real Manufacturing Process */}
+                <g className="production-flow">
+                  {/* Flow definitions with specific arrows */}
                   <defs>
-                    <marker id="arrowhead" markerWidth="10" markerHeight="7" 
-                            refX="9" refY="3.5" orient="auto">
-                      <polygon points="0 0, 10 3.5, 0 7" fill="#64748b"/>
+                    <marker id="flow-arrow" markerWidth="12" markerHeight="8" 
+                            refX="10" refY="4" orient="auto">
+                      <polygon points="0 0, 12 4, 0 8" fill="#059669" stroke="#047857" strokeWidth="1"/>
+                    </marker>
+                    <marker id="end-flow-arrow" markerWidth="12" markerHeight="8" 
+                            refX="10" refY="4" orient="auto">
+                      <polygon points="0 0, 12 4, 0 8" fill="#dc2626" stroke="#b91c1c" strokeWidth="1"/>
                     </marker>
                   </defs>
-                  <path d="M 550 350 L 600 350" opacity="0.7"/>
-                  <path d="M 1000 350 L 1050 350" opacity="0.7"/>
-                  <text x="575" y="340" className="fill-gray-600 text-sm font-mono">FLOW</text>
-                  <text x="1025" y="340" className="fill-gray-600 text-sm font-mono">FLOW</text>
+                  
+                  {/* Blender leal → Maturation */}
+                  <path d="M 230 280 Q 400 320 630 280" 
+                        stroke="#059669" strokeWidth="4" fill="none" 
+                        markerEnd="url(#flow-arrow)" opacity="0.8"/>
+                  <text x="400" y="310" textAnchor="middle" 
+                        className="fill-emerald-700 text-sm font-bold bg-white px-2 py-1">
+                    LEAL → MATURATION
+                  </text>
+                  
+                  {/* Blender Ploughshare → Maturation */}
+                  <path d="M 230 440 Q 400 400 630 360" 
+                        stroke="#059669" strokeWidth="4" fill="none" 
+                        markerEnd="url(#flow-arrow)" opacity="0.8"/>
+                  <text x="400" y="390" textAnchor="middle" 
+                        className="fill-emerald-700 text-sm font-bold bg-white px-2 py-1">
+                    PLOUGHSHARE → MATURATION
+                  </text>
+                  
+                  {/* Maturation → Corraza Tablet */}
+                  <path d="M 1000 320 Q 1200 280 1400 500" 
+                        stroke="#dc2626" strokeWidth="4" fill="none" 
+                        markerEnd="url(#end-flow-arrow)" opacity="0.8"/>
+                  <text x="1200" y="370" textAnchor="middle" 
+                        className="fill-red-700 text-sm font-bold bg-white px-2 py-1">
+                    → CORRAZA TABLET
+                  </text>
+                  
+                  {/* Maturation → Corraza Cube */}
+                  <path d="M 1000 380 Q 1200 420 1400 520" 
+                        stroke="#dc2626" strokeWidth="4" fill="none" 
+                        markerEnd="url(#end-flow-arrow)" opacity="0.8"/>
+                  <text x="1200" y="450" textAnchor="middle" 
+                        className="fill-red-700 text-sm font-bold bg-white px-2 py-1">
+                    → CORRAZA CUBE
+                  </text>
+                  
+                  {/* Process Labels */}
+                  <rect x="320" y="180" width="160" height="30" 
+                        fill="#fef3c7" stroke="#d97706" strokeWidth="2" rx="4"/>
+                  <text x="400" y="200" textAnchor="middle" 
+                        className="fill-amber-800 text-sm font-bold">
+                    SPECIFIC BLENDS ONLY
+                  </text>
                 </g>
                 
                 {/* PROFESSIONAL ORGANIZED FACTORY STRUCTURE */}
@@ -1728,12 +1773,32 @@ export default function MachinesPage() {
                                        status.text === 'text-blue-400' ? '#3b82f6' : 
                                        status.text === 'text-yellow-400' ? '#f59e0b' : '#ef4444';
                     
+                    // Highlight machines in the specific production flow
+                    const isFlowMachine = machine.name === 'Blender leal' || 
+                                         machine.name === 'Blender Ploughshare' ||
+                                         machine.name === 'Corraza Tablet' || 
+                                         machine.name === 'CORAZZA CUBE';
+                    
                     return (
                       <g key={machine.id} onClick={() => setSelectedMachine(machine)} style={{ cursor: 'pointer' }}>
-                        {/* Simple, clear machine representation */}
+                        {/* Enhanced representation for flow machines */}
                         <rect x={x} y={y} width="120" height="80" 
-                              fill={statusColor} stroke={dept_color} strokeWidth="3" rx="8"
-                              filter="url(#subtle-shadow)" opacity="0.9"/>
+                              fill={statusColor} 
+                              stroke={isFlowMachine ? '#dc2626' : dept_color} 
+                              strokeWidth={isFlowMachine ? "4" : "3"} 
+                              rx="8" filter="url(#subtle-shadow)" opacity="0.9"/>
+                        
+                        {/* Special indicator for flow machines */}
+                        {isFlowMachine && (
+                          <rect x={x + 5} y={y + 5} width="15" height="15" 
+                                fill="#dc2626" stroke="#ffffff" strokeWidth="1" rx="2"/>
+                        )}
+                        {isFlowMachine && (
+                          <text x={x + 12.5} y={y + 16} textAnchor="middle" 
+                                className="fill-white text-xs font-bold">
+                            ★
+                          </text>
+                        )}
                         
                         {/* Large, readable machine name */}
                         <text x={x + 60} y={y + 35} textAnchor="middle" 
