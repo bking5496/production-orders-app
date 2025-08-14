@@ -16430,3 +16430,5 @@
 2025-08-14T15:47:36: ✅ New PostgreSQL client connected
 2025-08-14T15:47:36: 🔗 Client acquired from pool
 2025-08-14T15:47:36: 🔓 Client released back to pool
+2025-08-14T15:52:36: 🔌 WebSocket disconnected: admin
+2025-08-14T15:52:36: 🔌 WebSocket disconnected: admin
