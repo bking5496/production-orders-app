@@ -1219,3 +1219,131 @@
 2025-08-14T08:12:19: 🔒 Auth failure: admin from ::1 - Invalid credentials - curl/8.5.0
 2025-08-14T08:12:31: 🔒 Auth failure: Brandon King from ::ffff:127.0.0.1 - Invalid credentials - curl/8.5.0
 2025-08-14T08:12:43: 🔒 Auth failure: admin from ::1 - Invalid input - curl/8.5.0
+2025-08-14T08:50:18: Error occurred: {
+  error: 'Cannot update machine while in use',
+  stack: 'ValidationError: Cannot update machine while in use\n' +
+    '    at MachinesService.updateMachine (/home/production-app/production-orders-app/src/services/machines.service.js:128:13)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:146:28',
+  url: '/api/machines/32',
+  method: 'PUT',
+  user: 'admin',
+  timestamp: '2025-08-14T06:50:18.383Z'
+}
+2025-08-14T08:50:29: Error occurred: {
+  error: 'Only in-progress orders can be completed',
+  stack: 'ValidationError: Only in-progress orders can be completed\n' +
+    '    at OrdersService.completeOrder (/home/production-app/production-orders-app/src/services/orders.service.js:218:13)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/orders.routes.js:388:28',
+  url: '/api/orders/80/complete',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-14T06:50:29.042Z'
+}
+2025-08-14T08:50:30: Error occurred: {
+  error: 'Only in-progress orders can be completed',
+  stack: 'ValidationError: Only in-progress orders can be completed\n' +
+    '    at OrdersService.completeOrder (/home/production-app/production-orders-app/src/services/orders.service.js:218:13)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/orders.routes.js:388:28',
+  url: '/api/orders/80/complete',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-14T06:50:30.386Z'
+}
+2025-08-14T08:50:39: Error occurred: {
+  error: 'column "waste_quantity" of relation "production_orders" does not exist',
+  stack: 'error: column "waste_quantity" of relation "production_orders" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.transaction (/home/production-app/production-orders-app/src/config/database.js:56:24)\n' +
+    '    at async DatabaseUtils.transaction (/home/production-app/production-orders-app/src/utils/database.js:153:12)\n' +
+    '    at async OrdersService.completeOrder (/home/production-app/production-orders-app/src/services/orders.service.js:229:21)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/orders.routes.js:388:28',
+  url: '/api/orders/80/complete',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-14T06:50:39.205Z'
+}
+2025-08-14T08:50:40: Error occurred: {
+  error: 'column "waste_quantity" of relation "production_orders" does not exist',
+  stack: 'error: column "waste_quantity" of relation "production_orders" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.transaction (/home/production-app/production-orders-app/src/config/database.js:56:24)\n' +
+    '    at async DatabaseUtils.transaction (/home/production-app/production-orders-app/src/utils/database.js:153:12)\n' +
+    '    at async OrdersService.completeOrder (/home/production-app/production-orders-app/src/services/orders.service.js:229:21)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/orders.routes.js:388:28',
+  url: '/api/orders/80/complete',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-14T06:50:40.252Z'
+}
+2025-08-14T08:50:42: Error occurred: {
+  error: 'column "waste_quantity" of relation "production_orders" does not exist',
+  stack: 'error: column "waste_quantity" of relation "production_orders" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.transaction (/home/production-app/production-orders-app/src/config/database.js:56:24)\n' +
+    '    at async DatabaseUtils.transaction (/home/production-app/production-orders-app/src/utils/database.js:153:12)\n' +
+    '    at async OrdersService.completeOrder (/home/production-app/production-orders-app/src/services/orders.service.js:229:21)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/orders.routes.js:388:28',
+  url: '/api/orders/80/complete',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-14T06:50:42.291Z'
+}
+2025-08-14T08:50:44: Error occurred: {
+  error: 'column "waste_quantity" of relation "production_orders" does not exist',
+  stack: 'error: column "waste_quantity" of relation "production_orders" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.transaction (/home/production-app/production-orders-app/src/config/database.js:56:24)\n' +
+    '    at async DatabaseUtils.transaction (/home/production-app/production-orders-app/src/utils/database.js:153:12)\n' +
+    '    at async OrdersService.completeOrder (/home/production-app/production-orders-app/src/services/orders.service.js:229:21)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/orders.routes.js:388:28',
+  url: '/api/orders/80/complete',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-14T06:50:44.186Z'
+}
+2025-08-14T08:50:45: Error occurred: {
+  error: 'column "waste_quantity" of relation "production_orders" does not exist',
+  stack: 'error: column "waste_quantity" of relation "production_orders" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.transaction (/home/production-app/production-orders-app/src/config/database.js:56:24)\n' +
+    '    at async DatabaseUtils.transaction (/home/production-app/production-orders-app/src/utils/database.js:153:12)\n' +
+    '    at async OrdersService.completeOrder (/home/production-app/production-orders-app/src/services/orders.service.js:229:21)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/orders.routes.js:388:28',
+  url: '/api/orders/80/complete',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-14T06:50:45.287Z'
+}
+2025-08-14T08:50:47: Error occurred: {
+  error: 'column "waste_quantity" of relation "production_orders" does not exist',
+  stack: 'error: column "waste_quantity" of relation "production_orders" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.transaction (/home/production-app/production-orders-app/src/config/database.js:56:24)\n' +
+    '    at async DatabaseUtils.transaction (/home/production-app/production-orders-app/src/utils/database.js:153:12)\n' +
+    '    at async OrdersService.completeOrder (/home/production-app/production-orders-app/src/services/orders.service.js:229:21)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/orders.routes.js:388:28',
+  url: '/api/orders/80/complete',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-14T06:50:47.345Z'
+}
+2025-08-14T08:51:12: Error occurred: {
+  error: 'Only in-progress orders can be completed',
+  stack: 'ValidationError: Only in-progress orders can be completed\n' +
+    '    at OrdersService.completeOrder (/home/production-app/production-orders-app/src/services/orders.service.js:218:13)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/orders.routes.js:388:28',
+  url: '/api/orders/82/complete',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-14T06:51:12.590Z'
+}
