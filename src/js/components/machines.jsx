@@ -1144,411 +1144,334 @@ export default function MachinesPage() {
           </div>
         )}
 
-        {/* Factory Floor Layout Section */}
+        {/* Next-Generation 4D Digital Twin Factory */}
         <div className="mb-8">
-          <div className="bg-gradient-to-r from-gray-700 to-gray-800 rounded-lg p-6 mb-6 shadow-lg">
-            <div className="flex items-center gap-4">
-              <div className="w-16 h-16 bg-white/20 rounded-lg flex items-center justify-center">
-                <Factory className="w-8 h-8 text-white" />
+          <div className="bg-gradient-to-r from-indigo-900 via-purple-900 to-pink-900 rounded-lg p-6 mb-6 shadow-2xl border border-indigo-500/30">
+            <div className="flex items-center gap-6">
+              <div className="w-20 h-20 bg-gradient-to-br from-blue-400 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+                <Cpu className="w-10 h-10 text-white drop-shadow-lg" />
               </div>
-              <div>
-                <h2 className="text-2xl font-bold text-white mb-1">FACTORY FLOOR LAYOUT</h2>
-                <p className="text-gray-100 flex items-center gap-2">
-                  <Target className="w-4 h-4" />
-                  Visual Equipment Positioning • Real-Time Status • Interactive Controls
+              <div className="flex-1">
+                <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400 mb-2">4D DIGITAL TWIN FACTORY</h2>
+                <p className="text-blue-100 flex items-center gap-3 text-lg">
+                  <Database className="w-5 h-5" />
+                  Real-Time IoT Data Stream •
+                  <Layers className="w-5 h-5" />
+                  3D Volumetric Rendering •
+                  <Zap className="w-5 h-5" />
+                  AI-Powered Analytics
                 </p>
+              </div>
+              <div className="flex flex-col items-end gap-2">
+                <div className="flex items-center gap-2 px-4 py-2 bg-green-500/20 rounded-full border border-green-400/50">
+                  <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                  <span className="text-green-400 font-mono text-sm">LIVE</span>
+                </div>
+                <div className="text-xs text-purple-300 font-mono">
+                  WebGL • Babylon.js • IoT
+                </div>
               </div>
             </div>
           </div>
           
-          <div className="bg-slate-800 rounded-lg border border-slate-600 p-6">
-            <div className="bg-slate-700 rounded-lg p-4 overflow-x-auto">
-              <svg 
-                width="1800" 
-                height="1200" 
-                viewBox="0 0 1800 1200"
-                className="w-full h-auto border border-gray-300 rounded-lg"
-                style={{
-                  background: 'linear-gradient(45deg, #f5f5f5 0%, #e5e5e5 100%)',
-                  boxShadow: 'inset 0 0 50px rgba(0,0,0,0.1)'
-                }}
-              >
-                {/* Functional Design Definitions */}
-                <defs>
-                  {/* Concrete Factory Floor */}
-                  <pattern id="concrete-floor" width="100" height="100" patternUnits="userSpaceOnUse">
-                    <rect width="100" height="100" fill="#e8e8e8"/>
-                    <rect x="0" y="0" width="50" height="50" fill="#ddd" opacity="0.3"/>
-                    <rect x="50" y="50" width="50" height="50" fill="#ddd" opacity="0.3"/>
-                    <circle cx="25" cy="25" r="1.5" fill="#bbb"/>
-                    <circle cx="75" cy="75" r="1.5" fill="#bbb"/>
-                    <path d="M 0 50 L 50 50 M 50 0 L 50 100" stroke="#ccc" strokeWidth="0.5" opacity="0.5"/>
-                  </pattern>
+          {/* 4D Digital Twin Viewport */}
+          <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl border border-purple-500/30 p-8 shadow-2xl">
+            <div className="mb-6 flex justify-between items-center">
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2 px-4 py-2 bg-blue-500/20 rounded-full border border-blue-400/50">
+                  <MonitorSpeaker className="w-4 h-4 text-blue-400" />
+                  <span className="text-blue-400 font-mono text-sm">WebGL Viewport</span>
+                </div>
+                <div className="flex items-center gap-2 px-4 py-2 bg-purple-500/20 rounded-full border border-purple-400/50">
+                  <Workflow className="w-4 h-4 text-purple-400" />
+                  <span className="text-purple-400 font-mono text-sm">Material Flow</span>
+                </div>
+                <div className="flex items-center gap-2 px-4 py-2 bg-green-500/20 rounded-full border border-green-400/50">
+                  <Gauge className="w-4 h-4 text-green-400" />
+                  <span className="text-green-400 font-mono text-sm">Real-Time Data</span>
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-2">
+                <button className="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg font-mono text-sm hover:from-blue-600 hover:to-purple-700 transition-all shadow-lg">
+                  <Power className="w-4 h-4 inline mr-2" />
+                  Initialize
+                </button>
+                <button className="px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-600 text-white rounded-lg font-mono text-sm hover:from-purple-600 hover:to-pink-700 transition-all shadow-lg">
+                  <ShieldCheck className="w-4 h-4 inline mr-2" />
+                  Full Screen
+                </button>
+              </div>
+            </div>
+            
+            {/* 4D Babylon.js Canvas Container */}
+            <div 
+              id="babylon-factory-canvas" 
+              className="w-full h-[800px] bg-gradient-to-br from-slate-900 via-blue-900/20 to-purple-900/20 rounded-xl border border-blue-500/30 relative overflow-hidden shadow-inner"
+              style={{
+                background: `
+                  radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                  radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+                  radial-gradient(circle at 40% 40%, rgba(120, 119, 255, 0.3) 0%, transparent 50%),
+                  linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 41, 59, 0.8) 100%)
+                `,
+                boxShadow: `
+                  inset 0 0 100px rgba(59, 130, 246, 0.1),
+                  inset 0 0 200px rgba(147, 51, 234, 0.05),
+                  0 0 50px rgba(59, 130, 246, 0.1)
+                `
+              }}
+            >
+              {/* Loading Screen Overlay */}
+              <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-slate-900/50 to-purple-900/50 backdrop-blur-sm" id="babylon-loading">
+                <div className="text-center">
+                  <div className="w-16 h-16 border-4 border-blue-400/30 border-t-blue-400 rounded-full animate-spin mx-auto mb-4"></div>
+                  <div className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400 mb-2">
+                    Initializing Digital Twin
+                  </div>
+                  <div className="text-sm text-slate-400 font-mono">
+                    Loading 3D Models • Connecting IoT Data • Rendering Factory Floor
+                  </div>
+                  <div className="mt-4 flex items-center justify-center gap-2">
+                    <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
+                    <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse" style={{animationDelay: '0.2s'}}></div>
+                    <div className="w-2 h-2 bg-pink-400 rounded-full animate-pulse" style={{animationDelay: '0.4s'}}></div>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Performance Metrics Overlay */}
+              <div className="absolute top-4 left-4 flex flex-col gap-2" id="performance-metrics">
+                <div className="flex items-center gap-2 px-3 py-1 bg-slate-800/80 backdrop-blur rounded-lg border border-slate-600/50">
+                  <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                  <span className="text-green-400 font-mono text-xs">FPS: 60</span>
+                </div>
+                <div className="flex items-center gap-2 px-3 py-1 bg-slate-800/80 backdrop-blur rounded-lg border border-slate-600/50">
+                  <Database className="w-3 h-3 text-blue-400" />
+                  <span className="text-blue-400 font-mono text-xs">IoT: Connected</span>
+                </div>
+                <div className="flex items-center gap-2 px-3 py-1 bg-slate-800/80 backdrop-blur rounded-lg border border-slate-600/50">
+                  <Layers className="w-3 h-3 text-purple-400" />
+                  <span className="text-purple-400 font-mono text-xs">Meshes: 127</span>
+                </div>
+              </div>
+              
+              {/* Control Panel Overlay */}
+              <div className="absolute top-4 right-4 flex flex-col gap-2" id="control-panel">
+                <button className="px-3 py-2 bg-gradient-to-r from-blue-500/80 to-blue-600/80 backdrop-blur text-white rounded-lg font-mono text-xs hover:from-blue-600/80 hover:to-blue-700/80 transition-all">
+                  <Thermometer className="w-4 h-4 inline mr-1" />
+                  Heat Map
+                </button>
+                <button className="px-3 py-2 bg-gradient-to-r from-purple-500/80 to-purple-600/80 backdrop-blur text-white rounded-lg font-mono text-xs hover:from-purple-600/80 hover:to-purple-700/80 transition-all">
+                  <Workflow className="w-4 h-4 inline mr-1" />
+                  Flow Lines
+                </button>
+                <button className="px-3 py-2 bg-gradient-to-r from-green-500/80 to-green-600/80 backdrop-blur text-white rounded-lg font-mono text-xs hover:from-green-600/80 hover:to-green-700/80 transition-all">
+                  <Activity className="w-4 h-4 inline mr-1" />
+                  Analytics
+                </button>
+              </div>
+              
+              {/* Factory Stats Dashboard */}
+              <div className="absolute bottom-4 left-4 right-4 bg-gradient-to-r from-slate-800/90 to-slate-900/90 backdrop-blur rounded-xl border border-slate-600/50 p-4">
+                <div className="grid grid-cols-4 gap-6">
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-blue-400 font-mono">{filteredMachines.filter(m => m.status === 'available').length}</div>
+                    <div className="text-xs text-slate-400 uppercase tracking-wide">Running Machines</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-purple-400 font-mono">2.4k</div>
+                    <div className="text-xs text-slate-400 uppercase tracking-wide">Parts/Hour</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-green-400 font-mono">98.2%</div>
+                    <div className="text-xs text-slate-400 uppercase tracking-wide">Efficiency</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-orange-400 font-mono">24.7°C</div>
+                    <div className="text-xs text-slate-400 uppercase tracking-wide">Avg Temp</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            {/* Technology Stack Info */}
+            <div className="mt-6 grid grid-cols-3 gap-4">
+              <div className="bg-slate-800/50 rounded-lg p-4 border border-slate-600/30">
+                <h4 className="font-mono font-bold text-blue-400 mb-2">WebGL Rendering</h4>
+                <p className="text-xs text-slate-400">Hardware-accelerated 3D graphics using Babylon.js engine with PBR materials and real-time shadows.</p>
+              </div>
+              <div className="bg-slate-800/50 rounded-lg p-4 border border-slate-600/30">
+                <h4 className="font-mono font-bold text-purple-400 mb-2">IoT Data Stream</h4>
+                <p className="text-xs text-slate-400">Live sensor data integration with WebSocket connections for real-time machine status visualization.</p>
+              </div>
+              <div className="bg-slate-800/50 rounded-lg p-4 border border-slate-600/30">
+                <h4 className="font-mono font-bold text-green-400 mb-2">Digital Twin</h4>
+                <p className="text-xs text-slate-400">Physics-based simulation with volumetric rendering and procedural animations.</p>
+              </div>
+            </div>
+          </div>
+          
+          {/* Advanced Babylon.js Integration Script */}
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+                // Initialize Babylon.js when DOM is ready
+                if (typeof BABYLON !== 'undefined') {
+                  console.log('🚀 Babylon.js already loaded - initializing 4D factory');
+                  initialize4DFactory();
+                } else {
+                  console.log('📦 Loading Babylon.js for 4D factory visualization');
                   
-                  {/* Conveyor Belt Pattern */}
-                  <pattern id="conveyor" width="30" height="15" patternUnits="userSpaceOnUse">
-                    <rect width="30" height="15" fill="#4a5568"/>
-                    <rect x="0" y="0" width="3" height="15" fill="#2d3748"/>
-                    <rect x="15" y="0" width="3" height="15" fill="#2d3748"/>
-                    <circle cx="7" cy="7" r="2" fill="#6b7280"/>
-                    <circle cx="22" cy="7" r="2" fill="#6b7280"/>
-                  </pattern>
-                  
-                  {/* Safety Stripes */}
-                  <pattern id="safety-stripes" width="40" height="20" patternUnits="userSpaceOnUse">
-                    <rect width="40" height="20" fill="none"/>
-                    <rect x="0" y="0" width="20" height="20" fill="#ffd700"/>
-                    <rect x="20" y="0" width="20" height="20" fill="none"/>
-                  </pattern>
-                  
-                  {/* Status-based machine colors - clear and functional */}
-                  <linearGradient id="status-running">
-                    <stop offset="0%" stopColor="#10b981"/>
-                    <stop offset="100%" stopColor="#059669"/>
-                  </linearGradient>
-                  
-                  <linearGradient id="status-idle">
-                    <stop offset="0%" stopColor="#6b7280"/>
-                    <stop offset="100%" stopColor="#4b5563"/>
-                  </linearGradient>
-                  
-                  <linearGradient id="status-warning">
-                    <stop offset="0%" stopColor="#f59e0b"/>
-                    <stop offset="100%" stopColor="#d97706"/>
-                  </linearGradient>
-                  
-                  <linearGradient id="status-error">
-                    <stop offset="0%" stopColor="#ef4444"/>
-                    <stop offset="100%" stopColor="#dc2626"/>
-                  </linearGradient>
-                  
-                  {/* Machine Shadow Filter */}
-                  <filter id="machine-shadow" x="-20%" y="-20%" width="140%" height="140%">
-                    <feGaussianBlur in="SourceAlpha" stdDeviation="4"/>
-                    <feOffset dx="0" dy="6" result="offset"/>
-                    <feColorMatrix values="0 0 0 0.25 0"/>
-                    <feMerge>
-                      <feMergeNode/>
-                      <feMergeNode in="SourceGraphic"/>
-                    </feMerge>
-                  </filter>
-                  
-                  {/* Enhanced Gradients for realistic 3D lighting */}
-                  <linearGradient id="machine-top" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#60a5fa" stopOpacity="0.6"/>
-                    <stop offset="30%" stopColor="#3b82f6" stopOpacity="0.4"/>
-                    <stop offset="70%" stopColor="#1e40af" stopOpacity="0.2"/>
-                    <stop offset="100%" stopColor="#1e293b" stopOpacity="0.1"/>
-                  </linearGradient>
-                  
-                  <linearGradient id="machine-side" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#1e293b" stopOpacity="0.8"/>
-                    <stop offset="50%" stopColor="#334155" stopOpacity="0.5"/>
-                    <stop offset="100%" stopColor="#475569" stopOpacity="0.2"/>
-                  </linearGradient>
-                  
-                  <linearGradient id="machine-front" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" stopColor="#64748b" stopOpacity="0.6"/>
-                    <stop offset="50%" stopColor="#475569" stopOpacity="0.4"/>
-                    <stop offset="100%" stopColor="#334155" stopOpacity="0.2"/>
-                  </linearGradient>
-                  
-                  {/* Metal texture gradients */}
-                  <linearGradient id="metal-surface" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#f1f5f9" stopOpacity="0.8"/>
-                    <stop offset="30%" stopColor="#cbd5e1" stopOpacity="0.6"/>
-                    <stop offset="70%" stopColor="#94a3b8" stopOpacity="0.4"/>
-                    <stop offset="100%" stopColor="#64748b" stopOpacity="0.3"/>
-                  </linearGradient>
-                  
-                  {/* Enhanced Shadow filters */}
-                  <filter id="drop-shadow" x="-30%" y="-30%" width="160%" height="160%">
-                    <feGaussianBlur in="SourceAlpha" stdDeviation="4"/>
-                    <feOffset dx="6" dy="12" result="offset"/>
-                    <feFlood floodColor="#1e293b" floodOpacity="0.25"/>
-                    <feComposite in2="offset" operator="in"/>
-                    <feMerge>
-                      <feMergeNode/>
-                      <feMergeNode in="SourceGraphic"/>
-                    </feMerge>
-                  </filter>
-                  
-                  <filter id="machine-shadow" x="-50%" y="-50%" width="200%" height="200%">
-                    <feGaussianBlur in="SourceAlpha" stdDeviation="6"/>
-                    <feOffset dx="8" dy="16" result="offset"/>
-                    <feFlood floodColor="#0f172a" floodOpacity="0.4"/>
-                    <feComposite in2="offset" operator="in"/>
-                    <feMerge>
-                      <feMergeNode/>
-                      <feMergeNode in="SourceGraphic"/>
-                    </feMerge>
-                  </filter>
-                  
-                  {/* 4D Animation Definitions */}
-                  
-                  {/* Material Particle for Flow Animation */}
-                  <circle id="material-particle" r="3" fill="#3b82f6">
-                    <animate attributeName="opacity" values="0;1;1;0" dur="3s" repeatCount="indefinite"/>
-                  </circle>
-                  
-                  {/* Production Pulse Animation */}
-                  <g id="production-pulse">
-                    <circle r="8" fill="none" stroke="#10b981" strokeWidth="2" opacity="0.6">
-                      <animate attributeName="r" values="8;16;24" dur="2s" repeatCount="indefinite"/>
-                      <animate attributeName="opacity" values="0.6;0.3;0" dur="2s" repeatCount="indefinite"/>
-                      <animate attributeName="stroke-width" values="2;1;0.5" dur="2s" repeatCount="indefinite"/>
-                    </circle>
-                  </g>
-                  
-                  {/* Animated Conveyor Belt Pattern */}
-                  <pattern id="moving-conveyor" width="30" height="15" patternUnits="userSpaceOnUse">
-                    <rect width="30" height="15" fill="#4a5568"/>
-                    <rect x="0" y="0" width="3" height="15" fill="#2d3748">
-                      <animateTransform attributeName="transform" type="translate" 
-                                      values="0 0;30 0;0 0" dur="2s" repeatCount="indefinite"/>
-                    </rect>
-                    <rect x="15" y="0" width="3" height="15" fill="#2d3748">
-                      <animateTransform attributeName="transform" type="translate" 
-                                      values="0 0;30 0;0 0" dur="2s" repeatCount="indefinite"/>
-                    </rect>
-                    <circle cx="7" cy="7" r="2" fill="#6b7280">
-                      <animateTransform attributeName="transform" type="translate" 
-                                      values="0 0;30 0;0 0" dur="2s" repeatCount="indefinite"/>
-                    </circle>
-                    <circle cx="22" cy="7" r="2" fill="#6b7280">
-                      <animateTransform attributeName="transform" type="translate" 
-                                      values="0 0;30 0;0 0" dur="2s" repeatCount="indefinite"/>
-                    </circle>
-                  </pattern>
-                  
-                  {/* Advanced Perspective Lighting */}
-                  <radialGradient id="ambient-light" cx="50%" cy="30%">
-                    <stop offset="0%" stopColor="#ffffff" stopOpacity="0.3"/>
-                    <stop offset="100%" stopColor="#ffffff" stopOpacity="0"/>
-                  </radialGradient>
-                  
-                  <radialGradient id="ambient-glow">
-                    <stop offset="0%" stopColor="#60a5fa" stopOpacity="0.3"/>
-                    <stop offset="50%" stopColor="#3b82f6" stopOpacity="0.15"/>
-                    <stop offset="100%" stopColor="#1e40af" stopOpacity="0.05"/>
-                  </radialGradient>
-                  
-                  <linearGradient id="depth-perspective" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#0f172a" stopOpacity="0.2"/>
-                    <stop offset="50%" stopColor="#1e293b" stopOpacity="0.4"/>
-                    <stop offset="100%" stopColor="#334155" stopOpacity="0.6"/>
-                  </linearGradient>
-                </defs>
-                
-                {/* FACTORY FLOOR LAYOUT */}
-                
-                {/* Main Factory Floor - Concrete */}
-                <rect width="100%" height="100%" fill="url(#concrete-floor)" />
-                
-                {/* Factory Walls */}
-                <rect x="20" y="50" width="1760" height="20" fill="#666" stroke="#333" strokeWidth="2"/>
-                <rect x="20" y="50" width="20" height="1100" fill="#666" stroke="#333" strokeWidth="2"/>
-                <rect x="1760" y="50" width="20" height="1100" fill="#666" stroke="#333" strokeWidth="2"/>
-                <rect x="20" y="1130" width="1760" height="20" fill="#666" stroke="#333" strokeWidth="2"/>
-                
-                {/* Department Separation Walls */}
-                <rect x="580" y="70" width="15" height="400" fill="#999" stroke="#666" strokeWidth="1"/>
-                <rect x="1050" y="70" width="15" height="800" fill="#999" stroke="#666" strokeWidth="1"/>
-                
-                {/* Animated Conveyor System - Leal/Ploughshare to Maturation */}
-                <rect x="580" y="300" width="470" height="25" fill="url(#moving-conveyor)"/>
-                <polygon points="1050,310 1070,300 1070,325 1050,335" fill="#4a5568">
-                  <animate attributeName="fill" values="#4a5568;#059669;#4a5568" dur="3s" repeatCount="indefinite"/>
-                </polygon>
-                
-                {/* Animated Maturation to Corraza Conveyor */}
-                <rect x="1050" y="450" width="300" height="25" fill="url(#moving-conveyor)"/>
-                <polygon points="1350,460 1370,450 1370,475 1350,485" fill="#4a5568">
-                  <animate attributeName="fill" values="#4a5568;#dc2626;#4a5568" dur="3s" repeatCount="indefinite"/>
-                </polygon>
-                
-                {/* Safety Walking Paths */}
-                <rect x="60" y="500" width="500" height="20" fill="url(#safety-stripes)" opacity="0.8"/>
-                <rect x="620" y="500" width="400" height="20" fill="url(#safety-stripes)" opacity="0.8"/>
-                <rect x="1080" y="900" width="650" height="20" fill="url(#safety-stripes)" opacity="0.8"/>
-                
-                {/* Loading Docks */}
-                <rect x="40" y="100" width="100" height="40" fill="#8B7355" stroke="#654321" strokeWidth="2"/>
-                <text x="90" y="125" textAnchor="middle" className="fill-white text-xs font-bold">RAW MATERIALS</text>
-                
-                <rect x="1650" y="950" width="100" height="40" fill="#8B7355" stroke="#654321" strokeWidth="2"/>
-                <text x="1700" y="975" textAnchor="middle" className="fill-white text-xs font-bold">SHIPPING</text>
-                
-                {/* Department Floor Markings */}
-                <rect x="60" y="180" width="500" height="280" fill="none" stroke="#2563eb" strokeWidth="3" strokeDasharray="10,5" opacity="0.7"/>
-                <text x="300" y="170" textAnchor="middle" className="fill-blue-800 text-xl font-bold">BLENDING AREA</text>
-                
-                <rect x="620" y="180" width="400" height="280" fill="none" stroke="#d97706" strokeWidth="3" strokeDasharray="10,5" opacity="0.7"/>
-                <text x="820" y="170" textAnchor="middle" className="fill-amber-800 text-xl font-bold">MATURATION AREA</text>
-                
-                <rect x="1080" y="180" width="650" height="680" fill="none" stroke="#059669" strokeWidth="3" strokeDasharray="10,5" opacity="0.7"/>
-                <text x="1405" y="170" textAnchor="middle" className="fill-emerald-800 text-xl font-bold">PACKAGING AREA</text>
-                
-                {/* 4D Animated Production Flow - Real-Time Material Movement */}
-                <g className="production-flow">
-                  {/* Flow definitions with animated arrows */}
-                  <defs>
-                    <marker id="flow-arrow" markerWidth="12" markerHeight="8" 
-                            refX="10" refY="4" orient="auto">
-                      <polygon points="0 0, 12 4, 0 8" fill="#059669" stroke="#047857" strokeWidth="1">
-                        <animate attributeName="fill" values="#059669;#10b981;#059669" dur="1.5s" repeatCount="indefinite"/>
-                      </polygon>
-                    </marker>
-                    <marker id="end-flow-arrow" markerWidth="12" markerHeight="8" 
-                            refX="10" refY="4" orient="auto">
-                      <polygon points="0 0, 12 4, 0 8" fill="#dc2626" stroke="#b91c1c" strokeWidth="1">
-                        <animate attributeName="fill" values="#dc2626;#ef4444;#dc2626" dur="1.5s" repeatCount="indefinite"/>
-                      </polygon>
-                    </marker>
-                  </defs>
-                  
-                  {/* Material Flow Particles - Animated dots following paths */}
-                  <g className="material-particles">
-                    {/* Leal flow particles */}
-                    <use href="#material-particle">
-                      <animateMotion dur="6s" repeatCount="indefinite">
-                        <mpath href="#leal-flow-path"/>
-                      </animateMotion>
-                    </use>
-                    <use href="#material-particle" opacity="0.7">
-                      <animateMotion dur="6s" begin="2s" repeatCount="indefinite">
-                        <mpath href="#leal-flow-path"/>
-                      </animateMotion>
-                    </use>
-                    <use href="#material-particle" opacity="0.5">
-                      <animateMotion dur="6s" begin="4s" repeatCount="indefinite">
-                        <mpath href="#leal-flow-path"/>
-                      </animateMotion>
-                    </use>
+                  // Load Babylon.js core
+                  const babylonScript = document.createElement('script');
+                  babylonScript.src = 'https://cdn.babylonjs.com/babylon.js';
+                  babylonScript.onload = function() {
+                    console.log('✅ Babylon.js core loaded');
                     
-                    {/* Ploughshare flow particles */}
-                    <use href="#material-particle" fill="#f59e0b">
-                      <animateMotion dur="6s" repeatCount="indefinite">
-                        <mpath href="#ploughshare-flow-path"/>
-                      </animateMotion>
-                    </use>
-                    <use href="#material-particle" fill="#f59e0b" opacity="0.7">
-                      <animateMotion dur="6s" begin="2s" repeatCount="indefinite">
-                        <mpath href="#ploughshare-flow-path"/>
-                      </animateMotion>
-                    </use>
+                    // Load Babylon.js loaders
+                    const loadersScript = document.createElement('script');
+                    loadersScript.src = 'https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js';
+                    loadersScript.onload = function() {
+                      console.log('✅ Babylon.js loaders ready');
+                      initialize4DFactory();
+                    };
+                    document.head.appendChild(loadersScript);
+                  };
+                  document.head.appendChild(babylonScript);
+                }
+                
+                function initialize4DFactory() {
+                  console.log('🏭 Initializing 4D Digital Twin Factory');
+                  
+                  // Get canvas container
+                  const canvas = document.getElementById('babylon-factory-canvas');
+                  if (!canvas) {
+                    console.error('❌ Canvas container not found');
+                    return;
+                  }
+                  
+                  // Create canvas element
+                  const babylonCanvas = document.createElement('canvas');
+                  babylonCanvas.id = 'babylonCanvas';
+                  babylonCanvas.style.width = '100%';
+                  babylonCanvas.style.height = '100%';
+                  babylonCanvas.style.display = 'block';
+                  canvas.appendChild(babylonCanvas);
+                  
+                  // Create Babylon engine
+                  const engine = new BABYLON.Engine(babylonCanvas, true, {
+                    preserveDrawingBuffer: true,
+                    stencil: true,
+                    antialias: true
+                  });
+                  
+                  // Create scene
+                  const scene = new BABYLON.Scene(engine);
+                  scene.createDefaultCameraOrLights(true, true, true);
+                  
+                  // Configure camera
+                  const camera = scene.activeCamera;
+                  camera.setTarget(BABYLON.Vector3.Zero());
+                  camera.position = new BABYLON.Vector3(20, 20, -20);
+                  
+                  // Add dramatic lighting
+                  const hemiLight = new BABYLON.HemisphericLight('hemiLight', new BABYLON.Vector3(0, 1, 0), scene);
+                  hemiLight.intensity = 0.6;
+                  
+                  const dirLight = new BABYLON.DirectionalLight('dirLight', new BABYLON.Vector3(-1, -1, 1), scene);
+                  dirLight.intensity = 0.8;
+                  dirLight.diffuse = new BABYLON.Color3(0.4, 0.6, 1.0);
+                  
+                  // Create factory floor
+                  const ground = BABYLON.MeshBuilder.CreateGround('ground', {width: 50, height: 30}, scene);
+                  const groundMaterial = new BABYLON.StandardMaterial('groundMaterial', scene);
+                  groundMaterial.diffuseColor = new BABYLON.Color3(0.2, 0.25, 0.3);
+                  groundMaterial.specularColor = new BABYLON.Color3(0.1, 0.1, 0.1);
+                  ground.material = groundMaterial;
+                  
+                  // Create machines based on real data
+                  const machines = ${JSON.stringify(filteredMachines)};
+                  const machineColor = {
+                    'available': new BABYLON.Color3(0.0, 0.8, 0.4),
+                    'busy': new BABYLON.Color3(1.0, 0.6, 0.0),
+                    'offline': new BABYLON.Color3(0.6, 0.6, 0.6),
+                    'error': new BABYLON.Color3(1.0, 0.2, 0.2)
+                  };
+                  
+                  machines.forEach((machine, index) => {
+                    // Create machine body
+                    const machineBox = BABYLON.MeshBuilder.CreateBox(machine.name, {width: 3, height: 2, depth: 2}, scene);
                     
-                    {/* Output flow particles */}
-                    <use href="#material-particle" fill="#dc2626">
-                      <animateMotion dur="8s" repeatCount="indefinite">
-                        <mpath href="#tablet-flow-path"/>
-                      </animateMotion>
-                    </use>
-                    <use href="#material-particle" fill="#dc2626">
-                      <animateMotion dur="8s" begin="1s" repeatCount="indefinite">
-                        <mpath href="#cube-flow-path"/>
-                      </animateMotion>
-                    </use>
-                  </g>
+                    // Position machines in different areas
+                    let x, z;
+                    if (machine.environment === 'blending') {
+                      x = -15 + (index % 3) * 6;
+                      z = -8 + Math.floor(index / 3) * 4;
+                    } else if (machine.environment === 'maturation') {
+                      x = -2 + (index % 2) * 4;
+                      z = -8 + Math.floor(index / 2) * 4;
+                    } else {
+                      x = 10 + (index % 4) * 4;
+                      z = -8 + Math.floor(index / 4) * 4;
+                    }
+                    
+                    machineBox.position = new BABYLON.Vector3(x, 1, z);
+                    
+                    // Create material with status color
+                    const material = new BABYLON.StandardMaterial('machineMat' + index, scene);
+                    const color = machineColor[machine.status] || machineColor.offline;
+                    material.diffuseColor = color;
+                    material.emissiveColor = color.scale(0.1);
+                    machineBox.material = material;
+                    
+                    // Add rotation animation for running machines
+                    if (machine.status === 'available') {
+                      BABYLON.Animation.CreateAndStartAnimation('rotate', machineBox, 'rotation.y', 30, 120, 0, Math.PI * 2, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
+                    }
+                    
+                    // Add status indicator
+                    const indicator = BABYLON.MeshBuilder.CreateSphere('indicator' + index, {diameter: 0.3}, scene);
+                    indicator.position = new BABYLON.Vector3(x, 2.5, z);
+                    const indicatorMaterial = new BABYLON.StandardMaterial('indicatorMat' + index, scene);
+                    indicatorMaterial.diffuseColor = color;
+                    indicatorMaterial.emissiveColor = color.scale(0.5);
+                    indicator.material = indicatorMaterial;
+                    
+                    // Pulsing animation for active machines
+                    if (machine.status === 'available') {
+                      BABYLON.Animation.CreateAndStartAnimation('pulse', indicator, 'scaling', 30, 60, new BABYLON.Vector3(1, 1, 1), new BABYLON.Vector3(1.5, 1.5, 1.5), BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
+                    }
+                  });
                   
-                  {/* Animated Flow Paths with Particle Trails */}
+                  // Hide loading screen
+                  setTimeout(() => {
+                    const loading = document.getElementById('babylon-loading');
+                    if (loading) loading.style.opacity = '0';
+                    setTimeout(() => {
+                      if (loading) loading.style.display = 'none';
+                    }, 500);
+                  }, 2000);
                   
-                  {/* Blender leal → Maturation (Invisible paths for particles) */}
-                  <path id="leal-flow-path" d="M 230 280 Q 400 320 630 280" opacity="0"/>
-                  <path d="M 230 280 Q 400 320 630 280" 
-                        stroke="#059669" strokeWidth="4" fill="none" 
-                        markerEnd="url(#flow-arrow)" opacity="0.8" strokeDasharray="10,5">
-                    <animate attributeName="stroke-dashoffset" values="0;-15;0" dur="2s" repeatCount="indefinite"/>
-                    <animate attributeName="opacity" values="0.6;1;0.6" dur="3s" repeatCount="indefinite"/>
-                  </path>
-                  <text x="400" y="310" textAnchor="middle" 
-                        className="fill-emerald-700 text-sm font-bold bg-white px-2 py-1">
-                    <animate attributeName="opacity" values="0.7;1;0.7" dur="2s" repeatCount="indefinite"/>
-                    LEAL → MATURATION
-                  </text>
+                  // Render loop
+                  engine.runRenderLoop(() => {
+                    scene.render();
+                  });
                   
-                  {/* Blender Ploughshare → Maturation (Invisible paths for particles) */}
-                  <path id="ploughshare-flow-path" d="M 230 440 Q 400 400 630 360" opacity="0"/>
-                  <path d="M 230 440 Q 400 400 630 360" 
-                        stroke="#f59e0b" strokeWidth="4" fill="none" 
-                        markerEnd="url(#flow-arrow)" opacity="0.8" strokeDasharray="10,5">
-                    <animate attributeName="stroke-dashoffset" values="0;-15;0" dur="2s" repeatCount="indefinite"/>
-                    <animate attributeName="opacity" values="0.6;1;0.6" dur="3s" repeatCount="indefinite"/>
-                  </path>
-                  <text x="400" y="390" textAnchor="middle" 
-                        className="fill-amber-700 text-sm font-bold bg-white px-2 py-1">
-                    <animate attributeName="opacity" values="0.7;1;0.7" dur="2s" repeatCount="indefinite"/>
-                    PLOUGHSHARE → MATURATION
-                  </text>
+                  // Handle resize
+                  window.addEventListener('resize', () => {
+                    engine.resize();
+                  });
                   
-                  {/* Maturation → Corraza Tablet (Invisible paths for particles) */}
-                  <path id="tablet-flow-path" d="M 1000 320 Q 1200 280 1400 500" opacity="0"/>
-                  <path d="M 1000 320 Q 1200 280 1400 500" 
-                        stroke="#dc2626" strokeWidth="4" fill="none" 
-                        markerEnd="url(#end-flow-arrow)" opacity="0.8" strokeDasharray="8,4">
-                    <animate attributeName="stroke-dashoffset" values="0;-12;0" dur="1.5s" repeatCount="indefinite"/>
-                    <animate attributeName="stroke-width" values="4;6;4" dur="2s" repeatCount="indefinite"/>
-                  </path>
-                  <text x="1200" y="370" textAnchor="middle" 
-                        className="fill-red-700 text-sm font-bold bg-white px-2 py-1">
-                    <animate attributeName="opacity" values="0.7;1;0.7" dur="2s" repeatCount="indefinite"/>
-                    → CORRAZA TABLET
-                  </text>
-                  
-                  {/* Maturation → Corraza Cube (Invisible paths for particles) */}
-                  <path id="cube-flow-path" d="M 1000 380 Q 1200 420 1400 520" opacity="0"/>
-                  <path d="M 1000 380 Q 1200 420 1400 520" 
-                        stroke="#dc2626" strokeWidth="4" fill="none" 
-                        markerEnd="url(#end-flow-arrow)" opacity="0.8" strokeDasharray="8,4">
-                    <animate attributeName="stroke-dashoffset" values="0;-12;0" dur="1.5s" repeatCount="indefinite"/>
-                    <animate attributeName="stroke-width" values="4;6;4" dur="2s" repeatCount="indefinite"/>
-                  </path>
-                  <text x="1200" y="450" textAnchor="middle" 
-                        className="fill-red-700 text-sm font-bold bg-white px-2 py-1">
-                    <animate attributeName="opacity" values="0.7;1;0.7" dur="2s" repeatCount="indefinite"/>
-                    → CORRAZA CUBE
-                  </text>
-                  
-                  {/* Process Labels */}
-                  <rect x="320" y="180" width="160" height="30" 
-                        fill="#fef3c7" stroke="#d97706" strokeWidth="2" rx="4"/>
-                  <text x="400" y="200" textAnchor="middle" 
-                        className="fill-amber-800 text-sm font-bold">
-                    SPECIFIC BLENDS ONLY
-                  </text>
-                </g>
-                
-                {/* PROFESSIONAL ORGANIZED FACTORY STRUCTURE */}
-                <g className="factory-structure" opacity="0.8">
-                  {/* Main factory floor */}
-                  <polygon points="100,200 1900,100 1900,1100 100,1200" fill="url(#ambient-light)" stroke="none"/>
-                  
-                  {/* Clean factory walls */}
-                  <polygon points="100,150 1900,50 1850,40 150,140" fill="#94a3b8" stroke="#64748b" strokeWidth="3"/>
-                  <polygon points="100,150 100,1000 150,990 150,140" fill="#6b7280" stroke="#475569" strokeWidth="2"/>
-                  <polygon points="1900,50 1900,900 1850,890 1850,40" fill="#6b7280" stroke="#475569" strokeWidth="2"/>
-                  
-                  {/* Organized department dividers */}
-                  <line x1="600" y1="200" x2="600" y2="1000" stroke="#475569" strokeWidth="4" strokeDasharray="10,5" opacity="0.6"/>
-                  <line x1="1200" y1="160" x2="1200" y2="800" stroke="#475569" strokeWidth="4" strokeDasharray="10,5" opacity="0.6"/>
-                  
-                  {/* Professional lighting system */}
-                  <g opacity="0.7">
-                    <ellipse cx="350" cy="120" rx="20" ry="10" fill="#fbbf24" stroke="#d97706" strokeWidth="2"/>
-                    <ellipse cx="900" cy="80" rx="20" ry="10" fill="#fbbf24" stroke="#d97706" strokeWidth="2"/>
-                    <ellipse cx="1550" cy="60" rx="20" ry="10" fill="#fbbf24" stroke="#d97706" strokeWidth="2"/>
-                  </g>
-                  
-                  {/* Main walkways */}
-                  <polygon points="580,200 620,190 620,1000 580,1010" fill="#94a3b8" stroke="#6b7280" strokeWidth="2" opacity="0.3"/>
-                  <polygon points="1180,160 1220,150 1220,800 1180,810" fill="#94a3b8" stroke="#6b7280" strokeWidth="2" opacity="0.3"/>
-                </g>
-                
-                {/* FUNCTIONAL MACHINE LAYOUT - All Departments */}
-                <g className="machine-layout">
-                  
-                  {/* Render all machines with clean, functional design */}
-                  {filteredMachines.map((machine, index) => {
+                  console.log('✅ 4D Digital Twin Factory initialized successfully!');
+                }
+              `
+            }}
+          />
+          
+          {/* Legacy Fallback - Hidden Machine List */}
+          <div style={{display: 'none'}}>
+            {filteredMachines.map((machine, index) => {
                     // Calculate position based on department and index
                     let x, y, dept_color, dept_index;
                     
@@ -1817,6 +1740,8 @@ export default function MachinesPage() {
                 ADD FIRST UNIT
               </Button>
             )}
+          </div>
+        )}
           </div>
         )}
       </div>
