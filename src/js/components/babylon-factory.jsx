@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useCallback } from 'react';
 
 const BabylonFactory = ({ machines = [], environments = [] }) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [error, setError] = useState(null);
-  const [containerId] = useState(() => `babylon-container-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`);
   
   let scene = null;
   let engine = null;
@@ -46,11 +45,10 @@ const BabylonFactory = ({ machines = [], environments = [] }) => {
   };
 
   // Initialize Babylon.js scene
-  const initializeBabylonScene = async () => {
+  const initializeBabylonScene = async (container) => {
     try {
-      const container = document.getElementById(containerId);
       if (!container) {
-        throw new Error(`Container element with ID ${containerId} not found`);
+        throw new Error('Container element not provided');
       }
 
       console.log('🏭 Container found, creating canvas...');
@@ -60,7 +58,7 @@ const BabylonFactory = ({ machines = [], environments = [] }) => {
 
       // Create canvas element directly in the container
       const babylonCanvas = document.createElement('canvas');
-      babylonCanvas.id = `babylonCanvas-${containerId}`;
+      babylonCanvas.id = `babylonCanvas-${Date.now()}`;
       babylonCanvas.style.width = '100%';
       babylonCanvas.style.height = '100%';
       babylonCanvas.style.display = 'block';
@@ -165,6 +163,12 @@ const BabylonFactory = ({ machines = [], environments = [] }) => {
       };
       window.addEventListener('resize', handleResize);
 
+      // Create machines if we have them
+      if (machines && machines.length > 0) {
+        console.log('🏭 Creating machines with scene...');
+        createMachines(machines);
+      }
+
       setIsLoaded(true);
       console.log('🏭 4D Digital Twin Factory initialized successfully');
 
@@ -260,48 +264,38 @@ const BabylonFactory = ({ machines = [], environments = [] }) => {
     });
   };
 
-  // Initialize on mount
-  useEffect(() => {
-    const initialize = async () => {
+  // Ref callback that initializes Babylon when element is actually mounted
+  const containerRefCallback = useCallback((element) => {
+    if (!element) {
+      // Element is being unmounted
+      if (engine) {
+        engine.dispose();
+      }
+      return;
+    }
+
+    // Use setTimeout to avoid blocking React's render cycle
+    setTimeout(async () => {
       try {
         setError(null);
-        console.log('🏭 Starting Babylon factory initialization...');
+        console.log('🏭 Container element mounted, starting Babylon factory initialization...');
         
         // First load Babylon.js libraries
         await loadBabylonJS();
         console.log('✅ Babylon.js libraries loaded');
         
-        // Wait a bit for DOM to be ready, then initialize
-        await new Promise(resolve => setTimeout(resolve, 300));
-        
-        // Initialize the scene
-        await initializeBabylonScene();
+        // Initialize the scene with the actual DOM element
+        await initializeBabylonScene(element);
         console.log('✅ Babylon scene initialized');
         
       } catch (error) {
         console.error('❌ Babylon factory initialization failed:', error);
         setError(error.message);
       }
-    };
+    }, 100);
+  }, []);
 
-    // Start initialization
-    initialize();
-
-    // Cleanup
-    return () => {
-      if (engine) {
-        engine.dispose();
-      }
-      window.removeEventListener('resize', () => {});
-    };
-  }, [containerId]);
-
-  // Update machines when prop changes
-  useEffect(() => {
-    if (isLoaded && machines.length > 0) {
-      createMachines(machines);
-    }
-  }, [machines, isLoaded]);
+  // Note: Machine creation will be handled in the initialization flow
 
   if (error) {
     return (
@@ -320,25 +314,40 @@ const BabylonFactory = ({ machines = [], environments = [] }) => {
     );
   }
 
-  if (!isLoaded) {
-    return (
-      <div className="flex items-center justify-center h-64 bg-blue-50 rounded-lg">
-        <div className="text-center">
-          <div className="text-blue-600 mb-2">🏭 Loading 4D Digital Twin Factory...</div>
-          <div className="text-sm text-blue-500">Initializing Babylon.js engine</div>
-          <div className="mt-2 w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="w-full h-96 bg-gray-900 rounded-lg overflow-hidden relative">
       <div 
-        id={containerId}
+        ref={containerRefCallback}
         className="w-full h-full absolute inset-0"
         style={{ minHeight: '400px' }}
       />
+      
+      {/* Loading overlay */}
+      {!isLoaded && !error && (
+        <div className="absolute inset-0 flex items-center justify-center bg-gray-900/90 backdrop-blur-sm">
+          <div className="text-center">
+            <div className="text-blue-400 mb-2">🏭 Loading 4D Digital Twin Factory...</div>
+            <div className="text-sm text-blue-300">Initializing Babylon.js engine</div>
+            <div className="mt-2 w-8 h-8 border-2 border-blue-400 border-t-transparent rounded-full animate-spin mx-auto"></div>
+          </div>
+        </div>
+      )}
+      
+      {/* Error overlay */}
+      {error && (
+        <div className="absolute inset-0 flex items-center justify-center bg-red-900/90 backdrop-blur-sm">
+          <div className="text-center">
+            <div className="text-red-400 mb-2">❌ Babylon.js Error</div>
+            <div className="text-sm text-red-300">{error}</div>
+            <button 
+              onClick={() => window.location.reload()} 
+              className="mt-2 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+            >
+              Reload Page
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
