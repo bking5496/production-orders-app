@@ -1279,24 +1279,24 @@ export default function MachinesPage() {
                 
                 {/* ENHANCED 3D BLENDING AREA - Professional Layout */}
                 <g>
-                  {/* 3D Blending department floor - larger and better positioned */}
+                  {/* Expanded 3D Blending department floor - much larger for proper spacing */}
                   <polygon 
-                    points="150,350 550,250 550,600 150,700" 
+                    points="130,350 580,230 580,750 130,870" 
                     fill="rgba(99, 102, 241, 0.12)" 
                     stroke="#6366f1" 
                     strokeWidth="4"
                     strokeDasharray="15,8"
                   />
                   
-                  {/* Department safety markings */}
+                  {/* Updated safety markings for larger area */}
                   <polygon 
-                    points="160,360 540,260 540,270 160,370" 
+                    points="140,360 570,240 570,250 140,370" 
                     fill="#fbbf24" 
                     stroke="#d97706" 
                     strokeWidth="2"
                   />
                   <polygon 
-                    points="160,680 540,580 540,590 160,690" 
+                    points="140,850 570,730 570,740 140,860" 
                     fill="#fbbf24" 
                     stroke="#d97706" 
                     strokeWidth="2"
@@ -1312,41 +1312,41 @@ export default function MachinesPage() {
                     🏭 BLENDING DEPARTMENT
                   </text>
                   
-                  {/* Zone markers */}
+                  {/* Fixed Zone markers - positioned to avoid machine overlap */}
                   <text 
-                    x="200" 
-                    y="320"
+                    x="170" 
+                    y="380"
                     className="fill-indigo-600 text-sm font-mono font-semibold"
-                    transform="rotate(-12 200 320)"
+                    transform="rotate(-12 170 380)"
                   >
                     ZONE A - PRIMARY MIXING
                   </text>
                   <text 
-                    x="300" 
-                    y="520"
+                    x="160" 
+                    y="550"
                     className="fill-indigo-600 text-sm font-mono font-semibold"
-                    transform="rotate(-12 300 520)"
+                    transform="rotate(-12 160 550)"
                   >
-                    ZONE B - PROCESSING &amp; TRANSFER
+                    ZONE B - PROCESSING
                   </text>
                   
-                  {/* Enhanced 3D Blending machines with professional spacing */}
+                  {/* Fixed 3D Blending machines with NO overlapping */}
                   {filteredMachines.filter(m => m.environment === 'blending').map((machine, index) => {
-                    // Enhanced 3D positions with better spacing and realistic proportions
+                    // Fixed positions - NO overlapping, proper spacing
                     const positions3D = [
-                      // Zone A - Primary Mixers (front row with proper spacing)
-                      { x: 200, y: 380, z: 45, w: 85, d: 60, h: 70, type: '3d_mixer_pro', name: 'Blender leal' },
-                      { x: 320, y: 350, z: 45, w: 85, d: 60, h: 70, type: '3d_mixer_pro', name: 'Blender MaxMix' },
-                      { x: 440, y: 320, z: 45, w: 85, d: 60, h: 70, type: '3d_mixer_pro', name: 'Blender Ploughshare' },
+                      // Row 1 - Front machines (well spaced)
+                      { x: 180, y: 400, z: 40, w: 80, d: 60, h: 65, type: '3d_mixer_pro', name: 'Blender leal' },
+                      { x: 320, y: 370, z: 40, w: 80, d: 60, h: 65, type: '3d_mixer_pro', name: 'Blender MaxMix' },
+                      { x: 460, y: 340, z: 40, w: 80, d: 60, h: 65, type: '3d_mixer_pro', name: 'Blender Ploughshare' },
                       
-                      // Zone A - Secondary mixer (middle position)
-                      { x: 260, y: 460, z: 50, w: 90, d: 65, h: 75, type: '3d_mixer_heavy', name: 'Blender Winkwork' },
+                      // Row 2 - Middle position (separate row)
+                      { x: 250, y: 520, z: 45, w: 85, d: 65, h: 70, type: '3d_mixer_heavy', name: 'Blender Winkwork' },
                       
-                      // Zone B - Drum blender (specialized equipment)
-                      { x: 380, y: 530, z: 40, w: 120, d: 50, h: 60, type: '3d_drum_pro', name: 'Drumblender' },
+                      // Row 3 - Back machines (well separated)
+                      { x: 400, y: 580, z: 35, w: 110, d: 50, h: 55, type: '3d_drum_pro', name: 'Drumblender' },
                       
-                      // Zone B - Liquid processing line (extended system)
-                      { x: 180, y: 580, z: 35, w: 280, d: 45, h: 50, type: '3d_liquid_pro', name: 'Liquid Line' }
+                      // Row 4 - Bottom (liquid line by itself)
+                      { x: 170, y: 650, z: 30, w: 250, d: 40, h: 45, type: '3d_liquid_pro', name: 'Liquid Line' }
                     ];
                     
                     const pos = positions3D[index] || positions3D[0];
@@ -1437,106 +1437,130 @@ export default function MachinesPage() {
                           </g>
                         )}
                         
-                        {/* 3D Drum blender */}
-                        {pos.type === '3d_drum' && (
+                        {/* Enhanced 3D Drum blender */}
+                        {pos.type === '3d_drum_pro' && (
                           <g>
-                            {/* Drum base */}
+                            {/* Drum foundation */}
                             <polygon 
-                              points={`${isoX},${isoY + pos.h} ${isoX + pos.w},${isoY + pos.h} ${isoX + pos.w + pos.z*0.5},${isoY + pos.h - pos.z*0.3} ${isoX + pos.z*0.5},${isoY + pos.h - pos.z*0.3}`}
-                              fill="#374151" stroke="#1f2937" strokeWidth="1"
+                              points={`${isoX-5},${isoY + pos.h + 5} ${isoX + pos.w + 5},${isoY + pos.h + 5} ${isoX + pos.w + pos.z*0.5 + 5},${isoY + pos.h - pos.z*0.3 + 5} ${isoX + pos.z*0.5 - 5},${isoY + pos.h - pos.z*0.3 + 5}`}
+                              fill="#2d3748" stroke="#1a202c" strokeWidth="2" opacity="0.8"
                             />
                             
-                            {/* Drum front face - cylindrical */}
-                            <rect x={isoX} y={isoY} width={pos.w} height={pos.h} fill={statusColor} stroke="#1f2937" strokeWidth="2" rx="20"/>
+                            {/* Drum main body - cylindrical front */}
+                            <rect x={isoX} y={isoY} width={pos.w} height={pos.h} fill={statusColor} stroke="#1f2937" strokeWidth="3" rx="25"/>
+                            <rect x={isoX} y={isoY} width={pos.w} height={pos.h} fill="url(#machine-front)" stroke="none" rx="25"/>
                             
-                            {/* Drum top (elliptical) */}
-                            <ellipse cx={isoX + pos.w/2 + pos.z*0.25} cy={isoY - pos.z*0.15} rx={pos.w/2} ry={pos.d/3} fill="url(#machine-top)" stroke="#1f2937" strokeWidth="1"/>
+                            {/* Drum top (elliptical for 3D effect) */}
+                            <ellipse cx={isoX + pos.w/2 + pos.z*0.25} cy={isoY - pos.z*0.15} rx={pos.w/2} ry={pos.d/3} fill="url(#machine-top)" stroke="#1f2937" strokeWidth="2"/>
                             
-                            {/* Drum side */}
+                            {/* Drum side face */}
                             <polygon 
                               points={`${isoX + pos.w},${isoY} ${isoX + pos.w + pos.z*0.5},${isoY - pos.z*0.3} ${isoX + pos.w + pos.z*0.5},${isoY + pos.h - pos.z*0.3} ${isoX + pos.w},${isoY + pos.h}`}
-                              fill="url(#machine-side)" stroke="#1f2937" strokeWidth="1"
+                              fill="url(#machine-side)" stroke="#1f2937" strokeWidth="2"
                             />
                             
-                            {/* 3D Control panel */}
-                            <rect x={isoX + 8} y={isoY + 8} width="20" height="12" fill="#4b5563" stroke="#1f2937" strokeWidth="1" rx="2"/>
+                            {/* Control panel */}
+                            <rect x={isoX + 10} y={isoY + 10} width="30" height="20" fill="#374151" stroke="#1f2937" strokeWidth="2" rx="3"/>
+                            <polygon 
+                              points={`${isoX + 10},${isoY + 10} ${isoX + 40},${isoY + 10} ${isoX + 45},${isoY + 7} ${isoX + 15},${isoY + 7}`} 
+                              fill="url(#metal-surface)" stroke="#1f2937" strokeWidth="1"
+                            />
                             
-                            {/* Rotating drum elements */}
-                            <ellipse cx={isoX + pos.w/2} cy={isoY + pos.h/2} rx={pos.w/3} ry={pos.h/4} fill="none" stroke="#1f2937" strokeWidth="2"/>
-                            <line x1={isoX + 20} y1={isoY + pos.h/2} x2={isoX + pos.w - 20} y2={isoY + pos.h/2} stroke="#1f2937" strokeWidth="2"/>
+                            {/* Control displays */}
+                            <rect x={isoX + 15} y={isoY + 15} width="10" height="6" fill="#1e3a8a" stroke="#1e40af" strokeWidth="1" rx="1"/>
+                            <rect x={isoX + 28} y={isoY + 15} width="6" height="6" fill="#dc2626" stroke="#991b1b" strokeWidth="1" rx="1"/>
+                            
+                            {/* Drum rotation mechanism */}
+                            <ellipse cx={isoX + pos.w/2} cy={isoY + pos.h/2} rx={pos.w/3} ry={pos.h/4} fill="none" stroke="#1f2937" strokeWidth="3"/>
+                            <line x1={isoX + 25} y1={isoY + pos.h/2} x2={isoX + pos.w - 25} y2={isoY + pos.h/2} stroke="#1f2937" strokeWidth="3"/>
+                            
+                            {/* Drive mechanism */}
+                            <rect x={isoX + pos.w - 25} y={isoY + pos.h - 20} width="20" height="12" fill="#4a5568" stroke="#1f2937" strokeWidth="2" rx="2"/>
+                            
+                            {/* Discharge chute */}
+                            <polygon points={`${isoX + pos.w/2 - 8},${isoY + pos.h} ${isoX + pos.w/2 + 8},${isoY + pos.h} ${isoX + pos.w/2 + 12},${isoY + pos.h + 15} ${isoX + pos.w/2 - 12},${isoY + pos.h + 15}`} fill="#6b7280" stroke="#1f2937" strokeWidth="2"/>
                           </g>
                         )}
                         
-                        {/* 3D Liquid line */}
-                        {pos.type === '3d_liquid_line' && (
+                        {/* Enhanced 3D Liquid processing line */}
+                        {pos.type === '3d_liquid_pro' && (
                           <g>
-                            {/* Line base */}
+                            {/* Line foundation */}
                             <polygon 
-                              points={`${isoX},${isoY + pos.h} ${isoX + pos.w},${isoY + pos.h} ${isoX + pos.w + pos.z*0.5},${isoY + pos.h - pos.z*0.3} ${isoX + pos.z*0.5},${isoY + pos.h - pos.z*0.3}`}
-                              fill="#374151" stroke="#1f2937" strokeWidth="1"
+                              points={`${isoX-5},${isoY + pos.h + 5} ${isoX + pos.w + 5},${isoY + pos.h + 5} ${isoX + pos.w + pos.z*0.5 + 5},${isoY + pos.h - pos.z*0.3 + 5} ${isoX + pos.z*0.5 - 5},${isoY + pos.h - pos.z*0.3 + 5}`}
+                              fill="#2d3748" stroke="#1a202c" strokeWidth="2" opacity="0.8"
                             />
                             
-                            {/* Line front face */}
-                            <rect x={isoX} y={isoY} width={pos.w} height={pos.h} fill={statusColor} stroke="#1f2937" strokeWidth="2" rx="8"/>
+                            {/* Main line body */}
+                            <rect x={isoX} y={isoY} width={pos.w} height={pos.h} fill={statusColor} stroke="#1f2937" strokeWidth="3" rx="10"/>
+                            <rect x={isoX} y={isoY} width={pos.w} height={pos.h} fill="url(#machine-front)" stroke="none" rx="10"/>
                             
-                            {/* Line top */}
+                            {/* Line top face */}
                             <polygon 
                               points={`${isoX},${isoY} ${isoX + pos.w},${isoY} ${isoX + pos.w + pos.z*0.5},${isoY - pos.z*0.3} ${isoX + pos.z*0.5},${isoY - pos.z*0.3}`}
-                              fill="url(#machine-top)" stroke="#1f2937" strokeWidth="1"
+                              fill="url(#machine-top)" stroke="#1f2937" strokeWidth="2"
                             />
                             
-                            {/* Line side */}
+                            {/* Line side face */}
                             <polygon 
                               points={`${isoX + pos.w},${isoY} ${isoX + pos.w + pos.z*0.5},${isoY - pos.z*0.3} ${isoX + pos.w + pos.z*0.5},${isoY + pos.h - pos.z*0.3} ${isoX + pos.w},${isoY + pos.h}`}
-                              fill="url(#machine-side)" stroke="#1f2937" strokeWidth="1"
+                              fill="url(#machine-side)" stroke="#1f2937" strokeWidth="2"
                             />
                             
-                            {/* 3D Control panel */}
-                            <rect x={isoX + 8} y={isoY + 5} width="25" height="12" fill="#4b5563" stroke="#1f2937" strokeWidth="1" rx="2"/>
-                            <polygon points={`${isoX + 8},${isoY + 5} ${isoX + 33},${isoY + 5} ${isoX + 38},${isoY + 2} ${isoX + 13},${isoY + 2}`} fill="#6b7280" stroke="#1f2937" strokeWidth="1"/>
+                            {/* Control panel */}
+                            <rect x={isoX + 10} y={isoY + 8} width="35" height="18" fill="#374151" stroke="#1f2937" strokeWidth="2" rx="3"/>
+                            <polygon 
+                              points={`${isoX + 10},${isoY + 8} ${isoX + 45},${isoY + 8} ${isoX + 50},${isoY + 5} ${isoX + 15},${isoY + 5}`} 
+                              fill="url(#metal-surface)" stroke="#1f2937" strokeWidth="1"
+                            />
                             
-                            {/* 3D Process stations */}
-                            {[...Array(7)].map((_, i) => {
-                              const stationX = isoX + 40 + i * 25;
+                            {/* Processing stations along the line */}
+                            {[...Array(8)].map((_, i) => {
+                              const stationX = isoX + 60 + i * 25;
                               const stationY = isoY + pos.h/2;
                               return (
                                 <g key={i}>
-                                  <circle cx={stationX} cy={stationY} r="6" fill="#4b5563" stroke="#1f2937" strokeWidth="1"/>
-                                  <ellipse cx={stationX + 2} cy={stationY - 1} rx="6" ry="4" fill="#6b7280" stroke="#1f2937" strokeWidth="1"/>
+                                  <circle cx={stationX} cy={stationY} r="8" fill="#4b5563" stroke="#1f2937" strokeWidth="2"/>
+                                  <circle cx={stationX} cy={stationY} r="8" fill="url(#metal-surface)" stroke="none"/>
+                                  <ellipse cx={stationX + 3} cy={stationY - 2} rx="8" ry="5" fill="none" stroke="#1f2937" strokeWidth="1" opacity="0.7"/>
                                 </g>
                               );
                             })}
                             
-                            {/* 3D Pipelines */}
-                            <line x1={isoX + 40} y1={isoY + 8} x2={isoX + pos.w - 15} y2={isoY + 8} stroke="#1f2937" strokeWidth="3"/>
-                            <line x1={isoX + 42} y1={isoY + 6} x2={isoX + pos.w - 13} y2={isoY + 6} stroke="#6b7280" strokeWidth="2"/>
-                            <line x1={isoX + 40} y1={isoY + pos.h - 8} x2={isoX + pos.w - 15} y2={isoY + pos.h - 8} stroke="#1f2937" strokeWidth="3"/>
-                            <line x1={isoX + 42} y1={isoY + pos.h - 6} x2={isoX + pos.w - 13} y2={isoY + pos.h - 6} stroke="#6b7280" strokeWidth="2"/>
+                            {/* Pipeline system */}
+                            <line x1={isoX + 55} y1={isoY + 12} x2={isoX + pos.w - 20} y2={isoY + 12} stroke="#1f2937" strokeWidth="4"/>
+                            <line x1={isoX + 57} y1={isoY + 10} x2={isoX + pos.w - 18} y2={isoY + 10} stroke="#6b7280" strokeWidth="3"/>
+                            <line x1={isoX + 55} y1={isoY + pos.h - 12} x2={isoX + pos.w - 20} y2={isoY + pos.h - 12} stroke="#1f2937" strokeWidth="4"/>
+                            <line x1={isoX + 57} y1={isoY + pos.h - 10} x2={isoX + pos.w - 18} y2={isoY + pos.h - 10} stroke="#6b7280" strokeWidth="3"/>
+                            
+                            {/* End connections */}
+                            <rect x={isoX + pos.w - 15} y={isoY + 8} width="12" height={pos.h - 16} fill="#374151" stroke="#1f2937" strokeWidth="2" rx="3"/>
                           </g>
                         )}
                         
-                        {/* 3D Machine label */}
+                        
+                        {/* Fixed Machine label - positioned to avoid overlap */}
                         <text 
-                          x={isoX + pos.w/2} y={isoY + pos.h + 25}
+                          x={isoX + pos.w/2} y={isoY + pos.h + 35}
                           textAnchor="middle"
-                          className="fill-slate-800 text-xs font-mono font-bold"
+                          className="fill-slate-800 text-sm font-mono font-bold"
                         >
                           {machine.name}
                         </text>
                         
-                        {/* 3D Status indicator */}
+                        {/* Enhanced 3D Status indicator */}
                         <circle 
-                          cx={isoX + pos.w - 10} cy={isoY + 10}
-                          r="8" fill={statusColor} stroke="#1f2937" strokeWidth="2"
+                          cx={isoX + pos.w - 12} cy={isoY + 12}
+                          r="10" fill={statusColor} stroke="#1f2937" strokeWidth="2"
                         />
                         <ellipse 
-                          cx={isoX + pos.w - 8} cy={isoY + 8}
-                          rx="8" ry="5" fill="rgba(255,255,255,0.3)" stroke="none"
+                          cx={isoX + pos.w - 10} cy={isoY + 10}
+                          rx="10" ry="7" fill="rgba(255,255,255,0.3)" stroke="none"
                         />
                         
-                        {/* 3D Status text */}
+                        {/* Fixed Status text - positioned above machine */}
                         <text 
-                          x={isoX + pos.w/2} y={isoY - 10}
+                          x={isoX + pos.w/2} y={isoY - 20}
                           textAnchor="middle"
                           className="fill-slate-800 text-sm font-mono font-bold"
                         >
