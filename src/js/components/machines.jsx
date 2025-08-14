@@ -695,6 +695,7 @@ export default function MachinesPage() {
   }
 
   return (
+    <>
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
       {/* SCADA Notification */}
       {notification && (
@@ -1664,8 +1665,6 @@ export default function MachinesPage() {
                       </g>
                     );
                   })}
-                </g>
-              </svg>
             </div>
             
             {/* Machine Details Panel */}
@@ -1740,8 +1739,6 @@ export default function MachinesPage() {
                 ADD FIRST UNIT
               </Button>
             )}
-          </div>
-        )}
           </div>
         )}
       </div>
@@ -2430,6 +2427,6 @@ export default function MachinesPage() {
           </div>
         </Modal>
       )}
-    </div>
+    </>
   );
 }
