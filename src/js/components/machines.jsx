@@ -1217,10 +1217,46 @@ export default function MachinesPage() {
                     <rect x="55" y="35" width="10" height="2" fill="#475569" opacity="0.25" rx="1"/>
                   </pattern>
                   
-                  {/* Advanced Animation Definitions */}
-                  <animate id="production-pulse" attributeName="opacity" values="0.5;1;0.5" dur="2s" repeatCount="indefinite"/>
-                  <animateTransform id="machine-rotation" attributeName="transform" type="rotate" values="0;360" dur="10s" repeatCount="indefinite"/>
-                  <animate id="status-glow" attributeName="r" values="3;8;3" dur="1.5s" repeatCount="indefinite"/>
+                  {/* Professional SCADA-Style Animation System */}
+                  <animate id="production-pulse" attributeName="opacity" values="0.6;1;0.6" dur="2.5s" repeatCount="indefinite"/>
+                  <animateTransform id="conveyor-motion" attributeName="transform" type="translateX" values="0;10;0" dur="3s" repeatCount="indefinite"/>
+                  <animate id="status-beacon" attributeName="r" values="4;12;4" dur="1.8s" repeatCount="indefinite"/>
+                  <animate id="steam-effect" attributeName="opacity" values="0.2;0.8;0.2" dur="4s" repeatCount="indefinite"/>
+                  <animateTransform id="vibration" attributeName="transform" type="translate" values="0,0;0.5,0;-0.5,0;0,0" dur="0.1s" repeatCount="indefinite"/>
+                  
+                  {/* Professional Industrial Lighting System */}
+                  <radialGradient id="overhead-lighting" cx="50%" cy="0%">
+                    <stop offset="0%" stopColor="#f8fafc" stopOpacity="0.4"/>
+                    <stop offset="30%" stopColor="#e2e8f0" stopOpacity="0.25"/>
+                    <stop offset="70%" stopColor="#cbd5e1" stopOpacity="0.1"/>
+                    <stop offset="100%" stopColor="#64748b" stopOpacity="0.05"/>
+                  </radialGradient>
+                  
+                  <linearGradient id="machine-metal" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#e2e8f0" stopOpacity="0.9"/>
+                    <stop offset="25%" stopColor="#cbd5e1" stopOpacity="0.7"/>
+                    <stop offset="50%" stopColor="#94a3b8" stopOpacity="0.5"/>
+                    <stop offset="75%" stopColor="#64748b" stopOpacity="0.4"/>
+                    <stop offset="100%" stopColor="#475569" stopOpacity="0.3"/>
+                  </linearGradient>
+                  
+                  <linearGradient id="brushed-steel" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="#f1f5f9" stopOpacity="0.8"/>
+                    <stop offset="20%" stopColor="#cbd5e1" stopOpacity="0.9"/>
+                    <stop offset="40%" stopColor="#94a3b8" stopOpacity="0.7"/>
+                    <stop offset="60%" stopColor="#cbd5e1" stopOpacity="0.9"/>
+                    <stop offset="80%" stopColor="#f1f5f9" stopOpacity="0.8"/>
+                    <stop offset="100%" stopColor="#e2e8f0" stopOpacity="0.6"/>
+                  </linearGradient>
+                  
+                  <filter id="industrial-lighting" x="-50%" y="-50%" width="200%" height="200%">
+                    <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="blur"/>
+                    <feSpecularLighting in="blur" specularConstant="2" specularExponent="20" result="specOut" lightingColor="#ffffff">
+                      <fePointLight x="50" y="30" z="200"/>
+                    </feSpecularLighting>
+                    <feComposite in="specOut" in2="SourceAlpha" operator="in" result="specOut2"/>
+                    <feComposite in="SourceGraphic" in2="specOut2" operator="arithmetic" k1="0" k2="1" k3="1" k4="0"/>
+                  </filter>
                   
                   {/* Enhanced Gradients for realistic 3D lighting */}
                   <linearGradient id="machine-top" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -1292,16 +1328,38 @@ export default function MachinesPage() {
                   </linearGradient>
                 </defs>
                 
-                {/* Dynamic 3D Perspective Floor */}
-                <rect width="100%" height="100%" fill="url(#perspective-floor)" />
+                {/* Cinematic Industrial Floor System */}
+                <rect width="100%" height="100%" fill="url(#cinematic-floor)" />
                 
-                {/* Atmospheric Perspective Overlay */}
-                <rect width="100%" height="100%" fill="url(#depth-perspective)" opacity="0.4"/>
+                {/* Professional Overhead Lighting */}
+                <ellipse cx="1200" cy="200" rx="800" ry="400" fill="url(#overhead-lighting)" opacity="0.3"/>
+                <ellipse cx="800" cy="800" rx="600" ry="300" fill="url(#overhead-lighting)" opacity="0.25"/>
+                <ellipse cx="1600" cy="1000" rx="500" ry="250" fill="url(#overhead-lighting)" opacity="0.2"/>
                 
-                {/* Animated Ambient Lighting */}
-                <circle cx="1100" cy="300" r="400" fill="url(#ambient-glow)" opacity="0.15">
-                  <animate attributeName="opacity" values="0.1;0.25;0.1" dur="4s" repeatCount="indefinite"/>
-                </circle>
+                {/* Dynamic Atmospheric Effects */}
+                <rect width="100%" height="100%" fill="url(#depth-perspective)" opacity="0.3"/>
+                
+                {/* Industrial Steam/Vapor Effects */}
+                <g opacity="0.15">
+                  <circle cx="400" cy="600" r="80" fill="#e2e8f0">
+                    <animate attributeName="opacity" values="0.05;0.2;0.05" dur="6s" repeatCount="indefinite"/>
+                    <animate attributeName="r" values="70;100;70" dur="8s" repeatCount="indefinite"/>
+                  </circle>
+                  <circle cx="1800" cy="400" r="60" fill="#cbd5e1">
+                    <animate attributeName="opacity" values="0.03;0.15;0.03" dur="7s" repeatCount="indefinite"/>
+                    <animate attributeName="r" values="50;80;50" dur="9s" repeatCount="indefinite"/>
+                  </circle>
+                </g>
+                
+                {/* Cinematic Depth Rays */}
+                <g opacity="0.1">
+                  <polygon points="0,0 400,200 350,250 0,100" fill="#60a5fa">
+                    <animate attributeName="opacity" values="0.05;0.15;0.05" dur="12s" repeatCount="indefinite"/>
+                  </polygon>
+                  <polygon points="2400,0 2000,300 2050,350 2400,150" fill="#3b82f6">
+                    <animate attributeName="opacity" values="0.03;0.12;0.03" dur="10s" repeatCount="indefinite"/>
+                  </polygon>
+                </g>
                 
                 {/* PROFESSIONAL ORGANIZED FACTORY STRUCTURE */}
                 <g className="factory-structure" opacity="0.8">
