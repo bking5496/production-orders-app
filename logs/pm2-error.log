@@ -1357,3 +1357,14 @@
   code: 'ERR_ERL_UNEXPECTED_X_FORWARDED_FOR',
   help: 'https://express-rate-limit.github.io/ERR_ERL_UNEXPECTED_X_FORWARDED_FOR/'
 }
+2025-08-14T16:27:23: Error occurred: {
+  error: 'Cannot update machine while in use',
+  stack: 'ValidationError: Cannot update machine while in use\n' +
+    '    at MachinesService.updateMachine (/home/production-app/production-orders-app/src/services/machines.service.js:128:13)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:146:28',
+  url: '/api/machines/23',
+  method: 'PUT',
+  user: 'admin',
+  timestamp: '2025-08-14T14:27:23.763Z'
+}
