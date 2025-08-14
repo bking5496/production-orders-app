@@ -19427,3 +19427,190 @@
   'analytics'
 ]
 2025-08-14T21:00:00: 🏠 admin joined room: production
+2025-08-14T21:00:26: 🔗 Client acquired from pool
+2025-08-14T21:00:26: 🔓 Client released back to pool
+2025-08-14T21:00:26: 🔗 Client acquired from pool
+2025-08-14T21:00:26: 🔓 Client released back to pool
+2025-08-14T21:00:26: 🔗 Client acquired from pool
+2025-08-14T21:00:26: 🔗 Client acquired from pool
+2025-08-14T21:00:26: 🔓 Client released back to pool
+2025-08-14T21:00:26: 🔓 Client released back to pool
+2025-08-14T21:00:26: 🔗 Client acquired from pool
+2025-08-14T21:00:26: 🔓 Client released back to pool
+2025-08-14T21:00:26: ✅ New PostgreSQL client connected
+2025-08-14T21:00:26: 🔗 Client acquired from pool
+2025-08-14T21:00:26: 🔓 Client released back to pool
+2025-08-14T21:00:26: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-14T21:00:26: 🏠 admin joined room: production
+2025-08-14T21:00:37: 🔗 Client acquired from pool
+2025-08-14T21:00:37: 🔗 Client acquired from pool
+2025-08-14T21:00:37: 🔓 Client released back to pool
+2025-08-14T21:00:37: 🔓 Client released back to pool
+2025-08-14T21:00:37: 🔗 Client acquired from pool
+2025-08-14T21:00:37: 🔗 Client acquired from pool
+2025-08-14T21:00:37: 🔓 Client released back to pool
+2025-08-14T21:00:37: 🔓 Client released back to pool
+2025-08-14T21:00:37: 🔗 Client acquired from pool
+2025-08-14T21:00:37: 🔓 Client released back to pool
+2025-08-14T21:00:37: 🔗 Client acquired from pool
+2025-08-14T21:00:37: 🔓 Client released back to pool
+2025-08-14T21:00:56: 🔗 Client acquired from pool
+2025-08-14T21:00:56: 🔓 Client released back to pool
+2025-08-14T21:01:56: ✅ New PostgreSQL client connected
+2025-08-14T21:01:56: 🔗 Client acquired from pool
+2025-08-14T21:01:56: 🔓 Client released back to pool
+2025-08-14T21:02:56: ✅ New PostgreSQL client connected
+2025-08-14T21:02:56: 🔗 Client acquired from pool
+2025-08-14T21:02:56: 🔓 Client released back to pool
+2025-08-14T21:03:12: 📺 admin subscribed to: [ 'machines', 'production', 'alerts' ]
+2025-08-14T21:03:12: 🔗 Client acquired from pool
+2025-08-14T21:03:12: 🔓 Client released back to pool
+2025-08-14T21:03:12: 🔗 Client acquired from pool
+2025-08-14T21:03:12: 🔓 Client released back to pool
+2025-08-14T21:03:12: 🔗 Client acquired from pool
+2025-08-14T21:03:12: 🔓 Client released back to pool
+2025-08-14T21:03:12: 🔗 Client acquired from pool
+2025-08-14T21:03:12: 🔓 Client released back to pool
+2025-08-14T21:03:12: 🔗 Client acquired from pool
+2025-08-14T21:03:12: 🔓 Client released back to pool
+2025-08-14T21:03:12: ✅ New PostgreSQL client connected
+2025-08-14T21:03:12: 🔗 Client acquired from pool
+2025-08-14T21:03:12: 🔓 Client released back to pool
+2025-08-14T21:03:12: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-14T21:03:12: 🏠 admin joined room: production
+2025-08-14T21:03:42: ✅ New PostgreSQL client connected
+2025-08-14T21:03:42: 🔗 Client acquired from pool
+2025-08-14T21:03:42: ✅ New PostgreSQL client connected
+2025-08-14T21:03:42: 🔗 Client acquired from pool
+2025-08-14T21:03:42: 🔓 Client released back to pool
+2025-08-14T21:03:42: ✅ New PostgreSQL client connected
+2025-08-14T21:03:42: 🔗 Client acquired from pool
+2025-08-14T21:03:42: 🔓 Client released back to pool
+2025-08-14T21:03:42: 🔓 Client released back to pool
+2025-08-14T21:03:42: ✅ New PostgreSQL client connected
+2025-08-14T21:03:42: 🔗 Client acquired from pool
+2025-08-14T21:03:42: 🔓 Client released back to pool
+2025-08-14T21:03:56: 🔗 Client acquired from pool
+2025-08-14T21:03:56: 🔓 Client released back to pool
+2025-08-14T21:04:12: 🔗 Client acquired from pool
+2025-08-14T21:04:12: 🔓 Client released back to pool
+2025-08-14T21:04:12: 🔗 Client acquired from pool
+2025-08-14T21:04:12: 🔗 Client acquired from pool
+2025-08-14T21:04:12: 🔓 Client released back to pool
+2025-08-14T21:04:12: 🔗 Client acquired from pool
+2025-08-14T21:04:12: 🔓 Client released back to pool
+2025-08-14T21:04:12: 🔓 Client released back to pool
+2025-08-14T21:04:42: 🔗 Client acquired from pool
+2025-08-14T21:04:42: 🔓 Client released back to pool
+2025-08-14T21:04:42: 🔗 Client acquired from pool
+2025-08-14T21:04:42: 🔓 Client released back to pool
+2025-08-14T21:04:42: 🔗 Client acquired from pool
+2025-08-14T21:04:42: 🔗 Client acquired from pool
+2025-08-14T21:04:42: 🔓 Client released back to pool
+2025-08-14T21:04:42: 🔓 Client released back to pool
+2025-08-14T21:04:56: 🔗 Client acquired from pool
+2025-08-14T21:04:56: 🔓 Client released back to pool
+2025-08-14T21:05:12: 🔗 Client acquired from pool
+2025-08-14T21:05:12: 🔓 Client released back to pool
+2025-08-14T21:05:12: 🔗 Client acquired from pool
+2025-08-14T21:05:12: 🔗 Client acquired from pool
+2025-08-14T21:05:12: 🔓 Client released back to pool
+2025-08-14T21:05:12: 🔓 Client released back to pool
+2025-08-14T21:05:12: ✅ New PostgreSQL client connected
+2025-08-14T21:05:12: 🔗 Client acquired from pool
+2025-08-14T21:05:12: 🔓 Client released back to pool
+2025-08-14T21:05:42: 🔗 Client acquired from pool
+2025-08-14T21:05:42: 🔓 Client released back to pool
+2025-08-14T21:05:42: 🔗 Client acquired from pool
+2025-08-14T21:05:42: 🔓 Client released back to pool
+2025-08-14T21:05:42: 🔗 Client acquired from pool
+2025-08-14T21:05:42: 🔓 Client released back to pool
+2025-08-14T21:05:42: ✅ New PostgreSQL client connected
+2025-08-14T21:05:42: 🔗 Client acquired from pool
+2025-08-14T21:05:42: 🔓 Client released back to pool
+2025-08-14T21:05:56: 🔗 Client acquired from pool
+2025-08-14T21:05:56: 🔓 Client released back to pool
+2025-08-14T21:06:12: 🔗 Client acquired from pool
+2025-08-14T21:06:12: 🔓 Client released back to pool
+2025-08-14T21:06:12: 🔗 Client acquired from pool
+2025-08-14T21:06:12: 🔗 Client acquired from pool
+2025-08-14T21:06:12: 🔓 Client released back to pool
+2025-08-14T21:06:12: 🔓 Client released back to pool
+2025-08-14T21:06:12: 🔗 Client acquired from pool
+2025-08-14T21:06:12: 🔓 Client released back to pool
+2025-08-14T21:06:56: ✅ New PostgreSQL client connected
+2025-08-14T21:06:56: 🔗 Client acquired from pool
+2025-08-14T21:06:56: ✅ New PostgreSQL client connected
+2025-08-14T21:06:56: 🔗 Client acquired from pool
+2025-08-14T21:06:56: ✅ New PostgreSQL client connected
+2025-08-14T21:06:56: 🔗 Client acquired from pool
+2025-08-14T21:06:56: ✅ New PostgreSQL client connected
+2025-08-14T21:06:56: 🔗 Client acquired from pool
+2025-08-14T21:06:56: ✅ New PostgreSQL client connected
+2025-08-14T21:06:56: 🔗 Client acquired from pool
+2025-08-14T21:06:56: 🔓 Client released back to pool
+2025-08-14T21:06:56: 🔓 Client released back to pool
+2025-08-14T21:06:56: 🔓 Client released back to pool
+2025-08-14T21:06:56: 🔓 Client released back to pool
+2025-08-14T21:06:56: 🔓 Client released back to pool
+2025-08-14T21:07:56: ✅ New PostgreSQL client connected
+2025-08-14T21:07:56: 🔗 Client acquired from pool
+2025-08-14T21:07:56: ✅ New PostgreSQL client connected
+2025-08-14T21:07:56: 🔗 Client acquired from pool
+2025-08-14T21:07:56: 🔓 Client released back to pool
+2025-08-14T21:07:56: 🔓 Client released back to pool
+2025-08-14T21:07:56: ✅ New PostgreSQL client connected
+2025-08-14T21:07:56: 🔗 Client acquired from pool
+2025-08-14T21:07:56: ✅ New PostgreSQL client connected
+2025-08-14T21:07:56: 🔗 Client acquired from pool
+2025-08-14T21:07:56: ✅ New PostgreSQL client connected
+2025-08-14T21:07:56: 🔗 Client acquired from pool
+2025-08-14T21:07:56: 🔓 Client released back to pool
+2025-08-14T21:07:56: 🔓 Client released back to pool
+2025-08-14T21:07:56: 🔓 Client released back to pool
+2025-08-14T21:08:56: ✅ New PostgreSQL client connected
+2025-08-14T21:08:56: 🔗 Client acquired from pool
+2025-08-14T21:08:56: 🔓 Client released back to pool
+2025-08-14T21:08:56: ✅ New PostgreSQL client connected
+2025-08-14T21:08:56: 🔗 Client acquired from pool
+2025-08-14T21:08:56: ✅ New PostgreSQL client connected
+2025-08-14T21:08:56: 🔗 Client acquired from pool
+2025-08-14T21:08:56: ✅ New PostgreSQL client connected
+2025-08-14T21:08:56: 🔗 Client acquired from pool
+2025-08-14T21:08:56: ✅ New PostgreSQL client connected
+2025-08-14T21:08:56: 🔗 Client acquired from pool
+2025-08-14T21:08:56: 🔓 Client released back to pool
+2025-08-14T21:08:56: 🔓 Client released back to pool
+2025-08-14T21:08:56: 🔓 Client released back to pool
+2025-08-14T21:08:56: 🔓 Client released back to pool
+2025-08-14T21:09:56: ✅ New PostgreSQL client connected
+2025-08-14T21:09:56: 🔗 Client acquired from pool
+2025-08-14T21:09:56: ✅ New PostgreSQL client connected
+2025-08-14T21:09:56: 🔗 Client acquired from pool
+2025-08-14T21:09:56: 🔓 Client released back to pool
+2025-08-14T21:09:56: ✅ New PostgreSQL client connected
+2025-08-14T21:09:56: 🔗 Client acquired from pool
+2025-08-14T21:09:56: 🔓 Client released back to pool
+2025-08-14T21:09:56: ✅ New PostgreSQL client connected
+2025-08-14T21:09:56: 🔗 Client acquired from pool
+2025-08-14T21:09:56: ✅ New PostgreSQL client connected
+2025-08-14T21:09:56: 🔗 Client acquired from pool
+2025-08-14T21:09:56: 🔓 Client released back to pool
+2025-08-14T21:09:56: 🔓 Client released back to pool
+2025-08-14T21:09:56: 🔓 Client released back to pool
