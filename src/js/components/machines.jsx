@@ -22,6 +22,212 @@ export default function MachinesPage() {
   useAutoConnect();
   const { lastUpdate, setMachines: setMachinesFromWS } = useMachineUpdates();
   const { notifications: wsNotifications, clearNotification } = useNotifications();
+
+  // 4D Babylon.js Factory Initialization
+  useEffect(() => {
+    if (filteredMachines.length > 0) {
+      console.log('🏭 Initializing 4D Digital Twin Factory with', filteredMachines.length, 'machines');
+      initializeBabylonFactory();
+    }
+  }, [filteredMachines]);
+
+  const initializeBabylonFactory = async () => {
+    try {
+      // Load Babylon.js if not already loaded
+      if (typeof window.BABYLON === 'undefined') {
+        console.log('📦 Loading Babylon.js libraries...');
+        await loadBabylonJS();
+      }
+
+      const canvas = document.getElementById('babylon-factory-canvas');
+      if (!canvas) {
+        console.error('❌ Canvas container not found');
+        return;
+      }
+
+      // Clear any existing canvas
+      canvas.innerHTML = '';
+
+      // Create canvas element
+      const babylonCanvas = document.createElement('canvas');
+      babylonCanvas.id = 'babylonCanvas';
+      babylonCanvas.style.width = '100%';
+      babylonCanvas.style.height = '100%';
+      babylonCanvas.style.display = 'block';
+      babylonCanvas.style.outline = 'none';
+      canvas.appendChild(babylonCanvas);
+
+      // Create Babylon engine
+      const engine = new window.BABYLON.Engine(babylonCanvas, true, {
+        preserveDrawingBuffer: true,
+        stencil: true,
+        antialias: true
+      });
+      setBabylonEngine(engine);
+
+      // Create scene
+      const scene = new window.BABYLON.Scene(engine);
+      setBabylonScene(scene);
+
+      // Setup camera
+      const camera = new window.BABYLON.ArcRotateCamera('camera', -Math.PI / 2, Math.PI / 3, 50, window.BABYLON.Vector3.Zero(), scene);
+      camera.attachControls(babylonCanvas);
+      camera.setTarget(window.BABYLON.Vector3.Zero());
+
+      // Add lighting
+      const hemiLight = new window.BABYLON.HemisphericLight('hemiLight', new window.BABYLON.Vector3(0, 1, 0), scene);
+      hemiLight.intensity = 0.7;
+      
+      const dirLight = new window.BABYLON.DirectionalLight('dirLight', new window.BABYLON.Vector3(-1, -1, 1), scene);
+      dirLight.intensity = 1.0;
+      dirLight.diffuse = new window.BABYLON.Color3(0.4, 0.6, 1.0);
+
+      // Create factory floor
+      const ground = window.BABYLON.MeshBuilder.CreateGround('ground', {width: 60, height: 40}, scene);
+      const groundMaterial = new window.BABYLON.StandardMaterial('groundMaterial', scene);
+      groundMaterial.diffuseColor = new window.BABYLON.Color3(0.15, 0.2, 0.25);
+      groundMaterial.specularColor = new window.BABYLON.Color3(0.1, 0.1, 0.1);
+      ground.material = groundMaterial;
+
+      // Create 3D machines
+      createFactoryMachines(scene);
+
+      // Hide loading screen
+      setTimeout(() => {
+        const loading = document.getElementById('babylon-loading');
+        if (loading) {
+          loading.style.opacity = '0';
+          setTimeout(() => {
+            if (loading) loading.style.display = 'none';
+          }, 500);
+        }
+      }, 1500);
+
+      // Render loop
+      engine.runRenderLoop(() => {
+        scene.render();
+      });
+
+      // Handle resize
+      window.addEventListener('resize', () => {
+        engine.resize();
+      });
+
+      console.log('✅ 4D Digital Twin Factory initialized successfully!');
+    } catch (error) {
+      console.error('❌ Failed to initialize 4D factory:', error);
+    }
+  };
+
+  const loadBabylonJS = () => {
+    return new Promise((resolve, reject) => {
+      if (typeof window.BABYLON !== 'undefined') {
+        resolve();
+        return;
+      }
+
+      const babylonScript = document.createElement('script');
+      babylonScript.src = 'https://cdn.babylonjs.com/babylon.js';
+      babylonScript.onload = () => {
+        console.log('✅ Babylon.js core loaded');
+        const loadersScript = document.createElement('script');
+        loadersScript.src = 'https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js';
+        loadersScript.onload = () => {
+          console.log('✅ Babylon.js loaders ready');
+          resolve();
+        };
+        loadersScript.onerror = reject;
+        document.head.appendChild(loadersScript);
+      };
+      babylonScript.onerror = reject;
+      document.head.appendChild(babylonScript);
+    });
+  };
+
+  const createFactoryMachines = (scene) => {
+    console.log('🏭 Creating 3D machines for', filteredMachines.length, 'equipment units');
+    
+    const machineColors = {
+      'available': new window.BABYLON.Color3(0.0, 0.8, 0.4),
+      'busy': new window.BABYLON.Color3(1.0, 0.6, 0.0),
+      'offline': new window.BABYLON.Color3(0.6, 0.6, 0.6),
+      'error': new window.BABYLON.Color3(1.0, 0.2, 0.2)
+    };
+
+    filteredMachines.forEach((machine, index) => {
+      // Create machine body
+      const machineBox = window.BABYLON.MeshBuilder.CreateBox(`machine_${machine.id}`, {
+        width: 4, height: 3, depth: 3
+      }, scene);
+
+      // Position machines in departments
+      let x, z;
+      const machinesInEnv = filteredMachines.filter(m => m.environment === machine.environment);
+      const envIndex = machinesInEnv.indexOf(machine);
+
+      if (machine.environment === 'blending') {
+        x = -20 + (envIndex % 3) * 8;
+        z = -15 + Math.floor(envIndex / 3) * 6;
+      } else if (machine.environment === 'maturation') {
+        x = -5 + (envIndex % 2) * 6;
+        z = -15 + Math.floor(envIndex / 2) * 6;
+      } else {
+        x = 10 + (envIndex % 4) * 6;
+        z = -15 + Math.floor(envIndex / 4) * 6;
+      }
+
+      machineBox.position = new window.BABYLON.Vector3(x, 1.5, z);
+
+      // Create material with status color
+      const material = new window.BABYLON.StandardMaterial(`machineMat_${machine.id}`, scene);
+      const statusColor = machineColors[machine.status] || machineColors.offline;
+      material.diffuseColor = statusColor;
+      material.emissiveColor = statusColor.scale(0.2);
+      material.specularColor = new window.BABYLON.Color3(0.3, 0.3, 0.3);
+      machineBox.material = material;
+
+      // Add machine name label
+      const nameLabel = window.BABYLON.MeshBuilder.CreatePlane(`label_${machine.id}`, {
+        width: 4, height: 1
+      }, scene);
+      nameLabel.position = new window.BABYLON.Vector3(x, 4, z);
+      nameLabel.billboardMode = window.BABYLON.Mesh.BILLBOARD_MODE_ALL;
+      
+      const labelMaterial = new window.BABYLON.StandardMaterial(`labelMat_${machine.id}`, scene);
+      labelMaterial.diffuseColor = new window.BABYLON.Color3(1, 1, 1);
+      labelMaterial.emissiveColor = statusColor.scale(0.5);
+      nameLabel.material = labelMaterial;
+
+      // Add animations for running machines
+      if (machine.status === 'available') {
+        // Rotation animation
+        window.BABYLON.Animation.CreateAndStartAnimation(
+          'machineRotation', 
+          machineBox, 
+          'rotation.y', 
+          30, 
+          120, 
+          0, 
+          Math.PI * 2, 
+          window.BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE
+        );
+
+        // Pulsing animation
+        window.BABYLON.Animation.CreateAndStartAnimation(
+          'machinePulse',
+          material,
+          'emissiveColor',
+          30,
+          60,
+          statusColor.scale(0.1),
+          statusColor.scale(0.5),
+          window.BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE
+        );
+      }
+
+      console.log(`✅ Created 3D machine: ${machine.name} at position (${x}, ${z}) with status ${machine.status}`);
+    });
+  };
   
   // State for managing modals
   const [showAddModal, setShowAddModal] = useState(false);
@@ -57,6 +263,8 @@ export default function MachinesPage() {
   // Schedule modal state
   const [machineSchedule, setMachineSchedule] = useState([]);
   const [loadingSchedule, setLoadingSchedule] = useState(false);
+  const [babylonEngine, setBabylonEngine] = useState(null);
+  const [babylonScene, setBabylonScene] = useState(null);
 
   // Update form environment when environments are loaded
   useEffect(() => {
