@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { Settings, Plus, Search, Filter, RefreshCw, Edit3, Trash2, AlertTriangle, Activity, Clock, BarChart3, CheckCircle, XCircle, Wrench, Users, Calendar, RotateCcw, Info, Wifi, Sun, Moon, Factory, Zap, Thermometer, Gauge, Power, MonitorSpeaker, ShieldCheck, Workflow, Layers, Target, Cpu, Database, Cog } from 'lucide-react';
 import API from '../core/api';
 import { formatUserDisplayName, formatEmployeeCode } from '../utils/text-utils';
@@ -23,102 +23,7 @@ export default function MachinesPage() {
   const { lastUpdate, setMachines: setMachinesFromWS } = useMachineUpdates();
   const { notifications: wsNotifications, clearNotification } = useNotifications();
 
-  // 4D Babylon.js Factory Initialization
-  useEffect(() => {
-    if (filteredMachines.length > 0) {
-      console.log('🏭 Initializing 4D Digital Twin Factory with', filteredMachines.length, 'machines');
-      initializeBabylonFactory();
-    }
-  }, [filteredMachines]);
-
-  const initializeBabylonFactory = async () => {
-    try {
-      // Load Babylon.js if not already loaded
-      if (typeof window.BABYLON === 'undefined') {
-        console.log('📦 Loading Babylon.js libraries...');
-        await loadBabylonJS();
-      }
-
-      const canvas = document.getElementById('babylon-factory-canvas');
-      if (!canvas) {
-        console.error('❌ Canvas container not found');
-        return;
-      }
-
-      // Clear any existing canvas
-      canvas.innerHTML = '';
-
-      // Create canvas element
-      const babylonCanvas = document.createElement('canvas');
-      babylonCanvas.id = 'babylonCanvas';
-      babylonCanvas.style.width = '100%';
-      babylonCanvas.style.height = '100%';
-      babylonCanvas.style.display = 'block';
-      babylonCanvas.style.outline = 'none';
-      canvas.appendChild(babylonCanvas);
-
-      // Create Babylon engine
-      const engine = new window.BABYLON.Engine(babylonCanvas, true, {
-        preserveDrawingBuffer: true,
-        stencil: true,
-        antialias: true
-      });
-      setBabylonEngine(engine);
-
-      // Create scene
-      const scene = new window.BABYLON.Scene(engine);
-      setBabylonScene(scene);
-
-      // Setup camera
-      const camera = new window.BABYLON.ArcRotateCamera('camera', -Math.PI / 2, Math.PI / 3, 50, window.BABYLON.Vector3.Zero(), scene);
-      camera.attachControls(babylonCanvas);
-      camera.setTarget(window.BABYLON.Vector3.Zero());
-
-      // Add lighting
-      const hemiLight = new window.BABYLON.HemisphericLight('hemiLight', new window.BABYLON.Vector3(0, 1, 0), scene);
-      hemiLight.intensity = 0.7;
-      
-      const dirLight = new window.BABYLON.DirectionalLight('dirLight', new window.BABYLON.Vector3(-1, -1, 1), scene);
-      dirLight.intensity = 1.0;
-      dirLight.diffuse = new window.BABYLON.Color3(0.4, 0.6, 1.0);
-
-      // Create factory floor
-      const ground = window.BABYLON.MeshBuilder.CreateGround('ground', {width: 60, height: 40}, scene);
-      const groundMaterial = new window.BABYLON.StandardMaterial('groundMaterial', scene);
-      groundMaterial.diffuseColor = new window.BABYLON.Color3(0.15, 0.2, 0.25);
-      groundMaterial.specularColor = new window.BABYLON.Color3(0.1, 0.1, 0.1);
-      ground.material = groundMaterial;
-
-      // Create 3D machines
-      createFactoryMachines(scene);
-
-      // Hide loading screen
-      setTimeout(() => {
-        const loading = document.getElementById('babylon-loading');
-        if (loading) {
-          loading.style.opacity = '0';
-          setTimeout(() => {
-            if (loading) loading.style.display = 'none';
-          }, 500);
-        }
-      }, 1500);
-
-      // Render loop
-      engine.runRenderLoop(() => {
-        scene.render();
-      });
-
-      // Handle resize
-      window.addEventListener('resize', () => {
-        engine.resize();
-      });
-
-      console.log('✅ 4D Digital Twin Factory initialized successfully!');
-    } catch (error) {
-      console.error('❌ Failed to initialize 4D factory:', error);
-    }
-  };
-
+  // Function declarations first to avoid hoisting issues
   const loadBabylonJS = () => {
     return new Promise((resolve, reject) => {
       if (typeof window.BABYLON !== 'undefined') {
@@ -228,6 +133,102 @@ export default function MachinesPage() {
       console.log(`✅ Created 3D machine: ${machine.name} at position (${x}, ${z}) with status ${machine.status}`);
     });
   };
+
+  const initializeBabylonFactory = async () => {
+    try {
+      // Load Babylon.js if not already loaded
+      if (typeof window.BABYLON === 'undefined') {
+        console.log('📦 Loading Babylon.js libraries...');
+        await loadBabylonJS();
+      }
+
+      const canvas = document.getElementById('babylon-factory-canvas');
+      if (!canvas) {
+        console.error('❌ Canvas container not found');
+        return;
+      }
+
+      // Clear any existing canvas
+      canvas.innerHTML = '';
+
+      // Create canvas element
+      const babylonCanvas = document.createElement('canvas');
+      babylonCanvas.id = 'babylonCanvas';
+      babylonCanvas.style.width = '100%';
+      babylonCanvas.style.height = '100%';
+      babylonCanvas.style.display = 'block';
+      babylonCanvas.style.outline = 'none';
+      canvas.appendChild(babylonCanvas);
+
+      // Create Babylon engine
+      const engine = new window.BABYLON.Engine(babylonCanvas, true, {
+        preserveDrawingBuffer: true,
+        stencil: true,
+        antialias: true
+      });
+      setBabylonEngine(engine);
+
+      // Create scene
+      const scene = new window.BABYLON.Scene(engine);
+      setBabylonScene(scene);
+
+      // Setup camera
+      const camera = new window.BABYLON.ArcRotateCamera('camera', -Math.PI / 2, Math.PI / 3, 50, window.BABYLON.Vector3.Zero(), scene);
+      camera.attachControls(babylonCanvas);
+      camera.setTarget(window.BABYLON.Vector3.Zero());
+
+      // Add lighting
+      const hemiLight = new window.BABYLON.HemisphericLight('hemiLight', new window.BABYLON.Vector3(0, 1, 0), scene);
+      hemiLight.intensity = 0.7;
+      
+      const dirLight = new window.BABYLON.DirectionalLight('dirLight', new window.BABYLON.Vector3(-1, -1, 1), scene);
+      dirLight.intensity = 1.0;
+      dirLight.diffuse = new window.BABYLON.Color3(0.4, 0.6, 1.0);
+
+      // Create factory floor
+      const ground = window.BABYLON.MeshBuilder.CreateGround('ground', {width: 60, height: 40}, scene);
+      const groundMaterial = new window.BABYLON.StandardMaterial('groundMaterial', scene);
+      groundMaterial.diffuseColor = new window.BABYLON.Color3(0.15, 0.2, 0.25);
+      groundMaterial.specularColor = new window.BABYLON.Color3(0.1, 0.1, 0.1);
+      ground.material = groundMaterial;
+
+      // Create 3D machines
+      createFactoryMachines(scene);
+
+      // Hide loading screen
+      setTimeout(() => {
+        const loading = document.getElementById('babylon-loading');
+        if (loading) {
+          loading.style.opacity = '0';
+          setTimeout(() => {
+            if (loading) loading.style.display = 'none';
+          }, 500);
+        }
+      }, 1500);
+
+      // Render loop
+      engine.runRenderLoop(() => {
+        scene.render();
+      });
+
+      // Handle resize
+      window.addEventListener('resize', () => {
+        engine.resize();
+      });
+
+      console.log('✅ 4D Digital Twin Factory initialized successfully!');
+    } catch (error) {
+      console.error('❌ Failed to initialize 4D factory:', error);
+    }
+  };
+
+  // 4D Babylon.js Factory Initialization useEffect
+  useEffect(() => {
+    if (filteredMachines.length > 0) {
+      console.log('🏭 Initializing 4D Digital Twin Factory with', filteredMachines.length, 'machines');
+      initializeBabylonFactory();
+    }
+  }, [filteredMachines]);
   
   // State for managing modals
   const [showAddModal, setShowAddModal] = useState(false);
@@ -1521,162 +1522,6 @@ export default function MachinesPage() {
             </div>
           </div>
           
-          {/* Advanced Babylon.js Integration Script */}
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `
-                // Initialize Babylon.js when DOM is ready
-                if (typeof BABYLON !== 'undefined') {
-                  console.log('🚀 Babylon.js already loaded - initializing 4D factory');
-                  initialize4DFactory();
-                } else {
-                  console.log('📦 Loading Babylon.js for 4D factory visualization');
-                  
-                  // Load Babylon.js core
-                  const babylonScript = document.createElement('script');
-                  babylonScript.src = 'https://cdn.babylonjs.com/babylon.js';
-                  babylonScript.onload = function() {
-                    console.log('✅ Babylon.js core loaded');
-                    
-                    // Load Babylon.js loaders
-                    const loadersScript = document.createElement('script');
-                    loadersScript.src = 'https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js';
-                    loadersScript.onload = function() {
-                      console.log('✅ Babylon.js loaders ready');
-                      initialize4DFactory();
-                    };
-                    document.head.appendChild(loadersScript);
-                  };
-                  document.head.appendChild(babylonScript);
-                }
-                
-                function initialize4DFactory() {
-                  console.log('🏭 Initializing 4D Digital Twin Factory');
-                  
-                  // Get canvas container
-                  const canvas = document.getElementById('babylon-factory-canvas');
-                  if (!canvas) {
-                    console.error('❌ Canvas container not found');
-                    return;
-                  }
-                  
-                  // Create canvas element
-                  const babylonCanvas = document.createElement('canvas');
-                  babylonCanvas.id = 'babylonCanvas';
-                  babylonCanvas.style.width = '100%';
-                  babylonCanvas.style.height = '100%';
-                  babylonCanvas.style.display = 'block';
-                  canvas.appendChild(babylonCanvas);
-                  
-                  // Create Babylon engine
-                  const engine = new BABYLON.Engine(babylonCanvas, true, {
-                    preserveDrawingBuffer: true,
-                    stencil: true,
-                    antialias: true
-                  });
-                  
-                  // Create scene
-                  const scene = new BABYLON.Scene(engine);
-                  scene.createDefaultCameraOrLights(true, true, true);
-                  
-                  // Configure camera
-                  const camera = scene.activeCamera;
-                  camera.setTarget(BABYLON.Vector3.Zero());
-                  camera.position = new BABYLON.Vector3(20, 20, -20);
-                  
-                  // Add dramatic lighting
-                  const hemiLight = new BABYLON.HemisphericLight('hemiLight', new BABYLON.Vector3(0, 1, 0), scene);
-                  hemiLight.intensity = 0.6;
-                  
-                  const dirLight = new BABYLON.DirectionalLight('dirLight', new BABYLON.Vector3(-1, -1, 1), scene);
-                  dirLight.intensity = 0.8;
-                  dirLight.diffuse = new BABYLON.Color3(0.4, 0.6, 1.0);
-                  
-                  // Create factory floor
-                  const ground = BABYLON.MeshBuilder.CreateGround('ground', {width: 50, height: 30}, scene);
-                  const groundMaterial = new BABYLON.StandardMaterial('groundMaterial', scene);
-                  groundMaterial.diffuseColor = new BABYLON.Color3(0.2, 0.25, 0.3);
-                  groundMaterial.specularColor = new BABYLON.Color3(0.1, 0.1, 0.1);
-                  ground.material = groundMaterial;
-                  
-                  // Create machines based on real data
-                  const machines = ${JSON.stringify(filteredMachines)};
-                  const machineColor = {
-                    'available': new BABYLON.Color3(0.0, 0.8, 0.4),
-                    'busy': new BABYLON.Color3(1.0, 0.6, 0.0),
-                    'offline': new BABYLON.Color3(0.6, 0.6, 0.6),
-                    'error': new BABYLON.Color3(1.0, 0.2, 0.2)
-                  };
-                  
-                  machines.forEach((machine, index) => {
-                    // Create machine body
-                    const machineBox = BABYLON.MeshBuilder.CreateBox(machine.name, {width: 3, height: 2, depth: 2}, scene);
-                    
-                    // Position machines in different areas
-                    let x, z;
-                    if (machine.environment === 'blending') {
-                      x = -15 + (index % 3) * 6;
-                      z = -8 + Math.floor(index / 3) * 4;
-                    } else if (machine.environment === 'maturation') {
-                      x = -2 + (index % 2) * 4;
-                      z = -8 + Math.floor(index / 2) * 4;
-                    } else {
-                      x = 10 + (index % 4) * 4;
-                      z = -8 + Math.floor(index / 4) * 4;
-                    }
-                    
-                    machineBox.position = new BABYLON.Vector3(x, 1, z);
-                    
-                    // Create material with status color
-                    const material = new BABYLON.StandardMaterial('machineMat' + index, scene);
-                    const color = machineColor[machine.status] || machineColor.offline;
-                    material.diffuseColor = color;
-                    material.emissiveColor = color.scale(0.1);
-                    machineBox.material = material;
-                    
-                    // Add rotation animation for running machines
-                    if (machine.status === 'available') {
-                      BABYLON.Animation.CreateAndStartAnimation('rotate', machineBox, 'rotation.y', 30, 120, 0, Math.PI * 2, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
-                    }
-                    
-                    // Add status indicator
-                    const indicator = BABYLON.MeshBuilder.CreateSphere('indicator' + index, {diameter: 0.3}, scene);
-                    indicator.position = new BABYLON.Vector3(x, 2.5, z);
-                    const indicatorMaterial = new BABYLON.StandardMaterial('indicatorMat' + index, scene);
-                    indicatorMaterial.diffuseColor = color;
-                    indicatorMaterial.emissiveColor = color.scale(0.5);
-                    indicator.material = indicatorMaterial;
-                    
-                    // Pulsing animation for active machines
-                    if (machine.status === 'available') {
-                      BABYLON.Animation.CreateAndStartAnimation('pulse', indicator, 'scaling', 30, 60, new BABYLON.Vector3(1, 1, 1), new BABYLON.Vector3(1.5, 1.5, 1.5), BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
-                    }
-                  });
-                  
-                  // Hide loading screen
-                  setTimeout(() => {
-                    const loading = document.getElementById('babylon-loading');
-                    if (loading) loading.style.opacity = '0';
-                    setTimeout(() => {
-                      if (loading) loading.style.display = 'none';
-                    }, 500);
-                  }, 2000);
-                  
-                  // Render loop
-                  engine.runRenderLoop(() => {
-                    scene.render();
-                  });
-                  
-                  // Handle resize
-                  window.addEventListener('resize', () => {
-                    engine.resize();
-                  });
-                  
-                  console.log('✅ 4D Digital Twin Factory initialized successfully!');
-                }
-              `
-            }}
-          />
           
           {/* Legacy Fallback - Hidden Machine List */}
           <div style={{display: 'none'}}>
