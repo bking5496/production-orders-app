@@ -1164,86 +1164,189 @@ export default function MachinesPage() {
           <div className="bg-slate-800 rounded-lg border border-slate-600 p-6">
             <div className="bg-slate-700 rounded-lg p-4 overflow-x-auto">
               <svg 
-                width="1600" 
-                height="800" 
-                viewBox="0 0 1600 800"
-                className="w-full h-auto border border-slate-500 rounded bg-gradient-to-b from-slate-200 to-slate-300"
+                width="1800" 
+                height="1000" 
+                viewBox="0 0 1800 1000"
+                className="w-full h-auto border border-slate-500 rounded bg-gradient-to-br from-slate-100 via-slate-200 to-slate-300"
               >
-                {/* 3D Grid and Floor */}
+                {/* Enhanced 3D Definitions */}
                 <defs>
-                  {/* 3D Floor Pattern */}
-                  <pattern id="floor-grid" width="40" height="23" patternUnits="userSpaceOnUse">
-                    <path d="M 0 0 L 40 0 L 20 23 L -20 23 Z" fill="none" stroke="#cbd5e1" strokeWidth="0.5"/>
-                    <path d="M 20 0 L 20 23" stroke="#cbd5e1" strokeWidth="0.3" opacity="0.5"/>
+                  {/* Professional 3D Floor Pattern */}
+                  <pattern id="floor-grid" width="50" height="30" patternUnits="userSpaceOnUse">
+                    <path d="M 0 0 L 50 0 L 25 30 L -25 30 Z" fill="none" stroke="#94a3b8" strokeWidth="0.8" opacity="0.4"/>
+                    <path d="M 25 0 L 25 30" stroke="#94a3b8" strokeWidth="0.5" opacity="0.3"/>
+                    <path d="M 0 15 L 50 15" stroke="#94a3b8" strokeWidth="0.3" opacity="0.2"/>
                   </pattern>
                   
-                  {/* Gradients for 3D effect */}
-                  <linearGradient id="machine-top" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" stopColor="#ffffff" stopOpacity="0.3"/>
-                    <stop offset="100%" stopColor="#000000" stopOpacity="0.1"/>
+                  {/* Enhanced Gradients for realistic 3D lighting */}
+                  <linearGradient id="machine-top" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#ffffff" stopOpacity="0.4"/>
+                    <stop offset="50%" stopColor="#f8fafc" stopOpacity="0.2"/>
+                    <stop offset="100%" stopColor="#e2e8f0" stopOpacity="0.1"/>
                   </linearGradient>
                   
-                  <linearGradient id="machine-side" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="#000000" stopOpacity="0.2"/>
-                    <stop offset="100%" stopColor="#ffffff" stopOpacity="0.1"/>
+                  <linearGradient id="machine-side" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#1e293b" stopOpacity="0.3"/>
+                    <stop offset="70%" stopColor="#475569" stopOpacity="0.15"/>
+                    <stop offset="100%" stopColor="#64748b" stopOpacity="0.05"/>
                   </linearGradient>
                   
-                  {/* Shadow filter */}
-                  <filter id="drop-shadow" x="-20%" y="-20%" width="140%" height="140%">
-                    <feDropShadow dx="4" dy="8" stdDeviation="3" floodOpacity="0.3"/>
+                  <linearGradient id="machine-front" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stopColor="#ffffff" stopOpacity="0.2"/>
+                    <stop offset="100%" stopColor="#1e293b" stopOpacity="0.1"/>
+                  </linearGradient>
+                  
+                  {/* Metal texture gradients */}
+                  <linearGradient id="metal-surface" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#f1f5f9" stopOpacity="0.8"/>
+                    <stop offset="30%" stopColor="#cbd5e1" stopOpacity="0.6"/>
+                    <stop offset="70%" stopColor="#94a3b8" stopOpacity="0.4"/>
+                    <stop offset="100%" stopColor="#64748b" stopOpacity="0.3"/>
+                  </linearGradient>
+                  
+                  {/* Enhanced Shadow filters */}
+                  <filter id="drop-shadow" x="-30%" y="-30%" width="160%" height="160%">
+                    <feGaussianBlur in="SourceAlpha" stdDeviation="4"/>
+                    <feOffset dx="6" dy="12" result="offset"/>
+                    <feFlood floodColor="#1e293b" floodOpacity="0.25"/>
+                    <feComposite in2="offset" operator="in"/>
+                    <feMerge>
+                      <feMergeNode/>
+                      <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
                   </filter>
+                  
+                  <filter id="machine-shadow" x="-50%" y="-50%" width="200%" height="200%">
+                    <feGaussianBlur in="SourceAlpha" stdDeviation="6"/>
+                    <feOffset dx="8" dy="16" result="offset"/>
+                    <feFlood floodColor="#0f172a" floodOpacity="0.4"/>
+                    <feComposite in2="offset" operator="in"/>
+                    <feMerge>
+                      <feMergeNode/>
+                      <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                  </filter>
+                  
+                  {/* Lighting effects */}
+                  <radialGradient id="ambient-light" cx="50%" cy="30%">
+                    <stop offset="0%" stopColor="#ffffff" stopOpacity="0.3"/>
+                    <stop offset="100%" stopColor="#ffffff" stopOpacity="0"/>
+                  </radialGradient>
                 </defs>
                 
                 {/* 3D Isometric Floor */}
                 <rect width="100%" height="100%" fill="url(#floor-grid)" />
                 
-                {/* Factory walls and ceiling beams - 3D perspective */}
-                <g className="factory-structure" opacity="0.6">
-                  {/* Back walls */}
-                  <polygon points="100,100 1500,100 1400,50 200,50" fill="#94a3b8" stroke="#64748b" strokeWidth="2"/>
-                  <polygon points="100,100 100,600 200,550 200,50" fill="#64748b" stroke="#475569" strokeWidth="2"/>
-                  <polygon points="1500,100 1500,600 1400,550 1400,50" fill="#64748b" stroke="#475569" strokeWidth="2"/>
+                {/* Enhanced Factory Structure - 3D perspective */}
+                <g className="factory-structure" opacity="0.7">
+                  {/* Factory floor base */}
+                  <polygon points="50,150 1750,50 1750,950 50,1050" fill="url(#ambient-light)" stroke="none"/>
                   
-                  {/* Ceiling beams */}
-                  <polygon points="200,50 1400,50 1400,30 200,30" fill="#9ca3af" stroke="#6b7280" strokeWidth="1"/>
-                  <polygon points="350,50 350,30 370,30 370,50" fill="#6b7280"/>
-                  <polygon points="650,50 650,30 670,30 670,50" fill="#6b7280"/>
-                  <polygon points="950,50 950,30 970,30 970,50" fill="#6b7280"/>
-                  <polygon points="1250,50 1250,30 1270,30 1270,50" fill="#6b7280"/>
+                  {/* Back walls with better perspective */}
+                  <polygon points="80,120 1720,20 1650,10 150,110" fill="#8fa4b3" stroke="#64748b" strokeWidth="3" opacity="0.8"/>
+                  <polygon points="80,120 80,800 150,790 150,110" fill="#64748b" stroke="#475569" strokeWidth="2"/>
+                  <polygon points="1720,20 1720,700 1650,690 1650,10" fill="#64748b" stroke="#475569" strokeWidth="2"/>
+                  
+                  {/* Enhanced ceiling structure */}
+                  <polygon points="150,110 1650,10 1650,0 150,100" fill="#a1a8b0" stroke="#6b7280" strokeWidth="2"/>
+                  
+                  {/* Structural support beams */}
+                  <g opacity="0.9">
+                    <polygon points="300,100 320,98 320,88 300,90" fill="#64748b" stroke="#475569" strokeWidth="1"/>
+                    <polygon points="300,90 300,100 310,780 310,770" fill="#4a5568" stroke="#374151" strokeWidth="1"/>
+                    
+                    <polygon points="600,85 620,83 620,73 600,75" fill="#64748b" stroke="#475569" strokeWidth="1"/>
+                    <polygon points="600,75 600,85 610,765 610,755" fill="#4a5568" stroke="#374151" strokeWidth="1"/>
+                    
+                    <polygon points="900,70 920,68 920,58 900,60" fill="#64748b" stroke="#475569" strokeWidth="1"/>
+                    <polygon points="900,60 900,70 910,750 910,740" fill="#4a5568" stroke="#374151" strokeWidth="1"/>
+                    
+                    <polygon points="1200,55 1220,53 220,43 1200,45" fill="#64748b" stroke="#475569" strokeWidth="1"/>
+                    <polygon points="1200,45 1200,55 1210,735 1210,725" fill="#4a5568" stroke="#374151" strokeWidth="1"/>
+                    
+                    <polygon points="1500,40 1520,38 1520,28 1500,30" fill="#64748b" stroke="#475569" strokeWidth="1"/>
+                    <polygon points="1500,30 1500,40 1510,720 1510,710" fill="#4a5568" stroke="#374151" strokeWidth="1"/>
+                  </g>
+                  
+                  {/* Industrial lighting fixtures */}
+                  <g opacity="0.6">
+                    <ellipse cx="400" cy="95" rx="15" ry="8" fill="#fbbf24" stroke="#d97706" strokeWidth="1" opacity="0.8"/>
+                    <ellipse cx="700" cy="80" rx="15" ry="8" fill="#fbbf24" stroke="#d97706" strokeWidth="1" opacity="0.8"/>
+                    <ellipse cx="1000" cy="65" rx="15" ry="8" fill="#fbbf24" stroke="#d97706" strokeWidth="1" opacity="0.8"/>
+                    <ellipse cx="1300" cy="50" rx="15" ry="8" fill="#fbbf24" stroke="#d97706" strokeWidth="1" opacity="0.8"/>
+                  </g>
                 </g>
                 
-                {/* 3D BLENDING AREA - Isometric Left Side */}
+                {/* ENHANCED 3D BLENDING AREA - Professional Layout */}
                 <g>
-                  {/* 3D Floor area for blending */}
+                  {/* 3D Blending department floor - larger and better positioned */}
                   <polygon 
-                    points="120,200 450,120 450,350 120,430" 
-                    fill="rgba(99, 102, 241, 0.1)" 
+                    points="150,350 550,250 550,600 150,700" 
+                    fill="rgba(99, 102, 241, 0.12)" 
                     stroke="#6366f1" 
-                    strokeWidth="3"
-                    strokeDasharray="10,5"
+                    strokeWidth="4"
+                    strokeDasharray="15,8"
                   />
-                  {/* Department label with 3D positioning */}
+                  
+                  {/* Department safety markings */}
+                  <polygon 
+                    points="160,360 540,260 540,270 160,370" 
+                    fill="#fbbf24" 
+                    stroke="#d97706" 
+                    strokeWidth="2"
+                  />
+                  <polygon 
+                    points="160,680 540,580 540,590 160,690" 
+                    fill="#fbbf24" 
+                    stroke="#d97706" 
+                    strokeWidth="2"
+                  />
+                  
+                  {/* Enhanced department label */}
                   <text 
-                    x="125" 
-                    y="110"
-                    className="fill-indigo-700 text-lg font-mono font-bold"
-                    transform="rotate(-15 125 110)"
+                    x="180" 
+                    y="240"
+                    className="fill-indigo-800 text-xl font-mono font-bold"
+                    transform="rotate(-12 180 240)"
                   >
                     🏭 BLENDING DEPARTMENT
                   </text>
                   
-                  {/* 3D Blending machines in isometric view */}
+                  {/* Zone markers */}
+                  <text 
+                    x="200" 
+                    y="320"
+                    className="fill-indigo-600 text-sm font-mono font-semibold"
+                    transform="rotate(-12 200 320)"
+                  >
+                    ZONE A - PRIMARY MIXING
+                  </text>
+                  <text 
+                    x="300" 
+                    y="520"
+                    className="fill-indigo-600 text-sm font-mono font-semibold"
+                    transform="rotate(-12 300 520)"
+                  >
+                    ZONE B - PROCESSING &amp; TRANSFER
+                  </text>
+                  
+                  {/* Enhanced 3D Blending machines with professional spacing */}
                   {filteredMachines.filter(m => m.environment === 'blending').map((machine, index) => {
-                    // 3D Isometric positions (x, y, z-depth, width, depth, height)
+                    // Enhanced 3D positions with better spacing and realistic proportions
                     const positions3D = [
-                      // Front row mixers
-                      { x: 150, y: 180, z: 30, w: 60, d: 40, h: 50, type: '3d_mixer', name: 'Blender leal' },
-                      { x: 230, y: 160, z: 30, w: 60, d: 40, h: 50, type: '3d_mixer', name: 'Blender MaxMix' },
-                      { x: 310, y: 140, z: 30, w: 60, d: 40, h: 50, type: '3d_mixer', name: 'Blender Ploughshare' },
-                      // Back row
-                      { x: 180, y: 250, z: 40, w: 60, d: 40, h: 50, type: '3d_mixer', name: 'Blender Winkwork' },
-                      { x: 270, y: 230, z: 35, w: 80, d: 35, h: 45, type: '3d_drum', name: 'Drumblender' },
-                      { x: 160, y: 320, z: 25, w: 200, d: 30, h: 35, type: '3d_liquid_line', name: 'Liquid Line' }
+                      // Zone A - Primary Mixers (front row with proper spacing)
+                      { x: 200, y: 380, z: 45, w: 85, d: 60, h: 70, type: '3d_mixer_pro', name: 'Blender leal' },
+                      { x: 320, y: 350, z: 45, w: 85, d: 60, h: 70, type: '3d_mixer_pro', name: 'Blender MaxMix' },
+                      { x: 440, y: 320, z: 45, w: 85, d: 60, h: 70, type: '3d_mixer_pro', name: 'Blender Ploughshare' },
+                      
+                      // Zone A - Secondary mixer (middle position)
+                      { x: 260, y: 460, z: 50, w: 90, d: 65, h: 75, type: '3d_mixer_heavy', name: 'Blender Winkwork' },
+                      
+                      // Zone B - Drum blender (specialized equipment)
+                      { x: 380, y: 530, z: 40, w: 120, d: 50, h: 60, type: '3d_drum_pro', name: 'Drumblender' },
+                      
+                      // Zone B - Liquid processing line (extended system)
+                      { x: 180, y: 580, z: 35, w: 280, d: 45, h: 50, type: '3d_liquid_pro', name: 'Liquid Line' }
                     ];
                     
                     const pos = positions3D[index] || positions3D[0];
@@ -1257,45 +1360,80 @@ export default function MachinesPage() {
                     const isoY = pos.y - pos.z * 0.3;
                     
                     return (
-                      <g key={machine.id} onClick={() => setSelectedMachine(machine)} style={{ cursor: 'pointer' }} filter="url(#drop-shadow)">
-                        {/* 3D Mixer machines */}
-                        {pos.type === '3d_mixer' && (
+                      <g key={machine.id} onClick={() => setSelectedMachine(machine)} style={{ cursor: 'pointer' }} filter="url(#machine-shadow)">
+                        {/* Professional 3D Mixer machines */}
+                        {(pos.type === '3d_mixer_pro' || pos.type === '3d_mixer_heavy') && (
                           <g>
-                            {/* Machine base (bottom face) */}
+                            {/* Machine foundation/base */}
                             <polygon 
-                              points={`${isoX},${isoY + pos.h} ${isoX + pos.w},${isoY + pos.h} ${isoX + pos.w + pos.z*0.5},${isoY + pos.h - pos.z*0.3} ${isoX + pos.z*0.5},${isoY + pos.h - pos.z*0.3}`}
-                              fill="#374151" stroke="#1f2937" strokeWidth="1"
+                              points={`${isoX-5},${isoY + pos.h + 5} ${isoX + pos.w + 5},${isoY + pos.h + 5} ${isoX + pos.w + pos.z*0.5 + 5},${isoY + pos.h - pos.z*0.3 + 5} ${isoX + pos.z*0.5 - 5},${isoY + pos.h - pos.z*0.3 + 5}`}
+                              fill="#2d3748" stroke="#1a202c" strokeWidth="2" opacity="0.8"
                             />
                             
-                            {/* Machine front face */}
+                            {/* Main machine body - front face */}
                             <rect 
                               x={isoX} y={isoY} width={pos.w} height={pos.h}
-                              fill={statusColor} stroke="#1f2937" strokeWidth="2" rx="6"
+                              fill={statusColor} stroke="#1f2937" strokeWidth="3" rx="8"
+                            />
+                            <rect 
+                              x={isoX} y={isoY} width={pos.w} height={pos.h}
+                              fill="url(#machine-front)" stroke="none" rx="8"
                             />
                             
-                            {/* Machine top face */}
+                            {/* Machine top face with enhanced detail */}
                             <polygon 
                               points={`${isoX},${isoY} ${isoX + pos.w},${isoY} ${isoX + pos.w + pos.z*0.5},${isoY - pos.z*0.3} ${isoX + pos.z*0.5},${isoY - pos.z*0.3}`}
-                              fill="url(#machine-top)" stroke="#1f2937" strokeWidth="1"
+                              fill="url(#machine-top)" stroke="#1f2937" strokeWidth="2"
                             />
                             
                             {/* Machine right side face */}
                             <polygon 
                               points={`${isoX + pos.w},${isoY} ${isoX + pos.w + pos.z*0.5},${isoY - pos.z*0.3} ${isoX + pos.w + pos.z*0.5},${isoY + pos.h - pos.z*0.3} ${isoX + pos.w},${isoY + pos.h}`}
+                              fill="url(#machine-side)" stroke="#1f2937" strokeWidth="2"
+                            />
+                            
+                            {/* Enhanced control panel with 3D depth */}
+                            <rect x={isoX + 10} y={isoY + 10} width="35" height="25" fill="#374151" stroke="#1f2937" strokeWidth="2" rx="4"/>
+                            <polygon 
+                              points={`${isoX + 10},${isoY + 10} ${isoX + 45},${isoY + 10} ${isoX + 50},${isoY + 5} ${isoX + 15},${isoY + 5}`} 
+                              fill="url(#metal-surface)" stroke="#1f2937" strokeWidth="1"
+                            />
+                            <polygon 
+                              points={`${isoX + 45},${isoY + 10} ${isoX + 45},${isoY + 35} ${isoX + 50},${isoY + 30} ${isoX + 50},${isoY + 5}`} 
                               fill="url(#machine-side)" stroke="#1f2937" strokeWidth="1"
                             />
                             
-                            {/* 3D Control panel */}
-                            <rect x={isoX + 8} y={isoY + 8} width="25" height="15" fill="#4b5563" stroke="#1f2937" strokeWidth="1" rx="3"/>
-                            <polygon points={`${isoX + 8},${isoY + 8} ${isoX + 33},${isoY + 8} ${isoX + 38},${isoY + 5} ${isoX + 13},${isoY + 5}`} fill="#6b7280" stroke="#1f2937" strokeWidth="1"/>
+                            {/* Control panel displays and buttons */}
+                            <rect x={isoX + 15} y={isoY + 15} width="12" height="8" fill="#1e3a8a" stroke="#1e40af" strokeWidth="1" rx="1"/>
+                            <rect x={isoX + 30} y={isoY + 15} width="8" height="8" fill="#dc2626" stroke="#991b1b" strokeWidth="1" rx="2"/>
+                            <rect x={isoX + 15} y={isoY + 25} width="20" height="3" fill="#4b5563" stroke="#374151" strokeWidth="1" rx="1"/>
                             
-                            {/* 3D Mixing chamber */}
-                            <circle cx={isoX + pos.w/2} cy={isoY + pos.h/2} r="18" fill="none" stroke="#1f2937" strokeWidth="3"/>
-                            <ellipse cx={isoX + pos.w/2 + 4} cy={isoY + pos.h/2 - 2} rx="18" ry="12" fill="none" stroke="#1f2937" strokeWidth="2" opacity="0.5"/>
+                            {/* Main mixing chamber with enhanced detail */}
+                            <circle cx={isoX + pos.w/2} cy={isoY + pos.h/2 + 5} r="25" fill="#6b7280" stroke="#1f2937" strokeWidth="4"/>
+                            <circle cx={isoX + pos.w/2} cy={isoY + pos.h/2 + 5} r="25" fill="url(#metal-surface)" stroke="none"/>
+                            <ellipse cx={isoX + pos.w/2 + 6} cy={isoY + pos.h/2 - 2} rx="25" ry="15" fill="none" stroke="#1f2937" strokeWidth="3" opacity="0.6"/>
                             
-                            {/* 3D Mixing blades */}
-                            <line x1={isoX + pos.w/2 - 12} y1={isoY + pos.h/2} x2={isoX + pos.w/2 + 12} y2={isoY + pos.h/2} stroke="#1f2937" strokeWidth="3"/>
-                            <line x1={isoX + pos.w/2} y1={isoY + pos.h/2 - 12} x2={isoX + pos.w/2} y2={isoY + pos.h/2 + 12} stroke="#1f2937" strokeWidth="3"/>
+                            {/* Chamber top view/opening */}
+                            <ellipse cx={isoX + pos.w/2 + 6} cy={isoY + pos.h/2 - 10} rx="20" ry="12" fill="#4a5568" stroke="#1f2937" strokeWidth="2"/>
+                            
+                            {/* Enhanced mixing blades with animation suggestion */}
+                            <g transform={`rotate(${machine.status === 'in_use' ? '15' : '0'} ${isoX + pos.w/2} ${isoY + pos.h/2 + 5})`}>
+                              <line x1={isoX + pos.w/2 - 18} y1={isoY + pos.h/2 + 5} x2={isoX + pos.w/2 + 18} y2={isoY + pos.h/2 + 5} stroke="#1f2937" strokeWidth="4"/>
+                              <line x1={isoX + pos.w/2} y1={isoY + pos.h/2 - 13} x2={isoX + pos.w/2} y2={isoY + pos.h/2 + 23} stroke="#1f2937" strokeWidth="4"/>
+                              <line x1={isoX + pos.w/2 - 13} y1={isoY + pos.h/2 - 8} x2={isoX + pos.w/2 + 13} y2={isoY + pos.h/2 + 18} stroke="#1f2937" strokeWidth="3"/>
+                              <line x1={isoX + pos.w/2 + 13} y1={isoY + pos.h/2 - 8} x2={isoX + pos.w/2 - 13} y2={isoY + pos.h/2 + 18} stroke="#1f2937" strokeWidth="3"/>
+                            </g>
+                            
+                            {/* Motor housing */}
+                            <rect x={isoX + pos.w - 25} y={isoY + 20} width="20" height="15" fill="#374151" stroke="#1f2937" strokeWidth="2" rx="3"/>
+                            <polygon 
+                              points={`${isoX + pos.w - 25},${isoY + 20} ${isoX + pos.w - 5},${isoY + 20} ${isoX + pos.w + 5},${isoY + 15} ${isoX + pos.w - 15},${isoY + 15}`} 
+                              fill="url(#metal-surface)" stroke="#1f2937" strokeWidth="1"
+                            />
+                            
+                            {/* Discharge valve */}
+                            <circle cx={isoX + pos.w/2} cy={isoY + pos.h - 8} r="6" fill="#6b7280" stroke="#1f2937" strokeWidth="2"/>
+                            <circle cx={isoX + pos.w/2 + 2} cy={isoY + pos.h - 10} r="6" fill="url(#metal-surface)" stroke="none"/>
                           </g>
                         )}
                         
