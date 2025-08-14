@@ -12661,3 +12661,16 @@
   'analytics'
 ]
 2025-08-14T09:19:42: 🏠 admin joined room: production
+2025-08-14T09:20:13: ✅ New PostgreSQL client connected
+2025-08-14T09:20:13: 🔗 Client acquired from pool
+2025-08-14T09:20:13: 🔓 Client released back to pool
+2025-08-14T09:20:42: 🔗 Client acquired from pool
+2025-08-14T09:20:42: 🔓 Client released back to pool
+2025-08-14T09:21:12: 🔗 Client acquired from pool
+2025-08-14T09:21:12: 🔓 Client released back to pool
+2025-08-14T09:21:42: ✅ New PostgreSQL client connected
+2025-08-14T09:21:42: 🔗 Client acquired from pool
+2025-08-14T09:21:43: 🔓 Client released back to pool
+2025-08-14T09:22:12: 🔗 Client acquired from pool
+2025-08-14T09:22:12: 🔓 Client released back to pool
+2025-08-14T09:27:13: 🔌 WebSocket disconnected: admin
