@@ -1511,28 +1511,28 @@ export default function MachinesPage() {
                         )}
                         
                         
-                        {/* Fixed Machine label - positioned to avoid overlap */}
+                        {/* Clean machine label positioning */}
                         <text 
-                          x={isoX + pos.w/2} y={isoY + pos.h + 35}
+                          x={isoX + pos.w/2} y={isoY + pos.h + 45}
                           textAnchor="middle"
                           className="fill-slate-800 text-sm font-mono font-bold"
                         >
                           {machine.name}
                         </text>
                         
-                        {/* Enhanced 3D Status indicator */}
+                        {/* Professional status indicator */}
                         <circle 
-                          cx={isoX + pos.w - 12} cy={isoY + 12}
-                          r="10" fill={statusColor} stroke="#1f2937" strokeWidth="2"
+                          cx={isoX + pos.w - 15} cy={isoY + 15}
+                          r="12" fill={statusColor} stroke="#1f2937" strokeWidth="3"
                         />
-                        <ellipse 
-                          cx={isoX + pos.w - 10} cy={isoY + 10}
-                          rx="10" ry="7" fill="rgba(255,255,255,0.3)" stroke="none"
+                        <circle 
+                          cx={isoX + pos.w - 18} cy={isoY + 12}
+                          r="8" fill="rgba(255,255,255,0.4)" stroke="none"
                         />
                         
-                        {/* Fixed Status text - positioned above machine */}
+                        {/* Clear status text positioning */}
                         <text 
-                          x={isoX + pos.w/2} y={isoY - 20}
+                          x={isoX + pos.w/2} y={isoY - 25}
                           textAnchor="middle"
                           className="fill-slate-800 text-sm font-mono font-bold"
                         >
@@ -1543,26 +1543,44 @@ export default function MachinesPage() {
                   })}
                 </g>
                 
-                {/* 3D MATURATION ROOM - Isometric Center */}
+                {/* ORGANIZED MATURATION DEPARTMENT - Center Section */}
                 <g>
-                  {/* 3D Maturation room floor */}
+                  {/* Clean maturation department area */}
                   <polygon 
-                    points="480,250 650,170 650,400 480,480" 
-                    fill="rgba(139, 69, 19, 0.15)" 
+                    points="650,250 1100,180 1100,800 650,870" 
+                    fill="rgba(139, 69, 19, 0.08)" 
                     stroke="#8b4513" 
                     strokeWidth="3"
-                    strokeDasharray="8,5"
+                    strokeDasharray="12,6"
                   />
                   
-                  {/* Department label with 3D positioning */}
+                  {/* Department header */}
                   <text 
-                    x="485" 
-                    y="160"
-                    className="fill-amber-800 text-lg font-mono font-bold"
-                    transform="rotate(-12 485 160)"
+                    x="700" 
+                    y="170"
+                    className="fill-amber-800 text-2xl font-mono font-bold"
                   >
-                    🍯 MATURATION ROOM
+                    MATURATION DEPARTMENT
                   </text>
+                  
+                  {/* Process flow indicators */}
+                  <polygon 
+                    points="670,260 1080,190 1080,200 670,270" 
+                    fill="#f59e0b" 
+                    stroke="#d97706" 
+                    strokeWidth="2"
+                    opacity="0.6"
+                  />
+                  <text x="875" y="235" textAnchor="middle" className="fill-amber-700 text-sm font-mono font-bold">FROM BLENDING</text>
+                  
+                  <polygon 
+                    points="670,840 1080,770 1080,780 670,850" 
+                    fill="#10b981" 
+                    stroke="#059669" 
+                    strokeWidth="2"
+                    opacity="0.6"
+                  />
+                  <text x="875" y="825" textAnchor="middle" className="fill-emerald-700 text-sm font-mono font-bold">TO PACKAGING</text>
                   
                   {/* 3D Maturation tanks and chambers */}
                   <g>
