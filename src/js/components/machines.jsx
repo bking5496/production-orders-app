@@ -1167,14 +1167,38 @@ export default function MachinesPage() {
                 width="1800" 
                 height="1200" 
                 viewBox="0 0 1800 1200"
-                className="w-full h-auto bg-slate-50 border border-slate-200 rounded"
+                className="w-full h-auto border border-gray-300 rounded-lg"
+                style={{
+                  background: 'linear-gradient(45deg, #f5f5f5 0%, #e5e5e5 100%)',
+                  boxShadow: 'inset 0 0 50px rgba(0,0,0,0.1)'
+                }}
               >
                 {/* Functional Design Definitions */}
                 <defs>
-                  {/* Simple, clear floor grid for spatial reference */}
-                  <pattern id="factory-grid" width="60" height="60" patternUnits="userSpaceOnUse">
-                    <rect width="60" height="60" fill="#f8fafc" stroke="none"/>
-                    <path d="M 0 0 L 0 60 M 0 0 L 60 0" stroke="#e2e8f0" strokeWidth="1" opacity="0.7"/>
+                  {/* Concrete Factory Floor */}
+                  <pattern id="concrete-floor" width="100" height="100" patternUnits="userSpaceOnUse">
+                    <rect width="100" height="100" fill="#e8e8e8"/>
+                    <rect x="0" y="0" width="50" height="50" fill="#ddd" opacity="0.3"/>
+                    <rect x="50" y="50" width="50" height="50" fill="#ddd" opacity="0.3"/>
+                    <circle cx="25" cy="25" r="1.5" fill="#bbb"/>
+                    <circle cx="75" cy="75" r="1.5" fill="#bbb"/>
+                    <path d="M 0 50 L 50 50 M 50 0 L 50 100" stroke="#ccc" strokeWidth="0.5" opacity="0.5"/>
+                  </pattern>
+                  
+                  {/* Conveyor Belt Pattern */}
+                  <pattern id="conveyor" width="30" height="15" patternUnits="userSpaceOnUse">
+                    <rect width="30" height="15" fill="#4a5568"/>
+                    <rect x="0" y="0" width="3" height="15" fill="#2d3748"/>
+                    <rect x="15" y="0" width="3" height="15" fill="#2d3748"/>
+                    <circle cx="7" cy="7" r="2" fill="#6b7280"/>
+                    <circle cx="22" cy="7" r="2" fill="#6b7280"/>
+                  </pattern>
+                  
+                  {/* Safety Stripes */}
+                  <pattern id="safety-stripes" width="40" height="20" patternUnits="userSpaceOnUse">
+                    <rect width="40" height="20" fill="none"/>
+                    <rect x="0" y="0" width="20" height="20" fill="#ffd700"/>
+                    <rect x="20" y="0" width="20" height="20" fill="none"/>
                   </pattern>
                   
                   {/* Status-based machine colors - clear and functional */}
@@ -1198,11 +1222,11 @@ export default function MachinesPage() {
                     <stop offset="100%" stopColor="#dc2626"/>
                   </linearGradient>
                   
-                  {/* Simple drop shadow for depth - minimal and functional */}
-                  <filter id="subtle-shadow">
-                    <feGaussianBlur in="SourceAlpha" stdDeviation="2"/>
-                    <feOffset dx="2" dy="3" result="offset"/>
-                    <feColorMatrix values="0 0 0 0.2 0"/>
+                  {/* Machine Shadow Filter */}
+                  <filter id="machine-shadow" x="-20%" y="-20%" width="140%" height="140%">
+                    <feGaussianBlur in="SourceAlpha" stdDeviation="4"/>
+                    <feOffset dx="0" dy="6" result="offset"/>
+                    <feColorMatrix values="0 0 0 0.25 0"/>
                     <feMerge>
                       <feMergeNode/>
                       <feMergeNode in="SourceGraphic"/>
@@ -1279,35 +1303,50 @@ export default function MachinesPage() {
                   </linearGradient>
                 </defs>
                 
-                {/* Clean, functional floor grid */}
-                <rect width="100%" height="100%" fill="url(#factory-grid)" />
+                {/* FACTORY FLOOR LAYOUT */}
                 
-                {/* Clear department zones with functional purpose */}
-                <g className="department-zones">
-                  {/* Blending Department Zone */}
-                  <rect x="50" y="150" width="500" height="400" 
-                        fill="#dbeafe" stroke="#3b82f6" strokeWidth="2" 
-                        strokeDasharray="8,4" opacity="0.3" rx="8"/>
-                  <text x="70" y="140" className="fill-blue-700 text-lg font-bold font-mono">
-                    BLENDING • 7 MACHINES
-                  </text>
-                  
-                  {/* Maturation Department Zone */}
-                  <rect x="600" y="150" width="400" height="400" 
-                        fill="#fef3c7" stroke="#f59e0b" strokeWidth="2" 
-                        strokeDasharray="8,4" opacity="0.3" rx="8"/>
-                  <text x="620" y="140" className="fill-amber-700 text-lg font-bold font-mono">
-                    MATURATION • 5 MACHINES
-                  </text>
-                  
-                  {/* Packaging Department Zone */}
-                  <rect x="1050" y="150" width="700" height="600" 
-                        fill="#d1fae5" stroke="#10b981" strokeWidth="2" 
-                        strokeDasharray="8,4" opacity="0.3" rx="8"/>
-                  <text x="1070" y="140" className="fill-emerald-700 text-lg font-bold font-mono">
-                    PACKAGING • 13 MACHINES
-                  </text>
-                </g>
+                {/* Main Factory Floor - Concrete */}
+                <rect width="100%" height="100%" fill="url(#concrete-floor)" />
+                
+                {/* Factory Walls */}
+                <rect x="20" y="50" width="1760" height="20" fill="#666" stroke="#333" strokeWidth="2"/>
+                <rect x="20" y="50" width="20" height="1100" fill="#666" stroke="#333" strokeWidth="2"/>
+                <rect x="1760" y="50" width="20" height="1100" fill="#666" stroke="#333" strokeWidth="2"/>
+                <rect x="20" y="1130" width="1760" height="20" fill="#666" stroke="#333" strokeWidth="2"/>
+                
+                {/* Department Separation Walls */}
+                <rect x="580" y="70" width="15" height="400" fill="#999" stroke="#666" strokeWidth="1"/>
+                <rect x="1050" y="70" width="15" height="800" fill="#999" stroke="#666" strokeWidth="1"/>
+                
+                {/* Main Conveyor System - Leal/Ploughshare to Maturation */}
+                <rect x="580" y="300" width="470" height="25" fill="url(#conveyor)"/>
+                <polygon points="1050,310 1070,300 1070,325 1050,335" fill="#4a5568"/>
+                
+                {/* Maturation to Corraza Conveyor */}
+                <rect x="1050" y="450" width="300" height="25" fill="url(#conveyor)"/>
+                <polygon points="1350,460 1370,450 1370,475 1350,485" fill="#4a5568"/>
+                
+                {/* Safety Walking Paths */}
+                <rect x="60" y="500" width="500" height="20" fill="url(#safety-stripes)" opacity="0.8"/>
+                <rect x="620" y="500" width="400" height="20" fill="url(#safety-stripes)" opacity="0.8"/>
+                <rect x="1080" y="900" width="650" height="20" fill="url(#safety-stripes)" opacity="0.8"/>
+                
+                {/* Loading Docks */}
+                <rect x="40" y="100" width="100" height="40" fill="#8B7355" stroke="#654321" strokeWidth="2"/>
+                <text x="90" y="125" textAnchor="middle" className="fill-white text-xs font-bold">RAW MATERIALS</text>
+                
+                <rect x="1650" y="950" width="100" height="40" fill="#8B7355" stroke="#654321" strokeWidth="2"/>
+                <text x="1700" y="975" textAnchor="middle" className="fill-white text-xs font-bold">SHIPPING</text>
+                
+                {/* Department Floor Markings */}
+                <rect x="60" y="180" width="500" height="280" fill="none" stroke="#2563eb" strokeWidth="3" strokeDasharray="10,5" opacity="0.7"/>
+                <text x="300" y="170" textAnchor="middle" className="fill-blue-800 text-xl font-bold">BLENDING AREA</text>
+                
+                <rect x="620" y="180" width="400" height="280" fill="none" stroke="#d97706" strokeWidth="3" strokeDasharray="10,5" opacity="0.7"/>
+                <text x="820" y="170" textAnchor="middle" className="fill-amber-800 text-xl font-bold">MATURATION AREA</text>
+                
+                <rect x="1080" y="180" width="650" height="680" fill="none" stroke="#059669" strokeWidth="3" strokeDasharray="10,5" opacity="0.7"/>
+                <text x="1405" y="170" textAnchor="middle" className="fill-emerald-800 text-xl font-bold">PACKAGING AREA</text>
                 
                 {/* Specific Production Flow - Based on Real Manufacturing Process */}
                 <g className="production-flow">
@@ -1432,23 +1471,73 @@ export default function MachinesPage() {
                     
                     return (
                       <g key={machine.id} onClick={() => setSelectedMachine(machine)} style={{ cursor: 'pointer' }}>
-                        {/* Enhanced representation for flow machines */}
-                        <rect x={x} y={y} width="120" height="80" 
-                              fill={statusColor} 
-                              stroke={isFlowMachine ? '#dc2626' : dept_color} 
-                              strokeWidth={isFlowMachine ? "4" : "3"} 
-                              rx="8" filter="url(#subtle-shadow)" opacity="0.9"/>
+                        {/* Realistic Factory Machine */}
                         
-                        {/* Special indicator for flow machines */}
-                        {isFlowMachine && (
-                          <rect x={x + 5} y={y + 5} width="15" height="15" 
-                                fill="#dc2626" stroke="#ffffff" strokeWidth="1" rx="2"/>
+                        {/* Machine Base/Foundation */}
+                        <rect x={x-5} y={y+75} width="130" height="10" fill="#555" opacity="0.6" rx="2"/>
+                        
+                        {/* Main Machine Body */}
+                        <rect x={x} y={y} width="120" height="75" 
+                              fill="#E5E5E5" stroke="#999" strokeWidth="2" rx="4"
+                              filter="url(#machine-shadow)"/>
+                        
+                        {/* Machine Top Panel */}
+                        <rect x={x+5} y={y+5} width="110" height="15" 
+                              fill="#D0D0D0" stroke="#AAA" strokeWidth="1" rx="2"/>
+                        
+                        {/* Status Indicator Light */}
+                        <circle cx={x+105} cy={y+12.5} r="6" 
+                                fill={statusColor} stroke="#333" strokeWidth="1.5"
+                                style={{ filter: statusColor === '#10b981' ? 'drop-shadow(0 0 6px #10b981)' : 'none' }}/>
+                        
+                        {/* Control Panel */}
+                        <rect x={x+85} y={y+25} width="30" height="25" 
+                              fill="#2D3748" stroke="#1A202C" strokeWidth="1" rx="3"/>
+                        
+                        {/* Control Buttons */}
+                        <circle cx={x+92} cy={y+32} r="2" fill="#4A5568"/>
+                        <circle cx={x+100} cy={y+32} r="2" fill={statusColor === '#10b981' ? '#10b981' : '#4A5568'}/>
+                        <circle cx={x+108} cy={y+32} r="2" fill="#4A5568"/>
+                        
+                        {/* Equipment Details Based on Type */}
+                        {machine.name.includes('Blender') && (
+                          <g>
+                            {/* Blender Tank */}
+                            <ellipse cx={x+60} cy={y+40} rx="45" ry="20" fill="#F0F0F0" stroke="#CCC" strokeWidth="1"/>
+                            {/* Agitator */}
+                            <rect x={x+58} y={y+25} width="4" height="30" fill="#666" rx="2"/>
+                            <circle cx={x+60} cy={y+27} r="8" fill="#888" stroke="#555" strokeWidth="1"/>
+                          </g>
                         )}
+                        
+                        {machine.name.includes('Corraza') && (
+                          <g>
+                            {/* Tablet Press */}
+                            <rect x={x+30} y={y+30} width="60" height="20" fill="#F5F5F5" stroke="#DDD" strokeWidth="1" rx="10"/>
+                            <rect x={x+45} y={y+35} width="30" height="10" fill="#E0E0E0" stroke="#CCC" strokeWidth="1" rx="5"/>
+                          </g>
+                        )}
+                        
+                        {machine.environment === 'packaging' && !machine.name.includes('Corraza') && (
+                          <g>
+                            {/* Packaging Line */}
+                            <rect x={x+10} y={y+35} width="100" height="8" fill="url(#conveyor)"/>
+                            <rect x={x+20} y={y+25} width="10" height="15" fill="#888"/>
+                            <rect x={x+40} y={y+25} width="10" height="15" fill="#888"/>
+                            <rect x={x+90} y={y+25} width="10" height="15" fill="#888"/>
+                          </g>
+                        )}
+                        
+                        {/* Critical Flow Machine Indicator */}
                         {isFlowMachine && (
-                          <text x={x + 12.5} y={y + 16} textAnchor="middle" 
-                                className="fill-white text-xs font-bold">
-                            ★
-                          </text>
+                          <g>
+                            <rect x={x-3} y={y-3} width="126" height="81" 
+                                  fill="none" stroke="#dc2626" strokeWidth="3" rx="6" strokeDasharray="10,5"/>
+                            <rect x={x+100} y={y-8} width="25" height="12" 
+                                  fill="#dc2626" stroke="#fff" strokeWidth="1" rx="6"/>
+                            <text x={x+112.5} y={y+1} textAnchor="middle" 
+                                  className="fill-white text-xs font-bold">KEY</text>
+                          </g>
                         )}
                         
                         {/* Large, readable machine name */}
