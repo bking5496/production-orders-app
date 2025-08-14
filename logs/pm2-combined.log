@@ -16139,3 +16139,183 @@
 2025-08-14T15:19:56: ✅ New PostgreSQL client connected
 2025-08-14T15:19:56: 🔗 Client acquired from pool
 2025-08-14T15:19:56: 🔓 Client released back to pool
+2025-08-14T15:20:36: ✅ New PostgreSQL client connected
+2025-08-14T15:20:36: 🔗 Client acquired from pool
+2025-08-14T15:20:36: 🔓 Client released back to pool
+2025-08-14T15:20:50: 🔗 Client acquired from pool
+2025-08-14T15:20:50: 🔓 Client released back to pool
+2025-08-14T15:20:50: 🔗 Client acquired from pool
+2025-08-14T15:20:50: 🔓 Client released back to pool
+2025-08-14T15:20:50: 🔗 Client acquired from pool
+2025-08-14T15:20:50: 🔓 Client released back to pool
+2025-08-14T15:20:50: 🔗 Client acquired from pool
+2025-08-14T15:20:50: 🔓 Client released back to pool
+2025-08-14T15:20:50: 🔗 Client acquired from pool
+2025-08-14T15:20:50: 🔓 Client released back to pool
+2025-08-14T15:20:50: 🔗 Client acquired from pool
+2025-08-14T15:20:50: 🔓 Client released back to pool
+2025-08-14T15:20:50: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-14T15:20:50: 🏠 admin joined room: production
+2025-08-14T15:21:36: ✅ New PostgreSQL client connected
+2025-08-14T15:21:36: 🔗 Client acquired from pool
+2025-08-14T15:21:36: 🔓 Client released back to pool
+2025-08-14T15:21:55: 🔌 WebSocket disconnected: admin
+2025-08-14T15:21:59: 🔗 Client acquired from pool
+2025-08-14T15:21:59: 🔓 Client released back to pool
+2025-08-14T15:21:59: ✅ New PostgreSQL client connected
+2025-08-14T15:21:59: 🔗 Client acquired from pool
+2025-08-14T15:21:59: 🔓 Client released back to pool
+2025-08-14T15:21:59: 🔗 Client acquired from pool
+2025-08-14T15:21:59: 🔓 Client released back to pool
+2025-08-14T15:22:00: New WebSocket connection attempt
+2025-08-14T15:22:00: ✅ WebSocket authenticated: admin (admin)
+2025-08-14T15:22:00: 🔗 Client acquired from pool
+2025-08-14T15:22:00: 🔗 Client acquired from pool
+2025-08-14T15:22:00: 🔓 Client released back to pool
+2025-08-14T15:22:00: 🔗 Client acquired from pool
+2025-08-14T15:22:00: 🔓 Client released back to pool
+2025-08-14T15:22:00: 🔗 Client acquired from pool
+2025-08-14T15:22:00: 🔓 Client released back to pool
+2025-08-14T15:22:00: 🔓 Client released back to pool
+2025-08-14T15:22:00: ✅ New PostgreSQL client connected
+2025-08-14T15:22:00: 🔗 Client acquired from pool
+2025-08-14T15:22:00: 🔓 Client released back to pool
+2025-08-14T15:22:00: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-14T15:22:00: 🏠 admin joined room: production
+2025-08-14T15:22:00: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-14T15:22:00: 🏠 admin joined room: production
+2025-08-14T15:22:00: 🔗 Client acquired from pool
+2025-08-14T15:22:00: 🔓 Client released back to pool
+2025-08-14T15:22:00: 🔗 Client acquired from pool
+2025-08-14T15:22:00: 🔓 Client released back to pool
+2025-08-14T15:22:03: 🔗 Client acquired from pool
+2025-08-14T15:22:03: 🔓 Client released back to pool
+2025-08-14T15:22:06: 🔗 Client acquired from pool
+2025-08-14T15:22:06: 🔓 Client released back to pool
+2025-08-14T15:22:30: 🔗 Client acquired from pool
+2025-08-14T15:22:30: 🔓 Client released back to pool
+2025-08-14T15:22:30: 🔗 Client acquired from pool
+2025-08-14T15:22:30: 🔓 Client released back to pool
+2025-08-14T15:22:30: 🔗 Client acquired from pool
+2025-08-14T15:22:30: 🔓 Client released back to pool
+2025-08-14T15:22:30: ✅ New PostgreSQL client connected
+2025-08-14T15:22:30: 🔗 Client acquired from pool
+2025-08-14T15:22:30: 🔓 Client released back to pool
+2025-08-14T15:22:32: 🔗 Client acquired from pool
+2025-08-14T15:22:32: 🔓 Client released back to pool
+2025-08-14T15:22:36: 🔗 Client acquired from pool
+2025-08-14T15:22:36: 🔓 Client released back to pool
+2025-08-14T15:23:21: 📤 User admin logged out
+2025-08-14T15:23:21: 🔌 WebSocket disconnected: admin
+2025-08-14T15:23:24: ValidationError: The 'X-Forwarded-For' header is set but the Express 'trust proxy' setting is false (default). This could indicate a misconfiguration which would prevent express-rate-limit from accurately identifying users. See https://express-rate-limit.github.io/ERR_ERL_UNEXPECTED_X_FORWARDED_FOR/ for more information.
+    at Object.xForwardedForHeader (/home/production-app/production-orders-app/node_modules/express-rate-limit/dist/index.cjs:185:13)
+    at wrappedValidations.<computed> [as xForwardedForHeader] (/home/production-app/production-orders-app/node_modules/express-rate-limit/dist/index.cjs:397:22)
+    at Object.keyGenerator (/home/production-app/production-orders-app/node_modules/express-rate-limit/dist/index.cjs:658:20)
+    at /home/production-app/production-orders-app/node_modules/express-rate-limit/dist/index.cjs:710:32
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async /home/production-app/production-orders-app/node_modules/express-rate-limit/dist/index.cjs:691:5 {
+  code: 'ERR_ERL_UNEXPECTED_X_FORWARDED_FOR',
+  help: 'https://express-rate-limit.github.io/ERR_ERL_UNEXPECTED_X_FORWARDED_FOR/'
+}
+2025-08-14T15:23:24: ✅ New PostgreSQL client connected
+2025-08-14T15:23:24: 🔗 Client acquired from pool
+2025-08-14T15:23:24: 🔓 Client released back to pool
+2025-08-14T15:23:24: 🔗 Client acquired from pool
+2025-08-14T15:23:24: 🔓 Client released back to pool
+2025-08-14T15:23:24: ✅ Auth success: admin from ::1 - Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0
+2025-08-14T15:23:24: 🔗 Client acquired from pool
+2025-08-14T15:23:24: 🔓 Client released back to pool
+2025-08-14T15:23:24: 🔗 Client acquired from pool
+2025-08-14T15:23:24: 🔓 Client released back to pool
+2025-08-14T15:23:24: 🔗 Client acquired from pool
+2025-08-14T15:23:24: 🔓 Client released back to pool
+2025-08-14T15:23:24: ✅ New PostgreSQL client connected
+2025-08-14T15:23:24: 🔗 Client acquired from pool
+2025-08-14T15:23:24: 🔓 Client released back to pool
+2025-08-14T15:23:24: 🔗 Client acquired from pool
+2025-08-14T15:23:24: 🔓 Client released back to pool
+2025-08-14T15:23:24: ✅ New PostgreSQL client connected
+2025-08-14T15:23:24: 🔗 Client acquired from pool
+2025-08-14T15:23:24: 🔓 Client released back to pool
+2025-08-14T15:23:24: New WebSocket connection attempt
+2025-08-14T15:23:24: ✅ WebSocket authenticated: admin (admin)
+2025-08-14T15:23:24: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-14T15:23:24: 🏠 admin joined room: production
+2025-08-14T15:23:24: 🔗 Client acquired from pool
+2025-08-14T15:23:24: 🔓 Client released back to pool
+2025-08-14T15:23:24: 🔗 Client acquired from pool
+2025-08-14T15:23:24: 🔓 Client released back to pool
+2025-08-14T15:23:24: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-14T15:23:24: 🏠 admin joined room: production
+2025-08-14T15:23:24: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-14T15:23:24: 🏠 admin joined room: production
+2025-08-14T15:23:26: 🔗 Client acquired from pool
+2025-08-14T15:23:26: 🔓 Client released back to pool
+2025-08-14T15:23:36: 🔗 Client acquired from pool
+2025-08-14T15:23:36: 🔓 Client released back to pool
+2025-08-14T15:24:36: ✅ New PostgreSQL client connected
+2025-08-14T15:24:36: 🔗 Client acquired from pool
+2025-08-14T15:24:36: 🔓 Client released back to pool
+2025-08-14T15:25:36: ✅ New PostgreSQL client connected
+2025-08-14T15:25:36: 🔗 Client acquired from pool
+2025-08-14T15:25:36: 🔓 Client released back to pool
+2025-08-14T15:26:36: ✅ New PostgreSQL client connected
+2025-08-14T15:26:36: 🔗 Client acquired from pool
+2025-08-14T15:26:36: 🔓 Client released back to pool
+2025-08-14T15:27:36: ✅ New PostgreSQL client connected
+2025-08-14T15:27:36: 🔗 Client acquired from pool
+2025-08-14T15:27:36: 🔓 Client released back to pool
+2025-08-14T15:28:36: ✅ New PostgreSQL client connected
+2025-08-14T15:28:36: 🔗 Client acquired from pool
+2025-08-14T15:28:36: 🔓 Client released back to pool
+2025-08-14T15:29:36: ✅ New PostgreSQL client connected
+2025-08-14T15:29:36: 🔗 Client acquired from pool
+2025-08-14T15:29:36: 🔓 Client released back to pool
