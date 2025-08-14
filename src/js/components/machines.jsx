@@ -1263,76 +1263,62 @@ export default function MachinesPage() {
                   <polygon points="1180,160 1220,150 1220,800 1180,810" fill="#94a3b8" stroke="#6b7280" strokeWidth="2" opacity="0.3"/>
                 </g>
                 
-                {/* ENHANCED 3D BLENDING AREA - Professional Layout */}
+                {/* ORGANIZED BLENDING DEPARTMENT - Left Section */}
                 <g>
-                  {/* Expanded 3D Blending department floor - much larger for proper spacing */}
+                  {/* Clean blending department area */}
                   <polygon 
-                    points="130,350 580,230 580,750 130,870" 
-                    fill="rgba(99, 102, 241, 0.12)" 
+                    points="150,250 550,180 550,800 150,870" 
+                    fill="rgba(99, 102, 241, 0.08)" 
                     stroke="#6366f1" 
-                    strokeWidth="4"
-                    strokeDasharray="15,8"
+                    strokeWidth="3"
+                    strokeDasharray="12,6"
                   />
                   
-                  {/* Updated safety markings for larger area */}
+                  {/* Department header */}
+                  <text 
+                    x="200" 
+                    y="170"
+                    className="fill-indigo-800 text-2xl font-mono font-bold"
+                  >
+                    BLENDING DEPARTMENT
+                  </text>
+                  
+                  {/* Production flow indicators */}
                   <polygon 
-                    points="140,360 570,240 570,250 140,370" 
-                    fill="#fbbf24" 
+                    points="170,260 530,190 530,200 170,270" 
+                    fill="#10b981" 
+                    stroke="#059669" 
+                    strokeWidth="2"
+                    opacity="0.6"
+                  />
+                  <text x="350" y="235" textAnchor="middle" className="fill-emerald-700 text-sm font-mono font-bold">RAW MATERIALS IN</text>
+                  
+                  <polygon 
+                    points="170,840 530,770 530,780 170,850" 
+                    fill="#f59e0b" 
                     stroke="#d97706" 
                     strokeWidth="2"
+                    opacity="0.6"
                   />
-                  <polygon 
-                    points="140,850 570,730 570,740 140,860" 
-                    fill="#fbbf24" 
-                    stroke="#d97706" 
-                    strokeWidth="2"
-                  />
+                  <text x="350" y="825" textAnchor="middle" className="fill-amber-700 text-sm font-mono font-bold">TO MATURATION</text>
                   
-                  {/* Enhanced department label */}
-                  <text 
-                    x="180" 
-                    y="240"
-                    className="fill-indigo-800 text-xl font-mono font-bold"
-                    transform="rotate(-12 180 240)"
-                  >
-                    🏭 BLENDING DEPARTMENT
-                  </text>
-                  
-                  {/* Fixed Zone markers - positioned to avoid machine overlap */}
-                  <text 
-                    x="170" 
-                    y="380"
-                    className="fill-indigo-600 text-sm font-mono font-semibold"
-                    transform="rotate(-12 170 380)"
-                  >
-                    ZONE A - PRIMARY MIXING
-                  </text>
-                  <text 
-                    x="160" 
-                    y="550"
-                    className="fill-indigo-600 text-sm font-mono font-semibold"
-                    transform="rotate(-12 160 550)"
-                  >
-                    ZONE B - PROCESSING
-                  </text>
-                  
-                  {/* Fixed 3D Blending machines with NO overlapping */}
+                  {/* PERFECTLY ORGANIZED BLENDING MACHINES */}
                   {filteredMachines.filter(m => m.environment === 'blending').map((machine, index) => {
-                    // Fixed positions - NO overlapping, proper spacing
+                    // CLEAN GRID LAYOUT - No overlapping, perfect spacing
                     const positions3D = [
-                      // Row 1 - Front machines (well spaced)
-                      { x: 180, y: 400, z: 40, w: 80, d: 60, h: 65, type: '3d_mixer_pro', name: 'Blender leal' },
-                      { x: 320, y: 370, z: 40, w: 80, d: 60, h: 65, type: '3d_mixer_pro', name: 'Blender MaxMix' },
-                      { x: 460, y: 340, z: 40, w: 80, d: 60, h: 65, type: '3d_mixer_pro', name: 'Blender Ploughshare' },
+                      // Row 1 - Primary Mixers (150 unit spacing)
+                      { x: 180, y: 320, z: 30, w: 70, d: 50, h: 60, type: '3d_mixer_pro', name: 'Blender leal' },
+                      { x: 360, y: 280, z: 30, w: 70, d: 50, h: 60, type: '3d_mixer_pro', name: 'Blender MaxMix' },
                       
-                      // Row 2 - Middle position (separate row)
-                      { x: 250, y: 520, z: 45, w: 85, d: 65, h: 70, type: '3d_mixer_heavy', name: 'Blender Winkwork' },
+                      // Row 2 - Secondary Mixers (150 unit spacing, 120 unit offset)
+                      { x: 180, y: 480, z: 30, w: 70, d: 50, h: 60, type: '3d_mixer_pro', name: 'Blender Ploughshare' },
+                      { x: 360, y: 440, z: 30, w: 75, d: 55, h: 65, type: '3d_mixer_heavy', name: 'Blender Winkwork' },
                       
-                      // Row 3 - Back machines (well separated)
-                      { x: 400, y: 580, z: 35, w: 110, d: 50, h: 55, type: '3d_drum_pro', name: 'Drumblender' },
+                      // Row 3 - Specialty Equipment (centered, large spacing)
+                      { x: 270, y: 640, z: 25, w: 100, d: 45, h: 50, type: '3d_drum_pro', name: 'Drumblender' },
                       
-                      // Row 4 - Bottom (liquid line by itself)
-                      { x: 170, y: 650, z: 30, w: 250, d: 40, h: 45, type: '3d_liquid_pro', name: 'Liquid Line' }
+                      // Row 4 - Processing Line (full width, bottom)
+                      { x: 180, y: 760, z: 20, w: 280, d: 35, h: 40, type: '3d_liquid_pro', name: 'Liquid Line' }
                     ];
                     
                     const pos = positions3D[index] || positions3D[0];
