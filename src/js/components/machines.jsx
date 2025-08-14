@@ -5,6 +5,7 @@ import { formatUserDisplayName, formatEmployeeCode } from '../utils/text-utils';
 import { Modal, Card, Button, Badge } from './ui-components.jsx';
 import { useMachineUpdates, useWebSocketEvent, useAutoConnect, useNotifications } from '../core/websocket-hooks.js';
 import { WebSocketStatusCompact } from './websocket-status.jsx';
+import BabylonFactory from './babylon-factory.jsx';
 
 export default function MachinesPage() {
   // State for storing the list of machines and UI status
@@ -23,212 +24,8 @@ export default function MachinesPage() {
   const { lastUpdate, setMachines: setMachinesFromWS } = useMachineUpdates();
   const { notifications: wsNotifications, clearNotification } = useNotifications();
 
-  // Function declarations first to avoid hoisting issues
-  const loadBabylonJS = () => {
-    return new Promise((resolve, reject) => {
-      if (typeof window.BABYLON !== 'undefined') {
-        resolve();
-        return;
-      }
 
-      const babylonScript = document.createElement('script');
-      babylonScript.src = 'https://cdn.babylonjs.com/babylon.js';
-      babylonScript.onload = () => {
-        console.log('✅ Babylon.js core loaded');
-        const loadersScript = document.createElement('script');
-        loadersScript.src = 'https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js';
-        loadersScript.onload = () => {
-          console.log('✅ Babylon.js loaders ready');
-          resolve();
-        };
-        loadersScript.onerror = reject;
-        document.head.appendChild(loadersScript);
-      };
-      babylonScript.onerror = reject;
-      document.head.appendChild(babylonScript);
-    });
-  };
 
-  const createFactoryMachines = (scene) => {
-    console.log('🏭 Creating 3D machines for', filteredMachines.length, 'equipment units');
-    
-    const machineColors = {
-      'available': new window.BABYLON.Color3(0.0, 0.8, 0.4),
-      'busy': new window.BABYLON.Color3(1.0, 0.6, 0.0),
-      'offline': new window.BABYLON.Color3(0.6, 0.6, 0.6),
-      'error': new window.BABYLON.Color3(1.0, 0.2, 0.2)
-    };
-
-    filteredMachines.forEach((machine, index) => {
-      // Create machine body
-      const machineBox = window.BABYLON.MeshBuilder.CreateBox(`machine_${machine.id}`, {
-        width: 4, height: 3, depth: 3
-      }, scene);
-
-      // Position machines in departments
-      let x, z;
-      const machinesInEnv = filteredMachines.filter(m => m.environment === machine.environment);
-      const envIndex = machinesInEnv.indexOf(machine);
-
-      if (machine.environment === 'blending') {
-        x = -20 + (envIndex % 3) * 8;
-        z = -15 + Math.floor(envIndex / 3) * 6;
-      } else if (machine.environment === 'maturation') {
-        x = -5 + (envIndex % 2) * 6;
-        z = -15 + Math.floor(envIndex / 2) * 6;
-      } else {
-        x = 10 + (envIndex % 4) * 6;
-        z = -15 + Math.floor(envIndex / 4) * 6;
-      }
-
-      machineBox.position = new window.BABYLON.Vector3(x, 1.5, z);
-
-      // Create material with status color
-      const material = new window.BABYLON.StandardMaterial(`machineMat_${machine.id}`, scene);
-      const statusColor = machineColors[machine.status] || machineColors.offline;
-      material.diffuseColor = statusColor;
-      material.emissiveColor = statusColor.scale(0.2);
-      material.specularColor = new window.BABYLON.Color3(0.3, 0.3, 0.3);
-      machineBox.material = material;
-
-      // Add machine name label
-      const nameLabel = window.BABYLON.MeshBuilder.CreatePlane(`label_${machine.id}`, {
-        width: 4, height: 1
-      }, scene);
-      nameLabel.position = new window.BABYLON.Vector3(x, 4, z);
-      nameLabel.billboardMode = window.BABYLON.Mesh.BILLBOARD_MODE_ALL;
-      
-      const labelMaterial = new window.BABYLON.StandardMaterial(`labelMat_${machine.id}`, scene);
-      labelMaterial.diffuseColor = new window.BABYLON.Color3(1, 1, 1);
-      labelMaterial.emissiveColor = statusColor.scale(0.5);
-      nameLabel.material = labelMaterial;
-
-      // Add animations for running machines
-      if (machine.status === 'available') {
-        // Rotation animation
-        window.BABYLON.Animation.CreateAndStartAnimation(
-          'machineRotation', 
-          machineBox, 
-          'rotation.y', 
-          30, 
-          120, 
-          0, 
-          Math.PI * 2, 
-          window.BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE
-        );
-
-        // Pulsing animation
-        window.BABYLON.Animation.CreateAndStartAnimation(
-          'machinePulse',
-          material,
-          'emissiveColor',
-          30,
-          60,
-          statusColor.scale(0.1),
-          statusColor.scale(0.5),
-          window.BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE
-        );
-      }
-
-      console.log(`✅ Created 3D machine: ${machine.name} at position (${x}, ${z}) with status ${machine.status}`);
-    });
-  };
-
-  const initializeBabylonFactory = async () => {
-    try {
-      // Load Babylon.js if not already loaded
-      if (typeof window.BABYLON === 'undefined') {
-        console.log('📦 Loading Babylon.js libraries...');
-        await loadBabylonJS();
-      }
-
-      const canvas = document.getElementById('babylon-factory-canvas');
-      if (!canvas) {
-        console.error('❌ Canvas container not found');
-        return;
-      }
-
-      // Clear any existing canvas
-      canvas.innerHTML = '';
-
-      // Create canvas element
-      const babylonCanvas = document.createElement('canvas');
-      babylonCanvas.id = 'babylonCanvas';
-      babylonCanvas.style.width = '100%';
-      babylonCanvas.style.height = '100%';
-      babylonCanvas.style.display = 'block';
-      babylonCanvas.style.outline = 'none';
-      canvas.appendChild(babylonCanvas);
-
-      // Create Babylon engine
-      const engine = new window.BABYLON.Engine(babylonCanvas, true, {
-        preserveDrawingBuffer: true,
-        stencil: true,
-        antialias: true
-      });
-      setBabylonEngine(engine);
-
-      // Create scene
-      const scene = new window.BABYLON.Scene(engine);
-      setBabylonScene(scene);
-
-      // Setup camera
-      const camera = new window.BABYLON.ArcRotateCamera('camera', -Math.PI / 2, Math.PI / 3, 50, window.BABYLON.Vector3.Zero(), scene);
-      camera.attachControls(babylonCanvas);
-      camera.setTarget(window.BABYLON.Vector3.Zero());
-
-      // Add lighting
-      const hemiLight = new window.BABYLON.HemisphericLight('hemiLight', new window.BABYLON.Vector3(0, 1, 0), scene);
-      hemiLight.intensity = 0.7;
-      
-      const dirLight = new window.BABYLON.DirectionalLight('dirLight', new window.BABYLON.Vector3(-1, -1, 1), scene);
-      dirLight.intensity = 1.0;
-      dirLight.diffuse = new window.BABYLON.Color3(0.4, 0.6, 1.0);
-
-      // Create factory floor
-      const ground = window.BABYLON.MeshBuilder.CreateGround('ground', {width: 60, height: 40}, scene);
-      const groundMaterial = new window.BABYLON.StandardMaterial('groundMaterial', scene);
-      groundMaterial.diffuseColor = new window.BABYLON.Color3(0.15, 0.2, 0.25);
-      groundMaterial.specularColor = new window.BABYLON.Color3(0.1, 0.1, 0.1);
-      ground.material = groundMaterial;
-
-      // Create 3D machines
-      createFactoryMachines(scene);
-
-      // Hide loading screen
-      setTimeout(() => {
-        const loading = document.getElementById('babylon-loading');
-        if (loading) {
-          loading.style.opacity = '0';
-          setTimeout(() => {
-            if (loading) loading.style.display = 'none';
-          }, 500);
-        }
-      }, 1500);
-
-      // Render loop
-      engine.runRenderLoop(() => {
-        scene.render();
-      });
-
-      // Handle resize
-      window.addEventListener('resize', () => {
-        engine.resize();
-      });
-
-      console.log('✅ 4D Digital Twin Factory initialized successfully!');
-    } catch (error) {
-      console.error('❌ Failed to initialize 4D factory:', error);
-    }
-  };
-
-  // 4D Babylon.js Factory Initialization useEffect
-  useEffect(() => {
-    if (filteredMachines.length > 0) {
-      console.log('🏭 Initializing 4D Digital Twin Factory with', filteredMachines.length, 'machines');
-      initializeBabylonFactory();
-    }
-  }, [filteredMachines]);
   
   // State for managing modals
   const [showAddModal, setShowAddModal] = useState(false);
@@ -264,8 +61,6 @@ export default function MachinesPage() {
   // Schedule modal state
   const [machineSchedule, setMachineSchedule] = useState([]);
   const [loadingSchedule, setLoadingSchedule] = useState(false);
-  const [babylonEngine, setBabylonEngine] = useState(null);
-  const [babylonScene, setBabylonScene] = useState(null);
 
   // Update form environment when environments are loaded
   useEffect(() => {
@@ -1414,96 +1209,8 @@ export default function MachinesPage() {
               </div>
             </div>
             
-            {/* 4D Babylon.js Canvas Container */}
-            <div 
-              id="babylon-factory-canvas" 
-              className="w-full h-[800px] bg-gradient-to-br from-slate-900 via-blue-900/20 to-purple-900/20 rounded-xl border border-blue-500/30 relative overflow-hidden shadow-inner"
-              style={{
-                background: `
-                  radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
-                  radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
-                  radial-gradient(circle at 40% 40%, rgba(120, 119, 255, 0.3) 0%, transparent 50%),
-                  linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 41, 59, 0.8) 100%)
-                `,
-                boxShadow: `
-                  inset 0 0 100px rgba(59, 130, 246, 0.1),
-                  inset 0 0 200px rgba(147, 51, 234, 0.05),
-                  0 0 50px rgba(59, 130, 246, 0.1)
-                `
-              }}
-            >
-              {/* Loading Screen Overlay */}
-              <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-slate-900/50 to-purple-900/50 backdrop-blur-sm" id="babylon-loading">
-                <div className="text-center">
-                  <div className="w-16 h-16 border-4 border-blue-400/30 border-t-blue-400 rounded-full animate-spin mx-auto mb-4"></div>
-                  <div className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400 mb-2">
-                    Initializing Digital Twin
-                  </div>
-                  <div className="text-sm text-slate-400 font-mono">
-                    Loading 3D Models • Connecting IoT Data • Rendering Factory Floor
-                  </div>
-                  <div className="mt-4 flex items-center justify-center gap-2">
-                    <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
-                    <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse" style={{animationDelay: '0.2s'}}></div>
-                    <div className="w-2 h-2 bg-pink-400 rounded-full animate-pulse" style={{animationDelay: '0.4s'}}></div>
-                  </div>
-                </div>
-              </div>
-              
-              {/* Performance Metrics Overlay */}
-              <div className="absolute top-4 left-4 flex flex-col gap-2" id="performance-metrics">
-                <div className="flex items-center gap-2 px-3 py-1 bg-slate-800/80 backdrop-blur rounded-lg border border-slate-600/50">
-                  <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                  <span className="text-green-400 font-mono text-xs">FPS: 60</span>
-                </div>
-                <div className="flex items-center gap-2 px-3 py-1 bg-slate-800/80 backdrop-blur rounded-lg border border-slate-600/50">
-                  <Database className="w-3 h-3 text-blue-400" />
-                  <span className="text-blue-400 font-mono text-xs">IoT: Connected</span>
-                </div>
-                <div className="flex items-center gap-2 px-3 py-1 bg-slate-800/80 backdrop-blur rounded-lg border border-slate-600/50">
-                  <Layers className="w-3 h-3 text-purple-400" />
-                  <span className="text-purple-400 font-mono text-xs">Meshes: 127</span>
-                </div>
-              </div>
-              
-              {/* Control Panel Overlay */}
-              <div className="absolute top-4 right-4 flex flex-col gap-2" id="control-panel">
-                <button className="px-3 py-2 bg-gradient-to-r from-blue-500/80 to-blue-600/80 backdrop-blur text-white rounded-lg font-mono text-xs hover:from-blue-600/80 hover:to-blue-700/80 transition-all">
-                  <Thermometer className="w-4 h-4 inline mr-1" />
-                  Heat Map
-                </button>
-                <button className="px-3 py-2 bg-gradient-to-r from-purple-500/80 to-purple-600/80 backdrop-blur text-white rounded-lg font-mono text-xs hover:from-purple-600/80 hover:to-purple-700/80 transition-all">
-                  <Workflow className="w-4 h-4 inline mr-1" />
-                  Flow Lines
-                </button>
-                <button className="px-3 py-2 bg-gradient-to-r from-green-500/80 to-green-600/80 backdrop-blur text-white rounded-lg font-mono text-xs hover:from-green-600/80 hover:to-green-700/80 transition-all">
-                  <Activity className="w-4 h-4 inline mr-1" />
-                  Analytics
-                </button>
-              </div>
-              
-              {/* Factory Stats Dashboard */}
-              <div className="absolute bottom-4 left-4 right-4 bg-gradient-to-r from-slate-800/90 to-slate-900/90 backdrop-blur rounded-xl border border-slate-600/50 p-4">
-                <div className="grid grid-cols-4 gap-6">
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-blue-400 font-mono">{filteredMachines.filter(m => m.status === 'available').length}</div>
-                    <div className="text-xs text-slate-400 uppercase tracking-wide">Running Machines</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-purple-400 font-mono">2.4k</div>
-                    <div className="text-xs text-slate-400 uppercase tracking-wide">Parts/Hour</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-green-400 font-mono">98.2%</div>
-                    <div className="text-xs text-slate-400 uppercase tracking-wide">Efficiency</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-orange-400 font-mono">24.7°C</div>
-                    <div className="text-xs text-slate-400 uppercase tracking-wide">Avg Temp</div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            {/* 4D Digital Twin Factory */}
+            <BabylonFactory machines={filteredMachines} environments={environments} />
             
             {/* Technology Stack Info */}
             <div className="mt-6 grid grid-cols-3 gap-4">
