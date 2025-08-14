@@ -11139,3 +11139,58 @@
   'analytics'
 ]
 2025-08-14T07:59:45: 🏠 admin joined room: production
+2025-08-14T08:00:15: ✅ New PostgreSQL client connected
+2025-08-14T08:00:15: 🔗 Client acquired from pool
+2025-08-14T08:00:15: 🔓 Client released back to pool
+2025-08-14T08:00:15: 🔗 Client acquired from pool
+2025-08-14T08:00:15: 🔓 Client released back to pool
+2025-08-14T08:00:15: Error occurred: {
+  error: 'column "customer_info" of relation "production_orders" does not exist',
+  stack: 'error: column "customer_info" of relation "production_orders" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.insert (/home/production-app/production-orders-app/src/utils/database.js:61:20)\n' +
+    '    at async OrdersService.createOrder (/home/production-app/production-orders-app/src/services/orders.service.js:102:22)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/orders.routes.js:197:22',
+  url: '/api/orders',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-14T06:00:15.708Z'
+}
+2025-08-14T08:00:16: 🔗 Client acquired from pool
+2025-08-14T08:00:16: 🔓 Client released back to pool
+2025-08-14T08:00:16: 🔗 Client acquired from pool
+2025-08-14T08:00:16: 🔓 Client released back to pool
+2025-08-14T08:00:16: Error occurred: {
+  error: 'column "customer_info" of relation "production_orders" does not exist',
+  stack: 'error: column "customer_info" of relation "production_orders" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.insert (/home/production-app/production-orders-app/src/utils/database.js:61:20)\n' +
+    '    at async OrdersService.createOrder (/home/production-app/production-orders-app/src/services/orders.service.js:102:22)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/orders.routes.js:197:22',
+  url: '/api/orders',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-14T06:00:16.761Z'
+}
+2025-08-14T08:00:18: 🔗 Client acquired from pool
+2025-08-14T08:00:18: 🔓 Client released back to pool
+2025-08-14T08:00:18: 🔗 Client acquired from pool
+2025-08-14T08:00:18: 🔓 Client released back to pool
+2025-08-14T08:00:18: Error occurred: {
+  error: 'column "customer_info" of relation "production_orders" does not exist',
+  stack: 'error: column "customer_info" of relation "production_orders" does not exist\n' +
+    '    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)\n' +
+    '    at async DatabaseUtils.insert (/home/production-app/production-orders-app/src/utils/database.js:61:20)\n' +
+    '    at async OrdersService.createOrder (/home/production-app/production-orders-app/src/services/orders.service.js:102:22)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/orders.routes.js:197:22',
+  url: '/api/orders',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-14T06:00:18.807Z'
+}
