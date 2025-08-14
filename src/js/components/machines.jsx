@@ -1164,27 +1164,57 @@ export default function MachinesPage() {
           <div className="bg-slate-800 rounded-lg border border-slate-600 p-6">
             <div className="bg-slate-700 rounded-lg p-4 overflow-x-auto">
               <svg 
-                width="2200" 
-                height="1400" 
-                viewBox="0 0 2200 1400"
-                className="w-full h-auto border border-slate-500 rounded bg-gradient-to-br from-slate-900 via-slate-800 to-slate-700"
+                width="2400" 
+                height="1600" 
+                viewBox="0 0 2400 1600"
+                className="w-full h-auto border-2 border-slate-400 rounded-xl bg-gradient-to-br from-slate-900 via-slate-800 to-slate-700"
                 style={{
-                  background: 'radial-gradient(ellipse at center, #1e293b 0%, #0f172a 70%, #020617 100%)',
-                  filter: 'drop-shadow(0 25px 50px rgba(0,0,0,0.5))'
+                  background: `
+                    linear-gradient(135deg, 
+                      #0a0e1a 0%, 
+                      #1e293b 25%, 
+                      #334155 50%, 
+                      #1e293b 75%, 
+                      #0f172a 100%
+                    ),
+                    radial-gradient(ellipse at 30% 20%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
+                    radial-gradient(ellipse at 70% 80%, rgba(16, 185, 129, 0.1) 0%, transparent 50%)
+                  `,
+                  filter: 'drop-shadow(0 30px 60px rgba(0,0,0,0.8)) contrast(1.1) brightness(1.05)',
+                  transform: 'perspective(1000px) rotateX(5deg)',
+                  transformOrigin: 'center center'
                 }}
               >
                 {/* Enhanced 3D Definitions */}
                 <defs>
-                  {/* Dynamic Perspective Floor Pattern */}
-                  <pattern id="perspective-floor" width="80" height="50" patternUnits="userSpaceOnUse">
-                    <rect width="80" height="50" fill="#0f172a" opacity="0.9"/>
-                    {/* Perspective vanishing point grid */}
-                    <path d="M 0 0 L 80 0 L 60 50 L -20 50 Z" fill="none" stroke="#1e293b" strokeWidth="1.2" opacity="0.7"/>
-                    <path d="M 20 0 L 20 50" stroke="#334155" strokeWidth="0.8" opacity="0.5"/>
-                    <path d="M 40 0 L 40 50" stroke="#334155" strokeWidth="0.6" opacity="0.4"/>
-                    <path d="M 60 0 L 60 50" stroke="#334155" strokeWidth="0.4" opacity="0.3"/>
-                    {/* Depth indicators */}
-                    <circle cx="40" cy="25" r="2" fill="#475569" opacity="0.3"/>
+                  {/* Professional Industrial Floor System */}
+                  <pattern id="cinematic-floor" width="120" height="80" patternUnits="userSpaceOnUse">
+                    <rect width="120" height="80" fill="#0a0f1c" opacity="0.95"/>
+                    
+                    {/* Advanced perspective grid with proper vanishing points */}
+                    <defs>
+                      <linearGradient id="floor-line" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stopColor="#475569" stopOpacity="0.8"/>
+                        <stop offset="50%" stopColor="#334155" stopOpacity="0.4"/>  
+                        <stop offset="100%" stopColor="#1e293b" stopOpacity="0.2"/>
+                      </linearGradient>
+                    </defs>
+                    
+                    {/* Primary perspective lines - converging to vanishing point */}
+                    <path d="M 0 0 L 120 20 L 100 80 L -20 60 Z" fill="none" stroke="url(#floor-line)" strokeWidth="1.5" opacity="0.6"/>
+                    <path d="M 30 0 L 30 80" stroke="#3b82f6" strokeWidth="0.8" opacity="0.3"/>
+                    <path d="M 60 0 L 60 80" stroke="#3b82f6" strokeWidth="0.6" opacity="0.25"/>
+                    <path d="M 90 0 L 90 80" stroke="#3b82f6" strokeWidth="0.4" opacity="0.2"/>
+                    
+                    {/* Depth grid lines */}
+                    <path d="M 0 20 L 120 25" stroke="#6366f1" strokeWidth="0.5" opacity="0.3"/>
+                    <path d="M 0 40 L 120 45" stroke="#6366f1" strokeWidth="0.4" opacity="0.25"/>
+                    <path d="M 0 60 L 120 65" stroke="#6366f1" strokeWidth="0.3" opacity="0.2"/>
+                    
+                    {/* Industrial floor details */}
+                    <circle cx="30" cy="20" r="1.5" fill="#64748b" opacity="0.4"/>
+                    <circle cx="90" cy="60" r="1" fill="#64748b" opacity="0.3"/>
+                    <rect x="55" y="35" width="10" height="2" fill="#475569" opacity="0.25" rx="1"/>
                   </pattern>
                   
                   {/* Advanced Animation Definitions */}
