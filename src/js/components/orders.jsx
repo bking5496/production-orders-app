@@ -2020,7 +2020,11 @@ export default function ProductionOrdersSystem() {
                   <div className="mb-6">
                     <h4 className="text-md font-bold text-purple-600 mb-2 border-b border-purple-200 pb-1">Specifications</h4>
                     <div className="bg-purple-50 border border-purple-200 rounded-lg p-3">
-                      <p className="text-gray-900 text-sm whitespace-pre-wrap">{typeof selectedOrder.specifications === 'string' ? selectedOrder.specifications : 'No specifications available'}</p>
+                      <p className="text-gray-900 text-sm whitespace-pre-wrap">{
+                        typeof selectedOrder.specifications === 'string' 
+                          ? selectedOrder.specifications 
+                          : selectedOrder.specifications?.notes || JSON.stringify(selectedOrder.specifications, null, 2)
+                      }</p>
                     </div>
                   </div>
                 )}
@@ -2030,7 +2034,11 @@ export default function ProductionOrdersSystem() {
                   <div className="mb-6">
                     <h4 className="text-md font-bold text-indigo-600 mb-2 border-b border-indigo-200 pb-1">Customer Info</h4>
                     <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-3">
-                      <p className="text-gray-900 text-sm whitespace-pre-wrap">{typeof selectedOrder.customer_info === 'string' ? selectedOrder.customer_info : 'No customer info available'}</p>
+                      <p className="text-gray-900 text-sm whitespace-pre-wrap">{
+                        typeof selectedOrder.customer_info === 'string' 
+                          ? selectedOrder.customer_info 
+                          : selectedOrder.customer_info?.company || selectedOrder.customer_info?.info || JSON.stringify(selectedOrder.customer_info, null, 2)
+                      }</p>
                     </div>
                   </div>
                 )}
