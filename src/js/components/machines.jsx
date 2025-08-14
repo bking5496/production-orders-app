@@ -1698,213 +1698,69 @@ export default function MachinesPage() {
                 </g>
                 
                 
-                {/* 3D PACKAGING AREA - Isometric Right Side */}
-                <g>
-                  {/* Clean packaging department area */}
-                  <polygon 
-                    points="1200,250 1800,180 1800,950 1200,1020" 
-                    fill="rgba(16, 185, 129, 0.06)" 
-                    stroke="#10b981" 
-                    strokeWidth="3"
-                    strokeDasharray="12,6"
-                  />
+                {/* FUNCTIONAL MACHINE LAYOUT - All Departments */}
+                <g className="machine-layout">
                   
-                  {/* Department header */}
-                  <text 
-                    x="1250" 
-                    y="170"
-                    className="fill-emerald-800 text-2xl font-mono font-bold"
-                  >
-                    PACKAGING DEPARTMENT
-                  </text>
-                  
-                  {/* 3D Packaging machines - simplified for performance */}
-                  {filteredMachines.filter(m => m.environment === 'packaging').map((machine, index) => {
-                    // CLEAN GRID LAYOUT - 4 columns, proper spacing
-                    const positions3D = [
-                      // Row 1 - Main production lines (4 machines, 150 unit spacing)
-                      { x: 1250, y: 320, z: 25, w: 80, d: 45, h: 50, type: '3d_line', name: 'CANLINE' },
-                      { x: 1400, y: 300, z: 25, w: 80, d: 45, h: 50, type: '3d_line', name: 'Canister Line' },
-                      { x: 1550, y: 280, z: 25, w: 75, d: 40, h: 45, type: '3d_sealer', name: 'Enflex f14' },
-                      { x: 1700, y: 260, z: 25, w: 75, d: 40, h: 45, type: '3d_sealer', name: 'Enflex fb 10 1;2' },
-                      
-                      // Row 2 - Secondary lines (4 machines, same spacing)
-                      { x: 1250, y: 450, z: 25, w: 90, d: 50, h: 55, type: '3d_line', name: 'NPS 5 Lane' },
-                      { x: 1400, y: 430, z: 25, w: 75, d: 40, h: 45, type: '3d_auger', name: 'NPS Auger 3' },
-                      { x: 1550, y: 410, z: 25, w: 85, d: 45, h: 50, type: '3d_stick', name: 'NPS Stick Pack' },
-                      { x: 1700, y: 390, z: 25, w: 75, d: 40, h: 45, type: '3d_line', name: 'Universal 1' },
-                      
-                      // Row 3 - Specialty equipment (4 machines)
-                      { x: 1250, y: 580, z: 25, w: 75, d: 40, h: 45, type: '3d_line', name: 'Universal 2' },
-                      { x: 1400, y: 560, z: 25, w: 75, d: 40, h: 45, type: '3d_line', name: 'Universal 3' },
-                      { x: 1550, y: 540, z: 25, w: 80, d: 45, h: 50, type: '3d_tablet', name: 'Corraza Tablet' },
-                      { x: 1700, y: 520, z: 25, w: 80, d: 45, h: 50, type: '3d_cube', name: 'CORAZZA CUBE' },
-                      
-                      // Row 4 - Final processing (remaining machines)
-                      { x: 1400, y: 710, z: 30, w: 100, d: 55, h: 60, type: '3d_palletizer', name: 'IlaPak' }
-                    ];
+                  {/* Render all machines with clean, functional design */}
+                  {filteredMachines.map((machine, index) => {
+                    // Calculate position based on department and index
+                    let x, y, dept_color, dept_index;
                     
-                    const pos = positions3D[index] || positions3D[0];
+                    if (machine.environment === 'blending') {
+                      dept_index = filteredMachines.filter(m => m.environment === 'blending').indexOf(machine);
+                      x = 80 + (dept_index % 3) * 150;
+                      y = 200 + Math.floor(dept_index / 3) * 120;
+                      dept_color = '#3b82f6';
+                    } else if (machine.environment === 'maturation') {
+                      dept_index = filteredMachines.filter(m => m.environment === 'maturation').indexOf(machine);
+                      x = 630 + (dept_index % 2) * 160;
+                      y = 200 + Math.floor(dept_index / 2) * 130;
+                      dept_color = '#f59e0b';
+                    } else if (machine.environment === 'packaging') {
+                      dept_index = filteredMachines.filter(m => m.environment === 'packaging').indexOf(machine);
+                      x = 1080 + (dept_index % 4) * 150;
+                      y = 200 + Math.floor(dept_index / 4) * 110;
+                      dept_color = '#10b981';
+                    }
+                    
                     const status = STATUS_COLORS[machine?.status] || STATUS_COLORS.offline;
                     const statusColor = status.text === 'text-green-400' ? '#10b981' : 
                                        status.text === 'text-blue-400' ? '#3b82f6' : 
                                        status.text === 'text-yellow-400' ? '#f59e0b' : '#ef4444';
                     
-                    const isoX = pos.x + pos.z * 0.5;
-                    const isoY = pos.y - pos.z * 0.3;
-                    
                     return (
-                      <g key={machine.id} onClick={() => setSelectedMachine(machine)} style={{ cursor: 'pointer' }} filter="url(#drop-shadow)">
-                        {/* Simplified 3D packaging machine */}
-                        <g>
-                          {/* Machine base */}
-                          <polygon 
-                            points={`${isoX},${isoY + pos.h} ${isoX + pos.w},${isoY + pos.h} ${isoX + pos.w + pos.z*0.5},${isoY + pos.h - pos.z*0.3} ${isoX + pos.z*0.5},${isoY + pos.h - pos.z*0.3}`}
-                            fill="#374151" stroke="#1f2937" strokeWidth="1"
-                          />
-                          
-                          {/* Machine front with dynamic effects */}
-                          <rect x={isoX} y={isoY} width={pos.w} height={pos.h} 
-                                fill={statusColor} stroke="#1f2937" strokeWidth="2" rx="4"
-                                opacity={machine.status === 'in_progress' ? "1" : "0.8"}>
-                            {machine.status === 'in_progress' && (
-                              <animate attributeName="opacity" values="0.8;1;0.8" dur="2s" repeatCount="indefinite"/>
-                            )}
-                          </rect>
-                          
-                          {/* Machine top */}
-                          <polygon 
-                            points={`${isoX},${isoY} ${isoX + pos.w},${isoY} ${isoX + pos.w + pos.z*0.5},${isoY - pos.z*0.3} ${isoX + pos.z*0.5},${isoY - pos.z*0.3}`}
-                            fill="url(#machine-top)" stroke="#1f2937" strokeWidth="1"
-                          />
-                          
-                          {/* Machine side */}
-                          <polygon 
-                            points={`${isoX + pos.w},${isoY} ${isoX + pos.w + pos.z*0.5},${isoY - pos.z*0.3} ${isoX + pos.w + pos.z*0.5},${isoY + pos.h - pos.z*0.3} ${isoX + pos.w},${isoY + pos.h}`}
-                            fill="url(#machine-side)" stroke="#1f2937" strokeWidth="1"
-                          />
-                          
-                          {/* Advanced Control Panel */}
-                          <rect x={isoX + 5} y={isoY + 5} width="20" height="12" fill="#1e293b" stroke="#475569" strokeWidth="1" rx="2" opacity="0.9"/>
-                          <polygon points={`${isoX + 5},${isoY + 5} ${isoX + 25},${isoY + 5} ${isoX + 30},${isoY + 2} ${isoX + 10},${isoY + 2}`} fill="#334155" stroke="#475569" strokeWidth="1"/>
-                          
-                          {/* Animated Status LED */}
-                          <circle cx={isoX + 22} cy={isoY + 8} r="2" fill={statusColor} stroke="#ffffff" strokeWidth="0.5">
-                            {machine.status === 'in_progress' && (
-                              <animate attributeName="r" values="2;4;2" dur="1.5s" repeatCount="indefinite"/>
-                            )}
-                          </circle>
-                          
-                          {/* Activity Bars for Running Machines */}
-                          {machine.status === 'in_progress' && (
-                            <g opacity="0.8">
-                              <rect x={isoX + 8} y={isoY + 12} width="1" height="3" fill="#10b981" rx="0.5">
-                                <animate attributeName="height" values="2;6;2" dur="0.8s" repeatCount="indefinite"/>
-                              </rect>
-                              <rect x={isoX + 11} y={isoY + 12} width="1" height="4" fill="#10b981" rx="0.5">
-                                <animate attributeName="height" values="3;7;3" dur="1.2s" repeatCount="indefinite"/>
-                              </rect>
-                              <rect x={isoX + 14} y={isoY + 12} width="1" height="2" fill="#10b981" rx="0.5">
-                                <animate attributeName="height" values="1;5;1" dur="1.0s" repeatCount="indefinite"/>
-                              </rect>
-                            </g>
-                          )}
-                          
-                          {/* Machine-specific details */}
-                          {pos.type === '3d_palletizer' && (
-                            <g>
-                              <rect x={isoX + pos.w/2 - 3} y={isoY - 15} width="6" height="15" fill="#374151" stroke="#1f2937" strokeWidth="1"/>
-                              <rect x={isoX + pos.w/2 - 10} y={isoY - 15} width="20" height="8" fill="#4b5563" stroke="#1f2937" strokeWidth="1" rx="2"/>
-                            </g>
-                          )}
-                          
-                          {pos.type === '3d_sealer' && (
-                            <rect x={isoX + 5} y={isoY + pos.h/2} width={pos.w - 10} height="3" fill="#dc2626"/>
-                          )}
-                          
-                          {pos.type === '3d_auger' && (
-                            <circle cx={isoX + pos.w/2} cy={isoY + pos.h/2} r="8" fill="none" stroke="#1f2937" strokeWidth="2"/>
-                          )}
-                          
-                          {pos.type === '3d_tablet' && (
-                            <circle cx={isoX + pos.w/2} cy={isoY + pos.h/2} r="10" fill="#374151" stroke="#1f2937" strokeWidth="2"/>
-                          )}
-                        </g>
+                      <g key={machine.id} onClick={() => setSelectedMachine(machine)} style={{ cursor: 'pointer' }}>
+                        {/* Simple, clear machine representation */}
+                        <rect x={x} y={y} width="120" height="80" 
+                              fill={statusColor} stroke={dept_color} strokeWidth="3" rx="8"
+                              filter="url(#subtle-shadow)" opacity="0.9"/>
                         
-                        {/* Machine label */}
-                        <text 
-                          x={isoX + pos.w/2} y={isoY + pos.h + 20}
-                          textAnchor="middle"
-                          className="fill-slate-800 text-xs font-mono font-bold"
-                        >
+                        {/* Large, readable machine name */}
+                        <text x={x + 60} y={y + 35} textAnchor="middle" 
+                              className="fill-white text-sm font-bold font-mono">
                           {machine.name}
                         </text>
                         
-                        {/* Status indicator */}
-                        <circle cx={isoX + pos.w - 8} cy={isoY + 8} r="6" fill={statusColor} stroke="#1f2937" strokeWidth="2"/>
-                        <ellipse cx={isoX + pos.w - 6} cy={isoY + 6} rx="6" ry="4" fill="rgba(255,255,255,0.3)"/>
+                        {/* Clear status indicator */}
+                        <circle cx={x + 100} cy={y + 15} r="8" 
+                                fill={statusColor} stroke="#ffffff" strokeWidth="2"/>
                         
+                        {/* Status text - large and clear */}
+                        <text x={x + 60} y={y + 55} textAnchor="middle" 
+                              className="fill-white text-xs font-bold">
+                          {STATUS_COLORS[machine?.status]?.label || 'OFF'}
+                        </text>
+                        
+                        {/* Production rate when running */}
+                        {machine.status === 'in_progress' && (
+                          <text x={x + 60} y={y + 95} textAnchor="middle" 
+                                className="fill-gray-700 text-xs font-mono">
+                            {machine.production_rate || '60'} units/hr
+                          </text>
+                        )}
                       </g>
                     );
                   })}
-                </g>
-                
-                {/* 3D Process Flow Arrows */}
-                <g>
-                  <defs>
-                    <marker id="arrowhead3d" markerWidth="12" markerHeight="8" refX="11" refY="4" orient="auto">
-                      <polygon points="0 0, 12 4, 0 8" fill="#374151"/>
-                      <polygon points="2 1, 12 4, 2 7" fill="#6b7280"/>
-                    </marker>
-                  </defs>
-                  
-                  {/* 3D Blending to Maturation flow */}
-                  <path d="M 450 320 Q 465 280 480 250" stroke="#374151" strokeWidth="5" fill="none" markerEnd="url(#arrowhead3d)"/>
-                  <path d="M 452 318 Q 467 278 482 248" stroke="#6b7280" strokeWidth="3" fill="none"/>
-                  <text x="465" y="275" textAnchor="middle" className="fill-slate-800 text-sm font-mono font-bold" transform="rotate(-20 465 275)">BLEND→MATURE</text>
-                  
-                  {/* 3D Maturation to Packaging flow */}
-                  <path d="M 650 330 Q 665 280 680 250" stroke="#374151" strokeWidth="5" fill="none" markerEnd="url(#arrowhead3d)"/>
-                  <path d="M 652 328 Q 667 278 682 248" stroke="#6b7280" strokeWidth="3" fill="none"/>
-                  <text x="665" y="285" textAnchor="middle" className="fill-slate-800 text-sm font-mono font-bold" transform="rotate(-20 665 285)">MATURE→PACK</text>
-                </g>
-                
-                {/* Flow arrows */}
-                <defs>
-                  <marker id="arrowhead" markerWidth="10" markerHeight="7" 
-                          refX="9" refY="3.5" orient="auto">
-                    <polygon points="0 0, 10 3.5, 0 7" fill="#64748b" />
-                  </marker>
-                </defs>
-                
-                {/* Material flow from blending to packaging */}
-                <path 
-                  d="M 450 180 Q 475 180 500 160"
-                  stroke="#64748b"
-                  strokeWidth="3"
-                  fill="none"
-                  markerEnd="url(#arrowhead)"
-                />
-                <text 
-                  x="475" 
-                  y="175"
-                  textAnchor="middle"
-                  className="fill-slate-600 text-xs font-mono"
-                >
-                  FLOW
-                </text>
-                
-                {/* Legend */}
-                <g transform="translate(50, 320)">
-                  <text className="fill-slate-700 text-xs font-mono font-bold">LEGEND:</text>
-                  <circle cx="60" cy="0" r="4" fill="#10b981" />
-                  <text x="70" y="4" className="fill-slate-700 text-xs font-mono">RDY</text>
-                  <circle cx="110" cy="0" r="4" fill="#3b82f6" />
-                  <text x="120" y="4" className="fill-slate-700 text-xs font-mono">RUN</text>
-                  <circle cx="160" cy="0" r="4" fill="#f59e0b" />
-                  <text x="170" y="4" className="fill-slate-700 text-xs font-mono">MNT</text>
-                  <circle cx="210" cy="0" r="4" fill="#ef4444" />
-                  <text x="220" y="4" className="fill-slate-700 text-xs font-mono">OFF</text>
                 </g>
               </svg>
             </div>
