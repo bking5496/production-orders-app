@@ -11056,3 +11056,40 @@
 2025-08-14T08:59:35: ✅ New PostgreSQL client connected
 2025-08-14T08:59:35: 🔗 Client acquired from pool
 2025-08-14T08:59:35: 🔓 Client released back to pool
+2025-08-14T09:00:35: ✅ New PostgreSQL client connected
+2025-08-14T09:00:35: 🔗 Client acquired from pool
+2025-08-14T09:00:35: 🔓 Client released back to pool
+2025-08-14T09:01:35: ✅ New PostgreSQL client connected
+2025-08-14T09:01:35: 🔗 Client acquired from pool
+2025-08-14T09:01:35: 🔓 Client released back to pool
+2025-08-14T09:02:35: ✅ New PostgreSQL client connected
+2025-08-14T09:02:35: 🔗 Client acquired from pool
+2025-08-14T09:02:35: 🔓 Client released back to pool
+2025-08-14T09:03:35: ✅ New PostgreSQL client connected
+2025-08-14T09:03:35: 🔗 Client acquired from pool
+2025-08-14T09:03:35: 🔓 Client released back to pool
+2025-08-14T09:04:35: ✅ New PostgreSQL client connected
+2025-08-14T09:04:35: 🔗 Client acquired from pool
+2025-08-14T09:04:35: 🔓 Client released back to pool
+2025-08-14T09:09:07: ✅ New PostgreSQL client connected
+2025-08-14T09:09:07: 🔗 Client acquired from pool
+2025-08-14T09:09:07: 🔓 Client released back to pool
+2025-08-14T09:09:24: 🌐 WebSocket server initialized
+2025-08-14T09:09:24: 🧹 WebSocket cleanup scheduler started
+2025-08-14T09:09:24: 🧪 Testing refactored components...
+2025-08-14T09:09:24: 🚀 Production refactored server running on port 3000
+2025-08-14T09:09:24: 📊 Health check: http://localhost:3000/api/health
+2025-08-14T09:09:24: 🔐 Auth test: http://localhost:3000/api/auth/login
+2025-08-14T09:09:24: ⚙️ System routes: http://localhost:3000/api/system/health
+2025-08-14T09:09:24: 🌐 WebSocket server initialized and ready
+2025-08-14T09:09:24: ✅ New PostgreSQL client connected
+2025-08-14T09:09:24: 🔗 Client acquired from pool
+2025-08-14T09:09:24: 🔓 Client released back to pool
+2025-08-14T09:09:24: ✅ Database connection: OK
+2025-08-14T09:09:24: ✅ Authentication middleware: OK
+2025-08-14T09:09:24: ✅ Response utilities: OK
+2025-08-14T09:09:24: ✅ Database utilities: OK
+2025-08-14T09:09:24: 🎉 All components tested successfully!
+2025-08-14T09:09:24: ✅ All components tested successfully
+2025-08-14T09:09:35: 🔗 Client acquired from pool
+2025-08-14T09:09:35: 🔓 Client released back to pool
