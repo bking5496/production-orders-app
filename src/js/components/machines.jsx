@@ -1164,36 +1164,52 @@ export default function MachinesPage() {
           <div className="bg-slate-800 rounded-lg border border-slate-600 p-6">
             <div className="bg-slate-700 rounded-lg p-4 overflow-x-auto">
               <svg 
-                width="2000" 
-                height="1200" 
-                viewBox="0 0 2000 1200"
-                className="w-full h-auto border border-slate-500 rounded bg-gradient-to-br from-slate-100 via-slate-200 to-slate-300"
+                width="2200" 
+                height="1400" 
+                viewBox="0 0 2200 1400"
+                className="w-full h-auto border border-slate-500 rounded bg-gradient-to-br from-slate-900 via-slate-800 to-slate-700"
+                style={{
+                  background: 'radial-gradient(ellipse at center, #1e293b 0%, #0f172a 70%, #020617 100%)',
+                  filter: 'drop-shadow(0 25px 50px rgba(0,0,0,0.5))'
+                }}
               >
                 {/* Enhanced 3D Definitions */}
                 <defs>
-                  {/* Professional 3D Floor Pattern */}
-                  <pattern id="floor-grid" width="50" height="30" patternUnits="userSpaceOnUse">
-                    <path d="M 0 0 L 50 0 L 25 30 L -25 30 Z" fill="none" stroke="#94a3b8" strokeWidth="0.8" opacity="0.4"/>
-                    <path d="M 25 0 L 25 30" stroke="#94a3b8" strokeWidth="0.5" opacity="0.3"/>
-                    <path d="M 0 15 L 50 15" stroke="#94a3b8" strokeWidth="0.3" opacity="0.2"/>
+                  {/* Dynamic Perspective Floor Pattern */}
+                  <pattern id="perspective-floor" width="80" height="50" patternUnits="userSpaceOnUse">
+                    <rect width="80" height="50" fill="#0f172a" opacity="0.9"/>
+                    {/* Perspective vanishing point grid */}
+                    <path d="M 0 0 L 80 0 L 60 50 L -20 50 Z" fill="none" stroke="#1e293b" strokeWidth="1.2" opacity="0.7"/>
+                    <path d="M 20 0 L 20 50" stroke="#334155" strokeWidth="0.8" opacity="0.5"/>
+                    <path d="M 40 0 L 40 50" stroke="#334155" strokeWidth="0.6" opacity="0.4"/>
+                    <path d="M 60 0 L 60 50" stroke="#334155" strokeWidth="0.4" opacity="0.3"/>
+                    {/* Depth indicators */}
+                    <circle cx="40" cy="25" r="2" fill="#475569" opacity="0.3"/>
                   </pattern>
+                  
+                  {/* Advanced Animation Definitions */}
+                  <animate id="production-pulse" attributeName="opacity" values="0.5;1;0.5" dur="2s" repeatCount="indefinite"/>
+                  <animateTransform id="machine-rotation" attributeName="transform" type="rotate" values="0;360" dur="10s" repeatCount="indefinite"/>
+                  <animate id="status-glow" attributeName="r" values="3;8;3" dur="1.5s" repeatCount="indefinite"/>
                   
                   {/* Enhanced Gradients for realistic 3D lighting */}
                   <linearGradient id="machine-top" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#ffffff" stopOpacity="0.4"/>
-                    <stop offset="50%" stopColor="#f8fafc" stopOpacity="0.2"/>
-                    <stop offset="100%" stopColor="#e2e8f0" stopOpacity="0.1"/>
+                    <stop offset="0%" stopColor="#60a5fa" stopOpacity="0.6"/>
+                    <stop offset="30%" stopColor="#3b82f6" stopOpacity="0.4"/>
+                    <stop offset="70%" stopColor="#1e40af" stopOpacity="0.2"/>
+                    <stop offset="100%" stopColor="#1e293b" stopOpacity="0.1"/>
                   </linearGradient>
                   
                   <linearGradient id="machine-side" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#1e293b" stopOpacity="0.3"/>
-                    <stop offset="70%" stopColor="#475569" stopOpacity="0.15"/>
-                    <stop offset="100%" stopColor="#64748b" stopOpacity="0.05"/>
+                    <stop offset="0%" stopColor="#1e293b" stopOpacity="0.8"/>
+                    <stop offset="50%" stopColor="#334155" stopOpacity="0.5"/>
+                    <stop offset="100%" stopColor="#475569" stopOpacity="0.2"/>
                   </linearGradient>
                   
                   <linearGradient id="machine-front" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" stopColor="#ffffff" stopOpacity="0.2"/>
-                    <stop offset="100%" stopColor="#1e293b" stopOpacity="0.1"/>
+                    <stop offset="0%" stopColor="#64748b" stopOpacity="0.6"/>
+                    <stop offset="50%" stopColor="#475569" stopOpacity="0.4"/>
+                    <stop offset="100%" stopColor="#334155" stopOpacity="0.2"/>
                   </linearGradient>
                   
                   {/* Metal texture gradients */}
@@ -1227,15 +1243,35 @@ export default function MachinesPage() {
                     </feMerge>
                   </filter>
                   
-                  {/* Lighting effects */}
+                  {/* Advanced Perspective Lighting */}
                   <radialGradient id="ambient-light" cx="50%" cy="30%">
                     <stop offset="0%" stopColor="#ffffff" stopOpacity="0.3"/>
                     <stop offset="100%" stopColor="#ffffff" stopOpacity="0"/>
                   </radialGradient>
+                  
+                  <radialGradient id="ambient-glow">
+                    <stop offset="0%" stopColor="#60a5fa" stopOpacity="0.3"/>
+                    <stop offset="50%" stopColor="#3b82f6" stopOpacity="0.15"/>
+                    <stop offset="100%" stopColor="#1e40af" stopOpacity="0.05"/>
+                  </radialGradient>
+                  
+                  <linearGradient id="depth-perspective" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#0f172a" stopOpacity="0.2"/>
+                    <stop offset="50%" stopColor="#1e293b" stopOpacity="0.4"/>
+                    <stop offset="100%" stopColor="#334155" stopOpacity="0.6"/>
+                  </linearGradient>
                 </defs>
                 
-                {/* 3D Isometric Floor */}
-                <rect width="100%" height="100%" fill="url(#floor-grid)" />
+                {/* Dynamic 3D Perspective Floor */}
+                <rect width="100%" height="100%" fill="url(#perspective-floor)" />
+                
+                {/* Atmospheric Perspective Overlay */}
+                <rect width="100%" height="100%" fill="url(#depth-perspective)" opacity="0.4"/>
+                
+                {/* Animated Ambient Lighting */}
+                <circle cx="1100" cy="300" r="400" fill="url(#ambient-glow)" opacity="0.15">
+                  <animate attributeName="opacity" values="0.1;0.25;0.1" dur="4s" repeatCount="indefinite"/>
+                </circle>
                 
                 {/* PROFESSIONAL ORGANIZED FACTORY STRUCTURE */}
                 <g className="factory-structure" opacity="0.8">
@@ -1677,8 +1713,14 @@ export default function MachinesPage() {
                             fill="#374151" stroke="#1f2937" strokeWidth="1"
                           />
                           
-                          {/* Machine front */}
-                          <rect x={isoX} y={isoY} width={pos.w} height={pos.h} fill={statusColor} stroke="#1f2937" strokeWidth="2" rx="4"/>
+                          {/* Machine front with dynamic effects */}
+                          <rect x={isoX} y={isoY} width={pos.w} height={pos.h} 
+                                fill={statusColor} stroke="#1f2937" strokeWidth="2" rx="4"
+                                opacity={machine.status === 'in_progress' ? "1" : "0.8"}>
+                            {machine.status === 'in_progress' && (
+                              <animate attributeName="opacity" values="0.8;1;0.8" dur="2s" repeatCount="indefinite"/>
+                            )}
+                          </rect>
                           
                           {/* Machine top */}
                           <polygon 
@@ -1692,9 +1734,31 @@ export default function MachinesPage() {
                             fill="url(#machine-side)" stroke="#1f2937" strokeWidth="1"
                           />
                           
-                          {/* Control panel */}
-                          <rect x={isoX + 5} y={isoY + 5} width="20" height="12" fill="#4b5563" stroke="#1f2937" strokeWidth="1" rx="2"/>
-                          <polygon points={`${isoX + 5},${isoY + 5} ${isoX + 25},${isoY + 5} ${isoX + 30},${isoY + 2} ${isoX + 10},${isoY + 2}`} fill="#6b7280" stroke="#1f2937" strokeWidth="1"/>
+                          {/* Advanced Control Panel */}
+                          <rect x={isoX + 5} y={isoY + 5} width="20" height="12" fill="#1e293b" stroke="#475569" strokeWidth="1" rx="2" opacity="0.9"/>
+                          <polygon points={`${isoX + 5},${isoY + 5} ${isoX + 25},${isoY + 5} ${isoX + 30},${isoY + 2} ${isoX + 10},${isoY + 2}`} fill="#334155" stroke="#475569" strokeWidth="1"/>
+                          
+                          {/* Animated Status LED */}
+                          <circle cx={isoX + 22} cy={isoY + 8} r="2" fill={statusColor} stroke="#ffffff" strokeWidth="0.5">
+                            {machine.status === 'in_progress' && (
+                              <animate attributeName="r" values="2;4;2" dur="1.5s" repeatCount="indefinite"/>
+                            )}
+                          </circle>
+                          
+                          {/* Activity Bars for Running Machines */}
+                          {machine.status === 'in_progress' && (
+                            <g opacity="0.8">
+                              <rect x={isoX + 8} y={isoY + 12} width="1" height="3" fill="#10b981" rx="0.5">
+                                <animate attributeName="height" values="2;6;2" dur="0.8s" repeatCount="indefinite"/>
+                              </rect>
+                              <rect x={isoX + 11} y={isoY + 12} width="1" height="4" fill="#10b981" rx="0.5">
+                                <animate attributeName="height" values="3;7;3" dur="1.2s" repeatCount="indefinite"/>
+                              </rect>
+                              <rect x={isoX + 14} y={isoY + 12} width="1" height="2" fill="#10b981" rx="0.5">
+                                <animate attributeName="height" values="1;5;1" dur="1.0s" repeatCount="indefinite"/>
+                              </rect>
+                            </g>
+                          )}
                           
                           {/* Machine-specific details */}
                           {pos.type === '3d_palletizer' && (
