@@ -14604,3 +14604,109 @@
 2025-08-14T12:38:28: 🔓 Client released back to pool
 2025-08-14T12:38:28: 🔗 Client acquired from pool
 2025-08-14T12:38:28: 🔓 Client released back to pool
+2025-08-14T12:41:44: 🌐 WebSocket server initialized
+2025-08-14T12:41:44: 🧹 WebSocket cleanup scheduler started
+2025-08-14T12:41:44: 🧪 Testing refactored components...
+2025-08-14T12:41:44: 🚀 Production refactored server running on port 3000
+2025-08-14T12:41:44: 📊 Health check: http://localhost:3000/api/health
+2025-08-14T12:41:44: 🔐 Auth test: http://localhost:3000/api/auth/login
+2025-08-14T12:41:44: ⚙️ System routes: http://localhost:3000/api/system/health
+2025-08-14T12:41:44: 🌐 WebSocket server initialized and ready
+2025-08-14T12:41:44: ✅ New PostgreSQL client connected
+2025-08-14T12:41:44: 🔗 Client acquired from pool
+2025-08-14T12:41:44: 🔓 Client released back to pool
+2025-08-14T12:41:44: ✅ Database connection: OK
+2025-08-14T12:41:44: ✅ Authentication middleware: OK
+2025-08-14T12:41:44: ✅ Response utilities: OK
+2025-08-14T12:41:44: ✅ Database utilities: OK
+2025-08-14T12:41:44: 🎉 All components tested successfully!
+2025-08-14T12:41:44: ✅ All components tested successfully
+2025-08-14T12:41:56: 🔗 Client acquired from pool
+2025-08-14T12:41:56: 🔓 Client released back to pool
+2025-08-14T12:41:57: New WebSocket connection attempt
+2025-08-14T12:41:57: ✅ WebSocket authenticated: admin (admin)
+2025-08-14T12:41:57: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-14T12:41:57: 🏠 admin joined room: production
+2025-08-14T12:41:57: 🔗 Client acquired from pool
+2025-08-14T12:41:57: 🔓 Client released back to pool
+2025-08-14T12:41:57: 🔗 Client acquired from pool
+2025-08-14T12:41:57: 🔓 Client released back to pool
+2025-08-14T12:42:01: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-14T12:42:01: 🏠 admin joined room: production
+2025-08-14T12:42:01: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-14T12:42:01: 🏠 admin joined room: production
+2025-08-14T12:42:06: New WebSocket connection attempt
+2025-08-14T12:42:06: ✅ WebSocket authenticated: admin (admin)
+2025-08-14T12:42:06: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-14T12:42:06: 🏠 admin joined room: production
+2025-08-14T12:42:06: 🔗 Client acquired from pool
+2025-08-14T12:42:06: 🔓 Client released back to pool
+2025-08-14T12:42:07: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-14T12:42:07: 🏠 admin joined room: production
+2025-08-14T12:42:07: New WebSocket connection attempt
+2025-08-14T12:42:07: ✅ WebSocket authenticated: admin (admin)
+2025-08-14T12:42:07: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-14T12:42:07: 🏠 admin joined room: production
+2025-08-14T12:42:07: 🔗 Client acquired from pool
+2025-08-14T12:42:07: 🔓 Client released back to pool
+2025-08-14T12:42:08: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-14T12:42:08: 🏠 admin joined room: production
+2025-08-14T12:42:09: 🔗 Client acquired from pool
+2025-08-14T12:42:09: 🔓 Client released back to pool
+2025-08-14T12:47:01: 🔌 WebSocket disconnected: admin
