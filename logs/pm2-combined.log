@@ -11194,3 +11194,77 @@
   user: 'admin',
   timestamp: '2025-08-14T06:00:18.807Z'
 }
+2025-08-14T08:10:03: 🌐 WebSocket server initialized
+2025-08-14T08:10:03: 🧹 WebSocket cleanup scheduler started
+2025-08-14T08:10:03: 🧪 Testing refactored components...
+2025-08-14T08:10:03: 🚀 Production refactored server running on port 3000
+2025-08-14T08:10:03: 📊 Health check: http://localhost:3000/api/health
+2025-08-14T08:10:03: 🔐 Auth test: http://localhost:3000/api/auth/login
+2025-08-14T08:10:03: ⚙️ System routes: http://localhost:3000/api/system/health
+2025-08-14T08:10:03: 🌐 WebSocket server initialized and ready
+2025-08-14T08:10:03: ✅ New PostgreSQL client connected
+2025-08-14T08:10:03: 🔗 Client acquired from pool
+2025-08-14T08:10:03: 🔓 Client released back to pool
+2025-08-14T08:10:03: ✅ Database connection: OK
+2025-08-14T08:10:03: ✅ Authentication middleware: OK
+2025-08-14T08:10:03: ✅ Response utilities: OK
+2025-08-14T08:10:03: ✅ Database utilities: OK
+2025-08-14T08:10:03: 🎉 All components tested successfully!
+2025-08-14T08:10:03: ✅ All components tested successfully
+2025-08-14T08:12:13: ValidationError: The 'X-Forwarded-For' header is set but the Express 'trust proxy' setting is false (default). This could indicate a misconfiguration which would prevent express-rate-limit from accurately identifying users. See https://express-rate-limit.github.io/ERR_ERL_UNEXPECTED_X_FORWARDED_FOR/ for more information.
+    at Object.xForwardedForHeader (/home/production-app/production-orders-app/node_modules/express-rate-limit/dist/index.cjs:185:13)
+    at wrappedValidations.<computed> [as xForwardedForHeader] (/home/production-app/production-orders-app/node_modules/express-rate-limit/dist/index.cjs:397:22)
+    at Object.keyGenerator (/home/production-app/production-orders-app/node_modules/express-rate-limit/dist/index.cjs:658:20)
+    at /home/production-app/production-orders-app/node_modules/express-rate-limit/dist/index.cjs:710:32
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async /home/production-app/production-orders-app/node_modules/express-rate-limit/dist/index.cjs:691:5 {
+  code: 'ERR_ERL_UNEXPECTED_X_FORWARDED_FOR',
+  help: 'https://express-rate-limit.github.io/ERR_ERL_UNEXPECTED_X_FORWARDED_FOR/'
+}
+2025-08-14T08:12:13: ✅ New PostgreSQL client connected
+2025-08-14T08:12:13: 🔗 Client acquired from pool
+2025-08-14T08:12:13: 🔓 Client released back to pool
+2025-08-14T08:12:13: 🔒 Auth failure: admin from ::1 - Invalid credentials - curl/8.5.0
+2025-08-14T08:12:19: 🔗 Client acquired from pool
+2025-08-14T08:12:19: 🔓 Client released back to pool
+2025-08-14T08:12:19: 🔒 Auth failure: admin from ::1 - Invalid credentials - curl/8.5.0
+2025-08-14T08:12:31: 🔗 Client acquired from pool
+2025-08-14T08:12:31: 🔓 Client released back to pool
+2025-08-14T08:12:31: 🔒 Auth failure: Brandon King from ::ffff:127.0.0.1 - Invalid credentials - curl/8.5.0
+2025-08-14T08:12:43: 🔒 Auth failure: admin from ::1 - Invalid input - curl/8.5.0
+2025-08-14T08:14:03: ✅ New PostgreSQL client connected
+2025-08-14T08:14:03: 🔗 Client acquired from pool
+2025-08-14T08:14:03: ✅ New PostgreSQL client connected
+2025-08-14T08:14:03: 🔗 Client acquired from pool
+2025-08-14T08:14:03: 🔓 Client released back to pool
+2025-08-14T08:14:03: 🔓 Client released back to pool
+2025-08-14T08:14:03: 🔗 Client acquired from pool
+2025-08-14T08:14:03: 🔓 Client released back to pool
+2025-08-14T08:14:03: 🔗 Client acquired from pool
+2025-08-14T08:14:03: 🔓 Client released back to pool
+2025-08-14T08:14:03: 🔗 Client acquired from pool
+2025-08-14T08:14:03: 🔗 Client acquired from pool
+2025-08-14T08:14:03: 🔓 Client released back to pool
+2025-08-14T08:14:03: 🔓 Client released back to pool
+2025-08-14T08:14:03: 🔗 Client acquired from pool
+2025-08-14T08:14:03: 🔓 Client released back to pool
+2025-08-14T08:14:03: ✅ New PostgreSQL client connected
+2025-08-14T08:14:03: 🔗 Client acquired from pool
+2025-08-14T08:14:03: ✅ New PostgreSQL client connected
+2025-08-14T08:14:03: 🔗 Client acquired from pool
+2025-08-14T08:14:03: 🔓 Client released back to pool
+2025-08-14T08:14:03: 🔓 Client released back to pool
+2025-08-14T08:14:03: New WebSocket connection attempt
+2025-08-14T08:14:03: ✅ WebSocket authenticated: admin (admin)
+2025-08-14T08:14:03: 🔗 Client acquired from pool
+2025-08-14T08:14:03: 🔓 Client released back to pool
+2025-08-14T08:14:03: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-14T08:14:03: 🏠 admin joined room: production

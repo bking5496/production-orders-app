@@ -1205,3 +1205,17 @@
   user: 'admin',
   timestamp: '2025-08-14T06:00:18.807Z'
 }
+2025-08-14T08:12:13: ValidationError: The 'X-Forwarded-For' header is set but the Express 'trust proxy' setting is false (default). This could indicate a misconfiguration which would prevent express-rate-limit from accurately identifying users. See https://express-rate-limit.github.io/ERR_ERL_UNEXPECTED_X_FORWARDED_FOR/ for more information.
+    at Object.xForwardedForHeader (/home/production-app/production-orders-app/node_modules/express-rate-limit/dist/index.cjs:185:13)
+    at wrappedValidations.<computed> [as xForwardedForHeader] (/home/production-app/production-orders-app/node_modules/express-rate-limit/dist/index.cjs:397:22)
+    at Object.keyGenerator (/home/production-app/production-orders-app/node_modules/express-rate-limit/dist/index.cjs:658:20)
+    at /home/production-app/production-orders-app/node_modules/express-rate-limit/dist/index.cjs:710:32
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async /home/production-app/production-orders-app/node_modules/express-rate-limit/dist/index.cjs:691:5 {
+  code: 'ERR_ERL_UNEXPECTED_X_FORWARDED_FOR',
+  help: 'https://express-rate-limit.github.io/ERR_ERL_UNEXPECTED_X_FORWARDED_FOR/'
+}
+2025-08-14T08:12:13: 🔒 Auth failure: admin from ::1 - Invalid credentials - curl/8.5.0
+2025-08-14T08:12:19: 🔒 Auth failure: admin from ::1 - Invalid credentials - curl/8.5.0
+2025-08-14T08:12:31: 🔒 Auth failure: Brandon King from ::ffff:127.0.0.1 - Invalid credentials - curl/8.5.0
+2025-08-14T08:12:43: 🔒 Auth failure: admin from ::1 - Invalid input - curl/8.5.0

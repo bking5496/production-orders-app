@@ -1123,7 +1123,11 @@ export default function ProductionOrdersSystem() {
                       </button>
                       <p className="text-sm text-gray-600">{order.product_name}</p>
                       {order.customer_info && (
-                        <p className="text-xs text-gray-500 mt-1">Customer: {order.customer_info}</p>
+                        <p className="text-xs text-gray-500 mt-1">Customer: {
+                          typeof order.customer_info === 'string' 
+                            ? order.customer_info 
+                            : order.customer_info.company || order.customer_info.info || 'N/A'
+                        }</p>
                       )}
                     </div>
                     <div className="flex items-center gap-2">
@@ -1279,7 +1283,11 @@ export default function ProductionOrdersSystem() {
                       <td className="px-6 py-4">
                         <div className="text-sm text-gray-900">{order.product_name}</div>
                         {order.customer_info && (
-                          <div className="text-xs text-gray-500">Customer: {order.customer_info}</div>
+                          <div className="text-xs text-gray-500">Customer: {
+                            typeof order.customer_info === 'string' 
+                              ? order.customer_info 
+                              : order.customer_info.company || order.customer_info.info || 'N/A'
+                          }</div>
                         )}
                       </td>
                       <td className="px-6 py-4">
