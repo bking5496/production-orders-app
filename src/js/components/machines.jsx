@@ -1143,6 +1143,305 @@ export default function MachinesPage() {
             </div>
           </div>
         )}
+
+        {/* Factory Floor Layout Section */}
+        <div className="mb-8">
+          <div className="bg-gradient-to-r from-gray-700 to-gray-800 rounded-lg p-6 mb-6 shadow-lg">
+            <div className="flex items-center gap-4">
+              <div className="w-16 h-16 bg-white/20 rounded-lg flex items-center justify-center">
+                <Factory className="w-8 h-8 text-white" />
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold text-white mb-1">FACTORY FLOOR LAYOUT</h2>
+                <p className="text-gray-100 flex items-center gap-2">
+                  <Target className="w-4 h-4" />
+                  Visual Equipment Positioning • Real-Time Status • Interactive Controls
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div className="bg-slate-800 rounded-lg border border-slate-600 p-6">
+            <div className="bg-slate-700 rounded-lg p-4 overflow-x-auto">
+              <svg 
+                width="1000" 
+                height="350" 
+                viewBox="0 0 1000 350"
+                className="w-full h-auto border border-slate-500 rounded bg-slate-100"
+              >
+                {/* Grid background */}
+                <defs>
+                  <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+                    <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#e2e8f0" strokeWidth="0.5"/>
+                  </pattern>
+                </defs>
+                <rect width="100%" height="100%" fill="url(#grid)" />
+                
+                {/* Blending Area */}
+                <g>
+                  <rect 
+                    x="50" 
+                    y="50" 
+                    width="400" 
+                    height="250"
+                    fill="none"
+                    stroke="#6366f1"
+                    strokeWidth="2"
+                    strokeDasharray="5,5"
+                    rx="8"
+                  />
+                  <text 
+                    x="60" 
+                    y="40"
+                    className="fill-indigo-600 text-sm font-mono font-bold"
+                  >
+                    BLENDING AREA
+                  </text>
+                  
+                  {/* Blending machines */}
+                  {filteredMachines.filter(m => m.environment === 'blending').slice(0, 4).map((machine, index) => {
+                    const positions = [
+                      { x: 80, y: 100, width: 60, height: 40, type: 'mixer' },
+                      { x: 180, y: 100, width: 60, height: 40, type: 'mixer' },
+                      { x: 280, y: 80, width: 40, height: 80, type: 'tank' },
+                      { x: 80, y: 180, width: 240, height: 20, type: 'conveyor' }
+                    ];
+                    const pos = positions[index] || positions[0];
+                    const status = STATUS_COLORS[machine?.status] || STATUS_COLORS.offline;
+                    
+                    return (
+                      <g key={machine.id} onClick={() => setSelectedMachine(machine)} style={{ cursor: 'pointer' }}>
+                        {/* Machine shape based on type */}
+                        {pos.type === 'mixer' && (
+                          <g>
+                            <rect 
+                              x={pos.x} y={pos.y} width={pos.width} height={pos.height}
+                              fill={status.text === 'text-green-400' ? '#10b981' : 
+                                    status.text === 'text-blue-400' ? '#3b82f6' : 
+                                    status.text === 'text-yellow-400' ? '#f59e0b' : '#ef4444'}
+                              stroke="#1f2937"
+                              strokeWidth="2"
+                              rx="8"
+                            />
+                            <circle 
+                              cx={pos.x + pos.width/2} cy={pos.y + pos.height/2}
+                              r="8" fill="none" stroke="#1f2937" strokeWidth="2"
+                            />
+                          </g>
+                        )}
+                        {pos.type === 'tank' && (
+                          <g>
+                            <rect 
+                              x={pos.x} y={pos.y} width={pos.width} height={pos.height}
+                              fill={status.text === 'text-green-400' ? '#10b981' : 
+                                    status.text === 'text-blue-400' ? '#3b82f6' : 
+                                    status.text === 'text-yellow-400' ? '#f59e0b' : '#ef4444'}
+                              stroke="#1f2937"
+                              strokeWidth="2"
+                              rx="4"
+                            />
+                            <ellipse 
+                              cx={pos.x + pos.width/2} cy={pos.y + 5}
+                              rx={pos.width/2 - 2} ry="5"
+                              fill="#1f2937"
+                            />
+                          </g>
+                        )}
+                        {pos.type === 'conveyor' && (
+                          <g>
+                            <rect 
+                              x={pos.x} y={pos.y} width={pos.width} height={pos.height}
+                              fill={status.text === 'text-green-400' ? '#10b981' : 
+                                    status.text === 'text-blue-400' ? '#3b82f6' : 
+                                    status.text === 'text-yellow-400' ? '#f59e0b' : '#ef4444'}
+                              stroke="#1f2937"
+                              strokeWidth="2"
+                              rx="10"
+                            />
+                          </g>
+                        )}
+                        
+                        {/* Machine label */}
+                        <text 
+                          x={pos.x + pos.width/2} y={pos.y + pos.height + 15}
+                          textAnchor="middle"
+                          className="fill-slate-700 text-xs font-mono font-semibold"
+                        >
+                          {machine.name}
+                        </text>
+                        
+                        {/* Status indicator */}
+                        <circle 
+                          cx={pos.x + pos.width - 5} cy={pos.y + 5}
+                          r="4"
+                          fill={status.text === 'text-green-400' ? '#10b981' : 
+                                status.text === 'text-blue-400' ? '#3b82f6' : 
+                                status.text === 'text-yellow-400' ? '#f59e0b' : '#ef4444'}
+                          stroke="#1f2937"
+                          strokeWidth="1"
+                        />
+                      </g>
+                    );
+                  })}
+                </g>
+                
+                {/* Packaging Area */}
+                <g>
+                  <rect 
+                    x="500" 
+                    y="50" 
+                    width="450" 
+                    height="250"
+                    fill="none"
+                    stroke="#10b981"
+                    strokeWidth="2"
+                    strokeDasharray="5,5"
+                    rx="8"
+                  />
+                  <text 
+                    x="510" 
+                    y="40"
+                    className="fill-emerald-600 text-sm font-mono font-bold"
+                  >
+                    PACKAGING AREA
+                  </text>
+                  
+                  {/* Packaging machines */}
+                  {filteredMachines.filter(m => m.environment === 'packaging').slice(0, 5).map((machine, index) => {
+                    const positions = [
+                      { x: 530, y: 80, width: 100, height: 30, type: 'line' },
+                      { x: 660, y: 80, width: 60, height: 30, type: 'sealer' },
+                      { x: 760, y: 80, width: 80, height: 90, type: 'palletizer' },
+                      { x: 530, y: 140, width: 100, height: 30, type: 'line' },
+                      { x: 530, y: 200, width: 300, height: 20, type: 'conveyor' }
+                    ];
+                    const pos = positions[index] || positions[0];
+                    const status = STATUS_COLORS[machine?.status] || STATUS_COLORS.offline;
+                    
+                    return (
+                      <g key={machine.id} onClick={() => setSelectedMachine(machine)} style={{ cursor: 'pointer' }}>
+                        {/* Machine shapes */}
+                        <rect 
+                          x={pos.x} y={pos.y} width={pos.width} height={pos.height}
+                          fill={status.text === 'text-green-400' ? '#10b981' : 
+                                status.text === 'text-blue-400' ? '#3b82f6' : 
+                                status.text === 'text-yellow-400' ? '#f59e0b' : '#ef4444'}
+                          stroke="#1f2937"
+                          strokeWidth="2"
+                          rx="4"
+                        />
+                        
+                        {/* Machine label */}
+                        <text 
+                          x={pos.x + pos.width/2} y={pos.y + pos.height + 15}
+                          textAnchor="middle"
+                          className="fill-slate-700 text-xs font-mono font-semibold"
+                        >
+                          {machine.name}
+                        </text>
+                        
+                        {/* Status indicator */}
+                        <circle 
+                          cx={pos.x + pos.width - 5} cy={pos.y + 5}
+                          r="4"
+                          fill={status.text === 'text-green-400' ? '#10b981' : 
+                                status.text === 'text-blue-400' ? '#3b82f6' : 
+                                status.text === 'text-yellow-400' ? '#f59e0b' : '#ef4444'}
+                          stroke="#1f2937"
+                          strokeWidth="1"
+                        />
+                      </g>
+                    );
+                  })}
+                </g>
+                
+                {/* Flow arrows */}
+                <defs>
+                  <marker id="arrowhead" markerWidth="10" markerHeight="7" 
+                          refX="9" refY="3.5" orient="auto">
+                    <polygon points="0 0, 10 3.5, 0 7" fill="#64748b" />
+                  </marker>
+                </defs>
+                
+                {/* Material flow from blending to packaging */}
+                <path 
+                  d="M 450 180 Q 475 180 500 160"
+                  stroke="#64748b"
+                  strokeWidth="3"
+                  fill="none"
+                  markerEnd="url(#arrowhead)"
+                />
+                <text 
+                  x="475" 
+                  y="175"
+                  textAnchor="middle"
+                  className="fill-slate-600 text-xs font-mono"
+                >
+                  FLOW
+                </text>
+                
+                {/* Legend */}
+                <g transform="translate(50, 320)">
+                  <text className="fill-slate-700 text-xs font-mono font-bold">LEGEND:</text>
+                  <circle cx="60" cy="0" r="4" fill="#10b981" />
+                  <text x="70" y="4" className="fill-slate-700 text-xs font-mono">RDY</text>
+                  <circle cx="110" cy="0" r="4" fill="#3b82f6" />
+                  <text x="120" y="4" className="fill-slate-700 text-xs font-mono">RUN</text>
+                  <circle cx="160" cy="0" r="4" fill="#f59e0b" />
+                  <text x="170" y="4" className="fill-slate-700 text-xs font-mono">MNT</text>
+                  <circle cx="210" cy="0" r="4" fill="#ef4444" />
+                  <text x="220" y="4" className="fill-slate-700 text-xs font-mono">OFF</text>
+                </g>
+              </svg>
+            </div>
+            
+            {/* Machine Details Panel */}
+            {selectedMachine && (
+              <div className="mt-6 bg-slate-800 rounded-lg border border-slate-600 p-4">
+                <h4 className="text-lg font-mono font-bold text-slate-200 mb-3">
+                  ■ {selectedMachine.name} DETAILS
+                </h4>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-xs font-mono">
+                  <div>
+                    <span className="text-slate-400">TYPE:</span>
+                    <div className="text-slate-200">{selectedMachine.type}</div>
+                  </div>
+                  <div>
+                    <span className="text-slate-400">CAPACITY:</span>
+                    <div className="text-slate-200">{selectedMachine.capacity || 'N/A'}</div>
+                  </div>
+                  <div>
+                    <span className="text-slate-400">RATE:</span>
+                    <div className="text-slate-200">{selectedMachine.production_rate || 'N/A'}/hr</div>
+                  </div>
+                  <div>
+                    <span className="text-slate-400">STATUS:</span>
+                    <div className={STATUS_COLORS[selectedMachine.status]?.text || 'text-slate-200'}>
+                      {STATUS_COLORS[selectedMachine.status]?.label || 'UNK'}
+                    </div>
+                  </div>
+                </div>
+                <div className="flex space-x-2 mt-4">
+                  <button
+                    onClick={() => {
+                      setFormData({...selectedMachine});
+                      setShowEditModal(true);
+                    }}
+                    className="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-slate-200 rounded text-xs font-mono transition-colors"
+                  >
+                    CONFIGURE
+                  </button>
+                  <button
+                    onClick={() => setSelectedMachine(null)}
+                    className="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-slate-200 rounded text-xs font-mono transition-colors"
+                  >
+                    CLOSE
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
       
         {/* SCADA Empty State */}
         {filteredMachines.length === 0 && (
