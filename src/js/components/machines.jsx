@@ -1164,98 +1164,49 @@ export default function MachinesPage() {
           <div className="bg-slate-800 rounded-lg border border-slate-600 p-6">
             <div className="bg-slate-700 rounded-lg p-4 overflow-x-auto">
               <svg 
-                width="2400" 
-                height="1600" 
-                viewBox="0 0 2400 1600"
-                className="w-full h-auto border-2 border-slate-400 rounded-xl bg-gradient-to-br from-slate-900 via-slate-800 to-slate-700"
-                style={{
-                  background: `
-                    linear-gradient(135deg, 
-                      #0a0e1a 0%, 
-                      #1e293b 25%, 
-                      #334155 50%, 
-                      #1e293b 75%, 
-                      #0f172a 100%
-                    ),
-                    radial-gradient(ellipse at 30% 20%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
-                    radial-gradient(ellipse at 70% 80%, rgba(16, 185, 129, 0.1) 0%, transparent 50%)
-                  `,
-                  filter: 'drop-shadow(0 30px 60px rgba(0,0,0,0.8)) contrast(1.1) brightness(1.05)',
-                  transform: 'perspective(1000px) rotateX(5deg)',
-                  transformOrigin: 'center center'
-                }}
+                width="1800" 
+                height="1200" 
+                viewBox="0 0 1800 1200"
+                className="w-full h-auto bg-slate-50 border border-slate-200 rounded"
               >
-                {/* Enhanced 3D Definitions */}
+                {/* Functional Design Definitions */}
                 <defs>
-                  {/* Professional Industrial Floor System */}
-                  <pattern id="cinematic-floor" width="120" height="80" patternUnits="userSpaceOnUse">
-                    <rect width="120" height="80" fill="#0a0f1c" opacity="0.95"/>
-                    
-                    {/* Advanced perspective grid with proper vanishing points */}
-                    <defs>
-                      <linearGradient id="floor-line" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stopColor="#475569" stopOpacity="0.8"/>
-                        <stop offset="50%" stopColor="#334155" stopOpacity="0.4"/>  
-                        <stop offset="100%" stopColor="#1e293b" stopOpacity="0.2"/>
-                      </linearGradient>
-                    </defs>
-                    
-                    {/* Primary perspective lines - converging to vanishing point */}
-                    <path d="M 0 0 L 120 20 L 100 80 L -20 60 Z" fill="none" stroke="url(#floor-line)" strokeWidth="1.5" opacity="0.6"/>
-                    <path d="M 30 0 L 30 80" stroke="#3b82f6" strokeWidth="0.8" opacity="0.3"/>
-                    <path d="M 60 0 L 60 80" stroke="#3b82f6" strokeWidth="0.6" opacity="0.25"/>
-                    <path d="M 90 0 L 90 80" stroke="#3b82f6" strokeWidth="0.4" opacity="0.2"/>
-                    
-                    {/* Depth grid lines */}
-                    <path d="M 0 20 L 120 25" stroke="#6366f1" strokeWidth="0.5" opacity="0.3"/>
-                    <path d="M 0 40 L 120 45" stroke="#6366f1" strokeWidth="0.4" opacity="0.25"/>
-                    <path d="M 0 60 L 120 65" stroke="#6366f1" strokeWidth="0.3" opacity="0.2"/>
-                    
-                    {/* Industrial floor details */}
-                    <circle cx="30" cy="20" r="1.5" fill="#64748b" opacity="0.4"/>
-                    <circle cx="90" cy="60" r="1" fill="#64748b" opacity="0.3"/>
-                    <rect x="55" y="35" width="10" height="2" fill="#475569" opacity="0.25" rx="1"/>
+                  {/* Simple, clear floor grid for spatial reference */}
+                  <pattern id="factory-grid" width="60" height="60" patternUnits="userSpaceOnUse">
+                    <rect width="60" height="60" fill="#f8fafc" stroke="none"/>
+                    <path d="M 0 0 L 0 60 M 0 0 L 60 0" stroke="#e2e8f0" strokeWidth="1" opacity="0.7"/>
                   </pattern>
                   
-                  {/* Professional SCADA-Style Animation System */}
-                  <animate id="production-pulse" attributeName="opacity" values="0.6;1;0.6" dur="2.5s" repeatCount="indefinite"/>
-                  <animateTransform id="conveyor-motion" attributeName="transform" type="translateX" values="0;10;0" dur="3s" repeatCount="indefinite"/>
-                  <animate id="status-beacon" attributeName="r" values="4;12;4" dur="1.8s" repeatCount="indefinite"/>
-                  <animate id="steam-effect" attributeName="opacity" values="0.2;0.8;0.2" dur="4s" repeatCount="indefinite"/>
-                  <animateTransform id="vibration" attributeName="transform" type="translate" values="0,0;0.5,0;-0.5,0;0,0" dur="0.1s" repeatCount="indefinite"/>
-                  
-                  {/* Professional Industrial Lighting System */}
-                  <radialGradient id="overhead-lighting" cx="50%" cy="0%">
-                    <stop offset="0%" stopColor="#f8fafc" stopOpacity="0.4"/>
-                    <stop offset="30%" stopColor="#e2e8f0" stopOpacity="0.25"/>
-                    <stop offset="70%" stopColor="#cbd5e1" stopOpacity="0.1"/>
-                    <stop offset="100%" stopColor="#64748b" stopOpacity="0.05"/>
-                  </radialGradient>
-                  
-                  <linearGradient id="machine-metal" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#e2e8f0" stopOpacity="0.9"/>
-                    <stop offset="25%" stopColor="#cbd5e1" stopOpacity="0.7"/>
-                    <stop offset="50%" stopColor="#94a3b8" stopOpacity="0.5"/>
-                    <stop offset="75%" stopColor="#64748b" stopOpacity="0.4"/>
-                    <stop offset="100%" stopColor="#475569" stopOpacity="0.3"/>
+                  {/* Status-based machine colors - clear and functional */}
+                  <linearGradient id="status-running">
+                    <stop offset="0%" stopColor="#10b981"/>
+                    <stop offset="100%" stopColor="#059669"/>
                   </linearGradient>
                   
-                  <linearGradient id="brushed-steel" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="#f1f5f9" stopOpacity="0.8"/>
-                    <stop offset="20%" stopColor="#cbd5e1" stopOpacity="0.9"/>
-                    <stop offset="40%" stopColor="#94a3b8" stopOpacity="0.7"/>
-                    <stop offset="60%" stopColor="#cbd5e1" stopOpacity="0.9"/>
-                    <stop offset="80%" stopColor="#f1f5f9" stopOpacity="0.8"/>
-                    <stop offset="100%" stopColor="#e2e8f0" stopOpacity="0.6"/>
+                  <linearGradient id="status-idle">
+                    <stop offset="0%" stopColor="#6b7280"/>
+                    <stop offset="100%" stopColor="#4b5563"/>
                   </linearGradient>
                   
-                  <filter id="industrial-lighting" x="-50%" y="-50%" width="200%" height="200%">
-                    <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="blur"/>
-                    <feSpecularLighting in="blur" specularConstant="2" specularExponent="20" result="specOut" lightingColor="#ffffff">
-                      <fePointLight x="50" y="30" z="200"/>
-                    </feSpecularLighting>
-                    <feComposite in="specOut" in2="SourceAlpha" operator="in" result="specOut2"/>
-                    <feComposite in="SourceGraphic" in2="specOut2" operator="arithmetic" k1="0" k2="1" k3="1" k4="0"/>
+                  <linearGradient id="status-warning">
+                    <stop offset="0%" stopColor="#f59e0b"/>
+                    <stop offset="100%" stopColor="#d97706"/>
+                  </linearGradient>
+                  
+                  <linearGradient id="status-error">
+                    <stop offset="0%" stopColor="#ef4444"/>
+                    <stop offset="100%" stopColor="#dc2626"/>
+                  </linearGradient>
+                  
+                  {/* Simple drop shadow for depth - minimal and functional */}
+                  <filter id="subtle-shadow">
+                    <feGaussianBlur in="SourceAlpha" stdDeviation="2"/>
+                    <feOffset dx="2" dy="3" result="offset"/>
+                    <feColorMatrix values="0 0 0 0.2 0"/>
+                    <feMerge>
+                      <feMergeNode/>
+                      <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
                   </filter>
                   
                   {/* Enhanced Gradients for realistic 3D lighting */}
@@ -1328,37 +1279,48 @@ export default function MachinesPage() {
                   </linearGradient>
                 </defs>
                 
-                {/* Cinematic Industrial Floor System */}
-                <rect width="100%" height="100%" fill="url(#cinematic-floor)" />
+                {/* Clean, functional floor grid */}
+                <rect width="100%" height="100%" fill="url(#factory-grid)" />
                 
-                {/* Professional Overhead Lighting */}
-                <ellipse cx="1200" cy="200" rx="800" ry="400" fill="url(#overhead-lighting)" opacity="0.3"/>
-                <ellipse cx="800" cy="800" rx="600" ry="300" fill="url(#overhead-lighting)" opacity="0.25"/>
-                <ellipse cx="1600" cy="1000" rx="500" ry="250" fill="url(#overhead-lighting)" opacity="0.2"/>
-                
-                {/* Dynamic Atmospheric Effects */}
-                <rect width="100%" height="100%" fill="url(#depth-perspective)" opacity="0.3"/>
-                
-                {/* Industrial Steam/Vapor Effects */}
-                <g opacity="0.15">
-                  <circle cx="400" cy="600" r="80" fill="#e2e8f0">
-                    <animate attributeName="opacity" values="0.05;0.2;0.05" dur="6s" repeatCount="indefinite"/>
-                    <animate attributeName="r" values="70;100;70" dur="8s" repeatCount="indefinite"/>
-                  </circle>
-                  <circle cx="1800" cy="400" r="60" fill="#cbd5e1">
-                    <animate attributeName="opacity" values="0.03;0.15;0.03" dur="7s" repeatCount="indefinite"/>
-                    <animate attributeName="r" values="50;80;50" dur="9s" repeatCount="indefinite"/>
-                  </circle>
+                {/* Clear department zones with functional purpose */}
+                <g className="department-zones">
+                  {/* Blending Department Zone */}
+                  <rect x="50" y="150" width="500" height="400" 
+                        fill="#dbeafe" stroke="#3b82f6" strokeWidth="2" 
+                        strokeDasharray="8,4" opacity="0.3" rx="8"/>
+                  <text x="70" y="140" className="fill-blue-700 text-lg font-bold font-mono">
+                    BLENDING • 7 MACHINES
+                  </text>
+                  
+                  {/* Maturation Department Zone */}
+                  <rect x="600" y="150" width="400" height="400" 
+                        fill="#fef3c7" stroke="#f59e0b" strokeWidth="2" 
+                        strokeDasharray="8,4" opacity="0.3" rx="8"/>
+                  <text x="620" y="140" className="fill-amber-700 text-lg font-bold font-mono">
+                    MATURATION • 5 MACHINES
+                  </text>
+                  
+                  {/* Packaging Department Zone */}
+                  <rect x="1050" y="150" width="700" height="600" 
+                        fill="#d1fae5" stroke="#10b981" strokeWidth="2" 
+                        strokeDasharray="8,4" opacity="0.3" rx="8"/>
+                  <text x="1070" y="140" className="fill-emerald-700 text-lg font-bold font-mono">
+                    PACKAGING • 13 MACHINES
+                  </text>
                 </g>
                 
-                {/* Cinematic Depth Rays */}
-                <g opacity="0.1">
-                  <polygon points="0,0 400,200 350,250 0,100" fill="#60a5fa">
-                    <animate attributeName="opacity" values="0.05;0.15;0.05" dur="12s" repeatCount="indefinite"/>
-                  </polygon>
-                  <polygon points="2400,0 2000,300 2050,350 2400,150" fill="#3b82f6">
-                    <animate attributeName="opacity" values="0.03;0.12;0.03" dur="10s" repeatCount="indefinite"/>
-                  </polygon>
+                {/* Material flow arrows - functional, not decorative */}
+                <g className="process-flow" stroke="#64748b" strokeWidth="3" fill="none" markerEnd="url(#arrowhead)">
+                  <defs>
+                    <marker id="arrowhead" markerWidth="10" markerHeight="7" 
+                            refX="9" refY="3.5" orient="auto">
+                      <polygon points="0 0, 10 3.5, 0 7" fill="#64748b"/>
+                    </marker>
+                  </defs>
+                  <path d="M 550 350 L 600 350" opacity="0.7"/>
+                  <path d="M 1000 350 L 1050 350" opacity="0.7"/>
+                  <text x="575" y="340" className="fill-gray-600 text-sm font-mono">FLOW</text>
+                  <text x="1025" y="340" className="fill-gray-600 text-sm font-mono">FLOW</text>
                 </g>
                 
                 {/* PROFESSIONAL ORGANIZED FACTORY STRUCTURE */}

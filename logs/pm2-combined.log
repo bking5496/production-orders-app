@@ -15839,3 +15839,20 @@
   'analytics'
 ]
 2025-08-14T14:19:47: 🏠 admin joined room: production
+2025-08-14T14:20:17: 🔗 Client acquired from pool
+2025-08-14T14:20:17: 🔓 Client released back to pool
+2025-08-14T14:20:47: ✅ New PostgreSQL client connected
+2025-08-14T14:20:47: 🔗 Client acquired from pool
+2025-08-14T14:20:47: 🔓 Client released back to pool
+2025-08-14T14:21:17: 🔗 Client acquired from pool
+2025-08-14T14:21:17: 🔓 Client released back to pool
+2025-08-14T14:21:47: ✅ New PostgreSQL client connected
+2025-08-14T14:21:47: 🔗 Client acquired from pool
+2025-08-14T14:21:47: 🔓 Client released back to pool
+2025-08-14T14:22:18: ✅ New PostgreSQL client connected
+2025-08-14T14:22:18: 🔗 Client acquired from pool
+2025-08-14T14:22:18: 🔓 Client released back to pool
+2025-08-14T14:22:50: ✅ New PostgreSQL client connected
+2025-08-14T14:22:50: 🔗 Client acquired from pool
+2025-08-14T14:22:50: 🔓 Client released back to pool
+2025-08-14T14:27:50: 🔌 WebSocket disconnected: admin
