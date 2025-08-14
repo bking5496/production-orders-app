@@ -1164,9 +1164,9 @@ export default function MachinesPage() {
           <div className="bg-slate-800 rounded-lg border border-slate-600 p-6">
             <div className="bg-slate-700 rounded-lg p-4 overflow-x-auto">
               <svg 
-                width="1800" 
-                height="1000" 
-                viewBox="0 0 1800 1000"
+                width="2000" 
+                height="1200" 
+                viewBox="0 0 2000 1200"
                 className="w-full h-auto border border-slate-500 rounded bg-gradient-to-br from-slate-100 via-slate-200 to-slate-300"
               >
                 {/* Enhanced 3D Definitions */}
@@ -1237,44 +1237,30 @@ export default function MachinesPage() {
                 {/* 3D Isometric Floor */}
                 <rect width="100%" height="100%" fill="url(#floor-grid)" />
                 
-                {/* Enhanced Factory Structure - 3D perspective */}
-                <g className="factory-structure" opacity="0.7">
-                  {/* Factory floor base */}
-                  <polygon points="50,150 1750,50 1750,950 50,1050" fill="url(#ambient-light)" stroke="none"/>
+                {/* PROFESSIONAL ORGANIZED FACTORY STRUCTURE */}
+                <g className="factory-structure" opacity="0.8">
+                  {/* Main factory floor */}
+                  <polygon points="100,200 1900,100 1900,1100 100,1200" fill="url(#ambient-light)" stroke="none"/>
                   
-                  {/* Back walls with better perspective */}
-                  <polygon points="80,120 1720,20 1650,10 150,110" fill="#8fa4b3" stroke="#64748b" strokeWidth="3" opacity="0.8"/>
-                  <polygon points="80,120 80,800 150,790 150,110" fill="#64748b" stroke="#475569" strokeWidth="2"/>
-                  <polygon points="1720,20 1720,700 1650,690 1650,10" fill="#64748b" stroke="#475569" strokeWidth="2"/>
+                  {/* Clean factory walls */}
+                  <polygon points="100,150 1900,50 1850,40 150,140" fill="#94a3b8" stroke="#64748b" strokeWidth="3"/>
+                  <polygon points="100,150 100,1000 150,990 150,140" fill="#6b7280" stroke="#475569" strokeWidth="2"/>
+                  <polygon points="1900,50 1900,900 1850,890 1850,40" fill="#6b7280" stroke="#475569" strokeWidth="2"/>
                   
-                  {/* Enhanced ceiling structure */}
-                  <polygon points="150,110 1650,10 1650,0 150,100" fill="#a1a8b0" stroke="#6b7280" strokeWidth="2"/>
+                  {/* Organized department dividers */}
+                  <line x1="600" y1="200" x2="600" y2="1000" stroke="#475569" strokeWidth="4" strokeDasharray="10,5" opacity="0.6"/>
+                  <line x1="1200" y1="160" x2="1200" y2="800" stroke="#475569" strokeWidth="4" strokeDasharray="10,5" opacity="0.6"/>
                   
-                  {/* Structural support beams */}
-                  <g opacity="0.9">
-                    <polygon points="300,100 320,98 320,88 300,90" fill="#64748b" stroke="#475569" strokeWidth="1"/>
-                    <polygon points="300,90 300,100 310,780 310,770" fill="#4a5568" stroke="#374151" strokeWidth="1"/>
-                    
-                    <polygon points="600,85 620,83 620,73 600,75" fill="#64748b" stroke="#475569" strokeWidth="1"/>
-                    <polygon points="600,75 600,85 610,765 610,755" fill="#4a5568" stroke="#374151" strokeWidth="1"/>
-                    
-                    <polygon points="900,70 920,68 920,58 900,60" fill="#64748b" stroke="#475569" strokeWidth="1"/>
-                    <polygon points="900,60 900,70 910,750 910,740" fill="#4a5568" stroke="#374151" strokeWidth="1"/>
-                    
-                    <polygon points="1200,55 1220,53 220,43 1200,45" fill="#64748b" stroke="#475569" strokeWidth="1"/>
-                    <polygon points="1200,45 1200,55 1210,735 1210,725" fill="#4a5568" stroke="#374151" strokeWidth="1"/>
-                    
-                    <polygon points="1500,40 1520,38 1520,28 1500,30" fill="#64748b" stroke="#475569" strokeWidth="1"/>
-                    <polygon points="1500,30 1500,40 1510,720 1510,710" fill="#4a5568" stroke="#374151" strokeWidth="1"/>
+                  {/* Professional lighting system */}
+                  <g opacity="0.7">
+                    <ellipse cx="350" cy="120" rx="20" ry="10" fill="#fbbf24" stroke="#d97706" strokeWidth="2"/>
+                    <ellipse cx="900" cy="80" rx="20" ry="10" fill="#fbbf24" stroke="#d97706" strokeWidth="2"/>
+                    <ellipse cx="1550" cy="60" rx="20" ry="10" fill="#fbbf24" stroke="#d97706" strokeWidth="2"/>
                   </g>
                   
-                  {/* Industrial lighting fixtures */}
-                  <g opacity="0.6">
-                    <ellipse cx="400" cy="95" rx="15" ry="8" fill="#fbbf24" stroke="#d97706" strokeWidth="1" opacity="0.8"/>
-                    <ellipse cx="700" cy="80" rx="15" ry="8" fill="#fbbf24" stroke="#d97706" strokeWidth="1" opacity="0.8"/>
-                    <ellipse cx="1000" cy="65" rx="15" ry="8" fill="#fbbf24" stroke="#d97706" strokeWidth="1" opacity="0.8"/>
-                    <ellipse cx="1300" cy="50" rx="15" ry="8" fill="#fbbf24" stroke="#d97706" strokeWidth="1" opacity="0.8"/>
-                  </g>
+                  {/* Main walkways */}
+                  <polygon points="580,200 620,190 620,1000 580,1010" fill="#94a3b8" stroke="#6b7280" strokeWidth="2" opacity="0.3"/>
+                  <polygon points="1180,160 1220,150 1220,800 1180,810" fill="#94a3b8" stroke="#6b7280" strokeWidth="2" opacity="0.3"/>
                 </g>
                 
                 {/* ENHANCED 3D BLENDING AREA - Professional Layout */}

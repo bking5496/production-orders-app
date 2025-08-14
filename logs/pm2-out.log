@@ -12353,3 +12353,47 @@
 2025-08-14T10:39:14: 🔓 Client released back to pool
 2025-08-14T10:39:44: 🔗 Client acquired from pool
 2025-08-14T10:39:44: 🔓 Client released back to pool
+2025-08-14T10:40:14: ✅ New PostgreSQL client connected
+2025-08-14T10:40:14: 🔗 Client acquired from pool
+2025-08-14T10:40:14: 🔓 Client released back to pool
+2025-08-14T10:40:44: 🔗 Client acquired from pool
+2025-08-14T10:40:44: 🔓 Client released back to pool
+2025-08-14T10:41:14: ✅ New PostgreSQL client connected
+2025-08-14T10:41:14: 🔗 Client acquired from pool
+2025-08-14T10:41:14: 🔓 Client released back to pool
+2025-08-14T10:41:44: 🔗 Client acquired from pool
+2025-08-14T10:41:44: 🔓 Client released back to pool
+2025-08-14T10:42:14: ✅ New PostgreSQL client connected
+2025-08-14T10:42:14: 🔗 Client acquired from pool
+2025-08-14T10:42:14: 🔓 Client released back to pool
+2025-08-14T10:42:44: 🔗 Client acquired from pool
+2025-08-14T10:42:44: 🔓 Client released back to pool
+2025-08-14T10:43:14: ✅ New PostgreSQL client connected
+2025-08-14T10:43:14: 🔗 Client acquired from pool
+2025-08-14T10:43:14: 🔓 Client released back to pool
+2025-08-14T10:43:33: 🔗 Client acquired from pool
+2025-08-14T10:43:33: 🔓 Client released back to pool
+2025-08-14T10:43:33: 🔗 Client acquired from pool
+2025-08-14T10:43:33: 🔓 Client released back to pool
+2025-08-14T10:43:33: 🔗 Client acquired from pool
+2025-08-14T10:43:33: ✅ New PostgreSQL client connected
+2025-08-14T10:43:33: 🔗 Client acquired from pool
+2025-08-14T10:43:33: 🔓 Client released back to pool
+2025-08-14T10:43:33: 🔓 Client released back to pool
+2025-08-14T10:43:33: ✅ New PostgreSQL client connected
+2025-08-14T10:43:33: 🔗 Client acquired from pool
+2025-08-14T10:43:33: ✅ New PostgreSQL client connected
+2025-08-14T10:43:33: 🔗 Client acquired from pool
+2025-08-14T10:43:33: 🔓 Client released back to pool
+2025-08-14T10:43:33: 🔓 Client released back to pool
+2025-08-14T10:43:33: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-14T10:43:33: 🏠 admin joined room: production
+2025-08-14T10:48:46: 🔌 WebSocket disconnected: admin
