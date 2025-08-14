@@ -570,6 +570,14 @@ export default function MachinesPage() {
     }
   };
 
+  // Handler for machine clicks (both 3D and list)
+  const handleMachineClick = (machine) => {
+    setSelectedMachine(machine);
+    // You can add more actions here like opening a details modal
+    console.log('🏭 Machine selected:', machine.name, '- Status:', machine.status);
+    showNotification(`Selected ${machine.name} (${machine.status})`, 'info');
+  };
+
   // Handler for the delete button
   const handleDeleteMachine = async (machineId) => {
     if (window.confirm('Are you sure you want to delete this machine?')) {
@@ -1209,8 +1217,82 @@ export default function MachinesPage() {
               </div>
             </div>
             
+            {/* Enhanced Compact Machine List */}
+            <div className="mb-6 bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold text-gray-900 flex items-center">
+                  <Factory className="w-5 h-5 mr-2 text-blue-600" />
+                  Live Machine Status
+                </h3>
+                <div className="flex items-center space-x-4 text-sm">
+                  <div className="flex items-center">
+                    <div className="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
+                    <span className="text-green-700">{filteredMachines.filter(m => m.status === 'available').length} Available</span>
+                  </div>
+                  <div className="flex items-center">
+                    <div className="w-3 h-3 bg-orange-500 rounded-full mr-2"></div>
+                    <span className="text-orange-700">{filteredMachines.filter(m => m.status === 'busy').length} Busy</span>
+                  </div>
+                  <div className="flex items-center">
+                    <div className="w-3 h-3 bg-gray-500 rounded-full mr-2"></div>
+                    <span className="text-gray-700">{filteredMachines.filter(m => m.status === 'offline').length} Offline</span>
+                  </div>
+                  <div className="flex items-center">
+                    <div className="w-3 h-3 bg-red-500 rounded-full mr-2"></div>
+                    <span className="text-red-700">{filteredMachines.filter(m => m.status === 'error').length} Error</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3">
+                {filteredMachines.map((machine) => {
+                  const statusColors = {
+                    'available': 'bg-green-100 border-green-300 text-green-800',
+                    'busy': 'bg-orange-100 border-orange-300 text-orange-800',
+                    'offline': 'bg-gray-100 border-gray-300 text-gray-800',
+                    'error': 'bg-red-100 border-red-300 text-red-800'
+                  };
+                  
+                  const statusIcons = {
+                    'available': <CheckCircle className="w-4 h-4" />,
+                    'busy': <Activity className="w-4 h-4" />,
+                    'offline': <XCircle className="w-4 h-4" />,
+                    'error': <AlertTriangle className="w-4 h-4" />
+                  };
+                  
+                  return (
+                    <div
+                      key={machine.id}
+                      className={`p-3 rounded-lg border-2 cursor-pointer transition-all hover:shadow-md ${statusColors[machine.status] || statusColors.offline}`}
+                      onClick={() => handleMachineClick(machine)}
+                    >
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center">
+                          {statusIcons[machine.status] || statusIcons.offline}
+                          <span className="ml-2 text-xs font-medium uppercase tracking-wide">
+                            {machine.environment}
+                          </span>
+                        </div>
+                        <Cog className="w-3 h-3 opacity-50" />
+                      </div>
+                      <div className="font-semibold text-sm truncate mb-1" title={machine.name}>
+                        {machine.name}
+                      </div>
+                      <div className="text-xs opacity-75">
+                        Type: {machine.type || 'Industrial'}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
             {/* 4D Digital Twin Factory */}
-            <BabylonFactory machines={filteredMachines} environments={environments} />
+            <BabylonFactory 
+              machines={filteredMachines} 
+              environments={environments} 
+              onMachineClick={handleMachineClick}
+            />
             
             {/* Technology Stack Info */}
             <div className="mt-6 grid grid-cols-3 gap-4">

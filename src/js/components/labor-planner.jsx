@@ -99,14 +99,31 @@ const LaborPlanner = ({ currentUser }) => {
 
   // Auto-assign crews based on 2-2-2 cycle
   const autoAssignShiftCycle = async (machine) => {
-    if (!machine.cycle_start_date || !machine.crews?.length) {
-      alert('Machine must have a cycle start date and crews configured');
+    if (!machine.crews?.length) {
+      alert('Machine must have crews configured first. Please add crews to this machine.');
       return;
+    }
+
+    // If no cycle start date, set it to today and update the machine
+    let cycleStartDate = machine.cycle_start_date;
+    if (!cycleStartDate) {
+      cycleStartDate = new Date().toISOString().split('T')[0]; // Today's date
+      try {
+        await API.put(`/machines/${machine.id}`, {
+          cycle_start_date: cycleStartDate
+        });
+        // Update local state
+        machine.cycle_start_date = cycleStartDate;
+        alert(`Cycle start date set to ${cycleStartDate} for ${machine.name}`);
+      } catch (error) {
+        alert('Failed to set cycle start date. Please try again.');
+        return;
+      }
     }
 
     try {
       const schedule = generateShiftCycleSchedule(
-        machine.cycle_start_date,
+        cycleStartDate,
         machine.crews,
         selectedDate
       );
@@ -591,11 +608,16 @@ const LaborPlanner = ({ currentUser }) => {
           ) : (
             <div className="space-y-6">
               {shiftCycleMachines.map(machine => {
-                const cycleSchedule = generateShiftCycleSchedule(
-                  machine.cycle_start_date,
-                  machine.crews || [],
-                  selectedDate
-                );
+                const cycleSchedule = machine.cycle_start_date 
+                  ? generateShiftCycleSchedule(
+                      machine.cycle_start_date,
+                      machine.crews || [],
+                      selectedDate
+                    )
+                  : (machine.crews || []).map(crew => ({
+                      ...crew,
+                      assignment: 'rest' // Default to rest if no cycle start date
+                    }));
                 
                 return (
                   <div key={machine.id} className="bg-white border border-gray-200 rounded-lg p-6">
@@ -604,7 +626,10 @@ const LaborPlanner = ({ currentUser }) => {
                         <h3 className="text-lg font-semibold text-gray-900">{machine.name}</h3>
                         <p className="text-sm text-blue-600">Environment: {machine.environment}</p>
                         <p className="text-xs text-gray-500">
-                          Cycle started: {new Date(machine.cycle_start_date).toLocaleDateString()}
+                          Cycle started: {machine.cycle_start_date 
+                            ? new Date(machine.cycle_start_date).toLocaleDateString()
+                            : 'Not set - Click to configure'
+                          }
                         </p>
                       </div>
                       <Button
