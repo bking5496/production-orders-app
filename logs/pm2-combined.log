@@ -26070,3 +26070,830 @@
 2025-08-15T17:10:16: ✅ Database utilities: OK
 2025-08-15T17:10:16: 🎉 All components tested successfully!
 2025-08-15T17:10:16: ✅ All components tested successfully
+2025-08-15T17:51:20: ✅ New PostgreSQL client connected
+2025-08-15T17:51:20: 🔗 Client acquired from pool
+2025-08-15T17:51:20: ✅ New PostgreSQL client connected
+2025-08-15T17:51:20: 🔗 Client acquired from pool
+2025-08-15T17:51:20: 🔓 Client released back to pool
+2025-08-15T17:51:20: 🔓 Client released back to pool
+2025-08-15T17:51:20: 🔗 Client acquired from pool
+2025-08-15T17:51:20: 🔓 Client released back to pool
+2025-08-15T17:51:20: 🔗 Client acquired from pool
+2025-08-15T17:51:20: 🔓 Client released back to pool
+2025-08-15T17:51:20: 🔗 Client acquired from pool
+2025-08-15T17:51:20: 🔗 Client acquired from pool
+2025-08-15T17:51:20: 🔓 Client released back to pool
+2025-08-15T17:51:20: 🔗 Client acquired from pool
+2025-08-15T17:51:20: 🔓 Client released back to pool
+2025-08-15T17:51:20: 🔗 Client acquired from pool
+2025-08-15T17:51:20: 🔓 Client released back to pool
+2025-08-15T17:51:20: 🔓 Client released back to pool
+2025-08-15T17:51:20: 🔗 Client acquired from pool
+2025-08-15T17:51:20: 🔓 Client released back to pool
+2025-08-15T17:51:20: New WebSocket connection attempt
+2025-08-15T17:51:20: ✅ WebSocket authenticated: admin (admin)
+2025-08-15T17:51:21: 🔗 Client acquired from pool
+2025-08-15T17:51:21: 🔓 Client released back to pool
+2025-08-15T17:51:21: 🔗 Client acquired from pool
+2025-08-15T17:51:21: 🔓 Client released back to pool
+2025-08-15T17:51:21: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-15T17:51:21: 🏠 admin joined room: production
+2025-08-15T17:51:21: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-15T17:51:21: 🏠 admin joined room: production
+2025-08-15T17:51:27: 📺 admin subscribed to: [ 'machines', 'production' ]
+2025-08-15T17:51:27: 🔗 Client acquired from pool
+2025-08-15T17:51:27: 🔓 Client released back to pool
+2025-08-15T17:51:27: 🔗 Client acquired from pool
+2025-08-15T17:51:27: 🔓 Client released back to pool
+2025-08-15T17:51:27: 🔗 Client acquired from pool
+2025-08-15T17:51:27: 🔗 Client acquired from pool
+2025-08-15T17:51:27: 🔓 Client released back to pool
+2025-08-15T17:51:27: 🔗 Client acquired from pool
+2025-08-15T17:51:27: 🔓 Client released back to pool
+2025-08-15T17:51:27: 🔓 Client released back to pool
+2025-08-15T17:51:27: 🔗 Client acquired from pool
+2025-08-15T17:51:27: 🔓 Client released back to pool
+2025-08-15T17:51:27: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-15T17:51:27: 🏠 admin joined room: production
+2025-08-15T17:51:57: 🔗 Client acquired from pool
+2025-08-15T17:51:57: 🔓 Client released back to pool
+2025-08-15T17:52:27: 🔗 Client acquired from pool
+2025-08-15T17:52:27: 🔓 Client released back to pool
+2025-08-15T17:52:57: ✅ New PostgreSQL client connected
+2025-08-15T17:52:57: 🔗 Client acquired from pool
+2025-08-15T17:52:57: 🔓 Client released back to pool
+2025-08-15T17:53:27: 🔗 Client acquired from pool
+2025-08-15T17:53:27: 🔓 Client released back to pool
+2025-08-15T17:53:50: 🔗 Client acquired from pool
+2025-08-15T17:53:50: 🔓 Client released back to pool
+2025-08-15T17:53:50: 🔗 Client acquired from pool
+2025-08-15T17:53:50: 🔓 Client released back to pool
+2025-08-15T17:53:50: 🔗 Client acquired from pool
+2025-08-15T17:53:50: 🔓 Client released back to pool
+2025-08-15T17:53:50: ✅ New PostgreSQL client connected
+2025-08-15T17:53:50: 🔗 Client acquired from pool
+2025-08-15T17:53:50: ✅ New PostgreSQL client connected
+2025-08-15T17:53:50: 🔗 Client acquired from pool
+2025-08-15T17:53:50: 🔓 Client released back to pool
+2025-08-15T17:53:50: 🔓 Client released back to pool
+2025-08-15T17:53:50: 🔗 Client acquired from pool
+2025-08-15T17:53:50: 🔓 Client released back to pool
+2025-08-15T17:53:50: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-15T17:53:50: 🏠 admin joined room: production
+2025-08-15T17:53:55: 🔗 Client acquired from pool
+2025-08-15T17:53:55: 🔓 Client released back to pool
+2025-08-15T17:53:58: 🔗 Client acquired from pool
+2025-08-15T17:53:58: 🔓 Client released back to pool
+2025-08-15T17:53:58: 🔗 Transaction client acquired from pool
+2025-08-15T17:53:58: 🔓 Transaction client released back to pool
+2025-08-15T17:53:58: 📡 Broadcast sent: order_resumed to channel: production (1 clients)
+2025-08-15T17:53:58: 🔗 Client acquired from pool
+2025-08-15T17:53:58: 🔓 Client released back to pool
+2025-08-15T17:53:58: 🔗 Client acquired from pool
+2025-08-15T17:53:58: 🔓 Client released back to pool
+2025-08-15T17:53:58: 🔗 Client acquired from pool
+2025-08-15T17:53:58: 🔓 Client released back to pool
+2025-08-15T17:54:38: ✅ New PostgreSQL client connected
+2025-08-15T17:54:38: 🔗 Client acquired from pool
+2025-08-15T17:54:38: 🔓 Client released back to pool
+2025-08-15T17:54:38: 🔗 Client acquired from pool
+2025-08-15T17:54:38: 🔓 Client released back to pool
+2025-08-15T17:54:38: ✅ New PostgreSQL client connected
+2025-08-15T17:54:38: 🔗 Client acquired from pool
+2025-08-15T17:54:38: ✅ New PostgreSQL client connected
+2025-08-15T17:54:38: 🔗 Client acquired from pool
+2025-08-15T17:54:38: 🔓 Client released back to pool
+2025-08-15T17:54:38: 🔓 Client released back to pool
+2025-08-15T17:54:38: 🔗 Client acquired from pool
+2025-08-15T17:54:38: 🔓 Client released back to pool
+2025-08-15T17:54:38: 🔗 Client acquired from pool
+2025-08-15T17:54:38: 🔓 Client released back to pool
+2025-08-15T17:54:43: 🔗 Client acquired from pool
+2025-08-15T17:54:43: 🔓 Client released back to pool
+2025-08-15T17:54:43: 🔗 Client acquired from pool
+2025-08-15T17:54:43: 🔓 Client released back to pool
+2025-08-15T17:54:43: 🔗 Client acquired from pool
+2025-08-15T17:54:43: 🔓 Client released back to pool
+2025-08-15T17:54:43: Error adding employee to crew: error: new row for relation "machine_crews" violates check constraint "machine_crews_crew_letter_check"
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)
+    at async DatabaseUtils.raw (/home/production-app/production-orders-app/src/utils/database.js:146:12)
+    at async MachinesService.addEmployeeToCrew (/home/production-app/production-orders-app/src/services/machines.service.js:449:9)
+    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:232:20 {
+  length: 428,
+  severity: 'ERROR',
+  code: '23514',
+  detail: 'Failing row contains (22, 40, undefined, 0, [{"id":5,"username":"Abongile Khambule","full_name":"Abongile Kh..., t, 2025-08-15, 2025-08-15, 4, 2025-08-15 17:54:43.079557+02, 2025-08-15 17:54:43.079557+02, null).',
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: 'public',
+  table: 'machine_crews',
+  column: undefined,
+  dataType: undefined,
+  constraint: 'machine_crews_crew_letter_check',
+  file: 'execMain.c',
+  line: '2058',
+  routine: 'ExecConstraints'
+}
+2025-08-15T17:54:43: Error occurred: {
+  error: 'Failed to add employee to crew: new row for relation "machine_crews" violates check constraint "machine_crews_crew_letter_check"',
+  stack: 'Error: Failed to add employee to crew: new row for relation "machine_crews" violates check constraint "machine_crews_crew_letter_check"\n' +
+    '    at MachinesService.addEmployeeToCrew (/home/production-app/production-orders-app/src/services/machines.service.js:458:13)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:232:20',
+  url: '/api/machines/40/crews/undefined/employees',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-15T15:54:43.083Z'
+}
+2025-08-15T17:54:44: 🔗 Client acquired from pool
+2025-08-15T17:54:44: 🔓 Client released back to pool
+2025-08-15T17:54:44: 🔗 Client acquired from pool
+2025-08-15T17:54:44: 🔓 Client released back to pool
+2025-08-15T17:54:44: 🔗 Client acquired from pool
+2025-08-15T17:54:44: 🔓 Client released back to pool
+2025-08-15T17:54:44: Error adding employee to crew: error: new row for relation "machine_crews" violates check constraint "machine_crews_crew_letter_check"
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)
+    at async DatabaseUtils.raw (/home/production-app/production-orders-app/src/utils/database.js:146:12)
+    at async MachinesService.addEmployeeToCrew (/home/production-app/production-orders-app/src/services/machines.service.js:449:9)
+    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:232:20 {
+  length: 428,
+  severity: 'ERROR',
+  code: '23514',
+  detail: 'Failing row contains (23, 40, undefined, 0, [{"id":6,"username":"amanda gwala","full_name":"amanda gwala","r..., t, 2025-08-15, 2025-08-15, 4, 2025-08-15 17:54:44.039972+02, 2025-08-15 17:54:44.039972+02, null).',
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: 'public',
+  table: 'machine_crews',
+  column: undefined,
+  dataType: undefined,
+  constraint: 'machine_crews_crew_letter_check',
+  file: 'execMain.c',
+  line: '2058',
+  routine: 'ExecConstraints'
+}
+2025-08-15T17:54:44: Error occurred: {
+  error: 'Failed to add employee to crew: new row for relation "machine_crews" violates check constraint "machine_crews_crew_letter_check"',
+  stack: 'Error: Failed to add employee to crew: new row for relation "machine_crews" violates check constraint "machine_crews_crew_letter_check"\n' +
+    '    at MachinesService.addEmployeeToCrew (/home/production-app/production-orders-app/src/services/machines.service.js:458:13)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:232:20',
+  url: '/api/machines/40/crews/undefined/employees',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-15T15:54:44.041Z'
+}
+2025-08-15T17:54:44: 🔗 Client acquired from pool
+2025-08-15T17:54:44: 🔓 Client released back to pool
+2025-08-15T17:54:44: 🔗 Client acquired from pool
+2025-08-15T17:54:44: 🔓 Client released back to pool
+2025-08-15T17:54:44: 🔗 Client acquired from pool
+2025-08-15T17:54:44: 🔓 Client released back to pool
+2025-08-15T17:54:44: Error adding employee to crew: error: new row for relation "machine_crews" violates check constraint "machine_crews_crew_letter_check"
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)
+    at async DatabaseUtils.raw (/home/production-app/production-orders-app/src/utils/database.js:146:12)
+    at async MachinesService.addEmployeeToCrew (/home/production-app/production-orders-app/src/services/machines.service.js:449:9)
+    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:232:20 {
+  length: 428,
+  severity: 'ERROR',
+  code: '23514',
+  detail: 'Failing row contains (24, 40, undefined, 0, [{"id":5,"username":"Abongile Khambule","full_name":"Abongile Kh..., t, 2025-08-15, 2025-08-15, 4, 2025-08-15 17:54:44.147584+02, 2025-08-15 17:54:44.147584+02, null).',
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: 'public',
+  table: 'machine_crews',
+  column: undefined,
+  dataType: undefined,
+  constraint: 'machine_crews_crew_letter_check',
+  file: 'execMain.c',
+  line: '2058',
+  routine: 'ExecConstraints'
+}
+2025-08-15T17:54:44: Error occurred: {
+  error: 'Failed to add employee to crew: new row for relation "machine_crews" violates check constraint "machine_crews_crew_letter_check"',
+  stack: 'Error: Failed to add employee to crew: new row for relation "machine_crews" violates check constraint "machine_crews_crew_letter_check"\n' +
+    '    at MachinesService.addEmployeeToCrew (/home/production-app/production-orders-app/src/services/machines.service.js:458:13)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:232:20',
+  url: '/api/machines/40/crews/undefined/employees',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-15T15:54:44.148Z'
+}
+2025-08-15T17:54:44: 🔗 Client acquired from pool
+2025-08-15T17:54:44: 🔓 Client released back to pool
+2025-08-15T17:54:44: 🔗 Client acquired from pool
+2025-08-15T17:54:44: 🔓 Client released back to pool
+2025-08-15T17:54:44: 🔗 Client acquired from pool
+2025-08-15T17:54:44: 🔓 Client released back to pool
+2025-08-15T17:54:44: Error adding employee to crew: error: new row for relation "machine_crews" violates check constraint "machine_crews_crew_letter_check"
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)
+    at async DatabaseUtils.raw (/home/production-app/production-orders-app/src/utils/database.js:146:12)
+    at async MachinesService.addEmployeeToCrew (/home/production-app/production-orders-app/src/services/machines.service.js:449:9)
+    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:232:20 {
+  length: 428,
+  severity: 'ERROR',
+  code: '23514',
+  detail: 'Failing row contains (25, 40, undefined, 0, [{"id":13,"username":"andile msani","full_name":"andile msani","..., t, 2025-08-15, 2025-08-15, 4, 2025-08-15 17:54:44.463405+02, 2025-08-15 17:54:44.463405+02, null).',
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: 'public',
+  table: 'machine_crews',
+  column: undefined,
+  dataType: undefined,
+  constraint: 'machine_crews_crew_letter_check',
+  file: 'execMain.c',
+  line: '2058',
+  routine: 'ExecConstraints'
+}
+2025-08-15T17:54:44: Error occurred: {
+  error: 'Failed to add employee to crew: new row for relation "machine_crews" violates check constraint "machine_crews_crew_letter_check"',
+  stack: 'Error: Failed to add employee to crew: new row for relation "machine_crews" violates check constraint "machine_crews_crew_letter_check"\n' +
+    '    at MachinesService.addEmployeeToCrew (/home/production-app/production-orders-app/src/services/machines.service.js:458:13)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:232:20',
+  url: '/api/machines/40/crews/undefined/employees',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-15T15:54:44.465Z'
+}
+2025-08-15T17:54:45: 🔗 Client acquired from pool
+2025-08-15T17:54:45: 🔓 Client released back to pool
+2025-08-15T17:54:45: 🔗 Client acquired from pool
+2025-08-15T17:54:45: 🔓 Client released back to pool
+2025-08-15T17:54:45: 🔗 Client acquired from pool
+2025-08-15T17:54:45: 🔓 Client released back to pool
+2025-08-15T17:54:45: Error adding employee to crew: error: new row for relation "machine_crews" violates check constraint "machine_crews_crew_letter_check"
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)
+    at async DatabaseUtils.raw (/home/production-app/production-orders-app/src/utils/database.js:146:12)
+    at async MachinesService.addEmployeeToCrew (/home/production-app/production-orders-app/src/services/machines.service.js:449:9)
+    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:232:20 {
+  length: 428,
+  severity: 'ERROR',
+  code: '23514',
+  detail: 'Failing row contains (26, 40, undefined, 0, [{"id":6,"username":"amanda gwala","full_name":"amanda gwala","r..., t, 2025-08-15, 2025-08-15, 4, 2025-08-15 17:54:45.113579+02, 2025-08-15 17:54:45.113579+02, null).',
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: 'public',
+  table: 'machine_crews',
+  column: undefined,
+  dataType: undefined,
+  constraint: 'machine_crews_crew_letter_check',
+  file: 'execMain.c',
+  line: '2058',
+  routine: 'ExecConstraints'
+}
+2025-08-15T17:54:45: Error occurred: {
+  error: 'Failed to add employee to crew: new row for relation "machine_crews" violates check constraint "machine_crews_crew_letter_check"',
+  stack: 'Error: Failed to add employee to crew: new row for relation "machine_crews" violates check constraint "machine_crews_crew_letter_check"\n' +
+    '    at MachinesService.addEmployeeToCrew (/home/production-app/production-orders-app/src/services/machines.service.js:458:13)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:232:20',
+  url: '/api/machines/40/crews/undefined/employees',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-15T15:54:45.114Z'
+}
+2025-08-15T17:54:45: 🔗 Client acquired from pool
+2025-08-15T17:54:45: 🔓 Client released back to pool
+2025-08-15T17:54:45: 🔗 Client acquired from pool
+2025-08-15T17:54:45: 🔓 Client released back to pool
+2025-08-15T17:54:45: 🔗 Client acquired from pool
+2025-08-15T17:54:45: 🔓 Client released back to pool
+2025-08-15T17:54:45: Error adding employee to crew: error: new row for relation "machine_crews" violates check constraint "machine_crews_crew_letter_check"
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)
+    at async DatabaseUtils.raw (/home/production-app/production-orders-app/src/utils/database.js:146:12)
+    at async MachinesService.addEmployeeToCrew (/home/production-app/production-orders-app/src/services/machines.service.js:449:9)
+    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:232:20 {
+  length: 428,
+  severity: 'ERROR',
+  code: '23514',
+  detail: 'Failing row contains (27, 40, undefined, 0, [{"id":13,"username":"andile msani","full_name":"andile msani","..., t, 2025-08-15, 2025-08-15, 4, 2025-08-15 17:54:45.528011+02, 2025-08-15 17:54:45.528011+02, null).',
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: 'public',
+  table: 'machine_crews',
+  column: undefined,
+  dataType: undefined,
+  constraint: 'machine_crews_crew_letter_check',
+  file: 'execMain.c',
+  line: '2058',
+  routine: 'ExecConstraints'
+}
+2025-08-15T17:54:45: Error occurred: {
+  error: 'Failed to add employee to crew: new row for relation "machine_crews" violates check constraint "machine_crews_crew_letter_check"',
+  stack: 'Error: Failed to add employee to crew: new row for relation "machine_crews" violates check constraint "machine_crews_crew_letter_check"\n' +
+    '    at MachinesService.addEmployeeToCrew (/home/production-app/production-orders-app/src/services/machines.service.js:458:13)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:232:20',
+  url: '/api/machines/40/crews/undefined/employees',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-15T15:54:45.529Z'
+}
+2025-08-15T17:54:46: 🔗 Client acquired from pool
+2025-08-15T17:54:46: 🔓 Client released back to pool
+2025-08-15T17:54:46: 🔗 Client acquired from pool
+2025-08-15T17:54:46: 🔓 Client released back to pool
+2025-08-15T17:54:46: 🔗 Client acquired from pool
+2025-08-15T17:54:46: 🔓 Client released back to pool
+2025-08-15T17:54:46: Error adding employee to crew: error: new row for relation "machine_crews" violates check constraint "machine_crews_crew_letter_check"
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)
+    at async DatabaseUtils.raw (/home/production-app/production-orders-app/src/utils/database.js:146:12)
+    at async MachinesService.addEmployeeToCrew (/home/production-app/production-orders-app/src/services/machines.service.js:449:9)
+    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:232:20 {
+  length: 428,
+  severity: 'ERROR',
+  code: '23514',
+  detail: 'Failing row contains (28, 40, undefined, 0, [{"id":5,"username":"Abongile Khambule","full_name":"Abongile Kh..., t, 2025-08-15, 2025-08-15, 4, 2025-08-15 17:54:46.208413+02, 2025-08-15 17:54:46.208413+02, null).',
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: 'public',
+  table: 'machine_crews',
+  column: undefined,
+  dataType: undefined,
+  constraint: 'machine_crews_crew_letter_check',
+  file: 'execMain.c',
+  line: '2058',
+  routine: 'ExecConstraints'
+}
+2025-08-15T17:54:46: Error occurred: {
+  error: 'Failed to add employee to crew: new row for relation "machine_crews" violates check constraint "machine_crews_crew_letter_check"',
+  stack: 'Error: Failed to add employee to crew: new row for relation "machine_crews" violates check constraint "machine_crews_crew_letter_check"\n' +
+    '    at MachinesService.addEmployeeToCrew (/home/production-app/production-orders-app/src/services/machines.service.js:458:13)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:232:20',
+  url: '/api/machines/40/crews/undefined/employees',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-15T15:54:46.209Z'
+}
+2025-08-15T17:54:47: 🔗 Client acquired from pool
+2025-08-15T17:54:47: 🔓 Client released back to pool
+2025-08-15T17:54:47: 🔗 Client acquired from pool
+2025-08-15T17:54:47: 🔓 Client released back to pool
+2025-08-15T17:54:47: 🔗 Client acquired from pool
+2025-08-15T17:54:47: 🔓 Client released back to pool
+2025-08-15T17:54:47: Error adding employee to crew: error: new row for relation "machine_crews" violates check constraint "machine_crews_crew_letter_check"
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)
+    at async DatabaseUtils.raw (/home/production-app/production-orders-app/src/utils/database.js:146:12)
+    at async MachinesService.addEmployeeToCrew (/home/production-app/production-orders-app/src/services/machines.service.js:449:9)
+    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:232:20 {
+  length: 426,
+  severity: 'ERROR',
+  code: '23514',
+  detail: 'Failing row contains (29, 40, undefined, 0, [{"id":6,"username":"amanda gwala","full_name":"amanda gwala","r..., t, 2025-08-15, 2025-08-15, 4, 2025-08-15 17:54:47.46409+02, 2025-08-15 17:54:47.46409+02, null).',
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: 'public',
+  table: 'machine_crews',
+  column: undefined,
+  dataType: undefined,
+  constraint: 'machine_crews_crew_letter_check',
+  file: 'execMain.c',
+  line: '2058',
+  routine: 'ExecConstraints'
+}
+2025-08-15T17:54:47: Error occurred: {
+  error: 'Failed to add employee to crew: new row for relation "machine_crews" violates check constraint "machine_crews_crew_letter_check"',
+  stack: 'Error: Failed to add employee to crew: new row for relation "machine_crews" violates check constraint "machine_crews_crew_letter_check"\n' +
+    '    at MachinesService.addEmployeeToCrew (/home/production-app/production-orders-app/src/services/machines.service.js:458:13)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:232:20',
+  url: '/api/machines/40/crews/undefined/employees',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-15T15:54:47.465Z'
+}
+2025-08-15T17:54:48: 🔗 Client acquired from pool
+2025-08-15T17:54:48: 🔓 Client released back to pool
+2025-08-15T17:54:48: 🔗 Client acquired from pool
+2025-08-15T17:54:48: 🔓 Client released back to pool
+2025-08-15T17:54:48: 🔗 Client acquired from pool
+2025-08-15T17:54:48: 🔓 Client released back to pool
+2025-08-15T17:54:48: Error adding employee to crew: error: new row for relation "machine_crews" violates check constraint "machine_crews_crew_letter_check"
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)
+    at async DatabaseUtils.raw (/home/production-app/production-orders-app/src/utils/database.js:146:12)
+    at async MachinesService.addEmployeeToCrew (/home/production-app/production-orders-app/src/services/machines.service.js:449:9)
+    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:232:20 {
+  length: 428,
+  severity: 'ERROR',
+  code: '23514',
+  detail: 'Failing row contains (30, 40, undefined, 0, [{"id":13,"username":"andile msani","full_name":"andile msani","..., t, 2025-08-15, 2025-08-15, 4, 2025-08-15 17:54:48.323825+02, 2025-08-15 17:54:48.323825+02, null).',
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: 'public',
+  table: 'machine_crews',
+  column: undefined,
+  dataType: undefined,
+  constraint: 'machine_crews_crew_letter_check',
+  file: 'execMain.c',
+  line: '2058',
+  routine: 'ExecConstraints'
+}
+2025-08-15T17:54:48: Error occurred: {
+  error: 'Failed to add employee to crew: new row for relation "machine_crews" violates check constraint "machine_crews_crew_letter_check"',
+  stack: 'Error: Failed to add employee to crew: new row for relation "machine_crews" violates check constraint "machine_crews_crew_letter_check"\n' +
+    '    at MachinesService.addEmployeeToCrew (/home/production-app/production-orders-app/src/services/machines.service.js:458:13)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:232:20',
+  url: '/api/machines/40/crews/undefined/employees',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-15T15:54:48.325Z'
+}
+2025-08-15T17:54:58: 🔗 Client acquired from pool
+2025-08-15T17:54:58: 🔓 Client released back to pool
+2025-08-15T17:54:58: Error removing employee from crew: NotFoundError: Crew not found not found
+    at MachinesService.removeEmployeeFromCrew (/home/production-app/production-orders-app/src/services/machines.service.js:474:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:250:20 {
+  statusCode: 404,
+  code: 'NOT_FOUND',
+  isOperational: true,
+  resource: 'Crew not found'
+}
+2025-08-15T17:54:58: Error occurred: {
+  error: 'Failed to remove employee from crew: Crew not found not found',
+  stack: 'Error: Failed to remove employee from crew: Crew not found not found\n' +
+    '    at MachinesService.removeEmployeeFromCrew (/home/production-app/production-orders-app/src/services/machines.service.js:492:13)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:250:20',
+  url: '/api/machines/40/crews/undefined/employees/10',
+  method: 'DELETE',
+  user: 'admin',
+  timestamp: '2025-08-15T15:54:58.613Z'
+}
+2025-08-15T17:54:59: 🔗 Client acquired from pool
+2025-08-15T17:54:59: 🔓 Client released back to pool
+2025-08-15T17:54:59: Error removing employee from crew: NotFoundError: Crew not found not found
+    at MachinesService.removeEmployeeFromCrew (/home/production-app/production-orders-app/src/services/machines.service.js:474:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:250:20 {
+  statusCode: 404,
+  code: 'NOT_FOUND',
+  isOperational: true,
+  resource: 'Crew not found'
+}
+2025-08-15T17:54:59: Error occurred: {
+  error: 'Failed to remove employee from crew: Crew not found not found',
+  stack: 'Error: Failed to remove employee from crew: Crew not found not found\n' +
+    '    at MachinesService.removeEmployeeFromCrew (/home/production-app/production-orders-app/src/services/machines.service.js:492:13)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:250:20',
+  url: '/api/machines/40/crews/undefined/employees/10',
+  method: 'DELETE',
+  user: 'admin',
+  timestamp: '2025-08-15T15:54:59.672Z'
+}
+2025-08-15T17:55:01: 🔗 Client acquired from pool
+2025-08-15T17:55:01: 🔓 Client released back to pool
+2025-08-15T17:55:01: Error removing employee from crew: NotFoundError: Crew not found not found
+    at MachinesService.removeEmployeeFromCrew (/home/production-app/production-orders-app/src/services/machines.service.js:474:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:250:20 {
+  statusCode: 404,
+  code: 'NOT_FOUND',
+  isOperational: true,
+  resource: 'Crew not found'
+}
+2025-08-15T17:55:01: Error occurred: {
+  error: 'Failed to remove employee from crew: Crew not found not found',
+  stack: 'Error: Failed to remove employee from crew: Crew not found not found\n' +
+    '    at MachinesService.removeEmployeeFromCrew (/home/production-app/production-orders-app/src/services/machines.service.js:492:13)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:250:20',
+  url: '/api/machines/40/crews/undefined/employees/10',
+  method: 'DELETE',
+  user: 'admin',
+  timestamp: '2025-08-15T15:55:01.734Z'
+}
+2025-08-15T17:55:20: 🔗 Client acquired from pool
+2025-08-15T17:55:20: 🔓 Client released back to pool
+2025-08-15T17:55:20: 🔗 Client acquired from pool
+2025-08-15T17:55:20: 🔓 Client released back to pool
+2025-08-15T17:55:20: 🔗 Client acquired from pool
+2025-08-15T17:55:20: 🔓 Client released back to pool
+2025-08-15T17:55:23: 🔗 Client acquired from pool
+2025-08-15T17:55:23: 🔓 Client released back to pool
+2025-08-15T17:55:23: 🔗 Client acquired from pool
+2025-08-15T17:55:23: 🔓 Client released back to pool
+2025-08-15T17:55:23: 🔗 Client acquired from pool
+2025-08-15T17:55:23: 🔓 Client released back to pool
+2025-08-15T17:55:25: 🔗 Client acquired from pool
+2025-08-15T17:55:25: 🔓 Client released back to pool
+2025-08-15T17:55:25: 🔗 Client acquired from pool
+2025-08-15T17:55:25: 🔓 Client released back to pool
+2025-08-15T17:55:25: 🔗 Client acquired from pool
+2025-08-15T17:55:25: 🔓 Client released back to pool
+2025-08-15T17:55:29: 🔗 Client acquired from pool
+2025-08-15T17:55:29: 🔓 Client released back to pool
+2025-08-15T17:55:29: 🔗 Client acquired from pool
+2025-08-15T17:55:29: 🔓 Client released back to pool
+2025-08-15T17:55:29: 🔗 Client acquired from pool
+2025-08-15T17:55:29: 🔓 Client released back to pool
+2025-08-15T17:55:31: 🔗 Client acquired from pool
+2025-08-15T17:55:31: 🔓 Client released back to pool
+2025-08-15T17:55:31: 🔗 Client acquired from pool
+2025-08-15T17:55:31: 🔓 Client released back to pool
+2025-08-15T17:55:31: 🔗 Client acquired from pool
+2025-08-15T17:55:31: 🔓 Client released back to pool
+2025-08-15T17:55:35: 🔗 Client acquired from pool
+2025-08-15T17:55:35: 🔓 Client released back to pool
+2025-08-15T17:55:35: 🔗 Client acquired from pool
+2025-08-15T17:55:35: 🔓 Client released back to pool
+2025-08-15T17:55:35: 🔗 Client acquired from pool
+2025-08-15T17:55:35: 🔓 Client released back to pool
+2025-08-15T17:55:40: 🔗 Client acquired from pool
+2025-08-15T17:55:40: 🔓 Client released back to pool
+2025-08-15T17:55:40: 🔗 Client acquired from pool
+2025-08-15T17:55:40: 🔓 Client released back to pool
+2025-08-15T17:55:40: 🔗 Client acquired from pool
+2025-08-15T17:55:40: 🔓 Client released back to pool
+2025-08-15T17:55:40: ✅ New PostgreSQL client connected
+2025-08-15T17:55:40: 🔗 Client acquired from pool
+2025-08-15T17:55:40: 🔓 Client released back to pool
+2025-08-15T17:55:40: 🔗 Client acquired from pool
+2025-08-15T17:55:40: 🔓 Client released back to pool
+2025-08-15T17:55:40: 🔗 Client acquired from pool
+2025-08-15T17:55:40: 🔓 Client released back to pool
+2025-08-15T17:55:40: 🔗 Client acquired from pool
+2025-08-15T17:55:40: 🔓 Client released back to pool
+2025-08-15T17:55:48: 🔗 Client acquired from pool
+2025-08-15T17:55:48: 🔓 Client released back to pool
+2025-08-15T17:55:48: 🔗 Client acquired from pool
+2025-08-15T17:55:48: 🔓 Client released back to pool
+2025-08-15T17:55:48: 🔗 Client acquired from pool
+2025-08-15T17:55:48: 🔓 Client released back to pool
+2025-08-15T17:56:03: 🔗 Client acquired from pool
+2025-08-15T17:56:03: 🔓 Client released back to pool
+2025-08-15T17:56:03: 🔗 Client acquired from pool
+2025-08-15T17:56:03: 🔓 Client released back to pool
+2025-08-15T17:56:03: 🔗 Client acquired from pool
+2025-08-15T17:56:03: 🔗 Client acquired from pool
+2025-08-15T17:56:03: 🔓 Client released back to pool
+2025-08-15T17:56:03: 🔓 Client released back to pool
+2025-08-15T17:56:03: ✅ New PostgreSQL client connected
+2025-08-15T17:56:03: 🔗 Client acquired from pool
+2025-08-15T17:56:03: 🔓 Client released back to pool
+2025-08-15T17:56:03: 🔗 Client acquired from pool
+2025-08-15T17:56:03: 🔓 Client released back to pool
+2025-08-15T17:56:03: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-15T17:56:03: 🏠 admin joined room: production
+2025-08-15T17:57:52: 🌐 WebSocket server initialized
+2025-08-15T17:57:52: 🧹 WebSocket cleanup scheduler started
+2025-08-15T17:57:52: 🧪 Testing refactored components...
+2025-08-15T17:57:52: 🚀 Production refactored server running on port 3000
+2025-08-15T17:57:52: 📊 Health check: http://localhost:3000/api/health
+2025-08-15T17:57:52: 🔐 Auth test: http://localhost:3000/api/auth/login
+2025-08-15T17:57:52: ⚙️ System routes: http://localhost:3000/api/system/health
+2025-08-15T17:57:52: 🌐 WebSocket server initialized and ready
+2025-08-15T17:57:52: ✅ New PostgreSQL client connected
+2025-08-15T17:57:52: 🔗 Client acquired from pool
+2025-08-15T17:57:52: 🔓 Client released back to pool
+2025-08-15T17:57:52: ✅ Database connection: OK
+2025-08-15T17:57:52: ✅ Authentication middleware: OK
+2025-08-15T17:57:52: ✅ Response utilities: OK
+2025-08-15T17:57:52: ✅ Database utilities: OK
+2025-08-15T17:57:52: 🎉 All components tested successfully!
+2025-08-15T17:57:52: ✅ All components tested successfully
+2025-08-15T17:58:25: ✅ New PostgreSQL client connected
+2025-08-15T17:58:25: 🔗 Client acquired from pool
+2025-08-15T17:58:25: 🔓 Client released back to pool
+2025-08-15T17:58:25: ✅ New PostgreSQL client connected
+2025-08-15T17:58:25: 🔗 Client acquired from pool
+2025-08-15T17:58:25: 🔓 Client released back to pool
+2025-08-15T17:58:25: ✅ New PostgreSQL client connected
+2025-08-15T17:58:25: 🔗 Client acquired from pool
+2025-08-15T17:58:25: ✅ New PostgreSQL client connected
+2025-08-15T17:58:25: 🔗 Client acquired from pool
+2025-08-15T17:58:25: ✅ New PostgreSQL client connected
+2025-08-15T17:58:25: 🔗 Client acquired from pool
+2025-08-15T17:58:25: 🔓 Client released back to pool
+2025-08-15T17:58:25: 🔓 Client released back to pool
+2025-08-15T17:58:25: 🔓 Client released back to pool
+2025-08-15T17:58:25: New WebSocket connection attempt
+2025-08-15T17:58:25: ✅ WebSocket authenticated: admin (admin)
+2025-08-15T17:58:25: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-15T17:58:25: 🏠 admin joined room: production
+2025-08-15T17:58:25: 🔗 Client acquired from pool
+2025-08-15T17:58:25: 🔓 Client released back to pool
+2025-08-15T17:58:25: 🔗 Client acquired from pool
+2025-08-15T17:58:25: 🔓 Client released back to pool
+2025-08-15T17:58:25: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-15T17:58:25: 🏠 admin joined room: production
+2025-08-15T17:58:25: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-15T17:58:25: 🏠 admin joined room: production
+2025-08-15T17:58:27: 🔌 WebSocket disconnected: admin
+2025-08-15T17:58:28: 🔗 Client acquired from pool
+2025-08-15T17:58:28: 🔓 Client released back to pool
+2025-08-15T17:58:28: 🔗 Client acquired from pool
+2025-08-15T17:58:28: 🔓 Client released back to pool
+2025-08-15T17:58:28: 🔗 Client acquired from pool
+2025-08-15T17:58:28: 🔓 Client released back to pool
+2025-08-15T17:58:28: 🔗 Client acquired from pool
+2025-08-15T17:58:28: 🔓 Client released back to pool
+2025-08-15T17:58:28: 🔗 Client acquired from pool
+2025-08-15T17:58:28: 🔗 Client acquired from pool
+2025-08-15T17:58:28: 🔓 Client released back to pool
+2025-08-15T17:58:28: 🔗 Client acquired from pool
+2025-08-15T17:58:28: 🔓 Client released back to pool
+2025-08-15T17:58:28: 🔗 Client acquired from pool
+2025-08-15T17:58:28: 🔓 Client released back to pool
+2025-08-15T17:58:28: 🔓 Client released back to pool
+2025-08-15T17:58:28: 🔗 Client acquired from pool
+2025-08-15T17:58:28: 🔓 Client released back to pool
+2025-08-15T17:58:28: New WebSocket connection attempt
+2025-08-15T17:58:28: ✅ WebSocket authenticated: admin (admin)
+2025-08-15T17:58:28: 🔗 Client acquired from pool
+2025-08-15T17:58:28: 🔓 Client released back to pool
+2025-08-15T17:58:28: 🔗 Client acquired from pool
+2025-08-15T17:58:28: 🔓 Client released back to pool
+2025-08-15T17:58:28: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-15T17:58:28: 🏠 admin joined room: production
+2025-08-15T17:58:28: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-15T17:58:28: 🏠 admin joined room: production
+2025-08-15T17:58:58: 🔗 Client acquired from pool
+2025-08-15T17:58:58: 🔓 Client released back to pool
+2025-08-15T17:59:28: 🔗 Client acquired from pool
+2025-08-15T17:59:28: 🔓 Client released back to pool
+2025-08-15T17:59:39: 🔗 Client acquired from pool
+2025-08-15T17:59:39: 🔓 Client released back to pool
+2025-08-15T17:59:39: 🔗 Client acquired from pool
+2025-08-15T17:59:39: 🔓 Client released back to pool
+2025-08-15T17:59:39: 📡 Broadcast sent: machine_updated to channel: all (1 clients)
+2025-08-15T17:59:39: 🔗 Client acquired from pool
+2025-08-15T17:59:39: 🔓 Client released back to pool
+2025-08-15T17:59:53: 🔗 Client acquired from pool
+2025-08-15T17:59:53: 🔓 Client released back to pool
+2025-08-15T17:59:53: 🔗 Client acquired from pool
+2025-08-15T17:59:53: 🔓 Client released back to pool
+2025-08-15T17:59:53: 🔗 Client acquired from pool
+2025-08-15T17:59:53: 🔓 Client released back to pool
+2025-08-15T17:59:53: ✅ New PostgreSQL client connected
+2025-08-15T17:59:53: 🔗 Client acquired from pool
+2025-08-15T17:59:53: 🔓 Client released back to pool
+2025-08-15T17:59:53: ✅ New PostgreSQL client connected
+2025-08-15T17:59:53: 🔗 Client acquired from pool
+2025-08-15T17:59:53: 🔓 Client released back to pool
+2025-08-15T17:59:53: 🔗 Client acquired from pool
+2025-08-15T17:59:53: 🔓 Client released back to pool
+2025-08-15T17:59:53: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-15T17:59:53: 🏠 admin joined room: production
+2025-08-15T17:59:55: 🔗 Client acquired from pool
+2025-08-15T17:59:55: 🔓 Client released back to pool
+2025-08-15T17:59:58: 📺 admin subscribed to: [ 'machines', 'production' ]
+2025-08-15T17:59:58: 🔗 Client acquired from pool
+2025-08-15T17:59:58: 🔗 Client acquired from pool
+2025-08-15T17:59:58: 🔗 Client acquired from pool
+2025-08-15T17:59:58: 🔓 Client released back to pool
+2025-08-15T17:59:58: 🔓 Client released back to pool
+2025-08-15T17:59:58: 🔗 Client acquired from pool
+2025-08-15T17:59:58: 🔓 Client released back to pool
+2025-08-15T17:59:58: 🔗 Client acquired from pool
+2025-08-15T17:59:58: 🔓 Client released back to pool
+2025-08-15T17:59:58: 🔓 Client released back to pool
+2025-08-15T17:59:58: 🔗 Client acquired from pool
+2025-08-15T17:59:58: 🔓 Client released back to pool
+2025-08-15T17:59:58: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-15T17:59:58: 🏠 admin joined room: production
