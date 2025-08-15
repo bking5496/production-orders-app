@@ -329,7 +329,7 @@ export default function ProductionOrdersSystem() {
 
   useWebSocketEvent('order_completed', (data) => {
     console.log('✅ Order completed:', data.data);
-    showNotification(`Order ${data.data.order_number} completed successfully`, 'success');
+    showNotification(`Order ${data.data.order_number} completed and archived`, 'success');
     loadOrders();
   }, []);
 
@@ -756,7 +756,7 @@ export default function ProductionOrdersSystem() {
       await API.post(`/orders/${order.id}/complete`, completionData);
       setShowWasteModal(false);
       resetWasteData();
-      showNotification(`Order ${order.order_number} completed successfully`, 'success');
+      showNotification(`Order ${order.order_number} completed and archived successfully`, 'success');
       loadOrders();
       loadMachines(); // Refresh machine status
     } catch (error) {
