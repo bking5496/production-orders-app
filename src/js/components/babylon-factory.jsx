@@ -461,36 +461,44 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
         scene
       );
 
-      // Create zone floor sections with color coding - FULL 52m × 42m LAYOUT
-      // BLENDING area floor section (top section) - Blue tint
+      // Create zone floor sections based on ACTUAL GRID LAYOUT - PROFESSIONAL INDUSTRIAL COLORS
+      // COLUMNS 1-2: Blending & Processing (0-10m) - Industrial Steel Blue
       const blendingFloor = createSimpleFloor('blendingFloor',
-        { width: factoryWidth, height: 14 }, // Full top section (5m + 6m + 3m buffer)
-        new window.BABYLON.Vector3(0, 0.02, -14), // Top section positioning
-        new window.BABYLON.Color3(0.2, 0.4, 0.8), // Safety blue
+        { width: 10, height: factoryHeight }, // Columns 1-2 width
+        new window.BABYLON.Vector3(-21, 0.02, 0), // Left side positioning
+        new window.BABYLON.Color3(0.3, 0.35, 0.4), // Industrial steel blue
         scene
       );
 
-      // MATURATION area floor section (left center) - Amber tint  
-      const maturationFloor = createSimpleFloor('maturationFloor',
-        { width: 25, height: 14 }, // Left half of center section
-        new window.BABYLON.Vector3(-13.5, 0.02, 0), // Left center positioning
-        new window.BABYLON.Color3(0.8, 0.6, 0.2), // Warm amber
+      // COLUMN 3: Packaging Operations (10-16m) - Safety Green  
+      const packagingFloor1 = createSimpleFloor('packagingFloor1',
+        { width: 6, height: factoryHeight }, // Column 3 width
+        new window.BABYLON.Vector3(-13, 0.02, 0), // Column 3 positioning
+        new window.BABYLON.Color3(0.25, 0.4, 0.25), // Professional safety green
         scene
       );
 
-      // PROCESSING area floor section (right center) - Purple tint
-      const processingFloor = createSimpleFloor('processingFloor',
-        { width: 27, height: 14 }, // Right half of center section
-        new window.BABYLON.Vector3(12.5, 0.02, 0), // Right center positioning
-        new window.BABYLON.Color3(0.6, 0.4, 0.8), // Processing purple
+      // COLUMN 4: Pre-Production (16-26m) - Industrial Gray
+      const preProductionFloor = createSimpleFloor('preProductionFloor',
+        { width: 10, height: factoryHeight }, // Column 4 width
+        new window.BABYLON.Vector3(-5, 0.02, 0), // Column 4 positioning
+        new window.BABYLON.Color3(0.35, 0.35, 0.35), // Industrial gray
         scene
       );
 
-      // PACKAGING area floor section (bottom section) - Green tint
-      const packagingFloor = createSimpleFloor('packagingFloor',
-        { width: factoryWidth, height: 14 }, // Full bottom section
-        new window.BABYLON.Vector3(0, 0.02, 14), // Bottom section positioning  
-        new window.BABYLON.Color3(0.2, 0.7, 0.3), // Fresh green
+      // COLUMN 5: Main Production Lines (26-46m) - Machine Gray
+      const mainProductionFloor = createSimpleFloor('mainProductionFloor',
+        { width: 20, height: factoryHeight }, // Column 5 width
+        new window.BABYLON.Vector3(10, 0.02, 0), // Column 5 positioning
+        new window.BABYLON.Color3(0.28, 0.3, 0.32), // Professional machine gray
+        scene
+      );
+
+      // COLUMN 6: Auxiliary Equipment (46-52m) - Industrial Bronze
+      const auxiliaryFloor = createSimpleFloor('auxiliaryFloor',
+        { width: 6, height: factoryHeight }, // Column 6 width
+        new window.BABYLON.Vector3(23, 0.02, 0), // Column 6 positioning
+        new window.BABYLON.Color3(0.4, 0.35, 0.3), // Industrial bronze
         scene
       );
 
@@ -499,27 +507,27 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
         const boundaries = [
           {
             name: 'BLENDING ZONE',
-            position: new window.BABYLON.Vector3(0, 0.1, -7), // Top boundary
-            size: { width: 50, height: 0.2, depth: 2 },
-            color: '#2563EB'
+            position: new window.BABYLON.Vector3(-16, 0.1, 0), // Column 1-2 boundary
+            size: { width: 2, height: 0.2, depth: factoryHeight },
+            color: '#4A5568'  // Professional steel gray
           },
           {
-            name: 'MATURATION ZONE', 
-            position: new window.BABYLON.Vector3(-13, 0.1, 0), // Left center boundary
-            size: { width: 2, height: 0.2, depth: 14 },
-            color: '#D97706'
+            name: 'PACKAGING ZONE', 
+            position: new window.BABYLON.Vector3(-10, 0.1, 0), // Column 3 boundary
+            size: { width: 2, height: 0.2, depth: factoryHeight },
+            color: '#2D5016'  // Professional dark green
           },
           {
-            name: 'PROCESSING ZONE',
-            position: new window.BABYLON.Vector3(0, 0.1, 0), // Center divider
-            size: { width: 2, height: 0.2, depth: 14 },
-            color: '#8B5CF6'
+            name: 'PRE-PRODUCTION ZONE',
+            position: new window.BABYLON.Vector3(0, 0.1, 0), // Column 4 boundary
+            size: { width: 2, height: 0.2, depth: factoryHeight },
+            color: '#4A4A4A'  // Industrial gray
           },
           {
-            name: 'PACKAGING ZONE',
-            position: new window.BABYLON.Vector3(0, 0.1, 7), // Bottom boundary
-            size: { width: 50, height: 0.2, depth: 2 },
-            color: '#059669'
+            name: 'MAIN PRODUCTION ZONE',
+            position: new window.BABYLON.Vector3(20, 0.1, 0), // Column 5 boundary
+            size: { width: 2, height: 0.2, depth: factoryHeight },
+            color: '#3D4043'  // Machine gray
           }
         ];
         
@@ -611,31 +619,38 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
         const zoneInfo = [
           {
             name: 'BLENDING ZONE',
-            position: new window.BABYLON.Vector3(-25, 3, -14),
-            color: '#2563EB',
+            position: new window.BABYLON.Vector3(-21, 3, 15),
+            color: '#4A5568',  // Professional steel gray
             description: 'Raw Material Processing',
             processes: ['Material Receipt', 'Primary Blending', 'Batch Preparation']
           },
           {
-            name: 'MATURATION ZONE',
-            position: new window.BABYLON.Vector3(-25, 3, -7),
-            color: '#D97706',
-            description: 'Product Development',
-            processes: ['Fluid Bed Processing', 'Aging & Development']
-          },
-          {
-            name: 'PROCESSING ZONE',
-            position: new window.BABYLON.Vector3(25, 3, -7),
-            color: '#8B5CF6',
-            description: 'Advanced Processing',
-            processes: ['Granulation', 'Drying', 'Sifting & Screening']
-          },
-          {
             name: 'PACKAGING ZONE',
-            position: new window.BABYLON.Vector3(25, 3, 14),
-            color: '#059669',
-            description: 'Final Product Processing',
-            processes: ['Tablet Formation', 'Flexible Packaging', 'Container Filling']
+            position: new window.BABYLON.Vector3(-13, 3, 15),
+            color: '#2D5016',  // Professional dark green
+            description: 'Packaging Operations',
+            processes: ['Stick Pack', 'Flexible Packaging', 'Universal Lines']
+          },
+          {
+            name: 'PRE-PRODUCTION ZONE',
+            position: new window.BABYLON.Vector3(-5, 3, 15),
+            color: '#4A4A4A',  // Industrial gray
+            description: 'Pre-Production Processing',
+            processes: ['Pre-Batch', 'Material Preparation', 'Setup']
+          },
+          {
+            name: 'MAIN PRODUCTION ZONE',
+            position: new window.BABYLON.Vector3(10, 3, 15),
+            color: '#3D4043',  // Machine gray
+            description: 'Main Production Lines',
+            processes: ['Can Lines', '5-Lane', 'Auger', 'Canister Lines']
+          },
+          {
+            name: 'AUXILIARY ZONE',
+            position: new window.BABYLON.Vector3(23, 3, 15),
+            color: '#5D4E37',  // Industrial bronze
+            description: 'Auxiliary Equipment',
+            processes: ['Ploughshare', 'MaxMix', 'Liquid Lines', 'Bulk Handling']
           }
         ];
         
@@ -907,10 +922,10 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
     console.log('🏭 Creating realistic 3D machine models for', machineList.length, 'equipment units');
 
     const machineColors = {
-      'available': new window.BABYLON.Color3(0.0, 0.8, 0.4),
-      'busy': new window.BABYLON.Color3(1.0, 0.6, 0.0),
-      'offline': new window.BABYLON.Color3(0.6, 0.6, 0.6),
-      'error': new window.BABYLON.Color3(1.0, 0.2, 0.2)
+      'available': new window.BABYLON.Color3(0.2, 0.6, 0.3),   // Professional forest green
+      'busy': new window.BABYLON.Color3(0.8, 0.5, 0.1),       // Industrial amber
+      'offline': new window.BABYLON.Color3(0.5, 0.5, 0.5),    // Industrial gray
+      'error': new window.BABYLON.Color3(0.7, 0.2, 0.1)       // Industrial red
     };
 
     // Clear existing machines
@@ -930,110 +945,124 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
         const machinesInEnv = machineList.filter(m => m.environment === machine.environment);
         const envIndex = machinesInEnv.indexOf(machine);
 
-        // WORKFLOW-OPTIMIZED MACHINE POSITIONING - FULL 52m × 42m LAYOUT
-        // Based on manufacturing process flow: Raw Materials → Processing → Final Products
+        // PRECISE GRID-BASED MACHINE POSITIONING - EXACT LAYOUT FROM IMAGE
+        // Based on actual factory floor layout: 52m × 42m grid structure
         const getOptimizedMachinePosition = (machine) => {
           const machineName = machine.name.toUpperCase();
           
-          // BLENDING ZONE - Raw material input and primary processing (top section -21 to -7)
-          const blendingPositions = {
-            'BLENDING': { x: -22, z: -18 },           // Raw material receipt
-            'PLOUGH BLENDER': { x: -12, z: -16 },    // Primary blending
-            'PLOUGHSHARE': { x: -12, z: -16 },       // Primary blending alt name
-            'PRE-BATCH': { x: -2, z: -16 },          // Batch preparation
-            '1000L BLENDER': { x: 8, z: -18 },       // Large batch blending
-            'MAXMIX': { x: 8, z: -18 },              // Large batch blending alt name
-            '1500L BLENDER': { x: 18, z: -16 },      // Industrial blending
-            'WINKWORK': { x: 18, z: -16 },           // Industrial blending alt name
-            'MIXER': { x: -18, z: -12 },             // Additional mixing
-            'BATCH': { x: 12, z: -12 }               // Batch processing
+          // COLUMN 1 (0-5m): Blending & Processing - Left side
+          const column1Positions = {
+            'BLENDER LEAL': { x: -23.5, z: 16.5 },     // Top left (2.5m, 2.5m)
+            'LEAL': { x: -23.5, z: 16.5 },             // Alt name
+            'MATURATION': { x: -23.5, z: 9 },          // Maturation room (2.5m, 9m)
+            'CORAZZA TABLET': { x: -23.5, z: -7 },     // Bottom left (2.5m, -7m)
+            'TABLET': { x: -23.5, z: -7 },             // Alt name
+            'CORAZZA': { x: -23.5, z: -7 }             // Alt name
           };
           
-          // MATURATION ZONE - Process development and aging (left center -7 to +7)
-          const maturationPositions = {
-            'FB-10': { x: -22, z: -4 },              // Fluid bed processing
-            'FB 10': { x: -22, z: -4 },              // Fluid bed processing alt
-            'MATURATION': { x: -18, z: 0 },          // Aging/development
-            'FLUID': { x: -22, z: 2 },               // Fluid processing
-            'BED': { x: -18, z: 4 }                  // Bed processing
+          // COLUMN 2 (5-10m): Blending & Processing
+          const column2Positions = {
+            'WINKWORK': { x: -18.5, z: 16.5 },         // Blender Winkwork (7.5m, 2.5m)
+            'BLENDER WINKWORK': { x: -18.5, z: 16.5 }, // Full name
+            'CORAZZA CUBE': { x: -18.5, z: -7 },       // Bottom (7.5m, -7m)
+            'CUBE': { x: -18.5, z: -7 }                // Alt name
           };
           
-          // PROCESSING ZONE - Advanced processing (right center -7 to +7)
-          const processingPositions = {
-            'GRANULATOR': { x: 18, z: -4 },          // Granulation
-            'GRANULATE': { x: 18, z: -4 },           // Granulation alt
-            'DRYER': { x: 22, z: -2 },               // Drying
-            'OVEN': { x: 22, z: -2 },                // Drying alt
-            'SIFTER': { x: 18, z: 2 },               // Sifting
-            'SCREEN': { x: 18, z: 2 },               // Screening
-            'SIEVE': { x: 22, z: 4 },                // Sieving
-            'CUBE': { x: 12, z: 0 },                 // Cube processing
-            'CUBES': { x: 12, z: 0 }                 // Cube processing alt
+          // COLUMN 3 (10-16m): Packaging Operations
+          const column3Positions = {
+            'NPS STICK PACK': { x: -13, z: 16.5 },     // Top (13m, 2.5m)
+            'STICK PACK': { x: -13, z: 16.5 },         // Alt name
+            'STICKPACK': { x: -13, z: 16.5 },          // Alt name
+            'ENFLEX': { x: -13, z: 12 },               // Enflex fb 10 1:2 (13m, 12m)
+            'FB-10': { x: -13, z: 12 },                // Alt name
+            'FB 10': { x: -13, z: 12 },                // Alt name
+            'ILAPACK': { x: -13, z: 2 },               // Middle (13m, 2m)
+            'ILAPAK': { x: -13, z: 2 },                // Alt name
+            'STOCK POWDER': { x: -13, z: -2 },         // Stock powder (13m, -2m)
+            'POWDER': { x: -13, z: -2 },               // Alt name
+            'UNIVERSAL': { x: -13, z: -12 }            // Universal stations (13m, -12m)
           };
           
-          // PACKAGING ZONE - Final product processing by type (+7 to +21)
-          const packagingPositions = {
-            // Solid product processing
-            'TABLETS': { x: -22, z: 16 },            // Tablet formation
-            'TABLET': { x: -22, z: 16 },             // Tablet formation alt
-            'PRESS': { x: -18, z: 18 },              // Press operations
-            'STOCK POWDER': { x: -12, z: 16 },       // Powder finishing
-            'POWDER': { x: -12, z: 16 },             // Powder finishing alt
-            
-            // Flexible packaging lines
-            'STICKPACK': { x: -6, z: 14 },           // Stick pack filling
-            'STICK PACK': { x: -6, z: 14 },          // Stick pack alt name
-            'ILAPACK': { x: -2, z: 16 },             // ILA packaging
-            'ILAPAK': { x: -2, z: 16 },              // ILA packaging alt
-            'UNIVERSAL': { x: 2, z: 14 },            // Universal packaging
-            
-            // Container and can lines
-            'OLD CAN LINE': { x: 8, z: 16 },         // Legacy can line
-            'CANLINE': { x: 8, z: 16 },              // Can line alt name
-            'CAN': { x: 8, z: 16 },                  // Can processing
-            'CANS': { x: 12, z: 18 },                // Can finishing
-            '5LANES': { x: 18, z: 16 },              // Multi-lane filling
-            'AUGER': { x: 22, z: 14 },               // Auger filling
-            'ENFLEX': { x: 18, z: 12 },              // Flexible packaging
-            'FILLER': { x: 14, z: 20 },              // Filling operations
-            'BOTTLING': { x: 16, z: 18 },            // Bottling operations
-            
-            // Bulk processing
-            'BULK': { x: 6, z: 18 },                 // Bulk handling
-            'PACKAGING': { x: 10, z: 14 }            // General packaging
+          // COLUMN 4 (16-26m): Pre-Production
+          const column4Positions = {
+            'PRE-BATCH': { x: -5, z: 12 },             // Large central area (21m, 12m)
+            'BATCH': { x: -5, z: 12 },                 // Alt name
+            'PRE': { x: -5, z: 12 }                    // Alt name
           };
           
-          // Check each position category with expanded environment support
-          if (machine.environment === 'blending') {
-            for (const [key, pos] of Object.entries(blendingPositions)) {
-              if (machineName.includes(key)) return pos;
+          // COLUMN 5 (26-46m): Main Production Lines
+          const column5Positions = {
+            'CANLINE': { x: 10, z: 2 },                // Canline (36m, 2m)
+            'CAN LINE': { x: 10, z: 2 },               // Alt name
+            'OLD CAN LINE': { x: 10, z: 2 },           // Alt name
+            'CAN': { x: 10, z: 2 },                    // Alt name
+            'NPS 5 LANE': { x: 10, z: -8 },            // Main production (36m, -8m)
+            '5LANES': { x: 10, z: -8 },                // Alt name
+            'NPS AUGER': { x: 10, z: -12 },            // Auger (36m, -12m)
+            'AUGER': { x: 10, z: -12 },                // Alt name
+            'ENFLEX F14': { x: 10, z: -16 },           // Enflex F14 (36m, -16m)
+            'CANISTER': { x: 10, z: -20 },             // Canister line (36m, -20m)
+            'CANISTER LINE': { x: 10, z: -20 }         // Full name
+          };
+          
+          // COLUMN 6 (46-52m): Auxiliary Equipment - Right side
+          const column6Positions = {
+            'PLOUGHSHARE': { x: 23.5, z: 16.5 },       // Top right (49m, 2.5m)
+            'PLOUGH': { x: 23.5, z: 16.5 },            // Alt name
+            'BLENDER MAXMIX': { x: 23.5, z: 10 },      // MaxMix (49m, 10m)
+            'MAXMIX': { x: 23.5, z: 10 },              // Alt name
+            'MAX MIX': { x: 23.5, z: 10 },             // Alt name
+            'DRUMBLENDER': { x: 23.5, z: 5.5 },        // Drumblender (49m, 5.5m)
+            'DRUM BLENDER': { x: 23.5, z: 5.5 },       // Alt name
+            'DRUM': { x: 23.5, z: 5.5 },               // Alt name
+            'BULKLINE': { x: 23.5, z: 0 },             // Bulkline (49m, 0m)
+            'BULK LINE': { x: 23.5, z: 0 },            // Alt name
+            'BULK': { x: 23.5, z: 0 },                 // Alt name
+            'LIQUID LINE': { x: 23.5, z: -8 },         // Liquid Line (49m, -8m)
+            'LIQUID': { x: 23.5, z: -8 }               // Alt name
+          };
+          
+          // GRID-BASED POSITION MATCHING - Check all columns for exact matches
+          const allPositions = {
+            ...column1Positions,
+            ...column2Positions,
+            ...column3Positions,
+            ...column4Positions,
+            ...column5Positions,
+            ...column6Positions
+          };
+          
+          // First try exact machine name match
+          if (allPositions[machineName]) {
+            return allPositions[machineName];
+          }
+          
+          // Then try partial matches for machine names
+          for (const [key, pos] of Object.entries(allPositions)) {
+            if (machineName.includes(key) || key.includes(machineName)) {
+              return pos;
             }
-            // Default blending position - distributed across top section
-            return { x: -22 + (envIndex % 4) * 11, z: -18 + Math.floor(envIndex / 4) * 4 };
+          }
+          
+          // Environment-based fallback positioning within grid structure
+          if (machine.environment === 'blending') {
+            // Columns 1-2: Blending equipment
+            return { x: -23.5 + (envIndex % 2) * 5, z: 16.5 - (Math.floor(envIndex / 2) * 8) };
           }
           
           if (machine.environment === 'maturation') {
-            for (const [key, pos] of Object.entries(maturationPositions)) {
-              if (machineName.includes(key)) return pos;
-            }
-            // Default maturation position - left side
-            return { x: -22 + (envIndex % 2) * 4, z: -6 + Math.floor(envIndex / 2) * 4 };
+            // Column 1: Maturation area
+            return { x: -23.5, z: 9 - (envIndex * 4) };
           }
           
           if (machine.environment === 'processing') {
-            for (const [key, pos] of Object.entries(processingPositions)) {
-              if (machineName.includes(key)) return pos;
-            }
-            // Default processing position - right side center
-            return { x: 12 + (envIndex % 3) * 4, z: -6 + Math.floor(envIndex / 3) * 4 };
+            // Column 6: Processing equipment
+            return { x: 23.5, z: 16.5 - (envIndex * 6) };
           }
           
           if (machine.environment === 'packaging') {
-            for (const [key, pos] of Object.entries(packagingPositions)) {
-              if (machineName.includes(key)) return pos;
-            }
-            // Default packaging position - distributed across bottom section
-            return { x: -22 + (envIndex % 6) * 7, z: 12 + Math.floor(envIndex / 6) * 4 };
+            // Columns 3-5: Packaging operations
+            return { x: -13 + (envIndex % 3) * 11.5, z: 16.5 - (Math.floor(envIndex / 3) * 8) };
           }
           
           // Enhanced fallback with machine name analysis for better positioning

@@ -28946,3 +28946,82 @@
 2025-08-15T23:19:28: 🔓 Client released back to pool
 2025-08-15T23:19:58: 🔗 Client acquired from pool
 2025-08-15T23:19:58: 🔓 Client released back to pool
+2025-08-15T23:20:28: ✅ New PostgreSQL client connected
+2025-08-15T23:20:28: 🔗 Client acquired from pool
+2025-08-15T23:20:28: 🔓 Client released back to pool
+2025-08-15T23:20:58: ✅ New PostgreSQL client connected
+2025-08-15T23:20:58: 🔗 Client acquired from pool
+2025-08-15T23:20:59: 🔓 Client released back to pool
+2025-08-15T23:21:28: 🔗 Client acquired from pool
+2025-08-15T23:21:28: 🔓 Client released back to pool
+2025-08-15T23:22:35: ✅ New PostgreSQL client connected
+2025-08-15T23:22:35: 🔗 Client acquired from pool
+2025-08-15T23:22:36: 🔓 Client released back to pool
+2025-08-15T23:23:35: ✅ New PostgreSQL client connected
+2025-08-15T23:23:36: 🔗 Client acquired from pool
+2025-08-15T23:23:36: 🔓 Client released back to pool
+2025-08-15T23:24:35: ✅ New PostgreSQL client connected
+2025-08-15T23:24:35: 🔗 Client acquired from pool
+2025-08-15T23:24:35: 🔓 Client released back to pool
+2025-08-15T23:25:35: ✅ New PostgreSQL client connected
+2025-08-15T23:25:35: 🔗 Client acquired from pool
+2025-08-15T23:25:35: 🔓 Client released back to pool
+2025-08-15T23:25:40: 🌐 WebSocket server initialized
+2025-08-15T23:25:40: 🧹 WebSocket cleanup scheduler started
+2025-08-15T23:25:40: 🧪 Testing refactored components...
+2025-08-15T23:25:40: 🚀 Production refactored server running on port 3000
+2025-08-15T23:25:40: 📊 Health check: http://localhost:3000/api/health
+2025-08-15T23:25:40: 🔐 Auth test: http://localhost:3000/api/auth/login
+2025-08-15T23:25:40: ⚙️ System routes: http://localhost:3000/api/system/health
+2025-08-15T23:25:40: 🌐 WebSocket server initialized and ready
+2025-08-15T23:25:40: ✅ New PostgreSQL client connected
+2025-08-15T23:25:40: 🔗 Client acquired from pool
+2025-08-15T23:25:40: 🔓 Client released back to pool
+2025-08-15T23:25:40: ✅ Database connection: OK
+2025-08-15T23:25:40: ✅ Authentication middleware: OK
+2025-08-15T23:25:40: ✅ Response utilities: OK
+2025-08-15T23:25:40: ✅ Database utilities: OK
+2025-08-15T23:25:40: 🎉 All components tested successfully!
+2025-08-15T23:25:40: ✅ All components tested successfully
+2025-08-15T23:25:51: 🔗 Client acquired from pool
+2025-08-15T23:25:51: 🔓 Client released back to pool
+2025-08-15T23:26:08: 🔗 Client acquired from pool
+2025-08-15T23:26:08: 🔓 Client released back to pool
+2025-08-15T23:26:08: ✅ New PostgreSQL client connected
+2025-08-15T23:26:08: 🔗 Client acquired from pool
+2025-08-15T23:26:08: 🔓 Client released back to pool
+2025-08-15T23:26:08: 🔗 Client acquired from pool
+2025-08-15T23:26:08: 🔓 Client released back to pool
+2025-08-15T23:26:08: 🔗 Client acquired from pool
+2025-08-15T23:26:08: 🔓 Client released back to pool
+2025-08-15T23:26:09: New WebSocket connection attempt
+2025-08-15T23:26:09: ✅ WebSocket authenticated: admin (admin)
+2025-08-15T23:26:09: 🔗 Client acquired from pool
+2025-08-15T23:26:09: 🔓 Client released back to pool
+2025-08-15T23:26:09: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-15T23:26:09: 🏠 admin joined room: production
+2025-08-15T23:29:47: 🌐 WebSocket server initialized
+2025-08-15T23:29:47: 🧹 WebSocket cleanup scheduler started
+2025-08-15T23:29:47: 🧪 Testing refactored components...
+2025-08-15T23:29:47: 🚀 Production refactored server running on port 3000
+2025-08-15T23:29:47: 📊 Health check: http://localhost:3000/api/health
+2025-08-15T23:29:47: 🔐 Auth test: http://localhost:3000/api/auth/login
+2025-08-15T23:29:47: ⚙️ System routes: http://localhost:3000/api/system/health
+2025-08-15T23:29:47: 🌐 WebSocket server initialized and ready
+2025-08-15T23:29:47: ✅ New PostgreSQL client connected
+2025-08-15T23:29:47: 🔗 Client acquired from pool
+2025-08-15T23:29:47: 🔓 Client released back to pool
+2025-08-15T23:29:47: ✅ Database connection: OK
+2025-08-15T23:29:47: ✅ Authentication middleware: OK
+2025-08-15T23:29:47: ✅ Response utilities: OK
+2025-08-15T23:29:47: ✅ Database utilities: OK
+2025-08-15T23:29:47: 🎉 All components tested successfully!
+2025-08-15T23:29:47: ✅ All components tested successfully
