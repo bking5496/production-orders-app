@@ -99,12 +99,12 @@ const UltraKPICard = ({ title, value, change, icon: Icon, color = "blue", target
       text: 'text-orange-700',
       accent: 'border-orange-300'
     },
-    pink: {
-      bg: 'from-pink-500 to-rose-500',
-      shadow: 'shadow-pink-200',
-      glow: 'bg-pink-100',
-      text: 'text-pink-700',
-      accent: 'border-pink-300'
+    red: {
+      bg: 'from-red-600 to-red-700',
+      shadow: 'shadow-red-300',
+      glow: 'bg-red-100',
+      text: 'text-red-700',
+      accent: 'border-red-300'
     }
   };
 
@@ -166,14 +166,20 @@ const UltraKPICard = ({ title, value, change, icon: Icon, color = "blue", target
 
         {/* Title */}
         <h3 className="text-sm font-semibold text-gray-600 mb-2 group-hover:text-gray-800 transition-colors">
-          {title}
+          {title || 'Loading...'}
         </h3>
 
         {/* Main Value with Animation */}
         <div className="mb-3">
           <div className={`text-3xl font-bold ${config.text} group-hover:text-4xl transition-all duration-300`}>
-            <AnimatedCounter value={parseInt(value) || 0} />
-            {typeof value === 'string' && value.includes('%') && '%'}
+            {value !== undefined && value !== null ? (
+              <>
+                <AnimatedCounter value={parseInt(value) || 0} />
+                {typeof value === 'string' && value.includes('%') && '%'}
+              </>
+            ) : (
+              <span className="text-gray-400">--</span>
+            )}
           </div>
         </div>
 
@@ -250,25 +256,25 @@ const EnhancedAlertCard = ({ alert, index }) => {
 
   const severityConfig = {
     critical: { 
-      bg: 'from-red-500 to-pink-500', 
-      border: 'border-red-300', 
+      bg: 'from-red-600 to-red-700', 
+      border: 'border-red-400', 
       icon: AlertTriangle, 
       pulse: true,
-      glow: 'shadow-red-200'
+      glow: 'shadow-red-300'
     },
     warning: { 
-      bg: 'from-yellow-500 to-orange-500', 
-      border: 'border-yellow-300', 
+      bg: 'from-yellow-600 to-orange-600', 
+      border: 'border-yellow-400', 
       icon: Clock, 
       pulse: false,
-      glow: 'shadow-yellow-200'
+      glow: 'shadow-yellow-300'
     },
     info: { 
-      bg: 'from-blue-500 to-cyan-500', 
-      border: 'border-blue-300', 
+      bg: 'from-blue-600 to-blue-700', 
+      border: 'border-blue-400', 
       icon: Bell, 
       pulse: false,
-      glow: 'shadow-blue-200'
+      glow: 'shadow-blue-300'
     }
   };
 
