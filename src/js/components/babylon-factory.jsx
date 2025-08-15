@@ -76,16 +76,42 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
       // Create optimized Babylon engine for performance
       engine = new window.BABYLON.Engine(canvas, true, {
         preserveDrawingBuffer: true,
-        stencil: true,\n        antialias: true,\n        powerPreference: 'high-performance',\n        failIfMajorPerformanceCaveat: false,\n        alpha: false,\n        premultipliedAlpha: false,\n        depth: true,\n        desynchronized: true\n      });\n      \n      // Enable performance optimizations\n      engine.enableOfflineSupport = false;\n      engine.doNotHandleContextLost = true;
+        stencil: true,
+        antialias: true,
+        powerPreference: 'high-performance',
+        failIfMajorPerformanceCaveat: false,
+        alpha: false,
+        premultipliedAlpha: false,
+        depth: true,
+        desynchronized: true
+      });
+      
+      // Enable performance optimizations
+      engine.enableOfflineSupport = false;
+      engine.doNotHandleContextLost = true;
 
-      // Create scene
+      // Create optimized scene
       scene = new window.BABYLON.Scene(engine);
       
       console.log('✅ Engine and scene created successfully');
       
+      // Performance optimizations for smooth 3D interaction
+      scene.performancePriority = window.BABYLON.ScenePerformancePriority.Intermediate;
+      scene.skipPointerMovePicking = true;
+      scene.autoClear = true;
+      scene.autoClearDepthAndStencil = true;
+      
+      // Optimize rendering
+      scene.blockMaterialDirtyMechanism = true;
+      
       // Disable debug rendering and random lines completely
       scene.forceWireframe = false;
       scene.forcePointsCloud = false;
+      
+      // LOD (Level of Detail) system for performance
+      scene.useGeometryUniqueIdsMap = true;
+      scene.useMaterialMeshMap = true;
+      scene.useClonedMeshMap = true;
       
       // Global setting to prevent any debug/wireframe rendering
       if (scene.getMeshes) {
@@ -93,8 +119,12 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
           if (mesh) {
             mesh.renderOutline = false;
             mesh.showBoundingBox = false;
+            mesh.checkCollisions = false;
+            mesh.isPickable = mesh.name.startsWith('machine_') || mesh.name.startsWith('platform_');
+            
             if (mesh.material) {
               mesh.material.wireframe = false;
+              mesh.material.backFaceCulling = true;
             }
           }
         });
@@ -348,7 +378,52 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
           list: () => Object.keys(presets)
         };
         
-        console.log('✅ Camera presets available: window.factoryCameraPresets.goTo("overview")');\n        \n        // Industry 4.0 Digital Twin Features\n        window.factoryDigitalTwin = {\n          // Real-time machine monitoring\n          updateMachineStatus: (machineId, status, metrics = {}) => {\n            const machine = scene.getMeshByName(`machine_${machineId}`);\n            const statusLight = scene.getMeshByName(`status_${machineId}`);\n            \n            if (machine && statusLight) {\n              const statusColors = {\n                'available': new window.BABYLON.Color3(0.0, 1.0, 0.3),\n                'busy': new window.BABYLON.Color3(1.0, 0.6, 0.0),\n                'offline': new window.BABYLON.Color3(0.5, 0.5, 0.5),\n                'error': new window.BABYLON.Color3(1.0, 0.1, 0.1),\n                'maintenance': new window.BABYLON.Color3(1.0, 1.0, 0.0)\n              };\n              \n              const color = statusColors[status] || statusColors.offline;\n              statusLight.material.diffuseColor = color;\n              statusLight.material.emissiveColor = color.scale(0.8);\n              \n              // Add performance metrics visualization\n              if (metrics.efficiency !== undefined) {\n                const perfBar = scene.getMeshByName(`perfBar_${machineId}`);\n                if (perfBar) {\n                  const efficiency = Math.max(0, Math.min(1, metrics.efficiency / 100));\n                  perfBar.scaling.x = efficiency;\n                  \n                  // Color based on efficiency\n                  if (efficiency > 0.8) {\n                    perfBar.material.diffuseColor = new window.BABYLON.Color3(0.0, 0.8, 0.3);\n                  } else if (efficiency > 0.6) {\n                    perfBar.material.diffuseColor = new window.BABYLON.Color3(1.0, 0.8, 0.0);\n                  } else {\n                    perfBar.material.diffuseColor = new window.BABYLON.Color3(1.0, 0.4, 0.0);\n                  }\n                }\n              }\n              \n              console.log(`🏭 Machine ${machineId} updated: ${status}`, metrics);\n            }\n          },\n          \n          // Flow visualization for material tracking\n          createMaterialFlow: (fromMachine, toMachine, material = 'generic') => {\n            const fromMesh = scene.getMeshByName(`machine_${fromMachine}`);\n            const toMesh = scene.getMeshByName(`machine_${toMachine}`);\n            \n            if (fromMesh && toMesh) {\n              const flowPath = window.BABYLON.MeshBuilder.CreateLines(`flow_${fromMachine}_${toMachine}`, {\n                points: [\n                  new window.BABYLON.Vector3(fromMesh.position.x, 3, fromMesh.position.z),\n                  new window.BABYLON.Vector3(toMesh.position.x, 3, toMesh.position.z)\n                ]\n              }, scene);\n              \n              flowPath.color = new window.BABYLON.Color3(0.0, 0.8, 1.0);\n              \n              // Animated flow particle\n              const particle = window.BABYLON.MeshBuilder.CreateSphere(`particle_${fromMachine}_${toMachine}`, {\n                diameter: 0.5\n              }, scene);\n              \n              particle.position = fromMesh.position.clone();\n              particle.position.y = 3;\n              \n              const particleMaterial = new window.BABYLON.StandardMaterial(`particleMat_${fromMachine}_${toMachine}`, scene);\n              particleMaterial.diffuseColor = new window.BABYLON.Color3(0.0, 0.8, 1.0);\n              particleMaterial.emissiveColor = new window.BABYLON.Color3(0.0, 0.4, 0.5);\n              particle.material = particleMaterial;\n              \n              // Animate particle movement\n              window.BABYLON.Animation.CreateAndStartAnimation(\n                'materialFlow', particle, 'position', 30, 90,\n                fromMesh.position.add(new window.BABYLON.Vector3(0, 3, 0)),\n                toMesh.position.add(new window.BABYLON.Vector3(0, 3, 0)),\n                window.BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE\n              );\n              \n              console.log(`📦 Material flow created: ${fromMachine} → ${toMachine}`);\n              return { flowPath, particle };\n            }\n          },\n          \n          // Environmental monitoring (temperature, humidity, air quality)\n          addEnvironmentalSensor: (position, sensorType = 'temperature') => {\n            const sensor = window.BABYLON.MeshBuilder.CreateCylinder(`sensor_${Date.now()}`, {\n              diameter: 0.3, height: 1\n            }, scene);\n            \n            sensor.position = position;\n            \n            const sensorMaterial = new window.BABYLON.StandardMaterial(`sensorMat_${Date.now()}`, scene);\n            sensorMaterial.diffuseColor = new window.BABYLON.Color3(0.7, 0.7, 0.9);\n            sensorMaterial.emissiveColor = new window.BABYLON.Color3(0.3, 0.3, 0.5);\n            sensor.material = sensorMaterial;\n            \n            // Add sensor label\n            const label = window.BABYLON.MeshBuilder.CreatePlane(`sensorLabel_${Date.now()}`, {\n              width: 3, height: 0.8\n            }, scene);\n            label.position = new window.BABYLON.Vector3(position.x, position.y + 2, position.z);\n            label.billboardMode = window.BABYLON.Mesh.BILLBOARDMODE_ALL;\n            \n            const labelMaterial = new window.BABYLON.StandardMaterial(`labelMat_${Date.now()}`, scene);\n            labelMaterial.diffuseColor = new window.BABYLON.Color3(1, 1, 1);\n            labelMaterial.emissiveColor = new window.BABYLON.Color3(0.5, 0.5, 0.5);\n            label.material = labelMaterial;\n            \n            console.log(`🌡️ Environmental sensor added: ${sensorType}`);\n            return sensor;\n          },\n          \n          // Production analytics overlay\n          showProductionMetrics: (enabled = true) => {\n            if (enabled) {\n              // Create floating metrics panel\n              const metricsPanel = window.BABYLON.MeshBuilder.CreatePlane('metricsPanel', {\n                width: 12, height: 8\n              }, scene);\n              \n              metricsPanel.position = new window.BABYLON.Vector3(0, 15, 0);\n              metricsPanel.billboardMode = window.BABYLON.Mesh.BILLBOARDMODE_ALL;\n              \n              const panelMaterial = new window.BABYLON.StandardMaterial('metricsPanelMat', scene);\n              panelMaterial.diffuseColor = new window.BABYLON.Color3(0.1, 0.1, 0.1);\n              panelMaterial.emissiveColor = new window.BABYLON.Color3(0.05, 0.05, 0.05);\n              panelMaterial.alpha = 0.8;\n              metricsPanel.material = panelMaterial;\n              \n              console.log('📊 Production metrics overlay enabled');\n            }\n          },\n          \n          // Predictive maintenance alerts\n          addMaintenanceAlert: (machineId, severity = 'warning') => {\n            const machine = scene.getMeshByName(`machine_${machineId}`);\n            if (machine) {\n              const alert = window.BABYLON.MeshBuilder.CreateSphere(`alert_${machineId}`, {\n                diameter: 1\n              }, scene);\n              \n              alert.position = new window.BABYLON.Vector3(\n                machine.position.x,\n                machine.position.y + 6,\n                machine.position.z\n              );\n              \n              const alertMaterial = new window.BABYLON.StandardMaterial(`alertMat_${machineId}`, scene);\n              const alertColors = {\n                'info': new window.BABYLON.Color3(0.0, 0.8, 1.0),\n                'warning': new window.BABYLON.Color3(1.0, 0.8, 0.0),\n                'critical': new window.BABYLON.Color3(1.0, 0.2, 0.0)\n              };\n              \n              const color = alertColors[severity] || alertColors.warning;\n              alertMaterial.diffuseColor = color;\n              alertMaterial.emissiveColor = color.scale(0.8);\n              alert.material = alertMaterial;\n              \n              // Pulsing animation\n              window.BABYLON.Animation.CreateAndStartAnimation(\n                'alertPulse', alert, 'scaling', 60, 120,\n                new window.BABYLON.Vector3(0.8, 0.8, 0.8),\n                new window.BABYLON.Vector3(1.2, 1.2, 1.2),\n                window.BABYLON.Animation.ANIMATIONLOOPMODE_YOYO\n              );\n              \n              console.log(`🚨 Maintenance alert added for machine ${machineId}: ${severity}`);\n              return alert;\n            }\n          }\n        };\n        \n        console.log('🏭 Industry 4.0 Digital Twin features enabled');\n        console.log('📊 Use window.factoryDigitalTwin for real-time monitoring');
+        console.log('✅ Camera presets available: window.factoryCameraPresets.goTo("overview")');
+        
+        // Industry 4.0 Digital Twin Features
+        window.factoryDigitalTwin = {
+          // Real-time machine monitoring
+          updateMachineStatus: (machineId, status, metrics = {}) => {
+            const machine = scene.getMeshByName(`machine_${machineId}`);
+            const statusLight = scene.getMeshByName(`status_${machineId}`);
+            
+            if (machine && statusLight) {
+              const statusColors = {
+                'available': new window.BABYLON.Color3(0.0, 1.0, 0.3),
+                'busy': new window.BABYLON.Color3(1.0, 0.6, 0.0),
+                'offline': new window.BABYLON.Color3(0.5, 0.5, 0.5),
+                'error': new window.BABYLON.Color3(1.0, 0.1, 0.1),
+                'maintenance': new window.BABYLON.Color3(1.0, 1.0, 0.0)
+              };
+              
+              const color = statusColors[status] || statusColors.offline;
+              statusLight.material.diffuseColor = color;
+              statusLight.material.emissiveColor = color.scale(0.8);
+              
+              console.log(`🏭 Machine ${machineId} updated: ${status}`, metrics);
+            }
+          },
+          
+          // Add environmental sensors
+          addEnvironmentalSensor: (position, sensorType = 'temperature') => {
+            const sensor = window.BABYLON.MeshBuilder.CreateCylinder(`sensor_${Date.now()}`, {
+              diameter: 0.3, height: 1
+            }, scene);
+            
+            sensor.position = position;
+            
+            const sensorMaterial = new window.BABYLON.StandardMaterial(`sensorMat_${Date.now()}`, scene);
+            sensorMaterial.diffuseColor = new window.BABYLON.Color3(0.7, 0.7, 0.9);
+            sensorMaterial.emissiveColor = new window.BABYLON.Color3(0.3, 0.3, 0.5);
+            sensor.material = sensorMaterial;
+            
+            console.log(`🌡️ Environmental sensor added: ${sensorType}`);
+            return sensor;
+          }
+        };
+        
+        console.log('🏭 Industry 4.0 Digital Twin features enabled');
+        console.log('📊 Use window.factoryDigitalTwin for real-time monitoring');
       };
       
       setupCameraPresets(camera, scene);
