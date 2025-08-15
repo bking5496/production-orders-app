@@ -79,6 +79,23 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
 
       // Create scene
       scene = new window.BABYLON.Scene(engine);
+      
+      // Disable debug rendering and random lines completely
+      scene.forceWireframe = false;
+      scene.forcePointsCloud = false;
+      
+      // Global setting to prevent any debug/wireframe rendering
+      if (scene.getMeshes) {
+        scene.onNewMeshAddedObservable.add((mesh) => {
+          if (mesh) {
+            mesh.renderOutline = false;
+            mesh.showBoundingBox = false;
+            if (mesh.material) {
+              mesh.material.wireframe = false;
+            }
+          }
+        });
+      }
 
       // Setup camera with proper checks for large factory complex
       const camera = new window.BABYLON.ArcRotateCamera(
@@ -136,7 +153,10 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
       const factoryMaterial = new window.BABYLON.StandardMaterial('factoryMaterial', scene);
       factoryMaterial.diffuseColor = new window.BABYLON.Color3(0.15, 0.2, 0.25); // Dark industrial concrete
       factoryMaterial.specularColor = new window.BABYLON.Color3(0.1, 0.1, 0.1);
+      factoryMaterial.wireframe = false; // Explicitly disable wireframe
       factoryFloor.material = factoryMaterial;
+      factoryFloor.renderOutline = false;
+      factoryFloor.showBoundingBox = false;
 
       // Create inbound warehouse floor (42.4m x 37m) - LEFT side when facing front
       const inboundFloor = window.BABYLON.MeshBuilder.CreateGround('inboundFloor', {
@@ -146,7 +166,10 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
       
       const warehouseMaterial = new window.BABYLON.StandardMaterial('warehouseMaterial', scene);
       warehouseMaterial.diffuseColor = new window.BABYLON.Color3(0.25, 0.25, 0.3); // Lighter warehouse concrete
+      warehouseMaterial.wireframe = false; // Explicitly disable wireframe
       inboundFloor.material = warehouseMaterial;
+      inboundFloor.renderOutline = false;
+      inboundFloor.showBoundingBox = false;
 
       // Create rebate store floor (37.6m x 37m)
       const rebateFloor = window.BABYLON.MeshBuilder.CreateGround('rebateFloor', {
@@ -156,7 +179,10 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
       
       const rebateMaterial = new window.BABYLON.StandardMaterial('rebateMaterial', scene);
       rebateMaterial.diffuseColor = new window.BABYLON.Color3(0.2, 0.3, 0.2); // Greenish storage area
+      rebateMaterial.wireframe = false; // Explicitly disable wireframe
       rebateFloor.material = rebateMaterial;
+      rebateFloor.renderOutline = false;
+      rebateFloor.showBoundingBox = false;
 
       // Create outbound warehouse floor (80m x 29m) - RIGHT side when facing front  
       const outboundFloor = window.BABYLON.MeshBuilder.CreateGround('outboundFloor', {
@@ -164,6 +190,8 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
       }, scene);
       outboundFloor.position = new window.BABYLON.Vector3(61.2, 0, 2); // Right of factory (moved from south to right)
       outboundFloor.material = warehouseMaterial;
+      outboundFloor.renderOutline = false;
+      outboundFloor.showBoundingBox = false;
 
       // Create perimeter walls for entire complex
       const walls = [
@@ -495,7 +523,10 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
           material.emissiveColor = statusColor.scale(0.1);
           material.specularColor = new window.BABYLON.Color3(0.5, 0.5, 0.5);
           material.roughness = 0.3;
+          material.wireframe = false; // Disable wireframe on machines
           mainBody.material = material;
+          mainBody.renderOutline = false;
+          mainBody.showBoundingBox = false;
         }
 
         // Add machine name label
