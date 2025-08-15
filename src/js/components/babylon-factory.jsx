@@ -138,11 +138,11 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
       factoryMaterial.specularColor = new window.BABYLON.Color3(0.1, 0.1, 0.1);
       factoryFloor.material = factoryMaterial;
 
-      // Create inbound warehouse floor (42.4m x 37m)
+      // Create inbound warehouse floor (42.4m x 37m) - LEFT side when facing front
       const inboundFloor = window.BABYLON.MeshBuilder.CreateGround('inboundFloor', {
         width: inboundLength, height: warehouseWidth
       }, scene);
-      inboundFloor.position = new window.BABYLON.Vector3(-61.2, 0, 2); // Left of factory
+      inboundFloor.position = new window.BABYLON.Vector3(-61.2, 0, 2); // Left of factory (correct)
       
       const warehouseMaterial = new window.BABYLON.StandardMaterial('warehouseMaterial', scene);
       warehouseMaterial.diffuseColor = new window.BABYLON.Color3(0.25, 0.25, 0.3); // Lighter warehouse concrete
@@ -158,38 +158,39 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
       rebateMaterial.diffuseColor = new window.BABYLON.Color3(0.2, 0.3, 0.2); // Greenish storage area
       rebateFloor.material = rebateMaterial;
 
-      // Create outbound warehouse floor (80m x 29m)
+      // Create outbound warehouse floor (80m x 29m) - RIGHT side when facing front  
       const outboundFloor = window.BABYLON.MeshBuilder.CreateGround('outboundFloor', {
         width: factoryLength, height: outboundDepth
       }, scene);
-      outboundFloor.position = new window.BABYLON.Vector3(0, 0, 31); // South of factory
+      outboundFloor.position = new window.BABYLON.Vector3(61.2, 0, 2); // Right of factory (moved from south to right)
       outboundFloor.material = warehouseMaterial;
 
       // Create perimeter walls for entire complex
       const walls = [
         // Main factory walls
         { name: 'factoryNorth', pos: [0, wallHeight/2, -factoryWidth/2], size: [factoryLength, wallHeight, wallThickness] },
-        { name: 'factoryEast', pos: [factoryLength/2, wallHeight/2, 0], size: [wallThickness, wallHeight, factoryWidth] },
+        { name: 'factorySouth', pos: [0, wallHeight/2, factoryWidth/2], size: [factoryLength, wallHeight, wallThickness] },
         
-        // Inbound warehouse walls
+        // Inbound warehouse walls (LEFT side)
         { name: 'inboundNorth', pos: [-61.2, wallHeight/2, -16.5], size: [inboundLength, wallHeight, wallThickness] },
         { name: 'inboundSouth', pos: [-61.2, wallHeight/2, 20.5], size: [inboundLength, wallHeight, wallThickness] },
         { name: 'inboundWest', pos: [-82.6, wallHeight/2, 2], size: [wallThickness, wallHeight, warehouseWidth] },
         
-        // Rebate store walls
+        // Rebate store walls (FAR LEFT)
         { name: 'rebateNorth', pos: [-100.8, wallHeight/2, -16.5], size: [rebateLength, wallHeight, wallThickness] },
         { name: 'rebateSouth', pos: [-100.8, wallHeight/2, 20.5], size: [rebateLength, wallHeight, wallThickness] },
         { name: 'rebateWest', pos: [-119.6, wallHeight/2, 2], size: [wallThickness, wallHeight, warehouseWidth] },
         
-        // Outbound warehouse walls
-        { name: 'outboundSouth', pos: [0, wallHeight/2, 45.5], size: [factoryLength, wallHeight, wallThickness] },
-        { name: 'outboundEast', pos: [factoryLength/2, wallHeight/2, 31], size: [wallThickness, wallHeight, outboundDepth] },
-        { name: 'outboundWest', pos: [-factoryLength/2, wallHeight/2, 31], size: [wallThickness, wallHeight, outboundDepth] }
+        // Outbound warehouse walls (RIGHT side)
+        { name: 'outboundNorth', pos: [61.2, wallHeight/2, -16.5], size: [factoryLength, wallHeight, wallThickness] },
+        { name: 'outboundSouth', pos: [61.2, wallHeight/2, 20.5], size: [factoryLength, wallHeight, wallThickness] },
+        { name: 'outboundEast', pos: [101.2, wallHeight/2, 2], size: [wallThickness, wallHeight, warehouseWidth] }
       ];
 
-      // Create wall material
+      // Create wall material - more subtle appearance
       const wallMaterial = new window.BABYLON.StandardMaterial('wallMaterial', scene);
-      wallMaterial.diffuseColor = new window.BABYLON.Color3(0.9, 0.9, 0.9);
+      wallMaterial.diffuseColor = new window.BABYLON.Color3(0.4, 0.4, 0.4); // Darker walls
+      wallMaterial.alpha = 0.3; // Semi-transparent to reduce visibility
 
       // Build all walls
       walls.forEach(wall => {

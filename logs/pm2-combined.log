@@ -26897,3 +26897,93 @@
   'analytics'
 ]
 2025-08-15T17:59:58: 🏠 admin joined room: production
+2025-08-15T18:00:01: 🔗 Client acquired from pool
+2025-08-15T18:00:01: 🔓 Client released back to pool
+2025-08-15T18:00:07: 🔗 Client acquired from pool
+2025-08-15T18:00:07: 🔓 Client released back to pool
+2025-08-15T18:00:07: Error occurred: {
+  error: 'Cannot update machine while in use',
+  stack: 'ValidationError: Cannot update machine while in use\n' +
+    '    at MachinesService.updateMachine (/home/production-app/production-orders-app/src/services/machines.service.js:128:13)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:146:28',
+  url: '/api/machines/26',
+  method: 'PUT',
+  user: 'admin',
+  timestamp: '2025-08-15T16:00:07.857Z'
+}
+2025-08-15T18:00:28: 🔗 Client acquired from pool
+2025-08-15T18:00:28: 🔓 Client released back to pool
+2025-08-15T18:00:58: 🔗 Client acquired from pool
+2025-08-15T18:00:58: 🔓 Client released back to pool
+2025-08-15T18:01:28: 🔗 Client acquired from pool
+2025-08-15T18:01:28: 🔓 Client released back to pool
+2025-08-15T18:01:58: ✅ New PostgreSQL client connected
+2025-08-15T18:01:58: 🔗 Client acquired from pool
+2025-08-15T18:01:58: 🔓 Client released back to pool
+2025-08-15T18:02:28: 🔗 Client acquired from pool
+2025-08-15T18:02:28: 🔓 Client released back to pool
+2025-08-15T18:02:58: 🔗 Client acquired from pool
+2025-08-15T18:02:58: 🔓 Client released back to pool
+2025-08-15T18:03:28: 🔗 Client acquired from pool
+2025-08-15T18:03:28: 🔓 Client released back to pool
+2025-08-15T18:03:58: ✅ New PostgreSQL client connected
+2025-08-15T18:03:58: 🔗 Client acquired from pool
+2025-08-15T18:03:58: 🔓 Client released back to pool
+2025-08-15T18:04:28: 🔗 Client acquired from pool
+2025-08-15T18:04:28: 🔓 Client released back to pool
+2025-08-15T18:04:30: ValidationError: The 'X-Forwarded-For' header is set but the Express 'trust proxy' setting is false (default). This could indicate a misconfiguration which would prevent express-rate-limit from accurately identifying users. See https://express-rate-limit.github.io/ERR_ERL_UNEXPECTED_X_FORWARDED_FOR/ for more information.
+    at Object.xForwardedForHeader (/home/production-app/production-orders-app/node_modules/express-rate-limit/dist/index.cjs:185:13)
+    at wrappedValidations.<computed> [as xForwardedForHeader] (/home/production-app/production-orders-app/node_modules/express-rate-limit/dist/index.cjs:397:22)
+    at Object.keyGenerator (/home/production-app/production-orders-app/node_modules/express-rate-limit/dist/index.cjs:658:20)
+    at /home/production-app/production-orders-app/node_modules/express-rate-limit/dist/index.cjs:710:32
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async /home/production-app/production-orders-app/node_modules/express-rate-limit/dist/index.cjs:691:5 {
+  code: 'ERR_ERL_UNEXPECTED_X_FORWARDED_FOR',
+  help: 'https://express-rate-limit.github.io/ERR_ERL_UNEXPECTED_X_FORWARDED_FOR/'
+}
+2025-08-15T18:04:30: 🔗 Client acquired from pool
+2025-08-15T18:04:30: 🔓 Client released back to pool
+2025-08-15T18:04:30: 🔗 Client acquired from pool
+2025-08-15T18:04:30: 🔓 Client released back to pool
+2025-08-15T18:04:30: ✅ Auth success: admin from ::1 - curl/8.5.0
+2025-08-15T18:04:31: 🔗 Client acquired from pool
+2025-08-15T18:04:31: 🔓 Client released back to pool
+2025-08-15T18:04:58: 🔗 Client acquired from pool
+2025-08-15T18:04:58: 🔓 Client released back to pool
+2025-08-15T18:05:28: ✅ New PostgreSQL client connected
+2025-08-15T18:05:28: 🔗 Client acquired from pool
+2025-08-15T18:05:28: 🔓 Client released back to pool
+2025-08-15T18:05:59: ✅ New PostgreSQL client connected
+2025-08-15T18:05:59: 🔗 Client acquired from pool
+2025-08-15T18:05:59: 🔓 Client released back to pool
+2025-08-15T18:06:35: ✅ New PostgreSQL client connected
+2025-08-15T18:06:35: 🔗 Client acquired from pool
+2025-08-15T18:06:35: 🔓 Client released back to pool
+2025-08-15T18:06:58: 🔗 Client acquired from pool
+2025-08-15T18:06:58: 🔓 Client released back to pool
+2025-08-15T18:07:28: 🔗 Client acquired from pool
+2025-08-15T18:07:28: 🔓 Client released back to pool
+2025-08-15T18:08:35: ✅ New PostgreSQL client connected
+2025-08-15T18:08:35: 🔗 Client acquired from pool
+2025-08-15T18:08:35: 🔓 Client released back to pool
+2025-08-15T18:09:35: ✅ New PostgreSQL client connected
+2025-08-15T18:09:35: 🔗 Client acquired from pool
+2025-08-15T18:09:35: 🔓 Client released back to pool
+2025-08-15T18:09:59: 🌐 WebSocket server initialized
+2025-08-15T18:09:59: 🧹 WebSocket cleanup scheduler started
+2025-08-15T18:09:59: 🧪 Testing refactored components...
+2025-08-15T18:09:59: 🚀 Production refactored server running on port 3000
+2025-08-15T18:09:59: 📊 Health check: http://localhost:3000/api/health
+2025-08-15T18:09:59: 🔐 Auth test: http://localhost:3000/api/auth/login
+2025-08-15T18:09:59: ⚙️ System routes: http://localhost:3000/api/system/health
+2025-08-15T18:09:59: 🌐 WebSocket server initialized and ready
+2025-08-15T18:09:59: ✅ New PostgreSQL client connected
+2025-08-15T18:09:59: 🔗 Client acquired from pool
+2025-08-15T18:09:59: 🔓 Client released back to pool
+2025-08-15T18:09:59: ✅ Database connection: OK
+2025-08-15T18:09:59: ✅ Authentication middleware: OK
+2025-08-15T18:09:59: ✅ Response utilities: OK
+2025-08-15T18:09:59: ✅ Database utilities: OK
+2025-08-15T18:09:59: 🎉 All components tested successfully!
+2025-08-15T18:09:59: ✅ All components tested successfully
