@@ -70,6 +70,8 @@ const LaborPlanner = ({ currentUser }) => {
   const [showShiftCycleModal, setShowShiftCycleModal] = useState(false);
   const [selectedCycleMachine, setSelectedCycleMachine] = useState(null);
   const [shiftMode, setShiftMode] = useState('manual'); // 'manual' or 'cycle'
+  const [showCrewManagementModal, setShowCrewManagementModal] = useState(false);
+  const [selectedCrewMachine, setSelectedCrewMachine] = useState(null);
 
   // Fetch machines with 2-2-2 shift cycles enabled
   const fetchShiftCycleMachines = async () => {
@@ -97,10 +99,56 @@ const LaborPlanner = ({ currentUser }) => {
     }
   };
 
+  // Manage crew assignments
+  const handleManageCrew = (machine) => {
+    setSelectedCrewMachine(machine);
+    setShowCrewManagementModal(true);
+  };
+
+  const addEmployeeToCrew = async (machineId, crewLetter, employeeId) => {
+    try {
+      const response = await API.post(`/machines/${machineId}/crews/${crewLetter}/employees`, {
+        employee_id: employeeId
+      });
+      
+      // Refresh the shift cycle machines to get updated crew data
+      fetchShiftCycleMachines();
+      alert('Employee added to crew successfully');
+    } catch (error) {
+      console.error('Failed to add employee to crew:', error);
+      alert('Failed to add employee to crew: ' + (error.response?.data?.error || error.message));
+    }
+  };
+
+  const removeEmployeeFromCrew = async (machineId, crewLetter, employeeId) => {
+    try {
+      await API.delete(`/machines/${machineId}/crews/${crewLetter}/employees/${employeeId}`);
+      
+      // Refresh the shift cycle machines to get updated crew data
+      fetchShiftCycleMachines();
+      alert('Employee removed from crew successfully');
+    } catch (error) {
+      console.error('Failed to remove employee from crew:', error);
+      alert('Failed to remove employee from crew: ' + (error.response?.data?.error || error.message));
+    }
+  };
+
   // Auto-assign crews based on 2-2-2 cycle
   const autoAssignShiftCycle = async (machine) => {
     if (!machine.crews?.length) {
       alert('Machine must have crews configured first. Please add crews to this machine.');
+      return;
+    }
+
+    // Check if crews have employees
+    const hasEmployees = machine.crews.some(crew => 
+      crew.employees && Array.isArray(crew.employees) && crew.employees.length > 0
+    );
+    
+    if (!hasEmployees) {
+      alert(`No employees assigned to crews for ${machine.name}. Please assign employees to crews first.`);
+      setSelectedCrewMachine(machine);
+      setShowCrewManagementModal(true);
       return;
     }
 
@@ -632,14 +680,25 @@ const LaborPlanner = ({ currentUser }) => {
                           }
                         </p>
                       </div>
-                      <Button
-                        onClick={() => autoAssignShiftCycle(machine)}
-                        size="sm"
-                        className="bg-green-500 hover:bg-green-600 text-white"
-                        leftIcon={<Play className="w-4 h-4" />}
-                      >
-                        Auto Assign
-                      </Button>
+                      <div className="flex gap-2">
+                        <Button
+                          onClick={() => handleManageCrew(machine)}
+                          size="sm"
+                          variant="outline"
+                          className="bg-blue-50 border-blue-200 text-blue-700 hover:bg-blue-100"
+                          leftIcon={<Users className="w-4 h-4" />}
+                        >
+                          Manage Crews
+                        </Button>
+                        <Button
+                          onClick={() => autoAssignShiftCycle(machine)}
+                          size="sm"
+                          className="bg-green-500 hover:bg-green-600 text-white"
+                          leftIcon={<Play className="w-4 h-4" />}
+                        >
+                          Auto Assign
+                        </Button>
+                      </div>
                     </div>
                     
                     {/* Crew Schedule Display */}
@@ -1194,6 +1253,126 @@ const LaborPlanner = ({ currentUser }) => {
                 </div>
               </div>
             </div>
+          </div>
+        </Modal>
+      )}
+
+      {/* Crew Management Modal */}
+      {showCrewManagementModal && selectedCrewMachine && (
+        <Modal
+          isOpen={showCrewManagementModal}
+          onClose={() => setShowCrewManagementModal(false)}
+          title={`Manage Crews - ${selectedCrewMachine.name}`}
+          size="lg"
+        >
+          <div className="space-y-6">
+            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-xl p-4 shadow-sm">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h4 className="font-semibold text-blue-900">2-2-2 Shift Cycle Crews</h4>
+                  <p className="text-sm text-blue-700 mt-1">
+                    Assign employees to crews for automatic shift rotation
+                  </p>
+                </div>
+                <div className="bg-blue-100 p-3 rounded-full">
+                  <Users className="w-6 h-6 text-blue-600" />
+                </div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {selectedCrewMachine.crews?.map(crew => (
+                <div key={crew.crew_letter} className="bg-white border-2 border-gray-100 rounded-xl p-4">
+                  <div className="flex items-center justify-between mb-4">
+                    <div>
+                      <h5 className="font-semibold text-gray-900">Crew {crew.crew_letter}</h5>
+                      <p className="text-xs text-gray-500">Offset: {crew.cycle_offset} days</p>
+                    </div>
+                    <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">
+                      {crew.employees?.length || 0} members
+                    </span>
+                  </div>
+
+                  {/* Current crew members */}
+                  <div className="space-y-2 mb-4">
+                    {crew.employees && crew.employees.length > 0 ? (
+                      crew.employees.map(employee => (
+                        <div key={employee.id} className="flex items-center justify-between bg-gray-50 rounded-lg p-2">
+                          <span className="text-sm font-medium text-gray-900">
+                            {formatUserDisplayName(employee)}
+                          </span>
+                          <button
+                            onClick={() => removeEmployeeFromCrew(selectedCrewMachine.id, crew.crew_letter, employee.id)}
+                            className="w-5 h-5 p-0 text-red-500 hover:text-red-700 hover:bg-red-50 border border-red-200 rounded-full flex items-center justify-center"
+                            title="Remove from crew"
+                          >
+                            <X className="w-3 h-3" />
+                          </button>
+                        </div>
+                      ))
+                    ) : (
+                      <p className="text-xs text-gray-400 text-center py-2">No employees assigned</p>
+                    )}
+                  </div>
+
+                  {/* Add employee section */}
+                  <div className="border-t pt-3">
+                    <h6 className="text-xs font-medium text-gray-700 mb-2">Add Employee</h6>
+                    <div className="space-y-2">
+                      {getFilteredEmployees()
+                        .filter(user => user.role !== 'supervisor' && user.role !== 'admin')
+                        .filter(user => !selectedCrewMachine.crews?.some(c => 
+                          c.employees?.some(emp => emp.id === user.id)
+                        ))
+                        .slice(0, 3)
+                        .map(user => (
+                          <div key={user.id} className="flex items-center justify-between p-2 bg-green-50 rounded-lg border border-green-100">
+                            <span className="text-xs font-medium text-gray-900">
+                              {formatUserDisplayName(user)}
+                            </span>
+                            <button
+                              onClick={() => addEmployeeToCrew(selectedCrewMachine.id, crew.crew_letter, user.id)}
+                              className="w-5 h-5 p-0 bg-green-500 text-white rounded-full hover:bg-green-600 flex items-center justify-center"
+                              title="Add to crew"
+                            >
+                              <Plus className="w-3 h-3" />
+                            </button>
+                          </div>
+                        ))}
+                      
+                      {getFilteredEmployees()
+                        .filter(user => user.role !== 'supervisor' && user.role !== 'admin')
+                        .filter(user => !selectedCrewMachine.crews?.some(c => 
+                          c.employees?.some(emp => emp.id === user.id)
+                        )).length === 0 && (
+                        <p className="text-xs text-gray-400 text-center py-1">No available employees</p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Instructions */}
+            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+              <h6 className="font-medium text-yellow-900 mb-2">2-2-2 Cycle Instructions</h6>
+              <div className="text-sm text-yellow-800 space-y-1">
+                <p>• <strong>Crew A:</strong> Starts on Day shift (0 offset)</p>
+                <p>• <strong>Crew B:</strong> Starts on Night shift (2 offset)</p>
+                <p>• <strong>Crew C:</strong> Starts on Rest (4 offset)</p>
+                <p>• Each crew works 2 days, then 2 nights, then 2 rest days</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex justify-end gap-3 mt-6">
+            <Button
+              onClick={() => setShowCrewManagementModal(false)}
+              variant="outline"
+              className="px-6 py-2.5 border-2 border-gray-200 hover:border-gray-300 rounded-xl font-medium"
+            >
+              Close
+            </Button>
           </div>
         </Modal>
       )}

@@ -398,6 +398,100 @@ class MachinesService {
       throw new Error('Failed to save machine crews: ' + error.message);
     }
   }
+
+  /**
+   * Add employee to a specific crew
+   */
+  async addEmployeeToCrew(machineId, crewLetter, employeeId, userId) {
+    try {
+      // First get the user's details
+      const user = await DatabaseUtils.findOne('users', { id: employeeId });
+      if (!user) {
+        throw new NotFoundError('Employee not found');
+      }
+
+      // Get current crew data
+      const crewResult = await DatabaseUtils.raw(`
+        SELECT employees FROM machine_crews 
+        WHERE machine_id = $1 AND crew_letter = $2
+      `, [machineId, crewLetter]);
+
+      let currentEmployees = [];
+      if (crewResult.rows.length > 0) {
+        currentEmployees = JSON.parse(crewResult.rows[0].employees || '[]');
+      }
+
+      // Check if employee is already in this crew
+      if (currentEmployees.some(emp => emp.id === parseInt(employeeId))) {
+        throw new ValidationError('Employee is already assigned to this crew');
+      }
+
+      // Add employee to the crew
+      const employeeData = {
+        id: parseInt(employeeId),
+        username: user.username,
+        full_name: user.full_name || user.username,
+        role: user.role
+      };
+      
+      currentEmployees.push(employeeData);
+
+      // Update or insert crew data
+      if (crewResult.rows.length > 0) {
+        await DatabaseUtils.raw(`
+          UPDATE machine_crews 
+          SET employees = $1, updated_at = NOW()
+          WHERE machine_id = $2 AND crew_letter = $3
+        `, [JSON.stringify(currentEmployees), machineId, crewLetter]);
+      } else {
+        // Create the crew if it doesn't exist
+        const crewOffsets = { 'A': 0, 'B': 2, 'C': 4 };
+        await DatabaseUtils.raw(`
+          INSERT INTO machine_crews (machine_id, crew_letter, cycle_offset, employees, created_by)
+          VALUES ($1, $2, $3, $4, $5)
+        `, [machineId, crewLetter, crewOffsets[crewLetter] || 0, JSON.stringify(currentEmployees), userId]);
+      }
+
+      return { success: true, message: 'Employee added to crew successfully' };
+    } catch (error) {
+      console.error('Error adding employee to crew:', error);
+      throw new Error('Failed to add employee to crew: ' + error.message);
+    }
+  }
+
+  /**
+   * Remove employee from a specific crew
+   */
+  async removeEmployeeFromCrew(machineId, crewLetter, employeeId, userId) {
+    try {
+      // Get current crew data
+      const crewResult = await DatabaseUtils.raw(`
+        SELECT employees FROM machine_crews 
+        WHERE machine_id = $1 AND crew_letter = $2
+      `, [machineId, crewLetter]);
+
+      if (crewResult.rows.length === 0) {
+        throw new NotFoundError('Crew not found');
+      }
+
+      let currentEmployees = JSON.parse(crewResult.rows[0].employees || '[]');
+      
+      // Remove employee from the crew
+      currentEmployees = currentEmployees.filter(emp => emp.id !== parseInt(employeeId));
+
+      // Update crew data
+      await DatabaseUtils.raw(`
+        UPDATE machine_crews 
+        SET employees = $1, updated_at = NOW()
+        WHERE machine_id = $2 AND crew_letter = $3
+      `, [JSON.stringify(currentEmployees), machineId, crewLetter]);
+
+      return { success: true, message: 'Employee removed from crew successfully' };
+    } catch (error) {
+      console.error('Error removing employee from crew:', error);
+      throw new Error('Failed to remove employee from crew: ' + error.message);
+    }
+  }
 }
 
 module.exports = new MachinesService();

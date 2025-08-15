@@ -216,6 +216,48 @@ router.post('/:id/crews',
 );
 
 /**
+ * POST /api/machines/:id/crews/:crewLetter/employees
+ * Add employee to a specific crew
+ */
+router.post('/:id/crews/:crewLetter/employees',
+  authenticateToken,
+  requireRole(['admin', 'supervisor']),
+  [body('employee_id').isInt().withMessage('Employee ID must be an integer')],
+  asyncHandler(async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.validationError(errors.array());
+    }
+
+    const result = await machinesService.addEmployeeToCrew(
+      req.params.id, 
+      req.params.crewLetter, 
+      req.body.employee_id, 
+      req.user.id
+    );
+    return res.success(result, 'Employee added to crew successfully');
+  })
+);
+
+/**
+ * DELETE /api/machines/:id/crews/:crewLetter/employees/:employeeId
+ * Remove employee from a specific crew
+ */
+router.delete('/:id/crews/:crewLetter/employees/:employeeId',
+  authenticateToken,
+  requireRole(['admin', 'supervisor']),
+  asyncHandler(async (req, res) => {
+    const result = await machinesService.removeEmployeeFromCrew(
+      req.params.id, 
+      req.params.crewLetter, 
+      req.params.employeeId, 
+      req.user.id
+    );
+    return res.success(result, 'Employee removed from crew successfully');
+  })
+);
+
+/**
  * DELETE /api/machines/:id
  * Delete machine (only if no production history)
  */
