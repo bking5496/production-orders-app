@@ -144,7 +144,7 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
       camera.useAutoRotationBehavior = false; // Disable auto-rotation
       camera.useFramingBehavior = false;     // Disable auto-framing
       
-      // Simple, direct camera control attachment
+      // Robust camera control attachment with verification
       const attachCameraControls = () => {
         try {
           if (!canvas) {
@@ -152,21 +152,119 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
             return false;
           }
           
-          // Direct attachment - Babylon handles the rest
-          camera.attachControls(canvas, true);
+          if (!camera) {
+            console.error('Camera not available for controls');
+            return false;
+          }
+          
+          // Verify camera has attachControls method
+          if (typeof camera.attachControls === 'function') {
+            camera.attachControls(canvas, true);
+            console.log('✅ Camera controls attached via attachControls');
+          } else if (typeof camera.attachControl === 'function') {
+            // Some Babylon versions use attachControl (singular)
+            camera.attachControl(canvas, true);
+            console.log('✅ Camera controls attached via attachControl');
+          } else {
+            // Manual camera controls setup if methods not available
+            console.warn('⚠️ Native camera controls not available, setting up manual controls');
+            setupManualCameraControls();
+            return true;
+          }
           
           // Basic canvas setup
           canvas.setAttribute('tabindex', '0');
           canvas.style.outline = 'none';
           canvas.style.touchAction = 'none';
           
-          console.log('✅ Camera controls attached');
           return true;
           
         } catch (error) {
           console.error('❌ Camera controls failed:', error);
+          // Fallback to manual controls
+          setupManualCameraControls();
           return false;
         }
+      };
+      
+      // Manual camera controls as fallback
+      const setupManualCameraControls = () => {
+        console.log('🎮 Setting up manual camera controls...');
+        
+        let isPointerDown = false;
+        let lastPointerX = 0;
+        let lastPointerY = 0;
+        
+        const handlePointerDown = (event) => {
+          isPointerDown = true;
+          lastPointerX = event.clientX;
+          lastPointerY = event.clientY;
+          canvas.setPointerCapture?.(event.pointerId);
+        };
+        
+        const handlePointerMove = (event) => {
+          if (!isPointerDown) return;
+          
+          const deltaX = event.clientX - lastPointerX;
+          const deltaY = event.clientY - lastPointerY;
+          
+          // Rotate camera
+          camera.alpha -= deltaX * 0.01;
+          camera.beta += deltaY * 0.01;
+          
+          // Clamp beta to prevent flipping
+          camera.beta = Math.max(camera.lowerBetaLimit || 0.1, 
+                                Math.min(camera.upperBetaLimit || Math.PI / 2, camera.beta));
+          
+          lastPointerX = event.clientX;
+          lastPointerY = event.clientY;
+        };
+        
+        const handlePointerUp = (event) => {
+          isPointerDown = false;
+          canvas.releasePointerCapture?.(event.pointerId);
+        };
+        
+        const handleWheel = (event) => {
+          event.preventDefault();
+          const delta = event.deltaY * 0.1;
+          camera.radius += delta;
+          camera.radius = Math.max(camera.lowerRadiusLimit || 10, 
+                                  Math.min(camera.upperRadiusLimit || 500, camera.radius));
+        };
+        
+        // Attach manual event listeners
+        canvas.addEventListener('pointerdown', handlePointerDown);
+        canvas.addEventListener('pointermove', handlePointerMove);
+        canvas.addEventListener('pointerup', handlePointerUp);
+        canvas.addEventListener('wheel', handleWheel, { passive: false });
+        
+        // Touch support
+        canvas.addEventListener('touchstart', (e) => {
+          if (e.touches.length === 1) {
+            handlePointerDown({ 
+              clientX: e.touches[0].clientX, 
+              clientY: e.touches[0].clientY,
+              pointerId: 0 
+            });
+          }
+        });
+        
+        canvas.addEventListener('touchmove', (e) => {
+          if (e.touches.length === 1) {
+            e.preventDefault();
+            handlePointerMove({ 
+              clientX: e.touches[0].clientX, 
+              clientY: e.touches[0].clientY 
+            });
+          }
+        });
+        
+        canvas.addEventListener('touchend', () => {
+          handlePointerUp({ pointerId: 0 });
+        });
+        
+        console.log('✅ Manual camera controls active');
       };
       
       // Set camera as active immediately
@@ -220,59 +318,6 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
         console.log('✅ Enhanced industrial lighting system initialized');
       };
       
-      // Fallback camera controls for when attachControls fails
-      const setupFallbackCameraControls = (camera, canvas, scene) => {
-        console.log('🔄 Setting up fallback camera controls...');
-        
-        let isPointerDown = false;
-        let lastPointerPosition = { x: 0, y: 0 };
-        
-        // Mouse/touch movement handling
-        const handlePointerMove = (event) => {
-          if (!isPointerDown) return;
-          
-          const deltaX = event.clientX - lastPointerPosition.x;
-          const deltaY = event.clientY - lastPointerPosition.y;
-          
-          // Rotate camera based on mouse movement
-          camera.alpha += deltaX * 0.01;
-          camera.beta += deltaY * 0.01;
-          
-          // Apply limits
-          camera.beta = Math.max(camera.lowerBetaLimit, Math.min(camera.upperBetaLimit, camera.beta));
-          
-          lastPointerPosition = { x: event.clientX, y: event.clientY };
-        };
-        
-        // Mouse/touch down
-        const handlePointerDown = (event) => {
-          isPointerDown = true;
-          lastPointerPosition = { x: event.clientX, y: event.clientY };
-          canvas.setPointerCapture?.(event.pointerId);
-        };
-        
-        // Mouse/touch up
-        const handlePointerUp = (event) => {
-          isPointerDown = false;
-          canvas.releasePointerCapture?.(event.pointerId);
-        };
-        
-        // Wheel zoom
-        const handleWheel = (event) => {
-          event.preventDefault();
-          const delta = event.deltaY * 0.01;
-          camera.radius += delta;
-          camera.radius = Math.max(camera.lowerRadiusLimit, Math.min(camera.upperRadiusLimit, camera.radius));
-        };
-        
-        // Attach fallback event listeners
-        canvas.addEventListener('pointerdown', handlePointerDown);
-        canvas.addEventListener('pointermove', handlePointerMove);
-        canvas.addEventListener('pointerup', handlePointerUp);
-        canvas.addEventListener('wheel', handleWheel, { passive: false });
-        
-        console.log('✅ Fallback camera controls active');
-      };
       
       // Initialize enhanced lighting system
       createEnhancedLighting(scene);

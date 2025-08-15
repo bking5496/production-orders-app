@@ -3185,3 +3185,4 @@
   user: 'admin',
   timestamp: '2025-08-15T20:03:34.471Z'
 }
+2025-08-15T22:53:12: JWT verification failed: jwt malformed
