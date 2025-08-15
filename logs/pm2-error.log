@@ -2719,3 +2719,243 @@
   code: 'ERR_ERL_UNEXPECTED_X_FORWARDED_FOR',
   help: 'https://express-rate-limit.github.io/ERR_ERL_UNEXPECTED_X_FORWARDED_FOR/'
 }
+2025-08-15T21:26:54: Error removing employee from crew: NotFoundError: Crew not found not found
+    at MachinesService.removeEmployeeFromCrew (/home/production-app/production-orders-app/src/services/machines.service.js:474:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:250:20 {
+  statusCode: 404,
+  code: 'NOT_FOUND',
+  isOperational: true,
+  resource: 'Crew not found'
+}
+2025-08-15T21:26:54: Error occurred: {
+  error: 'Failed to remove employee from crew: Crew not found not found',
+  stack: 'Error: Failed to remove employee from crew: Crew not found not found\n' +
+    '    at MachinesService.removeEmployeeFromCrew (/home/production-app/production-orders-app/src/services/machines.service.js:492:13)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:250:20',
+  url: '/api/machines/40/crews/undefined/employees/10',
+  method: 'DELETE',
+  user: 'admin',
+  timestamp: '2025-08-15T19:26:54.520Z'
+}
+2025-08-15T21:26:55: Error removing employee from crew: NotFoundError: Crew not found not found
+    at MachinesService.removeEmployeeFromCrew (/home/production-app/production-orders-app/src/services/machines.service.js:474:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:250:20 {
+  statusCode: 404,
+  code: 'NOT_FOUND',
+  isOperational: true,
+  resource: 'Crew not found'
+}
+2025-08-15T21:26:55: Error occurred: {
+  error: 'Failed to remove employee from crew: Crew not found not found',
+  stack: 'Error: Failed to remove employee from crew: Crew not found not found\n' +
+    '    at MachinesService.removeEmployeeFromCrew (/home/production-app/production-orders-app/src/services/machines.service.js:492:13)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:250:20',
+  url: '/api/machines/40/crews/undefined/employees/10',
+  method: 'DELETE',
+  user: 'admin',
+  timestamp: '2025-08-15T19:26:55.008Z'
+}
+2025-08-15T21:26:55: Error removing employee from crew: NotFoundError: Crew not found not found
+    at MachinesService.removeEmployeeFromCrew (/home/production-app/production-orders-app/src/services/machines.service.js:474:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:250:20 {
+  statusCode: 404,
+  code: 'NOT_FOUND',
+  isOperational: true,
+  resource: 'Crew not found'
+}
+2025-08-15T21:26:55: Error occurred: {
+  error: 'Failed to remove employee from crew: Crew not found not found',
+  stack: 'Error: Failed to remove employee from crew: Crew not found not found\n' +
+    '    at MachinesService.removeEmployeeFromCrew (/home/production-app/production-orders-app/src/services/machines.service.js:492:13)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:250:20',
+  url: '/api/machines/40/crews/undefined/employees/10',
+  method: 'DELETE',
+  user: 'admin',
+  timestamp: '2025-08-15T19:26:55.587Z'
+}
+2025-08-15T21:26:55: Error removing employee from crew: NotFoundError: Crew not found not found
+    at MachinesService.removeEmployeeFromCrew (/home/production-app/production-orders-app/src/services/machines.service.js:474:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:250:20 {
+  statusCode: 404,
+  code: 'NOT_FOUND',
+  isOperational: true,
+  resource: 'Crew not found'
+}
+2025-08-15T21:26:55: Error occurred: {
+  error: 'Failed to remove employee from crew: Crew not found not found',
+  stack: 'Error: Failed to remove employee from crew: Crew not found not found\n' +
+    '    at MachinesService.removeEmployeeFromCrew (/home/production-app/production-orders-app/src/services/machines.service.js:492:13)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:250:20',
+  url: '/api/machines/40/crews/undefined/employees/7',
+  method: 'DELETE',
+  user: 'admin',
+  timestamp: '2025-08-15T19:26:55.897Z'
+}
+2025-08-15T21:26:56: Error removing employee from crew: NotFoundError: Crew not found not found
+    at MachinesService.removeEmployeeFromCrew (/home/production-app/production-orders-app/src/services/machines.service.js:474:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:250:20 {
+  statusCode: 404,
+  code: 'NOT_FOUND',
+  isOperational: true,
+  resource: 'Crew not found'
+}
+2025-08-15T21:26:56: Error occurred: {
+  error: 'Failed to remove employee from crew: Crew not found not found',
+  stack: 'Error: Failed to remove employee from crew: Crew not found not found\n' +
+    '    at MachinesService.removeEmployeeFromCrew (/home/production-app/production-orders-app/src/services/machines.service.js:492:13)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:250:20',
+  url: '/api/machines/40/crews/undefined/employees/10',
+  method: 'DELETE',
+  user: 'admin',
+  timestamp: '2025-08-15T19:26:56.067Z'
+}
+2025-08-15T21:26:56: Error removing employee from crew: NotFoundError: Crew not found not found
+    at MachinesService.removeEmployeeFromCrew (/home/production-app/production-orders-app/src/services/machines.service.js:474:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:250:20 {
+  statusCode: 404,
+  code: 'NOT_FOUND',
+  isOperational: true,
+  resource: 'Crew not found'
+}
+2025-08-15T21:26:56: Error occurred: {
+  error: 'Failed to remove employee from crew: Crew not found not found',
+  stack: 'Error: Failed to remove employee from crew: Crew not found not found\n' +
+    '    at MachinesService.removeEmployeeFromCrew (/home/production-app/production-orders-app/src/services/machines.service.js:492:13)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:250:20',
+  url: '/api/machines/40/crews/undefined/employees/7',
+  method: 'DELETE',
+  user: 'admin',
+  timestamp: '2025-08-15T19:26:56.085Z'
+}
+2025-08-15T21:26:56: Error removing employee from crew: NotFoundError: Crew not found not found
+    at MachinesService.removeEmployeeFromCrew (/home/production-app/production-orders-app/src/services/machines.service.js:474:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:250:20 {
+  statusCode: 404,
+  code: 'NOT_FOUND',
+  isOperational: true,
+  resource: 'Crew not found'
+}
+2025-08-15T21:26:56: Error occurred: {
+  error: 'Failed to remove employee from crew: Crew not found not found',
+  stack: 'Error: Failed to remove employee from crew: Crew not found not found\n' +
+    '    at MachinesService.removeEmployeeFromCrew (/home/production-app/production-orders-app/src/services/machines.service.js:492:13)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:250:20',
+  url: '/api/machines/40/crews/undefined/employees/7',
+  method: 'DELETE',
+  user: 'admin',
+  timestamp: '2025-08-15T19:26:56.959Z'
+}
+2025-08-15T21:26:57: Error removing employee from crew: NotFoundError: Crew not found not found
+    at MachinesService.removeEmployeeFromCrew (/home/production-app/production-orders-app/src/services/machines.service.js:474:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:250:20 {
+  statusCode: 404,
+  code: 'NOT_FOUND',
+  isOperational: true,
+  resource: 'Crew not found'
+}
+2025-08-15T21:26:57: Error occurred: {
+  error: 'Failed to remove employee from crew: Crew not found not found',
+  stack: 'Error: Failed to remove employee from crew: Crew not found not found\n' +
+    '    at MachinesService.removeEmployeeFromCrew (/home/production-app/production-orders-app/src/services/machines.service.js:492:13)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:250:20',
+  url: '/api/machines/40/crews/undefined/employees/7',
+  method: 'DELETE',
+  user: 'admin',
+  timestamp: '2025-08-15T19:26:57.148Z'
+}
+2025-08-15T21:26:57: Error removing employee from crew: NotFoundError: Crew not found not found
+    at MachinesService.removeEmployeeFromCrew (/home/production-app/production-orders-app/src/services/machines.service.js:474:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:250:20 {
+  statusCode: 404,
+  code: 'NOT_FOUND',
+  isOperational: true,
+  resource: 'Crew not found'
+}
+2025-08-15T21:26:57: Error occurred: {
+  error: 'Failed to remove employee from crew: Crew not found not found',
+  stack: 'Error: Failed to remove employee from crew: Crew not found not found\n' +
+    '    at MachinesService.removeEmployeeFromCrew (/home/production-app/production-orders-app/src/services/machines.service.js:492:13)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:250:20',
+  url: '/api/machines/40/crews/undefined/employees/10',
+  method: 'DELETE',
+  user: 'admin',
+  timestamp: '2025-08-15T19:26:57.648Z'
+}
+2025-08-15T21:26:58: Error removing employee from crew: NotFoundError: Crew not found not found
+    at MachinesService.removeEmployeeFromCrew (/home/production-app/production-orders-app/src/services/machines.service.js:474:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:250:20 {
+  statusCode: 404,
+  code: 'NOT_FOUND',
+  isOperational: true,
+  resource: 'Crew not found'
+}
+2025-08-15T21:26:58: Error occurred: {
+  error: 'Failed to remove employee from crew: Crew not found not found',
+  stack: 'Error: Failed to remove employee from crew: Crew not found not found\n' +
+    '    at MachinesService.removeEmployeeFromCrew (/home/production-app/production-orders-app/src/services/machines.service.js:492:13)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:250:20',
+  url: '/api/machines/40/crews/undefined/employees/10',
+  method: 'DELETE',
+  user: 'admin',
+  timestamp: '2025-08-15T19:26:58.866Z'
+}
+2025-08-15T21:26:59: Error removing employee from crew: NotFoundError: Crew not found not found
+    at MachinesService.removeEmployeeFromCrew (/home/production-app/production-orders-app/src/services/machines.service.js:474:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:250:20 {
+  statusCode: 404,
+  code: 'NOT_FOUND',
+  isOperational: true,
+  resource: 'Crew not found'
+}
+2025-08-15T21:26:59: Error occurred: {
+  error: 'Failed to remove employee from crew: Crew not found not found',
+  stack: 'Error: Failed to remove employee from crew: Crew not found not found\n' +
+    '    at MachinesService.removeEmployeeFromCrew (/home/production-app/production-orders-app/src/services/machines.service.js:492:13)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:250:20',
+  url: '/api/machines/40/crews/undefined/employees/7',
+  method: 'DELETE',
+  user: 'admin',
+  timestamp: '2025-08-15T19:26:59.597Z'
+}
+2025-08-15T21:26:59: Error removing employee from crew: NotFoundError: Crew not found not found
+    at MachinesService.removeEmployeeFromCrew (/home/production-app/production-orders-app/src/services/machines.service.js:474:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:250:20 {
+  statusCode: 404,
+  code: 'NOT_FOUND',
+  isOperational: true,
+  resource: 'Crew not found'
+}
+2025-08-15T21:26:59: Error occurred: {
+  error: 'Failed to remove employee from crew: Crew not found not found',
+  stack: 'Error: Failed to remove employee from crew: Crew not found not found\n' +
+    '    at MachinesService.removeEmployeeFromCrew (/home/production-app/production-orders-app/src/services/machines.service.js:492:13)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:250:20',
+  url: '/api/machines/40/crews/undefined/employees/7',
+  method: 'DELETE',
+  user: 'admin',
+  timestamp: '2025-08-15T19:26:59.604Z'
+}

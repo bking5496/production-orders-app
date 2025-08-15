@@ -118,45 +118,26 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
         camera.setTarget(window.BABYLON.Vector3.Zero());
       }
 
-      // PROFESSIONAL INDUSTRIAL LIGHTING SYSTEM
-      const createIndustrialLighting = (scene) => {
-        // Main overhead lighting (high bay industrial fixtures)
-        const mainLight = new window.BABYLON.HemisphericLight('mainLight', 
-          new window.BABYLON.Vector3(0, 1, 0), scene);
-        mainLight.intensity = 0.7;
-        mainLight.diffuse = new window.BABYLON.Color3(0.95, 0.95, 1.0); // Cool white LED
+      // Simplified lighting system
+      const createBasicLighting = (scene) => {
+        const light = new window.BABYLON.HemisphericLight(
+          'light', 
+          new window.BABYLON.Vector3(0, 1, 0), 
+          scene
+        );
+        light.intensity = 0.6;
         
-        // Directional sunlight through skylights
-        const sunLight = new window.BABYLON.DirectionalLight('sunLight',
-          new window.BABYLON.Vector3(-0.5, -1, 0.3), scene);
-        sunLight.intensity = 0.8;
-        sunLight.diffuse = new window.BABYLON.Color3(1.0, 0.98, 0.9); // Warm sunlight
-        
-        // Zone-specific accent lighting
-        const zones = [
-          { pos: [0, 8, -15], color: FACTORY_COLORS.blending.accent },    // Blending
-          { pos: [-18, 8, -3], color: FACTORY_COLORS.maturation.accent }, // Maturation  
-          { pos: [0, 8, 13], color: FACTORY_COLORS.packaging.accent }     // Packaging
-        ];
-        
-        zones.forEach((zone, index) => {
-          const zoneLight = new window.BABYLON.PointLight(`zoneLight_${index}`,
-            new window.BABYLON.Vector3(...zone.pos), scene);
-          zoneLight.intensity = 0.5;
-          zoneLight.diffuse = zone.color;
-          zoneLight.range = 20;
-        });
-        
-        // Add subtle shadows for depth
-        if (window.BABYLON.ShadowGenerator) {
-          const shadowGenerator = new window.BABYLON.ShadowGenerator(1024, sunLight);
-          shadowGenerator.useContactHardeningShadow = true;
-          shadowGenerator.contactHardeningLightSizeUVRatio = 0.05;
-        }
+        const dirLight = new window.BABYLON.DirectionalLight(
+          'dirLight', 
+          new window.BABYLON.Vector3(-1, -1, 1), 
+          scene
+        );
+        dirLight.intensity = 1.0;
+        dirLight.diffuse = new window.BABYLON.Color3(0.4, 0.6, 1.0);
       };
       
-      // Initialize professional lighting
-      createIndustrialLighting(scene);
+      // Initialize basic lighting
+      createBasicLighting(scene);
 
       // ENHANCED FACTORY FLOOR WITH PROFESSIONAL INDUSTRIAL DESIGN
       // Factory dimensions from layout: 52m width x 42m height
@@ -168,121 +149,51 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
       const wallHeight = 6;
       const wallThickness = 0.3;
 
-      // PROFESSIONAL INDUSTRIAL COLOR PALETTE
-      const FACTORY_COLORS = {
-        baseFactory: {
-          diffuse: new window.BABYLON.Color3(0.25, 0.27, 0.30), // Polished concrete
-          specular: new window.BABYLON.Color3(0.8, 0.8, 0.8),
-          emissive: new window.BABYLON.Color3(0.05, 0.05, 0.05)
-        },
-        blending: {
-          diffuse: new window.BABYLON.Color3(0.2, 0.4, 0.8),     // Safety blue for raw materials
-          accent: new window.BABYLON.Color3(0.3, 0.5, 0.9),
-          safety: '#2563EB'
-        },
-        maturation: {
-          diffuse: new window.BABYLON.Color3(0.8, 0.6, 0.2),     // Warm amber for processing
-          accent: new window.BABYLON.Color3(0.9, 0.7, 0.3),
-          safety: '#D97706'
-        },
-        packaging: {
-          diffuse: new window.BABYLON.Color3(0.2, 0.7, 0.3),     // Fresh green for final product
-          accent: new window.BABYLON.Color3(0.3, 0.8, 0.4),
-          safety: '#059669'
-        },
-        flow: {
-          diffuse: new window.BABYLON.Color3(0.9, 0.7, 0.1),     // Process yellow
-          accent: new window.BABYLON.Color3(1.0, 0.8, 0.2)
-        }
-      };
-
-      // ENHANCED INDUSTRIAL FLOOR CREATION FUNCTION
-      const createIndustrialFloor = (name, dimensions, position, zoneType, scene) => {
+      // Simple floor creation
+      const createSimpleFloor = (name, dimensions, position, color, scene) => {
         const floor = window.BABYLON.MeshBuilder.CreateGround(name, dimensions, scene);
         floor.position = position;
         
-        // Create PBR material for realistic industrial flooring
-        const floorMaterial = new window.BABYLON.PBRMaterial(`${name}Material`, scene);
-        floorMaterial.baseColor = FACTORY_COLORS[zoneType].diffuse;
-        floorMaterial.metallicFactor = 0.1;
-        floorMaterial.roughnessFactor = 0.6;
-        floorMaterial.emissiveColor = FACTORY_COLORS[zoneType].diffuse.scale(0.05);
-        
-        // Add industrial grid pattern texture
-        const gridTexture = new window.BABYLON.DynamicTexture(`${name}Grid`, {width: 512, height: 512}, scene);
-        const context = gridTexture.getContext();
-        
-        // Draw industrial concrete base
-        context.fillStyle = '#404449'; // Industrial concrete color
-        context.fillRect(0, 0, 512, 512);
-        
-        // Add zone-specific color tint
-        context.fillStyle = FACTORY_COLORS[zoneType].safety + '40'; // 25% opacity
-        context.fillRect(0, 0, 512, 512);
-        
-        // Draw 5m grid lines (matching factory sections)
-        context.strokeStyle = FACTORY_COLORS[zoneType].safety + 'AA'; // 67% opacity
-        context.lineWidth = 2;
-        const gridSize = 64; // 512/8 for 5m sections
-        
-        for (let i = 0; i <= 512; i += gridSize) {
-          context.beginPath();
-          context.moveTo(i, 0);
-          context.lineTo(i, 512);
-          context.stroke();
-          
-          context.beginPath();
-          context.moveTo(0, i);
-          context.lineTo(512, i);
-          context.stroke();
-        }
-        
-        floorMaterial.baseTexture = gridTexture;
-        floor.material = floorMaterial;
+        const material = new window.BABYLON.StandardMaterial(`${name}Material`, scene);
+        material.diffuseColor = color;
+        material.wireframe = false;
+        floor.material = material;
         floor.renderOutline = false;
         floor.showBoundingBox = false;
         
         return floor;
       };
 
-      // Create main factory floor with enhanced industrial design
-      const factoryFloor = window.BABYLON.MeshBuilder.CreateGround('factoryFloor', {
-        width: factoryWidth, height: factoryHeight
-      }, scene);
-      factoryFloor.position = new window.BABYLON.Vector3(0, 0, 0);
-      
-      // Apply enhanced base factory material
-      const baseMaterial = new window.BABYLON.PBRMaterial('baseFactoryMaterial', scene);
-      baseMaterial.baseColor = FACTORY_COLORS.baseFactory.diffuse;
-      baseMaterial.metallicFactor = 0.1;
-      baseMaterial.roughnessFactor = 0.7;
-      baseMaterial.emissiveColor = FACTORY_COLORS.baseFactory.emissive;
-      factoryFloor.material = baseMaterial;
-      factoryFloor.renderOutline = false;
-      factoryFloor.showBoundingBox = false;
+      // Create main factory floor
+      const factoryFloor = createSimpleFloor('factoryFloor',
+        { width: factoryWidth, height: factoryHeight },
+        new window.BABYLON.Vector3(0, 0, 0),
+        new window.BABYLON.Color3(0.18, 0.22, 0.25), // Industrial concrete
+        scene
+      );
 
-      // ENHANCED ZONE FLOOR SECTIONS WITH PROFESSIONAL DESIGN
-      // BLENDING area floor section (top section) - Raw Materials Processing
-      const blendingFloor = createIndustrialFloor('blendingFloor',
+      // Create zone floor sections with color coding
+      // BLENDING area floor section (top section) - Blue tint
+      const blendingFloor = createSimpleFloor('blendingFloor',
         { width: factoryWidth, height: 11 }, // 5m + 6m sections
         new window.BABYLON.Vector3(0, 0.02, -15.5), // Slightly elevated
-        'blending',
+        new window.BABYLON.Color3(0.2, 0.4, 0.8), // Safety blue
         scene
       );
 
-      // MATURATION area floor section (left center) - Process Development
-      const maturationFloor = createIndustrialFloor('maturationFloor',
+      // MATURATION area floor section (left center) - Amber tint
+      const maturationFloor = createSimpleFloor('maturationFloor',
         { width: 16, height: 14 }, // Left portion of 14m section
         new window.BABYLON.Vector3(-18, 0.02, -3), // Left center
-        'maturation',
+        new window.BABYLON.Color3(0.8, 0.6, 0.2), // Warm amber
         scene
       );
 
-      // PACKAGING area floor section (bottom section) - Final Product Processing
-      const packagingFloor = createIndustrialFloor('packagingFloor',
+      // PACKAGING area floor section (bottom section) - Green tint
+      const packagingFloor = createSimpleFloor('packagingFloor',
         { width: factoryWidth, height: 8 }, // Bottom 8m section
         new window.BABYLON.Vector3(0, 0.02, 17), // Bottom section
-        'packaging',
+        new window.BABYLON.Color3(0.2, 0.7, 0.3), // Fresh green
         scene
       );
 
