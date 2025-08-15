@@ -47,7 +47,7 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
   };
 
   // Initialize Babylon.js scene
-  const initializeBabylonScene = async (container) => {
+  const initializeBabylonScene = async (canvas) => {
     try {
       if (!container) {
         throw new Error('Container element not provided');
@@ -97,25 +97,33 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
         });
       }
 
-      // Setup camera with proper checks for large factory complex
+      // Setup camera for 52m × 42m factory floor
       const camera = new window.BABYLON.ArcRotateCamera(
         'camera', 
-        -Math.PI / 2, 
-        Math.PI / 4, 
-        150,  // Much further back to view entire complex
-        new window.BABYLON.Vector3(-30, 0, 10), // Center view between factory and warehouses
+        -Math.PI / 2,  // Start looking from the side
+        Math.PI / 3,   // Angled down view
+        80,            // Closer distance for 52m factory
+        new window.BABYLON.Vector3(0, 0, 0), // Center of factory floor
         scene
       );
       
-      // Ensure canvas is ready before attaching controls
+      // Set camera limits for better control
+      camera.lowerBetaLimit = 0.1;
+      camera.upperBetaLimit = Math.PI / 2.2;
+      camera.lowerRadiusLimit = 30;
+      camera.upperRadiusLimit = 150;
+      
+      // Attach camera controls to canvas
       if (babylonCanvas && typeof camera.attachControls === 'function') {
-        camera.attachControls(babylonCanvas);
+        camera.attachControls(babylonCanvas, true);
+        console.log('🎥 Camera controls attached successfully');
       } else {
         console.warn('⚠️ Camera controls not available, using default settings');
       }
       
+      // Set camera target to center of factory
       if (typeof camera.setTarget === 'function') {
-        camera.setTarget(window.BABYLON.Vector3.Zero());
+        camera.setTarget(new window.BABYLON.Vector3(0, 0, 0));
       }
 
       // Simplified lighting system
@@ -204,19 +212,19 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
             name: 'BLENDING ZONE',
             position: new window.BABYLON.Vector3(0, 0.1, -10),
             size: { width: 50, height: 0.2, depth: 2 },
-            color: FACTORY_COLORS.blending.safety
+            color: '#2563EB'
           },
           {
             name: 'MATURATION ZONE', 
             position: new window.BABYLON.Vector3(-10, 0.1, 4),
             size: { width: 2, height: 0.2, depth: 14 },
-            color: FACTORY_COLORS.maturation.safety
+            color: '#D97706'
           },
           {
             name: 'PACKAGING ZONE',
             position: new window.BABYLON.Vector3(0, 0.1, 13),
             size: { width: 50, height: 0.2, depth: 2 },
-            color: FACTORY_COLORS.packaging.safety
+            color: '#059669'
           }
         ];
         
@@ -257,8 +265,8 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
         blendingToMaturation.rotation.z = -Math.PI / 2; // Point right
         
         const flowMaterial1 = new window.BABYLON.StandardMaterial('flowMat1', scene);
-        flowMaterial1.diffuseColor = FACTORY_COLORS.flow.diffuse;
-        flowMaterial1.emissiveColor = FACTORY_COLORS.flow.diffuse.scale(0.5);
+        flowMaterial1.diffuseColor = new window.BABYLON.Color3(0.9, 0.7, 0.1);
+        flowMaterial1.emissiveColor = new window.BABYLON.Color3(0.45, 0.35, 0.05);
         blendingToMaturation.material = flowMaterial1;
         
         // Maturation → Packaging flow
@@ -272,8 +280,8 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
         // Add pulsing animation to flow indicators
         window.BABYLON.Animation.CreateAndStartAnimation(
           'flowPulse', flowMaterial1, 'emissiveColor', 60, 120,
-          FACTORY_COLORS.flow.diffuse.scale(0.3),
-          FACTORY_COLORS.flow.diffuse.scale(0.8),
+          new window.BABYLON.Color3(0.27, 0.21, 0.03),
+          new window.BABYLON.Color3(0.72, 0.56, 0.08),
           window.BABYLON.Animation.ANIMATIONLOOPMODE_YOYO
         );
       };
@@ -309,21 +317,21 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
           {
             name: 'BLENDING ZONE',
             position: new window.BABYLON.Vector3(-25, 3, -15),
-            color: FACTORY_COLORS.blending.safety,
+            color: '#2563EB',
             description: 'Raw Material Processing',
             processes: ['Material Receipt', 'Primary Blending', 'Batch Preparation']
           },
           {
             name: 'MATURATION ZONE',
             position: new window.BABYLON.Vector3(-25, 3, -2),
-            color: FACTORY_COLORS.maturation.safety,
+            color: '#D97706',
             description: 'Product Development',
             processes: ['Fluid Bed Processing', 'Aging & Development']
           },
           {
             name: 'PACKAGING ZONE',
             position: new window.BABYLON.Vector3(-25, 3, 15),
-            color: FACTORY_COLORS.packaging.safety,
+            color: '#059669',
             description: 'Final Product Processing',
             processes: ['Tablet Formation', 'Flexible Packaging', 'Container Filling']
           }
@@ -756,11 +764,11 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
           
           // Color-code label based on machine environment
           if (machine.environment === 'blending') {
-            labelMaterial.emissiveColor = FACTORY_COLORS.blending.accent.scale(0.3);
+            labelMaterial.emissiveColor = new window.BABYLON.Color3(0.09, 0.15, 0.27);
           } else if (machine.environment === 'maturation') {
-            labelMaterial.emissiveColor = FACTORY_COLORS.maturation.accent.scale(0.3);
+            labelMaterial.emissiveColor = new window.BABYLON.Color3(0.27, 0.21, 0.09);
           } else if (machine.environment === 'packaging') {
-            labelMaterial.emissiveColor = FACTORY_COLORS.packaging.accent.scale(0.3);
+            labelMaterial.emissiveColor = new window.BABYLON.Color3(0.09, 0.24, 0.12);
           }
           
           nameLabel.material = labelMaterial;
@@ -856,10 +864,10 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
 
   return (
     <div className="w-full h-96 bg-gray-900 rounded-lg overflow-hidden relative">
-      <div 
+      <canvas 
         ref={containerRefCallback}
-        className="w-full h-full absolute inset-0"
-        style={{ minHeight: '400px' }}
+        className="w-full h-full"
+        style={{ display: 'block', minHeight: '400px' }}
       />
       
       {/* Loading overlay */}
