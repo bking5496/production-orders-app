@@ -432,19 +432,48 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
         const machinesInEnv = machineList.filter(m => m.environment === machine.environment);
         const envIndex = machinesInEnv.indexOf(machine);
 
-        // Position machines across the real 80m x 33m factory floor
+        // Position machines based on actual factory layout document
         if (machine.environment === 'blending') {
-          // Blending area - left side of factory floor
-          x = -30 + (envIndex % 4) * 12;
-          z = -10 + Math.floor(envIndex / 4) * 8;
+          // Blending area - left side of factory floor (per layout)
+          // PLOUGH BLENDER, 1000L BLENDER, 1500L BLENDER arrangement
+          if (machine.name.includes('PLOUGH')) {
+            x = -30; z = -12; // Front left position
+          } else if (machine.name.includes('1000L')) {
+            x = -30; z = -5; // Behind plough blender
+          } else if (machine.name.includes('1500L')) {
+            x = -30; z = 2; // Back position
+          } else {
+            // Other blending equipment
+            x = -25 + (envIndex % 3) * 8;
+            z = -10 + Math.floor(envIndex / 3) * 6;
+          }
         } else if (machine.environment === 'maturation') {
-          // Maturation area - center of factory floor  
-          x = -5 + (envIndex % 3) * 10;
-          z = -10 + Math.floor(envIndex / 3) * 8;
+          // Maturation area - center-left of factory floor
+          // FB-10 positioning based on layout
+          if (machine.name.includes('FB-10')) {
+            x = -15; z = -5; // Center maturation area
+          } else {
+            x = -15 + (envIndex % 2) * 8;
+            z = -8 + Math.floor(envIndex / 2) * 6;
+          }
         } else if (machine.environment === 'packaging') {
-          // Packaging area - right side of factory floor
-          x = 15 + (envIndex % 5) * 10;
-          z = -10 + Math.floor(envIndex / 5) * 8;
+          // Packaging area - right side and center-right of factory floor
+          if (machine.name.includes('STICKPACK')) {
+            x = 5; z = -12; // Front center-right
+          } else if (machine.name.includes('ILAPACK')) {
+            x = 15; z = -8; // Center-right
+          } else if (machine.name.includes('POWDER CAN LINE')) {
+            x = 25; z = -5; // Right side (5 lanes)
+          } else if (machine.name.includes('UNIVERSAL')) {
+            x = 20 + (envIndex % 3) * 8; 
+            z = 2 + Math.floor(envIndex / 3) * 6; // Back packaging area
+          } else if (machine.name.includes('CUBE')) {
+            x = 10; z = 5; // CUBES STOCK area
+          } else {
+            // Other packaging equipment
+            x = 10 + (envIndex % 4) * 8;
+            z = -10 + Math.floor(envIndex / 4) * 6;
+          }
         } else {
           // Default positioning across factory floor
           x = -35 + (envIndex % 8) * 10;
