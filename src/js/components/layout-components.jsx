@@ -524,7 +524,7 @@ const Sidebar = ({ isOpen, onClose }) => {
         { name: 'Production Monitor', href: '/production', icon: 'activity', priority: 'critical', roles: ['operator', 'supervisor', 'manager', 'admin'] },
         { name: 'Orders', href: '/orders', icon: 'package', priority: 'daily', roles: ['operator', 'supervisor', 'manager', 'admin'] },
         { name: 'Machines', href: '/machines', icon: 'settings', priority: 'daily', roles: ['operator', 'supervisor', 'manager', 'admin'] },
-        { name: '4D Digital Twin Factory', href: '/digital-twin', icon: 'factory', priority: 'management', roles: ['supervisor', 'manager', 'admin'] },
+        { name: '4D Digital Twin Factory', href: '/digital-twin', icon: 'package', priority: 'management', roles: ['supervisor', 'manager', 'admin'] },
         { name: 'Labor Layout', href: '/labour-layout', icon: 'users', priority: 'daily', roles: ['supervisor', 'manager', 'admin'] },
         { name: 'Labor Planner', href: '/labor-planner', icon: 'calendar', priority: 'daily', roles: ['supervisor', 'manager', 'admin'] },
         { name: 'Attendance Register', href: '/attendance-register', icon: 'userCheck', priority: 'daily', roles: ['supervisor', 'manager', 'admin'] },
