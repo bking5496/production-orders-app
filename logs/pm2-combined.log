@@ -24181,3 +24181,96 @@
 2025-08-14T23:03:25: ✅ Database utilities: OK
 2025-08-14T23:03:25: 🎉 All components tested successfully!
 2025-08-14T23:03:25: ✅ All components tested successfully
+2025-08-15T16:07:29: JWT verification failed: jwt expired
+2025-08-15T16:07:29: JWT verification failed: jwt expired
+2025-08-15T16:07:29: JWT verification failed: jwt expired
+2025-08-15T16:07:30: JWT verification failed: jwt expired
+2025-08-15T16:07:32: JWT verification failed: jwt expired
+2025-08-15T16:07:35: ValidationError: The 'X-Forwarded-For' header is set but the Express 'trust proxy' setting is false (default). This could indicate a misconfiguration which would prevent express-rate-limit from accurately identifying users. See https://express-rate-limit.github.io/ERR_ERL_UNEXPECTED_X_FORWARDED_FOR/ for more information.
+    at Object.xForwardedForHeader (/home/production-app/production-orders-app/node_modules/express-rate-limit/dist/index.cjs:185:13)
+    at wrappedValidations.<computed> [as xForwardedForHeader] (/home/production-app/production-orders-app/node_modules/express-rate-limit/dist/index.cjs:397:22)
+    at Object.keyGenerator (/home/production-app/production-orders-app/node_modules/express-rate-limit/dist/index.cjs:658:20)
+    at /home/production-app/production-orders-app/node_modules/express-rate-limit/dist/index.cjs:710:32
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async /home/production-app/production-orders-app/node_modules/express-rate-limit/dist/index.cjs:691:5 {
+  code: 'ERR_ERL_UNEXPECTED_X_FORWARDED_FOR',
+  help: 'https://express-rate-limit.github.io/ERR_ERL_UNEXPECTED_X_FORWARDED_FOR/'
+}
+2025-08-15T16:07:35: ✅ New PostgreSQL client connected
+2025-08-15T16:07:35: 🔗 Client acquired from pool
+2025-08-15T16:07:35: 🔓 Client released back to pool
+2025-08-15T16:07:36: 🔗 Client acquired from pool
+2025-08-15T16:07:36: 🔓 Client released back to pool
+2025-08-15T16:07:36: ✅ Auth success: admin from ::ffff:127.0.0.1 - Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0
+2025-08-15T16:07:36: 🔗 Client acquired from pool
+2025-08-15T16:07:36: 🔓 Client released back to pool
+2025-08-15T16:07:36: 🔗 Client acquired from pool
+2025-08-15T16:07:36: 🔓 Client released back to pool
+2025-08-15T16:07:36: ✅ New PostgreSQL client connected
+2025-08-15T16:07:36: 🔗 Client acquired from pool
+2025-08-15T16:07:36: ✅ New PostgreSQL client connected
+2025-08-15T16:07:36: 🔗 Client acquired from pool
+2025-08-15T16:07:36: 🔓 Client released back to pool
+2025-08-15T16:07:36: 🔗 Client acquired from pool
+2025-08-15T16:07:36: 🔓 Client released back to pool
+2025-08-15T16:07:36: 🔓 Client released back to pool
+2025-08-15T16:07:36: ✅ New PostgreSQL client connected
+2025-08-15T16:07:36: 🔗 Client acquired from pool
+2025-08-15T16:07:36: 🔓 Client released back to pool
+2025-08-15T16:07:36: New WebSocket connection attempt
+2025-08-15T16:07:36: ✅ WebSocket authenticated: admin (admin)
+2025-08-15T16:07:36: 🔗 Client acquired from pool
+2025-08-15T16:07:36: 🔓 Client released back to pool
+2025-08-15T16:07:36: 🔗 Client acquired from pool
+2025-08-15T16:07:36: 🔓 Client released back to pool
+2025-08-15T16:07:36: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-15T16:07:36: 🏠 admin joined room: production
+2025-08-15T16:07:36: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-15T16:07:36: 🏠 admin joined room: production
+2025-08-15T16:07:37: 📺 admin subscribed to: [ 'machines', 'production' ]
+2025-08-15T16:07:37: 🔗 Client acquired from pool
+2025-08-15T16:07:37: 🔓 Client released back to pool
+2025-08-15T16:07:37: 🔗 Client acquired from pool
+2025-08-15T16:07:37: 🔓 Client released back to pool
+2025-08-15T16:07:37: 🔗 Client acquired from pool
+2025-08-15T16:07:37: 🔗 Client acquired from pool
+2025-08-15T16:07:37: 🔗 Client acquired from pool
+2025-08-15T16:07:37: 🔓 Client released back to pool
+2025-08-15T16:07:37: 🔓 Client released back to pool
+2025-08-15T16:07:37: 🔓 Client released back to pool
+2025-08-15T16:07:37: 🔗 Client acquired from pool
+2025-08-15T16:07:37: 🔓 Client released back to pool
+2025-08-15T16:07:38: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-15T16:07:38: 🏠 admin joined room: production
+2025-08-15T16:08:07: 🔗 Client acquired from pool
+2025-08-15T16:08:07: 🔓 Client released back to pool
+2025-08-15T16:08:37: 🔗 Client acquired from pool
+2025-08-15T16:08:37: 🔓 Client released back to pool
+2025-08-15T16:09:07: 🔗 Client acquired from pool
+2025-08-15T16:09:07: 🔓 Client released back to pool
+2025-08-15T16:09:37: 🔗 Client acquired from pool
+2025-08-15T16:09:37: 🔓 Client released back to pool
