@@ -1447,3 +1447,603 @@
   code: 'ERR_ERL_UNEXPECTED_X_FORWARDED_FOR',
   help: 'https://express-rate-limit.github.io/ERR_ERL_UNEXPECTED_X_FORWARDED_FOR/'
 }
+2025-08-15T16:54:55: Error adding employee to crew: error: new row for relation "machine_crews" violates check constraint "machine_crews_crew_letter_check"
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)
+    at async DatabaseUtils.raw (/home/production-app/production-orders-app/src/utils/database.js:146:12)
+    at async MachinesService.addEmployeeToCrew (/home/production-app/production-orders-app/src/services/machines.service.js:449:9)
+    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:232:20 {
+  length: 427,
+  severity: 'ERROR',
+  code: '23514',
+  detail: 'Failing row contains (7, 40, undefined, 0, [{"id":5,"username":"Abongile Khambule","full_name":"Abongile Kh..., t, 2025-08-15, 2025-08-15, 4, 2025-08-15 16:54:55.984626+02, 2025-08-15 16:54:55.984626+02, null).',
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: 'public',
+  table: 'machine_crews',
+  column: undefined,
+  dataType: undefined,
+  constraint: 'machine_crews_crew_letter_check',
+  file: 'execMain.c',
+  line: '2058',
+  routine: 'ExecConstraints'
+}
+2025-08-15T16:54:55: Error occurred: {
+  error: 'Failed to add employee to crew: new row for relation "machine_crews" violates check constraint "machine_crews_crew_letter_check"',
+  stack: 'Error: Failed to add employee to crew: new row for relation "machine_crews" violates check constraint "machine_crews_crew_letter_check"\n' +
+    '    at MachinesService.addEmployeeToCrew (/home/production-app/production-orders-app/src/services/machines.service.js:458:13)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:232:20',
+  url: '/api/machines/40/crews/undefined/employees',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-15T14:54:55.989Z'
+}
+2025-08-15T16:54:56: Error adding employee to crew: error: new row for relation "machine_crews" violates check constraint "machine_crews_crew_letter_check"
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)
+    at async DatabaseUtils.raw (/home/production-app/production-orders-app/src/utils/database.js:146:12)
+    at async MachinesService.addEmployeeToCrew (/home/production-app/production-orders-app/src/services/machines.service.js:449:9)
+    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:232:20 {
+  length: 427,
+  severity: 'ERROR',
+  code: '23514',
+  detail: 'Failing row contains (8, 40, undefined, 0, [{"id":6,"username":"amanda gwala","full_name":"amanda gwala","r..., t, 2025-08-15, 2025-08-15, 4, 2025-08-15 16:54:56.888489+02, 2025-08-15 16:54:56.888489+02, null).',
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: 'public',
+  table: 'machine_crews',
+  column: undefined,
+  dataType: undefined,
+  constraint: 'machine_crews_crew_letter_check',
+  file: 'execMain.c',
+  line: '2058',
+  routine: 'ExecConstraints'
+}
+2025-08-15T16:54:56: Error occurred: {
+  error: 'Failed to add employee to crew: new row for relation "machine_crews" violates check constraint "machine_crews_crew_letter_check"',
+  stack: 'Error: Failed to add employee to crew: new row for relation "machine_crews" violates check constraint "machine_crews_crew_letter_check"\n' +
+    '    at MachinesService.addEmployeeToCrew (/home/production-app/production-orders-app/src/services/machines.service.js:458:13)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:232:20',
+  url: '/api/machines/40/crews/undefined/employees',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-15T14:54:56.889Z'
+}
+2025-08-15T16:54:57: Error adding employee to crew: error: new row for relation "machine_crews" violates check constraint "machine_crews_crew_letter_check"
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)
+    at async DatabaseUtils.raw (/home/production-app/production-orders-app/src/utils/database.js:146:12)
+    at async MachinesService.addEmployeeToCrew (/home/production-app/production-orders-app/src/services/machines.service.js:449:9)
+    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:232:20 {
+  length: 427,
+  severity: 'ERROR',
+  code: '23514',
+  detail: 'Failing row contains (9, 40, undefined, 0, [{"id":5,"username":"Abongile Khambule","full_name":"Abongile Kh..., t, 2025-08-15, 2025-08-15, 4, 2025-08-15 16:54:57.074625+02, 2025-08-15 16:54:57.074625+02, null).',
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: 'public',
+  table: 'machine_crews',
+  column: undefined,
+  dataType: undefined,
+  constraint: 'machine_crews_crew_letter_check',
+  file: 'execMain.c',
+  line: '2058',
+  routine: 'ExecConstraints'
+}
+2025-08-15T16:54:57: Error occurred: {
+  error: 'Failed to add employee to crew: new row for relation "machine_crews" violates check constraint "machine_crews_crew_letter_check"',
+  stack: 'Error: Failed to add employee to crew: new row for relation "machine_crews" violates check constraint "machine_crews_crew_letter_check"\n' +
+    '    at MachinesService.addEmployeeToCrew (/home/production-app/production-orders-app/src/services/machines.service.js:458:13)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:232:20',
+  url: '/api/machines/40/crews/undefined/employees',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-15T14:54:57.076Z'
+}
+2025-08-15T16:54:57: Error adding employee to crew: error: new row for relation "machine_crews" violates check constraint "machine_crews_crew_letter_check"
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)
+    at async DatabaseUtils.raw (/home/production-app/production-orders-app/src/utils/database.js:146:12)
+    at async MachinesService.addEmployeeToCrew (/home/production-app/production-orders-app/src/services/machines.service.js:449:9)
+    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:232:20 {
+  length: 428,
+  severity: 'ERROR',
+  code: '23514',
+  detail: 'Failing row contains (10, 40, undefined, 0, [{"id":13,"username":"andile msani","full_name":"andile msani","..., t, 2025-08-15, 2025-08-15, 4, 2025-08-15 16:54:57.865819+02, 2025-08-15 16:54:57.865819+02, null).',
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: 'public',
+  table: 'machine_crews',
+  column: undefined,
+  dataType: undefined,
+  constraint: 'machine_crews_crew_letter_check',
+  file: 'execMain.c',
+  line: '2058',
+  routine: 'ExecConstraints'
+}
+2025-08-15T16:54:57: Error occurred: {
+  error: 'Failed to add employee to crew: new row for relation "machine_crews" violates check constraint "machine_crews_crew_letter_check"',
+  stack: 'Error: Failed to add employee to crew: new row for relation "machine_crews" violates check constraint "machine_crews_crew_letter_check"\n' +
+    '    at MachinesService.addEmployeeToCrew (/home/production-app/production-orders-app/src/services/machines.service.js:458:13)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:232:20',
+  url: '/api/machines/40/crews/undefined/employees',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-15T14:54:57.867Z'
+}
+2025-08-15T16:54:58: Error adding employee to crew: error: new row for relation "machine_crews" violates check constraint "machine_crews_crew_letter_check"
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)
+    at async DatabaseUtils.raw (/home/production-app/production-orders-app/src/utils/database.js:146:12)
+    at async MachinesService.addEmployeeToCrew (/home/production-app/production-orders-app/src/services/machines.service.js:449:9)
+    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:232:20 {
+  length: 428,
+  severity: 'ERROR',
+  code: '23514',
+  detail: 'Failing row contains (11, 40, undefined, 0, [{"id":6,"username":"amanda gwala","full_name":"amanda gwala","r..., t, 2025-08-15, 2025-08-15, 4, 2025-08-15 16:54:58.020657+02, 2025-08-15 16:54:58.020657+02, null).',
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: 'public',
+  table: 'machine_crews',
+  column: undefined,
+  dataType: undefined,
+  constraint: 'machine_crews_crew_letter_check',
+  file: 'execMain.c',
+  line: '2058',
+  routine: 'ExecConstraints'
+}
+2025-08-15T16:54:58: Error occurred: {
+  error: 'Failed to add employee to crew: new row for relation "machine_crews" violates check constraint "machine_crews_crew_letter_check"',
+  stack: 'Error: Failed to add employee to crew: new row for relation "machine_crews" violates check constraint "machine_crews_crew_letter_check"\n' +
+    '    at MachinesService.addEmployeeToCrew (/home/production-app/production-orders-app/src/services/machines.service.js:458:13)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:232:20',
+  url: '/api/machines/40/crews/undefined/employees',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-15T14:54:58.022Z'
+}
+2025-08-15T16:54:58: Error removing employee from crew: NotFoundError: Crew not found not found
+    at MachinesService.removeEmployeeFromCrew (/home/production-app/production-orders-app/src/services/machines.service.js:474:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:250:20 {
+  statusCode: 404,
+  code: 'NOT_FOUND',
+  isOperational: true,
+  resource: 'Crew not found'
+}
+2025-08-15T16:54:58: Error occurred: {
+  error: 'Failed to remove employee from crew: Crew not found not found',
+  stack: 'Error: Failed to remove employee from crew: Crew not found not found\n' +
+    '    at MachinesService.removeEmployeeFromCrew (/home/production-app/production-orders-app/src/services/machines.service.js:492:13)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:250:20',
+  url: '/api/machines/40/crews/undefined/employees/10',
+  method: 'DELETE',
+  user: 'admin',
+  timestamp: '2025-08-15T14:54:58.817Z'
+}
+2025-08-15T16:54:58: Error adding employee to crew: error: new row for relation "machine_crews" violates check constraint "machine_crews_crew_letter_check"
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)
+    at async DatabaseUtils.raw (/home/production-app/production-orders-app/src/utils/database.js:146:12)
+    at async MachinesService.addEmployeeToCrew (/home/production-app/production-orders-app/src/services/machines.service.js:449:9)
+    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:232:20 {
+  length: 428,
+  severity: 'ERROR',
+  code: '23514',
+  detail: 'Failing row contains (12, 40, undefined, 0, [{"id":13,"username":"andile msani","full_name":"andile msani","..., t, 2025-08-15, 2025-08-15, 4, 2025-08-15 16:54:58.911683+02, 2025-08-15 16:54:58.911683+02, null).',
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: 'public',
+  table: 'machine_crews',
+  column: undefined,
+  dataType: undefined,
+  constraint: 'machine_crews_crew_letter_check',
+  file: 'execMain.c',
+  line: '2058',
+  routine: 'ExecConstraints'
+}
+2025-08-15T16:54:58: Error occurred: {
+  error: 'Failed to add employee to crew: new row for relation "machine_crews" violates check constraint "machine_crews_crew_letter_check"',
+  stack: 'Error: Failed to add employee to crew: new row for relation "machine_crews" violates check constraint "machine_crews_crew_letter_check"\n' +
+    '    at MachinesService.addEmployeeToCrew (/home/production-app/production-orders-app/src/services/machines.service.js:458:13)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:232:20',
+  url: '/api/machines/40/crews/undefined/employees',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-15T14:54:58.913Z'
+}
+2025-08-15T16:54:59: Error adding employee to crew: error: new row for relation "machine_crews" violates check constraint "machine_crews_crew_letter_check"
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)
+    at async DatabaseUtils.raw (/home/production-app/production-orders-app/src/utils/database.js:146:12)
+    at async MachinesService.addEmployeeToCrew (/home/production-app/production-orders-app/src/services/machines.service.js:449:9)
+    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:232:20 {
+  length: 428,
+  severity: 'ERROR',
+  code: '23514',
+  detail: 'Failing row contains (13, 40, undefined, 0, [{"id":5,"username":"Abongile Khambule","full_name":"Abongile Kh..., t, 2025-08-15, 2025-08-15, 4, 2025-08-15 16:54:59.178249+02, 2025-08-15 16:54:59.178249+02, null).',
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: 'public',
+  table: 'machine_crews',
+  column: undefined,
+  dataType: undefined,
+  constraint: 'machine_crews_crew_letter_check',
+  file: 'execMain.c',
+  line: '2058',
+  routine: 'ExecConstraints'
+}
+2025-08-15T16:54:59: Error occurred: {
+  error: 'Failed to add employee to crew: new row for relation "machine_crews" violates check constraint "machine_crews_crew_letter_check"',
+  stack: 'Error: Failed to add employee to crew: new row for relation "machine_crews" violates check constraint "machine_crews_crew_letter_check"\n' +
+    '    at MachinesService.addEmployeeToCrew (/home/production-app/production-orders-app/src/services/machines.service.js:458:13)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:232:20',
+  url: '/api/machines/40/crews/undefined/employees',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-15T14:54:59.179Z'
+}
+2025-08-15T16:55:00: Error removing employee from crew: NotFoundError: Crew not found not found
+    at MachinesService.removeEmployeeFromCrew (/home/production-app/production-orders-app/src/services/machines.service.js:474:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:250:20 {
+  statusCode: 404,
+  code: 'NOT_FOUND',
+  isOperational: true,
+  resource: 'Crew not found'
+}
+2025-08-15T16:55:00: Error occurred: {
+  error: 'Failed to remove employee from crew: Crew not found not found',
+  stack: 'Error: Failed to remove employee from crew: Crew not found not found\n' +
+    '    at MachinesService.removeEmployeeFromCrew (/home/production-app/production-orders-app/src/services/machines.service.js:492:13)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:250:20',
+  url: '/api/machines/40/crews/undefined/employees/10',
+  method: 'DELETE',
+  user: 'admin',
+  timestamp: '2025-08-15T14:55:00.357Z'
+}
+2025-08-15T16:55:00: Error adding employee to crew: error: new row for relation "machine_crews" violates check constraint "machine_crews_crew_letter_check"
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)
+    at async DatabaseUtils.raw (/home/production-app/production-orders-app/src/utils/database.js:146:12)
+    at async MachinesService.addEmployeeToCrew (/home/production-app/production-orders-app/src/services/machines.service.js:449:9)
+    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:232:20 {
+  length: 428,
+  severity: 'ERROR',
+  code: '23514',
+  detail: 'Failing row contains (14, 40, undefined, 0, [{"id":6,"username":"amanda gwala","full_name":"amanda gwala","r..., t, 2025-08-15, 2025-08-15, 4, 2025-08-15 16:55:00.362484+02, 2025-08-15 16:55:00.362484+02, null).',
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: 'public',
+  table: 'machine_crews',
+  column: undefined,
+  dataType: undefined,
+  constraint: 'machine_crews_crew_letter_check',
+  file: 'execMain.c',
+  line: '2058',
+  routine: 'ExecConstraints'
+}
+2025-08-15T16:55:00: Error occurred: {
+  error: 'Failed to add employee to crew: new row for relation "machine_crews" violates check constraint "machine_crews_crew_letter_check"',
+  stack: 'Error: Failed to add employee to crew: new row for relation "machine_crews" violates check constraint "machine_crews_crew_letter_check"\n' +
+    '    at MachinesService.addEmployeeToCrew (/home/production-app/production-orders-app/src/services/machines.service.js:458:13)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:232:20',
+  url: '/api/machines/40/crews/undefined/employees',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-15T14:55:00.364Z'
+}
+2025-08-15T16:55:01: Error adding employee to crew: error: new row for relation "machine_crews" violates check constraint "machine_crews_crew_letter_check"
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)
+    at async DatabaseUtils.raw (/home/production-app/production-orders-app/src/utils/database.js:146:12)
+    at async MachinesService.addEmployeeToCrew (/home/production-app/production-orders-app/src/services/machines.service.js:449:9)
+    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:232:20 {
+  length: 428,
+  severity: 'ERROR',
+  code: '23514',
+  detail: 'Failing row contains (15, 40, undefined, 0, [{"id":13,"username":"andile msani","full_name":"andile msani","..., t, 2025-08-15, 2025-08-15, 4, 2025-08-15 16:55:01.299824+02, 2025-08-15 16:55:01.299824+02, null).',
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: 'public',
+  table: 'machine_crews',
+  column: undefined,
+  dataType: undefined,
+  constraint: 'machine_crews_crew_letter_check',
+  file: 'execMain.c',
+  line: '2058',
+  routine: 'ExecConstraints'
+}
+2025-08-15T16:55:01: Error occurred: {
+  error: 'Failed to add employee to crew: new row for relation "machine_crews" violates check constraint "machine_crews_crew_letter_check"',
+  stack: 'Error: Failed to add employee to crew: new row for relation "machine_crews" violates check constraint "machine_crews_crew_letter_check"\n' +
+    '    at MachinesService.addEmployeeToCrew (/home/production-app/production-orders-app/src/services/machines.service.js:458:13)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:232:20',
+  url: '/api/machines/40/crews/undefined/employees',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-15T14:55:01.301Z'
+}
+2025-08-15T16:55:02: Error removing employee from crew: NotFoundError: Crew not found not found
+    at MachinesService.removeEmployeeFromCrew (/home/production-app/production-orders-app/src/services/machines.service.js:474:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:250:20 {
+  statusCode: 404,
+  code: 'NOT_FOUND',
+  isOperational: true,
+  resource: 'Crew not found'
+}
+2025-08-15T16:55:02: Error occurred: {
+  error: 'Failed to remove employee from crew: Crew not found not found',
+  stack: 'Error: Failed to remove employee from crew: Crew not found not found\n' +
+    '    at MachinesService.removeEmployeeFromCrew (/home/production-app/production-orders-app/src/services/machines.service.js:492:13)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:250:20',
+  url: '/api/machines/40/crews/undefined/employees/10',
+  method: 'DELETE',
+  user: 'admin',
+  timestamp: '2025-08-15T14:55:02.407Z'
+}
+2025-08-15T16:55:07: Error adding employee to crew: error: new row for relation "machine_crews" violates check constraint "machine_crews_crew_letter_check"
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)
+    at async DatabaseUtils.raw (/home/production-app/production-orders-app/src/utils/database.js:146:12)
+    at async MachinesService.addEmployeeToCrew (/home/production-app/production-orders-app/src/services/machines.service.js:449:9)
+    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:232:20 {
+  length: 428,
+  severity: 'ERROR',
+  code: '23514',
+  detail: 'Failing row contains (16, 38, undefined, 0, [{"id":5,"username":"Abongile Khambule","full_name":"Abongile Kh..., t, 2025-08-15, 2025-08-15, 4, 2025-08-15 16:55:07.512739+02, 2025-08-15 16:55:07.512739+02, null).',
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: 'public',
+  table: 'machine_crews',
+  column: undefined,
+  dataType: undefined,
+  constraint: 'machine_crews_crew_letter_check',
+  file: 'execMain.c',
+  line: '2058',
+  routine: 'ExecConstraints'
+}
+2025-08-15T16:55:07: Error occurred: {
+  error: 'Failed to add employee to crew: new row for relation "machine_crews" violates check constraint "machine_crews_crew_letter_check"',
+  stack: 'Error: Failed to add employee to crew: new row for relation "machine_crews" violates check constraint "machine_crews_crew_letter_check"\n' +
+    '    at MachinesService.addEmployeeToCrew (/home/production-app/production-orders-app/src/services/machines.service.js:458:13)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:232:20',
+  url: '/api/machines/38/crews/undefined/employees',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-15T14:55:07.513Z'
+}
+2025-08-15T16:55:08: Error adding employee to crew: error: new row for relation "machine_crews" violates check constraint "machine_crews_crew_letter_check"
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)
+    at async DatabaseUtils.raw (/home/production-app/production-orders-app/src/utils/database.js:146:12)
+    at async MachinesService.addEmployeeToCrew (/home/production-app/production-orders-app/src/services/machines.service.js:449:9)
+    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:232:20 {
+  length: 428,
+  severity: 'ERROR',
+  code: '23514',
+  detail: 'Failing row contains (17, 38, undefined, 0, [{"id":6,"username":"amanda gwala","full_name":"amanda gwala","r..., t, 2025-08-15, 2025-08-15, 4, 2025-08-15 16:55:08.189064+02, 2025-08-15 16:55:08.189064+02, null).',
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: 'public',
+  table: 'machine_crews',
+  column: undefined,
+  dataType: undefined,
+  constraint: 'machine_crews_crew_letter_check',
+  file: 'execMain.c',
+  line: '2058',
+  routine: 'ExecConstraints'
+}
+2025-08-15T16:55:08: Error occurred: {
+  error: 'Failed to add employee to crew: new row for relation "machine_crews" violates check constraint "machine_crews_crew_letter_check"',
+  stack: 'Error: Failed to add employee to crew: new row for relation "machine_crews" violates check constraint "machine_crews_crew_letter_check"\n' +
+    '    at MachinesService.addEmployeeToCrew (/home/production-app/production-orders-app/src/services/machines.service.js:458:13)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:232:20',
+  url: '/api/machines/38/crews/undefined/employees',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-15T14:55:08.190Z'
+}
+2025-08-15T16:55:08: Error adding employee to crew: error: new row for relation "machine_crews" violates check constraint "machine_crews_crew_letter_check"
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)
+    at async DatabaseUtils.raw (/home/production-app/production-orders-app/src/utils/database.js:146:12)
+    at async MachinesService.addEmployeeToCrew (/home/production-app/production-orders-app/src/services/machines.service.js:449:9)
+    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:232:20 {
+  length: 428,
+  severity: 'ERROR',
+  code: '23514',
+  detail: 'Failing row contains (18, 38, undefined, 0, [{"id":5,"username":"Abongile Khambule","full_name":"Abongile Kh..., t, 2025-08-15, 2025-08-15, 4, 2025-08-15 16:55:08.558636+02, 2025-08-15 16:55:08.558636+02, null).',
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: 'public',
+  table: 'machine_crews',
+  column: undefined,
+  dataType: undefined,
+  constraint: 'machine_crews_crew_letter_check',
+  file: 'execMain.c',
+  line: '2058',
+  routine: 'ExecConstraints'
+}
+2025-08-15T16:55:08: Error occurred: {
+  error: 'Failed to add employee to crew: new row for relation "machine_crews" violates check constraint "machine_crews_crew_letter_check"',
+  stack: 'Error: Failed to add employee to crew: new row for relation "machine_crews" violates check constraint "machine_crews_crew_letter_check"\n' +
+    '    at MachinesService.addEmployeeToCrew (/home/production-app/production-orders-app/src/services/machines.service.js:458:13)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:232:20',
+  url: '/api/machines/38/crews/undefined/employees',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-15T14:55:08.560Z'
+}
+2025-08-15T16:55:09: Error adding employee to crew: error: new row for relation "machine_crews" violates check constraint "machine_crews_crew_letter_check"
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)
+    at async DatabaseUtils.raw (/home/production-app/production-orders-app/src/utils/database.js:146:12)
+    at async MachinesService.addEmployeeToCrew (/home/production-app/production-orders-app/src/services/machines.service.js:449:9)
+    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:232:20 {
+  length: 428,
+  severity: 'ERROR',
+  code: '23514',
+  detail: 'Failing row contains (19, 38, undefined, 0, [{"id":6,"username":"amanda gwala","full_name":"amanda gwala","r..., t, 2025-08-15, 2025-08-15, 4, 2025-08-15 16:55:09.236144+02, 2025-08-15 16:55:09.236144+02, null).',
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: 'public',
+  table: 'machine_crews',
+  column: undefined,
+  dataType: undefined,
+  constraint: 'machine_crews_crew_letter_check',
+  file: 'execMain.c',
+  line: '2058',
+  routine: 'ExecConstraints'
+}
+2025-08-15T16:55:09: Error occurred: {
+  error: 'Failed to add employee to crew: new row for relation "machine_crews" violates check constraint "machine_crews_crew_letter_check"',
+  stack: 'Error: Failed to add employee to crew: new row for relation "machine_crews" violates check constraint "machine_crews_crew_letter_check"\n' +
+    '    at MachinesService.addEmployeeToCrew (/home/production-app/production-orders-app/src/services/machines.service.js:458:13)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:232:20',
+  url: '/api/machines/38/crews/undefined/employees',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-15T14:55:09.237Z'
+}
+2025-08-15T16:55:10: Error adding employee to crew: error: new row for relation "machine_crews" violates check constraint "machine_crews_crew_letter_check"
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)
+    at async DatabaseUtils.raw (/home/production-app/production-orders-app/src/utils/database.js:146:12)
+    at async MachinesService.addEmployeeToCrew (/home/production-app/production-orders-app/src/services/machines.service.js:449:9)
+    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:232:20 {
+  length: 428,
+  severity: 'ERROR',
+  code: '23514',
+  detail: 'Failing row contains (20, 38, undefined, 0, [{"id":5,"username":"Abongile Khambule","full_name":"Abongile Kh..., t, 2025-08-15, 2025-08-15, 4, 2025-08-15 16:55:10.610649+02, 2025-08-15 16:55:10.610649+02, null).',
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: 'public',
+  table: 'machine_crews',
+  column: undefined,
+  dataType: undefined,
+  constraint: 'machine_crews_crew_letter_check',
+  file: 'execMain.c',
+  line: '2058',
+  routine: 'ExecConstraints'
+}
+2025-08-15T16:55:10: Error occurred: {
+  error: 'Failed to add employee to crew: new row for relation "machine_crews" violates check constraint "machine_crews_crew_letter_check"',
+  stack: 'Error: Failed to add employee to crew: new row for relation "machine_crews" violates check constraint "machine_crews_crew_letter_check"\n' +
+    '    at MachinesService.addEmployeeToCrew (/home/production-app/production-orders-app/src/services/machines.service.js:458:13)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:232:20',
+  url: '/api/machines/38/crews/undefined/employees',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-15T14:55:10.611Z'
+}
+2025-08-15T16:55:12: Error adding employee to crew: error: new row for relation "machine_crews" violates check constraint "machine_crews_crew_letter_check"
+    at /home/production-app/production-orders-app/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async DatabaseManager.query (/home/production-app/production-orders-app/src/config/database.js:38:22)
+    at async DatabaseUtils.raw (/home/production-app/production-orders-app/src/utils/database.js:146:12)
+    at async MachinesService.addEmployeeToCrew (/home/production-app/production-orders-app/src/services/machines.service.js:449:9)
+    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:232:20 {
+  length: 428,
+  severity: 'ERROR',
+  code: '23514',
+  detail: 'Failing row contains (21, 38, undefined, 0, [{"id":6,"username":"amanda gwala","full_name":"amanda gwala","r..., t, 2025-08-15, 2025-08-15, 4, 2025-08-15 16:55:12.007831+02, 2025-08-15 16:55:12.007831+02, null).',
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: 'public',
+  table: 'machine_crews',
+  column: undefined,
+  dataType: undefined,
+  constraint: 'machine_crews_crew_letter_check',
+  file: 'execMain.c',
+  line: '2058',
+  routine: 'ExecConstraints'
+}
+2025-08-15T16:55:12: Error occurred: {
+  error: 'Failed to add employee to crew: new row for relation "machine_crews" violates check constraint "machine_crews_crew_letter_check"',
+  stack: 'Error: Failed to add employee to crew: new row for relation "machine_crews" violates check constraint "machine_crews_crew_letter_check"\n' +
+    '    at MachinesService.addEmployeeToCrew (/home/production-app/production-orders-app/src/services/machines.service.js:458:13)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async /home/production-app/production-orders-app/src/routes/machines.routes.js:232:20',
+  url: '/api/machines/38/crews/undefined/employees',
+  method: 'POST',
+  user: 'admin',
+  timestamp: '2025-08-15T14:55:12.010Z'
+}
