@@ -44,6 +44,7 @@ import LabourLayout from "./js/components/labour-layout.jsx";
 import { LaborManagementSystem } from './js/components/labor-planner.jsx';
 import AttendanceRegister from './js/components/attendance-register.jsx';
 import MaturationRoom from './js/components/maturation-room.jsx';
+import DigitalTwinFactory from './js/components/digital-twin-factory.jsx';
 
 // Define the routes for the application
 const routes = [
@@ -53,6 +54,7 @@ const routes = [
     { path: '/labor-planner', component: LaborManagementSystem, name: 'Labor Planner' },
     { path: '/orders', component: OrdersPage, title: 'Production Orders' },
     { path: '/machines', component: MachinesPage, title: 'Machine Management' },
+    { path: '/digital-twin', component: DigitalTwinFactory, title: '4D Digital Twin Factory' },
     { path: '/analytics', component: AnalyticsPage, title: 'Analytics & Reports' },
     { path: '/shift-reports', component: ShiftReports, title: 'Shift Reports' },
     { path: '/settings', component: SettingsPage, title: 'Settings' },
