@@ -55,7 +55,7 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
         throw new Error('Babylon.js not fully loaded');
       }
 
-      // Create optimized Babylon engine for performance
+      // Create optimized Babylon engine for MAXIMUM performance and visual quality
       engine = new window.BABYLON.Engine(canvas, true, {
         preserveDrawingBuffer: true,
         stencil: true,
@@ -65,7 +65,8 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
         alpha: false,
         premultipliedAlpha: false,
         depth: true,
-        desynchronized: true
+        desynchronized: true,
+        adaptToDeviceRatio: true // Better display scaling for high-DPI screens
       });
       
       // Enable performance optimizations
@@ -279,13 +280,15 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
       // Add camera preset positions for quick navigation - FULL LAYOUT COVERAGE
       const setupCameraPresets = (camera, scene) => {
         const presets = {
-          overview: { alpha: -Math.PI / 2, beta: Math.PI / 4, radius: 150, target: new window.BABYLON.Vector3(0, 0, 0) },
-          blending: { alpha: -Math.PI, beta: Math.PI / 3, radius: 60, target: new window.BABYLON.Vector3(0, 0, -14) },
-          maturation: { alpha: -Math.PI * 0.75, beta: Math.PI / 3, radius: 50, target: new window.BABYLON.Vector3(-18, 0, 0) },
-          processing: { alpha: -Math.PI * 0.25, beta: Math.PI / 3, radius: 50, target: new window.BABYLON.Vector3(18, 0, 0) },
-          packaging: { alpha: 0, beta: Math.PI / 3, radius: 70, target: new window.BABYLON.Vector3(0, 0, 14) },
-          isometric: { alpha: Math.PI / 4, beta: Math.PI / 3, radius: 120, target: new window.BABYLON.Vector3(0, 0, 0) },
-          aerial: { alpha: -Math.PI / 2, beta: Math.PI / 6, radius: 200, target: new window.BABYLON.Vector3(0, 0, 0) }
+          overview: { alpha: -Math.PI / 4, beta: Math.PI / 2.5, radius: 200, target: new window.BABYLON.Vector3(0, 0, 0) },
+          blending: { alpha: -Math.PI, beta: Math.PI / 3, radius: 80, target: new window.BABYLON.Vector3(0, 0, -14) },
+          maturation: { alpha: -Math.PI * 0.75, beta: Math.PI / 3, radius: 70, target: new window.BABYLON.Vector3(-18, 0, 0) },
+          processing: { alpha: -Math.PI * 0.25, beta: Math.PI / 3, radius: 70, target: new window.BABYLON.Vector3(18, 0, 0) },
+          packaging: { alpha: 0, beta: Math.PI / 3, radius: 90, target: new window.BABYLON.Vector3(0, 0, 14) },
+          isometric: { alpha: Math.PI / 4, beta: Math.PI / 3, radius: 180, target: new window.BABYLON.Vector3(0, 0, 0) },
+          aerial: { alpha: -Math.PI / 2, beta: Math.PI / 6, radius: 300, target: new window.BABYLON.Vector3(0, 0, 0) },
+          factory_flow: { alpha: Math.PI / 6, beta: Math.PI / 2.8, radius: 250, target: new window.BABYLON.Vector3(0, 0, 0) },
+          quality_control: { alpha: -Math.PI / 3, beta: Math.PI / 2.2, radius: 120, target: new window.BABYLON.Vector3(12, 0, 8) }
         };
         
         // Smooth camera transition function
@@ -654,10 +657,32 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
         }
       });
 
-      // Start render loop
+      // Start enhanced render loop with performance monitoring
+      let frameCount = 0;
+      let lastTime = performance.now();
+      
       engine.runRenderLoop(() => {
         if (scene) {
           scene.render();
+          
+          // Performance monitoring (every 60 frames)
+          frameCount++;
+          if (frameCount % 60 === 0) {
+            const currentTime = performance.now();
+            const fps = Math.round(60000 / (currentTime - lastTime));
+            lastTime = currentTime;
+            
+            // Update performance display if available
+            const perfDisplay = document.querySelector('#factory-performance');
+            if (perfDisplay) {
+              perfDisplay.textContent = `${fps} FPS`;
+            }
+            
+            // Log performance data for monitoring
+            if (fps < 30) {
+              console.warn(`⚠️ Factory performance: ${fps} FPS (low)`);
+            }
+          }
         }
       });
 
@@ -1194,6 +1219,18 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
             🟢 Packaging Zone
           </button>
           <button 
+            onClick={() => window.factoryCameraPresets?.goTo('factory_flow')}
+            className="w-full px-3 py-1 bg-yellow-600 hover:bg-yellow-700 rounded text-left"
+          >
+            🌊 Process Flow
+          </button>
+          <button 
+            onClick={() => window.factoryCameraPresets?.goTo('aerial')}
+            className="w-full px-3 py-1 bg-indigo-600 hover:bg-indigo-700 rounded text-left"
+          >
+            🚁 Aerial View
+          </button>
+          <button 
             onClick={() => {
               const elem = document.querySelector('canvas');
               if (elem.requestFullscreen) elem.requestFullscreen();
@@ -1226,6 +1263,14 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
             <span className="text-blue-400">
               {machines?.length > 0 ? Math.round((machines.filter(m => m.status === 'available').length / machines.length) * 100) : 0}%
             </span>
+          </div>
+          <div className="flex justify-between">
+            <span>Performance:</span>
+            <span id="factory-performance" className="text-green-400">-- FPS</span>
+          </div>
+          <div className="flex justify-between">
+            <span>Factory Size:</span>
+            <span className="text-purple-400">52m × 42m</span>
           </div>
         </div>
       </div>
