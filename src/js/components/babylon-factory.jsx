@@ -134,85 +134,88 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
       dirLight.intensity = 1.0;
       dirLight.diffuse = new window.BABYLON.Color3(0.4, 0.6, 1.0);
 
-      // Real-world factory dimensions based on your floor plan
-      const factoryLength = 80;  // 80m
-      const factoryWidth = 33;   // 33m
-      const warehouseWidth = 37; // 37m for inbound/rebate
-      const inboundLength = 42.4; // 42.4m inbound warehouse
-      const rebateLength = 37.6;  // 37.6m rebate store
-      const outboundDepth = 29;   // 29m outbound warehouse
-      const wallHeight = 8;
-      const wallThickness = 0.5;
+      // COMPLETE FACTORY FLOOR RECREATION - Based on precise layout
+      // Factory dimensions from layout: 52m width x 42m height
+      // Grid: 5m + 5m + 6m + 10m + 20m + 6m = 52m width
+      // Heights: 5m + 6m + 14m + 8m + various = 42m height
+      
+      const factoryWidth = 52;  // Total factory width
+      const factoryHeight = 42; // Total factory height  
+      const wallHeight = 6;
+      const wallThickness = 0.3;
 
-      // Create main factory floor (80m x 33m) - Production area
+      // Create main factory floor (52m x 42m) - Single production facility
       const factoryFloor = window.BABYLON.MeshBuilder.CreateGround('factoryFloor', {
-        width: factoryLength, height: factoryWidth
+        width: factoryWidth, height: factoryHeight
       }, scene);
       factoryFloor.position = new window.BABYLON.Vector3(0, 0, 0);
       
       const factoryMaterial = new window.BABYLON.StandardMaterial('factoryMaterial', scene);
-      factoryMaterial.diffuseColor = new window.BABYLON.Color3(0.15, 0.2, 0.25); // Dark industrial concrete
+      factoryMaterial.diffuseColor = new window.BABYLON.Color3(0.18, 0.22, 0.25); // Industrial concrete
       factoryMaterial.specularColor = new window.BABYLON.Color3(0.1, 0.1, 0.1);
-      factoryMaterial.wireframe = false; // Explicitly disable wireframe
+      factoryMaterial.wireframe = false;
       factoryFloor.material = factoryMaterial;
       factoryFloor.renderOutline = false;
       factoryFloor.showBoundingBox = false;
 
-      // Create inbound warehouse floor (42.4m x 37m) - LEFT side when facing front
-      const inboundFloor = window.BABYLON.MeshBuilder.CreateGround('inboundFloor', {
-        width: inboundLength, height: warehouseWidth
+      // Create area floor sections based on layout zones
+      // BLENDING area floor section (top section)
+      const blendingFloor = window.BABYLON.MeshBuilder.CreateGround('blendingFloor', {
+        width: factoryWidth, height: 11 // 5m + 6m sections  
       }, scene);
-      inboundFloor.position = new window.BABYLON.Vector3(-61.2, 0, 2); // Left of factory (correct)
+      blendingFloor.position = new window.BABYLON.Vector3(0, 0.01, -15.5); // Top section, slightly elevated
       
-      const warehouseMaterial = new window.BABYLON.StandardMaterial('warehouseMaterial', scene);
-      warehouseMaterial.diffuseColor = new window.BABYLON.Color3(0.25, 0.25, 0.3); // Lighter warehouse concrete
-      warehouseMaterial.wireframe = false; // Explicitly disable wireframe
-      inboundFloor.material = warehouseMaterial;
-      inboundFloor.renderOutline = false;
-      inboundFloor.showBoundingBox = false;
+      const blendingMaterial = new window.BABYLON.StandardMaterial('blendingMaterial', scene);
+      blendingMaterial.diffuseColor = new window.BABYLON.Color3(0.25, 0.20, 0.30); // Purple tint for blending
+      blendingMaterial.alpha = 0.8;
+      blendingMaterial.wireframe = false;
+      blendingFloor.material = blendingMaterial;
+      blendingFloor.renderOutline = false;
+      blendingFloor.showBoundingBox = false;
 
-      // Create rebate store floor (37.6m x 37m)
-      const rebateFloor = window.BABYLON.MeshBuilder.CreateGround('rebateFloor', {
-        width: rebateLength, height: warehouseWidth
+      // MATURATION area floor section (left center section)  
+      const maturationFloor = window.BABYLON.MeshBuilder.CreateGround('maturationFloor', {
+        width: 16, height: 14 // Left portion of 14m section
       }, scene);
-      rebateFloor.position = new window.BABYLON.Vector3(-100.8, 0, 2); // Left of inbound
+      maturationFloor.position = new window.BABYLON.Vector3(-18, 0.01, -3); // Left center
       
-      const rebateMaterial = new window.BABYLON.StandardMaterial('rebateMaterial', scene);
-      rebateMaterial.diffuseColor = new window.BABYLON.Color3(0.2, 0.3, 0.2); // Greenish storage area
-      rebateMaterial.wireframe = false; // Explicitly disable wireframe
-      rebateFloor.material = rebateMaterial;
-      rebateFloor.renderOutline = false;
-      rebateFloor.showBoundingBox = false;
+      const maturationMaterial = new window.BABYLON.StandardMaterial('maturationMaterial', scene);
+      maturationMaterial.diffuseColor = new window.BABYLON.Color3(0.20, 0.30, 0.25); // Green tint for maturation
+      maturationMaterial.alpha = 0.8;
+      maturationMaterial.wireframe = false;
+      maturationFloor.material = maturationMaterial;
+      maturationFloor.renderOutline = false;
+      maturationFloor.showBoundingBox = false;
 
-      // Create outbound warehouse floor (80m x 29m) - RIGHT side when facing front  
-      const outboundFloor = window.BABYLON.MeshBuilder.CreateGround('outboundFloor', {
-        width: factoryLength, height: outboundDepth
+      // PACKAGING area floor section (bottom section)
+      const packagingFloor = window.BABYLON.MeshBuilder.CreateGround('packagingFloor', {
+        width: factoryWidth, height: 8 // Bottom 8m section
       }, scene);
-      outboundFloor.position = new window.BABYLON.Vector3(61.2, 0, 2); // Right of factory (moved from south to right)
-      outboundFloor.material = warehouseMaterial;
-      outboundFloor.renderOutline = false;
-      outboundFloor.showBoundingBox = false;
+      packagingFloor.position = new window.BABYLON.Vector3(0, 0.01, 17); // Bottom section
+      
+      const packagingMaterial = new window.BABYLON.StandardMaterial('packagingMaterial', scene);
+      packagingMaterial.diffuseColor = new window.BABYLON.Color3(0.30, 0.25, 0.20); // Orange tint for packaging
+      packagingMaterial.alpha = 0.8;
+      packagingMaterial.wireframe = false;
+      packagingFloor.material = packagingMaterial;
+      packagingFloor.renderOutline = false;
+      packagingFloor.showBoundingBox = false;
 
-      // Create perimeter walls for entire complex
+      // Create perimeter walls for factory building (52m x 42m)
       const walls = [
-        // Main factory walls
-        { name: 'factoryNorth', pos: [0, wallHeight/2, -factoryWidth/2], size: [factoryLength, wallHeight, wallThickness] },
-        { name: 'factorySouth', pos: [0, wallHeight/2, factoryWidth/2], size: [factoryLength, wallHeight, wallThickness] },
+        // Factory perimeter walls
+        { name: 'factoryNorth', pos: [0, wallHeight/2, -factoryHeight/2], size: [factoryWidth, wallHeight, wallThickness] },
+        { name: 'factorySouth', pos: [0, wallHeight/2, factoryHeight/2], size: [factoryWidth, wallHeight, wallThickness] },
+        { name: 'factoryWest', pos: [-factoryWidth/2, wallHeight/2, 0], size: [wallThickness, wallHeight, factoryHeight] },
+        { name: 'factoryEast', pos: [factoryWidth/2, wallHeight/2, 0], size: [wallThickness, wallHeight, factoryHeight] },
         
-        // Inbound warehouse walls (LEFT side)
-        { name: 'inboundNorth', pos: [-61.2, wallHeight/2, -16.5], size: [inboundLength, wallHeight, wallThickness] },
-        { name: 'inboundSouth', pos: [-61.2, wallHeight/2, 20.5], size: [inboundLength, wallHeight, wallThickness] },
-        { name: 'inboundWest', pos: [-82.6, wallHeight/2, 2], size: [wallThickness, wallHeight, warehouseWidth] },
-        
-        // Rebate store walls (FAR LEFT)
-        { name: 'rebateNorth', pos: [-100.8, wallHeight/2, -16.5], size: [rebateLength, wallHeight, wallThickness] },
-        { name: 'rebateSouth', pos: [-100.8, wallHeight/2, 20.5], size: [rebateLength, wallHeight, wallThickness] },
-        { name: 'rebateWest', pos: [-119.6, wallHeight/2, 2], size: [wallThickness, wallHeight, warehouseWidth] },
-        
-        // Outbound warehouse walls (RIGHT side)
-        { name: 'outboundNorth', pos: [61.2, wallHeight/2, -16.5], size: [factoryLength, wallHeight, wallThickness] },
-        { name: 'outboundSouth', pos: [61.2, wallHeight/2, 20.5], size: [factoryLength, wallHeight, wallThickness] },
-        { name: 'outboundEast', pos: [101.2, wallHeight/2, 2], size: [wallThickness, wallHeight, warehouseWidth] }
+        // Internal area divider walls (optional visual separators)
+        // Blending area separator
+        { name: 'blendingDivider', pos: [0, wallHeight/4, -10], size: [factoryWidth * 0.8, wallHeight/2, wallThickness/2] },
+        // Maturation area separator  
+        { name: 'maturationDivider', pos: [-10, wallHeight/4, 4], size: [wallThickness/2, wallHeight/2, 14] },
+        // Packaging area separator
+        { name: 'packagingDivider', pos: [0, wallHeight/4, 13], size: [factoryWidth * 0.8, wallHeight/2, wallThickness/2] }
       ];
 
       // Create wall material - more subtle appearance
@@ -461,63 +464,67 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
         const machinesInEnv = machineList.filter(m => m.environment === machine.environment);
         const envIndex = machinesInEnv.indexOf(machine);
 
-        // Position machines based on precise factory floor layout (52m x 42m)
-        // Grid: 5m + 5m + 6m + 10m + 20m + 6m = 52m width
-        // Heights: 5m + 6m + 14m + 8m = 33m main areas
+        // PRECISE MACHINE POSITIONING - Factory Layout 52m x 42m
+        // Column positions: -24, -19, -13, -3, 17, 23 (based on 5m+5m+6m+10m+20m+6m)
+        // Row positions: -18.5, -12.5, -3, 17 (based on 5m+6m+14m+8m sections)
         
         if (machine.environment === 'blending') {
-          // BLENDING area - top left section of factory
-          if (machine.name.includes('Ploughshare') || machine.name.includes('PLOUGH BLENDER')) {
-            x = -20; z = -15; // Top center position in blending area
-          } else if (machine.name.includes('MaxMix') || machine.name.includes('1000L BLENDER')) {
-            x = 5; z = -8; // Right side of blending area
-          } else if (machine.name.includes('Winkwork') || machine.name.includes('1500L BLENDER')) {
-            x = 5; z = -2; // Right side, lower in blending area
+          // BLENDING area - Top section (rows -18.5 to -12.5)
+          if (machine.name.includes('BLENDING')) {
+            x = -24; z = -18; // Far left blending area
+          } else if (machine.name.includes('PLOUGH BLENDER') || machine.name.includes('Ploughshare')) {
+            x = -3; z = -15; // Center-right in blending area
           } else if (machine.name.includes('PRE-BATCH')) {
-            x = 0; z = -15; // Center top of blending area
+            x = 10; z = -15; // Right side in blending area  
+          } else if (machine.name.includes('1000L BLENDER') || machine.name.includes('MaxMix')) {
+            x = 17; z = -8; // Far right blending, lower row
+          } else if (machine.name.includes('1500L BLENDER') || machine.name.includes('Winkwork')) {
+            x = 17; z = -2; // Far right blending, bottom
           } else {
-            // Other blending equipment distributed in blending area
-            x = -15 + (envIndex % 3) * 10;
-            z = -12 + Math.floor(envIndex / 3) * 4;
+            // Other blending equipment
+            x = -19 + (envIndex % 3) * 8;
+            z = -16 + Math.floor(envIndex / 3) * 3;
           }
         } else if (machine.environment === 'packaging') {
-          // PACKAGING area - distributed across center and right sections
-          if (machine.name.includes('Stick Pack') || machine.name.includes('STICKPACK')) {
-            x = -15; z = -10; // Left side packaging area
-          } else if (machine.name.includes('IlaPak') || machine.name.includes('ILAPACK')) {
-            x = -15; z = 2; // Left side, middle height
+          // PACKAGING area - Bottom section and center areas
+          if (machine.name.includes('STICKPACK') || machine.name.includes('Stick Pack')) {
+            x = -19; z = -8; // Left side packaging area
+          } else if (machine.name.includes('ILAPACK') || machine.name.includes('IlaPak')) {
+            x = -19; z = 5; // Left side, lower packaging
           } else if (machine.name.includes('UNIVERSAL')) {
-            x = -15; z = 10; // Bottom left of packaging area
+            x = -19; z = 15; // Bottom left universal area
           } else if (machine.name.includes('TABLETS')) {
-            x = -20; z = 6; // Bottom left tablets area
+            x = -24; z = 17; // Bottom far left tablets
           } else if (machine.name.includes('CUBES')) {
-            x = -10; z = 6; // Bottom center cubes area
+            x = -13; z = 17; // Bottom cubes area
           } else if (machine.name.includes('STOCK') || machine.name.includes('POWDER')) {
-            x = 0; z = 6; // Bottom center stock powder area
-          } else if (machine.name.includes('CANLINE') || machine.name.includes('OLD CAN LINE')) {
-            x = 10; z = 6; // Bottom right can line area
+            x = -3; z = 17; // Bottom center stock powder
+          } else if (machine.name.includes('OLD CAN LINE') || machine.name.includes('CANLINE')) {
+            x = 10; z = 17; // Bottom right can line
           } else if (machine.name.includes('5LANES') || machine.name.includes('AUGER') || machine.name.includes('ENFLEX') || machine.name.includes('CANS')) {
-            x = 15; z = 6; // Far right packaging area
+            x = 20; z = 17; // Far right lanes/auger/enflex/cans
+          } else if (machine.name.includes('FB') || machine.name.includes('fb 10')) {
+            x = -24; z = -2; // FB-10 in maturation room area (per layout)
           } else if (machine.name.includes('BULK')) {
-            x = 5; z = 2; // Center bulk area
+            x = -3; z = 5; // Center bulk area
           } else {
-            // Other packaging equipment distributed across packaging areas
-            x = -10 + (envIndex % 5) * 6;
-            z = -5 + Math.floor(envIndex / 5) * 5;
+            // Other packaging equipment
+            x = -15 + (envIndex % 6) * 7;
+            z = -5 + Math.floor(envIndex / 6) * 8;
           }
         } else if (machine.environment === 'maturation') {
-          // MATURATION area - center left section
-          if (machine.name.includes('fb 10') || machine.name.includes('FB-10')) {
-            x = -20; z = -2; // Left side maturation area
+          // MATURATION area - Center left section
+          if (machine.name.includes('FB-10') || machine.name.includes('fb 10')) {
+            x = -24; z = -2; // Left side maturation (FB-10 area)
           } else {
-            // Other maturation equipment
-            x = -18 + (envIndex % 2) * 4;
-            z = -4 + Math.floor(envIndex / 2) * 4;
+            // Other maturation equipment in left center area
+            x = -22 + (envIndex % 2) * 6;
+            z = -5 + Math.floor(envIndex / 2) * 6;
           }
         } else {
           // Default positioning across factory floor
-          x = -20 + (envIndex % 8) * 5;
-          z = -12 + Math.floor(envIndex / 8) * 4;
+          x = -20 + (envIndex % 6) * 7;
+          z = -15 + Math.floor(envIndex / 6) * 8;
         }
 
         // Position the entire machine group
