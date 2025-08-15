@@ -225,7 +225,7 @@ class OrdersService {
       completion_notes = ''
     } = completionData;
 
-    // Complete transaction
+    // Complete transaction and automatically archive
     const results = await DatabaseUtils.transaction([
       {
         text: `UPDATE production_orders SET 
@@ -235,9 +235,12 @@ class OrdersService {
                waste_quantity = $4,
                quality_notes = $5,
                completion_notes = $6,
-               updated_at = $7,
-               updated_by = $8
-               WHERE id = $9`,
+               archived = $7,
+               archived_at = $8,
+               archived_by = $9,
+               updated_at = $10,
+               updated_by = $11
+               WHERE id = $12`,
         params: [
           'completed', 
           new Date(), 
@@ -245,6 +248,9 @@ class OrdersService {
           waste_quantity,
           quality_notes,
           completion_notes,
+          true, // Automatically archive completed orders
+          new Date(), // archived_at
+          userId, // archived_by
           new Date(), 
           userId, 
           id
