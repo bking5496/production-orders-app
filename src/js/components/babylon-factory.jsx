@@ -8,55 +8,37 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
   let scene = null;
   let engine = null;
 
-  // Load Babylon.js dynamically with enhanced verification
+  // Direct Babylon.js loading - simple and reliable
   const loadBabylonJS = async () => {
-    try {
-      // Enhanced check for complete Babylon.js availability
-      if (typeof window.BABYLON !== 'undefined' && 
-          window.BABYLON.ArcRotateCamera && 
-          window.BABYLON.ArcRotateCamera.prototype.attachControls) {
-        console.log('✅ Babylon.js already loaded with full camera controls');
-        return true;
-      }
-
-      console.log('📦 Loading Babylon.js libraries with enhanced controls...');
-      
-      // Load core Babylon.js
-      const babylonScript = document.createElement('script');
-      babylonScript.src = 'https://cdn.babylonjs.com/babylon.js';
-      
-      await new Promise((resolve, reject) => {
-        babylonScript.onload = () => {
-          console.log('✅ Babylon.js core loaded');
-          resolve();
-        };
-        babylonScript.onerror = () => reject(new Error('Failed to load Babylon.js core'));
-        document.head.appendChild(babylonScript);
-      });
-
-      // Enhanced verification with multiple checks
-      let attempts = 0;
-      const maxAttempts = 20;
-      
-      while (attempts < maxAttempts) {
-        if (window.BABYLON && 
-            window.BABYLON.Engine && 
-            window.BABYLON.Scene && 
-            window.BABYLON.ArcRotateCamera &&
-            window.BABYLON.ArcRotateCamera.prototype.attachControls) {
-          console.log('✅ Babylon.js fully ready with camera controls');
-          return true;
-        }
-        
-        await new Promise(resolve => setTimeout(resolve, 50));
-        attempts++;
-      }
-      
-      throw new Error('Babylon.js camera controls not fully loaded after timeout');
-    } catch (error) {
-      console.error('❌ Failed to load Babylon.js:', error);
-      throw error;
+    // Check if already loaded
+    if (window.BABYLON && window.BABYLON.Engine && window.BABYLON.Scene && window.BABYLON.ArcRotateCamera) {
+      console.log('✅ Babylon.js already available');
+      return true;
     }
+
+    console.log('📦 Loading Babylon.js from CDN...');
+    
+    return new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = 'https://cdn.babylonjs.com/babylon.js';
+      script.async = false; // Load synchronously to avoid race conditions
+      
+      script.onload = () => {
+        // Simple check after load
+        if (window.BABYLON && window.BABYLON.Engine) {
+          console.log('✅ Babylon.js loaded successfully');
+          resolve(true);
+        } else {
+          reject(new Error('Babylon.js objects not available after load'));
+        }
+      };
+      
+      script.onerror = () => {
+        reject(new Error('Failed to load Babylon.js from CDN'));
+      };
+      
+      document.head.appendChild(script);
+    });
   };
 
   // Initialize Babylon.js scene
@@ -130,24 +112,24 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
         });
       }
 
-      // Setup enhanced camera system for 52m × 42m factory floor
-      console.log('🎥 Creating enhanced ArcRotate camera...');
+      // Setup enhanced camera system for 52m × 42m factory floor - FULL CANVAS UTILIZATION
+      console.log('🎥 Creating enhanced ArcRotate camera for full canvas coverage...');
       const camera = new window.BABYLON.ArcRotateCamera(
         'factoryCamera', 
-        -Math.PI / 2,  // Start looking from the side
-        Math.PI / 3,   // Angled down view
-        80,            // Optimal distance for 52m factory
+        -Math.PI / 4,  // Better angle for full factory view
+        Math.PI / 2.5, // Optimized elevation for 52m × 42m coverage
+        120,           // Increased distance for full factory visibility
         new window.BABYLON.Vector3(0, 0, 0), // Center of factory floor
         scene
       );
       
       console.log('🎥 Camera created:', camera.constructor.name);
       
-      // Enhanced camera limits for professional factory navigation
+      // Enhanced camera limits for professional factory navigation - FULL CANVAS COVERAGE
       camera.lowerBetaLimit = 0.1;           // Prevent going too low
       camera.upperBetaLimit = Math.PI / 2.1; // Prevent going too high
-      camera.lowerRadiusLimit = 15;          // Minimum zoom distance
-      camera.upperRadiusLimit = 250;         // Maximum zoom distance
+      camera.lowerRadiusLimit = 30;          // Minimum zoom for detail view
+      camera.upperRadiusLimit = 350;         // Maximum zoom for full factory overview
       
       // Enhanced camera sensitivity settings for smooth control
       camera.wheelPrecision = 20;            // Smooth wheel zooming
@@ -161,57 +143,27 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
       camera.useAutoRotationBehavior = false; // Disable auto-rotation
       camera.useFramingBehavior = false;     // Disable auto-framing
       
-      // Enhanced control attachment with comprehensive error handling
-      const attachCameraControls = async () => {
+      // Simple, direct camera control attachment
+      const attachCameraControls = () => {
         try {
-          // Ensure canvas is ready and properly focused
-          if (!canvas || !canvas.getContext) {
-            throw new Error('Canvas not ready for camera controls');
+          if (!canvas) {
+            console.error('Canvas not available for camera controls');
+            return false;
           }
           
-          // Verify attachControls method exists
-          if (typeof camera.attachControls !== 'function') {
-            throw new Error('Camera attachControls method not available');
-          }
-          
-          // Wait for DOM to be fully ready
-          await new Promise(resolve => {
-            if (document.readyState === 'complete') {
-              resolve();
-            } else {
-              window.addEventListener('load', resolve, { once: true });
-            }
-          });
-          
-          // Attach controls with enhanced options
+          // Direct attachment - Babylon handles the rest
           camera.attachControls(canvas, true);
           
-          // Set canvas attributes for better interaction
+          // Basic canvas setup
           canvas.setAttribute('tabindex', '0');
           canvas.style.outline = 'none';
           canvas.style.touchAction = 'none';
           
-          // Force focus to enable keyboard controls
-          canvas.focus();
-          
-          console.log('✅ Enhanced camera controls attached successfully');
-          
-          // Verify controls are working by checking for event listeners
-          const hasPointerEvents = canvas.onpointerdown !== null || 
-                                  canvas.onpointermove !== null ||
-                                  canvas.addEventListener;
-          
-          if (!hasPointerEvents) {
-            console.warn('⚠️ Camera controls may not be fully functional');
-          }
-          
+          console.log('✅ Camera controls attached');
           return true;
           
         } catch (error) {
-          console.error('❌ Failed to attach camera controls:', error);
-          
-          // Fallback: Manual event handling for basic navigation
-          setupFallbackCameraControls(camera, canvas, scene);
+          console.error('❌ Camera controls failed:', error);
           return false;
         }
       };
@@ -219,8 +171,8 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
       // Set camera as active immediately
       scene.activeCamera = camera;
       
-      // Attach controls asynchronously
-      await attachCameraControls();
+      // Attach controls directly
+      attachCameraControls();
 
       // Enhanced lighting system for professional factory visualization
       const createEnhancedLighting = (scene) => {
@@ -1165,36 +1117,38 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
     });
   };
 
-  // Ref callback that initializes Babylon when element is actually mounted
+  // Direct initialization when canvas is ready
   const containerRefCallback = useCallback((element) => {
     if (!element) {
-      // Element is being unmounted
+      // Cleanup on unmount
       if (engine) {
         engine.dispose();
       }
       return;
     }
 
-    // Use setTimeout to avoid blocking React's render cycle
-    setTimeout(async () => {
+    // Initialize immediately - no setTimeout needed
+    const initializeFactory = async () => {
       try {
         setError(null);
-        console.log('🏭 Container element mounted, starting Babylon factory initialization...');
+        console.log('🏭 Starting factory initialization...');
         
-        // First load Babylon.js libraries
+        // Load Babylon.js
         await loadBabylonJS();
-        console.log('✅ Babylon.js libraries loaded');
         
-        // Initialize the scene with the canvas element
+        // Initialize the 3D scene
         await initializeBabylonScene(element);
-        console.log('✅ Babylon scene initialized');
+        
+        console.log('✅ Factory ready');
         
       } catch (error) {
-        console.error('❌ Babylon factory initialization failed:', error);
+        console.error('❌ Factory initialization failed:', error);
         setError(error.message);
       }
-    }, 100);
-  }, []);
+    };
+    
+    initializeFactory();
+  }, [machines]);
 
   // Note: Machine creation will be handled in the initialization flow
 
@@ -1216,13 +1170,77 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
   }
 
   return (
-    <div className="w-full h-96 bg-gray-900 rounded-lg overflow-hidden relative">
+    <div className="w-full bg-gray-900 rounded-lg overflow-hidden relative" style={{ height: 'calc(100vh - 120px)' }}>
+      {/* Industry 4.0 Control Panel */}
+      <div className="absolute top-4 left-4 z-10 bg-black/80 backdrop-blur-sm rounded-lg p-4 text-white">
+        <div className="text-sm font-semibold mb-2">🏭 Factory Controls</div>
+        <div className="space-y-2 text-xs">
+          <button 
+            onClick={() => window.factoryCameraPresets?.goTo('overview')}
+            className="w-full px-3 py-1 bg-blue-600 hover:bg-blue-700 rounded text-left"
+          >
+            📷 Overview
+          </button>
+          <button 
+            onClick={() => window.factoryCameraPresets?.goTo('blending')}
+            className="w-full px-3 py-1 bg-blue-600 hover:bg-blue-700 rounded text-left"
+          >
+            🔵 Blending Zone
+          </button>
+          <button 
+            onClick={() => window.factoryCameraPresets?.goTo('packaging')}
+            className="w-full px-3 py-1 bg-green-600 hover:bg-green-700 rounded text-left"
+          >
+            🟢 Packaging Zone
+          </button>
+          <button 
+            onClick={() => {
+              const elem = document.querySelector('canvas');
+              if (elem.requestFullscreen) elem.requestFullscreen();
+            }}
+            className="w-full px-3 py-1 bg-purple-600 hover:bg-purple-700 rounded text-left"
+          >
+            🔳 Fullscreen
+          </button>
+        </div>
+      </div>
+
+      {/* Real-time Status Panel */}
+      <div className="absolute top-4 right-4 z-10 bg-black/80 backdrop-blur-sm rounded-lg p-4 text-white">
+        <div className="text-sm font-semibold mb-2">📊 Live Status</div>
+        <div className="space-y-1 text-xs">
+          <div className="flex justify-between">
+            <span>Active Machines:</span>
+            <span className="text-green-400">{machines?.filter(m => m.status === 'available').length || 0}</span>
+          </div>
+          <div className="flex justify-between">
+            <span>Busy Machines:</span>
+            <span className="text-orange-400">{machines?.filter(m => m.status === 'busy').length || 0}</span>
+          </div>
+          <div className="flex justify-between">
+            <span>Offline:</span>
+            <span className="text-gray-400">{machines?.filter(m => m.status === 'offline').length || 0}</span>
+          </div>
+          <div className="flex justify-between">
+            <span>Factory Efficiency:</span>
+            <span className="text-blue-400">
+              {machines?.length > 0 ? Math.round((machines.filter(m => m.status === 'available').length / machines.length) * 100) : 0}%
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* Navigation Instructions */}
+      <div className="absolute bottom-4 left-4 z-10 bg-black/60 backdrop-blur-sm rounded-lg p-3 text-white text-xs">
+        <div className="font-semibold mb-1">🎮 Navigation</div>
+        <div>🖱️ Drag: Rotate • 🛞 Wheel: Zoom • 👆 Click: Select Machine</div>
+      </div>
+
       <canvas 
         ref={containerRefCallback}
         className="w-full h-full"
         style={{ 
-          display: 'block', 
-          minHeight: '400px',
+          display: 'block',
           touchAction: 'none',
           outline: 'none'
         }}
