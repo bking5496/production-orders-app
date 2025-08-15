@@ -27242,3 +27242,147 @@
   'analytics'
 ]
 2025-08-15T21:39:38: 🏠 admin joined room: production
+2025-08-15T21:41:17: 🌐 WebSocket server initialized
+2025-08-15T21:41:17: 🧹 WebSocket cleanup scheduler started
+2025-08-15T21:41:17: 🧪 Testing refactored components...
+2025-08-15T21:41:17: 🚀 Production refactored server running on port 3000
+2025-08-15T21:41:17: 📊 Health check: http://localhost:3000/api/health
+2025-08-15T21:41:17: 🔐 Auth test: http://localhost:3000/api/auth/login
+2025-08-15T21:41:17: ⚙️ System routes: http://localhost:3000/api/system/health
+2025-08-15T21:41:17: 🌐 WebSocket server initialized and ready
+2025-08-15T21:41:17: ✅ New PostgreSQL client connected
+2025-08-15T21:41:17: 🔗 Client acquired from pool
+2025-08-15T21:41:17: 🔓 Client released back to pool
+2025-08-15T21:41:17: ✅ Database connection: OK
+2025-08-15T21:41:17: ✅ Authentication middleware: OK
+2025-08-15T21:41:17: ✅ Response utilities: OK
+2025-08-15T21:41:17: ✅ Database utilities: OK
+2025-08-15T21:41:17: 🎉 All components tested successfully!
+2025-08-15T21:41:17: ✅ All components tested successfully
+2025-08-15T21:41:41: 🔗 Client acquired from pool
+2025-08-15T21:41:41: 🔓 Client released back to pool
+2025-08-15T21:41:41: ✅ New PostgreSQL client connected
+2025-08-15T21:41:41: 🔗 Client acquired from pool
+2025-08-15T21:41:41: 🔓 Client released back to pool
+2025-08-15T21:41:41: 🔗 Client acquired from pool
+2025-08-15T21:41:41: 🔓 Client released back to pool
+2025-08-15T21:41:41: 🔗 Client acquired from pool
+2025-08-15T21:41:41: 🔓 Client released back to pool
+2025-08-15T21:41:42: New WebSocket connection attempt
+2025-08-15T21:41:42: ✅ WebSocket authenticated: admin (admin)
+2025-08-15T21:41:42: 🔗 Client acquired from pool
+2025-08-15T21:41:42: 🔓 Client released back to pool
+2025-08-15T21:41:42: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-15T21:41:42: 🏠 admin joined room: production
+2025-08-15T21:43:47: 🌐 WebSocket server initialized
+2025-08-15T21:43:47: 🧹 WebSocket cleanup scheduler started
+2025-08-15T21:43:47: 🧪 Testing refactored components...
+2025-08-15T21:43:47: 🚀 Production refactored server running on port 3000
+2025-08-15T21:43:47: 📊 Health check: http://localhost:3000/api/health
+2025-08-15T21:43:47: 🔐 Auth test: http://localhost:3000/api/auth/login
+2025-08-15T21:43:47: ⚙️ System routes: http://localhost:3000/api/system/health
+2025-08-15T21:43:47: 🌐 WebSocket server initialized and ready
+2025-08-15T21:43:47: ✅ New PostgreSQL client connected
+2025-08-15T21:43:47: 🔗 Client acquired from pool
+2025-08-15T21:43:47: 🔓 Client released back to pool
+2025-08-15T21:43:47: ✅ Database connection: OK
+2025-08-15T21:43:47: ✅ Authentication middleware: OK
+2025-08-15T21:43:47: ✅ Response utilities: OK
+2025-08-15T21:43:47: ✅ Database utilities: OK
+2025-08-15T21:43:47: 🎉 All components tested successfully!
+2025-08-15T21:43:47: ✅ All components tested successfully
+2025-08-15T21:44:18: ✅ New PostgreSQL client connected
+2025-08-15T21:44:18: 🔗 Client acquired from pool
+2025-08-15T21:44:18: ✅ New PostgreSQL client connected
+2025-08-15T21:44:18: 🔗 Client acquired from pool
+2025-08-15T21:44:18: 🔓 Client released back to pool
+2025-08-15T21:44:18: 🔓 Client released back to pool
+2025-08-15T21:44:18: 🔗 Client acquired from pool
+2025-08-15T21:44:18: 🔓 Client released back to pool
+2025-08-15T21:44:18: 🔗 Client acquired from pool
+2025-08-15T21:44:18: 🔓 Client released back to pool
+2025-08-15T21:44:18: New WebSocket connection attempt
+2025-08-15T21:44:18: ✅ WebSocket authenticated: admin (admin)
+2025-08-15T21:44:18: 🔗 Client acquired from pool
+2025-08-15T21:44:18: 🔓 Client released back to pool
+2025-08-15T21:44:18: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-15T21:44:18: 🏠 admin joined room: production
+2025-08-15T21:48:24: 🌐 WebSocket server initialized
+2025-08-15T21:48:24: 🧹 WebSocket cleanup scheduler started
+2025-08-15T21:48:24: 🧪 Testing refactored components...
+2025-08-15T21:48:24: 🚀 Production refactored server running on port 3000
+2025-08-15T21:48:24: 📊 Health check: http://localhost:3000/api/health
+2025-08-15T21:48:24: 🔐 Auth test: http://localhost:3000/api/auth/login
+2025-08-15T21:48:24: ⚙️ System routes: http://localhost:3000/api/system/health
+2025-08-15T21:48:24: 🌐 WebSocket server initialized and ready
+2025-08-15T21:48:24: ✅ New PostgreSQL client connected
+2025-08-15T21:48:24: 🔗 Client acquired from pool
+2025-08-15T21:48:24: 🔓 Client released back to pool
+2025-08-15T21:48:24: ✅ Database connection: OK
+2025-08-15T21:48:24: ✅ Authentication middleware: OK
+2025-08-15T21:48:24: ✅ Response utilities: OK
+2025-08-15T21:48:24: ✅ Database utilities: OK
+2025-08-15T21:48:24: 🎉 All components tested successfully!
+2025-08-15T21:48:24: ✅ All components tested successfully
+2025-08-15T21:48:53: 🔗 Client acquired from pool
+2025-08-15T21:48:53: 🔓 Client released back to pool
+2025-08-15T21:48:53: 🔗 Client acquired from pool
+2025-08-15T21:48:53: 🔓 Client released back to pool
+2025-08-15T21:48:53: ✅ Auth success: admin from ::ffff:127.0.0.1 - Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Mobile Safari/537.36 Edg/139.0.0.0
+2025-08-15T21:48:53: 🔗 Client acquired from pool
+2025-08-15T21:48:53: 🔓 Client released back to pool
+2025-08-15T21:48:53: New WebSocket connection attempt
+2025-08-15T21:48:53: ✅ WebSocket authenticated: admin (admin)
+2025-08-15T21:48:53: 🔗 Client acquired from pool
+2025-08-15T21:48:53: 🔓 Client released back to pool
+2025-08-15T21:48:54: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-15T21:48:54: 🏠 admin joined room: production
+2025-08-15T21:49:26: 🔌 WebSocket disconnected: admin
+2025-08-15T21:49:27: ✅ New PostgreSQL client connected
+2025-08-15T21:49:27: 🔗 Client acquired from pool
+2025-08-15T21:49:27: ✅ New PostgreSQL client connected
+2025-08-15T21:49:27: 🔗 Client acquired from pool
+2025-08-15T21:49:27: 🔓 Client released back to pool
+2025-08-15T21:49:27: 🔓 Client released back to pool
+2025-08-15T21:49:27: 🔗 Client acquired from pool
+2025-08-15T21:49:27: 🔓 Client released back to pool
+2025-08-15T21:49:27: 🔗 Client acquired from pool
+2025-08-15T21:49:27: 🔓 Client released back to pool
+2025-08-15T21:49:28: New WebSocket connection attempt
+2025-08-15T21:49:28: ✅ WebSocket authenticated: admin (admin)
+2025-08-15T21:49:28: 🔗 Client acquired from pool
+2025-08-15T21:49:28: 🔓 Client released back to pool
+2025-08-15T21:49:28: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-08-15T21:49:28: 🏠 admin joined room: production

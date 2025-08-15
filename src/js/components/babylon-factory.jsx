@@ -49,29 +49,19 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
   // Initialize Babylon.js scene
   const initializeBabylonScene = async (canvas) => {
     try {
-      if (!container) {
-        throw new Error('Container element not provided');
+      if (!canvas) {
+        throw new Error('Canvas element not provided');
       }
 
-      console.log('🏭 Container found, creating canvas...');
+      console.log('🏭 Canvas found, creating Babylon engine...');
+      
+      // Verify Babylon.js is fully loaded
+      if (!window.BABYLON || !window.BABYLON.Engine || !window.BABYLON.ArcRotateCamera) {
+        throw new Error('Babylon.js not fully loaded');
+      }
 
-      // Clear any existing content
-      container.innerHTML = '';
-
-      // Create canvas element directly in the container
-      const babylonCanvas = document.createElement('canvas');
-      babylonCanvas.id = `babylonCanvas-${Date.now()}`;
-      babylonCanvas.style.width = '100%';
-      babylonCanvas.style.height = '100%';
-      babylonCanvas.style.display = 'block';
-      babylonCanvas.style.outline = 'none';
-      babylonCanvas.style.touchAction = 'none';
-      container.appendChild(babylonCanvas);
-
-      console.log('✅ Canvas created and appended to container');
-
-      // Create Babylon engine
-      engine = new window.BABYLON.Engine(babylonCanvas, true, {
+      // Create Babylon engine directly with canvas
+      engine = new window.BABYLON.Engine(canvas, true, {
         preserveDrawingBuffer: true,
         stencil: true,
         antialias: true
@@ -79,6 +69,8 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
 
       // Create scene
       scene = new window.BABYLON.Scene(engine);
+      
+      console.log('✅ Engine and scene created successfully');
       
       // Disable debug rendering and random lines completely
       scene.forceWireframe = false;
@@ -98,6 +90,7 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
       }
 
       // Setup camera for 52m × 42m factory floor
+      console.log('🎥 Creating camera...');
       const camera = new window.BABYLON.ArcRotateCamera(
         'camera', 
         -Math.PI / 2,  // Start looking from the side
@@ -107,23 +100,29 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
         scene
       );
       
+      console.log('🎥 Camera created:', camera.constructor.name);
+      
       // Set camera limits for better control
       camera.lowerBetaLimit = 0.1;
       camera.upperBetaLimit = Math.PI / 2.2;
-      camera.lowerRadiusLimit = 30;
-      camera.upperRadiusLimit = 150;
+      camera.lowerRadiusLimit = 20;
+      camera.upperRadiusLimit = 200;
       
-      // Attach camera controls to canvas
-      if (babylonCanvas && typeof camera.attachControls === 'function') {
-        camera.attachControls(babylonCanvas, true);
+      // Attach camera controls with proper error checking
+      if (camera && typeof camera.attachControls === 'function') {
+        camera.attachControls(canvas, true);
         console.log('🎥 Camera controls attached successfully');
+        
+        // Ensure camera is active
+        scene.activeCamera = camera;
+        
+        // Set wheel precision for better zooming
+        camera.wheelPrecision = 50;
+        camera.angularSensibilityX = 2000;
+        camera.angularSensibilityY = 2000;
       } else {
-        console.warn('⚠️ Camera controls not available, using default settings');
-      }
-      
-      // Set camera target to center of factory
-      if (typeof camera.setTarget === 'function') {
-        camera.setTarget(new window.BABYLON.Vector3(0, 0, 0));
+        console.warn('⚠️ Camera attachControls method not available, using basic controls');
+        scene.activeCamera = camera;
       }
 
       // Simplified lighting system
@@ -385,13 +384,16 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
               }
               console.log('🏭 Machine clicked:', machine.name);
               
-              // Add visual feedback - pulse effect
+              // Add visual feedback - brief pulse effect
               const originalScale = pickedMesh.scaling.clone();
-              window.BABYLON.Animation.CreateAndStartAnimation(
-                'clickPulse', pickedMesh, 'scaling', 60, 30, 
-                originalScale, originalScale.scale(1.2), 
-                window.BABYLON.Animation.ANIMATIONLOOPMODE_YOYO
-              );
+              
+              // Scale up briefly then back to normal
+              pickedMesh.scaling = originalScale.scale(1.1);
+              setTimeout(() => {
+                if (pickedMesh) {
+                  pickedMesh.scaling = originalScale;
+                }
+              }, 150);
             }
           }
         }
@@ -832,7 +834,7 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
         await loadBabylonJS();
         console.log('✅ Babylon.js libraries loaded');
         
-        // Initialize the scene with the actual DOM element
+        // Initialize the scene with the canvas element
         await initializeBabylonScene(element);
         console.log('✅ Babylon scene initialized');
         
@@ -867,7 +869,13 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
       <canvas 
         ref={containerRefCallback}
         className="w-full h-full"
-        style={{ display: 'block', minHeight: '400px' }}
+        style={{ 
+          display: 'block', 
+          minHeight: '400px',
+          touchAction: 'none',
+          outline: 'none'
+        }}
+        tabIndex={0}
       />
       
       {/* Loading overlay */}
