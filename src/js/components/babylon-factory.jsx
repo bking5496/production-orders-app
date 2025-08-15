@@ -80,13 +80,13 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
       // Create scene
       scene = new window.BABYLON.Scene(engine);
 
-      // Setup camera with proper checks
+      // Setup camera with proper checks for large factory complex
       const camera = new window.BABYLON.ArcRotateCamera(
         'camera', 
         -Math.PI / 2, 
-        Math.PI / 3, 
-        50, 
-        window.BABYLON.Vector3.Zero(), 
+        Math.PI / 4, 
+        150,  // Much further back to view entire complex
+        new window.BABYLON.Vector3(-30, 0, 10), // Center view between factory and warehouses
         scene
       );
       
@@ -117,46 +117,87 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
       dirLight.intensity = 1.0;
       dirLight.diffuse = new window.BABYLON.Color3(0.4, 0.6, 1.0);
 
-      // Create factory floor
-      const ground = window.BABYLON.MeshBuilder.CreateGround('ground', {width: 60, height: 40}, scene);
-      const groundMaterial = new window.BABYLON.StandardMaterial('groundMaterial', scene);
-      groundMaterial.diffuseColor = new window.BABYLON.Color3(0.15, 0.2, 0.25);
-      groundMaterial.specularColor = new window.BABYLON.Color3(0.1, 0.1, 0.1);
-      ground.material = groundMaterial;
-
-      // Create factory walls
+      // Real-world factory dimensions based on your floor plan
+      const factoryLength = 80;  // 80m
+      const factoryWidth = 33;   // 33m
+      const warehouseWidth = 37; // 37m for inbound/rebate
+      const inboundLength = 42.4; // 42.4m inbound warehouse
+      const rebateLength = 37.6;  // 37.6m rebate store
+      const outboundDepth = 29;   // 29m outbound warehouse
       const wallHeight = 8;
       const wallThickness = 0.5;
-      
-      // North wall
-      const northWall = window.BABYLON.MeshBuilder.CreateBox('northWall', {
-        width: 60, height: wallHeight, depth: wallThickness
-      }, scene);
-      northWall.position = new window.BABYLON.Vector3(0, wallHeight/2, -20);
-      
-      // South wall
-      const southWall = window.BABYLON.MeshBuilder.CreateBox('southWall', {
-        width: 60, height: wallHeight, depth: wallThickness
-      }, scene);
-      southWall.position = new window.BABYLON.Vector3(0, wallHeight/2, 20);
-      
-      // East wall
-      const eastWall = window.BABYLON.MeshBuilder.CreateBox('eastWall', {
-        width: wallThickness, height: wallHeight, depth: 40
-      }, scene);
-      eastWall.position = new window.BABYLON.Vector3(30, wallHeight/2, 0);
-      
-      // West wall
-      const westWall = window.BABYLON.MeshBuilder.CreateBox('westWall', {
-        width: wallThickness, height: wallHeight, depth: 40
-      }, scene);
-      westWall.position = new window.BABYLON.Vector3(-30, wallHeight/2, 0);
 
-      // Wall material
+      // Create main factory floor (80m x 33m) - Production area
+      const factoryFloor = window.BABYLON.MeshBuilder.CreateGround('factoryFloor', {
+        width: factoryLength, height: factoryWidth
+      }, scene);
+      factoryFloor.position = new window.BABYLON.Vector3(0, 0, 0);
+      
+      const factoryMaterial = new window.BABYLON.StandardMaterial('factoryMaterial', scene);
+      factoryMaterial.diffuseColor = new window.BABYLON.Color3(0.15, 0.2, 0.25); // Dark industrial concrete
+      factoryMaterial.specularColor = new window.BABYLON.Color3(0.1, 0.1, 0.1);
+      factoryFloor.material = factoryMaterial;
+
+      // Create inbound warehouse floor (42.4m x 37m)
+      const inboundFloor = window.BABYLON.MeshBuilder.CreateGround('inboundFloor', {
+        width: inboundLength, height: warehouseWidth
+      }, scene);
+      inboundFloor.position = new window.BABYLON.Vector3(-61.2, 0, 2); // Left of factory
+      
+      const warehouseMaterial = new window.BABYLON.StandardMaterial('warehouseMaterial', scene);
+      warehouseMaterial.diffuseColor = new window.BABYLON.Color3(0.25, 0.25, 0.3); // Lighter warehouse concrete
+      inboundFloor.material = warehouseMaterial;
+
+      // Create rebate store floor (37.6m x 37m)
+      const rebateFloor = window.BABYLON.MeshBuilder.CreateGround('rebateFloor', {
+        width: rebateLength, height: warehouseWidth
+      }, scene);
+      rebateFloor.position = new window.BABYLON.Vector3(-100.8, 0, 2); // Left of inbound
+      
+      const rebateMaterial = new window.BABYLON.StandardMaterial('rebateMaterial', scene);
+      rebateMaterial.diffuseColor = new window.BABYLON.Color3(0.2, 0.3, 0.2); // Greenish storage area
+      rebateFloor.material = rebateMaterial;
+
+      // Create outbound warehouse floor (80m x 29m)
+      const outboundFloor = window.BABYLON.MeshBuilder.CreateGround('outboundFloor', {
+        width: factoryLength, height: outboundDepth
+      }, scene);
+      outboundFloor.position = new window.BABYLON.Vector3(0, 0, 31); // South of factory
+      outboundFloor.material = warehouseMaterial;
+
+      // Create perimeter walls for entire complex
+      const walls = [
+        // Main factory walls
+        { name: 'factoryNorth', pos: [0, wallHeight/2, -factoryWidth/2], size: [factoryLength, wallHeight, wallThickness] },
+        { name: 'factoryEast', pos: [factoryLength/2, wallHeight/2, 0], size: [wallThickness, wallHeight, factoryWidth] },
+        
+        // Inbound warehouse walls
+        { name: 'inboundNorth', pos: [-61.2, wallHeight/2, -16.5], size: [inboundLength, wallHeight, wallThickness] },
+        { name: 'inboundSouth', pos: [-61.2, wallHeight/2, 20.5], size: [inboundLength, wallHeight, wallThickness] },
+        { name: 'inboundWest', pos: [-82.6, wallHeight/2, 2], size: [wallThickness, wallHeight, warehouseWidth] },
+        
+        // Rebate store walls
+        { name: 'rebateNorth', pos: [-100.8, wallHeight/2, -16.5], size: [rebateLength, wallHeight, wallThickness] },
+        { name: 'rebateSouth', pos: [-100.8, wallHeight/2, 20.5], size: [rebateLength, wallHeight, wallThickness] },
+        { name: 'rebateWest', pos: [-119.6, wallHeight/2, 2], size: [wallThickness, wallHeight, warehouseWidth] },
+        
+        // Outbound warehouse walls
+        { name: 'outboundSouth', pos: [0, wallHeight/2, 45.5], size: [factoryLength, wallHeight, wallThickness] },
+        { name: 'outboundEast', pos: [factoryLength/2, wallHeight/2, 31], size: [wallThickness, wallHeight, outboundDepth] },
+        { name: 'outboundWest', pos: [-factoryLength/2, wallHeight/2, 31], size: [wallThickness, wallHeight, outboundDepth] }
+      ];
+
+      // Create wall material
       const wallMaterial = new window.BABYLON.StandardMaterial('wallMaterial', scene);
       wallMaterial.diffuseColor = new window.BABYLON.Color3(0.9, 0.9, 0.9);
-      [northWall, southWall, eastWall, westWall].forEach(wall => {
-        wall.material = wallMaterial;
+
+      // Build all walls
+      walls.forEach(wall => {
+        const wallMesh = window.BABYLON.MeshBuilder.CreateBox(wall.name, {
+          width: wall.size[0], height: wall.size[1], depth: wall.size[2]
+        }, scene);
+        wallMesh.position = new window.BABYLON.Vector3(...wall.pos);
+        wallMesh.material = wallMaterial;
       });
 
       // Add click interaction for machines
@@ -391,15 +432,23 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
         const machinesInEnv = machineList.filter(m => m.environment === machine.environment);
         const envIndex = machinesInEnv.indexOf(machine);
 
+        // Position machines across the real 80m x 33m factory floor
         if (machine.environment === 'blending') {
-          x = -20 + (envIndex % 3) * 8;
-          z = -15 + Math.floor(envIndex / 3) * 6;
+          // Blending area - left side of factory floor
+          x = -30 + (envIndex % 4) * 12;
+          z = -10 + Math.floor(envIndex / 4) * 8;
         } else if (machine.environment === 'maturation') {
-          x = -5 + (envIndex % 2) * 6;
-          z = -15 + Math.floor(envIndex / 2) * 6;
+          // Maturation area - center of factory floor  
+          x = -5 + (envIndex % 3) * 10;
+          z = -10 + Math.floor(envIndex / 3) * 8;
+        } else if (machine.environment === 'packaging') {
+          // Packaging area - right side of factory floor
+          x = 15 + (envIndex % 5) * 10;
+          z = -10 + Math.floor(envIndex / 5) * 8;
         } else {
-          x = 10 + (envIndex % 4) * 6;
-          z = -15 + Math.floor(envIndex / 4) * 6;
+          // Default positioning across factory floor
+          x = -35 + (envIndex % 8) * 10;
+          z = -12 + Math.floor(envIndex / 8) * 6;
         }
 
         // Position the entire machine group
