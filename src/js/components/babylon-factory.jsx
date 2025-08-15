@@ -118,23 +118,47 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
         camera.setTarget(window.BABYLON.Vector3.Zero());
       }
 
-      // Add lighting
-      const hemiLight = new window.BABYLON.HemisphericLight(
-        'hemiLight', 
-        new window.BABYLON.Vector3(0, 1, 0), 
-        scene
-      );
-      hemiLight.intensity = 0.6;
+      // PROFESSIONAL INDUSTRIAL LIGHTING SYSTEM
+      const createIndustrialLighting = (scene) => {
+        // Main overhead lighting (high bay industrial fixtures)
+        const mainLight = new window.BABYLON.HemisphericLight('mainLight', 
+          new window.BABYLON.Vector3(0, 1, 0), scene);
+        mainLight.intensity = 0.7;
+        mainLight.diffuse = new window.BABYLON.Color3(0.95, 0.95, 1.0); // Cool white LED
+        
+        // Directional sunlight through skylights
+        const sunLight = new window.BABYLON.DirectionalLight('sunLight',
+          new window.BABYLON.Vector3(-0.5, -1, 0.3), scene);
+        sunLight.intensity = 0.8;
+        sunLight.diffuse = new window.BABYLON.Color3(1.0, 0.98, 0.9); // Warm sunlight
+        
+        // Zone-specific accent lighting
+        const zones = [
+          { pos: [0, 8, -15], color: FACTORY_COLORS.blending.accent },    // Blending
+          { pos: [-18, 8, -3], color: FACTORY_COLORS.maturation.accent }, // Maturation  
+          { pos: [0, 8, 13], color: FACTORY_COLORS.packaging.accent }     // Packaging
+        ];
+        
+        zones.forEach((zone, index) => {
+          const zoneLight = new window.BABYLON.PointLight(`zoneLight_${index}`,
+            new window.BABYLON.Vector3(...zone.pos), scene);
+          zoneLight.intensity = 0.5;
+          zoneLight.diffuse = zone.color;
+          zoneLight.range = 20;
+        });
+        
+        // Add subtle shadows for depth
+        if (window.BABYLON.ShadowGenerator) {
+          const shadowGenerator = new window.BABYLON.ShadowGenerator(1024, sunLight);
+          shadowGenerator.useContactHardeningShadow = true;
+          shadowGenerator.contactHardeningLightSizeUVRatio = 0.05;
+        }
+      };
       
-      const dirLight = new window.BABYLON.DirectionalLight(
-        'dirLight', 
-        new window.BABYLON.Vector3(-1, -1, 1), 
-        scene
-      );
-      dirLight.intensity = 1.0;
-      dirLight.diffuse = new window.BABYLON.Color3(0.4, 0.6, 1.0);
+      // Initialize professional lighting
+      createIndustrialLighting(scene);
 
-      // COMPLETE FACTORY FLOOR RECREATION - Based on precise layout
+      // ENHANCED FACTORY FLOOR WITH PROFESSIONAL INDUSTRIAL DESIGN
       // Factory dimensions from layout: 52m width x 42m height
       // Grid: 5m + 5m + 6m + 10m + 20m + 6m = 52m width
       // Heights: 5m + 6m + 14m + 8m + various = 42m height
@@ -144,93 +168,289 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
       const wallHeight = 6;
       const wallThickness = 0.3;
 
-      // Create main factory floor (52m x 42m) - Single production facility
+      // PROFESSIONAL INDUSTRIAL COLOR PALETTE
+      const FACTORY_COLORS = {
+        baseFactory: {
+          diffuse: new window.BABYLON.Color3(0.25, 0.27, 0.30), // Polished concrete
+          specular: new window.BABYLON.Color3(0.8, 0.8, 0.8),
+          emissive: new window.BABYLON.Color3(0.05, 0.05, 0.05)
+        },
+        blending: {
+          diffuse: new window.BABYLON.Color3(0.2, 0.4, 0.8),     // Safety blue for raw materials
+          accent: new window.BABYLON.Color3(0.3, 0.5, 0.9),
+          safety: '#2563EB'
+        },
+        maturation: {
+          diffuse: new window.BABYLON.Color3(0.8, 0.6, 0.2),     // Warm amber for processing
+          accent: new window.BABYLON.Color3(0.9, 0.7, 0.3),
+          safety: '#D97706'
+        },
+        packaging: {
+          diffuse: new window.BABYLON.Color3(0.2, 0.7, 0.3),     // Fresh green for final product
+          accent: new window.BABYLON.Color3(0.3, 0.8, 0.4),
+          safety: '#059669'
+        },
+        flow: {
+          diffuse: new window.BABYLON.Color3(0.9, 0.7, 0.1),     // Process yellow
+          accent: new window.BABYLON.Color3(1.0, 0.8, 0.2)
+        }
+      };
+
+      // ENHANCED INDUSTRIAL FLOOR CREATION FUNCTION
+      const createIndustrialFloor = (name, dimensions, position, zoneType, scene) => {
+        const floor = window.BABYLON.MeshBuilder.CreateGround(name, dimensions, scene);
+        floor.position = position;
+        
+        // Create PBR material for realistic industrial flooring
+        const floorMaterial = new window.BABYLON.PBRMaterial(`${name}Material`, scene);
+        floorMaterial.baseColor = FACTORY_COLORS[zoneType].diffuse;
+        floorMaterial.metallicFactor = 0.1;
+        floorMaterial.roughnessFactor = 0.6;
+        floorMaterial.emissiveColor = FACTORY_COLORS[zoneType].diffuse.scale(0.05);
+        
+        // Add industrial grid pattern texture
+        const gridTexture = new window.BABYLON.DynamicTexture(`${name}Grid`, {width: 512, height: 512}, scene);
+        const context = gridTexture.getContext();
+        
+        // Draw industrial concrete base
+        context.fillStyle = '#404449'; // Industrial concrete color
+        context.fillRect(0, 0, 512, 512);
+        
+        // Add zone-specific color tint
+        context.fillStyle = FACTORY_COLORS[zoneType].safety + '40'; // 25% opacity
+        context.fillRect(0, 0, 512, 512);
+        
+        // Draw 5m grid lines (matching factory sections)
+        context.strokeStyle = FACTORY_COLORS[zoneType].safety + 'AA'; // 67% opacity
+        context.lineWidth = 2;
+        const gridSize = 64; // 512/8 for 5m sections
+        
+        for (let i = 0; i <= 512; i += gridSize) {
+          context.beginPath();
+          context.moveTo(i, 0);
+          context.lineTo(i, 512);
+          context.stroke();
+          
+          context.beginPath();
+          context.moveTo(0, i);
+          context.lineTo(512, i);
+          context.stroke();
+        }
+        
+        floorMaterial.baseTexture = gridTexture;
+        floor.material = floorMaterial;
+        floor.renderOutline = false;
+        floor.showBoundingBox = false;
+        
+        return floor;
+      };
+
+      // Create main factory floor with enhanced industrial design
       const factoryFloor = window.BABYLON.MeshBuilder.CreateGround('factoryFloor', {
         width: factoryWidth, height: factoryHeight
       }, scene);
       factoryFloor.position = new window.BABYLON.Vector3(0, 0, 0);
       
-      const factoryMaterial = new window.BABYLON.StandardMaterial('factoryMaterial', scene);
-      factoryMaterial.diffuseColor = new window.BABYLON.Color3(0.18, 0.22, 0.25); // Industrial concrete
-      factoryMaterial.specularColor = new window.BABYLON.Color3(0.1, 0.1, 0.1);
-      factoryMaterial.wireframe = false;
-      factoryFloor.material = factoryMaterial;
+      // Apply enhanced base factory material
+      const baseMaterial = new window.BABYLON.PBRMaterial('baseFactoryMaterial', scene);
+      baseMaterial.baseColor = FACTORY_COLORS.baseFactory.diffuse;
+      baseMaterial.metallicFactor = 0.1;
+      baseMaterial.roughnessFactor = 0.7;
+      baseMaterial.emissiveColor = FACTORY_COLORS.baseFactory.emissive;
+      factoryFloor.material = baseMaterial;
       factoryFloor.renderOutline = false;
       factoryFloor.showBoundingBox = false;
 
-      // Create area floor sections based on layout zones
-      // BLENDING area floor section (top section)
-      const blendingFloor = window.BABYLON.MeshBuilder.CreateGround('blendingFloor', {
-        width: factoryWidth, height: 11 // 5m + 6m sections  
-      }, scene);
-      blendingFloor.position = new window.BABYLON.Vector3(0, 0.01, -15.5); // Top section, slightly elevated
-      
-      const blendingMaterial = new window.BABYLON.StandardMaterial('blendingMaterial', scene);
-      blendingMaterial.diffuseColor = new window.BABYLON.Color3(0.25, 0.20, 0.30); // Purple tint for blending
-      blendingMaterial.alpha = 0.8;
-      blendingMaterial.wireframe = false;
-      blendingFloor.material = blendingMaterial;
-      blendingFloor.renderOutline = false;
-      blendingFloor.showBoundingBox = false;
+      // ENHANCED ZONE FLOOR SECTIONS WITH PROFESSIONAL DESIGN
+      // BLENDING area floor section (top section) - Raw Materials Processing
+      const blendingFloor = createIndustrialFloor('blendingFloor',
+        { width: factoryWidth, height: 11 }, // 5m + 6m sections
+        new window.BABYLON.Vector3(0, 0.02, -15.5), // Slightly elevated
+        'blending',
+        scene
+      );
 
-      // MATURATION area floor section (left center section)  
-      const maturationFloor = window.BABYLON.MeshBuilder.CreateGround('maturationFloor', {
-        width: 16, height: 14 // Left portion of 14m section
-      }, scene);
-      maturationFloor.position = new window.BABYLON.Vector3(-18, 0.01, -3); // Left center
-      
-      const maturationMaterial = new window.BABYLON.StandardMaterial('maturationMaterial', scene);
-      maturationMaterial.diffuseColor = new window.BABYLON.Color3(0.20, 0.30, 0.25); // Green tint for maturation
-      maturationMaterial.alpha = 0.8;
-      maturationMaterial.wireframe = false;
-      maturationFloor.material = maturationMaterial;
-      maturationFloor.renderOutline = false;
-      maturationFloor.showBoundingBox = false;
+      // MATURATION area floor section (left center) - Process Development
+      const maturationFloor = createIndustrialFloor('maturationFloor',
+        { width: 16, height: 14 }, // Left portion of 14m section
+        new window.BABYLON.Vector3(-18, 0.02, -3), // Left center
+        'maturation',
+        scene
+      );
 
-      // PACKAGING area floor section (bottom section)
-      const packagingFloor = window.BABYLON.MeshBuilder.CreateGround('packagingFloor', {
-        width: factoryWidth, height: 8 // Bottom 8m section
-      }, scene);
-      packagingFloor.position = new window.BABYLON.Vector3(0, 0.01, 17); // Bottom section
-      
-      const packagingMaterial = new window.BABYLON.StandardMaterial('packagingMaterial', scene);
-      packagingMaterial.diffuseColor = new window.BABYLON.Color3(0.30, 0.25, 0.20); // Orange tint for packaging
-      packagingMaterial.alpha = 0.8;
-      packagingMaterial.wireframe = false;
-      packagingFloor.material = packagingMaterial;
-      packagingFloor.renderOutline = false;
-      packagingFloor.showBoundingBox = false;
+      // PACKAGING area floor section (bottom section) - Final Product Processing
+      const packagingFloor = createIndustrialFloor('packagingFloor',
+        { width: factoryWidth, height: 8 }, // Bottom 8m section
+        new window.BABYLON.Vector3(0, 0.02, 17), // Bottom section
+        'packaging',
+        scene
+      );
 
-      // Create perimeter walls for factory building (52m x 42m)
-      const walls = [
-        // Factory perimeter walls
-        { name: 'factoryNorth', pos: [0, wallHeight/2, -factoryHeight/2], size: [factoryWidth, wallHeight, wallThickness] },
-        { name: 'factorySouth', pos: [0, wallHeight/2, factoryHeight/2], size: [factoryWidth, wallHeight, wallThickness] },
-        { name: 'factoryWest', pos: [-factoryWidth/2, wallHeight/2, 0], size: [wallThickness, wallHeight, factoryHeight] },
-        { name: 'factoryEast', pos: [factoryWidth/2, wallHeight/2, 0], size: [wallThickness, wallHeight, factoryHeight] },
+      // ENHANCED ZONE BOUNDARY SYSTEM
+      const createZoneBoundaries = (scene) => {
+        const boundaries = [
+          {
+            name: 'BLENDING ZONE',
+            position: new window.BABYLON.Vector3(0, 0.1, -10),
+            size: { width: 50, height: 0.2, depth: 2 },
+            color: FACTORY_COLORS.blending.safety
+          },
+          {
+            name: 'MATURATION ZONE', 
+            position: new window.BABYLON.Vector3(-10, 0.1, 4),
+            size: { width: 2, height: 0.2, depth: 14 },
+            color: FACTORY_COLORS.maturation.safety
+          },
+          {
+            name: 'PACKAGING ZONE',
+            position: new window.BABYLON.Vector3(0, 0.1, 13),
+            size: { width: 50, height: 0.2, depth: 2 },
+            color: FACTORY_COLORS.packaging.safety
+          }
+        ];
         
-        // Internal area divider walls (optional visual separators)
-        // Blending area separator
-        { name: 'blendingDivider', pos: [0, wallHeight/4, -10], size: [factoryWidth * 0.8, wallHeight/2, wallThickness/2] },
-        // Maturation area separator  
-        { name: 'maturationDivider', pos: [-10, wallHeight/4, 4], size: [wallThickness/2, wallHeight/2, 14] },
-        // Packaging area separator
-        { name: 'packagingDivider', pos: [0, wallHeight/4, 13], size: [factoryWidth * 0.8, wallHeight/2, wallThickness/2] }
-      ];
+        boundaries.forEach(boundary => {
+          // Create colored floor stripe
+          const stripe = window.BABYLON.MeshBuilder.CreateBox(`boundary_${boundary.name}`, boundary.size, scene);
+          stripe.position = boundary.position;
+          
+          const stripeMaterial = new window.BABYLON.StandardMaterial(`boundaryMat_${boundary.name}`, scene);
+          stripeMaterial.diffuseColor = window.BABYLON.Color3.FromHexString(boundary.color);
+          stripeMaterial.emissiveColor = window.BABYLON.Color3.FromHexString(boundary.color).scale(0.3);
+          stripe.material = stripeMaterial;
+          
+          // Add zone name signage
+          const signHeight = 4;
+          const sign = window.BABYLON.MeshBuilder.CreatePlane(`sign_${boundary.name}`, {width: 8, height: 2}, scene);
+          sign.position = new window.BABYLON.Vector3(
+            boundary.position.x, 
+            signHeight, 
+            boundary.position.z
+          );
+          sign.billboardMode = window.BABYLON.Mesh.BILLBOARDMODE_Y;
+          
+          const signMaterial = new window.BABYLON.StandardMaterial(`signMat_${boundary.name}`, scene);
+          signMaterial.diffuseColor = new window.BABYLON.Color3(0.9, 0.9, 0.9);
+          signMaterial.emissiveColor = window.BABYLON.Color3.FromHexString(boundary.color).scale(0.2);
+          sign.material = signMaterial;
+        });
+      };
 
-      // Create wall material - more subtle appearance
-      const wallMaterial = new window.BABYLON.StandardMaterial('wallMaterial', scene);
-      wallMaterial.diffuseColor = new window.BABYLON.Color3(0.4, 0.4, 0.4); // Darker walls
-      wallMaterial.alpha = 0.3; // Semi-transparent to reduce visibility
-
-      // Build all walls
-      walls.forEach(wall => {
-        const wallMesh = window.BABYLON.MeshBuilder.CreateBox(wall.name, {
-          width: wall.size[0], height: wall.size[1], depth: wall.size[2]
+      // MANUFACTURING FLOW VISUALIZATION
+      const createProcessFlow = (scene) => {
+        // Blending → Maturation flow
+        const blendingToMaturation = window.BABYLON.MeshBuilder.CreateCylinder('flowArrow1', {
+          diameterTop: 0, diameterBottom: 1, height: 3, tessellation: 6
         }, scene);
-        wallMesh.position = new window.BABYLON.Vector3(...wall.pos);
-        wallMesh.material = wallMaterial;
-      });
+        blendingToMaturation.position = new window.BABYLON.Vector3(-15, 1, -8);
+        blendingToMaturation.rotation.z = -Math.PI / 2; // Point right
+        
+        const flowMaterial1 = new window.BABYLON.StandardMaterial('flowMat1', scene);
+        flowMaterial1.diffuseColor = FACTORY_COLORS.flow.diffuse;
+        flowMaterial1.emissiveColor = FACTORY_COLORS.flow.diffuse.scale(0.5);
+        blendingToMaturation.material = flowMaterial1;
+        
+        // Maturation → Packaging flow
+        const maturationToPackaging = window.BABYLON.MeshBuilder.CreateCylinder('flowArrow2', {
+          diameterTop: 0, diameterBottom: 1, height: 3, tessellation: 6
+        }, scene);
+        maturationToPackaging.position = new window.BABYLON.Vector3(-15, 1, 5);
+        maturationToPackaging.rotation.z = -Math.PI / 2;
+        maturationToPackaging.material = flowMaterial1;
+        
+        // Add pulsing animation to flow indicators
+        window.BABYLON.Animation.CreateAndStartAnimation(
+          'flowPulse', flowMaterial1, 'emissiveColor', 60, 120,
+          FACTORY_COLORS.flow.diffuse.scale(0.3),
+          FACTORY_COLORS.flow.diffuse.scale(0.8),
+          window.BABYLON.Animation.ANIMATIONLOOPMODE_YOYO
+        );
+      };
+
+      // FACTORY PERIMETER WALLS (simplified and more subtle)
+      const createFactoryWalls = (scene) => {
+        const walls = [
+          // Factory perimeter walls - more subtle
+          { name: 'factoryNorth', pos: [0, wallHeight/2, -factoryHeight/2], size: [factoryWidth, wallHeight, wallThickness] },
+          { name: 'factorySouth', pos: [0, wallHeight/2, factoryHeight/2], size: [factoryWidth, wallHeight, wallThickness] },
+          { name: 'factoryWest', pos: [-factoryWidth/2, wallHeight/2, 0], size: [wallThickness, wallHeight, factoryHeight] },
+          { name: 'factoryEast', pos: [factoryWidth/2, wallHeight/2, 0], size: [wallThickness, wallHeight, factoryHeight] }
+        ];
+
+        // Create subtle wall material
+        const wallMaterial = new window.BABYLON.StandardMaterial('wallMaterial', scene);
+        wallMaterial.diffuseColor = new window.BABYLON.Color3(0.5, 0.5, 0.5);
+        wallMaterial.alpha = 0.2; // Very subtle
+
+        // Build perimeter walls
+        walls.forEach(wall => {
+          const wallMesh = window.BABYLON.MeshBuilder.CreateBox(wall.name, {
+            width: wall.size[0], height: wall.size[1], depth: wall.size[2]
+          }, scene);
+          wallMesh.position = new window.BABYLON.Vector3(...wall.pos);
+          wallMesh.material = wallMaterial;
+        });
+      };
+
+      // ZONE INFORMATION PANELS
+      const createZoneInformationPanels = (scene) => {
+        const zoneInfo = [
+          {
+            name: 'BLENDING ZONE',
+            position: new window.BABYLON.Vector3(-25, 3, -15),
+            color: FACTORY_COLORS.blending.safety,
+            description: 'Raw Material Processing',
+            processes: ['Material Receipt', 'Primary Blending', 'Batch Preparation']
+          },
+          {
+            name: 'MATURATION ZONE',
+            position: new window.BABYLON.Vector3(-25, 3, -2),
+            color: FACTORY_COLORS.maturation.safety,
+            description: 'Product Development',
+            processes: ['Fluid Bed Processing', 'Aging & Development']
+          },
+          {
+            name: 'PACKAGING ZONE',
+            position: new window.BABYLON.Vector3(-25, 3, 15),
+            color: FACTORY_COLORS.packaging.safety,
+            description: 'Final Product Processing',
+            processes: ['Tablet Formation', 'Flexible Packaging', 'Container Filling']
+          }
+        ];
+        
+        zoneInfo.forEach(zone => {
+          // Create information panel
+          const panel = window.BABYLON.MeshBuilder.CreatePlane(`infoPanel_${zone.name}`, {
+            width: 8, height: 4
+          }, scene);
+          panel.position = zone.position;
+          panel.billboardMode = window.BABYLON.Mesh.BILLBOARDMODE_ALL;
+          
+          const panelMaterial = new window.BABYLON.StandardMaterial(`infoPanelMat_${zone.name}`, scene);
+          panelMaterial.diffuseColor = new window.BABYLON.Color3(0.1, 0.1, 0.1);
+          panelMaterial.emissiveColor = window.BABYLON.Color3.FromHexString(zone.color).scale(0.1);
+          panelMaterial.alpha = 0.8;
+          panel.material = panelMaterial;
+          
+          // Add zone title above panel
+          const title = window.BABYLON.MeshBuilder.CreatePlane(`title_${zone.name}`, {
+            width: 10, height: 1.5
+          }, scene);
+          title.position = new window.BABYLON.Vector3(zone.position.x, zone.position.y + 3, zone.position.z);
+          title.billboardMode = window.BABYLON.Mesh.BILLBOARDMODE_ALL;
+          
+          const titleMaterial = new window.BABYLON.StandardMaterial(`titleMat_${zone.name}`, scene);
+          titleMaterial.diffuseColor = new window.BABYLON.Color3(1, 1, 1);
+          titleMaterial.emissiveColor = window.BABYLON.Color3.FromHexString(zone.color).scale(0.3);
+          title.material = titleMaterial;
+        });
+      };
+
+      // Initialize all visual enhancements
+      createZoneBoundaries(scene);
+      createProcessFlow(scene);
+      createFactoryWalls(scene);
+      createZoneInformationPanels(scene);
 
       // Add click interaction for machines
       scene.onPointerObservable.add((pointerInfo) => {
@@ -464,68 +684,90 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
         const machinesInEnv = machineList.filter(m => m.environment === machine.environment);
         const envIndex = machinesInEnv.indexOf(machine);
 
-        // PRECISE MACHINE POSITIONING - Factory Layout 52m x 42m
-        // Column positions: -24, -19, -13, -3, 17, 23 (based on 5m+5m+6m+10m+20m+6m)
-        // Row positions: -18.5, -12.5, -3, 17 (based on 5m+6m+14m+8m sections)
+        // WORKFLOW-OPTIMIZED MACHINE POSITIONING
+        // Based on manufacturing process flow: Raw Materials → Processing → Final Products
+        const getOptimizedMachinePosition = (machine) => {
+          const machineName = machine.name.toUpperCase();
+          
+          // BLENDING ZONE - Raw material input and primary processing (top section)
+          const blendingPositions = {
+            'BLENDING': { x: -22, z: -18 },           // Raw material receipt
+            'PLOUGH BLENDER': { x: -8, z: -16 },     // Primary blending
+            'PLOUGHSHARE': { x: -8, z: -16 },        // Primary blending alt name
+            'PRE-BATCH': { x: 8, z: -16 },           // Batch preparation
+            '1000L BLENDER': { x: 18, z: -12 },      // Large batch blending
+            'MAXMIX': { x: 18, z: -12 },             // Large batch blending alt name
+            '1500L BLENDER': { x: 18, z: -8 },       // Industrial blending
+            'WINKWORK': { x: 18, z: -8 }             // Industrial blending alt name
+          };
+          
+          // MATURATION ZONE - Process development and aging (left center)
+          const maturationPositions = {
+            'FB-10': { x: -22, z: -2 },              // Fluid bed processing
+            'FB 10': { x: -22, z: -2 },              // Fluid bed processing alt
+            'MATURATION': { x: -18, z: 2 }           // Aging/development
+          };
+          
+          // PACKAGING ZONE - Final product processing by type
+          const packagingPositions = {
+            // Solid product processing
+            'TABLETS': { x: -22, z: 16 },            // Tablet formation
+            'CUBES': { x: -12, z: 16 },              // Cube cutting
+            'STOCK POWDER': { x: -2, z: 16 },        // Powder finishing
+            'POWDER': { x: -2, z: 16 },              // Powder finishing alt
+            
+            // Flexible packaging lines
+            'STICKPACK': { x: -18, z: -6 },          // Stick pack filling
+            'STICK PACK': { x: -18, z: -6 },         // Stick pack alt name
+            'ILAPACK': { x: -18, z: 2 },             // ILA packaging
+            'ILAPAK': { x: -18, z: 2 },              // ILA packaging alt
+            'UNIVERSAL': { x: -18, z: 14 },          // Universal packaging
+            
+            // Container and can lines
+            'OLD CAN LINE': { x: 8, z: 16 },         // Legacy can line
+            'CANLINE': { x: 8, z: 16 },              // Can line alt name
+            '5LANES': { x: 18, z: 12 },              // Multi-lane filling
+            'AUGER': { x: 20, z: 8 },                // Auger filling
+            'ENFLEX': { x: 22, z: 4 },               // Flexible packaging
+            'CANS': { x: 22, z: 16 },                // Can finishing
+            
+            // Bulk processing
+            'BULK': { x: -2, z: 6 }                  // Bulk handling
+          };
+          
+          // Check each position category
+          if (machine.environment === 'blending') {
+            for (const [key, pos] of Object.entries(blendingPositions)) {
+              if (machineName.includes(key)) return pos;
+            }
+            // Default blending position
+            return { x: -19 + (envIndex % 3) * 8, z: -16 + Math.floor(envIndex / 3) * 3 };
+          }
+          
+          if (machine.environment === 'maturation') {
+            for (const [key, pos] of Object.entries(maturationPositions)) {
+              if (machineName.includes(key)) return pos;
+            }
+            // Default maturation position
+            return { x: -22 + (envIndex % 2) * 6, z: -5 + Math.floor(envIndex / 2) * 6 };
+          }
+          
+          if (machine.environment === 'packaging') {
+            for (const [key, pos] of Object.entries(packagingPositions)) {
+              if (machineName.includes(key)) return pos;
+            }
+            // Default packaging position
+            return { x: -15 + (envIndex % 6) * 7, z: -5 + Math.floor(envIndex / 6) * 8 };
+          }
+          
+          // Default position for unmatched machines
+          return { x: -20 + (envIndex % 6) * 7, z: -15 + Math.floor(envIndex / 6) * 8 };
+        };
         
-        if (machine.environment === 'blending') {
-          // BLENDING area - Top section (rows -18.5 to -12.5)
-          if (machine.name.includes('BLENDING')) {
-            x = -24; z = -18; // Far left blending area
-          } else if (machine.name.includes('PLOUGH BLENDER') || machine.name.includes('Ploughshare')) {
-            x = -3; z = -15; // Center-right in blending area
-          } else if (machine.name.includes('PRE-BATCH')) {
-            x = 10; z = -15; // Right side in blending area  
-          } else if (machine.name.includes('1000L BLENDER') || machine.name.includes('MaxMix')) {
-            x = 17; z = -8; // Far right blending, lower row
-          } else if (machine.name.includes('1500L BLENDER') || machine.name.includes('Winkwork')) {
-            x = 17; z = -2; // Far right blending, bottom
-          } else {
-            // Other blending equipment
-            x = -19 + (envIndex % 3) * 8;
-            z = -16 + Math.floor(envIndex / 3) * 3;
-          }
-        } else if (machine.environment === 'packaging') {
-          // PACKAGING area - Bottom section and center areas
-          if (machine.name.includes('STICKPACK') || machine.name.includes('Stick Pack')) {
-            x = -19; z = -8; // Left side packaging area
-          } else if (machine.name.includes('ILAPACK') || machine.name.includes('IlaPak')) {
-            x = -19; z = 5; // Left side, lower packaging
-          } else if (machine.name.includes('UNIVERSAL')) {
-            x = -19; z = 15; // Bottom left universal area
-          } else if (machine.name.includes('TABLETS')) {
-            x = -24; z = 17; // Bottom far left tablets
-          } else if (machine.name.includes('CUBES')) {
-            x = -13; z = 17; // Bottom cubes area
-          } else if (machine.name.includes('STOCK') || machine.name.includes('POWDER')) {
-            x = -3; z = 17; // Bottom center stock powder
-          } else if (machine.name.includes('OLD CAN LINE') || machine.name.includes('CANLINE')) {
-            x = 10; z = 17; // Bottom right can line
-          } else if (machine.name.includes('5LANES') || machine.name.includes('AUGER') || machine.name.includes('ENFLEX') || machine.name.includes('CANS')) {
-            x = 20; z = 17; // Far right lanes/auger/enflex/cans
-          } else if (machine.name.includes('FB') || machine.name.includes('fb 10')) {
-            x = -24; z = -2; // FB-10 in maturation room area (per layout)
-          } else if (machine.name.includes('BULK')) {
-            x = -3; z = 5; // Center bulk area
-          } else {
-            // Other packaging equipment
-            x = -15 + (envIndex % 6) * 7;
-            z = -5 + Math.floor(envIndex / 6) * 8;
-          }
-        } else if (machine.environment === 'maturation') {
-          // MATURATION area - Center left section
-          if (machine.name.includes('FB-10') || machine.name.includes('fb 10')) {
-            x = -24; z = -2; // Left side maturation (FB-10 area)
-          } else {
-            // Other maturation equipment in left center area
-            x = -22 + (envIndex % 2) * 6;
-            z = -5 + Math.floor(envIndex / 2) * 6;
-          }
-        } else {
-          // Default positioning across factory floor
-          x = -20 + (envIndex % 6) * 7;
-          z = -15 + Math.floor(envIndex / 6) * 8;
-        }
+        // Get optimized position for this machine
+        const position = getOptimizedMachinePosition(machine);
+        x = position.x;
+        z = position.z;
 
         // Position the entire machine group
         if (mainBody) {
@@ -540,31 +782,101 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
           platform.position.z = z;
         }
 
-        // Create material with status color for main body
+        // ENHANCED MACHINE STATUS VISUALIZATION
+        const createMachineStatusIndicators = (machine, position, scene) => {
+          // Status light above machine
+          const statusLight = window.BABYLON.MeshBuilder.CreateSphere(`status_${machine.id}`, {
+            diameter: 0.5
+          }, scene);
+          statusLight.position = new window.BABYLON.Vector3(position.x, 8, position.z);
+          
+          const statusColors = {
+            'available': new window.BABYLON.Color3(0.0, 1.0, 0.3),   // Bright green
+            'busy': new window.BABYLON.Color3(1.0, 0.6, 0.0),        // Orange
+            'offline': new window.BABYLON.Color3(0.5, 0.5, 0.5),     // Gray
+            'error': new window.BABYLON.Color3(1.0, 0.1, 0.1)        // Red
+          };
+          
+          const lightMaterial = new window.BABYLON.StandardMaterial(`statusMat_${machine.id}`, scene);
+          lightMaterial.diffuseColor = statusColors[machine.status] || statusColors.offline;
+          lightMaterial.emissiveColor = (statusColors[machine.status] || statusColors.offline).scale(0.8);
+          statusLight.material = lightMaterial;
+          
+          // Pulsing animation for active machines
+          if (machine.status === 'busy') {
+            window.BABYLON.Animation.CreateAndStartAnimation(
+              'statusPulse', lightMaterial, 'emissiveColor', 60, 120,
+              (statusColors[machine.status] || statusColors.offline).scale(0.3),
+              (statusColors[machine.status] || statusColors.offline).scale(1.0),
+              window.BABYLON.Animation.ANIMATIONLOOPMODE_YOYO
+            );
+          }
+        };
+
+        // Create enhanced machine material with better status visualization
         if (mainBody) {
-          const material = new window.BABYLON.StandardMaterial(`machineMat_${machine.id}`, scene);
+          const material = new window.BABYLON.PBRMaterial(`machineMat_${machine.id}`, scene);
           const statusColor = machineColors[machine.status] || machineColors.offline;
-          material.diffuseColor = statusColor;
+          material.baseColor = statusColor;
           material.emissiveColor = statusColor.scale(0.1);
-          material.specularColor = new window.BABYLON.Color3(0.5, 0.5, 0.5);
-          material.roughness = 0.3;
-          material.wireframe = false; // Disable wireframe on machines
+          material.metallicFactor = 0.3;
+          material.roughnessFactor = 0.4;
+          material.wireframe = false;
           mainBody.material = material;
           mainBody.renderOutline = false;
           mainBody.showBoundingBox = false;
+          
+          // Add status indicator
+          createMachineStatusIndicators(machine, { x, z }, scene);
         }
 
-        // Add machine name label
-        const nameLabel = window.BABYLON.MeshBuilder.CreatePlane(`label_${machine.id}`, {
-          width: 6, height: 1
-        }, scene);
-        nameLabel.position = new window.BABYLON.Vector3(x, 6, z);
-        nameLabel.billboardMode = window.BABYLON.Mesh.BILLBOARDMODE_Y;
+        // ENHANCED MACHINE INFORMATION DISPLAY
+        const createMachineInfoDisplay = (machine, position, scene) => {
+          // Machine name label with better styling
+          const nameLabel = window.BABYLON.MeshBuilder.CreatePlane(`label_${machine.id}`, {
+            width: 6, height: 1.2
+          }, scene);
+          nameLabel.position = new window.BABYLON.Vector3(position.x, 6, position.z);
+          nameLabel.billboardMode = window.BABYLON.Mesh.BILLBOARDMODE_Y;
+          
+          const labelMaterial = new window.BABYLON.StandardMaterial(`labelMat_${machine.id}`, scene);
+          labelMaterial.diffuseColor = new window.BABYLON.Color3(0.9, 0.9, 0.9);
+          labelMaterial.emissiveColor = new window.BABYLON.Color3(0.6, 0.6, 0.6);
+          
+          // Color-code label based on machine environment
+          if (machine.environment === 'blending') {
+            labelMaterial.emissiveColor = FACTORY_COLORS.blending.accent.scale(0.3);
+          } else if (machine.environment === 'maturation') {
+            labelMaterial.emissiveColor = FACTORY_COLORS.maturation.accent.scale(0.3);
+          } else if (machine.environment === 'packaging') {
+            labelMaterial.emissiveColor = FACTORY_COLORS.packaging.accent.scale(0.3);
+          }
+          
+          nameLabel.material = labelMaterial;
+          
+          // Performance indicator (subtle bar under name)
+          const perfBar = window.BABYLON.MeshBuilder.CreateBox(`perfBar_${machine.id}`, {
+            width: 5, height: 0.1, depth: 0.1
+          }, scene);
+          perfBar.position = new window.BABYLON.Vector3(position.x, 5.5, position.z);
+          
+          const perfMaterial = new window.BABYLON.StandardMaterial(`perfMat_${machine.id}`, scene);
+          // Performance visualization based on status
+          if (machine.status === 'available') {
+            perfMaterial.diffuseColor = new window.BABYLON.Color3(0.0, 0.8, 0.3);
+            perfMaterial.emissiveColor = new window.BABYLON.Color3(0.0, 0.4, 0.15);
+          } else if (machine.status === 'busy') {
+            perfMaterial.diffuseColor = new window.BABYLON.Color3(1.0, 0.6, 0.0);
+            perfMaterial.emissiveColor = new window.BABYLON.Color3(0.5, 0.3, 0.0);
+          } else {
+            perfMaterial.diffuseColor = new window.BABYLON.Color3(0.3, 0.3, 0.3);
+            perfMaterial.emissiveColor = new window.BABYLON.Color3(0.1, 0.1, 0.1);
+          }
+          perfBar.material = perfMaterial;
+        };
         
-        const labelMaterial = new window.BABYLON.StandardMaterial(`labelMat_${machine.id}`, scene);
-        labelMaterial.diffuseColor = new window.BABYLON.Color3(1, 1, 1);
-        labelMaterial.emissiveColor = new window.BABYLON.Color3(0.8, 0.8, 0.8);
-        nameLabel.material = labelMaterial;
+        // Create enhanced info display
+        createMachineInfoDisplay(machine, { x, z }, scene);
 
         // Position other machine components
         const components = scene.meshes.filter(mesh => 
