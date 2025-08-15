@@ -8,38 +8,51 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
   let scene = null;
   let engine = null;
 
-  // Load Babylon.js dynamically
+  // Load Babylon.js dynamically with enhanced verification
   const loadBabylonJS = async () => {
     try {
-      if (typeof window.BABYLON !== 'undefined' && window.BABYLON.ArcRotateCamera) {
-        console.log('✅ Babylon.js already loaded');
+      // Enhanced check for complete Babylon.js availability
+      if (typeof window.BABYLON !== 'undefined' && 
+          window.BABYLON.ArcRotateCamera && 
+          window.BABYLON.ArcRotateCamera.prototype.attachControls) {
+        console.log('✅ Babylon.js already loaded with full camera controls');
         return true;
       }
 
-      console.log('📦 Loading Babylon.js libraries...');
+      console.log('📦 Loading Babylon.js libraries with enhanced controls...');
       
+      // Load core Babylon.js
       const babylonScript = document.createElement('script');
       babylonScript.src = 'https://cdn.babylonjs.com/babylon.js';
       
       await new Promise((resolve, reject) => {
         babylonScript.onload = () => {
           console.log('✅ Babylon.js core loaded');
-          // Verify essential classes are available
-          if (window.BABYLON && window.BABYLON.Engine && window.BABYLON.Scene && window.BABYLON.ArcRotateCamera) {
-            resolve();
-          } else {
-            reject(new Error('Babylon.js core classes not available'));
-          }
+          resolve();
         };
         babylonScript.onerror = () => reject(new Error('Failed to load Babylon.js core'));
         document.head.appendChild(babylonScript);
       });
 
-      // Small delay to ensure everything is initialized
-      await new Promise(resolve => setTimeout(resolve, 100));
-
-      console.log('✅ Babylon.js fully ready');
-      return true;
+      // Enhanced verification with multiple checks
+      let attempts = 0;
+      const maxAttempts = 20;
+      
+      while (attempts < maxAttempts) {
+        if (window.BABYLON && 
+            window.BABYLON.Engine && 
+            window.BABYLON.Scene && 
+            window.BABYLON.ArcRotateCamera &&
+            window.BABYLON.ArcRotateCamera.prototype.attachControls) {
+          console.log('✅ Babylon.js fully ready with camera controls');
+          return true;
+        }
+        
+        await new Promise(resolve => setTimeout(resolve, 50));
+        attempts++;
+      }
+      
+      throw new Error('Babylon.js camera controls not fully loaded after timeout');
     } catch (error) {
       console.error('❌ Failed to load Babylon.js:', error);
       throw error;
@@ -60,12 +73,10 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
         throw new Error('Babylon.js not fully loaded');
       }
 
-      // Create Babylon engine directly with canvas
+      // Create optimized Babylon engine for performance
       engine = new window.BABYLON.Engine(canvas, true, {
         preserveDrawingBuffer: true,
-        stencil: true,
-        antialias: true
-      });
+        stencil: true,\n        antialias: true,\n        powerPreference: 'high-performance',\n        failIfMajorPerformanceCaveat: false,\n        alpha: false,\n        premultipliedAlpha: false,\n        depth: true,\n        desynchronized: true\n      });\n      \n      // Enable performance optimizations\n      engine.enableOfflineSupport = false;\n      engine.doNotHandleContextLost = true;
 
       // Create scene
       scene = new window.BABYLON.Scene(engine);
@@ -89,62 +100,258 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
         });
       }
 
-      // Setup camera for 52m × 42m factory floor
-      console.log('🎥 Creating camera...');
+      // Setup enhanced camera system for 52m × 42m factory floor
+      console.log('🎥 Creating enhanced ArcRotate camera...');
       const camera = new window.BABYLON.ArcRotateCamera(
-        'camera', 
+        'factoryCamera', 
         -Math.PI / 2,  // Start looking from the side
         Math.PI / 3,   // Angled down view
-        80,            // Closer distance for 52m factory
+        80,            // Optimal distance for 52m factory
         new window.BABYLON.Vector3(0, 0, 0), // Center of factory floor
         scene
       );
       
       console.log('🎥 Camera created:', camera.constructor.name);
       
-      // Set camera limits for better control
-      camera.lowerBetaLimit = 0.1;
-      camera.upperBetaLimit = Math.PI / 2.2;
-      camera.lowerRadiusLimit = 20;
-      camera.upperRadiusLimit = 200;
+      // Enhanced camera limits for professional factory navigation
+      camera.lowerBetaLimit = 0.1;           // Prevent going too low
+      camera.upperBetaLimit = Math.PI / 2.1; // Prevent going too high
+      camera.lowerRadiusLimit = 15;          // Minimum zoom distance
+      camera.upperRadiusLimit = 250;         // Maximum zoom distance
       
-      // Attach camera controls with proper error checking
-      if (camera && typeof camera.attachControls === 'function') {
-        camera.attachControls(canvas, true);
-        console.log('🎥 Camera controls attached successfully');
-        
-        // Ensure camera is active
-        scene.activeCamera = camera;
-        
-        // Set wheel precision for better zooming
-        camera.wheelPrecision = 50;
-        camera.angularSensibilityX = 2000;
-        camera.angularSensibilityY = 2000;
-      } else {
-        console.warn('⚠️ Camera attachControls method not available, using basic controls');
-        scene.activeCamera = camera;
-      }
+      // Enhanced camera sensitivity settings for smooth control
+      camera.wheelPrecision = 20;            // Smooth wheel zooming
+      camera.angularSensibilityX = 1000;     // Horizontal rotation sensitivity
+      camera.angularSensibilityY = 1000;     // Vertical rotation sensitivity
+      camera.panningSensibility = 50;        // Panning sensitivity
+      camera.pinchPrecision = 100;           // Touch pinch sensitivity
+      
+      // Enable advanced camera behaviors
+      camera.useBouncingBehavior = true;     // Smooth bouncing at limits
+      camera.useAutoRotationBehavior = false; // Disable auto-rotation
+      camera.useFramingBehavior = false;     // Disable auto-framing
+      
+      // Enhanced control attachment with comprehensive error handling
+      const attachCameraControls = async () => {
+        try {
+          // Ensure canvas is ready and properly focused
+          if (!canvas || !canvas.getContext) {
+            throw new Error('Canvas not ready for camera controls');
+          }
+          
+          // Verify attachControls method exists
+          if (typeof camera.attachControls !== 'function') {
+            throw new Error('Camera attachControls method not available');
+          }
+          
+          // Wait for DOM to be fully ready
+          await new Promise(resolve => {
+            if (document.readyState === 'complete') {
+              resolve();
+            } else {
+              window.addEventListener('load', resolve, { once: true });
+            }
+          });
+          
+          // Attach controls with enhanced options
+          camera.attachControls(canvas, true);
+          
+          // Set canvas attributes for better interaction
+          canvas.setAttribute('tabindex', '0');
+          canvas.style.outline = 'none';
+          canvas.style.touchAction = 'none';
+          
+          // Force focus to enable keyboard controls
+          canvas.focus();
+          
+          console.log('✅ Enhanced camera controls attached successfully');
+          
+          // Verify controls are working by checking for event listeners
+          const hasPointerEvents = canvas.onpointerdown !== null || 
+                                  canvas.onpointermove !== null ||
+                                  canvas.addEventListener;
+          
+          if (!hasPointerEvents) {
+            console.warn('⚠️ Camera controls may not be fully functional');
+          }
+          
+          return true;
+          
+        } catch (error) {
+          console.error('❌ Failed to attach camera controls:', error);
+          
+          // Fallback: Manual event handling for basic navigation
+          setupFallbackCameraControls(camera, canvas, scene);
+          return false;
+        }
+      };
+      
+      // Set camera as active immediately
+      scene.activeCamera = camera;
+      
+      // Attach controls asynchronously
+      await attachCameraControls();
 
-      // Simplified lighting system
-      const createBasicLighting = (scene) => {
-        const light = new window.BABYLON.HemisphericLight(
-          'light', 
+      // Enhanced lighting system for professional factory visualization
+      const createEnhancedLighting = (scene) => {
+        // Primary ambient light for overall illumination
+        const ambientLight = new window.BABYLON.HemisphericLight(
+          'ambientLight', 
           new window.BABYLON.Vector3(0, 1, 0), 
           scene
         );
-        light.intensity = 0.6;
+        ambientLight.intensity = 0.4;
+        ambientLight.diffuse = new window.BABYLON.Color3(0.8, 0.9, 1.0);
         
-        const dirLight = new window.BABYLON.DirectionalLight(
-          'dirLight', 
-          new window.BABYLON.Vector3(-1, -1, 1), 
+        // Main directional light simulating overhead factory lighting
+        const mainLight = new window.BABYLON.DirectionalLight(
+          'mainFactoryLight', 
+          new window.BABYLON.Vector3(-0.5, -1, 0.3), 
           scene
         );
-        dirLight.intensity = 1.0;
-        dirLight.diffuse = new window.BABYLON.Color3(0.4, 0.6, 1.0);
+        mainLight.intensity = 1.2;
+        mainLight.diffuse = new window.BABYLON.Color3(1.0, 0.95, 0.9);
+        mainLight.specular = new window.BABYLON.Color3(0.8, 0.8, 0.8);
+        
+        // Secondary fill light for better depth perception
+        const fillLight = new window.BABYLON.DirectionalLight(
+          'fillLight', 
+          new window.BABYLON.Vector3(0.5, -0.8, -0.3), 
+          scene
+        );
+        fillLight.intensity = 0.6;
+        fillLight.diffuse = new window.BABYLON.Color3(0.9, 0.95, 1.0);
+        
+        // Industrial accent lighting for zone highlights
+        const accentLight = new window.BABYLON.SpotLight(
+          'accentLight',
+          new window.BABYLON.Vector3(0, 15, 0),
+          new window.BABYLON.Vector3(0, -1, 0),
+          Math.PI / 3,
+          2,
+          scene
+        );
+        accentLight.intensity = 0.8;
+        accentLight.diffuse = new window.BABYLON.Color3(1.0, 0.9, 0.7);
+        
+        console.log('✅ Enhanced industrial lighting system initialized');
       };
       
-      // Initialize basic lighting
-      createBasicLighting(scene);
+      // Fallback camera controls for when attachControls fails
+      const setupFallbackCameraControls = (camera, canvas, scene) => {
+        console.log('🔄 Setting up fallback camera controls...');
+        
+        let isPointerDown = false;
+        let lastPointerPosition = { x: 0, y: 0 };
+        
+        // Mouse/touch movement handling
+        const handlePointerMove = (event) => {
+          if (!isPointerDown) return;
+          
+          const deltaX = event.clientX - lastPointerPosition.x;
+          const deltaY = event.clientY - lastPointerPosition.y;
+          
+          // Rotate camera based on mouse movement
+          camera.alpha += deltaX * 0.01;
+          camera.beta += deltaY * 0.01;
+          
+          // Apply limits
+          camera.beta = Math.max(camera.lowerBetaLimit, Math.min(camera.upperBetaLimit, camera.beta));
+          
+          lastPointerPosition = { x: event.clientX, y: event.clientY };
+        };
+        
+        // Mouse/touch down
+        const handlePointerDown = (event) => {
+          isPointerDown = true;
+          lastPointerPosition = { x: event.clientX, y: event.clientY };
+          canvas.setPointerCapture?.(event.pointerId);
+        };
+        
+        // Mouse/touch up
+        const handlePointerUp = (event) => {
+          isPointerDown = false;
+          canvas.releasePointerCapture?.(event.pointerId);
+        };
+        
+        // Wheel zoom
+        const handleWheel = (event) => {
+          event.preventDefault();
+          const delta = event.deltaY * 0.01;
+          camera.radius += delta;
+          camera.radius = Math.max(camera.lowerRadiusLimit, Math.min(camera.upperRadiusLimit, camera.radius));
+        };
+        
+        // Attach fallback event listeners
+        canvas.addEventListener('pointerdown', handlePointerDown);
+        canvas.addEventListener('pointermove', handlePointerMove);
+        canvas.addEventListener('pointerup', handlePointerUp);
+        canvas.addEventListener('wheel', handleWheel, { passive: false });
+        
+        console.log('✅ Fallback camera controls active');
+      };
+      
+      // Initialize enhanced lighting system
+      createEnhancedLighting(scene);
+      
+      // Add camera preset positions for quick navigation - FULL LAYOUT COVERAGE
+      const setupCameraPresets = (camera, scene) => {
+        const presets = {
+          overview: { alpha: -Math.PI / 2, beta: Math.PI / 4, radius: 150, target: new window.BABYLON.Vector3(0, 0, 0) },
+          blending: { alpha: -Math.PI, beta: Math.PI / 3, radius: 60, target: new window.BABYLON.Vector3(0, 0, -14) },
+          maturation: { alpha: -Math.PI * 0.75, beta: Math.PI / 3, radius: 50, target: new window.BABYLON.Vector3(-18, 0, 0) },
+          processing: { alpha: -Math.PI * 0.25, beta: Math.PI / 3, radius: 50, target: new window.BABYLON.Vector3(18, 0, 0) },
+          packaging: { alpha: 0, beta: Math.PI / 3, radius: 70, target: new window.BABYLON.Vector3(0, 0, 14) },
+          isometric: { alpha: Math.PI / 4, beta: Math.PI / 3, radius: 120, target: new window.BABYLON.Vector3(0, 0, 0) },
+          aerial: { alpha: -Math.PI / 2, beta: Math.PI / 6, radius: 200, target: new window.BABYLON.Vector3(0, 0, 0) }
+        };
+        
+        // Smooth camera transition function
+        window.factoryCameraPresets = {
+          goTo: (presetName) => {
+            const preset = presets[presetName];
+            if (!preset) return;
+            
+            const animationTime = 1000; // 1 second transition
+            
+            // Animate to new position
+            window.BABYLON.Animation.CreateAndStartAnimation(
+              'cameraAlpha', camera, 'alpha', 60, 60,
+              camera.alpha, preset.alpha, window.BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT
+            );
+            
+            window.BABYLON.Animation.CreateAndStartAnimation(
+              'cameraBeta', camera, 'beta', 60, 60,
+              camera.beta, preset.beta, window.BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT
+            );
+            
+            window.BABYLON.Animation.CreateAndStartAnimation(
+              'cameraRadius', camera, 'radius', 60, 60,
+              camera.radius, preset.radius, window.BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT
+            );
+            
+            if (preset.target) {
+              window.BABYLON.Animation.CreateAndStartAnimation(
+                'cameraTargetX', camera, 'target.x', 60, 60,
+                camera.target.x, preset.target.x, window.BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT
+              );
+              
+              window.BABYLON.Animation.CreateAndStartAnimation(
+                'cameraTargetZ', camera, 'target.z', 60, 60,
+                camera.target.z, preset.target.z, window.BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT
+              );
+            }
+            
+            console.log(`🎥 Camera moving to ${presetName} preset`);
+          },
+          
+          list: () => Object.keys(presets)
+        };
+        
+        console.log('✅ Camera presets available: window.factoryCameraPresets.goTo("overview")');\n        \n        // Industry 4.0 Digital Twin Features\n        window.factoryDigitalTwin = {\n          // Real-time machine monitoring\n          updateMachineStatus: (machineId, status, metrics = {}) => {\n            const machine = scene.getMeshByName(`machine_${machineId}`);\n            const statusLight = scene.getMeshByName(`status_${machineId}`);\n            \n            if (machine && statusLight) {\n              const statusColors = {\n                'available': new window.BABYLON.Color3(0.0, 1.0, 0.3),\n                'busy': new window.BABYLON.Color3(1.0, 0.6, 0.0),\n                'offline': new window.BABYLON.Color3(0.5, 0.5, 0.5),\n                'error': new window.BABYLON.Color3(1.0, 0.1, 0.1),\n                'maintenance': new window.BABYLON.Color3(1.0, 1.0, 0.0)\n              };\n              \n              const color = statusColors[status] || statusColors.offline;\n              statusLight.material.diffuseColor = color;\n              statusLight.material.emissiveColor = color.scale(0.8);\n              \n              // Add performance metrics visualization\n              if (metrics.efficiency !== undefined) {\n                const perfBar = scene.getMeshByName(`perfBar_${machineId}`);\n                if (perfBar) {\n                  const efficiency = Math.max(0, Math.min(1, metrics.efficiency / 100));\n                  perfBar.scaling.x = efficiency;\n                  \n                  // Color based on efficiency\n                  if (efficiency > 0.8) {\n                    perfBar.material.diffuseColor = new window.BABYLON.Color3(0.0, 0.8, 0.3);\n                  } else if (efficiency > 0.6) {\n                    perfBar.material.diffuseColor = new window.BABYLON.Color3(1.0, 0.8, 0.0);\n                  } else {\n                    perfBar.material.diffuseColor = new window.BABYLON.Color3(1.0, 0.4, 0.0);\n                  }\n                }\n              }\n              \n              console.log(`🏭 Machine ${machineId} updated: ${status}`, metrics);\n            }\n          },\n          \n          // Flow visualization for material tracking\n          createMaterialFlow: (fromMachine, toMachine, material = 'generic') => {\n            const fromMesh = scene.getMeshByName(`machine_${fromMachine}`);\n            const toMesh = scene.getMeshByName(`machine_${toMachine}`);\n            \n            if (fromMesh && toMesh) {\n              const flowPath = window.BABYLON.MeshBuilder.CreateLines(`flow_${fromMachine}_${toMachine}`, {\n                points: [\n                  new window.BABYLON.Vector3(fromMesh.position.x, 3, fromMesh.position.z),\n                  new window.BABYLON.Vector3(toMesh.position.x, 3, toMesh.position.z)\n                ]\n              }, scene);\n              \n              flowPath.color = new window.BABYLON.Color3(0.0, 0.8, 1.0);\n              \n              // Animated flow particle\n              const particle = window.BABYLON.MeshBuilder.CreateSphere(`particle_${fromMachine}_${toMachine}`, {\n                diameter: 0.5\n              }, scene);\n              \n              particle.position = fromMesh.position.clone();\n              particle.position.y = 3;\n              \n              const particleMaterial = new window.BABYLON.StandardMaterial(`particleMat_${fromMachine}_${toMachine}`, scene);\n              particleMaterial.diffuseColor = new window.BABYLON.Color3(0.0, 0.8, 1.0);\n              particleMaterial.emissiveColor = new window.BABYLON.Color3(0.0, 0.4, 0.5);\n              particle.material = particleMaterial;\n              \n              // Animate particle movement\n              window.BABYLON.Animation.CreateAndStartAnimation(\n                'materialFlow', particle, 'position', 30, 90,\n                fromMesh.position.add(new window.BABYLON.Vector3(0, 3, 0)),\n                toMesh.position.add(new window.BABYLON.Vector3(0, 3, 0)),\n                window.BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE\n              );\n              \n              console.log(`📦 Material flow created: ${fromMachine} → ${toMachine}`);\n              return { flowPath, particle };\n            }\n          },\n          \n          // Environmental monitoring (temperature, humidity, air quality)\n          addEnvironmentalSensor: (position, sensorType = 'temperature') => {\n            const sensor = window.BABYLON.MeshBuilder.CreateCylinder(`sensor_${Date.now()}`, {\n              diameter: 0.3, height: 1\n            }, scene);\n            \n            sensor.position = position;\n            \n            const sensorMaterial = new window.BABYLON.StandardMaterial(`sensorMat_${Date.now()}`, scene);\n            sensorMaterial.diffuseColor = new window.BABYLON.Color3(0.7, 0.7, 0.9);\n            sensorMaterial.emissiveColor = new window.BABYLON.Color3(0.3, 0.3, 0.5);\n            sensor.material = sensorMaterial;\n            \n            // Add sensor label\n            const label = window.BABYLON.MeshBuilder.CreatePlane(`sensorLabel_${Date.now()}`, {\n              width: 3, height: 0.8\n            }, scene);\n            label.position = new window.BABYLON.Vector3(position.x, position.y + 2, position.z);\n            label.billboardMode = window.BABYLON.Mesh.BILLBOARDMODE_ALL;\n            \n            const labelMaterial = new window.BABYLON.StandardMaterial(`labelMat_${Date.now()}`, scene);\n            labelMaterial.diffuseColor = new window.BABYLON.Color3(1, 1, 1);\n            labelMaterial.emissiveColor = new window.BABYLON.Color3(0.5, 0.5, 0.5);\n            label.material = labelMaterial;\n            \n            console.log(`🌡️ Environmental sensor added: ${sensorType}`);\n            return sensor;\n          },\n          \n          // Production analytics overlay\n          showProductionMetrics: (enabled = true) => {\n            if (enabled) {\n              // Create floating metrics panel\n              const metricsPanel = window.BABYLON.MeshBuilder.CreatePlane('metricsPanel', {\n                width: 12, height: 8\n              }, scene);\n              \n              metricsPanel.position = new window.BABYLON.Vector3(0, 15, 0);\n              metricsPanel.billboardMode = window.BABYLON.Mesh.BILLBOARDMODE_ALL;\n              \n              const panelMaterial = new window.BABYLON.StandardMaterial('metricsPanelMat', scene);\n              panelMaterial.diffuseColor = new window.BABYLON.Color3(0.1, 0.1, 0.1);\n              panelMaterial.emissiveColor = new window.BABYLON.Color3(0.05, 0.05, 0.05);\n              panelMaterial.alpha = 0.8;\n              metricsPanel.material = panelMaterial;\n              \n              console.log('📊 Production metrics overlay enabled');\n            }\n          },\n          \n          // Predictive maintenance alerts\n          addMaintenanceAlert: (machineId, severity = 'warning') => {\n            const machine = scene.getMeshByName(`machine_${machineId}`);\n            if (machine) {\n              const alert = window.BABYLON.MeshBuilder.CreateSphere(`alert_${machineId}`, {\n                diameter: 1\n              }, scene);\n              \n              alert.position = new window.BABYLON.Vector3(\n                machine.position.x,\n                machine.position.y + 6,\n                machine.position.z\n              );\n              \n              const alertMaterial = new window.BABYLON.StandardMaterial(`alertMat_${machineId}`, scene);\n              const alertColors = {\n                'info': new window.BABYLON.Color3(0.0, 0.8, 1.0),\n                'warning': new window.BABYLON.Color3(1.0, 0.8, 0.0),\n                'critical': new window.BABYLON.Color3(1.0, 0.2, 0.0)\n              };\n              \n              const color = alertColors[severity] || alertColors.warning;\n              alertMaterial.diffuseColor = color;\n              alertMaterial.emissiveColor = color.scale(0.8);\n              alert.material = alertMaterial;\n              \n              // Pulsing animation\n              window.BABYLON.Animation.CreateAndStartAnimation(\n                'alertPulse', alert, 'scaling', 60, 120,\n                new window.BABYLON.Vector3(0.8, 0.8, 0.8),\n                new window.BABYLON.Vector3(1.2, 1.2, 1.2),\n                window.BABYLON.Animation.ANIMATIONLOOPMODE_YOYO\n              );\n              \n              console.log(`🚨 Maintenance alert added for machine ${machineId}: ${severity}`);\n              return alert;\n            }\n          }\n        };\n        \n        console.log('🏭 Industry 4.0 Digital Twin features enabled');\n        console.log('📊 Use window.factoryDigitalTwin for real-time monitoring');
+      };
+      
+      setupCameraPresets(camera, scene);
 
       // ENHANCED FACTORY FLOOR WITH PROFESSIONAL INDUSTRIAL DESIGN
       // Factory dimensions from layout: 52m width x 42m height
@@ -179,49 +386,63 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
         scene
       );
 
-      // Create zone floor sections with color coding
+      // Create zone floor sections with color coding - FULL 52m × 42m LAYOUT
       // BLENDING area floor section (top section) - Blue tint
       const blendingFloor = createSimpleFloor('blendingFloor',
-        { width: factoryWidth, height: 11 }, // 5m + 6m sections
-        new window.BABYLON.Vector3(0, 0.02, -15.5), // Slightly elevated
+        { width: factoryWidth, height: 14 }, // Full top section (5m + 6m + 3m buffer)
+        new window.BABYLON.Vector3(0, 0.02, -14), // Top section positioning
         new window.BABYLON.Color3(0.2, 0.4, 0.8), // Safety blue
         scene
       );
 
-      // MATURATION area floor section (left center) - Amber tint
+      // MATURATION area floor section (left center) - Amber tint  
       const maturationFloor = createSimpleFloor('maturationFloor',
-        { width: 16, height: 14 }, // Left portion of 14m section
-        new window.BABYLON.Vector3(-18, 0.02, -3), // Left center
+        { width: 25, height: 14 }, // Left half of center section
+        new window.BABYLON.Vector3(-13.5, 0.02, 0), // Left center positioning
         new window.BABYLON.Color3(0.8, 0.6, 0.2), // Warm amber
+        scene
+      );
+
+      // PROCESSING area floor section (right center) - Purple tint
+      const processingFloor = createSimpleFloor('processingFloor',
+        { width: 27, height: 14 }, // Right half of center section
+        new window.BABYLON.Vector3(12.5, 0.02, 0), // Right center positioning
+        new window.BABYLON.Color3(0.6, 0.4, 0.8), // Processing purple
         scene
       );
 
       // PACKAGING area floor section (bottom section) - Green tint
       const packagingFloor = createSimpleFloor('packagingFloor',
-        { width: factoryWidth, height: 8 }, // Bottom 8m section
-        new window.BABYLON.Vector3(0, 0.02, 17), // Bottom section
+        { width: factoryWidth, height: 14 }, // Full bottom section
+        new window.BABYLON.Vector3(0, 0.02, 14), // Bottom section positioning  
         new window.BABYLON.Color3(0.2, 0.7, 0.3), // Fresh green
         scene
       );
 
-      // ENHANCED ZONE BOUNDARY SYSTEM
+      // ENHANCED ZONE BOUNDARY SYSTEM - FULL FACTORY LAYOUT
       const createZoneBoundaries = (scene) => {
         const boundaries = [
           {
             name: 'BLENDING ZONE',
-            position: new window.BABYLON.Vector3(0, 0.1, -10),
+            position: new window.BABYLON.Vector3(0, 0.1, -7), // Top boundary
             size: { width: 50, height: 0.2, depth: 2 },
             color: '#2563EB'
           },
           {
             name: 'MATURATION ZONE', 
-            position: new window.BABYLON.Vector3(-10, 0.1, 4),
+            position: new window.BABYLON.Vector3(-13, 0.1, 0), // Left center boundary
             size: { width: 2, height: 0.2, depth: 14 },
             color: '#D97706'
           },
           {
+            name: 'PROCESSING ZONE',
+            position: new window.BABYLON.Vector3(0, 0.1, 0), // Center divider
+            size: { width: 2, height: 0.2, depth: 14 },
+            color: '#8B5CF6'
+          },
+          {
             name: 'PACKAGING ZONE',
-            position: new window.BABYLON.Vector3(0, 0.1, 13),
+            position: new window.BABYLON.Vector3(0, 0.1, 7), // Bottom boundary
             size: { width: 50, height: 0.2, depth: 2 },
             color: '#059669'
           }
@@ -310,26 +531,33 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
         });
       };
 
-      // ZONE INFORMATION PANELS
+      // ZONE INFORMATION PANELS - FULL FACTORY COVERAGE
       const createZoneInformationPanels = (scene) => {
         const zoneInfo = [
           {
             name: 'BLENDING ZONE',
-            position: new window.BABYLON.Vector3(-25, 3, -15),
+            position: new window.BABYLON.Vector3(-25, 3, -14),
             color: '#2563EB',
             description: 'Raw Material Processing',
             processes: ['Material Receipt', 'Primary Blending', 'Batch Preparation']
           },
           {
             name: 'MATURATION ZONE',
-            position: new window.BABYLON.Vector3(-25, 3, -2),
+            position: new window.BABYLON.Vector3(-25, 3, -7),
             color: '#D97706',
             description: 'Product Development',
             processes: ['Fluid Bed Processing', 'Aging & Development']
           },
           {
+            name: 'PROCESSING ZONE',
+            position: new window.BABYLON.Vector3(25, 3, -7),
+            color: '#8B5CF6',
+            description: 'Advanced Processing',
+            processes: ['Granulation', 'Drying', 'Sifting & Screening']
+          },
+          {
             name: 'PACKAGING ZONE',
-            position: new window.BABYLON.Vector3(-25, 3, 15),
+            position: new window.BABYLON.Vector3(25, 3, 14),
             color: '#059669',
             description: 'Final Product Processing',
             processes: ['Tablet Formation', 'Flexible Packaging', 'Container Filling']
@@ -605,84 +833,132 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
         const machinesInEnv = machineList.filter(m => m.environment === machine.environment);
         const envIndex = machinesInEnv.indexOf(machine);
 
-        // WORKFLOW-OPTIMIZED MACHINE POSITIONING
+        // WORKFLOW-OPTIMIZED MACHINE POSITIONING - FULL 52m × 42m LAYOUT
         // Based on manufacturing process flow: Raw Materials → Processing → Final Products
         const getOptimizedMachinePosition = (machine) => {
           const machineName = machine.name.toUpperCase();
           
-          // BLENDING ZONE - Raw material input and primary processing (top section)
+          // BLENDING ZONE - Raw material input and primary processing (top section -21 to -7)
           const blendingPositions = {
             'BLENDING': { x: -22, z: -18 },           // Raw material receipt
-            'PLOUGH BLENDER': { x: -8, z: -16 },     // Primary blending
-            'PLOUGHSHARE': { x: -8, z: -16 },        // Primary blending alt name
-            'PRE-BATCH': { x: 8, z: -16 },           // Batch preparation
-            '1000L BLENDER': { x: 18, z: -12 },      // Large batch blending
-            'MAXMIX': { x: 18, z: -12 },             // Large batch blending alt name
-            '1500L BLENDER': { x: 18, z: -8 },       // Industrial blending
-            'WINKWORK': { x: 18, z: -8 }             // Industrial blending alt name
+            'PLOUGH BLENDER': { x: -12, z: -16 },    // Primary blending
+            'PLOUGHSHARE': { x: -12, z: -16 },       // Primary blending alt name
+            'PRE-BATCH': { x: -2, z: -16 },          // Batch preparation
+            '1000L BLENDER': { x: 8, z: -18 },       // Large batch blending
+            'MAXMIX': { x: 8, z: -18 },              // Large batch blending alt name
+            '1500L BLENDER': { x: 18, z: -16 },      // Industrial blending
+            'WINKWORK': { x: 18, z: -16 },           // Industrial blending alt name
+            'MIXER': { x: -18, z: -12 },             // Additional mixing
+            'BATCH': { x: 12, z: -12 }               // Batch processing
           };
           
-          // MATURATION ZONE - Process development and aging (left center)
+          // MATURATION ZONE - Process development and aging (left center -7 to +7)
           const maturationPositions = {
-            'FB-10': { x: -22, z: -2 },              // Fluid bed processing
-            'FB 10': { x: -22, z: -2 },              // Fluid bed processing alt
-            'MATURATION': { x: -18, z: 2 }           // Aging/development
+            'FB-10': { x: -22, z: -4 },              // Fluid bed processing
+            'FB 10': { x: -22, z: -4 },              // Fluid bed processing alt
+            'MATURATION': { x: -18, z: 0 },          // Aging/development
+            'FLUID': { x: -22, z: 2 },               // Fluid processing
+            'BED': { x: -18, z: 4 }                  // Bed processing
           };
           
-          // PACKAGING ZONE - Final product processing by type
+          // PROCESSING ZONE - Advanced processing (right center -7 to +7)
+          const processingPositions = {
+            'GRANULATOR': { x: 18, z: -4 },          // Granulation
+            'GRANULATE': { x: 18, z: -4 },           // Granulation alt
+            'DRYER': { x: 22, z: -2 },               // Drying
+            'OVEN': { x: 22, z: -2 },                // Drying alt
+            'SIFTER': { x: 18, z: 2 },               // Sifting
+            'SCREEN': { x: 18, z: 2 },               // Screening
+            'SIEVE': { x: 22, z: 4 },                // Sieving
+            'CUBE': { x: 12, z: 0 },                 // Cube processing
+            'CUBES': { x: 12, z: 0 }                 // Cube processing alt
+          };
+          
+          // PACKAGING ZONE - Final product processing by type (+7 to +21)
           const packagingPositions = {
             // Solid product processing
             'TABLETS': { x: -22, z: 16 },            // Tablet formation
-            'CUBES': { x: -12, z: 16 },              // Cube cutting
-            'STOCK POWDER': { x: -2, z: 16 },        // Powder finishing
-            'POWDER': { x: -2, z: 16 },              // Powder finishing alt
+            'TABLET': { x: -22, z: 16 },             // Tablet formation alt
+            'PRESS': { x: -18, z: 18 },              // Press operations
+            'STOCK POWDER': { x: -12, z: 16 },       // Powder finishing
+            'POWDER': { x: -12, z: 16 },             // Powder finishing alt
             
             // Flexible packaging lines
-            'STICKPACK': { x: -18, z: -6 },          // Stick pack filling
-            'STICK PACK': { x: -18, z: -6 },         // Stick pack alt name
-            'ILAPACK': { x: -18, z: 2 },             // ILA packaging
-            'ILAPAK': { x: -18, z: 2 },              // ILA packaging alt
-            'UNIVERSAL': { x: -18, z: 14 },          // Universal packaging
+            'STICKPACK': { x: -6, z: 14 },           // Stick pack filling
+            'STICK PACK': { x: -6, z: 14 },          // Stick pack alt name
+            'ILAPACK': { x: -2, z: 16 },             // ILA packaging
+            'ILAPAK': { x: -2, z: 16 },              // ILA packaging alt
+            'UNIVERSAL': { x: 2, z: 14 },            // Universal packaging
             
             // Container and can lines
             'OLD CAN LINE': { x: 8, z: 16 },         // Legacy can line
             'CANLINE': { x: 8, z: 16 },              // Can line alt name
-            '5LANES': { x: 18, z: 12 },              // Multi-lane filling
-            'AUGER': { x: 20, z: 8 },                // Auger filling
-            'ENFLEX': { x: 22, z: 4 },               // Flexible packaging
-            'CANS': { x: 22, z: 16 },                // Can finishing
+            'CAN': { x: 8, z: 16 },                  // Can processing
+            'CANS': { x: 12, z: 18 },                // Can finishing
+            '5LANES': { x: 18, z: 16 },              // Multi-lane filling
+            'AUGER': { x: 22, z: 14 },               // Auger filling
+            'ENFLEX': { x: 18, z: 12 },              // Flexible packaging
+            'FILLER': { x: 14, z: 20 },              // Filling operations
+            'BOTTLING': { x: 16, z: 18 },            // Bottling operations
             
             // Bulk processing
-            'BULK': { x: -2, z: 6 }                  // Bulk handling
+            'BULK': { x: 6, z: 18 },                 // Bulk handling
+            'PACKAGING': { x: 10, z: 14 }            // General packaging
           };
           
-          // Check each position category
+          // Check each position category with expanded environment support
           if (machine.environment === 'blending') {
             for (const [key, pos] of Object.entries(blendingPositions)) {
               if (machineName.includes(key)) return pos;
             }
-            // Default blending position
-            return { x: -19 + (envIndex % 3) * 8, z: -16 + Math.floor(envIndex / 3) * 3 };
+            // Default blending position - distributed across top section
+            return { x: -22 + (envIndex % 4) * 11, z: -18 + Math.floor(envIndex / 4) * 4 };
           }
           
           if (machine.environment === 'maturation') {
             for (const [key, pos] of Object.entries(maturationPositions)) {
               if (machineName.includes(key)) return pos;
             }
-            // Default maturation position
-            return { x: -22 + (envIndex % 2) * 6, z: -5 + Math.floor(envIndex / 2) * 6 };
+            // Default maturation position - left side
+            return { x: -22 + (envIndex % 2) * 4, z: -6 + Math.floor(envIndex / 2) * 4 };
+          }
+          
+          if (machine.environment === 'processing') {
+            for (const [key, pos] of Object.entries(processingPositions)) {
+              if (machineName.includes(key)) return pos;
+            }
+            // Default processing position - right side center
+            return { x: 12 + (envIndex % 3) * 4, z: -6 + Math.floor(envIndex / 3) * 4 };
           }
           
           if (machine.environment === 'packaging') {
             for (const [key, pos] of Object.entries(packagingPositions)) {
               if (machineName.includes(key)) return pos;
             }
-            // Default packaging position
-            return { x: -15 + (envIndex % 6) * 7, z: -5 + Math.floor(envIndex / 6) * 8 };
+            // Default packaging position - distributed across bottom section
+            return { x: -22 + (envIndex % 6) * 7, z: 12 + Math.floor(envIndex / 6) * 4 };
           }
           
-          // Default position for unmatched machines
-          return { x: -20 + (envIndex % 6) * 7, z: -15 + Math.floor(envIndex / 6) * 8 };
+          // Enhanced fallback with machine name analysis for better positioning
+          let fallbackZone = 'general';
+          
+          // Analyze machine name for zone assignment
+          if (machineName.includes('BLEND') || machineName.includes('MIX') || machineName.includes('BATCH')) {
+            fallbackZone = 'blending';
+            return { x: -15 + (envIndex % 3) * 10, z: -16 + Math.floor(envIndex / 3) * 3 };
+          } else if (machineName.includes('FLUID') || machineName.includes('MATURE') || machineName.includes('AGE')) {
+            fallbackZone = 'maturation';
+            return { x: -20 + (envIndex % 2) * 4, z: -4 + Math.floor(envIndex / 2) * 4 };
+          } else if (machineName.includes('GRANUL') || machineName.includes('DRY') || machineName.includes('SIFT') || machineName.includes('CUBE')) {
+            fallbackZone = 'processing';
+            return { x: 15 + (envIndex % 2) * 6, z: -4 + Math.floor(envIndex / 2) * 4 };
+          } else if (machineName.includes('PACK') || machineName.includes('TABLET') || machineName.includes('CAN') || machineName.includes('FILL')) {
+            fallbackZone = 'packaging';
+            return { x: -18 + (envIndex % 5) * 8, z: 14 + Math.floor(envIndex / 5) * 3 };
+          }
+          
+          // Final fallback - center area
+          return { x: -10 + (envIndex % 4) * 6, z: -8 + Math.floor(envIndex / 4) * 4 };
         };
         
         // Get optimized position for this machine
