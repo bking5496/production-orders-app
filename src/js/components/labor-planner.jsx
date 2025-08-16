@@ -426,7 +426,7 @@ const LaborPlanner = ({ currentUser }) => {
   // Helper function to count assignments by role for a machine-shift combination
   const getAssignmentCounts = (machineId, shift) => {
     const assignmentKey = `${machineId}-${shift}`;
-    const shiftAssignments = assignments[assignmentKey] || [];
+    const shiftAssignments = (assignments[assignmentKey] || []).filter(a => a.role !== 'supervisor');
     
     const counts = {};
     shiftAssignments.forEach(assignment => {
@@ -772,23 +772,7 @@ const LaborPlanner = ({ currentUser }) => {
           <div className="text-center py-8 bg-gray-50 rounded-lg">
             <Factory className="w-12 h-12 text-gray-400 mx-auto mb-3" />
             <p className="text-gray-600">No machines scheduled for {selectedDate}</p>
-            <div className="text-sm text-gray-500 mt-2">
-              <p>Try these dates with scheduled machines:</p>
-              <div className="mt-2 space-x-2">
-                <button 
-                  onClick={() => setSelectedDate('2025-08-07')}
-                  className="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs hover:bg-blue-200"
-                >
-                  Aug 7 (14 machines)
-                </button>
-                <button 
-                  onClick={() => setSelectedDate('2025-08-08')}
-                  className="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs hover:bg-blue-200"
-                >
-                  Aug 8 (1 machine)
-                </button>
-              </div>
-            </div>
+            <p className="text-sm text-gray-500 mt-2">Select a different date or schedule machines for this date.</p>
           </div>
         ) : (
           <div className="space-y-4">
@@ -840,7 +824,7 @@ const LaborPlanner = ({ currentUser }) => {
                     {['day', 'night'].map(shift => {
                       const isScheduled = machine.scheduled_shifts.includes(shift);
                       const assignmentKey = `${machine.id}-${shift}`;
-                      const shiftAssignments = assignments[assignmentKey] || [];
+                      const shiftAssignments = (assignments[assignmentKey] || []).filter(a => a.role !== 'supervisor');
                       const roleRequirements = getRoleRequirements(machine);
                       const assignmentCounts = getAssignmentCounts(machine.id, shift);
                       

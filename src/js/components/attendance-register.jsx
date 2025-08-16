@@ -148,7 +148,7 @@ export default function AttendanceRegister() {
         );
     };
 
-    // Filter workers based on search and machine selection
+    // Filter workers based on search and machine selection, excluding supervisors
     const filteredWorkers = scheduledWorkers.filter(worker => {
         const matchesSearch = !searchTerm || 
             worker.employee_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -157,7 +157,10 @@ export default function AttendanceRegister() {
         
         const matchesMachine = selectedMachine === 'all' || worker.machine_name === selectedMachine;
         
-        return matchesSearch && matchesMachine;
+        // Exclude supervisors from attendance register
+        const isNotSupervisor = worker.assignment_role !== 'supervisor';
+        
+        return matchesSearch && matchesMachine && isNotSupervisor;
     });
 
     return (
