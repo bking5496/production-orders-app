@@ -957,7 +957,7 @@ export default function ProductionOrdersSystem() {
           <TouchButton
             onClick={() => setShowCreateModal(true)}
             size={isMobile ? "sm" : "md"}
-            className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+            className="bg-gradient-to-r from-blue-600 to-slate-700 hover:from-blue-700 hover:to-slate-800"
             icon={Plus}
           >
             {isMobile ? '' : 'New Order'}
@@ -1580,7 +1580,7 @@ export default function ProductionOrdersSystem() {
             <div className="flex gap-3 pt-4 border-t border-gray-200">
               <Button 
                 type="submit" 
-                className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+                className="flex-1 bg-gradient-to-r from-blue-600 to-slate-700 hover:from-blue-700 hover:to-slate-800"
                 disabled={loading}
               >
                 {loading ? 'Creating...' : 'Create Order'}
@@ -2018,8 +2018,8 @@ export default function ProductionOrdersSystem() {
                 {/* Specifications */}
                 {selectedOrder.specifications && (
                   <div className="mb-6">
-                    <h4 className="text-md font-bold text-purple-600 mb-2 border-b border-purple-200 pb-1">Specifications</h4>
-                    <div className="bg-purple-50 border border-purple-200 rounded-lg p-3">
+                    <h4 className="text-md font-bold text-slate-600 mb-2 border-b border-slate-200 pb-1">Specifications</h4>
+                    <div className="bg-slate-50 border border-slate-200 rounded-lg p-3">
                       <p className="text-gray-900 text-sm whitespace-pre-wrap">{
                         typeof selectedOrder.specifications === 'string' 
                           ? selectedOrder.specifications 

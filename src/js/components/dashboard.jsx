@@ -85,12 +85,12 @@ const UltraKPICard = ({ title, value, change, icon: Icon, color = "blue", target
       text: 'text-green-700',
       accent: 'border-green-300'
     },
-    purple: {
-      bg: 'from-purple-500 to-indigo-500',
-      shadow: 'shadow-purple-200',
-      glow: 'bg-purple-100',
-      text: 'text-purple-700',
-      accent: 'border-purple-300'
+    steel: {
+      bg: 'from-slate-600 to-gray-700',
+      shadow: 'shadow-slate-200',
+      glow: 'bg-slate-100',
+      text: 'text-slate-700',
+      accent: 'border-slate-300'
     },
     orange: {
       bg: 'from-orange-500 to-red-500',
@@ -495,7 +495,7 @@ export default function Dashboard() {
 
   const quickActions = [
     { label: 'Create Order', icon: Plus, action: () => window.location.href = '#/orders', color: 'blue' },
-    { label: 'View Analytics', icon: BarChart3, action: () => window.location.href = '#/analytics', color: 'purple' },
+    { label: 'View Analytics', icon: BarChart3, action: () => window.location.href = '#/analytics', color: 'steel' },
     { label: 'Manage Machines', icon: Settings, action: () => window.location.href = '#/machines', color: 'green' },
     { label: 'Labor Planning', icon: Users, action: () => window.location.href = '#/labor-planner', color: 'orange' }
   ];
@@ -552,10 +552,10 @@ export default function Dashboard() {
         <div className="text-center space-y-6">
           <div className="relative">
             <div className="w-20 h-20 border-4 border-blue-200 rounded-full animate-spin border-t-blue-600 mx-auto"></div>
-            <div className="absolute inset-0 w-20 h-20 border-4 border-purple-200 rounded-full animate-ping mx-auto"></div>
+            <div className="absolute inset-0 w-20 h-20 border-4 border-slate-200 rounded-full animate-ping mx-auto"></div>
           </div>
           <div className="space-y-3">
-            <h3 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            <h3 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-slate-700 bg-clip-text text-transparent">
               Loading Production Dashboard
             </h3>
             <p className="text-gray-600 max-w-md mx-auto">
@@ -585,14 +585,14 @@ export default function Dashboard() {
             <div className="flex-1">
               <div className="flex items-center gap-4 mb-3">
                 <div className="relative">
-                  <div className="p-3 bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl shadow-xl">
+                  <div className="p-3 bg-gradient-to-br from-blue-600 to-slate-700 rounded-2xl shadow-xl">
                     <Factory className="w-8 h-8 text-white" />
                   </div>
                   <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full animate-pulse shadow-lg"></div>
                 </div>
                 
                 <div>
-                  <h1 className="text-4xl font-bold bg-gradient-to-r from-gray-900 via-blue-900 to-purple-900 bg-clip-text text-transparent">
+                  <h1 className="text-4xl font-bold bg-gradient-to-r from-gray-900 via-blue-900 to-slate-900 bg-clip-text text-transparent">
                     Production Dashboard
                   </h1>
                   <p className="text-gray-600 mt-1">Real-time manufacturing intelligence & performance metrics</p>
@@ -611,9 +611,9 @@ export default function Dashboard() {
                   <Activity className="w-4 h-4 text-blue-600" />
                   <span className="font-medium text-blue-800">{stats.orders.in_progress} Active Orders</span>
                 </div>
-                <div className="flex items-center gap-2 px-3 py-2 bg-purple-100 rounded-full">
-                  <Cpu className="w-4 h-4 text-purple-600" />
-                  <span className="font-medium text-purple-800">{stats.machines.in_use} Machines Running</span>
+                <div className="flex items-center gap-2 px-3 py-2 bg-slate-100 rounded-full">
+                  <Cpu className="w-4 h-4 text-slate-600" />
+                  <span className="font-medium text-slate-800">{stats.machines.in_use} Machines Running</span>
                 </div>
               </div>
             </div>
@@ -631,7 +631,7 @@ export default function Dashboard() {
               
               <Button 
                 onClick={() => setShowQuickActions(true)}
-                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transition-all duration-300"
+                className="bg-gradient-to-r from-blue-600 to-slate-700 hover:from-blue-700 hover:to-slate-800 text-white shadow-lg hover:shadow-xl transition-all duration-300"
               >
                 <Zap className="w-4 h-4 mr-2" />
                 Quick Actions
@@ -669,7 +669,7 @@ export default function Dashboard() {
       <div className="p-6 space-y-8">
         {/* Priority Alerts */}
         {priorityAlerts.length > 0 && (
-          <div className="bg-gradient-to-r from-red-50 to-pink-50 border border-red-200 rounded-2xl p-6 shadow-lg">
+          <div className="bg-gradient-to-r from-red-50 to-orange-50 border border-red-200 rounded-2xl p-6 shadow-lg">
             <div className="flex items-center gap-3 mb-4">
               <div className="p-2 bg-red-500 rounded-xl animate-pulse">
                 <AlertTriangle className="w-6 h-6 text-white" />
@@ -702,7 +702,7 @@ export default function Dashboard() {
             value={`${Math.round((stats.machines.in_use / Math.max(stats.machines.total, 1)) * 100)}%`}
             change={3}
             icon={Factory}
-            color="purple"
+            color="steel"
             target={80}
             trend={-2}
             sparklineData={sparklineData.machines}
@@ -786,9 +786,9 @@ export default function Dashboard() {
         
         {/* Real-time Activity Feed */}
         <div className="bg-white/80 backdrop-blur-sm border border-gray-200/50 shadow-xl rounded-2xl overflow-hidden">
-          <div className="p-6 border-b border-gray-200/50 bg-gradient-to-r from-indigo-50 to-purple-50">
+          <div className="p-6 border-b border-gray-200/50 bg-gradient-to-r from-indigo-50 to-slate-50">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-xl">
+              <div className="p-2 bg-gradient-to-br from-indigo-500 to-slate-600 rounded-xl">
                 <Activity className="w-6 h-6 text-white" />
               </div>
               <h3 className="text-xl font-bold text-gray-900">Live Activity Feed</h3>
