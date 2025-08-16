@@ -3754,3 +3754,4 @@
 2025-08-16T23:47:29: 🔒 Auth failure: testuser from ::ffff:127.0.0.1 - Invalid credentials - Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/140.0.7339.5 Safari/537.36
 2025-08-16T23:47:30: 🔒 Auth failure: testuser from ::1 - Invalid credentials - Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/140.0.7339.5 Safari/537.36
 2025-08-16T23:47:32: 🔒 Auth failure: testuser from ::1 - Invalid credentials - Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/140.0.7339.5 Safari/537.36
+2025-08-16T23:50:54: 🔒 Auth failure: admin from ::ffff:127.0.0.1 - Invalid input - Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/138.0.7204.23 Safari/537.36
