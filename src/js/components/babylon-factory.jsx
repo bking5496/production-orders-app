@@ -91,7 +91,7 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
         adaptToDeviceRatio: true,
         // Ultra-high quality rendering settings
         xrCompatible: true,
-        audioEngine: true,
+        audioEngine: false, // Disable to avoid audio disposal issues
         deterministicLockstep: true,
         lockstepMaxSteps: 4,
         timeStep: 1/60,
@@ -125,7 +125,9 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
       
       // Enable advanced features for ultra-realistic rendering
       scene.environmentIntensity = 1.0;
-      scene.enablePhysics(new window.BABYLON.Vector3(0, -9.81, 0), new window.BABYLON.CannonJSPlugin());
+      
+      // Note: Physics disabled to avoid CANNON.js dependency
+      // scene.enablePhysics(new window.BABYLON.Vector3(0, -9.81, 0), new window.BABYLON.CannonJSPlugin());
       
       // Advanced material optimizations
       scene.blockMaterialDirtyMechanism = false; // Allow dynamic materials for ultra-quality

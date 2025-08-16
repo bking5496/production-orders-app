@@ -1,0 +1,17 @@
+{
+  "mcpServers": {
+    "playwright": {
+      "command": "npx",
+      "args": [
+        "@playwright/mcp",
+        "--headless",
+        "--host", "localhost",
+        "--port", "3001",
+        "--isolated"
+      ],
+      "env": {
+        "NODE_ENV": "production"
+      }
+    }
+  }
+}
