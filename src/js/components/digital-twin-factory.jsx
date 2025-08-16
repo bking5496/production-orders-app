@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { Factory, Maximize2, Minimize2, RotateCcw, Zap, Info } from 'lucide-react';
+import { Factory, Maximize2, Minimize2, RotateCcw, Zap, Info, Monitor, Layers, Settings } from 'lucide-react';
 import BabylonFactory from './babylon-factory.jsx';
+import FactoryDigitalTwin2D from './factory-digital-twin-2d.jsx';
 import API from '../core/api';
 
 export default function DigitalTwinFactory() {
   const [machines, setMachines] = useState([]);
+  const [environments, setEnvironments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [selectedMachine, setSelectedMachine] = useState(null);
+  const [viewMode, setViewMode] = useState('3d'); // '3d' or '2d'
+  const [show2DFactory, setShow2DFactory] = useState(false);
 
   // Load machines for the 3D factory
   useEffect(() => {
