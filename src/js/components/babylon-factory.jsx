@@ -113,24 +113,24 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
         });
       }
 
-      // Setup enhanced camera system for 52m × 42m factory floor - FULL CANVAS UTILIZATION
-      console.log('🎥 Creating enhanced ArcRotate camera for full canvas coverage...');
+      // Setup enhanced camera system for 80m × 60m stretched factory floor - FULL SCREEN UTILIZATION
+      console.log('🎥 Creating enhanced ArcRotate camera for full-screen stretched coverage...');
       const camera = new window.BABYLON.ArcRotateCamera(
         'factoryCamera', 
         -Math.PI / 4,  // Better angle for full factory view
-        Math.PI / 2.5, // Optimized elevation for 52m × 42m coverage
-        120,           // Increased distance for full factory visibility
-        new window.BABYLON.Vector3(0, 0, 0), // Center of factory floor
+        Math.PI / 2.5, // Optimized elevation for 80m × 60m coverage
+        150,           // Increased distance for full stretched factory visibility
+        new window.BABYLON.Vector3(0, 0, 0), // Center of stretched factory floor
         scene
       );
       
       console.log('🎥 Camera created:', camera.constructor.name);
       
-      // Enhanced camera limits for professional factory navigation - FULL CANVAS COVERAGE
+      // Enhanced camera limits for professional factory navigation - FULL SCREEN COVERAGE
       camera.lowerBetaLimit = 0.1;           // Prevent going too low
       camera.upperBetaLimit = Math.PI / 2.1; // Prevent going too high
-      camera.lowerRadiusLimit = 30;          // Minimum zoom for detail view
-      camera.upperRadiusLimit = 350;         // Maximum zoom for full factory overview
+      camera.lowerRadiusLimit = 40;          // Minimum zoom for detail view of stretched layout
+      camera.upperRadiusLimit = 400;         // Maximum zoom for full stretched factory overview
       
       // Enhanced camera sensitivity settings for smooth control
       camera.wheelPrecision = 20;            // Smooth wheel zooming
@@ -226,18 +226,41 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
         };
         
         const handleWheel = (event) => {
+          // Always prevent default to stop page scrolling
           event.preventDefault();
-          const delta = event.deltaY * 0.1;
+          event.stopPropagation();
+          
+          const delta = event.deltaY * 0.05; // Smoother zooming
           camera.radius += delta;
-          camera.radius = Math.max(camera.lowerRadiusLimit || 10, 
-                                  Math.min(camera.upperRadiusLimit || 500, camera.radius));
+          camera.radius = Math.max(camera.lowerRadiusLimit || 5, 
+                                  Math.min(camera.upperRadiusLimit || 200, camera.radius));
+          
+          // Force focus to canvas to capture all scroll events
+          canvas.focus();
         };
         
         // Attach manual event listeners
         canvas.addEventListener('pointerdown', handlePointerDown);
         canvas.addEventListener('pointermove', handlePointerMove);
         canvas.addEventListener('pointerup', handlePointerUp);
+        // Enhanced scroll capture - prevent page scrolling entirely when over canvas
         canvas.addEventListener('wheel', handleWheel, { passive: false });
+        
+        // Additional scroll prevention
+        canvas.addEventListener('scroll', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+        }, { passive: false });
+        
+        // Capture mouse enter/leave for scroll focus
+        canvas.addEventListener('mouseenter', () => {
+          canvas.focus();
+          document.body.style.overflow = 'hidden'; // Prevent page scroll
+        });
+        
+        canvas.addEventListener('mouseleave', () => {
+          document.body.style.overflow = 'auto'; // Restore page scroll
+        });
         
         // Touch support
         canvas.addEventListener('touchstart', (e) => {
@@ -428,13 +451,12 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
       
       setupCameraPresets(camera, scene);
 
-      // ENHANCED FACTORY FLOOR WITH PROFESSIONAL INDUSTRIAL DESIGN
-      // Factory dimensions from layout: 52m width x 42m height
-      // Grid: 5m + 5m + 6m + 10m + 20m + 6m = 52m width
-      // Heights: 5m + 6m + 14m + 8m + various = 42m height
+      // ENHANCED STRETCHED FACTORY FLOOR WITH PROFESSIONAL INDUSTRIAL DESIGN
+      // Stretched dimensions for better visibility: 80m width x 60m height
+      // Expanded grid for full-screen immersive experience
       
-      const factoryWidth = 52;  // Total factory width
-      const factoryHeight = 42; // Total factory height  
+      const factoryWidth = 80;  // Stretched factory width
+      const factoryHeight = 60; // Stretched factory height  
       const wallHeight = 6;
       const wallThickness = 0.3;
 
@@ -462,42 +484,42 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
       );
 
       // Create zone floor sections based on ACTUAL GRID LAYOUT - PROFESSIONAL INDUSTRIAL COLORS
-      // COLUMNS 1-2: Blending & Processing (0-10m) - Industrial Steel Blue
+      // COLUMNS 1-2: Blending & Processing (0-15m) - Industrial Steel Blue - STRETCHED
       const blendingFloor = createSimpleFloor('blendingFloor',
-        { width: 10, height: factoryHeight }, // Columns 1-2 width
-        new window.BABYLON.Vector3(-21, 0.02, 0), // Left side positioning
+        { width: 15, height: factoryHeight }, // Stretched columns 1-2 width
+        new window.BABYLON.Vector3(-32.5, 0.02, 0), // Left side positioning - stretched
         new window.BABYLON.Color3(0.3, 0.35, 0.4), // Industrial steel blue
         scene
       );
 
-      // COLUMN 3: Packaging Operations (10-16m) - Safety Green  
+      // COLUMN 3: Packaging Operations (15-25m) - Safety Green - STRETCHED
       const packagingFloor1 = createSimpleFloor('packagingFloor1',
-        { width: 6, height: factoryHeight }, // Column 3 width
-        new window.BABYLON.Vector3(-13, 0.02, 0), // Column 3 positioning
+        { width: 10, height: factoryHeight }, // Stretched column 3 width
+        new window.BABYLON.Vector3(-20, 0.02, 0), // Column 3 positioning - stretched
         new window.BABYLON.Color3(0.25, 0.4, 0.25), // Professional safety green
         scene
       );
 
-      // COLUMN 4: Pre-Production (16-26m) - Industrial Gray
+      // COLUMN 4: Pre-Production (25-40m) - Industrial Gray - STRETCHED
       const preProductionFloor = createSimpleFloor('preProductionFloor',
-        { width: 10, height: factoryHeight }, // Column 4 width
-        new window.BABYLON.Vector3(-5, 0.02, 0), // Column 4 positioning
+        { width: 15, height: factoryHeight }, // Stretched column 4 width
+        new window.BABYLON.Vector3(-7.5, 0.02, 0), // Column 4 positioning - stretched
         new window.BABYLON.Color3(0.35, 0.35, 0.35), // Industrial gray
         scene
       );
 
-      // COLUMN 5: Main Production Lines (26-46m) - Machine Gray
+      // COLUMN 5: Main Production Lines (40-65m) - Machine Gray - STRETCHED
       const mainProductionFloor = createSimpleFloor('mainProductionFloor',
-        { width: 20, height: factoryHeight }, // Column 5 width
-        new window.BABYLON.Vector3(10, 0.02, 0), // Column 5 positioning
+        { width: 25, height: factoryHeight }, // Stretched column 5 width
+        new window.BABYLON.Vector3(12.5, 0.02, 0), // Column 5 positioning - stretched
         new window.BABYLON.Color3(0.28, 0.3, 0.32), // Professional machine gray
         scene
       );
 
-      // COLUMN 6: Auxiliary Equipment (46-52m) - Industrial Bronze
+      // COLUMN 6: Auxiliary Equipment (65-80m) - Industrial Bronze - STRETCHED
       const auxiliaryFloor = createSimpleFloor('auxiliaryFloor',
-        { width: 6, height: factoryHeight }, // Column 6 width
-        new window.BABYLON.Vector3(23, 0.02, 0), // Column 6 positioning
+        { width: 15, height: factoryHeight }, // Stretched column 6 width
+        new window.BABYLON.Vector3(32.5, 0.02, 0), // Column 6 positioning - stretched
         new window.BABYLON.Color3(0.4, 0.35, 0.3), // Industrial bronze
         scene
       );
@@ -950,76 +972,76 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
         const getOptimizedMachinePosition = (machine) => {
           const machineName = machine.name.toUpperCase();
           
-          // COLUMN 1 (0-5m): Blending & Processing - Left side
+          // ENHANCED COLUMN 1 (0-5m): Blending & Processing - Left side - STRETCHED LAYOUT
           const column1Positions = {
-            'BLENDER LEAL': { x: -23.5, z: 16.5 },     // Top left (2.5m, 2.5m)
-            'LEAL': { x: -23.5, z: 16.5 },             // Alt name
-            'MATURATION': { x: -23.5, z: 9 },          // Maturation room (2.5m, 9m)
-            'CORAZZA TABLET': { x: -23.5, z: -7 },     // Bottom left (2.5m, -7m)
-            'TABLET': { x: -23.5, z: -7 },             // Alt name
-            'CORAZZA': { x: -23.5, z: -7 }             // Alt name
+            'BLENDER LEAL': { x: -30, z: 20 },         // Stretched top left
+            'LEAL': { x: -30, z: 20 },                 // Alt name  
+            'MATURATION': { x: -30, z: 10 },           // Maturation room - stretched
+            'CORAZZA TABLET': { x: -30, z: -10 },      // Bottom left - stretched
+            'TABLET': { x: -30, z: -10 },              // Alt name
+            'CORAZZA': { x: -30, z: -10 }              // Alt name
           };
           
-          // COLUMN 2 (5-10m): Blending & Processing
+          // ENHANCED COLUMN 2 (5-10m): Blending & Processing - STRETCHED
           const column2Positions = {
-            'WINKWORK': { x: -18.5, z: 16.5 },         // Blender Winkwork (7.5m, 2.5m)
-            'BLENDER WINKWORK': { x: -18.5, z: 16.5 }, // Full name
-            'CORAZZA CUBE': { x: -18.5, z: -7 },       // Bottom (7.5m, -7m)
-            'CUBE': { x: -18.5, z: -7 }                // Alt name
+            'WINKWORK': { x: -20, z: 20 },             // Blender Winkwork - stretched
+            'BLENDER WINKWORK': { x: -20, z: 20 },     // Full name
+            'CORAZZA CUBE': { x: -20, z: -10 },        // Bottom - stretched
+            'CUBE': { x: -20, z: -10 }                 // Alt name
           };
           
-          // COLUMN 3 (10-16m): Packaging Operations
+          // ENHANCED COLUMN 3 (10-16m): Packaging Operations - STRETCHED
           const column3Positions = {
-            'NPS STICK PACK': { x: -13, z: 16.5 },     // Top (13m, 2.5m)
-            'STICK PACK': { x: -13, z: 16.5 },         // Alt name
-            'STICKPACK': { x: -13, z: 16.5 },          // Alt name
-            'ENFLEX': { x: -13, z: 12 },               // Enflex fb 10 1:2 (13m, 12m)
-            'FB-10': { x: -13, z: 12 },                // Alt name
-            'FB 10': { x: -13, z: 12 },                // Alt name
-            'ILAPACK': { x: -13, z: 2 },               // Middle (13m, 2m)
-            'ILAPAK': { x: -13, z: 2 },                // Alt name
-            'STOCK POWDER': { x: -13, z: -2 },         // Stock powder (13m, -2m)
-            'POWDER': { x: -13, z: -2 },               // Alt name
-            'UNIVERSAL': { x: -13, z: -12 }            // Universal stations (13m, -12m)
+            'NPS STICK PACK': { x: -10, z: 22 },       // Top - stretched
+            'STICK PACK': { x: -10, z: 22 },           // Alt name
+            'STICKPACK': { x: -10, z: 22 },            // Alt name
+            'ENFLEX': { x: -10, z: 15 },               // Enflex fb 10 1:2 - stretched
+            'FB-10': { x: -10, z: 15 },                // Alt name
+            'FB 10': { x: -10, z: 15 },                // Alt name
+            'ILAPACK': { x: -10, z: 5 },               // Middle - stretched
+            'ILAPAK': { x: -10, z: 5 },                // Alt name
+            'STOCK POWDER': { x: -10, z: -5 },         // Stock powder - stretched
+            'POWDER': { x: -10, z: -5 },               // Alt name
+            'UNIVERSAL': { x: -10, z: -15 }            // Universal stations - stretched
           };
           
-          // COLUMN 4 (16-26m): Pre-Production
+          // ENHANCED COLUMN 4 (16-26m): Pre-Production - STRETCHED
           const column4Positions = {
-            'PRE-BATCH': { x: -5, z: 12 },             // Large central area (21m, 12m)
-            'BATCH': { x: -5, z: 12 },                 // Alt name
-            'PRE': { x: -5, z: 12 }                    // Alt name
+            'PRE-BATCH': { x: 0, z: 15 },              // Large central area - stretched
+            'BATCH': { x: 0, z: 15 },                  // Alt name
+            'PRE': { x: 0, z: 15 }                     // Alt name
           };
           
-          // COLUMN 5 (26-46m): Main Production Lines
+          // ENHANCED COLUMN 5 (26-46m): Main Production Lines - STRETCHED
           const column5Positions = {
-            'CANLINE': { x: 10, z: 2 },                // Canline (36m, 2m)
-            'CAN LINE': { x: 10, z: 2 },               // Alt name
-            'OLD CAN LINE': { x: 10, z: 2 },           // Alt name
-            'CAN': { x: 10, z: 2 },                    // Alt name
-            'NPS 5 LANE': { x: 10, z: -8 },            // Main production (36m, -8m)
-            '5LANES': { x: 10, z: -8 },                // Alt name
-            'NPS AUGER': { x: 10, z: -12 },            // Auger (36m, -12m)
-            'AUGER': { x: 10, z: -12 },                // Alt name
-            'ENFLEX F14': { x: 10, z: -16 },           // Enflex F14 (36m, -16m)
-            'CANISTER': { x: 10, z: -20 },             // Canister line (36m, -20m)
-            'CANISTER LINE': { x: 10, z: -20 }         // Full name
+            'CANLINE': { x: 15, z: 5 },                // Canline - stretched
+            'CAN LINE': { x: 15, z: 5 },               // Alt name
+            'OLD CAN LINE': { x: 15, z: 5 },           // Alt name
+            'CAN': { x: 15, z: 5 },                    // Alt name
+            'NPS 5 LANE': { x: 15, z: -5 },            // Main production - stretched
+            '5LANES': { x: 15, z: -5 },                // Alt name
+            'NPS AUGER': { x: 15, z: -12 },            // Auger - stretched
+            'AUGER': { x: 15, z: -12 },                // Alt name
+            'ENFLEX F14': { x: 15, z: -18 },           // Enflex F14 - stretched
+            'CANISTER': { x: 15, z: -25 },             // Canister line - stretched
+            'CANISTER LINE': { x: 15, z: -25 }         // Full name
           };
           
-          // COLUMN 6 (46-52m): Auxiliary Equipment - Right side
+          // ENHANCED COLUMN 6 (46-52m): Auxiliary Equipment - Right side - STRETCHED
           const column6Positions = {
-            'PLOUGHSHARE': { x: 23.5, z: 16.5 },       // Top right (49m, 2.5m)
-            'PLOUGH': { x: 23.5, z: 16.5 },            // Alt name
-            'BLENDER MAXMIX': { x: 23.5, z: 10 },      // MaxMix (49m, 10m)
-            'MAXMIX': { x: 23.5, z: 10 },              // Alt name
-            'MAX MIX': { x: 23.5, z: 10 },             // Alt name
-            'DRUMBLENDER': { x: 23.5, z: 5.5 },        // Drumblender (49m, 5.5m)
-            'DRUM BLENDER': { x: 23.5, z: 5.5 },       // Alt name
-            'DRUM': { x: 23.5, z: 5.5 },               // Alt name
-            'BULKLINE': { x: 23.5, z: 0 },             // Bulkline (49m, 0m)
-            'BULK LINE': { x: 23.5, z: 0 },            // Alt name
-            'BULK': { x: 23.5, z: 0 },                 // Alt name
-            'LIQUID LINE': { x: 23.5, z: -8 },         // Liquid Line (49m, -8m)
-            'LIQUID': { x: 23.5, z: -8 }               // Alt name
+            'PLOUGHSHARE': { x: 30, z: 20 },           // Top right - stretched
+            'PLOUGH': { x: 30, z: 20 },                // Alt name
+            'BLENDER MAXMIX': { x: 30, z: 12 },        // MaxMix - stretched
+            'MAXMIX': { x: 30, z: 12 },                // Alt name
+            'MAX MIX': { x: 30, z: 12 },               // Alt name
+            'DRUMBLENDER': { x: 30, z: 6 },            // Drumblender - stretched
+            'DRUM BLENDER': { x: 30, z: 6 },           // Alt name
+            'DRUM': { x: 30, z: 6 },                   // Alt name
+            'BULKLINE': { x: 30, z: 0 },               // Bulkline - stretched
+            'BULK LINE': { x: 30, z: 0 },              // Alt name
+            'BULK': { x: 30, z: 0 },                   // Alt name
+            'LIQUID LINE': { x: 30, z: -10 },          // Liquid Line - stretched
+            'LIQUID': { x: 30, z: -10 }                // Alt name
           };
           
           // GRID-BASED POSITION MATCHING - Check all columns for exact matches
@@ -1046,23 +1068,23 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
           
           // Environment-based fallback positioning within grid structure
           if (machine.environment === 'blending') {
-            // Columns 1-2: Blending equipment
-            return { x: -23.5 + (envIndex % 2) * 5, z: 16.5 - (Math.floor(envIndex / 2) * 8) };
+            // Columns 1-2: Blending equipment - STRETCHED
+            return { x: -32.5 + (envIndex % 2) * 7.5, z: 20 - (Math.floor(envIndex / 2) * 10) };
           }
           
           if (machine.environment === 'maturation') {
-            // Column 1: Maturation area
-            return { x: -23.5, z: 9 - (envIndex * 4) };
+            // Column 1: Maturation area - STRETCHED
+            return { x: -32.5, z: 12 - (envIndex * 6) };
           }
           
           if (machine.environment === 'processing') {
-            // Column 6: Processing equipment
-            return { x: 23.5, z: 16.5 - (envIndex * 6) };
+            // Column 6: Processing equipment - STRETCHED
+            return { x: 32.5, z: 20 - (envIndex * 8) };
           }
           
           if (machine.environment === 'packaging') {
-            // Columns 3-5: Packaging operations
-            return { x: -13 + (envIndex % 3) * 11.5, z: 16.5 - (Math.floor(envIndex / 3) * 8) };
+            // Columns 3-5: Packaging operations - STRETCHED
+            return { x: -20 + (envIndex % 3) * 17.5, z: 22 - (Math.floor(envIndex / 3) * 10) };
           }
           
           // Enhanced fallback with machine name analysis for better positioning
@@ -1269,7 +1291,23 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
   }
 
   return (
-    <div className="w-full bg-gray-900 rounded-lg overflow-hidden relative" style={{ height: 'calc(100vh - 120px)' }}>
+    <div className="fixed inset-0 bg-gray-900 overflow-hidden relative z-50" style={{ height: '100vh', width: '100vw' }}>
+      {/* Close Button */}
+      <div className="absolute top-4 right-4 z-20">
+        <button 
+          onClick={() => {
+            document.body.style.overflow = 'auto'; // Restore page scroll
+            const container = document.querySelector('.fixed.inset-0.bg-gray-900');
+            if (container) container.remove();
+            if (onMachineClick) onMachineClick(null); // Close factory view
+          }}
+          className="bg-red-600 hover:bg-red-700 text-white p-2 rounded-full shadow-lg transition-colors"
+          title="Close Digital Twin"
+        >
+          ✕
+        </button>
+      </div>
+
       {/* Industry 4.0 Control Panel */}
       <div className="absolute top-4 left-4 z-10 bg-black/80 backdrop-blur-sm rounded-lg p-4 text-white">
         <div className="text-sm font-semibold mb-2">🏭 Factory Controls</div>
@@ -1317,7 +1355,7 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
       </div>
 
       {/* Real-time Status Panel */}
-      <div className="absolute top-4 right-4 z-10 bg-black/80 backdrop-blur-sm rounded-lg p-4 text-white">
+      <div className="absolute top-16 right-4 z-10 bg-black/80 backdrop-blur-sm rounded-lg p-4 text-white">
         <div className="text-sm font-semibold mb-2">📊 Live Status</div>
         <div className="space-y-1 text-xs">
           <div className="flex justify-between">
