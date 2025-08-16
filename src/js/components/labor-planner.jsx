@@ -72,6 +72,7 @@ const LaborPlanner = ({ currentUser }) => {
   const [shiftMode, setShiftMode] = useState('manual'); // 'manual' or 'cycle'
   const [showCrewManagementModal, setShowCrewManagementModal] = useState(false);
   const [selectedCrewMachine, setSelectedCrewMachine] = useState(null);
+  const [crewSearchTerm, setCrewSearchTerm] = useState('');
 
   // Fetch machines with 2-2-2 shift cycles enabled
   const fetchShiftCycleMachines = async () => {
@@ -1337,14 +1338,44 @@ const LaborPlanner = ({ currentUser }) => {
 
                   {/* Add employee section */}
                   <div className="border-t pt-3">
-                    <h6 className="text-xs font-medium text-gray-700 mb-2">Add Employee</h6>
+                    <div className="flex justify-between items-center mb-2">
+                      <h6 className="text-xs font-medium text-gray-700">Add Employee</h6>
+                      <span className="text-xs text-gray-500">
+                        {getFilteredEmployees()
+                          .filter(user => user.role !== 'supervisor' && user.role !== 'admin')
+                          .filter(user => !selectedCrewMachine.crews?.some(c => 
+                            c.employees?.some(emp => emp.id === user.id)
+                          )).length} available
+                      </span>
+                    </div>
+                    
+                    {/* Search input for crew management */}
+                    <div className="mb-3">
+                      <input
+                        type="text"
+                        placeholder="Search employees..."
+                        value={crewSearchTerm}
+                        onChange={(e) => setCrewSearchTerm(e.target.value)}
+                        className="w-full px-3 py-1 text-xs border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
+                      />
+                    </div>
+                    
                     <div className="space-y-2 max-h-40 overflow-y-auto border border-gray-200 rounded p-2"> {/* Scrollable worker list */}
                       {getFilteredEmployees()
                         .filter(user => user.role !== 'supervisor' && user.role !== 'admin')
                         .filter(user => !selectedCrewMachine.crews?.some(c => 
                           c.employees?.some(emp => emp.id === user.id)
                         ))
-                        .slice(0, 15) // Show more workers
+                        .filter(user => {
+                          // Apply crew-specific search filter
+                          if (!crewSearchTerm) return true;
+                          const searchLower = crewSearchTerm.toLowerCase();
+                          const fullName = formatUserDisplayName(user).toLowerCase();
+                          return fullName.includes(searchLower) || 
+                                 user.username?.toLowerCase().includes(searchLower) ||
+                                 user.role?.toLowerCase().includes(searchLower);
+                        })
+                        .slice(0, 25) // Show more workers
                         .map(user => (
                           <div key={user.id} className="flex items-center justify-between p-2 bg-green-50 rounded-lg border border-green-100">
                             <span className="text-xs font-medium text-gray-900">
@@ -1364,8 +1395,19 @@ const LaborPlanner = ({ currentUser }) => {
                         .filter(user => user.role !== 'supervisor' && user.role !== 'admin')
                         .filter(user => !selectedCrewMachine.crews?.some(c => 
                           c.employees?.some(emp => emp.id === user.id)
-                        )).length === 0 && (
-                        <p className="text-xs text-gray-400 text-center py-1">No available employees</p>
+                        ))
+                        .filter(user => {
+                          // Apply crew-specific search filter
+                          if (!crewSearchTerm) return true;
+                          const searchLower = crewSearchTerm.toLowerCase();
+                          const fullName = formatUserDisplayName(user).toLowerCase();
+                          return fullName.includes(searchLower) || 
+                                 user.username?.toLowerCase().includes(searchLower) ||
+                                 user.role?.toLowerCase().includes(searchLower);
+                        }).length === 0 && (
+                        <p className="text-xs text-gray-400 text-center py-1">
+                          {crewSearchTerm ? 'No employees match your search' : 'No available employees'}
+                        </p>
                       )}
                     </div>
                   </div>
