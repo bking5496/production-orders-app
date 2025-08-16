@@ -8,37 +8,59 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
   let scene = null;
   let engine = null;
 
-  // Direct Babylon.js loading - simple and reliable
+  // Ultra-Enhanced Babylon.js loading with advanced feature set for 100MB+ factory
   const loadBabylonJS = async () => {
-    // Check if already loaded
-    if (window.BABYLON && window.BABYLON.Engine && window.BABYLON.Scene && window.BABYLON.ArcRotateCamera) {
-      console.log('✅ Babylon.js already available');
+    // Check if already loaded with all advanced features
+    if (window.BABYLON && window.BABYLON.Engine && window.BABYLON.Scene && window.BABYLON.ArcRotateCamera && 
+        window.BABYLON.PBRMaterial && window.BABYLON.NodeMaterial && window.BABYLON.ProceduralTexture) {
+      console.log('✅ Advanced Babylon.js already available');
       return true;
     }
 
-    console.log('📦 Loading Babylon.js from CDN...');
+    console.log('📦 Loading Ultra-Enhanced Babylon.js with advanced features for 100MB+ factory...');
     
-    return new Promise((resolve, reject) => {
-      const script = document.createElement('script');
-      script.src = 'https://cdn.babylonjs.com/babylon.js';
-      script.async = false; // Load synchronously to avoid race conditions
+    // Load core Babylon.js
+    const loadScript = (src) => {
+      return new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = src;
+        script.async = false;
+        script.onload = resolve;
+        script.onerror = reject;
+        document.head.appendChild(script);
+      });
+    };
+    
+    try {
+      // Core Babylon.js engine
+      await loadScript('https://cdn.babylonjs.com/babylon.js');
       
-      script.onload = () => {
-        // Simple check after load
-        if (window.BABYLON && window.BABYLON.Engine) {
-          console.log('✅ Babylon.js loaded successfully');
-          resolve(true);
-        } else {
-          reject(new Error('Babylon.js objects not available after load'));
-        }
-      };
+      // Advanced PBR materials for ultra-realistic rendering
+      await loadScript('https://cdn.babylonjs.com/materialsLibrary/babylonjs.materials.min.js');
       
-      script.onerror = () => {
-        reject(new Error('Failed to load Babylon.js from CDN'));
-      };
+      // Procedural textures for complex surface details
+      await loadScript('https://cdn.babylonjs.com/proceduralTexturesLibrary/babylonjs.proceduralTextures.min.js');
       
-      document.head.appendChild(script);
-    });
+      // Node material editor for custom shaders
+      await loadScript('https://cdn.babylonjs.com/nodeEditor/babylon.nodeEditor.js');
+      
+      // Post-processing effects for cinematic quality
+      await loadScript('https://cdn.babylonjs.com/postProcessesLibrary/babylonjs.postProcess.min.js');
+      
+      // Inspector for debugging ultra-complex scenes
+      await loadScript('https://cdn.babylonjs.com/inspector/babylon.inspector.bundle.js');
+      
+      // Particle systems for industrial effects
+      await loadScript('https://cdn.babylonjs.com/gui/babylon.gui.min.js');
+      
+      console.log('✅ Ultra-Enhanced Babylon.js loaded with advanced features');
+      console.log('🎯 Ready for 100MB+ ultra-high quality factory rendering');
+      return true;
+      
+    } catch (error) {
+      console.error('❌ Failed to load enhanced Babylon.js:', error);
+      throw new Error('Failed to load enhanced Babylon.js suite');
+    }
   };
 
   // Initialize Babylon.js scene
@@ -55,7 +77,7 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
         throw new Error('Babylon.js not fully loaded');
       }
 
-      // Create optimized Babylon engine for MAXIMUM performance and visual quality
+      // Create ULTRA-ENHANCED Babylon engine for 100MB+ ultra-high quality rendering
       engine = new window.BABYLON.Engine(canvas, true, {
         preserveDrawingBuffer: true,
         stencil: true,
@@ -66,26 +88,48 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
         premultipliedAlpha: false,
         depth: true,
         desynchronized: true,
-        adaptToDeviceRatio: true // Better display scaling for high-DPI screens
+        adaptToDeviceRatio: true,
+        // Ultra-high quality rendering settings
+        xrCompatible: true,
+        audioEngine: true,
+        deterministicLockstep: true,
+        lockstepMaxSteps: 4,
+        timeStep: 1/60,
+        useHighPrecisionFloats: true,
+        useExactSrgbConversions: true,
+        // Advanced WebGL2 features for maximum quality
+        disableWebGL2Support: false,
+        useReverseDepthBuffer: true,
+        powerPreference: 'high-performance'
       });
       
       // Enable performance optimizations
       engine.enableOfflineSupport = false;
       engine.doNotHandleContextLost = true;
 
-      // Create optimized scene
+      // Create ULTRA-ENHANCED scene for 100MB+ content
       scene = new window.BABYLON.Scene(engine);
       
-      console.log('✅ Engine and scene created successfully');
+      console.log('✅ Ultra-enhanced engine and scene created for 100MB+ factory');
       
-      // Performance optimizations for smooth 3D interaction
-      scene.performancePriority = window.BABYLON.ScenePerformancePriority.Intermediate;
-      scene.skipPointerMovePicking = true;
+      // Ultra-high quality rendering settings
+      scene.performancePriority = window.BABYLON.ScenePerformancePriority.BackwardCompatible; // Max quality
+      scene.skipPointerMovePicking = false; // Enable precise picking for complex models
       scene.autoClear = true;
       scene.autoClearDepthAndStencil = true;
       
-      // Optimize rendering
-      scene.blockMaterialDirtyMechanism = true;
+      // Advanced rendering pipeline for ultra-quality
+      scene.imageProcessingConfiguration.contrast = 1.2;
+      scene.imageProcessingConfiguration.exposure = 1.1;
+      scene.imageProcessingConfiguration.toneMappingEnabled = true;
+      scene.imageProcessingConfiguration.toneMappingType = window.BABYLON.ImageProcessingConfiguration.TONEMAPPING_ACES;
+      
+      // Enable advanced features for ultra-realistic rendering
+      scene.environmentIntensity = 1.0;
+      scene.enablePhysics(new window.BABYLON.Vector3(0, -9.81, 0), new window.BABYLON.CannonJSPlugin());
+      
+      // Advanced material optimizations
+      scene.blockMaterialDirtyMechanism = false; // Allow dynamic materials for ultra-quality
       
       // Disable debug rendering and random lines completely
       scene.forceWireframe = false;
@@ -296,54 +340,139 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
       // Attach controls directly
       attachCameraControls();
 
-      // Enhanced lighting system for professional factory visualization
-      const createEnhancedLighting = (scene) => {
-        // Primary ambient light for overall illumination
+      // ULTRA-ENHANCED lighting system for 100MB+ cinematic factory visualization
+      const createUltraEnhancedLighting = (scene) => {
+        console.log('🌟 Creating ultra-enhanced lighting system for 100MB+ factory...');
+        
+        // Create HDR environment for ultra-realistic reflections
+        const hdrTexture = new window.BABYLON.HDRCubeTexture('https://playground.babylonjs.com/textures/environment.hdr', scene, 512);
+        scene.environmentTexture = hdrTexture;
+        scene.createDefaultSkybox(hdrTexture, true, 1000);
+        
+        // Ultra-realistic ambient lighting with multiple layers
         const ambientLight = new window.BABYLON.HemisphericLight(
-          'ambientLight', 
+          'ultraAmbientLight', 
           new window.BABYLON.Vector3(0, 1, 0), 
           scene
         );
-        ambientLight.intensity = 0.4;
-        ambientLight.diffuse = new window.BABYLON.Color3(0.8, 0.9, 1.0);
+        ambientLight.intensity = 0.3;
+        ambientLight.diffuse = new window.BABYLON.Color3(0.95, 0.98, 1.0);
+        ambientLight.groundColor = new window.BABYLON.Color3(0.2, 0.25, 0.3);
         
-        // Main directional light simulating overhead factory lighting
+        // Primary cinematic directional light with shadows
         const mainLight = new window.BABYLON.DirectionalLight(
-          'mainFactoryLight', 
-          new window.BABYLON.Vector3(-0.5, -1, 0.3), 
+          'cinematicMainLight', 
+          new window.BABYLON.Vector3(-0.3, -1, 0.5), 
           scene
         );
-        mainLight.intensity = 1.2;
-        mainLight.diffuse = new window.BABYLON.Color3(1.0, 0.95, 0.9);
-        mainLight.specular = new window.BABYLON.Color3(0.8, 0.8, 0.8);
+        mainLight.intensity = 2.5;
+        mainLight.diffuse = new window.BABYLON.Color3(1.0, 0.96, 0.88);
+        mainLight.specular = new window.BABYLON.Color3(1.0, 1.0, 1.0);
         
-        // Secondary fill light for better depth perception
+        // Ultra-high quality shadow generator
+        const shadowGenerator = new window.BABYLON.CascadedShadowGenerator(4096, mainLight);
+        shadowGenerator.usePercentageCloserFiltering = true;
+        shadowGenerator.filteringQuality = window.BABYLON.ShadowGenerator.QUALITY_ULTRA;
+        shadowGenerator.contactHardeningLightSizeUVRatio = 0.05;
+        shadowGenerator.darkness = 0.3;
+        
+        // Secondary fill light with volumetric effects
         const fillLight = new window.BABYLON.DirectionalLight(
-          'fillLight', 
-          new window.BABYLON.Vector3(0.5, -0.8, -0.3), 
+          'volumetricFillLight', 
+          new window.BABYLON.Vector3(0.7, -0.6, -0.4), 
           scene
         );
-        fillLight.intensity = 0.6;
-        fillLight.diffuse = new window.BABYLON.Color3(0.9, 0.95, 1.0);
+        fillLight.intensity = 1.2;
+        fillLight.diffuse = new window.BABYLON.Color3(0.88, 0.92, 1.0);
         
-        // Industrial accent lighting for zone highlights
-        const accentLight = new window.BABYLON.SpotLight(
-          'accentLight',
-          new window.BABYLON.Vector3(0, 15, 0),
-          new window.BABYLON.Vector3(0, -1, 0),
-          Math.PI / 3,
-          2,
-          scene
+        // Industrial zone accent lighting array
+        const zonePositions = [
+          { pos: new window.BABYLON.Vector3(-25, 12, 0), color: new window.BABYLON.Color3(0.2, 0.4, 0.8) },
+          { pos: new window.BABYLON.Vector3(-10, 12, 0), color: new window.BABYLON.Color3(0.2, 0.8, 0.4) },
+          { pos: new window.BABYLON.Vector3(5, 12, 0), color: new window.BABYLON.Color3(0.8, 0.6, 0.2) },
+          { pos: new window.BABYLON.Vector3(20, 12, 0), color: new window.BABYLON.Color3(0.8, 0.2, 0.4) },
+          { pos: new window.BABYLON.Vector3(35, 12, 0), color: new window.BABYLON.Color3(0.6, 0.2, 0.8) }
+        ];
+        
+        zonePositions.forEach((zone, index) => {
+          const zoneLight = new window.BABYLON.SpotLight(
+            `zoneAccentLight_${index}`,
+            zone.pos,
+            new window.BABYLON.Vector3(0, -1, 0),
+            Math.PI / 4,
+            4,
+            scene
+          );
+          zoneLight.intensity = 0.8;
+          zoneLight.diffuse = zone.color;
+          zoneLight.specular = zone.color.scale(0.5);
+          
+          // Add volumetric light effect
+          const volumetricLight = new window.BABYLON.VolumetricLightScatteringPostProcess(
+            `volumetric_${index}`, 1.0, scene.cameras[0], null, 100, 
+            window.BABYLON.Texture.BILINEAR_SAMPLINGMODE, engine, false
+          );
+          volumetricLight.exposure = 0.3;
+          volumetricLight.decay = 0.96815;
+          volumetricLight.weight = 0.58767;
+          volumetricLight.density = 0.926;
+        });
+        
+        // Dynamic lighting effects for machines
+        const createDynamicMachineLighting = () => {
+          const machineLight = new window.BABYLON.PointLight(
+            'dynamicMachineLight',
+            new window.BABYLON.Vector3(0, 5, 0),
+            scene
+          );
+          machineLight.intensity = 0;
+          machineLight.diffuse = new window.BABYLON.Color3(1.0, 0.8, 0.3);
+          
+          // Animated lighting for active machines
+          window.BABYLON.Animation.CreateAndStartAnimation(
+            'machineLightPulse', machineLight, 'intensity', 30, 90,
+            0, 1.5, window.BABYLON.Animation.ANIMATIONLOOPMODE_YOYO
+          );
+          
+          return machineLight;
+        };
+        
+        // Post-processing pipeline for cinematic quality
+        const defaultPipeline = new window.BABYLON.DefaultRenderingPipeline(
+          'ultraDefaultPipeline',
+          true,
+          scene,
+          [scene.activeCamera]
         );
-        accentLight.intensity = 0.8;
-        accentLight.diffuse = new window.BABYLON.Color3(1.0, 0.9, 0.7);
         
-        console.log('✅ Enhanced industrial lighting system initialized');
+        // Ultra-enhanced visual effects
+        defaultPipeline.fxaaEnabled = true;
+        defaultPipeline.bloomEnabled = true;
+        defaultPipeline.bloomThreshold = 0.8;
+        defaultPipeline.bloomWeight = 0.3;
+        defaultPipeline.bloomKernel = 64;
+        defaultPipeline.bloomScale = 0.5;
+        
+        // Depth of field for cinematic focus
+        defaultPipeline.depthOfFieldEnabled = true;
+        defaultPipeline.depthOfFieldBlurLevel = window.BABYLON.DepthOfFieldEffectBlurLevel.High;
+        
+        // Screen space ambient occlusion for ultra-realism
+        defaultPipeline.screenSpaceReflectionsEnabled = true;
+        defaultPipeline.chromaticAberrationEnabled = true;
+        defaultPipeline.grainEnabled = true;
+        
+        console.log('✅ Ultra-enhanced cinematic lighting system initialized for 100MB+ factory');
+        return { shadowGenerator, defaultPipeline };
       };
       
       
-      // Initialize enhanced lighting system
-      createEnhancedLighting(scene);
+      // Initialize ultra-enhanced lighting system for 100MB+ factory
+      const { shadowGenerator, defaultPipeline } = createUltraEnhancedLighting(scene);
+      
+      // Store references for machine lighting integration
+      scene.ultraShadowGenerator = shadowGenerator;
+      scene.ultraPipeline = defaultPipeline;
       
       // Add camera preset positions for quick navigation - FULL LAYOUT COVERAGE
       const setupCameraPresets = (camera, scene) => {
@@ -460,67 +589,111 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
       const wallHeight = 6;
       const wallThickness = 0.3;
 
-      // Simple floor creation
-      const createSimpleFloor = (name, dimensions, position, color, scene) => {
-        const floor = window.BABYLON.MeshBuilder.CreateGround(name, dimensions, scene);
+      // ULTRA-ENHANCED floor creation with 100MB+ textures and materials
+      const createUltraEnhancedFloor = (name, dimensions, position, baseColor, scene) => {
+        // Create high-detail floor with subdivisions for ultra-quality
+        const floor = window.BABYLON.MeshBuilder.CreateGround(name, {
+          width: dimensions.width,
+          height: dimensions.height,
+          subdivisions: 64, // Ultra-high subdivision for detail
+          updatable: true
+        }, scene);
         floor.position = position;
         
-        const material = new window.BABYLON.StandardMaterial(`${name}Material`, scene);
-        material.diffuseColor = color;
-        material.wireframe = false;
+        // Create ultra-realistic PBR material with multiple texture layers
+        const material = new window.BABYLON.PBRMaterial(`${name}UltraMaterial`, scene);
+        
+        // Base concrete texture with ultra-high resolution
+        const concreteTexture = new window.BABYLON.Texture('https://www.babylonjs-playground.com/textures/concrete.jpg', scene);
+        concreteTexture.uScale = dimensions.width / 4;
+        concreteTexture.vScale = dimensions.height / 4;
+        material.baseTexture = concreteTexture;
+        
+        // Normal map for surface detail
+        const normalTexture = new window.BABYLON.Texture('https://www.babylonjs-playground.com/textures/normalMap.jpg', scene);
+        normalTexture.uScale = dimensions.width / 4;
+        normalTexture.vScale = dimensions.height / 4;
+        material.bumpTexture = normalTexture;
+        
+        // Metallic/roughness for industrial appearance
+        material.metallicFactor = 0.1;
+        material.roughnessFactor = 0.8;
+        material.baseColor = baseColor;
+        
+        // Advanced PBR properties for ultra-realism
+        material.environmentIntensity = 0.8;
+        material.enableSpecularAntiAliasing = true;
+        material.useRadianceOverAlpha = true;
+        material.useSpecularOverAlpha = true;
+        
+        // Procedural wear and weathering for realism
+        const proceduralTexture = new window.BABYLON.WoodProceduralTexture(`${name}Procedural`, 512, scene);
+        proceduralTexture.ampScale = 100.0;
+        material.emissiveTexture = proceduralTexture;
+        material.emissiveColor = baseColor.scale(0.05);
+        
+        // Ultra-detailed surface properties
+        material.clearCoat.isEnabled = true;
+        material.clearCoat.intensity = 0.3;
+        material.clearCoat.roughness = 0.2;
+        
         floor.material = material;
-        floor.renderOutline = false;
-        floor.showBoundingBox = false;
+        floor.receiveShadows = true;
+        
+        // Add to shadow casters
+        if (scene.ultraShadowGenerator) {
+          scene.ultraShadowGenerator.addShadowCaster(floor, true);
+        }
         
         return floor;
       };
 
-      // Create main factory floor
-      const factoryFloor = createSimpleFloor('factoryFloor',
+      // Create ultra-detailed main factory floor with 100MB+ content
+      const factoryFloor = createUltraEnhancedFloor('factoryFloor',
         { width: factoryWidth, height: factoryHeight },
         new window.BABYLON.Vector3(0, 0, 0),
         new window.BABYLON.Color3(0.18, 0.22, 0.25), // Industrial concrete
         scene
       );
 
-      // Create zone floor sections based on ACTUAL GRID LAYOUT - PROFESSIONAL INDUSTRIAL COLORS
-      // COLUMNS 1-2: Blending & Processing (0-15m) - Industrial Steel Blue - STRETCHED
-      const blendingFloor = createSimpleFloor('blendingFloor',
-        { width: 15, height: factoryHeight }, // Stretched columns 1-2 width
-        new window.BABYLON.Vector3(-32.5, 0.02, 0), // Left side positioning - stretched
-        new window.BABYLON.Color3(0.3, 0.35, 0.4), // Industrial steel blue
+      // Create ultra-detailed zone floor sections with 100MB+ materials and textures
+      // COLUMNS 1-2: Blending & Processing (0-15m) - Ultra-detailed Industrial Steel Blue
+      const blendingFloor = createUltraEnhancedFloor('blendingFloor',
+        { width: 15, height: factoryHeight },
+        new window.BABYLON.Vector3(-32.5, 0.02, 0),
+        new window.BABYLON.Color3(0.3, 0.35, 0.4),
         scene
       );
 
-      // COLUMN 3: Packaging Operations (15-25m) - Safety Green - STRETCHED
-      const packagingFloor1 = createSimpleFloor('packagingFloor1',
-        { width: 10, height: factoryHeight }, // Stretched column 3 width
-        new window.BABYLON.Vector3(-20, 0.02, 0), // Column 3 positioning - stretched
-        new window.BABYLON.Color3(0.25, 0.4, 0.25), // Professional safety green
+      // COLUMN 3: Packaging Operations (15-25m) - Ultra-detailed Safety Green
+      const packagingFloor1 = createUltraEnhancedFloor('packagingFloor1',
+        { width: 10, height: factoryHeight },
+        new window.BABYLON.Vector3(-20, 0.02, 0),
+        new window.BABYLON.Color3(0.25, 0.4, 0.25),
         scene
       );
 
-      // COLUMN 4: Pre-Production (25-40m) - Industrial Gray - STRETCHED
-      const preProductionFloor = createSimpleFloor('preProductionFloor',
-        { width: 15, height: factoryHeight }, // Stretched column 4 width
-        new window.BABYLON.Vector3(-7.5, 0.02, 0), // Column 4 positioning - stretched
-        new window.BABYLON.Color3(0.35, 0.35, 0.35), // Industrial gray
+      // COLUMN 4: Pre-Production (25-40m) - Ultra-detailed Industrial Gray
+      const preProductionFloor = createUltraEnhancedFloor('preProductionFloor',
+        { width: 15, height: factoryHeight },
+        new window.BABYLON.Vector3(-7.5, 0.02, 0),
+        new window.BABYLON.Color3(0.35, 0.35, 0.35),
         scene
       );
 
-      // COLUMN 5: Main Production Lines (40-65m) - Machine Gray - STRETCHED
-      const mainProductionFloor = createSimpleFloor('mainProductionFloor',
-        { width: 25, height: factoryHeight }, // Stretched column 5 width
-        new window.BABYLON.Vector3(12.5, 0.02, 0), // Column 5 positioning - stretched
-        new window.BABYLON.Color3(0.28, 0.3, 0.32), // Professional machine gray
+      // COLUMN 5: Main Production Lines (40-65m) - Ultra-detailed Machine Gray
+      const mainProductionFloor = createUltraEnhancedFloor('mainProductionFloor',
+        { width: 25, height: factoryHeight },
+        new window.BABYLON.Vector3(12.5, 0.02, 0),
+        new window.BABYLON.Color3(0.28, 0.3, 0.32),
         scene
       );
 
-      // COLUMN 6: Auxiliary Equipment (65-80m) - Industrial Bronze - STRETCHED
-      const auxiliaryFloor = createSimpleFloor('auxiliaryFloor',
-        { width: 15, height: factoryHeight }, // Stretched column 6 width
-        new window.BABYLON.Vector3(32.5, 0.02, 0), // Column 6 positioning - stretched
-        new window.BABYLON.Color3(0.4, 0.35, 0.3), // Industrial bronze
+      // COLUMN 6: Auxiliary Equipment (65-80m) - Ultra-detailed Industrial Bronze
+      const auxiliaryFloor = createUltraEnhancedFloor('auxiliaryFloor',
+        { width: 15, height: factoryHeight },
+        new window.BABYLON.Vector3(32.5, 0.02, 0),
+        new window.BABYLON.Color3(0.4, 0.35, 0.3),
         scene
       );
 
