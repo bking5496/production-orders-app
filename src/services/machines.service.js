@@ -342,7 +342,8 @@ class MachinesService {
       
       if (result.rows.length > 0) {
         return result.rows.map(row => ({
-          letter: row.crew_letter,
+          crew_letter: row.crew_letter,
+          letter: row.crew_letter, // Keep for backward compatibility
           offset: row.cycle_offset,
           employees: JSON.parse(row.employees || '[]')
         }));
@@ -350,17 +351,17 @@ class MachinesService {
       
       // Return default crew structure if none exists
       return [
-        { letter: 'A', offset: 0, employees: [] },
-        { letter: 'B', offset: 2, employees: [] },
-        { letter: 'C', offset: 4, employees: [] }
+        { crew_letter: 'A', letter: 'A', offset: 0, employees: [] },
+        { crew_letter: 'B', letter: 'B', offset: 2, employees: [] },
+        { crew_letter: 'C', letter: 'C', offset: 4, employees: [] }
       ];
     } catch (error) {
       console.error('Error getting machine crews:', error);
       // Return default crew structure on error
       return [
-        { letter: 'A', offset: 0, employees: [] },
-        { letter: 'B', offset: 2, employees: [] },
-        { letter: 'C', offset: 4, employees: [] }
+        { crew_letter: 'A', letter: 'A', offset: 0, employees: [] },
+        { crew_letter: 'B', letter: 'B', offset: 2, employees: [] },
+        { crew_letter: 'C', letter: 'C', offset: 4, employees: [] }
       ];
     }
   }

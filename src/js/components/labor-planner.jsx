@@ -111,9 +111,19 @@ const LaborPlanner = ({ currentUser }) => {
         employee_id: employeeId
       });
       
-      // Refresh the shift cycle machines to get updated crew data
+      // Refresh the specific machine's crew data immediately
+      const updatedCrews = await API.get(`/machines/${machineId}/crews`);
+      const updatedMachine = {
+        ...selectedCrewMachine,
+        crews: Array.isArray(updatedCrews) ? updatedCrews : updatedCrews.data || []
+      };
+      setSelectedCrewMachine(updatedMachine);
+      
+      // Also refresh the shift cycle machines to get updated crew data
       fetchShiftCycleMachines();
-      alert('Employee added to crew successfully');
+      
+      // Success notification without alert
+      console.log('Employee added to crew successfully');
     } catch (error) {
       console.error('Failed to add employee to crew:', error);
       alert('Failed to add employee to crew: ' + (error.response?.data?.error || error.message));
@@ -124,9 +134,19 @@ const LaborPlanner = ({ currentUser }) => {
     try {
       await API.delete(`/machines/${machineId}/crews/${crewLetter}/employees/${employeeId}`);
       
-      // Refresh the shift cycle machines to get updated crew data
+      // Refresh the specific machine's crew data immediately
+      const updatedCrews = await API.get(`/machines/${machineId}/crews`);
+      const updatedMachine = {
+        ...selectedCrewMachine,
+        crews: Array.isArray(updatedCrews) ? updatedCrews : updatedCrews.data || []
+      };
+      setSelectedCrewMachine(updatedMachine);
+      
+      // Also refresh the shift cycle machines to get updated crew data
       fetchShiftCycleMachines();
-      alert('Employee removed from crew successfully');
+      
+      // Success notification without alert
+      console.log('Employee removed from crew successfully');
     } catch (error) {
       console.error('Failed to remove employee from crew:', error);
       alert('Failed to remove employee from crew: ' + (error.response?.data?.error || error.message));
@@ -1318,13 +1338,13 @@ const LaborPlanner = ({ currentUser }) => {
                   {/* Add employee section */}
                   <div className="border-t pt-3">
                     <h6 className="text-xs font-medium text-gray-700 mb-2">Add Employee</h6>
-                    <div className="space-y-2">
+                    <div className="space-y-2 max-h-40 overflow-y-auto border border-gray-200 rounded p-2"> {/* Scrollable worker list */}
                       {getFilteredEmployees()
                         .filter(user => user.role !== 'supervisor' && user.role !== 'admin')
                         .filter(user => !selectedCrewMachine.crews?.some(c => 
                           c.employees?.some(emp => emp.id === user.id)
                         ))
-                        .slice(0, 3)
+                        .slice(0, 15) // Show more workers
                         .map(user => (
                           <div key={user.id} className="flex items-center justify-between p-2 bg-green-50 rounded-lg border border-green-100">
                             <span className="text-xs font-medium text-gray-900">
