@@ -45,6 +45,8 @@
     "node-cron": "^3.0.3",
     "nodemailer": "^6.9.13",
     "pg": "^8.16.3",
+    "playwright-mcp-advanced": "^0.1.0",
+    "playwright-mcp-chromium": "^1.0.6",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "winston": "^3.11.0",
