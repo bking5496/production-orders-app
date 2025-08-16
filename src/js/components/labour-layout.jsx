@@ -39,7 +39,7 @@ const exportToExcel = (rosterData, selectedDate) => {
                 'Status': s.status,
                 'Date': selectedDate
             })),
-            ...rosterData.assignments.map(a => ({
+            ...rosterData.assignments.filter(a => a.role !== 'supervisor' && a.position !== 'Supervisor').map(a => ({
                 'Type': 'Employee',
                 'Employee Code': a.employee_code || 'N/A',
                 'Name': formatUserDisplayName(a),
