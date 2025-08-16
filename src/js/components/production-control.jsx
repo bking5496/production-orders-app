@@ -310,14 +310,14 @@ export default function ProductionControl({ order, onUpdate, className = "" }) {
             </div>
           </Card>
 
-          <Card className="p-4 border-l-4 border-purple-200">
+          <Card className="p-4 border-l-4 border-slate-200">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-500">Efficiency</p>
-                <p className="text-2xl font-bold text-purple-600">{efficiency}%</p>
+                <p className="text-2xl font-bold text-slate-600">{efficiency}%</p>
                 <p className="text-xs text-gray-400">vs target rate</p>
               </div>
-              <TrendingUp className="w-8 h-8 text-purple-600" />
+              <TrendingUp className="w-8 h-8 text-slate-600" />
             </div>
           </Card>
 

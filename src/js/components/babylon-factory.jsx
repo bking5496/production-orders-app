@@ -1309,7 +1309,7 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
               const elem = document.querySelector('canvas');
               if (elem.requestFullscreen) elem.requestFullscreen();
             }}
-            className="w-full px-3 py-1 bg-purple-600 hover:bg-purple-700 rounded text-left"
+            className="w-full px-3 py-1 bg-slate-600 hover:bg-slate-700 rounded text-left"
           >
             🔳 Fullscreen
           </button>
@@ -1344,7 +1344,7 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
           </div>
           <div className="flex justify-between">
             <span>Factory Size:</span>
-            <span className="text-purple-400">52m × 42m</span>
+            <span className="text-slate-400">52m × 42m</span>
           </div>
         </div>
       </div>

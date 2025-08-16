@@ -385,7 +385,7 @@ const Header = ({ onMenuClick, notifications = [] }) => {
                         </button>
                         
                         <div className="flex items-center space-x-2">
-                            <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+                            <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-slate-700 rounded-lg flex items-center justify-center">
                                 <Activity className="w-5 h-5 text-white" />
                             </div>
                             <div>
@@ -577,7 +577,7 @@ const Sidebar = ({ isOpen, onClose }) => {
             } lg:translate-x-0`}>
                 <div className="flex items-center justify-between h-16 px-4 border-b border-gray-700/50 bg-gray-800/50">
                     <div className="flex items-center space-x-3">
-                        <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center">
+                        <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-slate-700 rounded-xl flex items-center justify-center">
                             <Activity className="w-6 h-6 text-white" />
                         </div>
                         <div>
@@ -627,7 +627,7 @@ const Sidebar = ({ isOpen, onClose }) => {
                                                 onClick={(e) => handleNavigate(e, item.href)}
                                                 className={`group flex items-center px-3 py-3 text-sm font-medium rounded-lg transition-all duration-200 min-h-[44px] touch-manipulation ${
                                                     isActive 
-                                                        ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg' 
+                                                        ? 'bg-gradient-to-r from-blue-600 to-slate-700 text-white shadow-lg' 
                                                         : 'text-gray-300 hover:bg-gray-700 hover:text-white hover:shadow-md'
                                                 }`}
                                             >
