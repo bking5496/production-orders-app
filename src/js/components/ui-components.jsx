@@ -278,8 +278,8 @@ export const Badge = ({
         danger: "bg-red-100 text-red-800 border border-red-200",
         warning: "bg-yellow-100 text-yellow-800 border border-yellow-200",
         info: "bg-cyan-100 text-cyan-800 border border-cyan-200",
-        purple: "bg-purple-100 text-purple-800 border border-purple-200",
-        pink: "bg-pink-100 text-pink-800 border border-pink-200",
+        steel: "bg-slate-100 text-slate-800 border border-slate-200",
+        bronze: "bg-amber-100 text-amber-800 border border-amber-200",
         indigo: "bg-indigo-100 text-indigo-800 border border-indigo-200",
         // Solid variants
         solidPrimary: "bg-blue-600 text-white",

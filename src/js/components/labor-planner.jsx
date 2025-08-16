@@ -511,7 +511,7 @@ const LaborPlanner = ({ currentUser }) => {
         <h2 className="text-xl font-semibold text-gray-900 mb-4">Factory-Wide Assignments</h2>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Supervisors */}
-          <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-6"
+          <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-6">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
                 <div className="bg-slate-100 p-3 rounded-full">
