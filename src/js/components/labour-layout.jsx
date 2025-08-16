@@ -232,7 +232,7 @@ export default function LabourLayoutPage() {
                         'Status': s.status,
                         'Date': selectedDate
                     })),
-                    ...rosterData.assignments.map(a => ({
+                    ...rosterData.assignments.filter(a => a.role !== 'supervisor' && a.position !== 'Supervisor').map(a => ({
                         'Type': 'Employee',
                         'Name': formatUserDisplayName(a),
                         'Employee Code': a.employee_code || 'N/A',
