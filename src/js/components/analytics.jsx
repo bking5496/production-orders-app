@@ -709,7 +709,7 @@ export default function AnalyticsPage() {
       green: { bg: "bg-green-50", text: "text-green-600", border: "border-green-200", icon: "text-green-500", gradient: "from-green-500 to-green-600" },
       yellow: { bg: "bg-yellow-50", text: "text-yellow-600", border: "border-yellow-200", icon: "text-yellow-500", gradient: "from-yellow-500 to-yellow-600" },
       red: { bg: "bg-red-50", text: "text-red-600", border: "border-red-200", icon: "text-red-500", gradient: "from-red-500 to-red-600" },
-      purple: { bg: "bg-purple-50", text: "text-purple-600", border: "border-purple-200", icon: "text-purple-500", gradient: "from-purple-500 to-purple-600" },
+      steel: { bg: "bg-slate-50", text: "text-slate-600", border: "border-slate-200", icon: "text-slate-500", gradient: "from-slate-600 to-slate-700" },
       orange: { bg: "bg-orange-50", text: "text-orange-600", border: "border-orange-200", icon: "text-orange-500", gradient: "from-orange-500 to-orange-600" },
       gray: { bg: "bg-gray-50", text: "text-gray-600", border: "border-gray-200", icon: "text-gray-500", gradient: "from-gray-500 to-gray-600" }
     };
@@ -807,7 +807,7 @@ export default function AnalyticsPage() {
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div className="flex-1">
             <div className="flex items-center gap-4 mb-2">
-              <div className="p-2 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg shadow-md">
+              <div className="p-2 bg-gradient-to-br from-blue-500 to-slate-700 rounded-lg shadow-md">
                 <BarChart3 className="w-6 h-6 text-white" />
               </div>
               <div>
@@ -830,7 +830,7 @@ export default function AnalyticsPage() {
                 <span className="text-gray-600">{metrics.activeMachines} Active Machines</span>
               </div>
               <div className="flex items-center gap-2 text-sm">
-                <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+                <div className="w-2 h-2 bg-slate-500 rounded-full"></div>
                 <span className="text-gray-600">{metrics.completionRate}% Completion Rate</span>
               </div>
             </div>
@@ -930,7 +930,7 @@ export default function AnalyticsPage() {
           {[
             { id: 'overview', label: 'Overview', icon: BarChart3, color: 'blue' },
             { id: 'orders', label: 'Order Analytics', icon: Package, color: 'green' },
-            { id: 'machines', label: 'Machine Analytics', icon: Factory, color: 'purple' },
+            { id: 'machines', label: 'Machine Analytics', icon: Factory, color: 'steel' },
             { id: 'labor', label: 'Labor Analytics', icon: Users, color: 'indigo' },
             { id: 'performance', label: 'Performance', icon: TrendingUp, color: 'emerald' },
             { id: 'downtime', label: 'Downtime Report', icon: AlertTriangle, color: 'red' },
@@ -977,7 +977,7 @@ export default function AnalyticsPage() {
               title="Machine Utilization"
               value={`${metrics.utilizationRate}%`}
               icon={Factory}
-              color="purple"
+              color="steel"
             />
             <StatsCard
               title="Active Machines"
@@ -1034,7 +1034,7 @@ export default function AnalyticsPage() {
               title="Total Quantity"
               value={metrics.totalQuantityOrdered.toLocaleString()}
               icon={Target}
-              color="purple"
+              color="steel"
             />
           </div>
 
@@ -1129,7 +1129,7 @@ export default function AnalyticsPage() {
               title="Avg Orders/Day"
               value={Math.round(metrics.totalOrders / 30)}
               icon={Package}
-              color="purple"
+              color="steel"
             />
             <StatsCard
               title="Machine Efficiency"
@@ -1153,7 +1153,7 @@ export default function AnalyticsPage() {
           {/* Enhanced Performance Table */}
           <Card className="p-6 hover:shadow-lg transition-shadow duration-300">
             <div className="flex items-center gap-3 mb-6">
-              <div className="p-2 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg">
+              <div className="p-2 bg-gradient-to-br from-indigo-500 to-slate-700 rounded-lg">
                 <TrendingUp className="w-5 h-5 text-white" />
               </div>
               <div>
@@ -1222,8 +1222,8 @@ export default function AnalyticsPage() {
                   <tr className="hover:bg-gray-50 transition-colors duration-200">
                     <td className="px-6 py-5 whitespace-nowrap">
                       <div className="flex items-center gap-3">
-                        <div className="p-2 bg-purple-50 rounded-lg">
-                          <Target className="w-4 h-4 text-purple-600" />
+                        <div className="p-2 bg-slate-50 rounded-lg">
+                          <Target className="w-4 h-4 text-slate-600" />
                         </div>
                         <div>
                           <div className="text-sm font-semibold text-gray-900">Production Efficiency</div>
@@ -1275,7 +1275,7 @@ export default function AnalyticsPage() {
               title="Unique Workers"
               value={new Set(analytics.assignments.map(a => a.employee_id)).size}
               icon={Activity}
-              color="purple"
+              color="steel"
             />
             <StatsCard
               title="Utilization"
@@ -1306,7 +1306,7 @@ export default function AnalyticsPage() {
                   
                   const roleConfig = {
                     operator: { color: 'bg-blue-500', icon: '🔧', label: 'Operators' },
-                    supervisor: { color: 'bg-purple-500', icon: '👨‍💼', label: 'Supervisors' },
+                    supervisor: { color: 'bg-slate-600', icon: '👨‍💼', label: 'Supervisors' },
                     packer: { color: 'bg-green-500', icon: '📦', label: 'Packers' }
                   };
                   
@@ -1456,7 +1456,7 @@ export default function AnalyticsPage() {
                       
                       const roleColors = {
                         operator: 'bg-blue-50 text-blue-700',
-                        supervisor: 'bg-purple-50 text-purple-700',
+                        supervisor: 'bg-slate-50 text-slate-700',
                         packer: 'bg-green-50 text-green-700'
                       };
                       
@@ -1464,7 +1464,7 @@ export default function AnalyticsPage() {
                         <tr key={index} className="hover:bg-gray-50 transition-colors duration-200">
                           <td className="px-6 py-5 whitespace-nowrap">
                             <div className="flex items-center gap-3">
-                              <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">
+                              <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-slate-700 rounded-full flex items-center justify-center text-white font-semibold text-sm">
                                 {(employee?.fullName || employee?.username || 'U').charAt(0).toUpperCase()}
                               </div>
                               <div>
