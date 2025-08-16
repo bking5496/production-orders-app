@@ -764,9 +764,9 @@ const OrderDetailsModal = ({ isOpen, onClose, orderId, orderNumber }) => {
                                             <div className="text-sm text-gray-600">Target Qty</div>
                                         </div>
                                     </div>
-                                    <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-4 border border-purple-100">
+                                    <div className="bg-gradient-to-br from-slate-50 to-gray-50 rounded-xl p-4 border border-slate-100">
                                         <div className="text-center">
-                                            <BarChart3 className="w-6 h-6 text-purple-500 mx-auto mb-2" />
+                                            <BarChart3 className="w-6 h-6 text-slate-600 mx-auto mb-2" />
                                             <div className="text-lg font-bold text-gray-900">
                                                 {(orderDetails.order.actual_quantity || 0).toLocaleString()}
                                             </div>

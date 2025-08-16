@@ -486,7 +486,8 @@ export default function LabourLayoutPage() {
                                     {rosterData.assignments && rosterData.assignments.filter(a => {
                                         const shiftMatch = selectedShift === 'all' ? true : a.shift === selectedShift;
                                         const machineMatch = selectedMachine === 'all' ? true : a.machine === selectedMachine;
-                                        return shiftMatch && machineMatch;
+                                        const isNotSupervisor = a.role !== 'supervisor' && a.position !== 'Supervisor';
+                                        return shiftMatch && machineMatch && isNotSupervisor;
                                     }).length > 0 && (
                                         <div>
                                             <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
@@ -513,7 +514,8 @@ export default function LabourLayoutPage() {
                                                             {rosterData.assignments.filter(a => {
                                                                 const shiftMatch = selectedShift === 'all' ? true : a.shift === selectedShift;
                                                                 const machineMatch = selectedMachine === 'all' ? true : a.machine === selectedMachine;
-                                                                return shiftMatch && machineMatch;
+                                                                const isNotSupervisor = a.role !== 'supervisor' && a.position !== 'Supervisor';
+                                                                return shiftMatch && machineMatch && isNotSupervisor;
                                                             }).map(assignment => (
                                                                 <tr key={`assignment-${assignment.id}`} className="hover:bg-green-50 transition-colors">
                                                                     <td className="px-6 py-4 whitespace-nowrap">
