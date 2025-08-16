@@ -1264,6 +1264,12 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
       const createUltraAudioSystem = (scene) => {
         console.log('🎵 Initializing ultra-enhanced factory audio system...');
         
+        // Check if audio engine is available
+        if (!window.BABYLON.Engine.audioEngine) {
+          console.log('ℹ️ Audio engine not available, skipping audio initialization');
+          return;
+        }
+        
         // Create advanced 3D audio engine
         scene.audioEnabled = true;
         scene.headphone = false;
