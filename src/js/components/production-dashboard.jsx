@@ -57,20 +57,20 @@ const UltraKPICard = ({ title, value, change, icon: Icon, color = "blue", target
   }, []);
 
   const colorClasses = {
-    blue: 'from-blue-500 to-cyan-500',
-    green: 'from-green-500 to-emerald-500',
-    yellow: 'from-yellow-500 to-orange-500',
-    purple: 'from-purple-500 to-pink-500',
-    red: 'from-red-500 to-pink-500',
-    gray: 'from-gray-500 to-slate-500'
+    blue: 'from-blue-600 to-slate-600',
+    green: 'from-green-600 to-emerald-600',
+    yellow: 'from-amber-500 to-orange-600',
+    purple: 'from-slate-600 to-gray-700',
+    red: 'from-red-600 to-orange-700',
+    gray: 'from-gray-600 to-slate-700'
   };
 
   const bgColors = {
-    blue: 'bg-gradient-to-br from-blue-50 to-cyan-50',
+    blue: 'bg-gradient-to-br from-blue-50 to-slate-50',
     green: 'bg-gradient-to-br from-green-50 to-emerald-50',
-    yellow: 'bg-gradient-to-br from-yellow-50 to-orange-50',
-    purple: 'bg-gradient-to-br from-purple-50 to-pink-50',
-    red: 'bg-gradient-to-br from-red-50 to-pink-50',
+    yellow: 'bg-gradient-to-br from-amber-50 to-orange-50',
+    purple: 'bg-gradient-to-br from-slate-50 to-gray-50',
+    red: 'bg-gradient-to-br from-red-50 to-orange-50',
     gray: 'bg-gradient-to-br from-gray-50 to-slate-50'
   };
 
@@ -230,36 +230,36 @@ const UltraMachineStatusCard = ({ machine, onClick }) => {
 
     const statusConfig = {
         available: { 
-            gradient: 'from-green-500 to-emerald-500',
+            gradient: 'from-green-600 to-emerald-600',
             bg: 'from-green-50 to-emerald-50',
             text: 'text-green-700', 
             icon: CheckCircle,
-            pulse: 'bg-green-500',
-            glow: 'shadow-green-500/25'
+            pulse: 'bg-green-600',
+            glow: 'shadow-green-600/25'
         },
         in_use: { 
-            gradient: 'from-blue-500 to-cyan-500',
-            bg: 'from-blue-50 to-cyan-50',
+            gradient: 'from-blue-600 to-slate-600',
+            bg: 'from-blue-50 to-slate-50',
             text: 'text-blue-700', 
             icon: Zap,
-            pulse: 'bg-blue-500',
-            glow: 'shadow-blue-500/25'
+            pulse: 'bg-blue-600',
+            glow: 'shadow-blue-600/25'
         },
         maintenance: { 
-            gradient: 'from-yellow-500 to-orange-500',
-            bg: 'from-yellow-50 to-orange-50',
-            text: 'text-yellow-700', 
+            gradient: 'from-amber-500 to-orange-600',
+            bg: 'from-amber-50 to-orange-50',
+            text: 'text-amber-700', 
             icon: Wrench,
-            pulse: 'bg-yellow-500',
-            glow: 'shadow-yellow-500/25'
+            pulse: 'bg-amber-500',
+            glow: 'shadow-amber-500/25'
         },
         offline: { 
-            gradient: 'from-red-500 to-pink-500',
-            bg: 'from-red-50 to-pink-50',
+            gradient: 'from-red-600 to-orange-700',
+            bg: 'from-red-50 to-orange-50',
             text: 'text-red-700', 
             icon: XCircle,
-            pulse: 'bg-red-500',
-            glow: 'shadow-red-500/25'
+            pulse: 'bg-red-600',
+            glow: 'shadow-red-600/25'
         },
     };
 
@@ -376,9 +376,9 @@ const UltraMachineStatusCard = ({ machine, onClick }) => {
                                 <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
                                     <div 
                                         className={`h-2 bg-gradient-to-r transition-all duration-1000 ease-out rounded-full ${
-                                            efficiency >= 90 ? 'from-green-500 to-emerald-500' :
-                                            efficiency >= 70 ? 'from-yellow-500 to-orange-500' : 
-                                            'from-red-500 to-pink-500'
+                                            efficiency >= 90 ? 'from-green-600 to-emerald-600' :
+                                            efficiency >= 70 ? 'from-amber-500 to-orange-600' : 
+                                            'from-red-600 to-orange-700'
                                         }`}
                                         style={{ 
                                             width: `${Math.min(efficiency, 100)}%`,
@@ -542,7 +542,7 @@ const UltraProductionSummary = ({ machines, activeOrders, todayStats, efficiency
             {/* Header */}
             <div className={`transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
                 <h2 className="text-2xl font-bold text-gray-800 mb-2 flex items-center gap-3">
-                    <div className="p-2 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg">
+                    <div className="p-2 bg-gradient-to-r from-blue-600 to-slate-600 rounded-lg">
                         <BarChart3 className="w-6 h-6 text-white" />
                     </div>
                     Production Performance
@@ -1085,7 +1085,7 @@ export default function UltraProductionFloorMonitor() {
         return (
             <div className="min-h-96 bg-gradient-to-br from-gray-50 to-blue-50 flex items-center justify-center">
                 <div className="text-center">
-                    <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-2xl flex items-center justify-center mb-4 mx-auto animate-pulse">
+                    <div className="w-16 h-16 bg-gradient-to-r from-blue-600 to-slate-600 rounded-2xl flex items-center justify-center mb-4 mx-auto animate-pulse">
                         <Factory className="w-8 h-8 text-white" />
                     </div>
                     <div className="flex items-center justify-center gap-3 text-gray-600">
@@ -1101,7 +1101,7 @@ export default function UltraProductionFloorMonitor() {
         return (
             <div className="min-h-96 bg-gradient-to-br from-gray-50 to-red-50 flex items-center justify-center p-6">
                 <div className="bg-white/80 backdrop-blur-xl border border-red-200 rounded-2xl p-8 max-w-md mx-auto text-center shadow-2xl">
-                    <div className="w-16 h-16 bg-gradient-to-r from-red-500 to-pink-500 rounded-2xl flex items-center justify-center mb-4 mx-auto">
+                    <div className="w-16 h-16 bg-gradient-to-r from-red-600 to-orange-700 rounded-2xl flex items-center justify-center mb-4 mx-auto">
                         <AlertTriangle className="w-8 h-8 text-white" />
                     </div>
                     <h3 className="text-xl font-bold text-gray-800 mb-2">Connection Error</h3>
@@ -1109,7 +1109,7 @@ export default function UltraProductionFloorMonitor() {
                     <p className="text-red-600 text-sm mb-6">{error}</p>
                     <button 
                         onClick={handleRefresh}
-                        className="w-full px-6 py-3 bg-gradient-to-r from-red-500 to-pink-500 text-white rounded-xl hover:from-red-600 hover:to-pink-600 transition-all duration-200 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105"
+                        className="w-full px-6 py-3 bg-gradient-to-r from-red-600 to-orange-700 text-white rounded-xl hover:from-red-700 hover:to-orange-800 transition-all duration-200 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105"
                     >
                         Try Again
                     </button>
@@ -1125,11 +1125,11 @@ export default function UltraProductionFloorMonitor() {
                 <div className="p-6">
                     <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
                         <div className="flex items-center gap-4">
-                            <div className="p-3 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-2xl shadow-lg">
+                            <div className="p-3 bg-gradient-to-r from-blue-600 via-slate-600 to-gray-700 rounded-2xl shadow-lg">
                                 <Factory className="w-8 h-8 text-white" />
                             </div>
                             <div>
-                                <h1 className="text-3xl font-bold bg-gradient-to-r from-gray-800 via-blue-800 to-purple-800 bg-clip-text text-transparent">
+                                <h1 className="text-3xl font-bold bg-gradient-to-r from-gray-800 via-blue-800 to-slate-800 bg-clip-text text-transparent">
                                     Production Floor Monitor
                                 </h1>
                                 <p className="text-gray-600 mt-1 flex items-center gap-2">
@@ -1160,7 +1160,7 @@ export default function UltraProductionFloorMonitor() {
                             <button 
                                 onClick={handleRefresh}
                                 disabled={refreshing}
-                                className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-xl hover:from-blue-600 hover:to-purple-600 disabled:opacity-50 transition-all duration-200 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105"
+                                className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-slate-600 text-white rounded-xl hover:from-blue-700 hover:to-slate-700 disabled:opacity-50 transition-all duration-200 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105"
                             >
                                 <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
                                 {refreshing ? 'Syncing...' : 'Refresh'}
@@ -1183,7 +1183,7 @@ export default function UltraProductionFloorMonitor() {
                 <div className="space-y-6">
                     <div className="flex items-center justify-between">
                         <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-3">
-                            <div className="p-2 bg-gradient-to-r from-green-500 to-teal-500 rounded-lg">
+                            <div className="p-2 bg-gradient-to-r from-green-600 to-emerald-600 rounded-lg">
                                 <Settings className="w-6 h-6 text-white" />
                             </div>
                             Machine Status Grid

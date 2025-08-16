@@ -254,24 +254,24 @@ export default function AttendanceRegister() {
                     </h2>
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                         <div className="text-center">
-                            <div className="text-2xl font-bold text-blue-600">{scheduledWorkers.length}</div>
+                            <div className="text-2xl font-bold text-blue-600">{scheduledWorkers.filter(w => w.assignment_role !== 'supervisor').length}</div>
                             <div className="text-sm text-gray-600">Total Scheduled</div>
                         </div>
                         <div className="text-center">
                             <div className="text-2xl font-bold text-green-600">
-                                {scheduledWorkers.filter(w => w.status === 'present').length}
+                                {scheduledWorkers.filter(w => w.status === 'present' && w.assignment_role !== 'supervisor').length}
                             </div>
                             <div className="text-sm text-gray-600">Present</div>
                         </div>
                         <div className="text-center">
                             <div className="text-2xl font-bold text-red-600">
-                                {scheduledWorkers.filter(w => w.status === 'absent').length}
+                                {scheduledWorkers.filter(w => w.status === 'absent' && w.assignment_role !== 'supervisor').length}
                             </div>
                             <div className="text-sm text-gray-600">Absent</div>
                         </div>
                         <div className="text-center">
                             <div className="text-2xl font-bold text-gray-600">
-                                {scheduledWorkers.filter(w => !w.status).length}
+                                {scheduledWorkers.filter(w => !w.status && w.assignment_role !== 'supervisor').length}
                             </div>
                             <div className="text-sm text-gray-600">Not Marked</div>
                         </div>
