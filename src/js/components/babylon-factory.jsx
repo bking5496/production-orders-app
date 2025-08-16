@@ -99,8 +99,7 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
         useExactSrgbConversions: true,
         // Advanced WebGL2 features for maximum quality
         disableWebGL2Support: false,
-        useReverseDepthBuffer: true,
-        powerPreference: 'high-performance'
+        useReverseDepthBuffer: true
       });
       
       // Enable performance optimizations
