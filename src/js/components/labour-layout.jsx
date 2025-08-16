@@ -92,7 +92,7 @@ const exportToExcel = (rosterData, selectedDate) => {
         wsData.push([]);
         wsData.push(['ASSIGNED EMPLOYEES']);
         wsData.push(['Employee Code', 'Name', 'Machine', 'Position', 'Shift', 'Company', 'Status']);
-        rosterData.assignments.forEach(assignment => {
+        rosterData.assignments.filter(a => a.role !== 'supervisor' && a.position !== 'Supervisor').forEach(assignment => {
             wsData.push([
                 assignment.employee_code || 'N/A',
                 assignment.fullName || assignment.name,
