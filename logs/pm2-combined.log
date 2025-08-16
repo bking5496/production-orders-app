@@ -40185,3 +40185,6 @@
 2025-08-17T00:05:01: 🏠 admin joined room: production
 2025-08-17T00:05:27: 🔌 WebSocket disconnected: admin
 2025-08-17T00:05:27: 🔌 WebSocket disconnected: admin
+2025-08-17T01:05:34: ✅ New PostgreSQL client connected
+2025-08-17T01:05:34: 🔗 Client acquired from pool
+2025-08-17T01:05:34: 🔓 Client released back to pool
