@@ -77,7 +77,7 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
         throw new Error('Babylon.js not fully loaded');
       }
 
-      // Create ULTRA-ENHANCED Babylon engine for 100MB+ ultra-high quality rendering
+      // Create CRYSTAL-CLEAR Babylon engine for sharp 100MB+ ultra-high quality rendering
       engine = new window.BABYLON.Engine(canvas, true, {
         preserveDrawingBuffer: true,
         stencil: true,
@@ -89,18 +89,21 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
         depth: true,
         desynchronized: true,
         adaptToDeviceRatio: true,
-        // Ultra-high quality rendering settings
+        // Crystal-clear rendering settings
         xrCompatible: true,
-        audioEngine: false, // Disable to avoid audio disposal issues
+        audioEngine: false,
         deterministicLockstep: true,
         lockstepMaxSteps: 4,
         timeStep: 1/60,
         useHighPrecisionFloats: true,
         useExactSrgbConversions: true,
-        // Advanced WebGL2 features for maximum quality
         disableWebGL2Support: false,
         useReverseDepthBuffer: true
       });
+      
+      // Force high-DPI rendering for crystal clarity
+      engine.setHardwareScalingLevel(1.0); // Native resolution
+      engine.setSize(canvas.clientWidth, canvas.clientHeight, true);
       
       // Enable performance optimizations
       engine.enableOfflineSupport = false;
@@ -345,21 +348,14 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
       const createUltraEnhancedLighting = (scene) => {
         console.log('🌟 Creating ultra-enhanced lighting system for 100MB+ factory...');
         
-        // Create HDR environment for ultra-realistic reflections (fallback if unavailable)
-        try {
-          const hdrTexture = new window.BABYLON.HDRCubeTexture('https://playground.babylonjs.com/textures/environment.hdr', scene, 512);
-          scene.environmentTexture = hdrTexture;
-          scene.createDefaultSkybox(hdrTexture, true, 1000);
-        } catch (error) {
-          console.log('ℹ️ HDR environment not available, using default skybox');
-          // Create simple gradient skybox as fallback
-          const skybox = window.BABYLON.MeshBuilder.CreateSphere('skyBox', {diameter:1000}, scene);
-          const skyboxMaterial = new window.BABYLON.StandardMaterial('skyBox', scene);
-          skyboxMaterial.diffuseColor = new window.BABYLON.Color3(0.1, 0.3, 0.6);
-          skyboxMaterial.disableLighting = true;
-          skybox.material = skyboxMaterial;
-          skybox.infiniteDistance = true;
-        }
+        // Simple gradient skybox for better performance (HDR disabled)
+        console.log('ℹ️ Using simple skybox for better performance');
+        const skybox = window.BABYLON.MeshBuilder.CreateSphere('skyBox', {diameter:1000}, scene);
+        const skyboxMaterial = new window.BABYLON.StandardMaterial('skyBox', scene);
+        skyboxMaterial.diffuseColor = new window.BABYLON.Color3(0.1, 0.3, 0.6);
+        skyboxMaterial.disableLighting = true;
+        skybox.material = skyboxMaterial;
+        skybox.infiniteDistance = true;
         
         // Ultra-realistic ambient lighting with multiple layers
         const ambientLight = new window.BABYLON.HemisphericLight(
@@ -459,28 +455,25 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
             [scene.activeCamera]
           );
           
-          // Ultra-enhanced visual effects
+          // Crystal-clear visual effects (optimized for sharpness)
           if (defaultPipeline.fxaaEnabled !== undefined) defaultPipeline.fxaaEnabled = true;
           if (defaultPipeline.bloomEnabled !== undefined) {
             defaultPipeline.bloomEnabled = true;
-            defaultPipeline.bloomThreshold = 0.8;
-            defaultPipeline.bloomWeight = 0.3;
-            defaultPipeline.bloomKernel = 64;
-            defaultPipeline.bloomScale = 0.5;
+            defaultPipeline.bloomThreshold = 0.9; // Higher threshold for less blur
+            defaultPipeline.bloomWeight = 0.1;    // Lower weight for sharpness
+            defaultPipeline.bloomKernel = 32;     // Smaller kernel for precision
+            defaultPipeline.bloomScale = 0.3;     // Reduced scale
           }
           
-          // Depth of field for cinematic focus
+          // DISABLE depth of field to prevent blurriness
           if (defaultPipeline.depthOfFieldEnabled !== undefined) {
-            defaultPipeline.depthOfFieldEnabled = true;
-            if (window.BABYLON.DepthOfFieldEffectBlurLevel) {
-              defaultPipeline.depthOfFieldBlurLevel = window.BABYLON.DepthOfFieldEffectBlurLevel.High;
-            }
+            defaultPipeline.depthOfFieldEnabled = false;
           }
           
-          // Screen space effects (if available)
-          if (defaultPipeline.screenSpaceReflectionsEnabled !== undefined) defaultPipeline.screenSpaceReflectionsEnabled = true;
-          if (defaultPipeline.chromaticAberrationEnabled !== undefined) defaultPipeline.chromaticAberrationEnabled = true;
-          if (defaultPipeline.grainEnabled !== undefined) defaultPipeline.grainEnabled = true;
+          // Minimal screen space effects for clarity
+          if (defaultPipeline.screenSpaceReflectionsEnabled !== undefined) defaultPipeline.screenSpaceReflectionsEnabled = false;
+          if (defaultPipeline.chromaticAberrationEnabled !== undefined) defaultPipeline.chromaticAberrationEnabled = false;
+          if (defaultPipeline.grainEnabled !== undefined) defaultPipeline.grainEnabled = false;
           
         } catch (error) {
           console.log('ℹ️ Advanced post-processing not available, using basic rendering');
@@ -628,25 +621,8 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
         // Create ultra-realistic PBR material with multiple texture layers
         const material = new window.BABYLON.PBRMaterial(`${name}UltraMaterial`, scene);
         
-        // Base concrete texture with ultra-high resolution (using fallback if needed)
-        try {
-          const concreteTexture = new window.BABYLON.Texture('https://playground.babylonjs.com/textures/ground.jpg', scene);
-          concreteTexture.uScale = dimensions.width / 4;
-          concreteTexture.vScale = dimensions.height / 4;
-          material.baseTexture = concreteTexture;
-        } catch (error) {
-          console.log('ℹ️ Using procedural texture for floor');
-        }
-        
-        // Normal map for surface detail (optional)
-        try {
-          const normalTexture = new window.BABYLON.Texture('https://playground.babylonjs.com/textures/normalMap.jpg', scene);
-          normalTexture.uScale = dimensions.width / 4;
-          normalTexture.vScale = dimensions.height / 4;
-          material.bumpTexture = normalTexture;
-        } catch (error) {
-          console.log('ℹ️ Normal mapping not available');
-        }
+        // Using procedural textures for better performance (external textures disabled)
+        console.log('ℹ️ Using procedural materials for better performance');
         
         // Metallic/roughness for industrial appearance
         material.metallicFactor = 0.1;
@@ -2744,7 +2720,11 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
         style={{ 
           display: 'block',
           touchAction: 'none',
-          outline: 'none'
+          outline: 'none',
+          imageRendering: 'auto',
+          filter: 'contrast(1.1) brightness(1.05)',
+          backfaceVisibility: 'hidden',
+          transform: 'translate3d(0, 0, 0)'
         }}
         tabIndex={0}
       />
