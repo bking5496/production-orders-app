@@ -3801,3 +3801,6 @@
   code: 'ERR_ERL_UNEXPECTED_X_FORWARDED_FOR',
   help: 'https://express-rate-limit.github.io/ERR_ERL_UNEXPECTED_X_FORWARDED_FOR/'
 }
+2025-08-17T22:06:09: JWT verification failed: jwt expired
+2025-08-17T22:06:11: JWT verification failed: jwt expired
+2025-08-17T22:06:14: JWT verification failed: jwt expired
