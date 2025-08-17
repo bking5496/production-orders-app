@@ -40710,3 +40710,4 @@
 2025-08-17T22:06:09: JWT verification failed: jwt expired
 2025-08-17T22:06:11: JWT verification failed: jwt expired
 2025-08-17T22:06:14: JWT verification failed: jwt expired
+2025-08-17T22:25:18: 🔌 WebSocket disconnected: admin
