@@ -3812,3 +3812,8 @@
 2025-08-17T22:40:27: 🔒 Auth failure: admin from ::1 - Invalid credentials - Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0
 2025-08-17T22:40:28: 🔒 Auth failure: admin from ::ffff:127.0.0.1 - Invalid credentials - Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0
 2025-08-17T22:40:30: 🔒 Auth failure: admin from ::1 - Invalid credentials - Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0
+2025-08-18T15:06:06: JWT verification failed: jwt expired
+2025-08-18T15:06:06: JWT verification failed: jwt expired
+2025-08-18T15:06:06: JWT verification failed: jwt expired
+2025-08-18T15:06:07: JWT verification failed: jwt expired
+2025-08-18T15:06:09: JWT verification failed: jwt expired
