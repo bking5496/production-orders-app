@@ -41048,3 +41048,6 @@
 2025-08-22T21:38:04: 🏠 admin joined room: production
 2025-08-22T21:38:09: 🔗 Client acquired from pool
 2025-08-22T21:38:09: 🔓 Client released back to pool
+2025-08-22T22:27:47: ✅ New PostgreSQL client connected
+2025-08-22T22:27:47: 🔗 Client acquired from pool
+2025-08-22T22:27:47: 🔓 Client released back to pool
