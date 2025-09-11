@@ -1391,20 +1391,18 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
         console.log('✅ Ultra-enhanced factory audio system initialized');
       };
       
-      // ULTRA-ENHANCED particle systems for industrial atmosphere
-      const createUltraParticleEffects = (scene) => {
-        console.log('✨ Creating ultra-enhanced particle effects for 100MB+ atmosphere...');
+      // SIMPLIFIED particle systems for better performance
+      const createSimplifiedParticleEffects = (scene) => {
+        console.log('✨ Creating simplified particle effects for better performance...');
         
-        // Steam and vapor effects throughout factory
+        // REDUCED steam effects (2 instead of 4, fewer particles)
         const steamPositions = [
-          new window.BABYLON.Vector3(-20, 3, 10),
-          new window.BABYLON.Vector3(-5, 4, -8),
-          new window.BABYLON.Vector3(12, 3, 15),
-          new window.BABYLON.Vector3(25, 4, -5)
+          new window.BABYLON.Vector3(-15, 3, 0),
+          new window.BABYLON.Vector3(15, 3, 0)
         ];
         
         steamPositions.forEach((position, index) => {
-          const steamSystem = new window.BABYLON.ParticleSystem(`factorySteam_${index}`, 300, scene);
+          const steamSystem = new window.BABYLON.ParticleSystem(`factorySteam_${index}`, 50, scene); // Reduced from 300 to 50
           steamSystem.particleTexture = new window.BABYLON.Texture('https://www.babylonjs-playground.com/textures/cloud.png', scene);
           
           // Create steam emitter
