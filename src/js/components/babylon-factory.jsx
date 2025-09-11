@@ -357,15 +357,15 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
         skybox.material = skyboxMaterial;
         skybox.infiniteDistance = true;
         
-        // Ultra-realistic ambient lighting with multiple layers
+        // BRIGHT ambient lighting for clear visibility
         const ambientLight = new window.BABYLON.HemisphericLight(
-          'ultraAmbientLight', 
+          'brightAmbientLight', 
           new window.BABYLON.Vector3(0, 1, 0), 
           scene
         );
-        ambientLight.intensity = 0.3;
-        ambientLight.diffuse = new window.BABYLON.Color3(0.95, 0.98, 1.0);
-        ambientLight.groundColor = new window.BABYLON.Color3(0.2, 0.25, 0.3);
+        ambientLight.intensity = 0.8; // Much brighter
+        ambientLight.diffuse = new window.BABYLON.Color3(1.0, 1.0, 1.0);
+        ambientLight.groundColor = new window.BABYLON.Color3(0.6, 0.6, 0.6);
         
         // Primary cinematic directional light with shadows
         const mainLight = new window.BABYLON.DirectionalLight(
@@ -373,16 +373,14 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
           new window.BABYLON.Vector3(-0.3, -1, 0.5), 
           scene
         );
-        mainLight.intensity = 2.5;
-        mainLight.diffuse = new window.BABYLON.Color3(1.0, 0.96, 0.88);
-        mainLight.specular = new window.BABYLON.Color3(1.0, 1.0, 1.0);
+        mainLight.intensity = 1.5; // Reduced for balance
+        mainLight.diffuse = new window.BABYLON.Color3(1.0, 1.0, 1.0);
+        mainLight.specular = new window.BABYLON.Color3(0.8, 0.8, 0.8);
         
-        // Ultra-high quality shadow generator
-        const shadowGenerator = new window.BABYLON.CascadedShadowGenerator(4096, mainLight);
-        shadowGenerator.usePercentageCloserFiltering = true;
-        shadowGenerator.filteringQuality = window.BABYLON.ShadowGenerator.QUALITY_ULTRA;
-        shadowGenerator.contactHardeningLightSizeUVRatio = 0.05;
-        shadowGenerator.darkness = 0.3;
+        // SIMPLIFIED shadow generator for better performance
+        const shadowGenerator = new window.BABYLON.ShadowGenerator(1024, mainLight); // Smaller shadow map
+        shadowGenerator.usePercentageCloserFiltering = false; // Disable expensive filtering
+        shadowGenerator.darkness = 0.4;
         
         // Secondary fill light with volumetric effects
         const fillLight = new window.BABYLON.DirectionalLight(
