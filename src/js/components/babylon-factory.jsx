@@ -348,39 +348,56 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
       const createUltraEnhancedLighting = (scene) => {
         console.log('🌟 Creating ultra-enhanced lighting system for 100MB+ factory...');
         
-        // Simple gradient skybox for better performance (HDR disabled)
-        console.log('ℹ️ Using simple skybox for better performance');
+        // BRIGHT white skybox to eliminate any darkness
+        console.log('ℹ️ Using bright white skybox for maximum brightness');
         const skybox = window.BABYLON.MeshBuilder.CreateSphere('skyBox', {diameter:1000}, scene);
         const skyboxMaterial = new window.BABYLON.StandardMaterial('skyBox', scene);
-        skyboxMaterial.diffuseColor = new window.BABYLON.Color3(0.1, 0.3, 0.6);
+        skyboxMaterial.diffuseColor = new window.BABYLON.Color3(0.9, 0.9, 0.9); // Much brighter
+        skyboxMaterial.emissiveColor = new window.BABYLON.Color3(0.2, 0.2, 0.2); // Add glow
         skyboxMaterial.disableLighting = true;
         skybox.material = skyboxMaterial;
         skybox.infiniteDistance = true;
         
-        // BRIGHT ambient lighting for clear visibility
+        // ULTRA-BRIGHT ambient lighting to eliminate darkness
         const ambientLight = new window.BABYLON.HemisphericLight(
-          'brightAmbientLight', 
+          'ultraBrightAmbient', 
           new window.BABYLON.Vector3(0, 1, 0), 
           scene
         );
-        ambientLight.intensity = 0.8; // Much brighter
+        ambientLight.intensity = 1.5; // Maximum brightness
         ambientLight.diffuse = new window.BABYLON.Color3(1.0, 1.0, 1.0);
-        ambientLight.groundColor = new window.BABYLON.Color3(0.6, 0.6, 0.6);
+        ambientLight.groundColor = new window.BABYLON.Color3(0.9, 0.9, 0.9);
         
-        // Primary cinematic directional light with shadows
+        // Primary ultra-bright directional light
         const mainLight = new window.BABYLON.DirectionalLight(
-          'cinematicMainLight', 
+          'ultraBrightMain', 
           new window.BABYLON.Vector3(-0.3, -1, 0.5), 
           scene
         );
-        mainLight.intensity = 1.5; // Reduced for balance
+        mainLight.intensity = 2.0; // Much brighter
         mainLight.diffuse = new window.BABYLON.Color3(1.0, 1.0, 1.0);
-        mainLight.specular = new window.BABYLON.Color3(0.8, 0.8, 0.8);
+        mainLight.specular = new window.BABYLON.Color3(1.0, 1.0, 1.0);
         
-        // SIMPLIFIED shadow generator for better performance
-        const shadowGenerator = new window.BABYLON.ShadowGenerator(1024, mainLight); // Smaller shadow map
-        shadowGenerator.usePercentageCloserFiltering = false; // Disable expensive filtering
-        shadowGenerator.darkness = 0.4;
+        // ADD EXTRA FLOOD LIGHTS to eliminate any darkness
+        const floodLight1 = new window.BABYLON.DirectionalLight(
+          'floodLight1', 
+          new window.BABYLON.Vector3(0.5, -1, -0.5), 
+          scene
+        );
+        floodLight1.intensity = 1.5;
+        floodLight1.diffuse = new window.BABYLON.Color3(1.0, 1.0, 1.0);
+        
+        const floodLight2 = new window.BABYLON.DirectionalLight(
+          'floodLight2', 
+          new window.BABYLON.Vector3(-0.5, -1, 0.5), 
+          scene
+        );
+        floodLight2.intensity = 1.5;
+        floodLight2.diffuse = new window.BABYLON.Color3(1.0, 1.0, 1.0);
+        
+        // SHADOWS DISABLED to eliminate darkness and improve performance
+        let shadowGenerator = null;
+        console.log('ℹ️ Shadows disabled for maximum brightness and performance');
         
         // Secondary fill light with volumetric effects
         const fillLight = new window.BABYLON.DirectionalLight(
