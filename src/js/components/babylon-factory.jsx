@@ -630,52 +630,52 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
         return floor;
       };
 
-      // Create ultra-detailed main factory floor with 100MB+ content
+      // Create ultra-detailed main factory floor with BRIGHT colors
       const factoryFloor = createUltraEnhancedFloor('factoryFloor',
         { width: factoryWidth, height: factoryHeight },
         new window.BABYLON.Vector3(0, 0, 0),
-        new window.BABYLON.Color3(0.18, 0.22, 0.25), // Industrial concrete
+        new window.BABYLON.Color3(0.7, 0.7, 0.7), // MUCH brighter concrete
         scene
       );
 
-      // Create ultra-detailed zone floor sections with 100MB+ materials and textures
-      // COLUMNS 1-2: Blending & Processing (0-15m) - Ultra-detailed Industrial Steel Blue
+      // Create ultra-detailed zone floor sections with BRIGHT colors
+      // COLUMNS 1-2: Blending & Processing - BRIGHT Steel Blue
       const blendingFloor = createUltraEnhancedFloor('blendingFloor',
         { width: 15, height: factoryHeight },
         new window.BABYLON.Vector3(-32.5, 0.02, 0),
-        new window.BABYLON.Color3(0.3, 0.35, 0.4),
+        new window.BABYLON.Color3(0.6, 0.65, 0.7), // Much brighter
         scene
       );
 
-      // COLUMN 3: Packaging Operations (15-25m) - Ultra-detailed Safety Green
+      // COLUMN 3: Packaging Operations - BRIGHT Safety Green
       const packagingFloor1 = createUltraEnhancedFloor('packagingFloor1',
         { width: 10, height: factoryHeight },
         new window.BABYLON.Vector3(-20, 0.02, 0),
-        new window.BABYLON.Color3(0.25, 0.4, 0.25),
+        new window.BABYLON.Color3(0.5, 0.7, 0.5), // Much brighter
         scene
       );
 
-      // COLUMN 4: Pre-Production (25-40m) - Ultra-detailed Industrial Gray
+      // COLUMN 4: Pre-Production - BRIGHT Gray
       const preProductionFloor = createUltraEnhancedFloor('preProductionFloor',
         { width: 15, height: factoryHeight },
         new window.BABYLON.Vector3(-7.5, 0.02, 0),
-        new window.BABYLON.Color3(0.35, 0.35, 0.35),
+        new window.BABYLON.Color3(0.65, 0.65, 0.65), // Much brighter
         scene
       );
 
-      // COLUMN 5: Main Production Lines (40-65m) - Ultra-detailed Machine Gray
+      // COLUMN 5: Main Production Lines - BRIGHT Machine Gray
       const mainProductionFloor = createUltraEnhancedFloor('mainProductionFloor',
         { width: 25, height: factoryHeight },
         new window.BABYLON.Vector3(12.5, 0.02, 0),
-        new window.BABYLON.Color3(0.28, 0.3, 0.32),
+        new window.BABYLON.Color3(0.6, 0.65, 0.7), // Much brighter
         scene
       );
 
-      // COLUMN 6: Auxiliary Equipment (65-80m) - Ultra-detailed Industrial Bronze
+      // COLUMN 6: Auxiliary Equipment - BRIGHT Bronze
       const auxiliaryFloor = createUltraEnhancedFloor('auxiliaryFloor',
         { width: 15, height: factoryHeight },
         new window.BABYLON.Vector3(32.5, 0.02, 0),
-        new window.BABYLON.Color3(0.4, 0.35, 0.3),
+        new window.BABYLON.Color3(0.7, 0.65, 0.6), // Much brighter
         scene
       );
 
