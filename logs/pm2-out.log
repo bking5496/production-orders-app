@@ -38365,3 +38365,30 @@
 2025-09-11T15:47:32: ✅ Database utilities: OK
 2025-09-11T15:47:32: 🎉 All components tested successfully!
 2025-09-11T15:47:32: ✅ All components tested successfully
+2025-09-11T16:01:41: ✅ New PostgreSQL client connected
+2025-09-11T16:01:41: 🔗 Client acquired from pool
+2025-09-11T16:01:41: 🔓 Client released back to pool
+2025-09-11T16:01:41: ✅ New PostgreSQL client connected
+2025-09-11T16:01:41: 🔗 Client acquired from pool
+2025-09-11T16:01:41: 🔓 Client released back to pool
+2025-09-11T16:01:41: 🔗 Client acquired from pool
+2025-09-11T16:01:41: 🔓 Client released back to pool
+2025-09-11T16:01:41: 🔗 Client acquired from pool
+2025-09-11T16:01:41: 🔓 Client released back to pool
+2025-09-11T16:01:41: New WebSocket connection attempt
+2025-09-11T16:01:41: ✅ WebSocket authenticated: admin (admin)
+2025-09-11T16:01:41: 🔗 Client acquired from pool
+2025-09-11T16:01:41: 🔓 Client released back to pool
+2025-09-11T16:01:41: 🔗 Client acquired from pool
+2025-09-11T16:01:41: 🔓 Client released back to pool
+2025-09-11T16:01:41: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-09-11T16:01:41: 🏠 admin joined room: production
+2025-09-11T16:09:12: 🔌 WebSocket disconnected: admin
