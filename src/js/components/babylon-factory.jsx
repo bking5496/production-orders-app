@@ -408,17 +408,9 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
           );
           zoneLight.intensity = 0.8;
           zoneLight.diffuse = zone.color;
-          zoneLight.specular = zone.color.scale(0.5);
+          zoneLight.specular = zone.color.scale(0.3);
           
-          // Add volumetric light effect
-          const volumetricLight = new window.BABYLON.VolumetricLightScatteringPostProcess(
-            `volumetric_${index}`, 1.0, scene.cameras[0], null, 100, 
-            window.BABYLON.Texture.BILINEAR_SAMPLINGMODE, engine, false
-          );
-          volumetricLight.exposure = 0.3;
-          volumetricLight.decay = 0.96815;
-          volumetricLight.weight = 0.58767;
-          volumetricLight.density = 0.926;
+          // VOLUMETRIC LIGHTING DISABLED for better performance
         });
         
         // Dynamic lighting effects for machines
