@@ -432,40 +432,9 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
           return machineLight;
         };
         
-        // Post-processing pipeline for cinematic quality (safe loading)
+        // POST-PROCESSING DISABLED for maximum performance and clarity
+        console.log('ℹ️ Post-processing disabled for maximum performance');
         let defaultPipeline = null;
-        try {
-          defaultPipeline = new window.BABYLON.DefaultRenderingPipeline(
-            'ultraDefaultPipeline',
-            true,
-            scene,
-            [scene.activeCamera]
-          );
-          
-          // Crystal-clear visual effects (optimized for sharpness)
-          if (defaultPipeline.fxaaEnabled !== undefined) defaultPipeline.fxaaEnabled = true;
-          if (defaultPipeline.bloomEnabled !== undefined) {
-            defaultPipeline.bloomEnabled = true;
-            defaultPipeline.bloomThreshold = 0.9; // Higher threshold for less blur
-            defaultPipeline.bloomWeight = 0.1;    // Lower weight for sharpness
-            defaultPipeline.bloomKernel = 32;     // Smaller kernel for precision
-            defaultPipeline.bloomScale = 0.3;     // Reduced scale
-          }
-          
-          // DISABLE depth of field to prevent blurriness
-          if (defaultPipeline.depthOfFieldEnabled !== undefined) {
-            defaultPipeline.depthOfFieldEnabled = false;
-          }
-          
-          // Minimal screen space effects for clarity
-          if (defaultPipeline.screenSpaceReflectionsEnabled !== undefined) defaultPipeline.screenSpaceReflectionsEnabled = false;
-          if (defaultPipeline.chromaticAberrationEnabled !== undefined) defaultPipeline.chromaticAberrationEnabled = false;
-          if (defaultPipeline.grainEnabled !== undefined) defaultPipeline.grainEnabled = false;
-          
-        } catch (error) {
-          console.log('ℹ️ Advanced post-processing not available, using basic rendering');
-          defaultPipeline = null;
-        }
         
         console.log('✅ Ultra-enhanced cinematic lighting system initialized for 100MB+ factory');
         return { shadowGenerator, defaultPipeline };
