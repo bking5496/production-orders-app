@@ -388,16 +388,13 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
           new window.BABYLON.Vector3(0.7, -0.6, -0.4), 
           scene
         );
-        fillLight.intensity = 1.2;
-        fillLight.diffuse = new window.BABYLON.Color3(0.88, 0.92, 1.0);
+        fillLight.intensity = 0.8; // Reduced intensity
+        fillLight.diffuse = new window.BABYLON.Color3(1.0, 1.0, 1.0);
         
-        // Industrial zone accent lighting array
+        // SIMPLIFIED zone lighting for better performance (reduced from 5 to 2 lights)
         const zonePositions = [
-          { pos: new window.BABYLON.Vector3(-25, 12, 0), color: new window.BABYLON.Color3(0.2, 0.4, 0.8) },
-          { pos: new window.BABYLON.Vector3(-10, 12, 0), color: new window.BABYLON.Color3(0.2, 0.8, 0.4) },
-          { pos: new window.BABYLON.Vector3(5, 12, 0), color: new window.BABYLON.Color3(0.8, 0.6, 0.2) },
-          { pos: new window.BABYLON.Vector3(20, 12, 0), color: new window.BABYLON.Color3(0.8, 0.2, 0.4) },
-          { pos: new window.BABYLON.Vector3(35, 12, 0), color: new window.BABYLON.Color3(0.6, 0.2, 0.8) }
+          { pos: new window.BABYLON.Vector3(-15, 12, 0), color: new window.BABYLON.Color3(0.4, 0.6, 1.0) },
+          { pos: new window.BABYLON.Vector3(15, 12, 0), color: new window.BABYLON.Color3(1.0, 0.8, 0.4) }
         ];
         
         zonePositions.forEach((zone, index) => {
