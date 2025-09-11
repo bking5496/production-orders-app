@@ -1442,40 +1442,8 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
           steamSystem.start();
         });
         
-        // Dust particles for realistic industrial atmosphere
-        const dustSystem = new window.BABYLON.ParticleSystem('factoryDust', 500, scene);
-        dustSystem.particleTexture = new window.BABYLON.Texture('https://www.babylonjs-playground.com/textures/dust.png', scene);
-        
-        const dustEmitter = window.BABYLON.MeshBuilder.CreateBox('dustEmitter', {
-          width: factoryWidth, height: 1, depth: factoryHeight
-        }, scene);
-        dustEmitter.position.y = 8;
-        dustEmitter.isVisible = false;
-        
-        dustSystem.emitter = dustEmitter;
-        dustSystem.minEmitBox = new window.BABYLON.Vector3(-factoryWidth/2, 0, -factoryHeight/2);
-        dustSystem.maxEmitBox = new window.BABYLON.Vector3(factoryWidth/2, 0, factoryHeight/2);
-        
-        dustSystem.color1 = new window.BABYLON.Color4(0.8, 0.75, 0.7, 0.3);
-        dustSystem.color2 = new window.BABYLON.Color4(0.7, 0.65, 0.6, 0.2);
-        dustSystem.colorDead = new window.BABYLON.Color4(0.6, 0.55, 0.5, 0.0);
-        
-        dustSystem.minSize = 0.1;
-        dustSystem.maxSize = 0.8;
-        dustSystem.minLifeTime = 8.0;
-        dustSystem.maxLifeTime = 15.0;
-        
-        dustSystem.emitRate = 30;
-        dustSystem.blendMode = window.BABYLON.ParticleSystem.BLENDMODE_STANDARD;
-        
-        dustSystem.gravity = new window.BABYLON.Vector3(0, -0.1, 0);
-        dustSystem.direction1 = new window.BABYLON.Vector3(-0.3, -0.5, -0.3);
-        dustSystem.direction2 = new window.BABYLON.Vector3(0.3, -0.2, 0.3);
-        
-        dustSystem.minAngularSpeed = 0;
-        dustSystem.maxAngularSpeed = Math.PI / 8;
-        
-        dustSystem.start();
+        // DUST SYSTEM DISABLED for better performance
+        console.log('ℹ️ Heavy dust system disabled for better performance');
         
         // Sparks and electrical effects near machines
         const createSparkEffects = () => {
@@ -1560,9 +1528,9 @@ const BabylonFactory = ({ machines = [], environments = [], onMachineClick }) =>
         console.log('✅ Ultra-enhanced particle effects system initialized');
       };
       
-      // Initialize ultra-enhanced systems
+      // Initialize optimized systems for performance
       createUltraAudioSystem(scene);
-      createUltraParticleEffects(scene);
+      createSimplifiedParticleEffects(scene);
       
       // Handle resize
       const handleResize = () => {
