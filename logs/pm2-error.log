@@ -4137,3 +4137,10 @@
   user: 'Anonymous',
   timestamp: '2025-09-26T14:48:15.255Z'
 }
+2025-09-29T18:37:57: 🔒 Auth failure: Admin from ::1 - Invalid input - Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36
+2025-09-29T18:38:01: 🔒 Auth failure: Admin from ::ffff:127.0.0.1 - Invalid credentials - Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36
+2025-09-29T18:38:02: 🔒 Auth failure: Admin from ::1 - Invalid credentials - Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36
+2025-09-29T18:38:04: 🔒 Auth failure: Admin from ::ffff:127.0.0.1 - Invalid credentials - Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36
+2025-09-29T18:38:11: 🔒 Auth failure: Admin from ::1 - Invalid credentials - Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36
+2025-09-29T18:38:12: 🔒 Auth failure: Admin from ::ffff:127.0.0.1 - Invalid credentials - Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36
+2025-09-29T18:38:14: 🔒 Auth failure: Admin from ::1 - Invalid credentials - Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36
