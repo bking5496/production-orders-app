@@ -43790,3 +43790,31 @@
 2025-10-01T11:57:13: 🔓 Client released back to pool
 2025-10-01T11:57:13: 🔓 Client released back to pool
 2025-10-01T11:57:13: 🔓 Client released back to pool
+2025-10-01T13:02:27: 🔌 WebSocket disconnected: admin
+2025-10-01T13:04:24: ✅ New PostgreSQL client connected
+2025-10-01T13:04:24: 🔗 Client acquired from pool
+2025-10-01T13:04:24: 🔓 Client released back to pool
+2025-10-01T13:04:25: New WebSocket connection attempt
+2025-10-01T13:04:25: ✅ WebSocket authenticated: admin (admin)
+2025-10-01T13:04:25: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-10-01T13:04:25: 🏠 admin joined room: production
+2025-10-01T13:04:25: 🔗 Client acquired from pool
+2025-10-01T13:04:25: 🔓 Client released back to pool
+2025-10-01T13:04:26: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-10-01T13:04:26: 🏠 admin joined room: production
