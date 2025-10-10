@@ -285,6 +285,228 @@ app.post('/api/waste', authenticateToken, async (req, res) => {
   }
 });
 
+// Get waste reports
+app.get('/api/waste/reports', authenticateToken, async (req, res) => {
+  try {
+    const db = await getDbClient();
+    const { start_date, end_date, order_id, waste_type } = req.query;
+    
+    let query = `
+      SELECT 
+        pw.*,
+        po.order_number,
+        po.product_name,
+        u.full_name as recorded_by_name,
+        u.username as recorded_by_username
+      FROM production_waste pw
+      LEFT JOIN production_orders po ON pw.order_id = po.id
+      LEFT JOIN users u ON pw.recorded_by = u.id
+      WHERE 1=1
+    `;
+    
+    const params = [];
+    let paramCount = 0;
+    
+    if (start_date) {
+      paramCount++;
+      query += ` AND pw.recorded_at >= $${paramCount}`;
+      params.push(start_date);
+    }
+    
+    if (end_date) {
+      paramCount++;
+      query += ` AND pw.recorded_at <= $${paramCount}`;
+      params.push(end_date);
+    }
+    
+    if (order_id) {
+      paramCount++;
+      query += ` AND pw.order_id = $${paramCount}`;
+      params.push(order_id);
+    }
+    
+    if (waste_type) {
+      paramCount++;
+      query += ` AND pw.waste_type = $${paramCount}`;
+      params.push(waste_type);
+    }
+    
+    query += ` ORDER BY pw.recorded_at DESC`;
+    
+    const result = await db.query(query, params);
+    res.success(result.rows, 'Waste reports retrieved successfully');
+  } catch (error) {
+    console.error('Error fetching waste reports:', error);
+    res.error('Failed to fetch waste reports', 500);
+  }
+});
+
+// Get downtime reports
+app.get('/api/downtime/reports', authenticateToken, async (req, res) => {
+  try {
+    const db = await getDbClient();
+    const { start_date, end_date, machine_id, category_id, status } = req.query;
+    
+    let query = `
+      SELECT 
+        pse.*,
+        po.order_number,
+        po.product_name,
+        m.name as machine_name,
+        dc.category_name,
+        dc.description as category_description,
+        u1.full_name as reported_by_name,
+        u2.full_name as assigned_to_name,
+        u3.full_name as resolved_by_name
+      FROM production_stops_enhanced pse
+      LEFT JOIN production_orders po ON pse.order_id = po.id
+      LEFT JOIN machines m ON pse.machine_id = m.id
+      LEFT JOIN downtime_categories dc ON pse.downtime_category_id = dc.id
+      LEFT JOIN users u1 ON pse.reported_by = u1.id
+      LEFT JOIN users u2 ON pse.assigned_to = u2.id
+      LEFT JOIN users u3 ON pse.resolved_by = u3.id
+      WHERE 1=1
+    `;
+    
+    const params = [];
+    let paramCount = 0;
+    
+    if (start_date) {
+      paramCount++;
+      query += ` AND pse.start_time >= $${paramCount}`;
+      params.push(start_date);
+    }
+    
+    if (end_date) {
+      paramCount++;
+      query += ` AND pse.start_time <= $${paramCount}`;
+      params.push(end_date);
+    }
+    
+    if (machine_id) {
+      paramCount++;
+      query += ` AND pse.machine_id = $${paramCount}`;
+      params.push(machine_id);
+    }
+    
+    if (category_id) {
+      paramCount++;
+      query += ` AND pse.downtime_category_id = $${paramCount}`;
+      params.push(category_id);
+    }
+    
+    if (status) {
+      paramCount++;
+      query += ` AND pse.status = $${paramCount}`;
+      params.push(status);
+    }
+    
+    query += ` ORDER BY pse.start_time DESC`;
+    
+    const result = await db.query(query, params);
+    res.success(result.rows, 'Downtime reports retrieved successfully');
+  } catch (error) {
+    console.error('Error fetching downtime reports:', error);
+    res.error('Failed to fetch downtime reports', 500);
+  }
+});
+
+// Get waste summary statistics
+app.get('/api/waste/summary', authenticateToken, async (req, res) => {
+  try {
+    const db = await getDbClient();
+    const { start_date, end_date } = req.query;
+    
+    let whereClause = '';
+    const params = [];
+    let paramCount = 0;
+    
+    if (start_date || end_date) {
+      whereClause = 'WHERE ';
+      if (start_date) {
+        paramCount++;
+        whereClause += `recorded_at >= $${paramCount}`;
+        params.push(start_date);
+      }
+      if (end_date) {
+        if (paramCount > 0) whereClause += ' AND ';
+        paramCount++;
+        whereClause += `recorded_at <= $${paramCount}`;
+        params.push(end_date);
+      }
+    }
+    
+    const summaryQuery = `
+      SELECT 
+        COUNT(*) as total_records,
+        SUM(quantity) as total_quantity,
+        SUM(total_cost) as total_cost,
+        waste_type,
+        COUNT(*) as type_count,
+        AVG(quantity) as avg_quantity
+      FROM production_waste 
+      ${whereClause}
+      GROUP BY waste_type
+      ORDER BY type_count DESC
+    `;
+    
+    const result = await db.query(summaryQuery, params);
+    res.success(result.rows, 'Waste summary retrieved successfully');
+  } catch (error) {
+    console.error('Error fetching waste summary:', error);
+    res.error('Failed to fetch waste summary', 500);
+  }
+});
+
+// Get downtime summary statistics
+app.get('/api/downtime/summary', authenticateToken, async (req, res) => {
+  try {
+    const db = await getDbClient();
+    const { start_date, end_date } = req.query;
+    
+    let whereClause = '';
+    const params = [];
+    let paramCount = 0;
+    
+    if (start_date || end_date) {
+      whereClause = 'WHERE ';
+      if (start_date) {
+        paramCount++;
+        whereClause += `pse.start_time >= $${paramCount}`;
+        params.push(start_date);
+      }
+      if (end_date) {
+        if (paramCount > 0) whereClause += ' AND ';
+        paramCount++;
+        whereClause += `pse.start_time <= $${paramCount}`;
+        params.push(end_date);
+      }
+    }
+    
+    const summaryQuery = `
+      SELECT 
+        COUNT(*) as total_incidents,
+        AVG(duration_minutes) as avg_duration,
+        SUM(duration_minutes) as total_duration,
+        dc.category_name,
+        COUNT(*) as category_count,
+        AVG(pse.duration_minutes) as avg_category_duration,
+        SUM(pse.cost_impact) as total_cost_impact
+      FROM production_stops_enhanced pse
+      LEFT JOIN downtime_categories dc ON pse.downtime_category_id = dc.id
+      ${whereClause}
+      GROUP BY dc.category_name, dc.id
+      ORDER BY category_count DESC
+    `;
+    
+    const result = await db.query(summaryQuery, params);
+    res.success(result.rows, 'Downtime summary retrieved successfully');
+  } catch (error) {
+    console.error('Error fetching downtime summary:', error);
+    res.error('Failed to fetch downtime summary', 500);
+  }
+});
+
 // Legacy route compatibility
 app.use('/api/labour', laborRoutes); // British spelling compatibility
 app.use('/api/planner', plannerRoutes); // Legacy planner endpoint compatibility

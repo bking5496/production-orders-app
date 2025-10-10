@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { AlertTriangle, Clock, Users, Package, Trash2, Plus, Save, X, Factory, Timer, AlertCircle, CheckCircle, User, Settings, RefreshCw, Calendar, Weight, Hash, FileText, Target } from 'lucide-react';
+import { AlertTriangle, Clock, Users, Package, Trash2, Plus, Save, X, Factory, Timer, AlertCircle, CheckCircle, User, Settings, RefreshCw, Calendar, Weight, Hash, FileText, Target, BarChart3 } from 'lucide-react';
 import API from '../core/api';
 import Time from '../core/time';
 import { Icon } from './layout-components.jsx';
 import { useOrderUpdates, useMachineUpdates, useWebSocketEvent } from '../core/websocket-hooks.js';
+import WasteDowntimeReports from './waste-downtime-reports.jsx';
 
 // iPad-optimized form section component
 const FormSection = ({ title, icon: IconComponent, children, className = "" }) => {
@@ -538,6 +539,19 @@ const WasteDowntimeManagement = () => {
               <span>Waste Recording</span>
             </div>
           </button>
+          <button
+            onClick={() => setActiveTab('reports')}
+            className={`px-8 py-4 rounded-xl font-semibold text-lg transition-all ${
+              activeTab === 'reports' 
+                ? 'bg-red-600 text-white shadow-lg' 
+                : 'bg-white text-gray-600 hover:bg-gray-100'
+            }`}
+          >
+            <div className="flex items-center space-x-3">
+              <BarChart3 className="w-6 h-6" />
+              <span>Reports & Analytics</span>
+            </div>
+          </button>
         </div>
       </div>
 
@@ -561,6 +575,10 @@ const WasteDowntimeManagement = () => {
             orders={orders}
             users={users}
           />
+        )}
+        
+        {activeTab === 'reports' && (
+          <WasteDowntimeReports />
         )}
       </div>
     </div>
