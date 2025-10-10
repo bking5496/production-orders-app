@@ -207,6 +207,84 @@ app.use('/api/system', systemRoutes);
 app.use('/api/config', configurationRoutes);
 app.use('/api/maturation', maturationRoutes);
 
+// Waste and Downtime Management Endpoints
+const { getDbClient } = require('./config/database');
+const { authenticateToken } = require('./middleware/auth');
+
+// Get downtime categories
+app.get('/api/downtime-categories', authenticateToken, async (req, res) => {
+  try {
+    const db = await getDbClient();
+    const result = await db.query('SELECT * FROM downtime_categories ORDER BY category_name');
+    res.success(result.rows, 'Downtime categories retrieved successfully');
+  } catch (error) {
+    console.error('Error fetching downtime categories:', error);
+    res.error('Failed to fetch downtime categories', 500);
+  }
+});
+
+// Create downtime record
+app.post('/api/downtime', authenticateToken, async (req, res) => {
+  try {
+    const db = await getDbClient();
+    const {
+      order_id,
+      machine_id,
+      downtime_category_id,
+      primary_cause,
+      notes,
+      reported_by,
+      assigned_to,
+      start_time,
+      estimated_duration,
+      severity
+    } = req.body;
+
+    const result = await db.query(`
+      INSERT INTO production_stops_enhanced 
+      (order_id, machine_id, downtime_category_id, primary_cause, notes, 
+       reported_by, assigned_to, start_time, estimated_duration, severity, status)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, 'active')
+      RETURNING *
+    `, [order_id, machine_id, downtime_category_id, primary_cause, notes, 
+        reported_by, assigned_to, start_time, estimated_duration, severity]);
+
+    res.success(result.rows[0], 'Downtime record created successfully');
+  } catch (error) {
+    console.error('Error creating downtime record:', error);
+    res.error('Failed to create downtime record', 500);
+  }
+});
+
+// Create waste record
+app.post('/api/waste', authenticateToken, async (req, res) => {
+  try {
+    const db = await getDbClient();
+    const {
+      order_id,
+      waste_type,
+      quantity,
+      unit,
+      reason,
+      recorded_by,
+      cost_per_unit,
+      total_cost
+    } = req.body;
+
+    const result = await db.query(`
+      INSERT INTO production_waste 
+      (order_id, waste_type, quantity, unit, reason, recorded_by, cost_per_unit, total_cost)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+      RETURNING *
+    `, [order_id, waste_type, quantity, unit, reason, recorded_by, cost_per_unit, total_cost]);
+
+    res.success(result.rows[0], 'Waste record created successfully');
+  } catch (error) {
+    console.error('Error creating waste record:', error);
+    res.error('Failed to create waste record', 500);
+  }
+});
+
 // Legacy route compatibility
 app.use('/api/labour', laborRoutes); // British spelling compatibility
 app.use('/api/planner', plannerRoutes); // Legacy planner endpoint compatibility

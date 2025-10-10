@@ -46173,3 +46173,523 @@
   'analytics'
 ]
 2025-10-10T20:29:52: 🏠 supervisor joined room: production
+2025-10-10T20:30:08: 📺 supervisor subscribed to: [ 'machines', 'production' ]
+2025-10-10T20:30:08: 🔗 Client acquired from pool
+2025-10-10T20:30:08: 🔓 Client released back to pool
+2025-10-10T20:30:08: 🔗 Client acquired from pool
+2025-10-10T20:30:08: 🔗 Client acquired from pool
+2025-10-10T20:30:08: 🔓 Client released back to pool
+2025-10-10T20:30:08: 🔗 Client acquired from pool
+2025-10-10T20:30:08: 🔗 Client acquired from pool
+2025-10-10T20:30:08: 🔓 Client released back to pool
+2025-10-10T20:30:08: 🔓 Client released back to pool
+2025-10-10T20:30:08: 🔗 Client acquired from pool
+2025-10-10T20:30:08: 🔓 Client released back to pool
+2025-10-10T20:30:08: 🔓 Client released back to pool
+2025-10-10T20:30:08: 📺 supervisor subscribed to: [
+  'general',
+  'notifications',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-10-10T20:30:08: 🏠 supervisor joined room: production
+2025-10-10T20:30:10: 📺 supervisor subscribed to: [ 'machines', 'production', 'alerts' ]
+2025-10-10T20:30:10: 🔗 Client acquired from pool
+2025-10-10T20:30:10: 🔗 Client acquired from pool
+2025-10-10T20:30:10: 🔓 Client released back to pool
+2025-10-10T20:30:10: 🔗 Client acquired from pool
+2025-10-10T20:30:10: 🔓 Client released back to pool
+2025-10-10T20:30:10: 🔗 Client acquired from pool
+2025-10-10T20:30:10: 🔓 Client released back to pool
+2025-10-10T20:30:10: 🔗 Client acquired from pool
+2025-10-10T20:30:10: 🔓 Client released back to pool
+2025-10-10T20:30:10: 🔗 Client acquired from pool
+2025-10-10T20:30:10: 🔓 Client released back to pool
+2025-10-10T20:30:10: 🔓 Client released back to pool
+2025-10-10T20:30:10: 📺 supervisor subscribed to: [
+  'general',
+  'notifications',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-10-10T20:30:10: 🏠 supervisor joined room: production
+2025-10-10T20:30:40: 🔗 Client acquired from pool
+2025-10-10T20:30:40: 🔓 Client released back to pool
+2025-10-10T20:30:40: 🔗 Client acquired from pool
+2025-10-10T20:30:40: 🔗 Client acquired from pool
+2025-10-10T20:30:40: 🔓 Client released back to pool
+2025-10-10T20:30:40: 🔓 Client released back to pool
+2025-10-10T20:30:40: ✅ New PostgreSQL client connected
+2025-10-10T20:30:40: 🔗 Client acquired from pool
+2025-10-10T20:30:40: 🔓 Client released back to pool
+2025-10-10T20:31:10: 🔗 Client acquired from pool
+2025-10-10T20:31:10: 🔗 Client acquired from pool
+2025-10-10T20:31:10: 🔓 Client released back to pool
+2025-10-10T20:31:10: 🔓 Client released back to pool
+2025-10-10T20:31:10: 🔗 Client acquired from pool
+2025-10-10T20:31:10: 🔗 Client acquired from pool
+2025-10-10T20:31:10: 🔓 Client released back to pool
+2025-10-10T20:31:10: 🔓 Client released back to pool
+2025-10-10T20:31:40: 🔗 Client acquired from pool
+2025-10-10T20:31:40: 🔗 Client acquired from pool
+2025-10-10T20:31:40: 🔓 Client released back to pool
+2025-10-10T20:31:40: 🔓 Client released back to pool
+2025-10-10T20:31:40: 🔗 Client acquired from pool
+2025-10-10T20:31:40: 🔗 Client acquired from pool
+2025-10-10T20:31:40: 🔓 Client released back to pool
+2025-10-10T20:31:40: 🔓 Client released back to pool
+2025-10-10T20:32:10: 🔗 Client acquired from pool
+2025-10-10T20:32:10: 🔗 Client acquired from pool
+2025-10-10T20:32:10: 🔓 Client released back to pool
+2025-10-10T20:32:10: 🔓 Client released back to pool
+2025-10-10T20:32:10: 🔗 Client acquired from pool
+2025-10-10T20:32:10: 🔓 Client released back to pool
+2025-10-10T20:32:10: ✅ New PostgreSQL client connected
+2025-10-10T20:32:10: 🔗 Client acquired from pool
+2025-10-10T20:32:10: 🔓 Client released back to pool
+2025-10-10T20:32:40: 🔗 Client acquired from pool
+2025-10-10T20:32:40: 🔓 Client released back to pool
+2025-10-10T20:32:40: 🔗 Client acquired from pool
+2025-10-10T20:32:40: 🔓 Client released back to pool
+2025-10-10T20:32:40: ✅ New PostgreSQL client connected
+2025-10-10T20:32:40: 🔗 Client acquired from pool
+2025-10-10T20:32:40: ✅ New PostgreSQL client connected
+2025-10-10T20:32:40: 🔗 Client acquired from pool
+2025-10-10T20:32:40: 🔓 Client released back to pool
+2025-10-10T20:32:40: 🔓 Client released back to pool
+2025-10-10T20:33:10: 🔗 Client acquired from pool
+2025-10-10T20:33:10: 🔗 Client acquired from pool
+2025-10-10T20:33:10: 🔗 Client acquired from pool
+2025-10-10T20:33:10: 🔓 Client released back to pool
+2025-10-10T20:33:10: 🔓 Client released back to pool
+2025-10-10T20:33:10: 🔓 Client released back to pool
+2025-10-10T20:33:10: 🔗 Client acquired from pool
+2025-10-10T20:33:10: 🔓 Client released back to pool
+2025-10-10T20:33:40: 🔗 Client acquired from pool
+2025-10-10T20:33:40: 🔓 Client released back to pool
+2025-10-10T20:33:40: 🔗 Client acquired from pool
+2025-10-10T20:33:40: 🔗 Client acquired from pool
+2025-10-10T20:33:40: 🔗 Client acquired from pool
+2025-10-10T20:33:40: 🔓 Client released back to pool
+2025-10-10T20:33:40: 🔓 Client released back to pool
+2025-10-10T20:33:40: 🔓 Client released back to pool
+2025-10-10T20:33:43: 📺 supervisor subscribed to: [ 'production', 'machines' ]
+2025-10-10T20:33:43: 🔗 Client acquired from pool
+2025-10-10T20:33:43: 🔗 Client acquired from pool
+2025-10-10T20:33:43: 🔗 Client acquired from pool
+2025-10-10T20:33:43: 🔓 Client released back to pool
+2025-10-10T20:33:43: 🔓 Client released back to pool
+2025-10-10T20:33:43: 🔓 Client released back to pool
+2025-10-10T20:33:43: 🔗 Client acquired from pool
+2025-10-10T20:33:43: 🔓 Client released back to pool
+2025-10-10T20:33:43: ✅ New PostgreSQL client connected
+2025-10-10T20:33:43: 🔗 Client acquired from pool
+2025-10-10T20:33:43: ✅ New PostgreSQL client connected
+2025-10-10T20:33:43: 🔗 Client acquired from pool
+2025-10-10T20:33:43: 🔓 Client released back to pool
+2025-10-10T20:33:43: 🔓 Client released back to pool
+2025-10-10T20:33:44: 📺 supervisor subscribed to: [
+  'general',
+  'notifications',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-10-10T20:33:44: 🏠 supervisor joined room: production
+2025-10-10T20:33:48: 🔗 Client acquired from pool
+2025-10-10T20:33:48: 🔗 Client acquired from pool
+2025-10-10T20:33:48: 🔗 Client acquired from pool
+2025-10-10T20:33:48: 🔗 Client acquired from pool
+2025-10-10T20:33:48: 🔓 Client released back to pool
+2025-10-10T20:33:48: 🔓 Client released back to pool
+2025-10-10T20:33:48: 🔓 Client released back to pool
+2025-10-10T20:33:48: 🔓 Client released back to pool
+2025-10-10T20:33:53: 🔗 Client acquired from pool
+2025-10-10T20:33:53: 🔗 Client acquired from pool
+2025-10-10T20:33:53: 🔗 Client acquired from pool
+2025-10-10T20:33:53: 🔗 Client acquired from pool
+2025-10-10T20:33:53: 🔓 Client released back to pool
+2025-10-10T20:33:53: 🔓 Client released back to pool
+2025-10-10T20:33:53: 🔓 Client released back to pool
+2025-10-10T20:33:53: 🔓 Client released back to pool
+2025-10-10T20:33:58: 🔗 Client acquired from pool
+2025-10-10T20:33:58: 🔗 Client acquired from pool
+2025-10-10T20:33:58: 🔗 Client acquired from pool
+2025-10-10T20:33:58: 🔗 Client acquired from pool
+2025-10-10T20:33:58: 🔓 Client released back to pool
+2025-10-10T20:33:58: 🔓 Client released back to pool
+2025-10-10T20:33:58: 🔓 Client released back to pool
+2025-10-10T20:33:58: 🔓 Client released back to pool
+2025-10-10T20:34:03: 🔗 Client acquired from pool
+2025-10-10T20:34:03: 🔗 Client acquired from pool
+2025-10-10T20:34:03: 🔗 Client acquired from pool
+2025-10-10T20:34:03: 🔗 Client acquired from pool
+2025-10-10T20:34:03: 🔓 Client released back to pool
+2025-10-10T20:34:03: 🔓 Client released back to pool
+2025-10-10T20:34:03: 🔓 Client released back to pool
+2025-10-10T20:34:03: 🔓 Client released back to pool
+2025-10-10T20:34:08: 🔗 Client acquired from pool
+2025-10-10T20:34:08: 🔗 Client acquired from pool
+2025-10-10T20:34:08: 🔗 Client acquired from pool
+2025-10-10T20:34:08: 🔗 Client acquired from pool
+2025-10-10T20:34:08: 🔓 Client released back to pool
+2025-10-10T20:34:08: 🔓 Client released back to pool
+2025-10-10T20:34:08: 🔓 Client released back to pool
+2025-10-10T20:34:08: 🔓 Client released back to pool
+2025-10-10T20:34:13: 🔗 Client acquired from pool
+2025-10-10T20:34:13: 🔗 Client acquired from pool
+2025-10-10T20:34:13: 🔗 Client acquired from pool
+2025-10-10T20:34:13: 🔗 Client acquired from pool
+2025-10-10T20:34:13: 🔓 Client released back to pool
+2025-10-10T20:34:13: 🔓 Client released back to pool
+2025-10-10T20:34:13: 🔓 Client released back to pool
+2025-10-10T20:34:13: 🔓 Client released back to pool
+2025-10-10T20:34:18: 🔗 Client acquired from pool
+2025-10-10T20:34:18: 🔗 Client acquired from pool
+2025-10-10T20:34:18: 🔗 Client acquired from pool
+2025-10-10T20:34:18: 🔗 Client acquired from pool
+2025-10-10T20:34:18: 🔓 Client released back to pool
+2025-10-10T20:34:18: 🔓 Client released back to pool
+2025-10-10T20:34:18: 🔓 Client released back to pool
+2025-10-10T20:34:18: 🔓 Client released back to pool
+2025-10-10T20:34:23: 🔗 Client acquired from pool
+2025-10-10T20:34:23: 🔗 Client acquired from pool
+2025-10-10T20:34:23: 🔗 Client acquired from pool
+2025-10-10T20:34:23: 🔗 Client acquired from pool
+2025-10-10T20:34:23: 🔓 Client released back to pool
+2025-10-10T20:34:23: 🔓 Client released back to pool
+2025-10-10T20:34:23: 🔓 Client released back to pool
+2025-10-10T20:34:23: 🔓 Client released back to pool
+2025-10-10T20:34:28: 🔗 Client acquired from pool
+2025-10-10T20:34:28: 🔗 Client acquired from pool
+2025-10-10T20:34:28: 🔗 Client acquired from pool
+2025-10-10T20:34:28: 🔗 Client acquired from pool
+2025-10-10T20:34:28: 🔓 Client released back to pool
+2025-10-10T20:34:28: 🔓 Client released back to pool
+2025-10-10T20:34:28: 🔓 Client released back to pool
+2025-10-10T20:34:28: 🔓 Client released back to pool
+2025-10-10T20:34:33: 🔗 Client acquired from pool
+2025-10-10T20:34:33: 🔗 Client acquired from pool
+2025-10-10T20:34:33: 🔗 Client acquired from pool
+2025-10-10T20:34:33: 🔗 Client acquired from pool
+2025-10-10T20:34:33: 🔓 Client released back to pool
+2025-10-10T20:34:33: 🔓 Client released back to pool
+2025-10-10T20:34:33: 🔓 Client released back to pool
+2025-10-10T20:34:33: 🔓 Client released back to pool
+2025-10-10T20:34:38: 🔗 Client acquired from pool
+2025-10-10T20:34:38: 🔗 Client acquired from pool
+2025-10-10T20:34:38: 🔗 Client acquired from pool
+2025-10-10T20:34:38: 🔗 Client acquired from pool
+2025-10-10T20:34:38: 🔓 Client released back to pool
+2025-10-10T20:34:38: 🔓 Client released back to pool
+2025-10-10T20:34:38: 🔓 Client released back to pool
+2025-10-10T20:34:38: 🔓 Client released back to pool
+2025-10-10T20:34:44: 🔗 Client acquired from pool
+2025-10-10T20:34:44: 🔗 Client acquired from pool
+2025-10-10T20:34:44: 🔗 Client acquired from pool
+2025-10-10T20:34:44: 🔗 Client acquired from pool
+2025-10-10T20:34:44: 🔓 Client released back to pool
+2025-10-10T20:34:44: 🔓 Client released back to pool
+2025-10-10T20:34:44: 🔓 Client released back to pool
+2025-10-10T20:34:44: 🔓 Client released back to pool
+2025-10-10T20:34:49: 🔗 Client acquired from pool
+2025-10-10T20:34:49: 🔗 Client acquired from pool
+2025-10-10T20:34:49: 🔗 Client acquired from pool
+2025-10-10T20:34:49: 🔗 Client acquired from pool
+2025-10-10T20:34:49: 🔓 Client released back to pool
+2025-10-10T20:34:49: 🔓 Client released back to pool
+2025-10-10T20:34:49: 🔓 Client released back to pool
+2025-10-10T20:34:49: 🔓 Client released back to pool
+2025-10-10T20:34:54: 🔗 Client acquired from pool
+2025-10-10T20:34:54: 🔗 Client acquired from pool
+2025-10-10T20:34:54: 🔗 Client acquired from pool
+2025-10-10T20:34:54: 🔗 Client acquired from pool
+2025-10-10T20:34:54: 🔓 Client released back to pool
+2025-10-10T20:34:54: 🔓 Client released back to pool
+2025-10-10T20:34:54: 🔓 Client released back to pool
+2025-10-10T20:34:54: 🔓 Client released back to pool
+2025-10-10T20:34:59: 🔗 Client acquired from pool
+2025-10-10T20:34:59: 🔗 Client acquired from pool
+2025-10-10T20:34:59: 🔗 Client acquired from pool
+2025-10-10T20:34:59: 🔗 Client acquired from pool
+2025-10-10T20:34:59: 🔓 Client released back to pool
+2025-10-10T20:34:59: 🔓 Client released back to pool
+2025-10-10T20:34:59: 🔓 Client released back to pool
+2025-10-10T20:34:59: 🔓 Client released back to pool
+2025-10-10T20:35:04: 🔗 Client acquired from pool
+2025-10-10T20:35:04: 🔗 Client acquired from pool
+2025-10-10T20:35:04: 🔗 Client acquired from pool
+2025-10-10T20:35:04: 🔗 Client acquired from pool
+2025-10-10T20:35:04: 🔓 Client released back to pool
+2025-10-10T20:35:04: 🔓 Client released back to pool
+2025-10-10T20:35:04: 🔓 Client released back to pool
+2025-10-10T20:35:04: 🔓 Client released back to pool
+2025-10-10T20:35:09: 🔗 Client acquired from pool
+2025-10-10T20:35:09: 🔗 Client acquired from pool
+2025-10-10T20:35:09: 🔗 Client acquired from pool
+2025-10-10T20:35:09: 🔗 Client acquired from pool
+2025-10-10T20:35:09: 🔓 Client released back to pool
+2025-10-10T20:35:09: 🔓 Client released back to pool
+2025-10-10T20:35:09: 🔓 Client released back to pool
+2025-10-10T20:35:09: 🔓 Client released back to pool
+2025-10-10T20:35:13: 🔗 Client acquired from pool
+2025-10-10T20:35:13: 🔗 Client acquired from pool
+2025-10-10T20:35:13: 🔗 Client acquired from pool
+2025-10-10T20:35:13: 🔗 Client acquired from pool
+2025-10-10T20:35:13: 🔓 Client released back to pool
+2025-10-10T20:35:13: 🔓 Client released back to pool
+2025-10-10T20:35:13: 🔓 Client released back to pool
+2025-10-10T20:35:13: 🔓 Client released back to pool
+2025-10-10T20:35:14: 🔗 Client acquired from pool
+2025-10-10T20:35:14: 🔓 Client released back to pool
+2025-10-10T20:35:14: 🔗 Client acquired from pool
+2025-10-10T20:35:14: 🔗 Client acquired from pool
+2025-10-10T20:35:14: 🔗 Client acquired from pool
+2025-10-10T20:35:14: 🔗 Client acquired from pool
+2025-10-10T20:35:14: 🔓 Client released back to pool
+2025-10-10T20:35:14: 🔓 Client released back to pool
+2025-10-10T20:35:14: 🔓 Client released back to pool
+2025-10-10T20:35:14: 🔓 Client released back to pool
+2025-10-10T20:35:44: 🔗 Client acquired from pool
+2025-10-10T20:35:44: 🔓 Client released back to pool
+2025-10-10T20:35:44: 🔗 Client acquired from pool
+2025-10-10T20:35:44: 🔗 Client acquired from pool
+2025-10-10T20:35:44: 🔗 Client acquired from pool
+2025-10-10T20:35:44: 🔗 Client acquired from pool
+2025-10-10T20:35:44: 🔓 Client released back to pool
+2025-10-10T20:35:44: 🔓 Client released back to pool
+2025-10-10T20:35:44: 🔓 Client released back to pool
+2025-10-10T20:35:44: 🔓 Client released back to pool
+2025-10-10T20:36:14: 🔗 Client acquired from pool
+2025-10-10T20:36:14: 🔓 Client released back to pool
+2025-10-10T20:36:14: 🔗 Client acquired from pool
+2025-10-10T20:36:14: 🔗 Client acquired from pool
+2025-10-10T20:36:14: 🔗 Client acquired from pool
+2025-10-10T20:36:14: 🔗 Client acquired from pool
+2025-10-10T20:36:14: 🔓 Client released back to pool
+2025-10-10T20:36:14: 🔓 Client released back to pool
+2025-10-10T20:36:14: 🔓 Client released back to pool
+2025-10-10T20:36:14: 🔓 Client released back to pool
+2025-10-10T20:36:27: 🔗 Client acquired from pool
+2025-10-10T20:36:27: 🔓 Client released back to pool
+2025-10-10T20:36:27: 🔗 Client acquired from pool
+2025-10-10T20:36:27: 🔗 Client acquired from pool
+2025-10-10T20:36:27: 🔓 Client released back to pool
+2025-10-10T20:36:27: 🔓 Client released back to pool
+2025-10-10T20:36:27: 🔗 Client acquired from pool
+2025-10-10T20:36:27: 🔗 Client acquired from pool
+2025-10-10T20:36:27: 🔗 Client acquired from pool
+2025-10-10T20:36:27: 🔓 Client released back to pool
+2025-10-10T20:36:27: 🔓 Client released back to pool
+2025-10-10T20:36:27: 🔓 Client released back to pool
+2025-10-10T20:36:27: 📺 supervisor subscribed to: [
+  'general',
+  'notifications',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-10-10T20:36:27: 🏠 supervisor joined room: production
+2025-10-10T20:36:33: 🔌 WebSocket disconnected: supervisor
+2025-10-10T20:36:34: 🔗 Client acquired from pool
+2025-10-10T20:36:34: 🔓 Client released back to pool
+2025-10-10T20:36:34: 🔗 Client acquired from pool
+2025-10-10T20:36:34: 🔓 Client released back to pool
+2025-10-10T20:36:34: 🔗 Client acquired from pool
+2025-10-10T20:36:34: 🔓 Client released back to pool
+2025-10-10T20:36:34: New WebSocket connection attempt
+2025-10-10T20:36:34: ✅ WebSocket authenticated: supervisor (supervisor)
+2025-10-10T20:36:38: 🔌 WebSocket disconnected: supervisor
+2025-10-10T20:36:38: 🔗 Client acquired from pool
+2025-10-10T20:36:38: 🔗 Client acquired from pool
+2025-10-10T20:36:38: 🔓 Client released back to pool
+2025-10-10T20:36:38: 🔓 Client released back to pool
+2025-10-10T20:36:38: 🔗 Client acquired from pool
+2025-10-10T20:36:38: 🔓 Client released back to pool
+2025-10-10T20:36:39: New WebSocket connection attempt
+2025-10-10T20:36:39: ✅ WebSocket authenticated: supervisor (supervisor)
+2025-10-10T20:36:43: 🔌 WebSocket disconnected: supervisor
+2025-10-10T20:36:43: 🔗 Client acquired from pool
+2025-10-10T20:36:43: 🔗 Client acquired from pool
+2025-10-10T20:36:43: 🔓 Client released back to pool
+2025-10-10T20:36:43: 🔓 Client released back to pool
+2025-10-10T20:36:43: 🔗 Client acquired from pool
+2025-10-10T20:36:43: 🔓 Client released back to pool
+2025-10-10T20:36:44: New WebSocket connection attempt
+2025-10-10T20:36:44: ✅ WebSocket authenticated: supervisor (supervisor)
+2025-10-10T20:38:54: 🔌 WebSocket disconnected: supervisor
+2025-10-10T20:38:55: ✅ New PostgreSQL client connected
+2025-10-10T20:38:55: 🔗 Client acquired from pool
+2025-10-10T20:38:55: ✅ New PostgreSQL client connected
+2025-10-10T20:38:55: 🔗 Client acquired from pool
+2025-10-10T20:38:55: 🔓 Client released back to pool
+2025-10-10T20:38:55: 🔓 Client released back to pool
+2025-10-10T20:38:55: ✅ New PostgreSQL client connected
+2025-10-10T20:38:55: 🔗 Client acquired from pool
+2025-10-10T20:38:55: 🔓 Client released back to pool
+2025-10-10T20:38:56: 🔗 Client acquired from pool
+2025-10-10T20:38:56: 🔓 Client released back to pool
+2025-10-10T20:38:56: 🔗 Client acquired from pool
+2025-10-10T20:38:56: 🔓 Client released back to pool
+2025-10-10T20:38:56: 🔗 Client acquired from pool
+2025-10-10T20:38:56: 🔓 Client released back to pool
+2025-10-10T20:38:56: New WebSocket connection attempt
+2025-10-10T20:38:56: ✅ WebSocket authenticated: supervisor (supervisor)
+2025-10-10T20:38:56: New WebSocket connection attempt
+2025-10-10T20:38:56: ✅ WebSocket authenticated: supervisor (supervisor)
+/home/production-app/production-orders-app/src/server-production.js:362
+const { authenticateToken, requireRole } = require('./middleware/auth');
+        ^
+
+SyntaxError: Identifier 'authenticateToken' has already been declared
+    at wrapSafe (node:internal/modules/cjs/loader:1472:18)
+    at Module._compile (node:internal/modules/cjs/loader:1501:20)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Module._load (node:internal/modules/cjs/loader:1096:12)
+    at /home/production-app/production-orders-app/node_modules/pm2/lib/ProcessContainer.js:304:25
+    at wrapper (/home/production-app/production-orders-app/node_modules/async/internal/once.js:12:16)
+    at next (/home/production-app/production-orders-app/node_modules/async/waterfall.js:96:20)
+    at /home/production-app/production-orders-app/node_modules/async/internal/onlyOnce.js:12:16
+    at WriteStream.<anonymous> (/home/production-app/production-orders-app/node_modules/pm2/lib/Utility.js:186:13)
+/home/production-app/production-orders-app/src/server-production.js:362
+const { authenticateToken, requireRole } = require('./middleware/auth');
+        ^
+
+SyntaxError: Identifier 'authenticateToken' has already been declared
+    at wrapSafe (node:internal/modules/cjs/loader:1472:18)
+    at Module._compile (node:internal/modules/cjs/loader:1501:20)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Module._load (node:internal/modules/cjs/loader:1096:12)
+    at /home/production-app/production-orders-app/node_modules/pm2/lib/ProcessContainer.js:304:25
+    at wrapper (/home/production-app/production-orders-app/node_modules/async/internal/once.js:12:16)
+    at next (/home/production-app/production-orders-app/node_modules/async/waterfall.js:96:20)
+    at /home/production-app/production-orders-app/node_modules/async/internal/onlyOnce.js:12:16
+    at WriteStream.<anonymous> (/home/production-app/production-orders-app/node_modules/pm2/lib/Utility.js:186:13)
+/home/production-app/production-orders-app/src/server-production.js:362
+const { authenticateToken, requireRole } = require('./middleware/auth');
+        ^
+
+SyntaxError: Identifier 'authenticateToken' has already been declared
+    at wrapSafe (node:internal/modules/cjs/loader:1472:18)
+    at Module._compile (node:internal/modules/cjs/loader:1501:20)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Module._load (node:internal/modules/cjs/loader:1096:12)
+    at /home/production-app/production-orders-app/node_modules/pm2/lib/ProcessContainer.js:304:25
+    at wrapper (/home/production-app/production-orders-app/node_modules/async/internal/once.js:12:16)
+    at next (/home/production-app/production-orders-app/node_modules/async/waterfall.js:96:20)
+    at /home/production-app/production-orders-app/node_modules/async/internal/onlyOnce.js:12:16
+    at WriteStream.<anonymous> (/home/production-app/production-orders-app/node_modules/pm2/lib/Utility.js:186:13)
+/home/production-app/production-orders-app/src/server-production.js:362
+const { authenticateToken, requireRole } = require('./middleware/auth');
+        ^
+
+SyntaxError: Identifier 'authenticateToken' has already been declared
+    at wrapSafe (node:internal/modules/cjs/loader:1472:18)
+    at Module._compile (node:internal/modules/cjs/loader:1501:20)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Module._load (node:internal/modules/cjs/loader:1096:12)
+    at /home/production-app/production-orders-app/node_modules/pm2/lib/ProcessContainer.js:304:25
+    at wrapper (/home/production-app/production-orders-app/node_modules/async/internal/once.js:12:16)
+    at next (/home/production-app/production-orders-app/node_modules/async/waterfall.js:96:20)
+    at /home/production-app/production-orders-app/node_modules/async/internal/onlyOnce.js:12:16
+    at WriteStream.<anonymous> (/home/production-app/production-orders-app/node_modules/pm2/lib/Utility.js:186:13)
+/home/production-app/production-orders-app/src/server-production.js:362
+const { authenticateToken, requireRole } = require('./middleware/auth');
+        ^
+
+SyntaxError: Identifier 'authenticateToken' has already been declared
+    at wrapSafe (node:internal/modules/cjs/loader:1472:18)
+    at Module._compile (node:internal/modules/cjs/loader:1501:20)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Module._load (node:internal/modules/cjs/loader:1096:12)
+    at /home/production-app/production-orders-app/node_modules/pm2/lib/ProcessContainer.js:304:25
+    at wrapper (/home/production-app/production-orders-app/node_modules/async/internal/once.js:12:16)
+    at next (/home/production-app/production-orders-app/node_modules/async/waterfall.js:96:20)
+    at /home/production-app/production-orders-app/node_modules/async/internal/onlyOnce.js:12:16
+    at WriteStream.<anonymous> (/home/production-app/production-orders-app/node_modules/pm2/lib/Utility.js:186:13)
+/home/production-app/production-orders-app/src/server-production.js:362
+const { authenticateToken, requireRole } = require('./middleware/auth');
+        ^
+
+SyntaxError: Identifier 'authenticateToken' has already been declared
+    at wrapSafe (node:internal/modules/cjs/loader:1472:18)
+    at Module._compile (node:internal/modules/cjs/loader:1501:20)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Module._load (node:internal/modules/cjs/loader:1096:12)
+    at /home/production-app/production-orders-app/node_modules/pm2/lib/ProcessContainer.js:304:25
+    at wrapper (/home/production-app/production-orders-app/node_modules/async/internal/once.js:12:16)
+    at next (/home/production-app/production-orders-app/node_modules/async/waterfall.js:96:20)
+    at /home/production-app/production-orders-app/node_modules/async/internal/onlyOnce.js:12:16
+    at WriteStream.<anonymous> (/home/production-app/production-orders-app/node_modules/pm2/lib/Utility.js:186:13)
+/home/production-app/production-orders-app/src/server-production.js:362
+const { authenticateToken, requireRole } = require('./middleware/auth');
+        ^
+
+SyntaxError: Identifier 'authenticateToken' has already been declared
+    at wrapSafe (node:internal/modules/cjs/loader:1472:18)
+    at Module._compile (node:internal/modules/cjs/loader:1501:20)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Module._load (node:internal/modules/cjs/loader:1096:12)
+    at /home/production-app/production-orders-app/node_modules/pm2/lib/ProcessContainer.js:304:25
+    at wrapper (/home/production-app/production-orders-app/node_modules/async/internal/once.js:12:16)
+    at next (/home/production-app/production-orders-app/node_modules/async/waterfall.js:96:20)
+    at /home/production-app/production-orders-app/node_modules/async/internal/onlyOnce.js:12:16
+    at WriteStream.<anonymous> (/home/production-app/production-orders-app/node_modules/pm2/lib/Utility.js:186:13)
+/home/production-app/production-orders-app/src/server-production.js:362
+const { authenticateToken, requireRole } = require('./middleware/auth');
+        ^
+
+SyntaxError: Identifier 'authenticateToken' has already been declared
+    at wrapSafe (node:internal/modules/cjs/loader:1472:18)
+    at Module._compile (node:internal/modules/cjs/loader:1501:20)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Module._load (node:internal/modules/cjs/loader:1096:12)
+    at /home/production-app/production-orders-app/node_modules/pm2/lib/ProcessContainer.js:304:25
+    at wrapper (/home/production-app/production-orders-app/node_modules/async/internal/once.js:12:16)
+    at next (/home/production-app/production-orders-app/node_modules/async/waterfall.js:96:20)
+    at /home/production-app/production-orders-app/node_modules/async/internal/onlyOnce.js:12:16
+    at WriteStream.<anonymous> (/home/production-app/production-orders-app/node_modules/pm2/lib/Utility.js:186:13)
+/home/production-app/production-orders-app/src/server-production.js:362
+const { authenticateToken, requireRole } = require('./middleware/auth');
+        ^
+
+SyntaxError: Identifier 'authenticateToken' has already been declared
+    at wrapSafe (node:internal/modules/cjs/loader:1472:18)
+    at Module._compile (node:internal/modules/cjs/loader:1501:20)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Module._load (node:internal/modules/cjs/loader:1096:12)
+    at /home/production-app/production-orders-app/node_modules/pm2/lib/ProcessContainer.js:304:25
+    at wrapper (/home/production-app/production-orders-app/node_modules/async/internal/once.js:12:16)
+    at next (/home/production-app/production-orders-app/node_modules/async/waterfall.js:96:20)
+    at /home/production-app/production-orders-app/node_modules/async/internal/onlyOnce.js:12:16
+    at WriteStream.<anonymous> (/home/production-app/production-orders-app/node_modules/pm2/lib/Utility.js:186:13)
+/home/production-app/production-orders-app/src/server-production.js:362
+const { authenticateToken, requireRole } = require('./middleware/auth');
+        ^
+
+SyntaxError: Identifier 'authenticateToken' has already been declared
+    at wrapSafe (node:internal/modules/cjs/loader:1472:18)
+    at Module._compile (node:internal/modules/cjs/loader:1501:20)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Module._load (node:internal/modules/cjs/loader:1096:12)
+    at /home/production-app/production-orders-app/node_modules/pm2/lib/ProcessContainer.js:304:25
+    at wrapper (/home/production-app/production-orders-app/node_modules/async/internal/once.js:12:16)
+    at next (/home/production-app/production-orders-app/node_modules/async/waterfall.js:96:20)
+    at /home/production-app/production-orders-app/node_modules/async/internal/onlyOnce.js:12:16
+    at WriteStream.<anonymous> (/home/production-app/production-orders-app/node_modules/pm2/lib/Utility.js:186:13)
