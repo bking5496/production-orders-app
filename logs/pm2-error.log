@@ -4162,3 +4162,11 @@
   user: 'Anonymous',
   timestamp: '2025-10-04T22:33:07.422Z'
 }
+2025-10-10T10:46:53: JWT verification failed: jwt expired
+2025-10-10T10:46:53: JWT verification failed: jwt expired
+2025-10-10T10:46:54: JWT verification failed: jwt expired
+2025-10-10T10:46:55: JWT verification failed: jwt expired
+2025-10-10T10:46:57: JWT verification failed: jwt expired
+2025-10-10T10:47:09: 🔒 Auth failure: admin from ::ffff:127.0.0.1 - Invalid credentials - Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36 Edg/141.0.0.0
+2025-10-10T10:47:10: 🔒 Auth failure: admin from ::1 - Invalid credentials - Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36 Edg/141.0.0.0
+2025-10-10T10:47:12: 🔒 Auth failure: admin from ::ffff:127.0.0.1 - Invalid credentials - Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36 Edg/141.0.0.0
