@@ -228,7 +228,7 @@ app.post('/api/downtime', authenticateToken, async (req, res) => {
   try {
     const db = await getDbClient();
     const {
-      order_id,
+      order_number,
       machine_id,
       downtime_category_id,
       primary_cause,
@@ -239,6 +239,13 @@ app.post('/api/downtime', authenticateToken, async (req, res) => {
       estimated_duration,
       severity
     } = req.body;
+
+    // Find order by order_number to get order_id
+    let order_id = null;
+    if (order_number) {
+      const orderResult = await db.query('SELECT id FROM production_orders WHERE order_number = $1', [order_number]);
+      order_id = orderResult.rows[0]?.id || null;
+    }
 
     const result = await db.query(`
       INSERT INTO production_stops_enhanced 
@@ -261,7 +268,7 @@ app.post('/api/waste', authenticateToken, async (req, res) => {
   try {
     const db = await getDbClient();
     const {
-      order_id,
+      order_number,
       waste_type,
       quantity,
       unit,
@@ -270,6 +277,13 @@ app.post('/api/waste', authenticateToken, async (req, res) => {
       cost_per_unit,
       total_cost
     } = req.body;
+
+    // Find order by order_number to get order_id
+    let order_id = null;
+    if (order_number) {
+      const orderResult = await db.query('SELECT id FROM production_orders WHERE order_number = $1', [order_number]);
+      order_id = orderResult.rows[0]?.id || null;
+    }
 
     const result = await db.query(`
       INSERT INTO production_waste 

@@ -104,9 +104,9 @@ const ActionButton = ({ onClick, icon: IconComponent, label, color = "blue", dis
 };
 
 // Downtime entry form
-const DowntimeForm = ({ onSave, onCancel, orders = [], machines = [], users = [], categories = [] }) => {
+const DowntimeForm = ({ onSave, onCancel, orders = [], machines = [], users = [], categories = [], laborData = [] }) => {
   const [formData, setFormData] = useState({
-    order_id: '',
+    order_number: '',
     machine_id: '',
     downtime_category_id: '',
     primary_cause: '',
@@ -123,7 +123,7 @@ const DowntimeForm = ({ onSave, onCancel, orders = [], machines = [], users = []
     try {
       await onSave(formData);
       setFormData({
-        order_id: '',
+        order_number: '',
         machine_id: '',
         downtime_category_id: '',
         primary_cause: '',
@@ -145,15 +145,10 @@ const DowntimeForm = ({ onSave, onCancel, orders = [], machines = [], users = []
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <TouchInput
           label="Order Number"
-          type="select"
-          value={formData.order_id}
-          onChange={(value) => setFormData({...formData, order_id: value})}
-          placeholder="Select Production Order"
+          value={formData.order_number}
+          onChange={(value) => setFormData({...formData, order_number: value})}
+          placeholder="Enter order number (e.g. ORD-2024-001)"
           required
-          options={orders.map(order => ({
-            value: order.id,
-            label: `${order.order_number} - ${order.product_name}`
-          }))}
         />
         
         <TouchInput
@@ -197,9 +192,9 @@ const DowntimeForm = ({ onSave, onCancel, orders = [], machines = [], users = []
           onChange={(value) => setFormData({...formData, reported_by: value})}
           placeholder="Select Supervisor"
           required
-          options={users.filter(u => u.role === 'supervisor').map(user => ({
-            value: user.id,
-            label: user.full_name || user.username
+          options={laborData.filter(l => l.role === 'supervisor' || l.position === 'Supervisor').map(person => ({
+            value: person.user_id || person.id,
+            label: person.full_name || person.name || person.employee_name
           }))}
         />
         
@@ -209,9 +204,9 @@ const DowntimeForm = ({ onSave, onCancel, orders = [], machines = [], users = []
           value={formData.assigned_to}
           onChange={(value) => setFormData({...formData, assigned_to: value})}
           placeholder="Select Operator"
-          options={users.filter(u => u.role === 'operator').map(user => ({
-            value: user.id,
-            label: user.full_name || user.username
+          options={laborData.filter(l => l.role === 'operator' || l.position === 'Operator').map(person => ({
+            value: person.user_id || person.id,
+            label: person.full_name || person.name || person.employee_name
           }))}
         />
         
@@ -263,9 +258,9 @@ const DowntimeForm = ({ onSave, onCancel, orders = [], machines = [], users = []
 };
 
 // Waste entry form
-const WasteForm = ({ onSave, onCancel, orders = [], users = [] }) => {
+const WasteForm = ({ onSave, onCancel, orders = [], users = [], laborData = [] }) => {
   const [formData, setFormData] = useState({
-    order_id: '',
+    order_number: '',
     waste_type: '',
     quantity: '',
     unit: 'kg',
@@ -301,7 +296,7 @@ const WasteForm = ({ onSave, onCancel, orders = [], users = [] }) => {
       });
       
       setFormData({
-        order_id: '',
+        order_number: '',
         waste_type: '',
         quantity: '',
         unit: 'kg',
@@ -320,15 +315,10 @@ const WasteForm = ({ onSave, onCancel, orders = [], users = [] }) => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <TouchInput
           label="Order Number"
-          type="select"
-          value={formData.order_id}
-          onChange={(value) => setFormData({...formData, order_id: value})}
-          placeholder="Select Production Order"
+          value={formData.order_number}
+          onChange={(value) => setFormData({...formData, order_number: value})}
+          placeholder="Enter order number (e.g. ORD-2024-001)"
           required
-          options={orders.map(order => ({
-            value: order.id,
-            label: `${order.order_number} - ${order.product_name}`
-          }))}
         />
         
         <TouchInput
@@ -367,9 +357,9 @@ const WasteForm = ({ onSave, onCancel, orders = [], users = [] }) => {
           onChange={(value) => setFormData({...formData, recorded_by: value})}
           placeholder="Select Supervisor/Operator"
           required
-          options={users.map(user => ({
-            value: user.id,
-            label: user.full_name || user.username
+          options={laborData.map(person => ({
+            value: person.user_id || person.id,
+            label: person.full_name || person.name || person.employee_name
           }))}
         />
         
@@ -430,6 +420,7 @@ const WasteDowntimeManagement = () => {
   const [machines, setMachines] = useState([]);
   const [users, setUsers] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [laborData, setLaborData] = useState([]);
 
   // Subscribe to real-time updates - TEMPORARILY DISABLED
   // useOrderUpdates((newOrders) => setOrders(newOrders));
@@ -439,17 +430,19 @@ const WasteDowntimeManagement = () => {
   const loadData = useCallback(async () => {
     try {
       setIsLoading(true);
-      const [ordersRes, machinesRes, usersRes, categoriesRes] = await Promise.all([
+      const [ordersRes, machinesRes, usersRes, categoriesRes, laborRes] = await Promise.all([
         API.get('/api/orders'),
         API.get('/api/machines'),
         API.get('/api/users'),
-        API.get('/api/downtime-categories')
+        API.get('/api/downtime-categories'),
+        API.get('/api/labor/assignments')
       ]);
       
       setOrders(ordersRes.data || []);
       setMachines(machinesRes.data || []);
       setUsers(usersRes.data || []);
       setCategories(categoriesRes.data || []);
+      setLaborData(laborRes.data || []);
       
     } catch (error) {
       console.error('Error loading data:', error);
@@ -565,6 +558,7 @@ const WasteDowntimeManagement = () => {
             machines={machines}
             users={users}
             categories={categories}
+            laborData={laborData}
           />
         )}
         
@@ -574,6 +568,7 @@ const WasteDowntimeManagement = () => {
             onCancel={() => {}}
             orders={orders}
             users={users}
+            laborData={laborData}
           />
         )}
         
