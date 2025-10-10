@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom/client';
 
 // Import app configuration first (required by API service)
@@ -80,6 +80,9 @@ function App() {
   const isIPad = /iPad|iPad Simulator/i.test(navigator.userAgent) || 
                 (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
   
+  // Prevent multiple redirects
+  const hasRedirected = useRef(false);
+  
   // WebSocket auto-connection (only when authenticated)
   useAutoConnect();
 
@@ -113,12 +116,14 @@ function App() {
     );
   }
 
-  // Auto-redirect supervisor users on iPad to special view
-  useEffect(() => {
-    if (isAuthenticated && user && isIPad && user.role === 'supervisor' && currentPath !== '/supervisor-ipad') {
-      Router.navigate('/supervisor-ipad');
-    }
-  }, [isAuthenticated, user, isIPad, currentPath]);
+  // Auto-redirect supervisor users on iPad to special view - TEMPORARILY DISABLED
+  // useEffect(() => {
+  //   if (isAuthenticated && user && isIPad && user.role === 'supervisor' && currentPath !== '/supervisor-ipad' && !hasRedirected.current) {
+  //     console.log('Redirecting supervisor to iPad view');
+  //     hasRedirected.current = true;
+  //     Router.navigate('/supervisor-ipad');
+  //   }
+  // }, [isAuthenticated, user, isIPad, currentPath]);
 
   const route = routes.find(r => r.path === currentPath);
   const ComponentToRender = route ? route.component : Dashboard;

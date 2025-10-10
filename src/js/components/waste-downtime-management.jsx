@@ -459,7 +459,7 @@ const WasteDowntimeManagement = () => {
 
   useEffect(() => {
     loadData();
-  }, [loadData]);
+  }, []); // Only run on mount
 
   // Save downtime record
   const saveDowntime = useCallback(async (downtimeData) => {

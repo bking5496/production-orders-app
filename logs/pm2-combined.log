@@ -46693,3 +46693,467 @@ SyntaxError: Identifier 'authenticateToken' has already been declared
     at next (/home/production-app/production-orders-app/node_modules/async/waterfall.js:96:20)
     at /home/production-app/production-orders-app/node_modules/async/internal/onlyOnce.js:12:16
     at WriteStream.<anonymous> (/home/production-app/production-orders-app/node_modules/pm2/lib/Utility.js:186:13)
+ReferenceError: authenticateToken is not defined
+    at Object.<anonymous> (/home/production-app/production-orders-app/src/server-production.js:214:37)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Module._load (node:internal/modules/cjs/loader:1096:12)
+    at /home/production-app/production-orders-app/node_modules/pm2/lib/ProcessContainer.js:304:25
+    at wrapper (/home/production-app/production-orders-app/node_modules/async/internal/once.js:12:16)
+    at next (/home/production-app/production-orders-app/node_modules/async/waterfall.js:96:20)
+    at /home/production-app/production-orders-app/node_modules/async/internal/onlyOnce.js:12:16
+    at WriteStream.<anonymous> (/home/production-app/production-orders-app/node_modules/pm2/lib/Utility.js:186:13)
+ReferenceError: authenticateToken is not defined
+    at Object.<anonymous> (/home/production-app/production-orders-app/src/server-production.js:214:37)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Module._load (node:internal/modules/cjs/loader:1096:12)
+    at /home/production-app/production-orders-app/node_modules/pm2/lib/ProcessContainer.js:304:25
+    at wrapper (/home/production-app/production-orders-app/node_modules/async/internal/once.js:12:16)
+    at next (/home/production-app/production-orders-app/node_modules/async/waterfall.js:96:20)
+    at /home/production-app/production-orders-app/node_modules/async/internal/onlyOnce.js:12:16
+    at WriteStream.<anonymous> (/home/production-app/production-orders-app/node_modules/pm2/lib/Utility.js:186:13)
+ReferenceError: authenticateToken is not defined
+    at Object.<anonymous> (/home/production-app/production-orders-app/src/server-production.js:214:37)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Module._load (node:internal/modules/cjs/loader:1096:12)
+    at /home/production-app/production-orders-app/node_modules/pm2/lib/ProcessContainer.js:304:25
+    at wrapper (/home/production-app/production-orders-app/node_modules/async/internal/once.js:12:16)
+    at next (/home/production-app/production-orders-app/node_modules/async/waterfall.js:96:20)
+    at /home/production-app/production-orders-app/node_modules/async/internal/onlyOnce.js:12:16
+    at WriteStream.<anonymous> (/home/production-app/production-orders-app/node_modules/pm2/lib/Utility.js:186:13)
+ReferenceError: authenticateToken is not defined
+    at Object.<anonymous> (/home/production-app/production-orders-app/src/server-production.js:214:37)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Module._load (node:internal/modules/cjs/loader:1096:12)
+    at /home/production-app/production-orders-app/node_modules/pm2/lib/ProcessContainer.js:304:25
+    at wrapper (/home/production-app/production-orders-app/node_modules/async/internal/once.js:12:16)
+    at next (/home/production-app/production-orders-app/node_modules/async/waterfall.js:96:20)
+    at /home/production-app/production-orders-app/node_modules/async/internal/onlyOnce.js:12:16
+    at WriteStream.<anonymous> (/home/production-app/production-orders-app/node_modules/pm2/lib/Utility.js:186:13)
+ReferenceError: authenticateToken is not defined
+    at Object.<anonymous> (/home/production-app/production-orders-app/src/server-production.js:214:37)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Module._load (node:internal/modules/cjs/loader:1096:12)
+    at /home/production-app/production-orders-app/node_modules/pm2/lib/ProcessContainer.js:304:25
+    at wrapper (/home/production-app/production-orders-app/node_modules/async/internal/once.js:12:16)
+    at next (/home/production-app/production-orders-app/node_modules/async/waterfall.js:96:20)
+    at /home/production-app/production-orders-app/node_modules/async/internal/onlyOnce.js:12:16
+    at WriteStream.<anonymous> (/home/production-app/production-orders-app/node_modules/pm2/lib/Utility.js:186:13)
+ReferenceError: authenticateToken is not defined
+    at Object.<anonymous> (/home/production-app/production-orders-app/src/server-production.js:214:37)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Module._load (node:internal/modules/cjs/loader:1096:12)
+    at /home/production-app/production-orders-app/node_modules/pm2/lib/ProcessContainer.js:304:25
+    at wrapper (/home/production-app/production-orders-app/node_modules/async/internal/once.js:12:16)
+    at next (/home/production-app/production-orders-app/node_modules/async/waterfall.js:96:20)
+    at /home/production-app/production-orders-app/node_modules/async/internal/onlyOnce.js:12:16
+    at WriteStream.<anonymous> (/home/production-app/production-orders-app/node_modules/pm2/lib/Utility.js:186:13)
+ReferenceError: authenticateToken is not defined
+    at Object.<anonymous> (/home/production-app/production-orders-app/src/server-production.js:214:37)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Module._load (node:internal/modules/cjs/loader:1096:12)
+    at /home/production-app/production-orders-app/node_modules/pm2/lib/ProcessContainer.js:304:25
+    at wrapper (/home/production-app/production-orders-app/node_modules/async/internal/once.js:12:16)
+    at next (/home/production-app/production-orders-app/node_modules/async/waterfall.js:96:20)
+    at /home/production-app/production-orders-app/node_modules/async/internal/onlyOnce.js:12:16
+    at WriteStream.<anonymous> (/home/production-app/production-orders-app/node_modules/pm2/lib/Utility.js:186:13)
+ReferenceError: authenticateToken is not defined
+    at Object.<anonymous> (/home/production-app/production-orders-app/src/server-production.js:214:37)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Module._load (node:internal/modules/cjs/loader:1096:12)
+    at /home/production-app/production-orders-app/node_modules/pm2/lib/ProcessContainer.js:304:25
+    at wrapper (/home/production-app/production-orders-app/node_modules/async/internal/once.js:12:16)
+    at next (/home/production-app/production-orders-app/node_modules/async/waterfall.js:96:20)
+    at /home/production-app/production-orders-app/node_modules/async/internal/onlyOnce.js:12:16
+    at WriteStream.<anonymous> (/home/production-app/production-orders-app/node_modules/pm2/lib/Utility.js:186:13)
+ReferenceError: authenticateToken is not defined
+    at Object.<anonymous> (/home/production-app/production-orders-app/src/server-production.js:214:37)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Module._load (node:internal/modules/cjs/loader:1096:12)
+    at /home/production-app/production-orders-app/node_modules/pm2/lib/ProcessContainer.js:304:25
+    at wrapper (/home/production-app/production-orders-app/node_modules/async/internal/once.js:12:16)
+    at next (/home/production-app/production-orders-app/node_modules/async/waterfall.js:96:20)
+    at /home/production-app/production-orders-app/node_modules/async/internal/onlyOnce.js:12:16
+    at WriteStream.<anonymous> (/home/production-app/production-orders-app/node_modules/pm2/lib/Utility.js:186:13)
+ReferenceError: authenticateToken is not defined
+    at Object.<anonymous> (/home/production-app/production-orders-app/src/server-production.js:214:37)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Module._load (node:internal/modules/cjs/loader:1096:12)
+    at /home/production-app/production-orders-app/node_modules/pm2/lib/ProcessContainer.js:304:25
+    at wrapper (/home/production-app/production-orders-app/node_modules/async/internal/once.js:12:16)
+    at next (/home/production-app/production-orders-app/node_modules/async/waterfall.js:96:20)
+    at /home/production-app/production-orders-app/node_modules/async/internal/onlyOnce.js:12:16
+    at WriteStream.<anonymous> (/home/production-app/production-orders-app/node_modules/pm2/lib/Utility.js:186:13)
+ReferenceError: requireRole is not defined
+    at Object.<anonymous> (/home/production-app/production-orders-app/src/server-production.js:377:31)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Module._load (node:internal/modules/cjs/loader:1096:12)
+    at /home/production-app/production-orders-app/node_modules/pm2/lib/ProcessContainer.js:304:25
+    at wrapper (/home/production-app/production-orders-app/node_modules/async/internal/once.js:12:16)
+    at next (/home/production-app/production-orders-app/node_modules/async/waterfall.js:96:20)
+    at /home/production-app/production-orders-app/node_modules/async/internal/onlyOnce.js:12:16
+    at WriteStream.<anonymous> (/home/production-app/production-orders-app/node_modules/pm2/lib/Utility.js:186:13)
+ReferenceError: requireRole is not defined
+    at Object.<anonymous> (/home/production-app/production-orders-app/src/server-production.js:377:31)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Module._load (node:internal/modules/cjs/loader:1096:12)
+    at /home/production-app/production-orders-app/node_modules/pm2/lib/ProcessContainer.js:304:25
+    at wrapper (/home/production-app/production-orders-app/node_modules/async/internal/once.js:12:16)
+    at next (/home/production-app/production-orders-app/node_modules/async/waterfall.js:96:20)
+    at /home/production-app/production-orders-app/node_modules/async/internal/onlyOnce.js:12:16
+    at WriteStream.<anonymous> (/home/production-app/production-orders-app/node_modules/pm2/lib/Utility.js:186:13)
+ReferenceError: requireRole is not defined
+    at Object.<anonymous> (/home/production-app/production-orders-app/src/server-production.js:377:31)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Module._load (node:internal/modules/cjs/loader:1096:12)
+    at /home/production-app/production-orders-app/node_modules/pm2/lib/ProcessContainer.js:304:25
+    at wrapper (/home/production-app/production-orders-app/node_modules/async/internal/once.js:12:16)
+    at next (/home/production-app/production-orders-app/node_modules/async/waterfall.js:96:20)
+    at /home/production-app/production-orders-app/node_modules/async/internal/onlyOnce.js:12:16
+    at WriteStream.<anonymous> (/home/production-app/production-orders-app/node_modules/pm2/lib/Utility.js:186:13)
+ReferenceError: requireRole is not defined
+    at Object.<anonymous> (/home/production-app/production-orders-app/src/server-production.js:377:31)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Module._load (node:internal/modules/cjs/loader:1096:12)
+    at /home/production-app/production-orders-app/node_modules/pm2/lib/ProcessContainer.js:304:25
+    at wrapper (/home/production-app/production-orders-app/node_modules/async/internal/once.js:12:16)
+    at next (/home/production-app/production-orders-app/node_modules/async/waterfall.js:96:20)
+    at /home/production-app/production-orders-app/node_modules/async/internal/onlyOnce.js:12:16
+    at WriteStream.<anonymous> (/home/production-app/production-orders-app/node_modules/pm2/lib/Utility.js:186:13)
+ReferenceError: requireRole is not defined
+    at Object.<anonymous> (/home/production-app/production-orders-app/src/server-production.js:377:31)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Module._load (node:internal/modules/cjs/loader:1096:12)
+    at /home/production-app/production-orders-app/node_modules/pm2/lib/ProcessContainer.js:304:25
+    at wrapper (/home/production-app/production-orders-app/node_modules/async/internal/once.js:12:16)
+    at next (/home/production-app/production-orders-app/node_modules/async/waterfall.js:96:20)
+    at /home/production-app/production-orders-app/node_modules/async/internal/onlyOnce.js:12:16
+    at WriteStream.<anonymous> (/home/production-app/production-orders-app/node_modules/pm2/lib/Utility.js:186:13)
+ReferenceError: requireRole is not defined
+    at Object.<anonymous> (/home/production-app/production-orders-app/src/server-production.js:377:31)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Module._load (node:internal/modules/cjs/loader:1096:12)
+    at /home/production-app/production-orders-app/node_modules/pm2/lib/ProcessContainer.js:304:25
+    at wrapper (/home/production-app/production-orders-app/node_modules/async/internal/once.js:12:16)
+    at next (/home/production-app/production-orders-app/node_modules/async/waterfall.js:96:20)
+    at /home/production-app/production-orders-app/node_modules/async/internal/onlyOnce.js:12:16
+    at WriteStream.<anonymous> (/home/production-app/production-orders-app/node_modules/pm2/lib/Utility.js:186:13)
+ReferenceError: requireRole is not defined
+    at Object.<anonymous> (/home/production-app/production-orders-app/src/server-production.js:377:31)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Module._load (node:internal/modules/cjs/loader:1096:12)
+    at /home/production-app/production-orders-app/node_modules/pm2/lib/ProcessContainer.js:304:25
+    at wrapper (/home/production-app/production-orders-app/node_modules/async/internal/once.js:12:16)
+    at next (/home/production-app/production-orders-app/node_modules/async/waterfall.js:96:20)
+    at /home/production-app/production-orders-app/node_modules/async/internal/onlyOnce.js:12:16
+    at WriteStream.<anonymous> (/home/production-app/production-orders-app/node_modules/pm2/lib/Utility.js:186:13)
+ReferenceError: requireRole is not defined
+    at Object.<anonymous> (/home/production-app/production-orders-app/src/server-production.js:377:31)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Module._load (node:internal/modules/cjs/loader:1096:12)
+    at /home/production-app/production-orders-app/node_modules/pm2/lib/ProcessContainer.js:304:25
+    at wrapper (/home/production-app/production-orders-app/node_modules/async/internal/once.js:12:16)
+    at next (/home/production-app/production-orders-app/node_modules/async/waterfall.js:96:20)
+    at /home/production-app/production-orders-app/node_modules/async/internal/onlyOnce.js:12:16
+    at WriteStream.<anonymous> (/home/production-app/production-orders-app/node_modules/pm2/lib/Utility.js:186:13)
+ReferenceError: requireRole is not defined
+    at Object.<anonymous> (/home/production-app/production-orders-app/src/server-production.js:377:31)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Module._load (node:internal/modules/cjs/loader:1096:12)
+    at /home/production-app/production-orders-app/node_modules/pm2/lib/ProcessContainer.js:304:25
+    at wrapper (/home/production-app/production-orders-app/node_modules/async/internal/once.js:12:16)
+    at next (/home/production-app/production-orders-app/node_modules/async/waterfall.js:96:20)
+    at /home/production-app/production-orders-app/node_modules/async/internal/onlyOnce.js:12:16
+    at WriteStream.<anonymous> (/home/production-app/production-orders-app/node_modules/pm2/lib/Utility.js:186:13)
+2025-10-10T20:52:09: 🌐 WebSocket server initialized
+2025-10-10T20:52:09: 🧹 WebSocket cleanup scheduler started
+2025-10-10T20:52:09: 🧪 Testing refactored components...
+2025-10-10T20:52:09: 🚀 Production refactored server running on port 3000
+2025-10-10T20:52:09: 📊 Health check: http://localhost:3000/api/health
+2025-10-10T20:52:09: 🔐 Auth test: http://localhost:3000/api/auth/login
+2025-10-10T20:52:09: ⚙️ System routes: http://localhost:3000/api/system/health
+2025-10-10T20:52:09: 🌐 WebSocket server initialized and ready
+2025-10-10T20:52:09: ✅ New PostgreSQL client connected
+2025-10-10T20:52:09: 🔗 Client acquired from pool
+2025-10-10T20:52:09: 🔓 Client released back to pool
+2025-10-10T20:52:09: ✅ Database connection: OK
+2025-10-10T20:52:10: ✅ Authentication middleware: OK
+2025-10-10T20:52:10: ✅ Response utilities: OK
+2025-10-10T20:52:10: ✅ Database utilities: OK
+2025-10-10T20:52:10: 🎉 All components tested successfully!
+2025-10-10T20:52:10: ✅ All components tested successfully
+2025-10-10T20:52:17: 🌐 WebSocket server initialized
+2025-10-10T20:52:17: 🧹 WebSocket cleanup scheduler started
+2025-10-10T20:52:17: 🧪 Testing refactored components...
+2025-10-10T20:52:17: 🚀 Production refactored server running on port 3000
+2025-10-10T20:52:17: 📊 Health check: http://localhost:3000/api/health
+2025-10-10T20:52:17: 🔐 Auth test: http://localhost:3000/api/auth/login
+2025-10-10T20:52:17: ⚙️ System routes: http://localhost:3000/api/system/health
+2025-10-10T20:52:17: 🌐 WebSocket server initialized and ready
+2025-10-10T20:52:17: ✅ New PostgreSQL client connected
+2025-10-10T20:52:17: 🔗 Client acquired from pool
+2025-10-10T20:52:17: 🔓 Client released back to pool
+2025-10-10T20:52:17: ✅ Database connection: OK
+2025-10-10T20:52:17: ✅ Authentication middleware: OK
+2025-10-10T20:52:17: ✅ Response utilities: OK
+2025-10-10T20:52:17: ✅ Database utilities: OK
+2025-10-10T20:52:17: 🎉 All components tested successfully!
+2025-10-10T20:52:17: ✅ All components tested successfully
+2025-10-10T20:52:29: ValidationError: The 'X-Forwarded-For' header is set but the Express 'trust proxy' setting is false (default). This could indicate a misconfiguration which would prevent express-rate-limit from accurately identifying users. See https://express-rate-limit.github.io/ERR_ERL_UNEXPECTED_X_FORWARDED_FOR/ for more information.
+    at Object.xForwardedForHeader (/home/production-app/production-orders-app/node_modules/express-rate-limit/dist/index.cjs:185:13)
+    at wrappedValidations.<computed> [as xForwardedForHeader] (/home/production-app/production-orders-app/node_modules/express-rate-limit/dist/index.cjs:397:22)
+    at Object.keyGenerator (/home/production-app/production-orders-app/node_modules/express-rate-limit/dist/index.cjs:658:20)
+    at /home/production-app/production-orders-app/node_modules/express-rate-limit/dist/index.cjs:710:32
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async /home/production-app/production-orders-app/node_modules/express-rate-limit/dist/index.cjs:691:5 {
+  code: 'ERR_ERL_UNEXPECTED_X_FORWARDED_FOR',
+  help: 'https://express-rate-limit.github.io/ERR_ERL_UNEXPECTED_X_FORWARDED_FOR/'
+}
+2025-10-10T20:52:29: 🔗 Client acquired from pool
+2025-10-10T20:52:29: 🔓 Client released back to pool
+2025-10-10T20:52:29: 🔗 Client acquired from pool
+2025-10-10T20:52:29: 🔓 Client released back to pool
+2025-10-10T20:52:29: ✅ Auth success: supervisor from ::1 - Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36 Edg/141.0.0.0
+2025-10-10T20:52:30: 🔗 Client acquired from pool
+2025-10-10T20:52:30: 🔓 Client released back to pool
+2025-10-10T20:52:30: 🔗 Client acquired from pool
+2025-10-10T20:52:30: 🔓 Client released back to pool
+2025-10-10T20:52:30: 🔗 Client acquired from pool
+2025-10-10T20:52:30: 🔓 Client released back to pool
+2025-10-10T20:52:30: ✅ New PostgreSQL client connected
+2025-10-10T20:52:30: 🔗 Client acquired from pool
+2025-10-10T20:52:30: 🔓 Client released back to pool
+2025-10-10T20:52:30: ✅ New PostgreSQL client connected
+2025-10-10T20:52:30: 🔗 Client acquired from pool
+2025-10-10T20:52:30: 🔓 Client released back to pool
+2025-10-10T20:52:30: 🔗 Client acquired from pool
+2025-10-10T20:52:30: 🔓 Client released back to pool
+2025-10-10T20:52:30: New WebSocket connection attempt
+2025-10-10T20:52:30: ✅ WebSocket authenticated: supervisor (supervisor)
+2025-10-10T20:52:30: 🔗 Client acquired from pool
+2025-10-10T20:52:30: 🔓 Client released back to pool
+2025-10-10T20:52:30: 🔗 Client acquired from pool
+2025-10-10T20:52:30: 🔓 Client released back to pool
+2025-10-10T20:52:30: 📺 supervisor subscribed to: [
+  'general',
+  'notifications',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-10-10T20:52:30: 🏠 supervisor joined room: production
+2025-10-10T20:52:30: 📺 supervisor subscribed to: [
+  'general',
+  'notifications',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-10-10T20:52:30: 🏠 supervisor joined room: production
+2025-10-10T20:52:48: 🔗 Client acquired from pool
+2025-10-10T20:52:48: 🔓 Client released back to pool
+2025-10-10T20:52:48: 🔗 Client acquired from pool
+2025-10-10T20:52:48: 🔓 Client released back to pool
+2025-10-10T20:52:48: ✅ Auth success: supervisor from ::1 - Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36 Edg/141.0.0.0
+2025-10-10T20:52:48: New WebSocket connection attempt
+2025-10-10T20:52:48: ✅ WebSocket authenticated: supervisor (supervisor)
+2025-10-10T20:53:00: 🔗 Client acquired from pool
+2025-10-10T20:53:00: 🔓 Client released back to pool
+2025-10-10T20:53:00: 🔗 Client acquired from pool
+2025-10-10T20:53:00: 🔓 Client released back to pool
+2025-10-10T20:53:00: 🔗 Client acquired from pool
+2025-10-10T20:53:00: 🔓 Client released back to pool
+2025-10-10T20:53:00: ✅ New PostgreSQL client connected
+2025-10-10T20:53:00: 🔗 Client acquired from pool
+2025-10-10T20:53:00: 🔓 Client released back to pool
+2025-10-10T20:53:06: 🔌 WebSocket disconnected: supervisor
+2025-10-10T20:53:06: 🔗 Client acquired from pool
+2025-10-10T20:53:06: 🔓 Client released back to pool
+2025-10-10T20:53:06: 🔗 Client acquired from pool
+2025-10-10T20:53:06: 🔓 Client released back to pool
+2025-10-10T20:53:07: 🔗 Client acquired from pool
+2025-10-10T20:53:07: 🔓 Client released back to pool
+2025-10-10T20:53:07: New WebSocket connection attempt
+2025-10-10T20:53:07: ✅ WebSocket authenticated: supervisor (supervisor)
+2025-10-10T20:53:30: 🔗 Client acquired from pool
+2025-10-10T20:53:30: 🔓 Client released back to pool
+2025-10-10T20:53:30: 🔗 Client acquired from pool
+2025-10-10T20:53:30: 🔓 Client released back to pool
+2025-10-10T20:53:30: 🔗 Client acquired from pool
+2025-10-10T20:53:30: 🔗 Client acquired from pool
+2025-10-10T20:53:30: 🔓 Client released back to pool
+2025-10-10T20:53:30: 🔓 Client released back to pool
+2025-10-10T20:54:00: ✅ New PostgreSQL client connected
+2025-10-10T20:54:00: 🔗 Client acquired from pool
+2025-10-10T20:54:00: 🔓 Client released back to pool
+2025-10-10T20:54:00: ✅ New PostgreSQL client connected
+2025-10-10T20:54:00: 🔗 Client acquired from pool
+2025-10-10T20:54:00: ✅ New PostgreSQL client connected
+2025-10-10T20:54:00: 🔗 Client acquired from pool
+2025-10-10T20:54:00: 🔓 Client released back to pool
+2025-10-10T20:54:00: ✅ New PostgreSQL client connected
+2025-10-10T20:54:00: 🔗 Client acquired from pool
+2025-10-10T20:54:00: 🔓 Client released back to pool
+2025-10-10T20:54:00: 🔓 Client released back to pool
+2025-10-10T20:54:30: 🔗 Client acquired from pool
+2025-10-10T20:54:30: 🔓 Client released back to pool
+2025-10-10T20:54:30: 🔗 Client acquired from pool
+2025-10-10T20:54:30: 🔓 Client released back to pool
+2025-10-10T20:54:30: ✅ New PostgreSQL client connected
+2025-10-10T20:54:30: 🔗 Client acquired from pool
+2025-10-10T20:54:30: ✅ New PostgreSQL client connected
+2025-10-10T20:54:30: 🔗 Client acquired from pool
+2025-10-10T20:54:30: 🔓 Client released back to pool
+2025-10-10T20:54:30: 🔓 Client released back to pool
+2025-10-10T20:55:00: 🔗 Client acquired from pool
+2025-10-10T20:55:00: 🔓 Client released back to pool
+2025-10-10T20:55:00: 🔗 Client acquired from pool
+2025-10-10T20:55:00: 🔗 Client acquired from pool
+2025-10-10T20:55:00: 🔓 Client released back to pool
+2025-10-10T20:55:00: 🔗 Client acquired from pool
+2025-10-10T20:55:00: 🔓 Client released back to pool
+2025-10-10T20:55:00: 🔓 Client released back to pool
+2025-10-10T20:55:26: 🔌 WebSocket disconnected: supervisor
+2025-10-10T20:55:27: 🔗 Client acquired from pool
+2025-10-10T20:55:27: 🔓 Client released back to pool
+2025-10-10T20:55:27: 🔗 Client acquired from pool
+2025-10-10T20:55:27: 🔓 Client released back to pool
+2025-10-10T20:55:27: 🔗 Client acquired from pool
+2025-10-10T20:55:27: 🔓 Client released back to pool
+2025-10-10T20:55:27: New WebSocket connection attempt
+2025-10-10T20:55:27: ✅ WebSocket authenticated: supervisor (supervisor)
+2025-10-10T20:55:30: 🔗 Client acquired from pool
+2025-10-10T20:55:30: 🔓 Client released back to pool
+2025-10-10T20:55:30: 🔗 Client acquired from pool
+2025-10-10T20:55:30: 🔓 Client released back to pool
+2025-10-10T20:55:30: ✅ New PostgreSQL client connected
+2025-10-10T20:55:30: 🔗 Client acquired from pool
+2025-10-10T20:55:30: ✅ New PostgreSQL client connected
+2025-10-10T20:55:30: 🔗 Client acquired from pool
+2025-10-10T20:55:30: 🔓 Client released back to pool
+2025-10-10T20:55:30: 🔓 Client released back to pool
+2025-10-10T20:55:32: 🔌 WebSocket disconnected: supervisor
+2025-10-10T20:55:32: 🔗 Client acquired from pool
+2025-10-10T20:55:32: 🔓 Client released back to pool
+2025-10-10T20:55:32: 🔗 Client acquired from pool
+2025-10-10T20:55:32: 🔓 Client released back to pool
+2025-10-10T20:55:32: 🔗 Client acquired from pool
+2025-10-10T20:55:32: 🔓 Client released back to pool
+2025-10-10T20:55:33: New WebSocket connection attempt
+2025-10-10T20:55:33: ✅ WebSocket authenticated: supervisor (supervisor)
+2025-10-10T20:55:35: 🔌 WebSocket disconnected: supervisor
+2025-10-10T20:55:36: 🔗 Client acquired from pool
+2025-10-10T20:55:36: 🔗 Client acquired from pool
+2025-10-10T20:55:36: 🔓 Client released back to pool
+2025-10-10T20:55:36: 🔓 Client released back to pool
+2025-10-10T20:55:36: 🔗 Client acquired from pool
+2025-10-10T20:55:36: 🔓 Client released back to pool
+2025-10-10T20:55:36: New WebSocket connection attempt
+2025-10-10T20:55:36: ✅ WebSocket authenticated: supervisor (supervisor)
+2025-10-10T20:56:58: ✅ New PostgreSQL client connected
+2025-10-10T20:56:58: 🔗 Client acquired from pool
+2025-10-10T20:56:58: ✅ New PostgreSQL client connected
+2025-10-10T20:56:58: 🔗 Client acquired from pool
+2025-10-10T20:56:58: 🔓 Client released back to pool
+2025-10-10T20:56:58: 🔓 Client released back to pool
+2025-10-10T20:56:58: ✅ New PostgreSQL client connected
+2025-10-10T20:56:58: 🔗 Client acquired from pool
+2025-10-10T20:56:58: 🔓 Client released back to pool
+2025-10-10T20:56:58: ✅ New PostgreSQL client connected
+2025-10-10T20:56:58: 🔗 Client acquired from pool
+2025-10-10T20:56:58: 🔓 Client released back to pool
+2025-10-10T20:57:58: ✅ New PostgreSQL client connected
+2025-10-10T20:57:58: 🔗 Client acquired from pool
+2025-10-10T20:57:58: ✅ New PostgreSQL client connected
+2025-10-10T20:57:58: 🔗 Client acquired from pool
+2025-10-10T20:57:58: ✅ New PostgreSQL client connected
+2025-10-10T20:57:58: 🔗 Client acquired from pool
+2025-10-10T20:57:58: 🔓 Client released back to pool
+2025-10-10T20:57:58: ✅ New PostgreSQL client connected
+2025-10-10T20:57:58: 🔗 Client acquired from pool
+2025-10-10T20:57:58: 🔓 Client released back to pool
+2025-10-10T20:57:58: 🔓 Client released back to pool
+2025-10-10T20:57:58: 🔓 Client released back to pool
+2025-10-10T20:58:01: 🔌 WebSocket disconnected: supervisor
+2025-10-10T20:58:02: 🔗 Client acquired from pool
+2025-10-10T20:58:02: 🔗 Client acquired from pool
+2025-10-10T20:58:02: 🔓 Client released back to pool
+2025-10-10T20:58:02: 🔓 Client released back to pool
+2025-10-10T20:58:02: 🔗 Client acquired from pool
+2025-10-10T20:58:02: 🔓 Client released back to pool
+2025-10-10T20:58:02: New WebSocket connection attempt
+2025-10-10T20:58:02: ✅ WebSocket authenticated: supervisor (supervisor)
+2025-10-10T20:58:40: 🔌 WebSocket disconnected: supervisor
+2025-10-10T20:58:40: ✅ New PostgreSQL client connected
+2025-10-10T20:58:40: 🔗 Client acquired from pool
+2025-10-10T20:58:40: ✅ New PostgreSQL client connected
+2025-10-10T20:58:40: 🔗 Client acquired from pool
+2025-10-10T20:58:40: 🔓 Client released back to pool
+2025-10-10T20:58:40: 🔓 Client released back to pool
+2025-10-10T20:58:41: 🔗 Client acquired from pool
+2025-10-10T20:58:41: 🔓 Client released back to pool
+2025-10-10T20:58:41: New WebSocket connection attempt
+2025-10-10T20:58:41: ✅ WebSocket authenticated: supervisor (supervisor)
+2025-10-10T20:58:54: 🔗 Client acquired from pool
+2025-10-10T20:58:54: 🔓 Client released back to pool
+2025-10-10T20:58:54: 🔗 Client acquired from pool
+2025-10-10T20:58:54: 🔗 Client acquired from pool
+2025-10-10T20:58:54: 🔓 Client released back to pool
+2025-10-10T20:58:54: 🔓 Client released back to pool
+2025-10-10T20:58:54: 🔗 Client acquired from pool
+2025-10-10T20:58:54: 🔓 Client released back to pool
+2025-10-10T20:58:56: 🔌 WebSocket disconnected: supervisor
+2025-10-10T20:58:56: 🔗 Client acquired from pool
+2025-10-10T20:58:56: 🔗 Client acquired from pool
+2025-10-10T20:58:56: 🔓 Client released back to pool
+2025-10-10T20:58:56: 🔓 Client released back to pool
+2025-10-10T20:58:56: 🔗 Client acquired from pool
+2025-10-10T20:58:56: 🔓 Client released back to pool
+2025-10-10T20:58:56: New WebSocket connection attempt
+2025-10-10T20:58:56: ✅ WebSocket authenticated: supervisor (supervisor)
+2025-10-10T20:59:07: 🔗 Client acquired from pool
+2025-10-10T20:59:07: 🔓 Client released back to pool
+2025-10-10T20:59:07: 🔗 Client acquired from pool
+2025-10-10T20:59:07: 🔓 Client released back to pool
+2025-10-10T20:59:07: ✅ Auth success: supervisor from ::ffff:127.0.0.1 - Mozilla/5.0 (Linux; Android 11; SM-T970) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.6422.35 Safari/537.36
+2025-10-10T20:59:07: New WebSocket connection attempt
+2025-10-10T20:59:07: ✅ WebSocket authenticated: supervisor (supervisor)

@@ -209,6 +209,7 @@ app.use('/api/maturation', maturationRoutes);
 
 // Waste and Downtime Management Endpoints
 const { getDbClient } = require('./config/database');
+const { authenticateToken, requireRole } = require('./middleware/auth');
 
 // Get downtime categories
 app.get('/api/downtime-categories', authenticateToken, async (req, res) => {
