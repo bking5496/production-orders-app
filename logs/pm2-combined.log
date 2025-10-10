@@ -48142,3 +48142,158 @@ ReferenceError: requireRole is not defined
 2025-10-10T22:16:12: 🏠 supervisor joined room: production
 2025-10-10T22:16:12: 🔗 Client acquired from pool
 2025-10-10T22:16:12: 🔓 Client released back to pool
+2025-10-10T22:23:53: ValidationError: The 'X-Forwarded-For' header is set but the Express 'trust proxy' setting is false (default). This could indicate a misconfiguration which would prevent express-rate-limit from accurately identifying users. See https://express-rate-limit.github.io/ERR_ERL_UNEXPECTED_X_FORWARDED_FOR/ for more information.
+    at Object.xForwardedForHeader (/home/production-app/production-orders-app/node_modules/express-rate-limit/dist/index.cjs:185:13)
+    at wrappedValidations.<computed> [as xForwardedForHeader] (/home/production-app/production-orders-app/node_modules/express-rate-limit/dist/index.cjs:397:22)
+    at Object.keyGenerator (/home/production-app/production-orders-app/node_modules/express-rate-limit/dist/index.cjs:658:20)
+    at /home/production-app/production-orders-app/node_modules/express-rate-limit/dist/index.cjs:710:32
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async /home/production-app/production-orders-app/node_modules/express-rate-limit/dist/index.cjs:691:5 {
+  code: 'ERR_ERL_UNEXPECTED_X_FORWARDED_FOR',
+  help: 'https://express-rate-limit.github.io/ERR_ERL_UNEXPECTED_X_FORWARDED_FOR/'
+}
+2025-10-10T22:23:53: ✅ New PostgreSQL client connected
+2025-10-10T22:23:53: 🔗 Client acquired from pool
+2025-10-10T22:23:53: 🔓 Client released back to pool
+2025-10-10T22:23:53: 🔗 Client acquired from pool
+2025-10-10T22:23:53: 🔓 Client released back to pool
+2025-10-10T22:23:53: ✅ Auth success: supervisor from ::1 - Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/138.0.7204.23 Safari/537.36
+2025-10-10T22:23:53: 🔗 Client acquired from pool
+2025-10-10T22:23:53: 🔓 Client released back to pool
+2025-10-10T22:23:53: 🔗 Client acquired from pool
+2025-10-10T22:23:53: 🔓 Client released back to pool
+2025-10-10T22:23:53: 🔗 Client acquired from pool
+2025-10-10T22:23:53: 🔓 Client released back to pool
+2025-10-10T22:23:53: New WebSocket connection attempt
+2025-10-10T22:23:53: ✅ WebSocket authenticated: supervisor (supervisor)
+2025-10-10T22:23:53: 🔗 Client acquired from pool
+2025-10-10T22:23:53: 🔓 Client released back to pool
+2025-10-10T22:23:53: ✅ New PostgreSQL client connected
+2025-10-10T22:23:53: 🔗 Client acquired from pool
+2025-10-10T22:23:53: ✅ New PostgreSQL client connected
+2025-10-10T22:23:53: 🔗 Client acquired from pool
+2025-10-10T22:23:53: 🔓 Client released back to pool
+2025-10-10T22:23:53: 🔓 Client released back to pool
+2025-10-10T22:23:53: 🔗 Client acquired from pool
+2025-10-10T22:23:53: 🔓 Client released back to pool
+2025-10-10T22:23:53: 🔗 Client acquired from pool
+2025-10-10T22:23:53: 🔓 Client released back to pool
+2025-10-10T22:23:54: 📺 supervisor subscribed to: [
+  'general',
+  'notifications',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-10-10T22:23:54: 🏠 supervisor joined room: production
+2025-10-10T22:23:54: 📺 supervisor subscribed to: [
+  'general',
+  'notifications',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-10-10T22:23:54: 🏠 supervisor joined room: production
+2025-10-10T22:24:23: 🔗 Client acquired from pool
+2025-10-10T22:24:23: 🔓 Client released back to pool
+2025-10-10T22:24:23: 🔗 Client acquired from pool
+2025-10-10T22:24:23: 🔗 Client acquired from pool
+2025-10-10T22:24:23: 🔓 Client released back to pool
+2025-10-10T22:24:23: 🔓 Client released back to pool
+2025-10-10T22:24:23: 🔗 Client acquired from pool
+2025-10-10T22:24:23: 🔓 Client released back to pool
+2025-10-10T22:24:53: 🔗 Client acquired from pool
+2025-10-10T22:24:53: 🔓 Client released back to pool
+2025-10-10T22:24:53: 🔗 Client acquired from pool
+2025-10-10T22:24:53: 🔗 Client acquired from pool
+2025-10-10T22:24:53: 🔓 Client released back to pool
+2025-10-10T22:24:53: 🔗 Client acquired from pool
+2025-10-10T22:24:53: 🔓 Client released back to pool
+2025-10-10T22:24:53: 🔓 Client released back to pool
+2025-10-10T22:25:23: 🔗 Client acquired from pool
+2025-10-10T22:25:23: 🔗 Client acquired from pool
+2025-10-10T22:25:23: 🔓 Client released back to pool
+2025-10-10T22:25:23: 🔗 Client acquired from pool
+2025-10-10T22:25:23: 🔓 Client released back to pool
+2025-10-10T22:25:23: 🔓 Client released back to pool
+2025-10-10T22:25:23: ✅ New PostgreSQL client connected
+2025-10-10T22:25:23: 🔗 Client acquired from pool
+2025-10-10T22:25:23: 🔓 Client released back to pool
+2025-10-10T22:25:53: 🔗 Client acquired from pool
+2025-10-10T22:25:53: 🔓 Client released back to pool
+2025-10-10T22:25:53: 🔗 Client acquired from pool
+2025-10-10T22:25:53: 🔗 Client acquired from pool
+2025-10-10T22:25:53: 🔓 Client released back to pool
+2025-10-10T22:25:53: 🔓 Client released back to pool
+2025-10-10T22:25:53: 🔗 Client acquired from pool
+2025-10-10T22:25:53: 🔓 Client released back to pool
+2025-10-10T22:26:23: 🔗 Client acquired from pool
+2025-10-10T22:26:23: 🔗 Client acquired from pool
+2025-10-10T22:26:23: 🔓 Client released back to pool
+2025-10-10T22:26:23: 🔓 Client released back to pool
+2025-10-10T22:26:23: 🔗 Client acquired from pool
+2025-10-10T22:26:23: 🔓 Client released back to pool
+2025-10-10T22:26:23: ✅ New PostgreSQL client connected
+2025-10-10T22:26:23: 🔗 Client acquired from pool
+2025-10-10T22:26:23: 🔓 Client released back to pool
+2025-10-10T22:26:53: 🔗 Client acquired from pool
+2025-10-10T22:26:53: 🔗 Client acquired from pool
+2025-10-10T22:26:53: 🔓 Client released back to pool
+2025-10-10T22:26:53: 🔗 Client acquired from pool
+2025-10-10T22:26:53: 🔓 Client released back to pool
+2025-10-10T22:26:53: 🔓 Client released back to pool
+2025-10-10T22:26:53: 🔗 Client acquired from pool
+2025-10-10T22:26:53: 🔓 Client released back to pool
+2025-10-10T22:27:23: 🔗 Client acquired from pool
+2025-10-10T22:27:23: 🔗 Client acquired from pool
+2025-10-10T22:27:23: 🔓 Client released back to pool
+2025-10-10T22:27:23: 🔗 Client acquired from pool
+2025-10-10T22:27:23: 🔓 Client released back to pool
+2025-10-10T22:27:23: 🔓 Client released back to pool
+2025-10-10T22:27:23: 🔗 Client acquired from pool
+2025-10-10T22:27:23: 🔓 Client released back to pool
+2025-10-10T22:27:53: 🔗 Client acquired from pool
+2025-10-10T22:27:53: 🔓 Client released back to pool
+2025-10-10T22:27:53: 🔗 Client acquired from pool
+2025-10-10T22:27:53: 🔗 Client acquired from pool
+2025-10-10T22:27:53: 🔓 Client released back to pool
+2025-10-10T22:27:53: 🔗 Client acquired from pool
+2025-10-10T22:27:53: 🔓 Client released back to pool
+2025-10-10T22:27:53: 🔓 Client released back to pool
+2025-10-10T22:28:07: 🔌 WebSocket disconnected: supervisor
+2025-10-10T22:28:08: 🔗 Client acquired from pool
+2025-10-10T22:28:08: 🔓 Client released back to pool
+2025-10-10T22:28:08: 🔗 Client acquired from pool
+2025-10-10T22:28:08: 🔓 Client released back to pool
+2025-10-10T22:28:08: 🔗 Client acquired from pool
+2025-10-10T22:28:08: 🔓 Client released back to pool
+2025-10-10T22:28:08: 🔗 Client acquired from pool
+2025-10-10T22:28:08: 🔓 Client released back to pool
+2025-10-10T22:28:08: New WebSocket connection attempt
+2025-10-10T22:28:08: ✅ WebSocket authenticated: supervisor (supervisor)
+2025-10-10T22:28:08: 🔗 Client acquired from pool
+2025-10-10T22:28:08: 🔓 Client released back to pool
+2025-10-10T22:28:08: 🔗 Client acquired from pool
+2025-10-10T22:28:08: 🔓 Client released back to pool
+2025-10-10T22:28:08: 🔗 Client acquired from pool
+2025-10-10T22:28:08: 🔓 Client released back to pool
+2025-10-10T22:28:08: 📺 supervisor subscribed to: [
+  'general',
+  'notifications',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-10-10T22:28:08: 🏠 supervisor joined room: production
+2025-10-10T22:28:08: 📺 supervisor subscribed to: [
+  'general',
+  'notifications',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-10-10T22:28:08: 🏠 supervisor joined room: production
