@@ -45198,3 +45198,57 @@
 2025-10-10T16:46:11: 🔓 Client released back to pool
 2025-10-10T16:46:11: 🔓 Client released back to pool
 2025-10-10T16:51:11: 🔌 WebSocket disconnected: admin
+2025-10-10T17:12:36: ✅ New PostgreSQL client connected
+2025-10-10T17:12:36: 🔗 Client acquired from pool
+2025-10-10T17:12:36: ✅ New PostgreSQL client connected
+2025-10-10T17:12:36: 🔗 Client acquired from pool
+2025-10-10T17:12:36: ✅ New PostgreSQL client connected
+2025-10-10T17:12:36: 🔗 Client acquired from pool
+2025-10-10T17:12:36: ✅ New PostgreSQL client connected
+2025-10-10T17:12:36: 🔗 Client acquired from pool
+2025-10-10T17:12:36: 🔓 Client released back to pool
+2025-10-10T17:12:36: 🔓 Client released back to pool
+2025-10-10T17:12:36: ✅ New PostgreSQL client connected
+2025-10-10T17:12:36: 🔗 Client acquired from pool
+2025-10-10T17:12:36: 🔓 Client released back to pool
+2025-10-10T17:12:36: 🔓 Client released back to pool
+2025-10-10T17:12:36: 🔓 Client released back to pool
+2025-10-10T17:12:36: 🔗 Client acquired from pool
+2025-10-10T17:12:36: 🔓 Client released back to pool
+2025-10-10T17:12:36: New WebSocket connection attempt
+2025-10-10T17:12:36: ✅ WebSocket authenticated: admin (admin)
+2025-10-10T17:12:36: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-10-10T17:12:36: 🏠 admin joined room: production
+2025-10-10T17:12:36: 🔗 Client acquired from pool
+2025-10-10T17:12:36: 🔓 Client released back to pool
+2025-10-10T17:12:36: 🔗 Client acquired from pool
+2025-10-10T17:12:36: 🔓 Client released back to pool
+2025-10-10T17:12:36: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-10-10T17:12:36: 🏠 admin joined room: production
+2025-10-10T17:12:36: 📺 admin subscribed to: [
+  'general',
+  'notifications',
+  'admin',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-10-10T17:12:36: 🏠 admin joined room: production
+2025-10-10T17:12:38: 🔌 WebSocket disconnected: admin
