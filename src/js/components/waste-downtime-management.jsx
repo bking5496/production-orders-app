@@ -430,9 +430,9 @@ const WasteDowntimeManagement = () => {
   const [users, setUsers] = useState([]);
   const [categories, setCategories] = useState([]);
 
-  // Subscribe to real-time updates
-  useOrderUpdates((newOrders) => setOrders(newOrders));
-  useMachineUpdates((newMachines) => setMachines(newMachines));
+  // Subscribe to real-time updates - TEMPORARILY DISABLED
+  // useOrderUpdates((newOrders) => setOrders(newOrders));
+  // useMachineUpdates((newMachines) => setMachines(newMachines));
 
   // Load initial data
   const loadData = useCallback(async () => {
