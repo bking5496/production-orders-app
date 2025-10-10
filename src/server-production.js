@@ -209,7 +209,6 @@ app.use('/api/maturation', maturationRoutes);
 
 // Waste and Downtime Management Endpoints
 const { getDbClient } = require('./config/database');
-const { authenticateToken } = require('./middleware/auth');
 
 // Get downtime categories
 app.get('/api/downtime-categories', authenticateToken, async (req, res) => {
@@ -359,7 +358,6 @@ app.put('/api/settings/general', (req, res, next) => {
 });
 // Environments endpoints - direct forwarding to system service
 const systemService = require('./services/system.service');
-const { authenticateToken, requireRole } = require('./middleware/auth');
 
 app.get('/api/environments', authenticateToken, async (req, res) => {
   try {
