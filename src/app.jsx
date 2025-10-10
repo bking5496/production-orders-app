@@ -45,6 +45,7 @@ import { LaborManagementSystem } from './js/components/labor-planner.jsx';
 import AttendanceRegister from './js/components/attendance-register.jsx';
 import MaturationRoom from './js/components/maturation-room.jsx';
 import DigitalTwinFactory from './js/components/digital-twin-factory.jsx';
+import IPadSupervisorView from './js/components/ipad-supervisor-view.jsx';
 
 // Define the routes for the application
 const routes = [
@@ -61,6 +62,7 @@ const routes = [
     { path: '/admin', component: AdminPanel, title: 'Admin Panel & User Management' },
     { path: '/attendance-register', component: AttendanceRegister, title: 'Attendance Register' },
     { path: '/maturation-room', component: MaturationRoom, title: 'Maturation Room' },
+    { path: '/supervisor-ipad', component: IPadSupervisorView, title: 'Supervisor iPad View' },
 ];
 
 // Initialize the router
@@ -73,6 +75,10 @@ function App() {
   
   // Session management
   const { sessionStatus, handleSessionExpiring, handleSessionExpired } = useSessionManager();
+  
+  // iPad detection
+  const isIPad = /iPad|iPad Simulator/i.test(navigator.userAgent) || 
+                (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
   
   // WebSocket auto-connection (only when authenticated)
   useAutoConnect();
@@ -107,9 +113,34 @@ function App() {
     );
   }
 
+  // Auto-redirect supervisor users on iPad to special view
+  useEffect(() => {
+    if (isAuthenticated && user && isIPad && user.role === 'supervisor' && currentPath !== '/supervisor-ipad') {
+      Router.navigate('/supervisor-ipad');
+    }
+  }, [isAuthenticated, user, isIPad, currentPath]);
+
   const route = routes.find(r => r.path === currentPath);
   const ComponentToRender = route ? route.component : Dashboard;
   const pageTitle = route ? route.name || route.title : 'Dashboard';
+
+  // For iPad supervisor view, render without layout
+  if (currentPath === '/supervisor-ipad') {
+    return (
+      <ManufacturingErrorBoundary>
+        <ComponentToRender />
+        <RealtimeNotifications />
+        {isAuthenticated && (
+          <SessionManager 
+            onSessionExpiring={handleSessionExpiring}
+            onSessionExpired={handleSessionExpired}
+          />
+        )}
+        <WebSocketDebug />
+        <GlobalWebSocketNotifications />
+      </ManufacturingErrorBoundary>
+    );
+  }
 
   return (
     <ManufacturingErrorBoundary>
