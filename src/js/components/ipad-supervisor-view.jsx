@@ -5,7 +5,7 @@ import Time from '../core/time';
 import { Icon } from './layout-components.jsx';
 import { useOrderUpdates, useMachineUpdates, useWebSocketEvent, useAutoConnect, useNotifications } from '../core/websocket-hooks.js';
 import { WebSocketStatusCompact, WebSocketIndicator } from './websocket-status.jsx';
-import WasteDowntimeManagement from './waste-downtime-management.jsx';
+import WasteDowntimeDashboard from './waste-downtime-dashboard.jsx';
 
 // iPad-specific card component with larger touch targets
 const SupervisorCard = ({ title, value, change, icon: IconComponent, color = "blue", children, className = "" }) => {
@@ -193,8 +193,8 @@ const IPadSupervisorView = () => {
   // Auto-connect WebSocket
   const isConnected = useAutoConnect();
 
-  // Simply render the waste and downtime management component
-  return <WasteDowntimeManagement />;
+  // Simply render the waste and downtime dashboard component
+  return <WasteDowntimeDashboard />;
 };
 
 export default IPadSupervisorView;
