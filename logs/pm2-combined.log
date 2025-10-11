@@ -51532,3 +51532,73 @@ ReferenceError: requireRole is not defined
   'analytics'
 ]
 2025-10-11T10:51:59: 🏠 supervisor joined room: production
+2025-10-11T11:22:45: 🔌 WebSocket disconnected: supervisor
+2025-10-11T11:22:45: 🔌 WebSocket disconnected: supervisor
+2025-10-11T11:22:46: ✅ New PostgreSQL client connected
+2025-10-11T11:22:46: 🔗 Client acquired from pool
+2025-10-11T11:22:46: ✅ New PostgreSQL client connected
+2025-10-11T11:22:46: 🔗 Client acquired from pool
+2025-10-11T11:22:46: 🔓 Client released back to pool
+2025-10-11T11:22:46: 🔗 Client acquired from pool
+2025-10-11T11:22:46: 🔓 Client released back to pool
+2025-10-11T11:22:46: 🔓 Client released back to pool
+2025-10-11T11:22:46: 🔗 Client acquired from pool
+2025-10-11T11:22:46: 🔓 Client released back to pool
+2025-10-11T11:22:46: 🔗 Client acquired from pool
+2025-10-11T11:22:46: 🔓 Client released back to pool
+2025-10-11T11:22:46: New WebSocket connection attempt
+2025-10-11T11:22:46: ✅ WebSocket authenticated: supervisor (supervisor)
+2025-10-11T11:22:46: 🔗 Client acquired from pool
+2025-10-11T11:22:46: 🔓 Client released back to pool
+2025-10-11T11:22:46: 🔗 Client acquired from pool
+2025-10-11T11:22:46: 🔓 Client released back to pool
+2025-10-11T11:22:46: 🔗 Client acquired from pool
+2025-10-11T11:22:46: 🔓 Client released back to pool
+2025-10-11T11:22:46: 🔗 Client acquired from pool
+2025-10-11T11:22:46: 🔓 Client released back to pool
+2025-10-11T11:22:46: 🔗 Client acquired from pool
+2025-10-11T11:22:46: 🔓 Client released back to pool
+2025-10-11T11:22:47: 📺 supervisor subscribed to: [
+  'general',
+  'notifications',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-10-11T11:22:47: 🏠 supervisor joined room: production
+2025-10-11T11:22:47: 📺 supervisor subscribed to: [
+  'general',
+  'notifications',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-10-11T11:22:47: 🏠 supervisor joined room: production
+2025-10-11T11:22:47: New WebSocket connection attempt
+2025-10-11T11:22:47: ✅ WebSocket authenticated: supervisor (supervisor)
+2025-10-11T11:22:47: 🔗 Client acquired from pool
+2025-10-11T11:22:47: 🔓 Client released back to pool
+2025-10-11T11:22:47: 🔗 Client acquired from pool
+2025-10-11T11:22:47: 🔗 Client acquired from pool
+2025-10-11T11:22:47: 🔓 Client released back to pool
+2025-10-11T11:22:47: 🔓 Client released back to pool
+2025-10-11T11:22:47: 📺 supervisor subscribed to: [
+  'general',
+  'notifications',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-10-11T11:22:47: 🏠 supervisor joined room: production
+2025-10-11T11:22:47: 📺 supervisor subscribed to: [
+  'general',
+  'notifications',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-10-11T11:22:47: 🏠 supervisor joined room: production
