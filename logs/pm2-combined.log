@@ -50536,3 +50536,172 @@ ReferenceError: requireRole is not defined
 2025-10-11T10:09:34: 🔓 Client released back to pool
 2025-10-11T10:09:34: 🔗 Client acquired from pool
 2025-10-11T10:09:34: 🔓 Client released back to pool
+2025-10-11T10:10:04: 🔗 Client acquired from pool
+2025-10-11T10:10:04: 🔗 Client acquired from pool
+2025-10-11T10:10:04: 🔓 Client released back to pool
+2025-10-11T10:10:04: 🔗 Client acquired from pool
+2025-10-11T10:10:04: 🔓 Client released back to pool
+2025-10-11T10:10:04: 🔓 Client released back to pool
+2025-10-11T10:10:04: 🔗 Client acquired from pool
+2025-10-11T10:10:04: 🔓 Client released back to pool
+2025-10-11T10:10:34: 🔗 Client acquired from pool
+2025-10-11T10:10:34: 🔓 Client released back to pool
+2025-10-11T10:10:34: 🔗 Client acquired from pool
+2025-10-11T10:10:34: 🔗 Client acquired from pool
+2025-10-11T10:10:34: 🔓 Client released back to pool
+2025-10-11T10:10:34: 🔗 Client acquired from pool
+2025-10-11T10:10:34: 🔓 Client released back to pool
+2025-10-11T10:10:34: 🔓 Client released back to pool
+2025-10-11T10:11:04: 🔗 Client acquired from pool
+2025-10-11T10:11:04: 🔓 Client released back to pool
+2025-10-11T10:11:04: 🔗 Client acquired from pool
+2025-10-11T10:11:04: 🔗 Client acquired from pool
+2025-10-11T10:11:04: 🔓 Client released back to pool
+2025-10-11T10:11:04: 🔗 Client acquired from pool
+2025-10-11T10:11:04: 🔓 Client released back to pool
+2025-10-11T10:11:04: 🔓 Client released back to pool
+2025-10-11T10:11:34: 🔗 Client acquired from pool
+2025-10-11T10:11:34: 🔓 Client released back to pool
+2025-10-11T10:11:34: 🔗 Client acquired from pool
+2025-10-11T10:11:34: 🔓 Client released back to pool
+2025-10-11T10:11:34: 🔗 Client acquired from pool
+2025-10-11T10:11:34: 🔓 Client released back to pool
+2025-10-11T10:11:34: 🔗 Client acquired from pool
+2025-10-11T10:11:34: 🔓 Client released back to pool
+2025-10-11T10:12:04: 🔗 Client acquired from pool
+2025-10-11T10:12:04: 🔓 Client released back to pool
+2025-10-11T10:12:04: 🔗 Client acquired from pool
+2025-10-11T10:12:04: 🔓 Client released back to pool
+2025-10-11T10:12:04: 🔗 Client acquired from pool
+2025-10-11T10:12:04: 🔓 Client released back to pool
+2025-10-11T10:12:04: ✅ New PostgreSQL client connected
+2025-10-11T10:12:04: 🔗 Client acquired from pool
+2025-10-11T10:12:04: 🔓 Client released back to pool
+2025-10-11T10:12:34: 🔗 Client acquired from pool
+2025-10-11T10:12:34: 🔓 Client released back to pool
+2025-10-11T10:12:34: 🔗 Client acquired from pool
+2025-10-11T10:12:34: 🔗 Client acquired from pool
+2025-10-11T10:12:34: 🔓 Client released back to pool
+2025-10-11T10:12:34: 🔗 Client acquired from pool
+2025-10-11T10:12:34: 🔓 Client released back to pool
+2025-10-11T10:12:34: 🔓 Client released back to pool
+2025-10-11T10:13:04: 🔗 Client acquired from pool
+2025-10-11T10:13:04: 🔗 Client acquired from pool
+2025-10-11T10:13:04: 🔓 Client released back to pool
+2025-10-11T10:13:04: 🔗 Client acquired from pool
+2025-10-11T10:13:04: 🔓 Client released back to pool
+2025-10-11T10:13:04: 🔗 Client acquired from pool
+2025-10-11T10:13:04: 🔓 Client released back to pool
+2025-10-11T10:13:04: 🔓 Client released back to pool
+2025-10-11T10:13:34: 🔗 Client acquired from pool
+2025-10-11T10:13:34: 🔗 Client acquired from pool
+2025-10-11T10:13:34: 🔓 Client released back to pool
+2025-10-11T10:13:34: 🔓 Client released back to pool
+2025-10-11T10:13:34: 🔗 Client acquired from pool
+2025-10-11T10:13:34: 🔓 Client released back to pool
+2025-10-11T10:13:34: ✅ New PostgreSQL client connected
+2025-10-11T10:13:34: 🔗 Client acquired from pool
+2025-10-11T10:13:34: 🔓 Client released back to pool
+2025-10-11T10:14:04: 🔗 Client acquired from pool
+2025-10-11T10:14:04: 🔓 Client released back to pool
+2025-10-11T10:14:04: 🔗 Client acquired from pool
+2025-10-11T10:14:04: 🔓 Client released back to pool
+2025-10-11T10:14:04: ✅ New PostgreSQL client connected
+2025-10-11T10:14:04: 🔗 Client acquired from pool
+2025-10-11T10:14:04: ✅ New PostgreSQL client connected
+2025-10-11T10:14:04: 🔗 Client acquired from pool
+2025-10-11T10:14:04: 🔓 Client released back to pool
+2025-10-11T10:14:04: 🔓 Client released back to pool
+2025-10-11T10:14:34: 🔗 Client acquired from pool
+2025-10-11T10:14:34: 🔓 Client released back to pool
+2025-10-11T10:14:34: 🔗 Client acquired from pool
+2025-10-11T10:14:34: 🔗 Client acquired from pool
+2025-10-11T10:14:34: 🔓 Client released back to pool
+2025-10-11T10:14:34: 🔗 Client acquired from pool
+2025-10-11T10:14:34: 🔓 Client released back to pool
+2025-10-11T10:14:34: 🔓 Client released back to pool
+2025-10-11T10:15:03: 🔗 Client acquired from pool
+2025-10-11T10:15:04: 🔓 Client released back to pool
+2025-10-11T10:15:04: 🔗 Client acquired from pool
+2025-10-11T10:15:04: 🔓 Client released back to pool
+2025-10-11T10:15:04: 🔗 Client acquired from pool
+2025-10-11T10:15:04: 🔗 Client acquired from pool
+2025-10-11T10:15:04: 🔓 Client released back to pool
+2025-10-11T10:15:04: 🔓 Client released back to pool
+2025-10-11T10:15:34: 🔗 Client acquired from pool
+2025-10-11T10:15:34: 🔓 Client released back to pool
+2025-10-11T10:15:34: 🔗 Client acquired from pool
+2025-10-11T10:15:34: 🔓 Client released back to pool
+2025-10-11T10:15:34: ✅ New PostgreSQL client connected
+2025-10-11T10:15:34: 🔗 Client acquired from pool
+2025-10-11T10:15:34: ✅ New PostgreSQL client connected
+2025-10-11T10:15:34: 🔗 Client acquired from pool
+2025-10-11T10:15:34: 🔓 Client released back to pool
+2025-10-11T10:15:34: 🔓 Client released back to pool
+2025-10-11T10:16:04: 🔗 Client acquired from pool
+2025-10-11T10:16:04: 🔓 Client released back to pool
+2025-10-11T10:16:04: 🔗 Client acquired from pool
+2025-10-11T10:16:04: 🔓 Client released back to pool
+2025-10-11T10:16:04: 🔗 Client acquired from pool
+2025-10-11T10:16:04: 🔗 Client acquired from pool
+2025-10-11T10:16:04: 🔓 Client released back to pool
+2025-10-11T10:16:04: 🔓 Client released back to pool
+2025-10-11T10:16:34: 🔗 Client acquired from pool
+2025-10-11T10:16:34: 🔗 Client acquired from pool
+2025-10-11T10:16:34: 🔓 Client released back to pool
+2025-10-11T10:16:34: 🔗 Client acquired from pool
+2025-10-11T10:16:34: 🔓 Client released back to pool
+2025-10-11T10:16:34: 🔗 Client acquired from pool
+2025-10-11T10:16:34: 🔓 Client released back to pool
+2025-10-11T10:16:34: 🔓 Client released back to pool
+2025-10-11T10:17:04: 🔗 Client acquired from pool
+2025-10-11T10:17:04: 🔓 Client released back to pool
+2025-10-11T10:17:04: 🔗 Client acquired from pool
+2025-10-11T10:17:04: 🔗 Client acquired from pool
+2025-10-11T10:17:04: 🔓 Client released back to pool
+2025-10-11T10:17:04: 🔓 Client released back to pool
+2025-10-11T10:17:04: ✅ New PostgreSQL client connected
+2025-10-11T10:17:04: 🔗 Client acquired from pool
+2025-10-11T10:17:04: 🔓 Client released back to pool
+2025-10-11T10:17:24: 🔌 WebSocket disconnected: supervisor
+2025-10-11T10:17:34: 🔗 Client acquired from pool
+2025-10-11T10:17:34: 🔗 Client acquired from pool
+2025-10-11T10:17:34: 🔗 Client acquired from pool
+2025-10-11T10:17:34: 🔓 Client released back to pool
+2025-10-11T10:17:34: 🔗 Client acquired from pool
+2025-10-11T10:17:34: 🔓 Client released back to pool
+2025-10-11T10:17:34: 🔓 Client released back to pool
+2025-10-11T10:17:34: 🔓 Client released back to pool
+2025-10-11T10:18:04: 🔗 Client acquired from pool
+2025-10-11T10:18:04: 🔓 Client released back to pool
+2025-10-11T10:18:04: 🔗 Client acquired from pool
+2025-10-11T10:18:04: 🔗 Client acquired from pool
+2025-10-11T10:18:04: 🔓 Client released back to pool
+2025-10-11T10:18:04: 🔓 Client released back to pool
+2025-10-11T10:18:04: ✅ New PostgreSQL client connected
+2025-10-11T10:18:04: 🔗 Client acquired from pool
+2025-10-11T10:18:04: 🔓 Client released back to pool
+2025-10-11T10:18:34: 🔗 Client acquired from pool
+2025-10-11T10:18:34: 🔓 Client released back to pool
+2025-10-11T10:18:34: 🔗 Client acquired from pool
+2025-10-11T10:18:34: 🔓 Client released back to pool
+2025-10-11T10:18:34: 🔗 Client acquired from pool
+2025-10-11T10:18:34: 🔗 Client acquired from pool
+2025-10-11T10:18:34: 🔓 Client released back to pool
+2025-10-11T10:18:34: 🔓 Client released back to pool
+2025-10-11T10:19:04: 🔗 Client acquired from pool
+2025-10-11T10:19:04: 🔓 Client released back to pool
+2025-10-11T10:19:04: 🔗 Client acquired from pool
+2025-10-11T10:19:04: 🔗 Client acquired from pool
+2025-10-11T10:19:04: 🔓 Client released back to pool
+2025-10-11T10:19:04: 🔗 Client acquired from pool
+2025-10-11T10:19:04: 🔓 Client released back to pool
+2025-10-11T10:19:04: 🔓 Client released back to pool
+2025-10-11T10:19:34: 🔗 Client acquired from pool
+2025-10-11T10:19:34: 🔓 Client released back to pool
+2025-10-11T10:19:34: 🔗 Client acquired from pool
+2025-10-11T10:19:34: 🔓 Client released back to pool
+2025-10-11T10:19:34: 🔗 Client acquired from pool
+2025-10-11T10:19:34: 🔓 Client released back to pool
+2025-10-11T10:19:34: 🔗 Client acquired from pool
+2025-10-11T10:19:34: 🔓 Client released back to pool
