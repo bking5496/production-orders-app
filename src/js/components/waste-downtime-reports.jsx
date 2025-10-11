@@ -136,9 +136,8 @@ const ReportFilters = ({ onFiltersChange, machines = [], orders = [], categories
 const SummaryCards = ({ wasteData = [], downtimeData = [] }) => {
   const wasteSummary = useMemo(() => {
     const totalRecords = wasteData.length;
-    const totalCost = wasteData.reduce((sum, item) => sum + (parseFloat(item.total_cost) || 0), 0);
     const totalQuantity = wasteData.reduce((sum, item) => sum + (parseFloat(item.quantity) || 0), 0);
-    return { totalRecords, totalCost, totalQuantity };
+    return { totalRecords, totalQuantity };
   }, [wasteData]);
 
   const downtimeSummary = useMemo(() => {
