@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { Calendar, Download, Filter, BarChart3, PieChart, TrendingUp, FileText, Printer, RefreshCw, X, Search, ArrowDown, ArrowUp, Eye } from 'lucide-react';
+import { Calendar, Download, Filter, BarChart3, PieChart, TrendingUp, FileText, Printer, RefreshCw, X, Search, ArrowDown, ArrowUp, Eye, Home, ArrowLeft } from 'lucide-react';
 import API from '../core/api';
 import Time from '../core/time';
 
@@ -298,12 +298,6 @@ const DataTable = ({ data = [], type = 'waste', onExport }) => {
                     </button>
                   </th>
                   <th className="px-6 py-4 text-left">
-                    <button onClick={() => handleSort('total_cost')} className="flex items-center space-x-2 font-semibold text-gray-700">
-                      <span>Cost</span>
-                      <SortIcon field="total_cost" />
-                    </button>
-                  </th>
-                  <th className="px-6 py-4 text-left">
                     <button onClick={() => handleSort('recorded_by_name')} className="flex items-center space-x-2 font-semibold text-gray-700">
                       <span>Recorded By</span>
                       <SortIcon field="recorded_by_name" />
@@ -363,7 +357,6 @@ const DataTable = ({ data = [], type = 'waste', onExport }) => {
                     <td className="px-6 py-4 text-sm text-gray-900">{item.order_number}</td>
                     <td className="px-6 py-4 text-sm text-gray-900">{item.waste_type}</td>
                     <td className="px-6 py-4 text-sm text-gray-900">{item.quantity} {item.unit}</td>
-                    <td className="px-6 py-4 text-sm text-gray-900">R{parseFloat(item.total_cost || 0).toFixed(2)}</td>
                     <td className="px-6 py-4 text-sm text-gray-900">{item.recorded_by_name || item.recorded_by_username}</td>
                   </>
                 ) : (
@@ -403,7 +396,7 @@ const DataTable = ({ data = [], type = 'waste', onExport }) => {
 };
 
 // Main reports component
-const WasteDowntimeReports = () => {
+const WasteDowntimeReports = ({ onBack }) => {
   const [activeTab, setActiveTab] = useState('waste');
   const [isLoading, setIsLoading] = useState(false);
   const [wasteData, setWasteData] = useState([]);
@@ -473,13 +466,33 @@ const WasteDowntimeReports = () => {
     <div className="min-h-screen bg-gray-50 p-6">
       {/* Header */}
       <div className="mb-8">
-        <div className="flex items-center space-x-4 mb-6">
-          <div className="p-4 bg-indigo-600 rounded-2xl">
-            <BarChart3 className="w-10 h-10 text-white" />
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center space-x-4">
+            <div className="p-4 bg-indigo-600 rounded-2xl">
+              <BarChart3 className="w-10 h-10 text-white" />
+            </div>
+            <div>
+              <h1 className="text-4xl font-bold text-gray-800">Waste & Downtime Reports</h1>
+              <p className="text-xl text-gray-600">Comprehensive analysis and data export</p>
+            </div>
           </div>
-          <div>
-            <h1 className="text-4xl font-bold text-gray-800">Waste & Downtime Reports</h1>
-            <p className="text-xl text-gray-600">Comprehensive analysis and data export</p>
+          <div className="flex space-x-4">
+            <button
+              onClick={() => window.location.href = '/supervisor'}
+              className="flex items-center space-x-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold shadow-lg transform transition-all duration-200 hover:scale-105 active:scale-95"
+            >
+              <Home className="w-5 h-5" />
+              <span>Home</span>
+            </button>
+            {onBack && (
+              <button
+                onClick={onBack}
+                className="flex items-center space-x-2 px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white rounded-xl font-semibold shadow-lg transform transition-all duration-200 hover:scale-105 active:scale-95"
+              >
+                <ArrowLeft className="w-5 h-5" />
+                <span>Back</span>
+              </button>
+            )}
           </div>
         </div>
         

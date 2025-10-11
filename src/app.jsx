@@ -62,7 +62,7 @@ const routes = [
     { path: '/admin', component: AdminPanel, title: 'Admin Panel & User Management' },
     { path: '/attendance-register', component: AttendanceRegister, title: 'Attendance Register' },
     { path: '/maturation-room', component: MaturationRoom, title: 'Maturation Room' },
-    { path: '/supervisor-ipad', component: IPadSupervisorView, title: 'Supervisor iPad View' },
+    { path: '/supervisor', component: IPadSupervisorView, title: 'Supervisor View' },
 ];
 
 // Initialize the router
@@ -118,10 +118,10 @@ function App() {
 
   // Auto-redirect supervisor users on iPad to special view - TEMPORARILY DISABLED
   // useEffect(() => {
-  //   if (isAuthenticated && user && isIPad && user.role === 'supervisor' && currentPath !== '/supervisor-ipad' && !hasRedirected.current) {
+  //   if (isAuthenticated && user && isIPad && user.role === 'supervisor' && currentPath !== '/supervisor' && !hasRedirected.current) {
   //     console.log('Redirecting supervisor to iPad view');
   //     hasRedirected.current = true;
-  //     Router.navigate('/supervisor-ipad');
+  //     Router.navigate('/supervisor');
   //   }
   // }, [isAuthenticated, user, isIPad, currentPath]);
 
@@ -129,8 +129,8 @@ function App() {
   const ComponentToRender = route ? route.component : Dashboard;
   const pageTitle = route ? route.name || route.title : 'Dashboard';
 
-  // For iPad supervisor view, render without layout
-  if (currentPath === '/supervisor-ipad') {
+  // For supervisor view, render without layout
+  if (currentPath === '/supervisor') {
     return (
       <ManufacturingErrorBoundary>
         <ComponentToRender />
