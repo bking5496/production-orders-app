@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { AlertTriangle, Clock, Users, Package, Trash2, Plus, Save, X, Factory, Timer, AlertCircle, CheckCircle, User, Settings, RefreshCw, Calendar, Weight, Hash, FileText, Target, BarChart3, Edit, Eye, TrendingUp, TrendingDown } from 'lucide-react';
+import { AlertTriangle, Clock, Users, Package, Trash2, Plus, Save, X, Factory, Timer, AlertCircle, CheckCircle, User, Settings, RefreshCw, Calendar, Weight, Hash, FileText, Target, BarChart3, Edit, Eye, TrendingUp, TrendingDown, Home, ArrowLeft } from 'lucide-react';
 import API from '../core/api';
 import Time from '../core/time';
 import { Icon } from './layout-components.jsx';
@@ -539,7 +539,6 @@ const WasteDowntimeDashboard = () => {
   const [stats, setStats] = useState({
     todayWaste: 0,
     todayDowntime: 0,
-    totalWasteCost: 0,
     totalDowntimeHours: 0
   });
 
@@ -601,7 +600,6 @@ const WasteDowntimeDashboard = () => {
       setStats({
         todayWaste: wasteData.reduce((sum, item) => sum + parseInt(item.total_records || 0), 0),
         todayDowntime: downtimeData.reduce((sum, item) => sum + parseInt(item.total_incidents || 0), 0),
-        totalWasteCost: wasteData.reduce((sum, item) => sum + parseFloat(item.total_cost || 0), 0),
         totalDowntimeHours: Math.round(downtimeData.reduce((sum, item) => sum + parseInt(item.total_duration || 0), 0) / 60)
       });
     } catch (error) {
@@ -655,19 +653,37 @@ const WasteDowntimeDashboard = () => {
     <div className="min-h-screen bg-gray-50 p-6">
       {/* Header */}
       <div className="mb-8">
-        <div className="flex items-center space-x-4 mb-6">
-          <div className="p-4 bg-indigo-600 rounded-2xl">
-            <Factory className="w-10 h-10 text-white" />
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center space-x-4">
+            <div className="p-4 bg-indigo-600 rounded-2xl">
+              <Factory className="w-10 h-10 text-white" />
+            </div>
+            <div>
+              <h1 className="text-4xl font-bold text-gray-800">Waste & Downtime Dashboard</h1>
+              <p className="text-xl text-gray-600">Production Supervisor Control Center</p>
+            </div>
           </div>
-          <div>
-            <h1 className="text-4xl font-bold text-gray-800">Waste & Downtime Dashboard</h1>
-            <p className="text-xl text-gray-600">Production Supervisor Control Center</p>
+          <div className="flex space-x-4">
+            <button
+              onClick={() => window.location.href = '/supervisor'}
+              className="flex items-center space-x-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold shadow-lg transform transition-all duration-200 hover:scale-105 active:scale-95"
+            >
+              <Home className="w-5 h-5" />
+              <span>Home</span>
+            </button>
+            <button
+              onClick={() => window.history.back()}
+              className="flex items-center space-x-2 px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white rounded-xl font-semibold shadow-lg transform transition-all duration-200 hover:scale-105 active:scale-95"
+            >
+              <ArrowLeft className="w-5 h-5" />
+              <span>Back</span>
+            </button>
           </div>
         </div>
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <StatsCard
           title="Today's Waste Events"
           value={stats.todayWaste}
@@ -683,14 +699,6 @@ const WasteDowntimeDashboard = () => {
           icon={AlertTriangle}
           color="orange"
           trend="down"
-        />
-        <StatsCard
-          title="Waste Cost Today"
-          value={`R${stats.totalWasteCost.toFixed(0)}`}
-          change="+8%"
-          icon={Weight}
-          color="purple"
-          trend="up"
         />
         <StatsCard
           title="Downtime Hours Today"

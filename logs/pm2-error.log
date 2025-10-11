@@ -4227,3 +4227,12 @@
   code: 'ERR_ERL_UNEXPECTED_X_FORWARDED_FOR',
   help: 'https://express-rate-limit.github.io/ERR_ERL_UNEXPECTED_X_FORWARDED_FOR/'
 }
+2025-10-11T09:08:00: 🔒 Auth failure: admin from ::ffff:127.0.0.1 - Invalid credentials - Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36 Edg/141.0.0.0
+2025-10-11T09:08:01: 🔒 Auth failure: admin from ::1 - Invalid credentials - Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36 Edg/141.0.0.0
+2025-10-11T09:08:03: 🔒 Auth failure: admin from ::ffff:127.0.0.1 - Invalid credentials - Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36 Edg/141.0.0.0
+2025-10-11T09:08:10: 🔒 Auth failure: admin from ::1 - Invalid credentials - Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36 Edg/141.0.0.0
+2025-10-11T09:08:11: 🔒 Auth failure: admin from ::ffff:127.0.0.1 - Invalid credentials - Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36 Edg/141.0.0.0
+2025-10-11T09:08:13: 🔒 Auth failure: admin from ::1 - Invalid credentials - Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36 Edg/141.0.0.0
+2025-10-11T09:08:19: 🔒 Auth failure: Admin from ::1 - Invalid credentials - Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36 Edg/141.0.0.0
+2025-10-11T09:08:20: 🔒 Auth failure: Admin from ::1 - Invalid credentials - Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36 Edg/141.0.0.0
+2025-10-11T09:08:22: 🔒 Auth failure: Admin from ::ffff:127.0.0.1 - Invalid credentials - Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36 Edg/141.0.0.0
