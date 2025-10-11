@@ -148,7 +148,7 @@ const SummaryCards = ({ wasteData = [], downtimeData = [] }) => {
   }, [downtimeData]);
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
       <div className="bg-gradient-to-br from-red-600 to-orange-600 rounded-2xl p-6 text-white">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-semibold">Waste Records</h3>
@@ -156,15 +156,6 @@ const SummaryCards = ({ wasteData = [], downtimeData = [] }) => {
         </div>
         <div className="text-3xl font-bold">{wasteSummary.totalRecords}</div>
         <div className="text-red-100">Total incidents</div>
-      </div>
-      
-      <div className="bg-gradient-to-br from-orange-600 to-amber-600 rounded-2xl p-6 text-white">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold">Waste Cost</h3>
-          <TrendingUp className="w-8 h-8" />
-        </div>
-        <div className="text-3xl font-bold">R{wasteSummary.totalCost.toFixed(2)}</div>
-        <div className="text-orange-100">Total cost impact</div>
       </div>
       
       <div className="bg-gradient-to-br from-purple-600 to-indigo-600 rounded-2xl p-6 text-white">
