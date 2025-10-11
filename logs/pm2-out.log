@@ -47044,3 +47044,34 @@
 2025-10-11T12:12:24: 🔌 WebSocket disconnected: supervisor
 2025-10-11T12:12:24: 🔌 WebSocket disconnected: supervisor
 2025-10-11T12:35:25: 🔌 WebSocket disconnected: supervisor
+2025-10-11T13:04:55: ✅ New PostgreSQL client connected
+2025-10-11T13:04:55: 🔗 Client acquired from pool
+2025-10-11T13:04:55: ✅ New PostgreSQL client connected
+2025-10-11T13:04:55: 🔗 Client acquired from pool
+2025-10-11T13:04:55: 🔓 Client released back to pool
+2025-10-11T13:04:55: ✅ New PostgreSQL client connected
+2025-10-11T13:04:55: 🔗 Client acquired from pool
+2025-10-11T13:04:55: 🔓 Client released back to pool
+2025-10-11T13:04:55: 🔓 Client released back to pool
+2025-10-11T13:04:56: New WebSocket connection attempt
+2025-10-11T13:04:56: ✅ WebSocket authenticated: supervisor (supervisor)
+2025-10-11T13:04:56: 📺 supervisor subscribed to: [
+  'general',
+  'notifications',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-10-11T13:04:56: 🏠 supervisor joined room: production
+2025-10-11T13:04:56: New WebSocket connection attempt
+2025-10-11T13:04:56: ✅ WebSocket authenticated: supervisor (supervisor)
+2025-10-11T13:04:56: 📺 supervisor subscribed to: [
+  'general',
+  'notifications',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-10-11T13:04:56: 🏠 supervisor joined room: production
