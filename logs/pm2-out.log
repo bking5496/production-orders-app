@@ -48126,3 +48126,239 @@
 2025-10-12T19:10:01: 🔗 Client acquired from pool
 2025-10-12T19:10:01: 🔓 Client released back to pool
 2025-10-12T19:10:01: 🔓 Client released back to pool
+2025-10-12T19:10:48: ✅ New PostgreSQL client connected
+2025-10-12T19:10:48: 🔗 Client acquired from pool
+2025-10-12T19:10:48: 🔓 Client released back to pool
+2025-10-12T19:10:48: ✅ New PostgreSQL client connected
+2025-10-12T19:10:48: 🔗 Client acquired from pool
+2025-10-12T19:10:48: ✅ New PostgreSQL client connected
+2025-10-12T19:10:48: 🔗 Client acquired from pool
+2025-10-12T19:10:48: 🔓 Client released back to pool
+2025-10-12T19:10:48: 🔓 Client released back to pool
+2025-10-12T19:10:48: ✅ New PostgreSQL client connected
+2025-10-12T19:10:48: 🔗 Client acquired from pool
+2025-10-12T19:10:48: 🔓 Client released back to pool
+2025-10-12T19:10:51: 🔗 Client acquired from pool
+2025-10-12T19:10:51: 🔗 Client acquired from pool
+2025-10-12T19:10:51: 🔓 Client released back to pool
+2025-10-12T19:10:51: 🔓 Client released back to pool
+2025-10-12T19:10:51: 🔗 Client acquired from pool
+2025-10-12T19:10:51: 🔗 Client acquired from pool
+2025-10-12T19:10:51: 🔓 Client released back to pool
+2025-10-12T19:10:51: 🔗 Client acquired from pool
+2025-10-12T19:10:51: 🔓 Client released back to pool
+2025-10-12T19:10:51: 🔓 Client released back to pool
+2025-10-12T19:10:51: 🔗 Client acquired from pool
+2025-10-12T19:10:51: 🔓 Client released back to pool
+2025-10-12T19:10:51: 📺 supervisor subscribed to: [
+  'general',
+  'notifications',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-10-12T19:10:51: 🏠 supervisor joined room: production
+2025-10-12T19:10:53: 🔗 Client acquired from pool
+2025-10-12T19:10:53: 🔓 Client released back to pool
+2025-10-12T19:10:53: 🔗 Client acquired from pool
+2025-10-12T19:10:53: 🔓 Client released back to pool
+2025-10-12T19:10:53: 🔗 Transaction client acquired from pool
+2025-10-12T19:10:53: 🔓 Transaction client released back to pool
+2025-10-12T19:10:53: 🔗 Client acquired from pool
+2025-10-12T19:10:53: 🔓 Client released back to pool
+2025-10-12T19:10:53: 📡 Broadcast sent: order_started to channel: production (2 clients)
+2025-10-12T19:10:53: 🔗 Client acquired from pool
+2025-10-12T19:10:53: 🔓 Client released back to pool
+2025-10-12T19:10:53: 🔗 Client acquired from pool
+2025-10-12T19:10:53: 🔓 Client released back to pool
+2025-10-12T19:10:53: 🔗 Client acquired from pool
+2025-10-12T19:10:53: 🔓 Client released back to pool
+2025-10-12T19:10:54: 🔗 Client acquired from pool
+2025-10-12T19:10:54: 🔓 Client released back to pool
+2025-10-12T19:10:58: 📺 supervisor subscribed to: [ 'machines', 'production' ]
+2025-10-12T19:10:58: 🔗 Client acquired from pool
+2025-10-12T19:10:58: 🔓 Client released back to pool
+2025-10-12T19:10:58: 🔗 Client acquired from pool
+2025-10-12T19:10:58: 🔗 Client acquired from pool
+2025-10-12T19:10:58: 🔓 Client released back to pool
+2025-10-12T19:10:58: 🔗 Client acquired from pool
+2025-10-12T19:10:58: 🔗 Client acquired from pool
+2025-10-12T19:10:58: 🔓 Client released back to pool
+2025-10-12T19:10:58: 🔓 Client released back to pool
+2025-10-12T19:10:58: 🔓 Client released back to pool
+2025-10-12T19:10:58: 🔗 Client acquired from pool
+2025-10-12T19:10:58: 🔓 Client released back to pool
+2025-10-12T19:10:58: 📺 supervisor subscribed to: [
+  'general',
+  'notifications',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-10-12T19:10:58: 🏠 supervisor joined room: production
+2025-10-12T19:10:59: 🔗 Client acquired from pool
+2025-10-12T19:10:59: 🔓 Client released back to pool
+2025-10-12T19:10:59: 🔗 Client acquired from pool
+2025-10-12T19:10:59: 🔗 Client acquired from pool
+2025-10-12T19:10:59: 🔓 Client released back to pool
+2025-10-12T19:10:59: 🔗 Client acquired from pool
+2025-10-12T19:10:59: 🔗 Client acquired from pool
+2025-10-12T19:10:59: 🔓 Client released back to pool
+2025-10-12T19:10:59: 🔓 Client released back to pool
+2025-10-12T19:10:59: 🔓 Client released back to pool
+2025-10-12T19:10:59: 🔗 Client acquired from pool
+2025-10-12T19:10:59: 🔓 Client released back to pool
+2025-10-12T19:10:59: 📺 supervisor subscribed to: [
+  'general',
+  'notifications',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-10-12T19:10:59: 🏠 supervisor joined room: production
+2025-10-12T19:11:00: 🔗 Client acquired from pool
+2025-10-12T19:11:00: 🔓 Client released back to pool
+2025-10-12T19:11:00: 🔗 Client acquired from pool
+2025-10-12T19:11:00: 🔓 Client released back to pool
+2025-10-12T19:11:00: 🔗 Client acquired from pool
+2025-10-12T19:11:00: 🔓 Client released back to pool
+2025-10-12T19:11:01: 🔗 Client acquired from pool
+2025-10-12T19:11:01: 🔓 Client released back to pool
+2025-10-12T19:11:02: 🔗 Client acquired from pool
+2025-10-12T19:11:02: 🔓 Client released back to pool
+2025-10-12T19:11:02: 🔗 Client acquired from pool
+2025-10-12T19:11:02: 🔗 Client acquired from pool
+2025-10-12T19:11:02: 🔗 Client acquired from pool
+2025-10-12T19:11:02: 🔓 Client released back to pool
+2025-10-12T19:11:02: 🔓 Client released back to pool
+2025-10-12T19:11:02: 🔓 Client released back to pool
+2025-10-12T19:11:02: 🔗 Client acquired from pool
+2025-10-12T19:11:02: 🔓 Client released back to pool
+2025-10-12T19:11:03: 🔗 Client acquired from pool
+2025-10-12T19:11:03: 🔓 Client released back to pool
+2025-10-12T19:11:03: 🔗 Client acquired from pool
+2025-10-12T19:11:03: 🔗 Client acquired from pool
+2025-10-12T19:11:03: 🔓 Client released back to pool
+2025-10-12T19:11:03: 🔗 Client acquired from pool
+2025-10-12T19:11:03: 🔓 Client released back to pool
+2025-10-12T19:11:03: 🔗 Client acquired from pool
+2025-10-12T19:11:03: 🔓 Client released back to pool
+2025-10-12T19:11:03: 🔓 Client released back to pool
+2025-10-12T19:11:03: 🔗 Client acquired from pool
+2025-10-12T19:11:03: 🔓 Client released back to pool
+2025-10-12T19:11:03: 📺 supervisor subscribed to: [
+  'general',
+  'notifications',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-10-12T19:11:03: 🏠 supervisor joined room: production
+2025-10-12T19:11:10: 🔌 WebSocket disconnected: supervisor
+2025-10-12T19:11:11: 🔗 Client acquired from pool
+2025-10-12T19:11:11: 🔗 Client acquired from pool
+2025-10-12T19:11:11: 🔓 Client released back to pool
+2025-10-12T19:11:11: 🔓 Client released back to pool
+2025-10-12T19:11:11: 🔗 Client acquired from pool
+2025-10-12T19:11:11: 🔓 Client released back to pool
+2025-10-12T19:11:11: 🔗 Client acquired from pool
+2025-10-12T19:11:11: 🔓 Client released back to pool
+2025-10-12T19:11:11: 🔗 Client acquired from pool
+2025-10-12T19:11:11: 🔓 Client released back to pool
+2025-10-12T19:11:11: New WebSocket connection attempt
+2025-10-12T19:11:11: ✅ WebSocket authenticated: supervisor (supervisor)
+2025-10-12T19:11:11: 🔗 Client acquired from pool
+2025-10-12T19:11:11: 🔓 Client released back to pool
+2025-10-12T19:11:11: 🔗 Client acquired from pool
+2025-10-12T19:11:11: 🔓 Client released back to pool
+2025-10-12T19:11:11: 📺 supervisor subscribed to: [
+  'general',
+  'notifications',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-10-12T19:11:11: 🏠 supervisor joined room: production
+2025-10-12T19:11:11: 📺 supervisor subscribed to: [
+  'general',
+  'notifications',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-10-12T19:11:11: 🏠 supervisor joined room: production
+2025-10-12T19:12:04: ✅ New PostgreSQL client connected
+2025-10-12T19:12:04: 🔗 Client acquired from pool
+2025-10-12T19:12:04: 🔓 Client released back to pool
+2025-10-12T19:12:04: ✅ New PostgreSQL client connected
+2025-10-12T19:12:04: 🔗 Client acquired from pool
+2025-10-12T19:12:04: 🔓 Client released back to pool
+2025-10-12T19:12:04: 🔗 Client acquired from pool
+2025-10-12T19:12:04: 🔓 Client released back to pool
+2025-10-12T19:12:04: 🔗 Client acquired from pool
+2025-10-12T19:12:04: 🔓 Client released back to pool
+2025-10-12T19:12:04: 🔗 Client acquired from pool
+2025-10-12T19:12:04: 🔓 Client released back to pool
+2025-10-12T19:12:04: New WebSocket connection attempt
+2025-10-12T19:12:04: ✅ WebSocket authenticated: supervisor (supervisor)
+2025-10-12T19:12:04: 🔗 Client acquired from pool
+2025-10-12T19:12:04: 🔗 Client acquired from pool
+2025-10-12T19:12:04: 🔓 Client released back to pool
+2025-10-12T19:12:04: 🔓 Client released back to pool
+2025-10-12T19:12:04: 📺 supervisor subscribed to: [
+  'general',
+  'notifications',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-10-12T19:12:04: 🏠 supervisor joined room: production
+2025-10-12T19:12:04: 📺 supervisor subscribed to: [
+  'general',
+  'notifications',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-10-12T19:12:04: 🏠 supervisor joined room: production
+2025-10-12T19:12:08: 🔌 WebSocket disconnected: supervisor
+2025-10-12T19:12:08: 🔗 Client acquired from pool
+2025-10-12T19:12:08: 🔓 Client released back to pool
+2025-10-12T19:12:08: 🔗 Client acquired from pool
+2025-10-12T19:12:08: 🔓 Client released back to pool
+2025-10-12T19:12:08: 🔗 Client acquired from pool
+2025-10-12T19:12:08: 🔓 Client released back to pool
+2025-10-12T19:12:08: New WebSocket connection attempt
+2025-10-12T19:12:08: ✅ WebSocket authenticated: supervisor (supervisor)
+2025-10-12T19:12:08: 🔗 Client acquired from pool
+2025-10-12T19:12:08: 🔓 Client released back to pool
+2025-10-12T19:12:08: 🔗 Client acquired from pool
+2025-10-12T19:12:08: 🔗 Client acquired from pool
+2025-10-12T19:12:08: 🔓 Client released back to pool
+2025-10-12T19:12:08: 🔓 Client released back to pool
+2025-10-12T19:12:08: 📺 supervisor subscribed to: [
+  'general',
+  'notifications',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-10-12T19:12:08: 🏠 supervisor joined room: production
+2025-10-12T19:12:08: 📺 supervisor subscribed to: [
+  'general',
+  'notifications',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-10-12T19:12:08: 🏠 supervisor joined room: production
