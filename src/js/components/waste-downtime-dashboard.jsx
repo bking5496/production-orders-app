@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { AlertTriangle, Clock, Users, Package, Trash2, Plus, Save, X, Factory, Timer, AlertCircle, CheckCircle, User, Settings, RefreshCw, Calendar, Weight, Hash, FileText, Target, BarChart3, Edit, Eye, TrendingUp, TrendingDown, Home, ArrowLeft } from 'lucide-react';
+import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import { AlertTriangle, Clock, Users, Package, Trash2, Plus, Save, X, Factory, Timer, AlertCircle, CheckCircle, User, Settings, RefreshCw, Calendar, Weight, Hash, FileText, Target, BarChart3, Edit, Eye, TrendingUp, TrendingDown, Home, ArrowLeft, Wifi, Battery, Signal, Menu, Bell, ChevronDown } from 'lucide-react';
 import API from '../core/api';
 import Time from '../core/time';
 import { Icon } from './layout-components.jsx';
