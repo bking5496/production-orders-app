@@ -48403,3 +48403,71 @@
   'analytics'
 ]
 2025-10-12T20:29:14: 🏠 supervisor joined room: production
+2025-10-12T21:43:48: 🔌 WebSocket disconnected: supervisor
+2025-10-12T21:45:23: ✅ New PostgreSQL client connected
+2025-10-12T21:45:23: 🔗 Client acquired from pool
+2025-10-12T21:45:23: 🔓 Client released back to pool
+2025-10-12T21:45:24: 🔗 Client acquired from pool
+2025-10-12T21:45:24: 🔓 Client released back to pool
+2025-10-12T21:45:24: ✅ Auth success: supervisor from ::ffff:127.0.0.1 - Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/138.0.7204.23 Safari/537.36
+2025-10-12T21:45:24: 🔗 Client acquired from pool
+2025-10-12T21:45:24: 🔓 Client released back to pool
+2025-10-12T21:45:24: New WebSocket connection attempt
+2025-10-12T21:45:24: ✅ WebSocket authenticated: supervisor (supervisor)
+2025-10-12T21:45:24: 🔗 Client acquired from pool
+2025-10-12T21:45:24: 🔓 Client released back to pool
+2025-10-12T21:45:24: 🔗 Client acquired from pool
+2025-10-12T21:45:24: 🔓 Client released back to pool
+2025-10-12T21:45:24: 🔗 Client acquired from pool
+2025-10-12T21:45:24: 🔓 Client released back to pool
+2025-10-12T21:45:24: 📺 supervisor subscribed to: [
+  'general',
+  'notifications',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-10-12T21:45:24: 🏠 supervisor joined room: production
+2025-10-12T21:45:24: 📺 supervisor subscribed to: [
+  'general',
+  'notifications',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-10-12T21:45:24: 🏠 supervisor joined room: production
+2025-10-12T21:45:39: 🔗 Client acquired from pool
+2025-10-12T21:45:39: 🔓 Client released back to pool
+2025-10-12T21:45:40: 🔗 Client acquired from pool
+2025-10-12T21:45:40: 🔓 Client released back to pool
+2025-10-12T21:45:40: ✅ Auth success: supervisor from ::1 - Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36 Edg/141.0.0.0
+2025-10-12T21:45:40: 🔗 Client acquired from pool
+2025-10-12T21:45:40: 🔓 Client released back to pool
+2025-10-12T21:45:40: 🔗 Client acquired from pool
+2025-10-12T21:45:40: 🔓 Client released back to pool
+2025-10-12T21:45:40: New WebSocket connection attempt
+2025-10-12T21:45:40: ✅ WebSocket authenticated: supervisor (supervisor)
+2025-10-12T21:45:40: 🔗 Client acquired from pool
+2025-10-12T21:45:40: 🔓 Client released back to pool
+2025-10-12T21:45:41: 🔗 Client acquired from pool
+2025-10-12T21:45:41: 🔓 Client released back to pool
+2025-10-12T21:45:41: 📺 supervisor subscribed to: [
+  'general',
+  'notifications',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-10-12T21:45:41: 🏠 supervisor joined room: production
+2025-10-12T21:45:41: 📺 supervisor subscribed to: [
+  'general',
+  'notifications',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-10-12T21:45:41: 🏠 supervisor joined room: production
