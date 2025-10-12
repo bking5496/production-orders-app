@@ -6,6 +6,122 @@ import { Icon } from './layout-components.jsx';
 import { useOrderUpdates, useMachineUpdates, useWebSocketEvent } from '../core/websocket-hooks.js';
 import WasteDowntimeReports from './waste-downtime-reports.jsx';
 
+// App Status Bar Component
+const AppStatusBar = () => {
+  const [currentTime, setCurrentTime] = useState(new Date());
+  
+  useEffect(() => {
+    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
+  
+  return (
+    <div className="bg-black text-white px-4 py-2 text-sm flex justify-between items-center">
+      <div className="flex items-center space-x-2">
+        <Signal className="w-4 h-4" />
+        <Wifi className="w-4 h-4" />
+      </div>
+      <div className="font-medium">
+        {currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+      </div>
+      <div className="flex items-center space-x-2">
+        <span className="text-xs">100%</span>
+        <Battery className="w-4 h-4" />
+      </div>
+    </div>
+  );
+};
+
+// App Header Component
+const AppHeader = ({ title, subtitle, onMenuClick, showBack, onBackClick }) => {
+  return (
+    <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-4 py-4 shadow-lg">
+      <div className="flex items-center justify-between mb-2">
+        <div className="flex items-center space-x-3">
+          {showBack ? (
+            <button onClick={onBackClick} className="p-2 hover:bg-white/20 rounded-xl transition-colors">
+              <ArrowLeft className="w-6 h-6" />
+            </button>
+          ) : (
+            <button onClick={onMenuClick} className="p-2 hover:bg-white/20 rounded-xl transition-colors">
+              <Menu className="w-6 h-6" />
+            </button>
+          )}
+          <div className="p-2 bg-white/20 rounded-xl">
+            <Factory className="w-8 h-8" />
+          </div>
+        </div>
+        <button className="p-2 hover:bg-white/20 rounded-xl transition-colors relative">
+          <Bell className="w-6 h-6" />
+          <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">3</span>
+        </button>
+      </div>
+      <div>
+        <h1 className="text-2xl font-bold">{title}</h1>
+        <p className="text-indigo-100">{subtitle}</p>
+      </div>
+    </div>
+  );
+};
+
+// Pull to Refresh Component
+const PullToRefresh = ({ onRefresh, children }) => {
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [pullDistance, setPullDistance] = useState(0);
+  const startY = useRef(0);
+  const isPulling = useRef(false);
+  
+  const handleTouchStart = (e) => {
+    startY.current = e.touches[0].clientY;
+    isPulling.current = window.scrollY === 0;
+  };
+  
+  const handleTouchMove = (e) => {
+    if (!isPulling.current) return;
+    
+    const currentY = e.touches[0].clientY;
+    const distance = Math.max(0, (currentY - startY.current) * 0.5);
+    setPullDistance(Math.min(distance, 100));
+    
+    if (distance > 0) {
+      e.preventDefault();
+    }
+  };
+  
+  const handleTouchEnd = async () => {
+    if (pullDistance > 60 && !isRefreshing) {
+      setIsRefreshing(true);
+      await onRefresh();
+      setIsRefreshing(false);
+    }
+    setPullDistance(0);
+    isPulling.current = false;
+  };
+  
+  return (
+    <div 
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+      className="relative"
+    >
+      {pullDistance > 0 && (
+        <div className="absolute top-0 left-0 right-0 flex justify-center py-4 bg-gradient-to-b from-indigo-100 to-transparent" style={{ transform: `translateY(-${100 - pullDistance}px)` }}>
+          <div className="flex items-center space-x-2 text-indigo-600">
+            <RefreshCw className={`w-5 h-5 ${pullDistance > 60 || isRefreshing ? 'animate-spin' : ''}`} />
+            <span className="text-sm font-medium">
+              {isRefreshing ? 'Refreshing...' : pullDistance > 60 ? 'Release to refresh' : 'Pull to refresh'}
+            </span>
+          </div>
+        </div>
+      )}
+      <div style={{ transform: `translateY(${pullDistance}px)` }}>
+        {children}
+      </div>
+    </div>
+  );
+};
+
 // Modal component
 const Modal = ({ isOpen, onClose, title, children, size = "large" }) => {
   if (!isOpen) return null;
