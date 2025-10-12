@@ -53253,3 +53253,5 @@ ReferenceError: requireRole is not defined
   'analytics'
 ]
 2025-10-12T23:39:51: 🏠 supervisor joined room: production
+2025-10-12T23:40:34: 🔌 WebSocket disconnected: supervisor
+2025-10-12T23:40:47: 🔌 WebSocket disconnected: supervisor
