@@ -808,88 +808,74 @@ const WasteDowntimeDashboard = () => {
     return <WasteDowntimeReports onBack={() => setShowReports(false)} />;
   }
 
+  const handleRefresh = async () => {
+    await loadData();
+    if (navigator.vibrate) {
+      navigator.vibrate(50);
+    }
+  };
+  
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      {/* Header */}
-      <div className="mb-8">
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center space-x-4">
-            <div className="p-4 bg-indigo-600 rounded-2xl">
-              <Factory className="w-10 h-10 text-white" />
-            </div>
-            <div>
-              <h1 className="text-4xl font-bold text-gray-800">Waste & Downtime Dashboard</h1>
-              <p className="text-xl text-gray-600">Production Supervisor Control Center</p>
-            </div>
-          </div>
-          <div className="flex space-x-4">
-            <button
-              onClick={() => window.location.href = '/supervisor'}
-              className="flex items-center space-x-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold shadow-lg transform transition-all duration-200 hover:scale-105 active:scale-95"
-            >
-              <Home className="w-5 h-5" />
-              <span>Home</span>
-            </button>
-            <button
-              onClick={() => window.history.back()}
-              className="flex items-center space-x-2 px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white rounded-xl font-semibold shadow-lg transform transition-all duration-200 hover:scale-105 active:scale-95"
-            >
-              <ArrowLeft className="w-5 h-5" />
-              <span>Back</span>
-            </button>
-          </div>
-        </div>
-      </div>
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-indigo-50 overflow-hidden">
+      <AppStatusBar />
+      <AppHeader 
+        title="Supervisor Dashboard" 
+        subtitle="Waste & Downtime Control Center"
+        onMenuClick={() => {}}
+      />
+      
+      <PullToRefresh onRefresh={handleRefresh}>
+        <div className="px-4 pb-20">
 
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <StatsCard
-          title="Today's Waste Events"
-          value={stats.todayWaste}
-          change="+12%"
-          icon={Trash2}
-          color="red"
-          trend="up"
-        />
-        <StatsCard
-          title="Today's Downtime Events"
-          value={stats.todayDowntime}
-          change="-5%"
-          icon={AlertTriangle}
-          color="orange"
-          trend="down"
-        />
-        <StatsCard
-          title="Downtime Hours Today"
-          value={`${stats.totalDowntimeHours}h`}
-          change="-15%"
-          icon={Clock}
-          color="blue"
-          trend="down"
-        />
-      </div>
+          {/* Stats Cards */}
+          <div className="grid grid-cols-1 gap-6 mb-6 mt-6">
+            <StatsCard
+              title="Today's Waste Events"
+              value={stats.todayWaste}
+              change="+12%"
+              icon={Trash2}
+              color="red"
+              trend="up"
+            />
+            <StatsCard
+              title="Today's Downtime Events"
+              value={stats.todayDowntime}
+              change="-5%"
+              icon={AlertTriangle}
+              color="orange"
+              trend="down"
+            />
+            <StatsCard
+              title="Downtime Hours Today"
+              value={`${stats.totalDowntimeHours}h`}
+              change="-15%"
+              icon={Clock}
+              color="blue"
+              trend="down"
+            />
+          </div>
 
-      {/* Quick Actions */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <QuickActionButton
-          onClick={() => setShowDowntimeModal(true)}
-          icon={Plus}
-          label="Add Downtime Event"
-          color="red"
-        />
-        <QuickActionButton
-          onClick={() => setShowWasteModal(true)}
-          icon={Plus}
-          label="Add Waste Record"
-          color="green"
-        />
-        <QuickActionButton
-          onClick={() => setShowReports(true)}
-          icon={BarChart3}
-          label="View Reports"
-          color="blue"
-        />
-      </div>
+          {/* Quick Actions */}
+          <div className="grid grid-cols-1 gap-4 mb-6">
+            <QuickActionButton
+              onClick={() => setShowDowntimeModal(true)}
+              icon={AlertTriangle}
+              label="Add Downtime Event"
+              color="orange"
+            />
+            <QuickActionButton
+              onClick={() => setShowWasteModal(true)}
+              icon={Trash2}
+              label="Add Waste Record"
+              color="red"
+            />
+            <QuickActionButton
+              onClick={() => setShowReports(true)}
+              icon={BarChart3}
+              label="View Reports"
+              color="blue"
+            />
+          </div>
 
       {/* Recent Entries */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
