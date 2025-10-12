@@ -877,21 +877,26 @@ const WasteDowntimeDashboard = () => {
             />
           </div>
 
-      {/* Recent Entries */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <RecentEntriesList
-          title="Recent Waste Records"
-          entries={recentWaste}
-          type="waste"
-          onViewAll={() => setShowReports(true)}
-        />
-        <RecentEntriesList
-          title="Recent Downtime Events"
-          entries={recentDowntime}
-          type="downtime"
-          onViewAll={() => setShowReports(true)}
-        />
-      </div>
+          {/* Recent Entries */}
+          <div className="space-y-6">
+            <RecentEntriesList
+              title="Recent Waste Records"
+              entries={recentWaste}
+              type="waste"
+              onViewAll={() => setShowReports(true)}
+            />
+            <RecentEntriesList
+              title="Recent Downtime Events"
+              entries={recentDowntime}
+              type="downtime"
+              onViewAll={() => setShowReports(true)}
+            />
+          </div>
+        </div>
+      </PullToRefresh>
+      
+      {/* Bottom Safe Area */}
+      <div className="h-6 bg-transparent"></div>
 
       {/* Modals */}
       <AddDowntimeModal
