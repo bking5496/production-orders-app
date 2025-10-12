@@ -122,30 +122,34 @@ const PullToRefresh = ({ onRefresh, children }) => {
   );
 };
 
-// Modal component
+// Enhanced Modal with app-like animations
 const Modal = ({ isOpen, onClose, title, children, size = "large" }) => {
-  if (!isOpen) return null;
-
-  const sizeClasses = {
-    small: "max-w-md",
-    medium: "max-w-2xl", 
-    large: "max-w-4xl",
-    extraLarge: "max-w-6xl"
-  };
+  const [isVisible, setIsVisible] = useState(false);
+  
+  useEffect(() => {
+    if (isOpen) {
+      setIsVisible(true);
+    } else {
+      const timer = setTimeout(() => setIsVisible(false), 300);
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen]);
+  
+  if (!isVisible) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className={`bg-white rounded-2xl shadow-2xl ${sizeClasses[size]} w-full max-h-[90vh] overflow-y-auto`}>
+    <div className={`fixed inset-0 bg-black z-50 transition-all duration-300 ${isOpen ? 'bg-opacity-50' : 'bg-opacity-0'}`}>
+      <div className={`absolute inset-x-0 bottom-0 bg-white rounded-t-3xl shadow-2xl transition-all duration-300 ease-out ${isOpen ? 'translate-y-0' : 'translate-y-full'} max-h-[90vh] overflow-hidden`}>
         <div className="flex items-center justify-between p-6 border-b border-gray-200">
           <h2 className="text-2xl font-bold text-gray-800">{title}</h2>
           <button
             onClick={onClose}
-            className="p-2 hover:bg-gray-100 rounded-xl transition-colors"
+            className="p-3 hover:bg-gray-100 rounded-full transition-colors"
           >
             <X className="w-6 h-6 text-gray-600" />
           </button>
         </div>
-        <div className="p-6">
+        <div className="p-6 overflow-y-auto max-h-[calc(90vh-100px)]">
           {children}
         </div>
       </div>
@@ -153,8 +157,10 @@ const Modal = ({ isOpen, onClose, title, children, size = "large" }) => {
   );
 };
 
-// Dashboard stats card
+// Enhanced Stats Card with haptic feedback simulation
 const StatsCard = ({ title, value, change, icon: IconComponent, color = "blue", trend = "up", onClick }) => {
+  const [isPressed, setIsPressed] = useState(false);
+  
   const colorClasses = {
     blue: 'from-blue-600 to-slate-600 border-blue-400',
     green: 'from-green-600 to-emerald-600 border-green-400', 
@@ -162,59 +168,96 @@ const StatsCard = ({ title, value, change, icon: IconComponent, color = "blue", 
     orange: 'from-orange-600 to-amber-600 border-orange-400',
     purple: 'from-purple-600 to-indigo-600 border-purple-400'
   };
+  
+  const handleTouchStart = () => {
+    setIsPressed(true);
+    // Simulate haptic feedback
+    if (navigator.vibrate) {
+      navigator.vibrate(10);
+    }
+  };
+  
+  const handleTouchEnd = () => {
+    setIsPressed(false);
+    if (onClick) onClick();
+  };
 
   return (
     <div 
-      className={`p-6 rounded-2xl bg-gradient-to-br ${colorClasses[color]} border-2 shadow-xl cursor-pointer transform transition-all duration-300 hover:scale-105 active:scale-95`}
-      onClick={onClick}
+      className={`p-6 rounded-3xl bg-gradient-to-br ${colorClasses[color]} shadow-2xl cursor-pointer transform transition-all duration-200 active:scale-95 ${isPressed ? 'scale-95 shadow-lg' : 'hover:scale-102 shadow-xl'}`}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+      onMouseDown={handleTouchStart}
+      onMouseUp={handleTouchEnd}
+      onMouseLeave={() => setIsPressed(false)}
     >
       <div className="flex items-center justify-between mb-4">
-        <div className="p-3 bg-white/20 rounded-2xl">
-          <IconComponent className="w-8 h-8 text-white" />
+        <div className="p-4 bg-white/20 rounded-2xl backdrop-blur-sm">
+          <IconComponent className="w-10 h-10 text-white" />
         </div>
         {change && (
-          <div className="flex items-center space-x-1">
+          <div className="flex items-center space-x-1 bg-white/20 px-3 py-1 rounded-full backdrop-blur-sm">
             {trend === 'up' ? (
-              <TrendingUp className="w-5 h-5 text-green-200" />
+              <TrendingUp className="w-4 h-4 text-green-200" />
             ) : (
-              <TrendingDown className="w-5 h-5 text-red-200" />
+              <TrendingDown className="w-4 h-4 text-red-200" />
             )}
-            <span className={`text-sm font-semibold ${trend === 'up' ? 'text-green-200' : 'text-red-200'}`}>
+            <span className={`text-sm font-bold ${trend === 'up' ? 'text-green-200' : 'text-red-200'}`}>
               {change}
             </span>
           </div>
         )}
       </div>
       
-      <div className="space-y-2">
-        <div className="text-white text-3xl font-bold">{value}</div>
-        <div className="text-white/80 text-lg font-medium">{title}</div>
+      <div className="space-y-3">
+        <div className="text-white text-4xl font-black tracking-tight">{value}</div>
+        <div className="text-white/90 text-lg font-semibold">{title}</div>
       </div>
     </div>
   );
 };
 
-// Quick action button
+// Enhanced Quick Action Button with app-like feel
 const QuickActionButton = ({ onClick, icon: IconComponent, label, color = "blue", size = "large" }) => {
+  const [isPressed, setIsPressed] = useState(false);
+  
   const colorClasses = {
-    blue: 'bg-blue-600 hover:bg-blue-700 active:bg-blue-800',
-    green: 'bg-green-600 hover:bg-green-700 active:bg-green-800',
-    red: 'bg-red-600 hover:bg-red-700 active:bg-red-800',
-    orange: 'bg-orange-600 hover:bg-orange-700 active:bg-orange-800'
+    blue: 'from-blue-600 to-blue-700 border-blue-500',
+    green: 'from-green-600 to-green-700 border-green-500',
+    red: 'from-red-600 to-red-700 border-red-500',
+    orange: 'from-orange-600 to-orange-700 border-orange-500'
   };
 
   const sizeClasses = {
-    large: 'p-6 text-lg min-h-[100px]',
-    medium: 'p-4 text-base min-h-[80px]'
+    large: 'p-8 text-xl min-h-[120px]',
+    medium: 'p-6 text-lg min-h-[100px]'
+  };
+  
+  const handleTouchStart = () => {
+    setIsPressed(true);
+    if (navigator.vibrate) {
+      navigator.vibrate(15);
+    }
+  };
+  
+  const handleTouchEnd = () => {
+    setIsPressed(false);
+    if (onClick) onClick();
   };
 
   return (
     <button
-      onClick={onClick}
-      className={`${sizeClasses[size]} ${colorClasses[color]} text-white rounded-2xl font-semibold flex flex-col items-center justify-center space-y-3 shadow-lg transform transition-all duration-200 hover:scale-105 active:scale-95 w-full`}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+      onMouseDown={handleTouchStart}
+      onMouseUp={handleTouchEnd}
+      onMouseLeave={() => setIsPressed(false)}
+      className={`${sizeClasses[size]} bg-gradient-to-br ${colorClasses[color]} border-2 text-white rounded-3xl font-bold flex flex-col items-center justify-center space-y-4 shadow-2xl transform transition-all duration-200 w-full backdrop-blur-sm ${isPressed ? 'scale-95 shadow-lg' : 'hover:scale-105 shadow-xl'}`}
     >
-      <IconComponent className="w-8 h-8" />
-      <span>{label}</span>
+      <div className="p-3 bg-white/20 rounded-2xl">
+        <IconComponent className="w-10 h-10" />
+      </div>
+      <span className="tracking-wide">{label}</span>
     </button>
   );
 };
