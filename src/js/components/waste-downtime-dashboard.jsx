@@ -184,34 +184,34 @@ const StatsCard = ({ title, value, change, icon: IconComponent, color = "blue", 
 
   return (
     <div 
-      className={`p-6 rounded-3xl bg-gradient-to-br ${colorClasses[color]} shadow-2xl cursor-pointer transform transition-all duration-200 active:scale-95 ${isPressed ? 'scale-95 shadow-lg' : 'hover:scale-102 shadow-xl'}`}
+      className={`p-4 rounded-2xl bg-gradient-to-br ${colorClasses[color]} shadow-xl cursor-pointer transform transition-all duration-200 active:scale-95 ${isPressed ? 'scale-95 shadow-lg' : 'hover:scale-102 shadow-xl'}`}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
       onMouseDown={handleTouchStart}
       onMouseUp={handleTouchEnd}
       onMouseLeave={() => setIsPressed(false)}
     >
-      <div className="flex items-center justify-between mb-4">
-        <div className="p-4 bg-white/20 rounded-2xl backdrop-blur-sm">
-          <IconComponent className="w-10 h-10 text-white" />
+      <div className="flex flex-col items-center mb-3">
+        <div className="p-2 bg-white/20 rounded-xl backdrop-blur-sm mb-2">
+          <IconComponent className="w-6 h-6 text-white" />
         </div>
         {change && (
-          <div className="flex items-center space-x-1 bg-white/20 px-3 py-1 rounded-full backdrop-blur-sm">
+          <div className="flex items-center space-x-1 bg-white/20 px-2 py-1 rounded-full backdrop-blur-sm">
             {trend === 'up' ? (
-              <TrendingUp className="w-4 h-4 text-green-200" />
+              <TrendingUp className="w-3 h-3 text-green-200" />
             ) : (
-              <TrendingDown className="w-4 h-4 text-red-200" />
+              <TrendingDown className="w-3 h-3 text-red-200" />
             )}
-            <span className={`text-sm font-bold ${trend === 'up' ? 'text-green-200' : 'text-red-200'}`}>
+            <span className={`text-xs font-bold ${trend === 'up' ? 'text-green-200' : 'text-red-200'}`}>
               {change}
             </span>
           </div>
         )}
       </div>
       
-      <div className="space-y-3">
-        <div className="text-white text-4xl font-black tracking-tight">{value}</div>
-        <div className="text-white/90 text-lg font-semibold">{title}</div>
+      <div className="space-y-2">
+        <div className="text-white text-2xl font-black tracking-tight">{value}</div>
+        <div className="text-white/90 text-xs font-semibold leading-tight">{title}</div>
       </div>
     </div>
   );
@@ -538,9 +538,7 @@ const AddWasteModal = ({ isOpen, onClose, onSave, orders = [], users = [], labor
     quantity: '',
     unit: 'kg',
     reason: '',
-    recorded_by: '',
-    cost_per_unit: '',
-    total_cost: ''
+    recorded_by: ''
   });
 
   const wasteTypes = [
@@ -553,14 +551,7 @@ const AddWasteModal = ({ isOpen, onClose, onSave, orders = [], users = [], labor
   const handleSubmit = useCallback(async (e) => {
     e.preventDefault();
     try {
-      const totalCost = formData.cost_per_unit && formData.quantity ? 
-        (parseFloat(formData.cost_per_unit) * parseFloat(formData.quantity)).toFixed(2) : 
-        formData.total_cost;
-      
-      await onSave({
-        ...formData,
-        total_cost: totalCost
-      });
+      await onSave(formData);
       
       setFormData({
         order_number: '',
@@ -568,9 +559,7 @@ const AddWasteModal = ({ isOpen, onClose, onSave, orders = [], users = [], labor
         quantity: '',
         unit: 'kg',
         reason: '',
-        recorded_by: '',
-        cost_per_unit: '',
-        total_cost: ''
+        recorded_by: ''
       });
       onClose();
     } catch (error) {
@@ -631,15 +620,6 @@ const AddWasteModal = ({ isOpen, onClose, onSave, orders = [], users = [], labor
               label: person.full_name || person.name || person.employee_name
             }))}
           />
-          
-          <TouchInput
-            label="Cost per Unit (Optional)"
-            type="number"
-            step="0.01"
-            value={formData.cost_per_unit}
-            onChange={(value) => setFormData({...formData, cost_per_unit: value})}
-            placeholder="Cost per unit"
-          />
         </div>
         
         <TouchInput
@@ -650,14 +630,6 @@ const AddWasteModal = ({ isOpen, onClose, onSave, orders = [], users = [], labor
           placeholder="Describe the reason for waste and any relevant details"
           required
         />
-        
-        {formData.cost_per_unit && formData.quantity && (
-          <div className="p-4 bg-blue-50 rounded-xl">
-            <div className="text-lg font-semibold text-blue-800">
-              Calculated Total Cost: R{(parseFloat(formData.cost_per_unit) * parseFloat(formData.quantity)).toFixed(2)}
-            </div>
-          </div>
-        )}
         
         <div className="flex space-x-4 pt-4">
           <button
@@ -828,7 +800,7 @@ const WasteDowntimeDashboard = () => {
         <div className="px-4 pb-20">
 
           {/* Stats Cards */}
-          <div className="grid grid-cols-1 gap-6 mb-6 mt-6">
+          <div className="grid grid-cols-3 gap-3 mb-6 mt-6">
             <StatsCard
               title="Today's Waste Events"
               value={stats.todayWaste}
