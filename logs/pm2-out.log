@@ -48918,3 +48918,227 @@
 ]
 2025-10-13T12:03:34: 🏠 supervisor joined room: production
 2025-10-13T12:28:07: 🔌 WebSocket disconnected: supervisor
+2025-10-13T15:21:34: ✅ New PostgreSQL client connected
+2025-10-13T15:21:34: 🔗 Client acquired from pool
+2025-10-13T15:21:34: 🔓 Client released back to pool
+2025-10-13T15:21:34: 🔗 Client acquired from pool
+2025-10-13T15:21:34: 🔓 Client released back to pool
+2025-10-13T15:21:35: New WebSocket connection attempt
+2025-10-13T15:21:35: ✅ WebSocket authenticated: supervisor (supervisor)
+2025-10-13T15:21:35: 📺 supervisor subscribed to: [
+  'general',
+  'notifications',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-10-13T15:21:35: 🏠 supervisor joined room: production
+2025-10-13T15:21:35: 🔗 Client acquired from pool
+2025-10-13T15:21:35: 🔓 Client released back to pool
+2025-10-13T15:21:35: 🔗 Client acquired from pool
+2025-10-13T15:21:35: 🔓 Client released back to pool
+2025-10-13T15:21:35: 📺 supervisor subscribed to: [
+  'general',
+  'notifications',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-10-13T15:21:35: 🏠 supervisor joined room: production
+2025-10-13T15:21:35: 📺 supervisor subscribed to: [
+  'general',
+  'notifications',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-10-13T15:21:35: 🏠 supervisor joined room: production
+2025-10-13T15:22:20: 🔌 WebSocket disconnected: supervisor
+2025-10-13T15:22:20: ✅ New PostgreSQL client connected
+2025-10-13T15:22:20: 🔗 Client acquired from pool
+2025-10-13T15:22:20: ✅ New PostgreSQL client connected
+2025-10-13T15:22:20: 🔗 Client acquired from pool
+2025-10-13T15:22:20: 🔓 Client released back to pool
+2025-10-13T15:22:20: 🔓 Client released back to pool
+2025-10-13T15:22:20: 🔗 Client acquired from pool
+2025-10-13T15:22:20: 🔓 Client released back to pool
+2025-10-13T15:22:20: 🔗 Client acquired from pool
+2025-10-13T15:22:20: 🔗 Client acquired from pool
+2025-10-13T15:22:20: 🔓 Client released back to pool
+2025-10-13T15:22:20: 🔓 Client released back to pool
+2025-10-13T15:22:20: 🔗 Client acquired from pool
+2025-10-13T15:22:20: 🔓 Client released back to pool
+2025-10-13T15:22:20: 🔗 Client acquired from pool
+2025-10-13T15:22:20: ✅ New PostgreSQL client connected
+2025-10-13T15:22:20: 🔗 Client acquired from pool
+2025-10-13T15:22:20: 🔓 Client released back to pool
+2025-10-13T15:22:20: 🔓 Client released back to pool
+2025-10-13T15:22:21: 🔗 Client acquired from pool
+2025-10-13T15:22:21: 🔓 Client released back to pool
+2025-10-13T15:22:21: New WebSocket connection attempt
+2025-10-13T15:22:21: ✅ WebSocket authenticated: supervisor (supervisor)
+2025-10-13T15:22:21: 🔗 Client acquired from pool
+2025-10-13T15:22:21: 🔓 Client released back to pool
+2025-10-13T15:22:21: 📺 supervisor subscribed to: [
+  'general',
+  'notifications',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-10-13T15:22:21: 🏠 supervisor joined room: production
+2025-10-13T15:22:21: 📺 supervisor subscribed to: [
+  'general',
+  'notifications',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-10-13T15:22:21: 🏠 supervisor joined room: production
+2025-10-13T15:22:21: 🔗 Client acquired from pool
+2025-10-13T15:22:21: 🔓 Client released back to pool
+2025-10-13T15:22:45: 🔌 WebSocket disconnected: supervisor
+2025-10-13T15:22:46: 🔗 Client acquired from pool
+2025-10-13T15:22:46: 🔓 Client released back to pool
+2025-10-13T15:22:46: 🔗 Client acquired from pool
+2025-10-13T15:22:46: 🔓 Client released back to pool
+2025-10-13T15:22:46: 🔗 Client acquired from pool
+2025-10-13T15:22:46: 🔓 Client released back to pool
+2025-10-13T15:22:46: 🔗 Client acquired from pool
+2025-10-13T15:22:46: 🔓 Client released back to pool
+2025-10-13T15:22:46: 🔗 Client acquired from pool
+2025-10-13T15:22:46: 🔗 Client acquired from pool
+2025-10-13T15:22:46: 🔓 Client released back to pool
+2025-10-13T15:22:46: 🔓 Client released back to pool
+2025-10-13T15:22:46: 🔗 Client acquired from pool
+2025-10-13T15:22:46: 🔗 Client acquired from pool
+2025-10-13T15:22:46: 🔓 Client released back to pool
+2025-10-13T15:22:46: 🔓 Client released back to pool
+2025-10-13T15:22:46: 🔗 Client acquired from pool
+2025-10-13T15:22:46: New WebSocket connection attempt
+2025-10-13T15:22:46: ✅ WebSocket authenticated: supervisor (supervisor)
+2025-10-13T15:22:46: 🔓 Client released back to pool
+2025-10-13T15:22:46: 🔗 Client acquired from pool
+2025-10-13T15:22:46: 🔓 Client released back to pool
+2025-10-13T15:22:46: 🔗 Client acquired from pool
+2025-10-13T15:22:46: 🔓 Client released back to pool
+2025-10-13T15:22:46: 📺 supervisor subscribed to: [
+  'general',
+  'notifications',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-10-13T15:22:46: 🏠 supervisor joined room: production
+2025-10-13T15:22:46: 📺 supervisor subscribed to: [
+  'general',
+  'notifications',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-10-13T15:22:46: 🏠 supervisor joined room: production
+2025-10-13T15:22:55: 🔌 WebSocket disconnected: supervisor
+2025-10-13T15:22:55: 🔗 Client acquired from pool
+2025-10-13T15:22:55: 🔗 Client acquired from pool
+2025-10-13T15:22:55: 🔓 Client released back to pool
+2025-10-13T15:22:55: 🔓 Client released back to pool
+2025-10-13T15:22:55: 🔗 Client acquired from pool
+2025-10-13T15:22:55: 🔓 Client released back to pool
+2025-10-13T15:22:55: 🔗 Client acquired from pool
+2025-10-13T15:22:55: 🔗 Client acquired from pool
+2025-10-13T15:22:55: 🔓 Client released back to pool
+2025-10-13T15:22:55: 🔓 Client released back to pool
+2025-10-13T15:22:55: 🔗 Client acquired from pool
+2025-10-13T15:22:55: 🔓 Client released back to pool
+2025-10-13T15:22:55: ✅ New PostgreSQL client connected
+2025-10-13T15:22:55: 🔗 Client acquired from pool
+2025-10-13T15:22:55: 🔓 Client released back to pool
+2025-10-13T15:22:55: 🔗 Client acquired from pool
+2025-10-13T15:22:55: 🔓 Client released back to pool
+2025-10-13T15:22:55: 🔗 Client acquired from pool
+2025-10-13T15:22:55: 🔓 Client released back to pool
+2025-10-13T15:22:55: New WebSocket connection attempt
+2025-10-13T15:22:55: ✅ WebSocket authenticated: supervisor (supervisor)
+2025-10-13T15:22:55: 🔗 Client acquired from pool
+2025-10-13T15:22:55: 🔓 Client released back to pool
+2025-10-13T15:22:56: 📺 supervisor subscribed to: [
+  'general',
+  'notifications',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-10-13T15:22:56: 🏠 supervisor joined room: production
+2025-10-13T15:22:56: 📺 supervisor subscribed to: [
+  'general',
+  'notifications',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-10-13T15:22:56: 🏠 supervisor joined room: production
+2025-10-13T15:22:56: 🔗 Client acquired from pool
+2025-10-13T15:22:56: 🔓 Client released back to pool
+2025-10-13T15:23:12: 🔌 WebSocket disconnected: supervisor
+2025-10-13T15:23:12: 🔗 Client acquired from pool
+2025-10-13T15:23:12: 🔗 Client acquired from pool
+2025-10-13T15:23:12: 🔓 Client released back to pool
+2025-10-13T15:23:12: 🔓 Client released back to pool
+2025-10-13T15:23:12: 🔗 Client acquired from pool
+2025-10-13T15:23:12: 🔓 Client released back to pool
+2025-10-13T15:23:12: 🔗 Client acquired from pool
+2025-10-13T15:23:12: 🔓 Client released back to pool
+2025-10-13T15:23:12: 🔗 Client acquired from pool
+2025-10-13T15:23:12: 🔗 Client acquired from pool
+2025-10-13T15:23:12: 🔓 Client released back to pool
+2025-10-13T15:23:12: 🔓 Client released back to pool
+2025-10-13T15:23:12: 🔗 Client acquired from pool
+2025-10-13T15:23:12: 🔗 Client acquired from pool
+2025-10-13T15:23:12: 🔓 Client released back to pool
+2025-10-13T15:23:12: 🔓 Client released back to pool
+2025-10-13T15:23:12: 🔗 Client acquired from pool
+2025-10-13T15:23:12: 🔓 Client released back to pool
+2025-10-13T15:23:13: New WebSocket connection attempt
+2025-10-13T15:23:13: ✅ WebSocket authenticated: supervisor (supervisor)
+2025-10-13T15:23:13: 🔗 Client acquired from pool
+2025-10-13T15:23:13: 🔓 Client released back to pool
+2025-10-13T15:23:13: 🔗 Client acquired from pool
+2025-10-13T15:23:13: 🔓 Client released back to pool
+2025-10-13T15:23:14: 📺 supervisor subscribed to: [
+  'general',
+  'notifications',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-10-13T15:23:14: 🏠 supervisor joined room: production
+2025-10-13T15:23:14: 📺 supervisor subscribed to: [
+  'general',
+  'notifications',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-10-13T15:23:14: 🏠 supervisor joined room: production
+2025-10-13T15:27:40: ✅ New PostgreSQL client connected
+2025-10-13T15:27:40: 🔗 Client acquired from pool
+2025-10-13T15:27:40: 🔓 Client released back to pool
+2025-10-13T15:27:40: 🔗 Client acquired from pool
+2025-10-13T15:27:40: 🔓 Client released back to pool
+2025-10-13T15:27:40: ✅ Auth success: supervisor from ::1 - curl/8.5.0
+2025-10-13T15:27:46: 🔗 Client acquired from pool
+2025-10-13T15:27:46: 🔓 Client released back to pool
+2025-10-13T15:27:54: 🔗 Client acquired from pool
+2025-10-13T15:27:54: 🔓 Client released back to pool

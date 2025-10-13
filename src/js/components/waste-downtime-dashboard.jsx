@@ -706,8 +706,8 @@ const WasteDowntimeDashboard = () => {
     try {
       const today = new Date().toISOString().split('T')[0];
       const [wasteRes, downtimeRes] = await Promise.all([
-        API.get(`/api/waste/reports?start_date=${today}`),
-        API.get(`/api/downtime/reports?start_date=${today}`)
+        API.get(`/waste/reports?start_date=${today}`),
+        API.get(`/downtime/reports?start_date=${today}`)
       ]);
       
       setRecentWaste(wasteRes.data || []);
@@ -721,8 +721,8 @@ const WasteDowntimeDashboard = () => {
     try {
       const today = new Date().toISOString().split('T')[0];
       const [wasteSummary, downtimeSummary] = await Promise.all([
-        API.get(`/api/waste/summary?start_date=${today}&end_date=${today}`),
-        API.get(`/api/downtime/summary?start_date=${today}&end_date=${today}`)
+        API.get(`/waste/summary?start_date=${today}&end_date=${today}`),
+        API.get(`/downtime/summary?start_date=${today}&end_date=${today}`)
       ]);
       
       const wasteData = wasteSummary.data || [];
