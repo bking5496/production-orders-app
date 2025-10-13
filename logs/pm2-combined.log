@@ -53962,3 +53962,41 @@ ReferenceError: requireRole is not defined
     at authenticateToken (/home/production-app/production-orders-app/src/middleware/auth.js:22:7)
     at Layer.handle [as handle_request] (/home/production-app/production-orders-app/node_modules/express/lib/router/layer.js:95:5)
     at next (/home/production-app/production-orders-app/node_modules/express/lib/router/route.js:149:13)
+2025-10-13T16:36:16: ✅ New PostgreSQL client connected
+2025-10-13T16:36:16: 🔗 Client acquired from pool
+2025-10-13T16:36:16: 🔓 Client released back to pool
+2025-10-13T16:36:16: 🔗 Client acquired from pool
+2025-10-13T16:36:16: 🔓 Client released back to pool
+2025-10-13T16:36:16: New WebSocket connection attempt
+2025-10-13T16:36:16: ✅ WebSocket authenticated: supervisor (supervisor)
+2025-10-13T16:36:16: 📺 supervisor subscribed to: [
+  'general',
+  'notifications',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-10-13T16:36:16: 🏠 supervisor joined room: production
+2025-10-13T16:36:16: 🔗 Client acquired from pool
+2025-10-13T16:36:16: 🔓 Client released back to pool
+2025-10-13T16:36:17: 🔗 Client acquired from pool
+2025-10-13T16:36:17: 🔓 Client released back to pool
+2025-10-13T16:36:17: 📺 supervisor subscribed to: [
+  'general',
+  'notifications',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-10-13T16:36:17: 🏠 supervisor joined room: production
+2025-10-13T16:36:17: 📺 supervisor subscribed to: [
+  'general',
+  'notifications',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-10-13T16:36:17: 🏠 supervisor joined room: production
