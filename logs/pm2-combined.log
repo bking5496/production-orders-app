@@ -53255,3 +53255,42 @@ ReferenceError: requireRole is not defined
 2025-10-12T23:39:51: 🏠 supervisor joined room: production
 2025-10-12T23:40:34: 🔌 WebSocket disconnected: supervisor
 2025-10-12T23:40:47: 🔌 WebSocket disconnected: supervisor
+2025-10-13T08:22:57: JWT verification failed: jwt expired
+2025-10-13T08:22:57: JWT verification failed: jwt expired
+2025-10-13T08:22:57: JWT verification failed: jwt expired
+2025-10-13T08:22:58: JWT verification failed: jwt expired
+2025-10-13T08:23:00: JWT verification failed: jwt expired
+2025-10-13T08:23:07: ✅ New PostgreSQL client connected
+2025-10-13T08:23:07: 🔗 Client acquired from pool
+2025-10-13T08:23:07: 🔓 Client released back to pool
+2025-10-13T08:23:07: 🔗 Client acquired from pool
+2025-10-13T08:23:07: 🔓 Client released back to pool
+2025-10-13T08:23:07: ✅ Auth success: supervisor from ::ffff:127.0.0.1 - Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36 Edg/141.0.0.0
+2025-10-13T08:23:08: 🔗 Client acquired from pool
+2025-10-13T08:23:08: 🔓 Client released back to pool
+2025-10-13T08:23:08: 🔗 Client acquired from pool
+2025-10-13T08:23:08: 🔓 Client released back to pool
+2025-10-13T08:23:08: New WebSocket connection attempt
+2025-10-13T08:23:08: ✅ WebSocket authenticated: supervisor (supervisor)
+2025-10-13T08:23:08: 🔗 Client acquired from pool
+2025-10-13T08:23:08: 🔓 Client released back to pool
+2025-10-13T08:23:08: 🔗 Client acquired from pool
+2025-10-13T08:23:08: 🔓 Client released back to pool
+2025-10-13T08:23:08: 📺 supervisor subscribed to: [
+  'general',
+  'notifications',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-10-13T08:23:08: 🏠 supervisor joined room: production
+2025-10-13T08:23:08: 📺 supervisor subscribed to: [
+  'general',
+  'notifications',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-10-13T08:23:08: 🏠 supervisor joined room: production
