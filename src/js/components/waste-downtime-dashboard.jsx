@@ -678,11 +678,11 @@ const WasteDowntimeDashboard = () => {
     try {
       setIsLoading(true);
       const [ordersRes, machinesRes, usersRes, categoriesRes, laborRes] = await Promise.all([
-        API.get('/api/orders'),
-        API.get('/api/machines'),
-        API.get('/api/users'),
-        API.get('/api/downtime-categories'),
-        API.get('/api/labor/assignments')
+        API.get('/orders'),
+        API.get('/machines'),
+        API.get('/users'),
+        API.get('/downtime-categories'),
+        API.get('/labor/assignments')
       ]);
       
       setOrders(ordersRes.data || []);
@@ -745,7 +745,7 @@ const WasteDowntimeDashboard = () => {
   // Save functions
   const saveDowntime = useCallback(async (downtimeData) => {
     try {
-      await API.post('/api/downtime', downtimeData);
+      await API.post('/downtime', downtimeData);
       loadRecentEntries();
       loadStats();
     } catch (error) {
@@ -756,7 +756,7 @@ const WasteDowntimeDashboard = () => {
 
   const saveWaste = useCallback(async (wasteData) => {
     try {
-      await API.post('/api/waste', wasteData);
+      await API.post('/waste', wasteData);
       loadRecentEntries();
       loadStats();
     } catch (error) {
