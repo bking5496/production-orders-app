@@ -4378,3 +4378,5 @@
     at Layer.handle [as handle_request] (/home/production-app/production-orders-app/node_modules/express/lib/router/layer.js:95:5)
     at next (/home/production-app/production-orders-app/node_modules/express/lib/router/route.js:149:13)
 2025-10-13T15:27:33: JWT verification failed: jwt malformed
+2025-10-13T15:37:35: JWT verification failed: jwt malformed
+2025-10-13T15:37:40: 🔒 Auth failure: admin from ::ffff:127.0.0.1 - Invalid input - curl/8.5.0
