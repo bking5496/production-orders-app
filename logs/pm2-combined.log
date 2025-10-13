@@ -53451,3 +53451,37 @@ ReferenceError: requireRole is not defined
 ]
 2025-10-13T11:18:41: 🏠 supervisor joined room: production
 2025-10-13T11:28:07: 🔌 WebSocket disconnected: supervisor
+2025-10-13T11:43:57: ✅ New PostgreSQL client connected
+2025-10-13T11:43:57: 🔗 Client acquired from pool
+2025-10-13T11:43:57: 🔓 Client released back to pool
+2025-10-13T11:43:58: 🔗 Client acquired from pool
+2025-10-13T11:43:58: 🔓 Client released back to pool
+2025-10-13T11:43:58: ✅ Auth success: supervisor from ::1 - Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/138.0.7204.23 Safari/537.36
+2025-10-13T11:43:58: 🔗 Client acquired from pool
+2025-10-13T11:43:58: New WebSocket connection attempt
+2025-10-13T11:43:58: ✅ WebSocket authenticated: supervisor (supervisor)
+2025-10-13T11:43:58: 🔓 Client released back to pool
+2025-10-13T11:43:58: 🔗 Client acquired from pool
+2025-10-13T11:43:58: 🔓 Client released back to pool
+2025-10-13T11:43:58: 🔗 Client acquired from pool
+2025-10-13T11:43:58: 🔓 Client released back to pool
+2025-10-13T11:43:58: 🔗 Client acquired from pool
+2025-10-13T11:43:58: 🔓 Client released back to pool
+2025-10-13T11:43:58: 📺 supervisor subscribed to: [
+  'general',
+  'notifications',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-10-13T11:43:58: 🏠 supervisor joined room: production
+2025-10-13T11:43:58: 📺 supervisor subscribed to: [
+  'general',
+  'notifications',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-10-13T11:43:58: 🏠 supervisor joined room: production
