@@ -53883,3 +53883,4 @@ ReferenceError: requireRole is not defined
 2025-10-13T15:27:54: 🔓 Client released back to pool
 2025-10-13T15:37:35: JWT verification failed: jwt malformed
 2025-10-13T15:37:40: 🔒 Auth failure: admin from ::ffff:127.0.0.1 - Invalid input - curl/8.5.0
+2025-10-13T15:47:07: 🔌 WebSocket disconnected: supervisor
