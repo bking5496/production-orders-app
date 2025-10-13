@@ -208,14 +208,13 @@ app.use('/api/config', configurationRoutes);
 app.use('/api/maturation', maturationRoutes);
 
 // Waste and Downtime Management Endpoints
-const { getDbClient } = require('./config/database');
+const { query } = require('./config/database');
 const { authenticateToken, requireRole } = require('./middleware/auth');
 
 // Get downtime categories
 app.get('/api/downtime-categories', authenticateToken, async (req, res) => {
   try {
-    const db = await getDbClient();
-    const result = await db.query('SELECT * FROM downtime_categories ORDER BY category_name');
+    const result = await query('SELECT * FROM downtime_categories ORDER BY category_name');
     res.success(result.rows, 'Downtime categories retrieved successfully');
   } catch (error) {
     console.error('Error fetching downtime categories:', error);
@@ -226,7 +225,7 @@ app.get('/api/downtime-categories', authenticateToken, async (req, res) => {
 // Create downtime record
 app.post('/api/downtime', authenticateToken, async (req, res) => {
   try {
-    const db = await getDbClient();
+    // Use query function directly from database config
     const {
       order_number,
       machine_id,
@@ -243,11 +242,11 @@ app.post('/api/downtime', authenticateToken, async (req, res) => {
     // Find order by order_number to get order_id
     let order_id = null;
     if (order_number) {
-      const orderResult = await db.query('SELECT id FROM production_orders WHERE order_number = $1', [order_number]);
+      const orderResult = await query('SELECT id FROM production_orders WHERE order_number = $1', [order_number]);
       order_id = orderResult.rows[0]?.id || null;
     }
 
-    const result = await db.query(`
+    const result = await query(`
       INSERT INTO production_stops_enhanced 
       (order_id, machine_id, downtime_category_id, primary_cause, notes, 
        reported_by, assigned_to, start_time, estimated_duration, severity, status)
@@ -266,7 +265,7 @@ app.post('/api/downtime', authenticateToken, async (req, res) => {
 // Create waste record
 app.post('/api/waste', authenticateToken, async (req, res) => {
   try {
-    const db = await getDbClient();
+    // Use query function directly from database config
     const {
       order_number,
       waste_type,
@@ -281,11 +280,11 @@ app.post('/api/waste', authenticateToken, async (req, res) => {
     // Find order by order_number to get order_id
     let order_id = null;
     if (order_number) {
-      const orderResult = await db.query('SELECT id FROM production_orders WHERE order_number = $1', [order_number]);
+      const orderResult = await query('SELECT id FROM production_orders WHERE order_number = $1', [order_number]);
       order_id = orderResult.rows[0]?.id || null;
     }
 
-    const result = await db.query(`
+    const result = await query(`
       INSERT INTO production_waste 
       (order_id, waste_type, quantity, unit, reason, recorded_by, cost_per_unit, total_cost)
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
@@ -302,7 +301,7 @@ app.post('/api/waste', authenticateToken, async (req, res) => {
 // Get waste reports
 app.get('/api/waste/reports', authenticateToken, async (req, res) => {
   try {
-    const db = await getDbClient();
+    // Use query function directly from database config
     const { start_date, end_date, order_id, waste_type } = req.query;
     
     let query = `
@@ -347,7 +346,7 @@ app.get('/api/waste/reports', authenticateToken, async (req, res) => {
     
     query += ` ORDER BY pw.recorded_at DESC`;
     
-    const result = await db.query(query, params);
+    const result = await query(query, params);
     res.success(result.rows, 'Waste reports retrieved successfully');
   } catch (error) {
     console.error('Error fetching waste reports:', error);
@@ -358,7 +357,7 @@ app.get('/api/waste/reports', authenticateToken, async (req, res) => {
 // Get downtime reports
 app.get('/api/downtime/reports', authenticateToken, async (req, res) => {
   try {
-    const db = await getDbClient();
+    // Use query function directly from database config
     const { start_date, end_date, machine_id, category_id, status } = req.query;
     
     let query = `
@@ -417,7 +416,7 @@ app.get('/api/downtime/reports', authenticateToken, async (req, res) => {
     
     query += ` ORDER BY pse.start_time DESC`;
     
-    const result = await db.query(query, params);
+    const result = await query(query, params);
     res.success(result.rows, 'Downtime reports retrieved successfully');
   } catch (error) {
     console.error('Error fetching downtime reports:', error);
@@ -428,7 +427,7 @@ app.get('/api/downtime/reports', authenticateToken, async (req, res) => {
 // Get waste summary statistics
 app.get('/api/waste/summary', authenticateToken, async (req, res) => {
   try {
-    const db = await getDbClient();
+    // Use query function directly from database config
     const { start_date, end_date } = req.query;
     
     let whereClause = '';
@@ -464,7 +463,7 @@ app.get('/api/waste/summary', authenticateToken, async (req, res) => {
       ORDER BY type_count DESC
     `;
     
-    const result = await db.query(summaryQuery, params);
+    const result = await query(summaryQuery, params);
     res.success(result.rows, 'Waste summary retrieved successfully');
   } catch (error) {
     console.error('Error fetching waste summary:', error);
@@ -475,7 +474,7 @@ app.get('/api/waste/summary', authenticateToken, async (req, res) => {
 // Get downtime summary statistics
 app.get('/api/downtime/summary', authenticateToken, async (req, res) => {
   try {
-    const db = await getDbClient();
+    // Use query function directly from database config
     const { start_date, end_date } = req.query;
     
     let whereClause = '';
@@ -513,7 +512,7 @@ app.get('/api/downtime/summary', authenticateToken, async (req, res) => {
       ORDER BY category_count DESC
     `;
     
-    const result = await db.query(summaryQuery, params);
+    const result = await query(summaryQuery, params);
     res.success(result.rows, 'Downtime summary retrieved successfully');
   } catch (error) {
     console.error('Error fetching downtime summary:', error);
@@ -794,7 +793,7 @@ const testComponents = async () => {
   try {
     // Test database connection
     const db = require('./config/database');
-    await db.query('SELECT NOW() as current_time');
+    await query('SELECT NOW() as current_time');
     console.log('✅ Database connection: OK');
     
     // Test authentication middleware
