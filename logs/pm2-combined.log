@@ -53884,3 +53884,81 @@ ReferenceError: requireRole is not defined
 2025-10-13T15:37:35: JWT verification failed: jwt malformed
 2025-10-13T15:37:40: 🔒 Auth failure: admin from ::ffff:127.0.0.1 - Invalid input - curl/8.5.0
 2025-10-13T15:47:07: 🔌 WebSocket disconnected: supervisor
+2025-10-13T15:53:54: 🔌 WebSocket disconnected: supervisor
+2025-10-13T15:53:55: ✅ New PostgreSQL client connected
+2025-10-13T15:53:55: 🔗 Client acquired from pool
+2025-10-13T15:53:55: ✅ New PostgreSQL client connected
+2025-10-13T15:53:55: 🔗 Client acquired from pool
+2025-10-13T15:53:55: 🔓 Client released back to pool
+2025-10-13T15:53:55: 🔓 Client released back to pool
+2025-10-13T15:53:55: 🔗 Client acquired from pool
+2025-10-13T15:53:55: 🔓 Client released back to pool
+2025-10-13T15:53:55: 🔗 Client acquired from pool
+2025-10-13T15:53:55: 🔓 Client released back to pool
+2025-10-13T15:53:55: 🔗 Client acquired from pool
+2025-10-13T15:53:55: 🔗 Client acquired from pool
+2025-10-13T15:53:55: 🔓 Client released back to pool
+2025-10-13T15:53:55: 🔓 Client released back to pool
+2025-10-13T15:53:55: Error fetching downtime categories: TypeError: getDbClient is not a function
+    at /home/production-app/production-orders-app/src/server-production.js:217:22
+    at Layer.handle [as handle_request] (/home/production-app/production-orders-app/node_modules/express/lib/router/layer.js:95:5)
+    at next (/home/production-app/production-orders-app/node_modules/express/lib/router/route.js:149:13)
+    at /home/production-app/production-orders-app/src/middleware/auth.js:33:5
+    at /home/production-app/production-orders-app/node_modules/jsonwebtoken/verify.js:261:12
+    at getSecret (/home/production-app/production-orders-app/node_modules/jsonwebtoken/verify.js:97:14)
+    at module.exports [as verify] (/home/production-app/production-orders-app/node_modules/jsonwebtoken/verify.js:101:10)
+    at authenticateToken (/home/production-app/production-orders-app/src/middleware/auth.js:22:7)
+    at Layer.handle [as handle_request] (/home/production-app/production-orders-app/node_modules/express/lib/router/layer.js:95:5)
+    at next (/home/production-app/production-orders-app/node_modules/express/lib/router/route.js:149:13)
+2025-10-13T15:53:55: 🔗 Client acquired from pool
+2025-10-13T15:53:55: 🔗 Client acquired from pool
+2025-10-13T15:53:55: 🔓 Client released back to pool
+2025-10-13T15:53:55: 🔓 Client released back to pool
+2025-10-13T15:53:55: 🔗 Client acquired from pool
+2025-10-13T15:53:55: 🔓 Client released back to pool
+2025-10-13T15:53:55: New WebSocket connection attempt
+2025-10-13T15:53:55: ✅ WebSocket authenticated: supervisor (supervisor)
+2025-10-13T15:53:55: 🔗 Client acquired from pool
+2025-10-13T15:53:55: 🔓 Client released back to pool
+2025-10-13T15:53:55: 🔗 Client acquired from pool
+2025-10-13T15:53:55: 🔓 Client released back to pool
+2025-10-13T15:53:55: 📺 supervisor subscribed to: [
+  'general',
+  'notifications',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-10-13T15:53:55: 🏠 supervisor joined room: production
+2025-10-13T15:53:55: 📺 supervisor subscribed to: [
+  'general',
+  'notifications',
+  'production',
+  'machines',
+  'alerts',
+  'analytics'
+]
+2025-10-13T15:53:55: 🏠 supervisor joined room: production
+2025-10-13T15:53:56: Error fetching downtime categories: TypeError: getDbClient is not a function
+    at /home/production-app/production-orders-app/src/server-production.js:217:22
+    at Layer.handle [as handle_request] (/home/production-app/production-orders-app/node_modules/express/lib/router/layer.js:95:5)
+    at next (/home/production-app/production-orders-app/node_modules/express/lib/router/route.js:149:13)
+    at /home/production-app/production-orders-app/src/middleware/auth.js:33:5
+    at /home/production-app/production-orders-app/node_modules/jsonwebtoken/verify.js:261:12
+    at getSecret (/home/production-app/production-orders-app/node_modules/jsonwebtoken/verify.js:97:14)
+    at module.exports [as verify] (/home/production-app/production-orders-app/node_modules/jsonwebtoken/verify.js:101:10)
+    at authenticateToken (/home/production-app/production-orders-app/src/middleware/auth.js:22:7)
+    at Layer.handle [as handle_request] (/home/production-app/production-orders-app/node_modules/express/lib/router/layer.js:95:5)
+    at next (/home/production-app/production-orders-app/node_modules/express/lib/router/route.js:149:13)
+2025-10-13T15:53:58: Error fetching downtime categories: TypeError: getDbClient is not a function
+    at /home/production-app/production-orders-app/src/server-production.js:217:22
+    at Layer.handle [as handle_request] (/home/production-app/production-orders-app/node_modules/express/lib/router/layer.js:95:5)
+    at next (/home/production-app/production-orders-app/node_modules/express/lib/router/route.js:149:13)
+    at /home/production-app/production-orders-app/src/middleware/auth.js:33:5
+    at /home/production-app/production-orders-app/node_modules/jsonwebtoken/verify.js:261:12
+    at getSecret (/home/production-app/production-orders-app/node_modules/jsonwebtoken/verify.js:97:14)
+    at module.exports [as verify] (/home/production-app/production-orders-app/node_modules/jsonwebtoken/verify.js:101:10)
+    at authenticateToken (/home/production-app/production-orders-app/src/middleware/auth.js:22:7)
+    at Layer.handle [as handle_request] (/home/production-app/production-orders-app/node_modules/express/lib/router/layer.js:95:5)
+    at next (/home/production-app/production-orders-app/node_modules/express/lib/router/route.js:149:13)
