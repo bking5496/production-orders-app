@@ -4551,3 +4551,39 @@
   user: 'Anonymous',
   timestamp: '2025-10-21T02:40:29.862Z'
 }
+2025-10-22T11:51:53: Error occurred: {
+  error: 'Not allowed by CORS',
+  stack: 'Error: Not allowed by CORS\n' +
+    '    at origin (/home/production-app/production-orders-app/src/server-production.js:45:16)\n' +
+    '    at /home/production-app/production-orders-app/node_modules/cors/lib/index.js:219:13\n' +
+    '    at optionsCallback (/home/production-app/production-orders-app/node_modules/cors/lib/index.js:199:9)\n' +
+    '    at corsMiddleware (/home/production-app/production-orders-app/node_modules/cors/lib/index.js:204:7)\n' +
+    '    at Layer.handle [as handle_request] (/home/production-app/production-orders-app/node_modules/express/lib/router/layer.js:95:5)\n' +
+    '    at trim_prefix (/home/production-app/production-orders-app/node_modules/express/lib/router/index.js:328:13)\n' +
+    '    at /home/production-app/production-orders-app/node_modules/express/lib/router/index.js:286:9\n' +
+    '    at Function.process_params (/home/production-app/production-orders-app/node_modules/express/lib/router/index.js:346:12)\n' +
+    '    at next (/home/production-app/production-orders-app/node_modules/express/lib/router/index.js:280:10)\n' +
+    '    at expressInit (/home/production-app/production-orders-app/node_modules/express/lib/middleware/init.js:40:5)',
+  url: '/',
+  method: 'GET',
+  user: 'Anonymous',
+  timestamp: '2025-10-22T09:51:53.942Z'
+}
+2025-10-22T11:57:52: Error occurred: {
+  error: 'Not allowed by CORS',
+  stack: 'Error: Not allowed by CORS\n' +
+    '    at origin (/home/production-app/production-orders-app/src/server-production.js:45:16)\n' +
+    '    at /home/production-app/production-orders-app/node_modules/cors/lib/index.js:219:13\n' +
+    '    at optionsCallback (/home/production-app/production-orders-app/node_modules/cors/lib/index.js:199:9)\n' +
+    '    at corsMiddleware (/home/production-app/production-orders-app/node_modules/cors/lib/index.js:204:7)\n' +
+    '    at Layer.handle [as handle_request] (/home/production-app/production-orders-app/node_modules/express/lib/router/layer.js:95:5)\n' +
+    '    at trim_prefix (/home/production-app/production-orders-app/node_modules/express/lib/router/index.js:328:13)\n' +
+    '    at /home/production-app/production-orders-app/node_modules/express/lib/router/index.js:286:9\n' +
+    '    at Function.process_params (/home/production-app/production-orders-app/node_modules/express/lib/router/index.js:346:12)\n' +
+    '    at next (/home/production-app/production-orders-app/node_modules/express/lib/router/index.js:280:10)\n' +
+    '    at expressInit (/home/production-app/production-orders-app/node_modules/express/lib/middleware/init.js:40:5)',
+  url: '/',
+  method: 'GET',
+  user: 'Anonymous',
+  timestamp: '2025-10-22T09:57:52.844Z'
+}
